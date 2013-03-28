@@ -444,6 +444,9 @@ t_brick *brick_new(const char *name)
 	brick->state.has_ref=0;
 	brick->state.is_current=0;
 	brick->state.always_trigger=0;
+	brick->state.use_dragging = 1;
+	brick->state.use_loops = 1;
+	brick->state.frame_loop = 0;
 
 	brick->geom.block_pos=0;
 	brick->geom.height=20;

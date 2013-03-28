@@ -129,9 +129,24 @@ int brick_mouse_cloning(t_context *C,int mouse_over)
 
 void cls_brick_trigger_number(t_brick *brick)
 {
-	if(brick->action)
+	if(brick->state.use_loops == 0)
 	{
-		 brick->action(brick);
+		t_context *C = ctx_get();
+		int frame = C->app->frame;
+
+		if(brick->state.frame_loop != frame)
+		{
+			brick->state.frame_loop = frame;
+			if(brick->action) brick->action(brick);
+		}
+		else
+		{
+			brick_set_updated(brick);
+		}
+	}
+	else
+	{
+		if(brick->action) brick->action(brick);
 	}
 }
 

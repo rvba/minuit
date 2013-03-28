@@ -225,6 +225,10 @@ struct Brick_State
 	int is_contextual:1;
 	int is_versatil:1;
 	int has_ref:1;
+	int use_dragging:1;
+	int use_loops:1;
+	int frame_loop;
+
 };
 
 // BRICK GEOMETRY

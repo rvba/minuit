@@ -991,6 +991,7 @@ t_node *add_clone(t_context *C)
 
 	t_node *node_brick_clone=add_part_slider_int(C,block,"clone",NULL);
 	t_brick *brick_clone=node_brick_clone->data;
+	brick_clone->state.use_loops = 0;
 
 	// re-init to float (old int data used by plug_out)
 	plug_init(&brick_clone->plug_in,dt_float,brick_clone,NULL,0);
@@ -999,6 +1000,7 @@ t_node *add_clone(t_context *C)
 	brick_clone->plug_out.flow_out=0;
 	brick_clone->plug_in.flow_in=0;
 	brick_clone->plug_out.open_out=0;
+	brick_clone->state.use_dragging = 0;
 
 	return node_block;
 }
@@ -1048,6 +1050,7 @@ t_node *add_maths(t_context *C,const char *name)
 
 	brick_clone->plug_out.flow_out=0;
 	brick_clone->plug_out.open_out=0;
+	brick_clone->state.use_dragging = 0;
 
 	if(is(name,"+"))
 		brick_clone->action=op_add;
@@ -1143,6 +1146,7 @@ t_node *set_no_store(t_node *node)
 t_node *set_no_store_v(t_plug *plug,t_node *node)
 {
 	t_brick *brick = node->data;
+
 	t_plug *plug_intern = &brick->plug_intern;
 	t_plug *plug_in = &brick->plug_in;
 

@@ -162,9 +162,12 @@ void *op_slider(t_brick *brick)
 		else
 		{
 			// set dragging
-			if(C->app->mouse->button_left == button_pressed && C->app->mouse->is_moving)
+			if(brick->state.use_dragging)
 			{
-				brick->state.is_draging=1;
+				if(C->app->mouse->button_left == button_pressed && C->app->mouse->is_moving)
+				{
+					brick->state.is_draging=1;
+				}
 			}
 			else
 			{
@@ -175,7 +178,6 @@ void *op_slider(t_brick *brick)
 
 					if(brick->plug_intern.data_type==dt_int)
 					{
-
 						int *data=brick->plug_intern.data;
 						if(brick->state.is_left_pressed) 	*data -= 1; 
 						else if(brick->state.is_right_pressed) 	*data += 1; 
@@ -757,7 +759,6 @@ void op_add_bricks(t_brick *brick,t_brick *brick_target,int n,t_parent parent)
 	{
 		add_exe_remove_brick(brick);
 	}
-
 }
 
 
