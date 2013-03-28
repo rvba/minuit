@@ -1,0 +1,12 @@
+Source: minuit
+Section: graphics
+Priority: extra
+Maintainer: Milovann Yanatchkov <mil01@free.fr>
+Build-Depends: debhelper (>= 7), mesa-common-dev, freeglut3-dev, libjpeg62-dev, libpng12-dev, libfreetype6-dev, exuberant-ctags 
+Standards-Version: 3.8.3
+Homepage: http://www.rvba.fr
+
+Package: minuit
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Minuit is not a userinterface toolkit 
