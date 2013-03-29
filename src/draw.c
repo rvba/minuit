@@ -174,7 +174,7 @@ void draw_mesh_direct(t_draw *draw,t_scene *scene,t_mesh *mesh)
 
 	if(mesh->state.buffer_type!=buffer_direct) mesh_init_buffers(mesh,buffer_direct); 
 
-	if (draw->with_material)
+	if (draw->with_material && draw->mode != mode_selection)
 	{
 		t_material *material = mesh->material;
 
@@ -239,7 +239,7 @@ void draw_mesh_direct(t_draw *draw,t_scene *scene,t_mesh *mesh)
 
 	glShadeModel(GL_FLAT);
 
-	if (draw->with_light)
+	if (draw->with_light && draw->mode != mode_selection)
 	{
 		glEnable(GL_LIGHTING);
 		GLfloat model_ambient[] = {1,1,1,1};
@@ -254,31 +254,27 @@ void draw_mesh_direct(t_draw *draw,t_scene *scene,t_mesh *mesh)
 		t_vlst *vlst_quad=mesh->quad_normal;
 		float *normals=vlst_quad->data;
 
-		/*
-		t_vlst *vlst_colors=mesh->colors;
-		float *colors=vlst_colors->data;
-		*/
-
-		// draw faces
 		j=0;
 		for(i=0;i<quads->count;i++)
 		{
 			glBegin(GL_QUADS);
 			for(n=0;n<4;n++)
 			{
-				//int indice=q[j];
-				//float *c=colors+(indice*4);
-
 				// normal
 				if(draw->with_normal)
 					glNormal3f(normals[(i*3)+0],normals[(i*3)+1],normals[(i*3)+2]);
 
-				// color
-				//glColor4f(c[0],c[1],c[2],c[3]);
-				//glColor3f((float)u_randrange(0,255)/255,1,1);
-				//glColor3f(1,0,0);
+				if(draw->mode == mode_selection)
+				{
+					float c[3];
+					c[0] = (float)mesh->idcol[0]/255;
+					c[1] = (float)mesh->idcol[1]/255;
+					c[2] = (float)mesh->idcol[2]/255;
+					glColor3f(c[0],c[1],c[2]);
+				}
 
 				// vertex
+
 				glVertex3f(v[(q[j]*3)],v[(q[j]*3)+1],v[(q[j]*3)+2]);
 				j++;
 			}
