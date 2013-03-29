@@ -228,6 +228,7 @@ struct Brick_State
 	int use_dragging:1;
 	int use_loops:1;
 	int frame_loop;
+	int remove_connected:1;
 
 };
 
@@ -351,7 +352,7 @@ void 		plug_init( t_plug *plug, t_data_type type, t_brick *brick, void *data_tar
 
 void 		brick_release(t_brick *brick);
 void 		brick_free(t_brick *brick);
-int 		brick_delete(t_brick *brick);
+int 		brick_delete(t_brick *brick,int remove_connected);
 void 		brick_type_change(t_brick *brick,t_plug *plug);
 void 		brick_type_reset(t_brick *brick);
 void 		brick_change_type_by_name(t_brick *brick,t_data_type type);

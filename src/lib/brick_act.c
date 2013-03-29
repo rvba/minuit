@@ -598,10 +598,13 @@ void *op_plusplus(t_brick *brick)
 void exe_remove_brick(t_dict *args)
 {
 	t_context *C = ctx_get();
+
 	// remove brick
 
 	t_brick *_brick = dict_pop_data(args,"brick");
 	t_block *block = _brick->block;
+
+	int remove_connected = _brick->state.remove_connected;
 
 	t_plug *plug_intern = &_brick->plug_intern;
 	int *slider = plug_intern->data;
@@ -613,15 +616,18 @@ void exe_remove_brick(t_dict *args)
 
 	if(brick)
 	{
-		if(brick_delete(brick))
+		// check if bricks are not connected
+		if(brick_delete(brick,remove_connected))
 		{
+			// remove link from bricks
 			lst_link_remove(bricks,last);
 			scene_struct_delete(C->scene,last);
 			block->tot_bricks--;
 		}
 		else
 		{
-			*slider=block->tot_bricks;
+			// re-increment slider
+			(*slider)++;
 		}
 	}
 }
@@ -732,7 +738,7 @@ void add_exe_remove_brick(t_brick *brick)
 
 // ADD BRICKS
 
-void op_add_bricks(t_brick *brick,t_brick *brick_target,int n,t_parent parent)
+void op_add_bricks(t_brick *brick,t_brick *brick_target,int offset,t_parent parent)
 {
 	// slide
 	op_slider_positive(brick);
@@ -745,8 +751,9 @@ void op_add_bricks(t_brick *brick,t_brick *brick_target,int n,t_parent parent)
 	if(slider==0)
 	{
 	}
+
 	// add brick
-	else if( *slider > tot_bricks-n) 
+	else if( *slider > tot_bricks - offset) 
 	{
 		if(parent == t_parent_child)
 			add_exe_add_brick(brick,brick_target,exe_add_brick_parent_child);
@@ -755,7 +762,7 @@ void op_add_bricks(t_brick *brick,t_brick *brick_target,int n,t_parent parent)
 
 	}
 	// remove brick
-	else if(*slider < tot_bricks -n)
+	else if(*slider < tot_bricks - offset)
 	{
 		add_exe_remove_brick(brick);
 	}

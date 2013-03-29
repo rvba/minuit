@@ -129,15 +129,20 @@ void brick_selector_list_free(t_lst *lst)
 
 // BRICK DELETE
 
-int brick_delete(t_brick *brick)
+int brick_delete(t_brick *brick,int remove_connected)
 {
 	t_context *C=ctx_get();
 
 	t_plug *plug_in=&brick->plug_in;
 	t_plug *plug_out=&brick->plug_out;
 
-	if(!plug_in->is_connected && !plug_out->is_connected)
+	if(
+		(remove_connected && !plug_out->is_connected)
+		||
+		(!plug_in->is_connected && !plug_out->is_connected)
+		)
 	{
+		// remove users
 		dlink("block",brick->block);
 
 		t_plug *plug = &brick->plug_intern;
@@ -447,6 +452,7 @@ t_brick *brick_new(const char *name)
 	brick->state.use_dragging = 1;
 	brick->state.use_loops = 1;
 	brick->state.frame_loop = 0;
+	brick->state.remove_connected = 0;
 
 	brick->geom.block_pos=0;
 	brick->geom.height=20;

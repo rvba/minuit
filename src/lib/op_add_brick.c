@@ -1001,6 +1001,7 @@ t_node *add_clone(t_context *C)
 	brick_clone->plug_in.flow_in=0;
 	brick_clone->plug_out.open_out=0;
 	brick_clone->state.use_dragging = 0;
+	brick_clone->state.remove_connected = 1;
 
 	return node_block;
 }
@@ -1159,6 +1160,8 @@ t_node *set_no_store_v(t_plug *plug,t_node *node)
 	return node;
 }
 
+// VECTOR
+
 t_node *add_vector(t_context *C)
 {
 	// NEW BLOCK
@@ -1182,6 +1185,7 @@ t_node *add_vector(t_context *C)
 
 }
 
+// CONST
 
 t_node *add_const(t_context *C)
 {

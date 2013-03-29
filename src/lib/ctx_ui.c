@@ -260,7 +260,7 @@ void ctx_ui(t_context *C)
 	ctx_ui_linking(C);
 
 	// GRAPH update
-	if(!C->event->is_brick_transformed) ctx_links_update(C);
+	ctx_links_update(C);
 
 	// POST EXE
 	ctx_exe(C);
