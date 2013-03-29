@@ -388,6 +388,7 @@ t_node *add_brick_vlst(t_context *C,t_block *block,const char *name,t_data_type 
 	brick->action=op_pointer;
 	brick->state.draw_value=1;
 	brick->state.always_trigger = 1;
+	brick->state.use_loops = 0;
 
 	// PLUG
 	set_plug_option(brick);
@@ -890,11 +891,12 @@ t_node *add_part_vlst(t_context *C,t_block *block,t_data_type type,const char *n
 
 	if(is(name,"vertex"))
 	{
+		// add vlst
 		node=add_brick_vlst(C,block,name,type,ptr);
 
 		t_vlst *vlst=ptr;
 
-		// vertex count
+		// add vertex count
 
 		scene_add_ref(C->scene,"struct_ref","vlst","count",&vlst->count_new,vlst);
 
@@ -902,6 +904,7 @@ t_node *add_part_vlst(t_context *C,t_block *block,t_data_type type,const char *n
 		t_brick *brick_count=node_count->data;
 
 		brick_count->action=op_set_vlst;
+		brick_count->state.use_loops = 0;
 
 		t_brick *brick=node->data;
 		brick->state.draw_outline=0;
@@ -920,6 +923,7 @@ t_node *add_part_vlst(t_context *C,t_block *block,t_data_type type,const char *n
 		t_brick *brick_count=node_count->data;
 
 		brick_count->action=op_set_colors;
+		brick_count->state.use_loops = 0;
 
 		t_brick *brick=node->data;
 		brick->state.draw_outline=0;

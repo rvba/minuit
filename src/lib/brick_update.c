@@ -142,12 +142,14 @@ void cls_brick_trigger_number(t_brick *brick)
 		else
 		{
 			brick_set_updated(brick);
+			brick_release(brick);
 		}
 	}
 	else
 	{
 		if(brick->action) brick->action(brick);
 	}
+
 }
 
 void cls_brick_trigger_switch(t_brick *brick)

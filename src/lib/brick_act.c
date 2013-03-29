@@ -162,12 +162,14 @@ void *op_slider(t_brick *brick)
 		else
 		{
 			// set dragging
-			if(brick->state.use_dragging)
+			if(
+				brick->state.use_dragging
+				&&
+				(C->app->mouse->button_left == button_pressed && C->app->mouse->is_moving)
+				
+				)
 			{
-				if(C->app->mouse->button_left == button_pressed && C->app->mouse->is_moving)
-				{
 					brick->state.is_draging=1;
-				}
 			}
 			else
 			{
@@ -175,6 +177,7 @@ void *op_slider(t_brick *brick)
 				if(!brick->state.is_done)
 				{
 					brick->state.is_done=1;
+
 
 					if(brick->plug_intern.data_type==dt_int)
 					{
