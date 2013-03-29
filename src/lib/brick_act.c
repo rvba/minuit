@@ -60,7 +60,7 @@ void *op_brick_add(t_brick *brick)
 	else if(is(name,"switch"))  		add_switch(C,"switch",NULL); 
 	else if(is(name,"clone"))  		add_clone(C); 
 	else if(is(name,"pipe")) 		add_pipe(C); 
-	else if(is(name,"sec")) 		add_slider_int(C,"sec",&C->app->timer);
+	else if(is(name,"sec")) 		add_slider_int(C,"sec",&C->app->clock->sec);
 	else if(is(name,"int")) 		add_slider_int(C,"int",NULL);
 	else if(is(name,"float")) 		add_slider_float(C,"float",NULL);
 	else if(is(name,"10")) 			add_multiplier(C,"10");
