@@ -129,7 +129,6 @@ void *op_slider(t_brick *brick)
 	plug_intern->cls->flow(plug_intern);
 
 	// trigger
-	//if(!C->event->is_brick_transformed && brick->mode==bm_triggering) // (see:plug_update)
 	if(brick->mode==bm_triggering) // (see:plug_update)
 	{
 		// dragging
