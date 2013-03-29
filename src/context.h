@@ -223,5 +223,6 @@ t_context *ctx_get(void);
 t_context *ctx_init(int argc,char **argv);
 void ctx_links_init(void);
 void exe_init(void);
+void brick_remove(t_dict *args);
 
 #endif

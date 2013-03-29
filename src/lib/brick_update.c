@@ -254,6 +254,18 @@ void brick_release(t_brick *brick)
 	C->ui->brick_selected=NULL;
 }
 
+void brick_remove(t_dict *args)
+{
+	t_context *C = ctx_get();
+
+	t_brick *brick = dict_pop_data(args,"brick");
+
+	t_block *block = brick->block;
+	list_remove_by_ptr(C->scene->global,block);
+	scene_struct_delete(C->scene,block);
+}
+
+
 // UPDATE
 
 int is_vec_stored=0;
@@ -294,6 +306,25 @@ void cls_brick_update(t_brick *brick)
 	}
 		
 	// MODES
+
+	if(mouse_over && C->event->brick_delete) 
+	{
+		printf("start removing\n");
+		C->event->brick_delete = 0;
+
+		t_action *action = action_new("action");
+
+		action->act = brick_remove;
+
+		t_node *node_dict = dict_add("args");
+		t_dict *dict = node_dict->data;
+		action->args = dict;
+
+		dict_symbol_add(action->args,"brick",dt_null,brick);
+
+		exe_add_action(action);
+	}
+
 
 	if(!C->event->ui.pan)
 	{

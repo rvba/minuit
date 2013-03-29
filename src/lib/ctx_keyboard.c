@@ -99,12 +99,11 @@ void keymap_main(unsigned char key)
 		case '3': op_camera_view_left(C->camera);break;
 		case '2': op_camera_ortho_rotate(C->camera,-5,0,0);break;
 		case 'x': op_switch_color(C);break;
-	//	case 'k': op_texture_add("test");break;
 		case 't': switch_txt(C);break;
 		case 'l': scene_log(C->scene);break;
-	//	case 'g': sys_git_get();break;
 		case 'n': C->ui->step = 1; break;
 		case 'r': C->ui->step_reset = 1; break;
+		case 'd': C->event->brick_delete = 1; break;
 
 		case APP_KEY_ESC: 	
 

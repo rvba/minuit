@@ -133,6 +133,7 @@ struct Event
 	char standby_char;
 	char *standby_string;
 	int video;
+	int brick_delete;
 };
 
 t_event *event_new(void);

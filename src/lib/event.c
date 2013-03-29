@@ -79,5 +79,7 @@ t_event *event_new(void)
 	event->standby_string=NULL;
 	event->video = 0;
 
+	event->brick_delete = 0;
+
 	return event;
 }

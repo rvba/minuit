@@ -77,4 +77,7 @@ void scene_file_free(t_scene *sc,t_node *node) ;
 void scene_image_free(t_scene *sc,t_node *node);
 void scene_material_free(t_scene *sc,t_node *node); 
 void scene_option_free(t_scene *sc,t_node *node) ;
+
+t_node *scene_struct_get(t_scene *sc,void *ptr);
+
 #endif

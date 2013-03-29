@@ -19,6 +19,7 @@ typedef enum Type_Operation
 {
 	t_op_add,
 	t_op_mult
+
 }t_operation;
 
 

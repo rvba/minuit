@@ -264,4 +264,6 @@ void ctx_ui(t_context *C)
 
 	// POST EXE
 	ctx_exe(C);
+
+	C->event->brick_delete = 0;
 }

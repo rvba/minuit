@@ -548,6 +548,31 @@ int scene_node_delete(t_scene *sc,t_node *node)
 	}
 }
 
+t_node *scene_struct_get(t_scene *sc,void *ptr)
+{
+	//XXX!!! var is not generic
+	t_generic *g=(t_generic *)ptr;
+
+	t_link *l;
+	t_node *n;
+	t_node *node=NULL;
+
+	for(l=sc->nodes->first;l;l=l->next)
+	{
+		n=l->data;
+		if(n->type!=nt_var)
+		{
+			if(n->id==g->id)
+			{
+				node=n;
+				break;
+			}
+		}
+	}
+
+	return node;
+}
+
 void scene_struct_delete(t_scene *sc,void *ptr)
 {
 	//XXX!!! var is not generic
