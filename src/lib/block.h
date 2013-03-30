@@ -464,6 +464,8 @@ void 		plug_data_set(t_plug *plug,t_data_type type,void *data);
 void plug_add_parent(t_plug *plug,t_plug *parent);
 void plug_remove_parent(t_plug *plug);
 
+void *op_stack(t_brick *brick);
+
 #endif
 
 

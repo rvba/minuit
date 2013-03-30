@@ -239,6 +239,7 @@ t_node *	add_loop_get(t_context *C);
 t_node *	add_get(t_context *C);
 t_node *	add_for(t_context *C);
 t_node *	add_vector(t_context *C);
+t_node *add_stack(t_context *C);
 
 t_node *add_const(t_context *C);
 void *op_const(t_brick *brick);

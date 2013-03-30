@@ -106,6 +106,7 @@ void *op_brick_add(t_brick *brick)
 	else if(is(name,"quit")) 		add_trigger_always(C,"quit",op_do_quit); 
 	else if(is(name,"const")) 		add_const(C); 
 	else if(is(name,"and")) 		add_maths(C,"and"); 
+	else if(is(name,"stack")) 		add_stack(C); 
 
 	// store
 	C->scene->store=0;
@@ -1894,6 +1895,53 @@ void *op_const(t_brick *brick)
 
 	if(brick->mode == bm_triggering)
 		brick_release(brick);
+
+	return NULL;
+}
+
+
+void *op_stack(t_brick *brick)
+{
+	t_context *C = ctx_get();
+
+	op_slider(brick);
+
+
+	t_block *block = brick->block;
+
+	t_brick *brick_i = block_brick_get(block,"i");
+	t_brick *brick_counter = block_brick_get(block,"counter");
+	t_brick *brick_limit = block_brick_get(block,"limit");
+
+	int *i = brick_i->plug_intern.data;
+	int *counter = brick_counter->plug_intern.data;
+	int *limit = brick_limit->plug_intern.data;
+
+	//int *plus = brick->plug_intern.data;
+
+	// RESET BY FRAME
+
+	if(brick->state.frame_loop != C->app->frame)
+	{
+		brick->state.frame_loop = C->app->frame;
+		*counter = 0;
+		*i = 0;
+	}
+	else
+	{
+		(*counter)++;
+	}
+
+	// TEST
+
+	if(*counter > *limit)
+	{
+		*counter = 0;
+		(*i)++;
+	}
+
+	brick_set_updated(brick);
+	if(brick->mode == bm_triggering) brick_release(brick);
 
 	return NULL;
 }

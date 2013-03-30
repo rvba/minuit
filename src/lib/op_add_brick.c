@@ -1209,4 +1209,48 @@ t_node *add_const(t_context *C)
 	return node_block;
 }
 
+// STACK
+
+t_node *add_stack(t_context *C)
+{
+	// NEW BLOCK
+	t_node *node_block = add_block(C,"stack");
+	t_block *block=node_block->data;
+	block->state.draw_outline=1;
+
+	// i
+	t_node *node_i = add_part_slider_int(C,block,"i",NULL);
+	t_brick *brick_i = node_i->data;
+	t_plug *plug_i = &brick_i->plug_intern;
+
+	// counter
+	t_node *node_counter = add_part_slider_int(C,block,"counter",NULL);
+	t_brick *brick_counter = node_counter->data;
+	t_plug *plug_counter = &brick_counter->plug_intern;
+
+	// limit
+	t_node *node_limit = add_part_slider_int(C,block,"limit",NULL);
+	t_brick *brick_limit = node_limit->data;
+	t_plug *plug_limit = &brick_limit->plug_intern;
+
+	brick_limit->state.use_loops = 0;
+
+	// ++
+
+	t_node *node_plus = add_part_slider_int(C,block,"++",NULL);
+	t_brick *brick_plus = node_plus->data;
+	t_plug *plug_plus = &brick_plus->plug_intern;
+
+	brick_plus->action = op_stack;
+
+	plug_add_parent(plug_i,plug_plus);
+	plug_add_parent(plug_counter,plug_plus);
+	plug_add_parent(plug_limit,plug_plus);
+
+
+
+	return node_block;
+
+}
+
 
