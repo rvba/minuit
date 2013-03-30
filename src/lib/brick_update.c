@@ -309,7 +309,6 @@ void cls_brick_update(t_brick *brick)
 
 	if(mouse_over && C->event->brick_delete) 
 	{
-		printf("start removing\n");
 		C->event->brick_delete = 0;
 
 		t_action *action = action_new("action");

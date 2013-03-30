@@ -89,9 +89,41 @@ void plug_remove_parent(t_plug *plug)
 
 // CLONE
 
+void brick_clone_change_name(t_brick *brick)
+{
+	int n=0;
+	char s[10];
+	char *name = brick->txt_name.name;
+	//char *name = brick->name;
+	char old_name[_NAME_LONG_];
+
+	strncpy(old_name,name,_NAME_LONG_);
+
+	s[0] = '[';
+	s[1] = '\0';
+
+	n = s_append(name,s,n);
+	n = s_append(name,old_name,n);
+
+	s[0] = ' ';
+	s[1] = '\0';
+
+	n = s_append(name,s,n);
+
+	sprintf(s,"%d",brick->state.clone);
+
+	n = s_append(name,s,n);
+
+	s[0] = ']';
+	s[1] ='\0';
+
+	s_append(name,s,n);
+}
+
 t_brick *brick_clone(t_block *block,t_brick *brick)
 {
 	t_context *C=ctx_get();
+
 	C->scene->store=1;
 
 	t_plug *plug_intern=&brick->plug_intern;
@@ -99,13 +131,31 @@ t_brick *brick_clone(t_block *block,t_brick *brick)
 	t_node *clone_node=brick_make(block,brick->name,brick->type,plug_intern->data_type,plug_intern->data);
 
 	t_brick *clone_brick=clone_node->data;
+
 	clone_brick->action=brick->action;
 	clone_brick->state.draw_name=brick->state.draw_name;
 	clone_brick->state.draw_value=brick->state.draw_value;
 	clone_brick->state.draw_outline=brick->state.draw_outline;
 
-
 	C->scene->store=0;
+
+
+	if(brick->state.clone)
+	{
+		clone_brick->state.clone = brick->state.clone;
+		brick_clone_change_name(clone_brick);
+		//txt_init(&clone_brick->txt_name,clone_brick->name);
+	}
+	else
+	{
+		brick->state.clone = brick->id;
+		clone_brick->state.clone = brick->id;
+		brick_clone_change_name(brick);
+		//txt_init(&brick->txt_name,brick->name);
+		//txt_init(&clone_brick->txt_name,clone_brick->name);
+		brick_clone_change_name(clone_brick);
+		brick_build_width(brick);
+	}
 
 	return clone_node->data;
 }
@@ -333,6 +383,12 @@ t_brick *brick_rebind(t_scene *sc,void *ptr)
 	txt_init(&brick->txt_name,brick->name);
 	txt_init(&brick->txt_data,NULL);
 
+	if(brick->state.clone)
+	{
+		brick_clone_change_name(brick);
+		brick_build_width(brick);
+	}
+
 	return brick;
 }
 
@@ -453,6 +509,7 @@ t_brick *brick_new(const char *name)
 	brick->state.use_loops = 1;
 	brick->state.frame_loop = 0;
 	brick->state.remove_connected = 0;
+	brick->state.clone = 0;
 
 	brick->geom.block_pos=0;
 	brick->geom.height=20;

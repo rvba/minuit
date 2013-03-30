@@ -229,6 +229,7 @@ struct Brick_State
 	int use_loops:1;
 	int frame_loop;
 	int remove_connected:1;
+	int clone;
 
 };
 
@@ -269,6 +270,8 @@ struct Brick
 
 	int idcol_right[3];			// col
 	int idcol_left[3];
+
+	int col_clone[3];
 
 	t_brick_mode mode;			// unique mode
 	t_brick_state state;			// multiple states
