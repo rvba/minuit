@@ -97,6 +97,7 @@ struct Draw
 	int divy;
 
 	int show_axis_world;
+	int draw_lights;
 };
 
 void draw_clear(float r,float g,float b,float a);

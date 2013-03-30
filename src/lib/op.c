@@ -190,6 +190,7 @@ t_node *make_menu_draw(void)
 	add_brick_switch(C,block,"blend",&C->event->with_blend);
 	add_brick_switch(C,block,"restrict",&C->draw->with_restrict_matrix);
 	add_brick_switch(C,block,"direct",&C->draw->mode_direct);
+	add_brick_switch(C,block,"draw lights",&C->draw->draw_lights);
 
 	return menu;
 }

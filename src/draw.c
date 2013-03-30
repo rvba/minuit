@@ -58,22 +58,25 @@ void draw_add_light(t_node *node)
 
 void draw_light(t_draw *draw, t_node *node)
 {
-	t_light *light = node->data;
-	float *pos=light->pos;
-
-	if(draw->mode==mode_selection)
-	{	
-		int *col=light->idcol;
-		float c[3];
-		cconv(c,col);
-
-		skt_point(pos,20,c);
-	}
-	else
+	if(draw->draw_lights)
 	{
-		float color[]={0,0,0};
-		int width=5;
-		skt_point(pos,width,color);
+		t_light *light = node->data;
+		float *pos=light->pos;
+
+		if(draw->mode==mode_selection)
+		{	
+			int *col=light->idcol;
+			float c[3];
+			cconv(c,col);
+
+			skt_point(pos,20,c);
+		}
+		else
+		{
+			float color[]={0,0,0};
+			int width=5;
+			skt_point(pos,width,color);
+		}
 	}
 }
 
@@ -636,6 +639,8 @@ t_draw *draw_new(void)
 	draw->img_with_alpha=0;
 	draw->divx=2;
 	draw->divy=2;
+
+	draw->draw_lights = 1;
 
 	return draw;
 }
