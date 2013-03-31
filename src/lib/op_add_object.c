@@ -169,7 +169,8 @@ void add_mn(void)
 
 		if(is(file->ext,"mn"))
 		{
-			load_file(C,file->path);
+			//load_file(C,file->path);
+			load_file(C,file->location);
 		}
 		else
 		{

@@ -300,6 +300,8 @@ t_app *app_new(int argc,char **argv)
 	app->keyboard=keyboard_new();
 	app->clock=clock_new();
 
+	app->file = file_new("void");
+
 	clock_init(app->clock);
 
 	return app;

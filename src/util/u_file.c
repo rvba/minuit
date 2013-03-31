@@ -11,6 +11,7 @@
 #define PATH_LIMIT 1024
 #define S_DEBUG 0
 
+// search for path / name / extention
 int file_path_split(t_file *file)
 {
 	int i,j;
@@ -20,7 +21,8 @@ int file_path_split(t_file *file)
 	int indice=-1;
 	int start=0;
 
-	char *path = file->path;
+	//char *path = file->path;
+	char *path = file->location;
 
 	// RELATIVE PATH: if path is relative, go to first slash ./
 	if (path[0] == '.')
@@ -104,7 +106,8 @@ int file_init(t_file *file)
 	int indice=-1;
 	int is_split;
 
-	if(strlen(file->path)==0)
+	//if(strlen(file->path)==0)
+	if(strlen(file->location)==0)
 	{
 		printf("null path\n");
 		return 0;
@@ -118,7 +121,8 @@ int file_init(t_file *file)
 	}
 	else
 	{
-		filename=file->path;
+		//filename=file->path;
+		filename=file->location;
 	}
 
 	// split name/extension
@@ -168,7 +172,8 @@ int file_init(t_file *file)
 	}
 	else
 	{
-		set_name(file->name,file->path);
+		//set_name(file->name,file->path);
+		set_name(file->name,file->location);
 	}
 
 
@@ -198,7 +203,8 @@ void file_build_path(t_file *file)
 
 	new_path[cursor]='\0';
 
-	set_path(file->path,new_path);
+	//set_path(file->path,new_path);
+	set_path(file->location,new_path);
 }
 
 void file_go_backward(t_file *file)
@@ -433,6 +439,7 @@ void file_read_lines(t_file *file)
 void file_show(t_file *file)
 {
 	printf("SHOW FILE\n");
+	if(file->location) printf("path:%s\n",file->location);
 	if(file->path) printf("path:%s\n",file->path);
 	if(file->name) printf("name:%s\n",file->name);
 	if(file->ext) printf("ext:%s\n",file->ext);
@@ -470,7 +477,8 @@ void file_open(t_file *file)
 {
 	if(!file->file)
 	{
-		file->file=fopen(file->path,"w");
+		//file->file=fopen(file->path,"w");
+		file->file=fopen(file->location,"w");
 	}
 }
 
@@ -488,7 +496,8 @@ void file_close(t_file *file)
 
 void file_read(t_file *file)
 {
-	FILE *f = fopen(file->path,"r");
+	//FILE *f = fopen(file->path,"r");
+	FILE *f = fopen(file->location,"r");
 	fseek (f,0,SEEK_END);
 	file->data_size = ftell(f);
 	rewind(f);
@@ -516,8 +525,10 @@ t_file *file_new(const char *path)
 	memset(file->name,'\0',_NAME_);
 	memset(file->ext,'\0',_EXT_);
 	memset(file->path,'\0',_PATH_);
+	//memset(file->location,'\0',_PATH_);
 
-	set_path(file->path,path);
+	//set_path(file->path,path);
+	set_path(file->location,path);
 
 	file->path_parts=NULL;
 	file->data=NULL;

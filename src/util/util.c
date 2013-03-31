@@ -14,7 +14,8 @@ t_file *LOG_FILE;
 void log_init(void)
 {
 	t_file *file = file_new("mn.log");
-	file->file=fopen(file->path,"w");
+	//file->file=fopen(file->path,"w");
+	file->file=fopen(file->location,"w");
 	fprintf(file->file,"LOG\n");
 	file_close(file);
 	LOG_FILE=file;
@@ -25,7 +26,8 @@ void __log__(int status,char *fmt, ...)
 	if(status)
 	{
 		t_file *file=LOG_FILE;
-		file->file=fopen(file->path,"a");
+		//file->file=fopen(file->path,"a");
+		file->file=fopen(file->location,"a");
 
 		va_list ap;
 		va_start(ap,fmt);

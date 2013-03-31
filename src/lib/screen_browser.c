@@ -85,7 +85,7 @@ void browser_reset(void)
 void browser_build_cmd(void)
 {
 	int p=0;
-	char *_path=path->path;
+	char *_path=path->location;
 
 	p=s_append(cmd,"cd ",p);
 	p=s_append(cmd,_path,p);
@@ -100,7 +100,7 @@ void *browser_return_filename(t_brick *brick)
 
 	int pos=0;
 
-	pos=s_append(tmp,path->path,pos);
+	pos=s_append(tmp,path->location,pos);
 	pos=s_append(tmp,"/",pos);
 	pos=s_append(tmp,brick->name,pos);
 	pos=s_append(tmp,NULL,pos);
@@ -150,7 +150,7 @@ void browser_build(void)
 
 				s_convert_newline_endline(file_name,input);
 
-				pos=s_append(file_path,path->path,0);
+				pos=s_append(file_path,path->location,0);
 				pos=s_append(file_path,"/",pos);
 				pos=s_append(file_path,file_name,pos);
 				pos=s_append(file_path,NULL,pos);

@@ -209,6 +209,7 @@ struct File
 	short users;
 	char name[_NAME_];
 
+	char location[_PATH_];
 	char path[_PATH_];
 	char ext[_EXT_];
 
@@ -367,6 +368,8 @@ int u_lookup(char *word,char *array[]);
 
 // FILE
 
+void file_build_path(t_file *file);
+int file_path_split(t_file *file);
 void file_go_directory(t_file *file,char *name);
 void file_go_backward(t_file *file);
 int word_equal(t_word *word,const char *string);

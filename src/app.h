@@ -144,6 +144,8 @@ struct App
 	int load_file;
 	int loaded_file;
 	char *file_path;
+
+	t_file *file;
 };
 
 int app_get_frame(void);

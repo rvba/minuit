@@ -432,6 +432,38 @@ void save_file(t_context *C,const char *path)
 	mem_write(path);
 }
 
+void save_file_increment(t_context *C)
+{
+	t_file *file = C->app->file;
+
+	file_path_split(file);
+	file_show(file);
+
+	char *name = file->name;
+	int length = strlen(name);
+	int last_char = length - 1;
+
+	if(!isdigit(name[last_char]))
+	{
+		printf("no digit\n");
+		int n=0;
+
+		char number[3] = "-01";
+
+		n = s_append(file->name,file->name,n);
+		n = s_append(file->name,number,n);
+
+		file_build_path(file);
+
+		printf("new name:%s\n",file->name);
+		printf(">%s\n",file->path);
+	}
+	else
+	{
+		printf("digit\n");
+	}
+}
+
 // LOAD SCENE
 
 void load_scene(t_context *C,t_scene *sc)
@@ -1025,6 +1057,10 @@ void load_file(t_context *C,const char *path)
 
 	// free tmp scene
 	scene_free(sc);
+	
+	set_path(C->app->file->location,path);
+	file_init(C->app->file);
+
 }
 
 
