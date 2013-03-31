@@ -16,7 +16,7 @@ int is_init=0;
 int is_built=0;
 
 char cmd[1024];
-char default_path[]="/home";
+char default_path[1024];
 
 int pos;
 
@@ -211,7 +211,6 @@ void browser_build(void)
 void browser_update(void)
 {
 	t_block *block=BROWSER_BUTTONS->data;
-	//cls_block_update(block);
 	block->cls->update(block);
 }
 
@@ -243,12 +242,17 @@ void browser_init(void)
 {
 	if(!is_init)
 	{
+		// set init
 		is_init=1;
+
+		// get current
+		getcwd(default_path,1024);
 
 		BROWSER_BUTTONS=block_make("block_browser","block");
 		t_block *block = BROWSER_BUTTONS->data;
 		vset(block->pos,0,0,0);
 		path=file_new(default_path);
+		file_init(path);
 	}
 }
 

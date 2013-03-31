@@ -135,8 +135,10 @@ void keymap_main(unsigned char key)
 
 	switch(C->app->keyboard->special)
 	{
-		case 1: load_file(C,"./minuit.mn");break; 	//F1
-		case 2: save_file(C,"./minuit.mn");break; 	//F2
+		//case 1: load_file(C,"./minuit-01.mn");break; 	//F1
+		case 1: load_last(C);break; 	//F1
+		//case 2: save_file(C,"./minuit.mn");break; 	//F2
+		case 2: save_file(C);break; 	//F2
 		case 3: save_file_increment(C);break; 		//F3
 	}
 }

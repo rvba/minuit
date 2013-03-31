@@ -118,17 +118,17 @@ int op_quit(t_node *node)
 
 	if(C->event->free_scene)
 	{
-		/*
-		scene_free(C->scene);
-		app_free(C->app);
-		free(C->scene);
-		free(C->app);
-		free(C->ui);
-		free(C->event);
-		free(C);
-		*/
 	}
 
+	// minuit.save
+
+	t_file *file = file_new("minuit.save");
+	file_init(file);
+	file_open(file);
+	fprintf(file->file,"%s\n",C->app->file->location);
+	file_close(file);
+
+	// exit badly
 	op_exit();
 
 	return 1;

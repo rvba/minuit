@@ -167,6 +167,8 @@ void add_mn(void)
 	{
 		t_file *file = file_new(filename);
 
+		file_init(file);
+
 		if(is(file->ext,"mn"))
 		{
 			//load_file(C,file->path);

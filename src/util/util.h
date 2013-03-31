@@ -34,6 +34,7 @@
 #include <pthread.h>
 #include <jpeglib.h>
 #include <png.h>
+#include <sys/stat.h>
 
 #define PI 3.14159655f
 
@@ -213,8 +214,12 @@ struct File
 	char path[_PATH_];
 	char ext[_EXT_];
 
-	int path_tot_parts;
-	char **path_parts;
+	int is_relative;
+	int is_directory;
+	int has_extention;
+
+	int tot_directories;
+	char **directories;
 
 	long data_size;
 	int tot_line;
@@ -368,7 +373,9 @@ int u_lookup(char *word,char *array[]);
 
 // FILE
 
-void file_build_path(t_file *file);
+int file_exists(t_file *file);
+void file_set_location(t_file *file, const char *path);
+void file_build_location(t_file *file);
 int file_path_split(t_file *file);
 void file_go_directory(t_file *file,char *name);
 void file_go_backward(t_file *file);

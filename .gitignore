@@ -16,6 +16,7 @@ data/screen*
 Release
 mn
 *.mn
-*.log
 out
 git.c
+minuit.save
+minuit.log

@@ -301,6 +301,7 @@ t_app *app_new(int argc,char **argv)
 	app->clock=clock_new();
 
 	app->file = file_new("void");
+	file_init(app->file);
 
 	clock_init(app->clock);
 

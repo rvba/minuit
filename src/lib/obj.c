@@ -137,6 +137,7 @@ void _op_obj_import(void)
 
 		// parse file
 		t_file *file = file_new(filename);
+		file_init(file);
 
 		free(C->event->standby_string);
 		//C->event->standby_function=NULL;
