@@ -480,13 +480,6 @@ void save_file(t_context *C)
 	mem_write(file->location);
 }
 
-void _save_file(t_context *C)
-{
-	const char *path = C->app->file->location;
-	option_save(C);
-	mem_write(path);
-}
-
 void save_file_increment(t_context *C)
 {
 	t_file *file = C->app->file;
@@ -496,23 +489,19 @@ void save_file_increment(t_context *C)
 	int i,j;
 	char *name = file->name;
 	int length = strlen(name);
-	int last_char = length - 1;
+	int last_char = length - 1; // starts from 0 !
 	int max_indice = 10;
 	char indice[max_indice];
 	bzero(indice,max_indice);
 
 	if(!isdigit(name[last_char]))
 	{
-		int n=0;
+		char number[4] = "-01";
 
-		char number[3] = "-01";
-
-		n = s_append(file->name,file->name,n);
-		n = s_append(file->name,number,n);
-
+		strcat(file->name,number);
+		set_name(file->name,name);
 		file_build_location(file);
 
-		//_save_file(C);
 		save_file(C);
 	}
 	else
@@ -567,7 +556,6 @@ void save_file_increment(t_context *C)
 			set_name(file->name,new_name);
 			file_build_location(file);
 
-			//_save_file(C);
 			save_file(C);
 		}
 	}
