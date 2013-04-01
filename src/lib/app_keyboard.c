@@ -53,21 +53,8 @@ void app_gl_keyboard_special(t_app *app)
 {
 	int modifier = glutGetModifiers();
 
-	if (modifier == GLUT_ACTIVE_SHIFT) 
-	{
-		app->keyboard->shift=1;
-		app->keyboard->ctrl=0;
-	}
-	else if (modifier == GLUT_ACTIVE_CTRL)
-	{
-		app->keyboard->ctrl=1;
-		app->keyboard->shift=0;
-	}
-	else
-	{
-		app->keyboard->shift=0;
-		app->keyboard->ctrl=0;
-	}
+	if (modifier == GLUT_ACTIVE_SHIFT) app->keyboard->shift=1;
+	if (modifier == GLUT_ACTIVE_CTRL) app->keyboard->ctrl=1;
 }
 
 void app_gl_keyboard(unsigned char key,int x,int y)
@@ -80,8 +67,6 @@ void app_gl_keyboard(unsigned char key,int x,int y)
 
 	if(key) app->keyboard->key_pressed = key;
 	else app->keyboard->key_pressed = 0;
-
-	glutPostRedisplay();
 
 	if(app->debug_keyboard) printf("key:%c(%d)\n",key,(int)key);
 }

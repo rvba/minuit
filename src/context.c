@@ -133,13 +133,28 @@ void ctx_mode(t_context *C)
 	C->mode->update(C->mode);
 }
 
+void ctx_reset(t_context *C)
+{
+	t_event *event = C->event;
+	event->plug_switch_flow_in = 0;
+
+	// reset special keys
+	t_app *app = C->app;
+
+	if(!(app->mouse->button_left == button_pressed))
+	{
+		app->keyboard->ctrl=0;
+		app->keyboard->shift=0;
+	}
+}
+
 void ctx_update(t_context *C)
 {
+	ctx_app(C);
 	ctx_camera(C);
 	ctx_keyboard(C);	
 	ctx_ui(C);
 	ctx_scene(C); // selection status for: meshes,lights
-	ctx_app(C);
 	ctx_mode(C);
 }
 
@@ -153,6 +168,8 @@ void ctx_handler(void)
 	ctx_render(C);
 	// update
 	ctx_update(C);
+	//reset
+	ctx_reset(C);
 }
 
 
