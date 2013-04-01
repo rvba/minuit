@@ -134,6 +134,20 @@ struct Event
 	char *standby_string;
 	int video;
 	int brick_delete;
+
+	int switch_plug_in_flow_in;
+	int switch_plug_in_flow_out;
+	int switch_plug_in_open_in;
+	int switch_plug_in_open_out;
+	int switch_plug_in_follow_in;
+	int switch_plug_in_follow_out;
+
+	int switch_plug_out_flow_in;
+	int switch_plug_out_flow_out;
+	int switch_plug_out_open_in;
+	int switch_plug_out_open_out;
+	int switch_plug_out_follow_in;
+	int switch_plug_out_follow_out;
 };
 
 t_event *event_new(void);

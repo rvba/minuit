@@ -135,10 +135,24 @@ void ctx_mode(t_context *C)
 
 void ctx_reset(t_context *C)
 {
+	// event
 	t_event *event = C->event;
-	event->plug_switch_flow_in = 0;
 
-	// reset special keys
+	event->switch_plug_in_flow_in = 0;
+	event->switch_plug_in_flow_out = 0;
+	event->switch_plug_in_open_in = 0;
+	event->switch_plug_in_open_out = 0;
+	event->switch_plug_in_follow_in = 0;
+	event->switch_plug_in_follow_out = 0;
+
+	event->switch_plug_out_flow_in = 0;
+	event->switch_plug_out_flow_out = 0;
+	event->switch_plug_out_open_in = 0;
+	event->switch_plug_out_open_out = 0;
+	event->switch_plug_out_follow_in = 0;
+	event->switch_plug_out_follow_out = 0;
+
+	// app special keys
 	t_app *app = C->app;
 
 	if(!(app->mouse->button_left == button_pressed))

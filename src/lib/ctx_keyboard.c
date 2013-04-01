@@ -53,9 +53,30 @@ void switch_desk(t_context *C)
 void keymap_main(unsigned char key)
 {
 	t_context *C=ctx_get();
+	t_event *event = C->event;
 
 	switch(key)
 	{
+		// plugs
+
+		case 'A': event->switch_plug_in_flow_in = 1; break;
+		case 'Q': event->switch_plug_in_open_in = 1; break;
+		case 'W': event->switch_plug_in_follow_in = 1; break;
+
+		case 'Z': event->switch_plug_in_flow_out = 1; break;
+		case 'S': event->switch_plug_in_open_out = 1; break;
+		case 'X': event->switch_plug_in_follow_out = 1; break;
+
+		case 'E': event->switch_plug_out_flow_in = 1; break;
+		case 'D': event->switch_plug_out_open_in = 1; break;
+		case 'C': event->switch_plug_out_follow_in = 1; break;
+
+		case 'R': event->switch_plug_out_flow_out = 1; break;
+		case 'F': event->switch_plug_out_open_out = 1; break;
+		case 'V': event->switch_plug_out_follow_out = 1; break;
+
+		//
+
 		case '*': draw_switch_axis_world(C->draw);break;
 		case '_': op_camera_translate_key(C->camera,-10,0);break;//right
 		case '-': op_camera_translate_key(C->camera,10,0);break;//left

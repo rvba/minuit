@@ -81,5 +81,19 @@ t_event *event_new(void)
 
 	event->brick_delete = 0;
 
+	event->switch_plug_in_flow_in = 0;
+	event->switch_plug_in_flow_out = 0;
+	event->switch_plug_in_open_in = 0;
+	event->switch_plug_in_open_out = 0;
+	event->switch_plug_in_follow_in = 0;
+	event->switch_plug_in_follow_out = 0;
+
+	event->switch_plug_out_flow_in = 0;
+	event->switch_plug_out_flow_out = 0;
+	event->switch_plug_out_open_in = 0;
+	event->switch_plug_out_open_out = 0;
+	event->switch_plug_out_follow_in = 0;
+	event->switch_plug_out_follow_out = 0;
+
 	return event;
 }

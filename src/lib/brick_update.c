@@ -272,6 +272,12 @@ int is_vec_stored=0;
 float v[3];
 float vec[3];
 
+inline void brick_plug_change_state(int *state)
+{
+	if(*state == 1) *state =0;
+	else *state = 1;
+}
+
 
 void cls_brick_update(t_brick *brick)
 {
@@ -280,6 +286,7 @@ void cls_brick_update(t_brick *brick)
 
 
 	t_plug *plug_in = &brick->plug_in;
+	t_plug *plug_out = &brick->plug_out;
 
 	int button_left=C->app->mouse->button_left;
 	int button_right=C->app->mouse->button_right;
@@ -305,7 +312,7 @@ void cls_brick_update(t_brick *brick)
 		}
 	}
 		
-	// MODES
+	// DELETE
 
 	if(mouse_over && C->event->brick_delete) 
 	{
@@ -324,178 +331,170 @@ void cls_brick_update(t_brick *brick)
 		exe_add_action(action);
 	}
 
+	// PLUGS
+	t_event *event = C->event;
+
+	if(mouse_over)
+	{
+		     if(event->switch_plug_in_flow_in)		brick_plug_change_state(&plug_in->flow_in);
+		else if(event->switch_plug_in_open_in)		brick_plug_change_state(&plug_in->open_in);
+		else if(event->switch_plug_in_follow_in)	brick_plug_change_state(&plug_in->follow_in);
+		else if(event->switch_plug_in_flow_out)		brick_plug_change_state(&plug_in->flow_out);
+		else if(event->switch_plug_in_open_out)		brick_plug_change_state(&plug_in->open_out);
+		else if(event->switch_plug_in_follow_out)	brick_plug_change_state(&plug_in->follow_out);
+
+		else if(event->switch_plug_out_flow_in)		brick_plug_change_state(&plug_out->flow_in);
+		else if(event->switch_plug_out_open_in)		brick_plug_change_state(&plug_out->open_in);
+		else if(event->switch_plug_out_follow_in)	brick_plug_change_state(&plug_out->follow_in);
+		else if(event->switch_plug_out_flow_out)	brick_plug_change_state(&plug_out->flow_out);
+		else if(event->switch_plug_out_open_out)	brick_plug_change_state(&plug_out->open_out);
+		else if(event->switch_plug_out_follow_out)	brick_plug_change_state(&plug_out->follow_out);
+	}
+
+
+	// MODES
 
 	if(!C->event->ui.pan)
 	{
+		switch(mode)
+		{
+			case bm_idle:
 
-	switch(mode)
-	{
-		case bm_idle:
-
-			// STORE BRICK_IN
-			if(C->event->is_brick_transformed)
-			{
-
-				if(is_mouse_over_plug(C,&brick->plug_in) && button_left==button_pressed)
+				// STORE BRICK_IN
+				if(C->event->is_brick_transformed)
 				{
-					C->ui->brick_in=brick;
+
+					if(is_mouse_over_plug(C,&brick->plug_in) && button_left==button_pressed)
+					{
+						C->ui->brick_in=brick;
+					}
+
 				}
 
-			}
-
-			if(!C->event->is_brick_transformed)
-			{
-				// START MOVING
-				if(mouse_over && button_right==button_pressed) 
+				if(!C->event->is_brick_transformed)
 				{
-					if(!C->event->ui.is_menu_mouse_show)
-					{
-						C->event->is_brick_transformed=1;
-						C->ui->brick_selected=brick;
-						brick->mode=bm_moving;
-					}
-				}
-				// START CLONING
-				else if(brick_mouse_cloning(C,mouse_over))
-				{
-					if(is_cloning)
-					{
-						C->event->is_brick_transformed=1;
-						C->ui->brick_selected=brick;
-						brick->mode=bm_moving;
-					}
-					else
+					// START MOVING
+					if(mouse_over && button_right==button_pressed) 
 					{
 						if(!C->event->ui.is_menu_mouse_show)
 						{
 							C->event->is_brick_transformed=1;
 							C->ui->brick_selected=brick;
-							brick->mode=bm_cloning;
+							brick->mode=bm_moving;
 						}
 					}
-				}
-
-				// START LINKING
-				else if(is_mouse_over_plug(C,&brick->plug_out) && button_left==button_pressed)
-				{
-					if(!C->event->ui.is_menu_mouse_show)
+					// START CLONING
+					else if(brick_mouse_cloning(C,mouse_over))
 					{
-						C->event->is_brick_transformed=1;
-						C->ui->brick_selected=brick;
-						brick->mode=bm_linking;
-						C->ui->brick_out=brick;
-
-						char msg[40];
-						char *type=data_name_get(brick->plug_intern.data_type);
-						sprintf(msg,"plug out:%s",type);
-						term_print(C->term,msg);
-
-					}
-				}
-
-				// START UNLINKING
-				else if(is_mouse_over_plug(C,&brick->plug_in) && button_left==button_pressed)
-				{
-					C->ui->brick_in=brick;
-
-					if(plug_in->is_connected)
-					{
-						if(!C->event->ui.is_menu_mouse_show)
+						if(is_cloning)
 						{
 							C->event->is_brick_transformed=1;
 							C->ui->brick_selected=brick;
-							brick->mode=bm_unlinking;
+							brick->mode=bm_moving;
 						}
-					}
-				}
-
-				// START TYPING
-				else if(button_middle_clic)
-				{
-				}
-
-				// START TRIGGER 
-				else 
-				{
-					if(brick->state.is_clicable)
-					{
-						if(brick_clic && !plug_in->is_connected)
+						else
 						{
-							if(brick->state.use_brick_blocking)
-							{
-								if(brick->state.is_idle)
-								{
-									brick->state.is_idle=0;
-									C->event->is_brick_transformed=1;
-									C->ui->brick_selected=brick;
-									brick->mode=bm_triggering;
-								}
-							}
-							else if(brick->state.use_global_blocking)
-							{
-								if(C->app->mouse->button_left_is_ready)
-								{
-									C->app->mouse->button_left_is_ready=0;
-									C->event->is_brick_transformed=1;
-									C->ui->brick_selected=brick;
-									brick->mode=bm_triggering;
-								}
-							}
-							else
+							if(!C->event->ui.is_menu_mouse_show)
 							{
 								C->event->is_brick_transformed=1;
 								C->ui->brick_selected=brick;
-								brick->mode=bm_triggering;
+								brick->mode=bm_cloning;
+							}
+						}
+					}
+
+					// START LINKING
+					else if(is_mouse_over_plug(C,&brick->plug_out) && button_left==button_pressed)
+					{
+						if(!C->event->ui.is_menu_mouse_show)
+						{
+							C->event->is_brick_transformed=1;
+							C->ui->brick_selected=brick;
+							brick->mode=bm_linking;
+							C->ui->brick_out=brick;
+
+							char msg[40];
+							char *type=data_name_get(brick->plug_intern.data_type);
+							sprintf(msg,"plug out:%s",type);
+							term_print(C->term,msg);
+
+						}
+					}
+
+					// START UNLINKING
+					else if(is_mouse_over_plug(C,&brick->plug_in) && button_left==button_pressed)
+					{
+						C->ui->brick_in=brick;
+
+						if(plug_in->is_connected)
+						{
+							if(!C->event->ui.is_menu_mouse_show)
+							{
+								C->event->is_brick_transformed=1;
+								C->ui->brick_selected=brick;
+								brick->mode=bm_unlinking;
+							}
+						}
+					}
+
+					// START TYPING
+					else if(button_middle_clic)
+					{
+					}
+
+					// START TRIGGER 
+					else 
+					{
+						if(brick->state.is_clicable)
+						{
+							if(brick_clic && !plug_in->is_connected)
+							{
+								if(brick->state.use_brick_blocking)
+								{
+									if(brick->state.is_idle)
+									{
+										brick->state.is_idle=0;
+										C->event->is_brick_transformed=1;
+										C->ui->brick_selected=brick;
+										brick->mode=bm_triggering;
+									}
+								}
+								else if(brick->state.use_global_blocking)
+								{
+									if(C->app->mouse->button_left_is_ready)
+									{
+										C->app->mouse->button_left_is_ready=0;
+										C->event->is_brick_transformed=1;
+										C->ui->brick_selected=brick;
+										brick->mode=bm_triggering;
+									}
+								}
+								else
+								{
+									C->event->is_brick_transformed=1;
+									C->ui->brick_selected=brick;
+									brick->mode=bm_triggering;
+								}
 							}
 						}
 					}
 				}
-			}
 
-			break;
+				break;
 
-		case bm_moving:
+			case bm_moving:
 
-			// cloning
-			if(is_cloning)
-			{
-				// release
-				if(brick_mouse_release(brick))
+				// cloning
+				if(is_cloning)
 				{
-					is_vec_stored=0;
-					is_cloning=0;
-					brick_release(brick);
-				}
+					// release
+					if(brick_mouse_release(brick))
+					{
+						is_vec_stored=0;
+						is_cloning=0;
+						brick_release(brick);
+					}
 
-				t_block *block=brick->block;
-				float *block_pos=block->pos;
-				ctx_get_mouse_pos(C,mouse_pos);
-
-				if(!is_vec_stored)
-				{
-					is_vec_stored=1;
-					ctx_ui_menu_hide(C);
-					vsub(vec,block_pos,mouse_pos);
-				}
-				else
-				{
-					ctx_ui_menu_hide(C);
-					vadd(v,mouse_pos,vec);
-					vcp(block_pos,v);
-				}
-			}
-			// moving
-			else
-			{
-				// release
-				if(button_right==button_released)
-				{
-					is_vec_stored=0;
-					brick_release(brick);
-				}
-				// move
-				else
-				{
 					t_block *block=brick->block;
 					float *block_pos=block->pos;
 					ctx_get_mouse_pos(C,mouse_pos);
@@ -512,124 +511,153 @@ void cls_brick_update(t_brick *brick)
 						vadd(v,mouse_pos,vec);
 						vcp(block_pos,v);
 					}
-				
 				}
-			}
-
-			break;
-
-		case bm_cloning:
-
-			if(!is_cloning)
-			{
-
-				t_block *clone_block=block_clone(brick->block);
-				t_brick *clone_brick=clone_block->bricks->first->data;
-
-				clone_brick->state.is_mouse_over=1;
-				clone_block->state.is_mouse_over=0;
-				clone_brick->mode=bm_moving;
-
-				brick_release(brick);
-				C->event->is_brick_transformed=1;
-
-				is_cloning=1;
-			}
-
-			break;
-
-
-		case bm_linking:
-			
-			// release linking
-			if(button_left==button_released)
-			{
-				// connect
-				if(C->ui->brick_in)
-				{
-					t_brick *brick_in=C->ui->brick_in;
-					t_plug *plug_in=&brick_in->plug_in;
-					if(!plug_in->src)
-					{
-						t_brick *brick_in = C->ui->brick_in;
-						t_brick *brick_out = C->ui->brick_out;
-
-						brick_in->cls->connect(brick_in,brick_out);
-					}
-
-				}
-
-				// reset
-
-				C->ui->brick_out=NULL;
-				C->ui->brick_in=NULL;
-
-				C->event->is_drawing=0;
-
-				C->event->state=event_idle;
-				brick->state.is_linking=0;
-
-				// release
-				brick_release(brick);
-
-			}
-			else
-			{
-				t_brick *brick_out=C->ui->brick_out;
-				t_plug *plug_out=&brick_out->plug_out;
-
-				// if plug out isn't yet plugged
-				if(!plug_out->is_connected)
-				{
-					// init linking
-					if(!brick->state.is_linking)
-					{
-						brick->state.is_linking=1;
-
-						ctx_get_mouse_pos(C,mouse_pos);
-
-						t_block *block=brick->block;
-
-						float width = brick_get_width(brick);
-						width+=brick->geom.height*2;
-
-						float x=block->pos[0];
-						float y=block->pos[1];
-
-						float pos_x= x	+  width ;
-						float pos_y= y + (brick->geom.block_pos*brick->geom.height) +(brick->geom.height/2);
-
-						C->event->start_x=pos_x; 
-						C->event->start_y=pos_y;
-
-
-						C->event->is_drawing=1;
-						C->event->state=event_linking;
-					}
-				}
-
-				// else release
+				// moving
 				else
 				{
-					brick->mode=bm_idle;
-					C->event->is_brick_transformed=0;
+					// release
+					if(button_right==button_released)
+					{
+						is_vec_stored=0;
+						brick_release(brick);
+					}
+					// move
+					else
+					{
+						t_block *block=brick->block;
+						float *block_pos=block->pos;
+						ctx_get_mouse_pos(C,mouse_pos);
+
+						if(!is_vec_stored)
+						{
+							is_vec_stored=1;
+							ctx_ui_menu_hide(C);
+							vsub(vec,block_pos,mouse_pos);
+						}
+						else
+						{
+							ctx_ui_menu_hide(C);
+							vadd(v,mouse_pos,vec);
+							vcp(block_pos,v);
+						}
+					
+					}
 				}
-			}
 
-			break;
-	
-		case bm_unlinking:
-			brick->cls->disconnect(brick);
-			break;
+				break;
 
-		case bm_triggering:
-			brick->cls->trigger(brick);
-			break;
+			case bm_cloning:
 
-		case bm_typing:
-			break;
+				if(!is_cloning)
+				{
 
-	}
+					t_block *clone_block=block_clone(brick->block);
+					t_brick *clone_brick=clone_block->bricks->first->data;
+
+					clone_brick->state.is_mouse_over=1;
+					clone_block->state.is_mouse_over=0;
+					clone_brick->mode=bm_moving;
+
+					brick_release(brick);
+					C->event->is_brick_transformed=1;
+
+					is_cloning=1;
+				}
+
+				break;
+
+
+			case bm_linking:
+				
+				// release linking
+				if(button_left==button_released)
+				{
+					// connect
+					if(C->ui->brick_in)
+					{
+						t_brick *brick_in=C->ui->brick_in;
+						t_plug *plug_in=&brick_in->plug_in;
+						if(!plug_in->src)
+						{
+							t_brick *brick_in = C->ui->brick_in;
+							t_brick *brick_out = C->ui->brick_out;
+
+							brick_in->cls->connect(brick_in,brick_out);
+						}
+
+					}
+
+					// reset
+
+					C->ui->brick_out=NULL;
+					C->ui->brick_in=NULL;
+
+					C->event->is_drawing=0;
+
+					C->event->state=event_idle;
+					brick->state.is_linking=0;
+
+					// release
+					brick_release(brick);
+
+				}
+				else
+				{
+					t_brick *brick_out=C->ui->brick_out;
+					t_plug *plug_out=&brick_out->plug_out;
+
+					// if plug out isn't yet plugged
+					if(!plug_out->is_connected)
+					{
+						// init linking
+						if(!brick->state.is_linking)
+						{
+							brick->state.is_linking=1;
+
+							ctx_get_mouse_pos(C,mouse_pos);
+
+							t_block *block=brick->block;
+
+							float width = brick_get_width(brick);
+							width+=brick->geom.height*2;
+
+							float x=block->pos[0];
+							float y=block->pos[1];
+
+							float pos_x= x	+  width ;
+							float pos_y= y + (brick->geom.block_pos*brick->geom.height) +(brick->geom.height/2);
+
+							C->event->start_x=pos_x; 
+							C->event->start_y=pos_y;
+
+
+							C->event->is_drawing=1;
+							C->event->state=event_linking;
+						}
+					}
+
+					// else release
+					else
+					{
+						brick->mode=bm_idle;
+						C->event->is_brick_transformed=0;
+					}
+				}
+
+				break;
+		
+			case bm_unlinking:
+				brick->cls->disconnect(brick);
+				break;
+
+			case bm_triggering:
+				brick->cls->trigger(brick);
+				break;
+
+			case bm_typing:
+				break;
+
+		}
 	}
 }
 
