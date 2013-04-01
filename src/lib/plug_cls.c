@@ -20,7 +20,6 @@ void cls_plug_make_float(t_plug *plug);
 void cls_plug_make_int(t_plug *plug);
 void cls_plug_make_string(t_plug *plug);
 void cls_plug_make_pointer(t_plug *plug);
-
 void cls_plug_make_mesh(t_plug *plug);
 void cls_plug_make_vertex(t_plug *plug);
 void cls_plug_make_face(t_plug *plug);
@@ -33,6 +32,135 @@ void cls_plug_make_selector(t_plug *plug);
 void cls_plug_make_trigger(t_plug *plug);
 void cls_plug_make_operator(t_plug *plug);
 void cls_plug_make_vector(t_plug *plug);
+
+void cls_plug_connect_int(t_plug *plug)
+{
+}
+
+void cls_plug_disconnect_int(t_plug *plug)
+{
+}
+
+
+void cls_plug_connect_float(t_plug *plug)
+{
+}
+
+void cls_plug_disconnect_float(t_plug *plug)
+{
+}
+
+void cls_plug_connect_string(t_plug *plug)
+{
+}
+
+void cls_plug_disconnect_string(t_plug *plug)
+{
+}
+
+void cls_plug_connect_pointer(t_plug *plug)
+{
+}
+
+void cls_plug_disconnect_pointer(t_plug *plug)
+{
+}
+
+void cls_plug_connect_mesh(t_plug *plug)
+{
+}
+
+void cls_plug_disconnect_mesh(t_plug *plug)
+{
+}
+
+void cls_plug_connect_vertex(t_plug *plug)
+{
+}
+
+void cls_plug_disconnect_vertex(t_plug *plug)
+{
+}
+
+void cls_plug_connect_face(t_plug *plug)
+{
+}
+
+void cls_plug_disconnect_face(t_plug *plug)
+{
+}
+
+void cls_plug_connect_vlst(t_plug *plug)
+{
+}
+
+void cls_plug_disconnect_vlst(t_plug *plug)
+{
+}
+
+void cls_plug_connect_lst(t_plug *plug)
+{
+}
+
+void cls_plug_disconnect_lst(t_plug *plug)
+{
+}
+
+void cls_plug_connect_camera(t_plug *plug)
+{
+}
+
+void cls_plug_disconnect_camera(t_plug *plug)
+{
+}
+
+void cls_plug_connect_char(t_plug *plug)
+{
+}
+
+void cls_plug_disconnect_char(t_plug *plug)
+{
+}
+
+void cls_plug_connect_object(t_plug *plug)
+{
+}
+
+void cls_plug_disconnect_object(t_plug *plug)
+{
+}
+
+void cls_plug_connect_selector(t_plug *plug)
+{
+}
+
+void cls_plug_disconnect_selector(t_plug *plug)
+{
+}
+
+void cls_plug_connect_trigger(t_plug *plug)
+{
+}
+
+void cls_plug_disconnect_trigger(t_plug *plug)
+{
+}
+
+void cls_plug_connect_operator(t_plug *plug)
+{
+}
+
+void cls_plug_disconnect_operator(t_plug *plug)
+{
+}
+
+void cls_plug_connect_vector(t_plug *plug)
+{
+}
+
+void cls_plug_disconnect_vector(t_plug *plug)
+{
+}
 
 
 void plug_data_reset(t_plug *plug)
@@ -1038,6 +1166,8 @@ t_plug_class plug_float ={
 	.type=dt_float,
 	.make=cls_plug_make_float,
 	.flow=cls_plug_flow_float,
+	.connect = cls_plug_connect_float,
+	.disconnect = cls_plug_disconnect_float,
 };
 
 // INT
@@ -1047,6 +1177,8 @@ t_plug_class plug_int ={
 	.type=dt_int,
 	.make=cls_plug_make_int,
 	.flow=cls_plug_flow_int,
+	.connect = cls_plug_connect_int,
+	.disconnect = cls_plug_disconnect_int,
 };
 
 // STRING
@@ -1056,6 +1188,8 @@ t_plug_class plug_string ={
 	.type=dt_string,
 	.make=cls_plug_make_string,
 	.flow=cls_plug_flow_generic, //XXX
+	.connect = cls_plug_connect_string,
+	.disconnect = cls_plug_disconnect_string,
 };
 
 // POINTER
@@ -1065,6 +1199,8 @@ t_plug_class plug_pointer ={
 	.type=dt_pointer,
 	.make=cls_plug_make_string,
 	.flow=cls_plug_flow_pointer, //XXX
+	.connect = cls_plug_connect_pointer,
+	.disconnect = cls_plug_disconnect_pointer,
 };
 
 // MESH
@@ -1074,6 +1210,8 @@ t_plug_class plug_mesh ={
 	.type=dt_mesh,
 	.make=cls_plug_make_mesh,
 	.flow=cls_plug_flow_mesh, 
+	.connect = cls_plug_connect_mesh,
+	.disconnect = cls_plug_disconnect_mesh,
 };
 
 // VERTEX
@@ -1083,6 +1221,8 @@ t_plug_class plug_vertex ={
 	.type=dt_vertex,
 	.make=cls_plug_make_vertex,
 	.flow=cls_plug_flow_vertex, 
+	.connect = cls_plug_connect_vertex,
+	.disconnect = cls_plug_disconnect_vertex,
 };
 
 // FACE
@@ -1092,6 +1232,8 @@ t_plug_class plug_face ={
 	.type=dt_face,
 	.make=cls_plug_make_face,
 	.flow=cls_plug_flow_generic, //XXX
+	.connect = cls_plug_connect_face,
+	.disconnect = cls_plug_disconnect_face,
 };
 
 // VLST
@@ -1101,6 +1243,8 @@ t_plug_class plug_vlst ={
 	.type=dt_vlst,
 	.make=cls_plug_make_vlst,
 	.flow=cls_plug_flow_vlst, 
+	.connect = cls_plug_connect_vlst,
+	.disconnect = cls_plug_disconnect_vlst,
 };
 
 // LST
@@ -1110,6 +1254,8 @@ t_plug_class plug_lst ={
 	.type=dt_lst,
 	.make=cls_plug_make_lst,
 	.flow=cls_plug_flow_lst, 
+	.connect = cls_plug_connect_lst,
+	.disconnect = cls_plug_disconnect_lst,
 };
 
 // CAMERA
@@ -1119,6 +1265,8 @@ t_plug_class plug_camera ={
 	.type=dt_camera,
 	.make=cls_plug_make_camera,
 	.flow=cls_plug_flow_camera, 
+	.connect = cls_plug_connect_camera,
+	.disconnect = cls_plug_disconnect_camera,
 };
 
 // CHAR
@@ -1128,6 +1276,8 @@ t_plug_class plug_char ={
 	.type=dt_char,
 	.make=cls_plug_make_char,
 	.flow=cls_plug_flow_generic, //XXX
+	.connect = cls_plug_connect_char,
+	.disconnect = cls_plug_disconnect_char,
 };
 
 // OBJECT
@@ -1137,6 +1287,8 @@ t_plug_class plug_object ={
 	.type=dt_object,
 	.make=cls_plug_make_object,
 	.flow=cls_plug_flow_object, 
+	.connect = cls_plug_connect_object,
+	.disconnect = cls_plug_disconnect_object,
 };
 
 // SELECTOR
@@ -1146,6 +1298,8 @@ t_plug_class plug_selector ={
 	.type=dt_selector,
 	.make=cls_plug_make_selector,
 	.flow=cls_plug_flow_object, 
+	.connect = cls_plug_connect_selector,
+	.disconnect = cls_plug_disconnect_selector,
 };
 
 // TRIGGER
@@ -1155,6 +1309,8 @@ t_plug_class plug_trigger ={
 	.type=dt_trigger,
 	.make=cls_plug_make_trigger,
 	.flow=cls_plug_flow_trigger, 
+	.connect = cls_plug_connect_trigger,
+	.disconnect = cls_plug_disconnect_trigger,
 };
 
 // OPERATOR
@@ -1164,6 +1320,8 @@ t_plug_class plug_operator ={
 	.type=dt_operator,
 	.make=cls_plug_make_operator,
 	.flow=cls_plug_flow_operator, 
+	.connect = cls_plug_connect_operator,
+	.disconnect = cls_plug_disconnect_operator,
 };
 
 // VECTOR
@@ -1173,6 +1331,8 @@ t_plug_class plug_vector ={
 	.type=dt_vector,
 	.make=cls_plug_make_vector,
 	.flow=cls_plug_flow_vector,  
+	.connect = cls_plug_connect_vector,
+	.disconnect = cls_plug_disconnect_vector,
 };
 
 

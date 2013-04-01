@@ -100,6 +100,8 @@ struct Plug_Class
 	t_data_type type;
 	void (* make)(t_plug *plug);
 	void (* flow)(t_plug *plug);
+	void (* connect)(t_plug *plug);
+	void (* disconnect)(t_plug *plug);
 };
 
 // PLUG
