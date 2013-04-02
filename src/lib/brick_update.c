@@ -54,6 +54,15 @@ void cls_brick_connect(t_brick *self,t_brick *src)
 			brick_type_change(self,&src->plug_intern);
 		}
 	}
+
+	t_plug *plug_self = &self->plug_intern;
+	t_plug *plug_src = &src->plug_intern;
+
+	// plug_cls
+	plug_self->cls->connect(plug_self,plug_src);
+	plug_src->cls->connect(plug_src,plug_self);
+
+
 }
 
 // DISCONNECT
@@ -69,6 +78,12 @@ void cls_brick_disconnect(t_brick *self)
 	t_plug *plug_target=plug_in->src;
 	t_brick *brick_out=plug_target->brick;
 	t_plug *plug_out=&brick_out->plug_out;
+	t_plug *plug_intern_self = &self->plug_intern;
+	t_plug *plug_intern_out = &brick_out->plug_intern;
+
+	// plug_cls
+	plug_intern_self->cls->disconnect(plug_intern_self);
+	plug_intern_out->cls->disconnect(plug_intern_out);
 
 	// set plug state
 	plug_in->is_connected=0;

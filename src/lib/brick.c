@@ -144,15 +144,12 @@ t_brick *brick_clone(t_block *block,t_brick *brick)
 	{
 		clone_brick->state.clone = brick->state.clone;
 		brick_clone_change_name(clone_brick);
-		//txt_init(&clone_brick->txt_name,clone_brick->name);
 	}
 	else
 	{
 		brick->state.clone = brick->id;
 		clone_brick->state.clone = brick->id;
 		brick_clone_change_name(brick);
-		//txt_init(&brick->txt_name,brick->name);
-		//txt_init(&clone_brick->txt_name,clone_brick->name);
 		brick_clone_change_name(clone_brick);
 		brick_build_width(brick);
 	}
@@ -234,6 +231,7 @@ void brick_type_change(t_brick *brick,t_plug *plug)
 
 	// build data
 	plug_intern->data=data_add(plug_intern->data_type,plug->data);
+	plug_intern->data_memory = plug_intern->data;
 
 	// data init
 	data_init(plug_intern->data_type,plug_intern->data);
@@ -273,6 +271,7 @@ void brick_change_type_by_name(t_brick *brick,t_data_type type)
 
 		// build data
 		plug_intern->data=data_add(plug_intern->data_type,NULL);
+		plug_intern->data_memory = plug_intern->data;
 		// data init
 		data_init(plug_intern->data_type,plug_intern->data);
 
@@ -306,16 +305,19 @@ void plug_init(
 	if(data_target)
 	{
 		plug->data=data_target;
+		plug->data_memory = plug->data;
 	}
 	else
 	{
 		if(duplicate)
 		{
 			plug->data=data_add(type,data_target);
+			plug->data_memory = plug->data;
 		}
 		else
 		{
 			plug->data=NULL;
+			plug->data_memory = NULL;
 		}
 	}
 }
@@ -335,6 +337,7 @@ void plug_reset(t_plug *plug,const char *name)
 	plug->child=NULL;
 	plug->pos=0; 
 	plug->data=NULL;
+	plug->data_memory = NULL;
 	plug->brick=NULL;
 	plug->is_connected=0;
 	plug->is_updated=0;
@@ -353,6 +356,7 @@ void plug_reset(t_plug *plug,const char *name)
 	plug->let_in = 0;
 	plug->let_out = 0;
 	plug->is_eval = 0;
+	plug->is_volatil = 0;
 
 	plug->data_type=dt_null;
 	plug->operator_type = ot_null;
@@ -370,8 +374,14 @@ t_brick *brick_rebind(t_scene *sc,void *ptr)
 	rebind(sc,"brick","menu",(void **)&brick->menu);
 	rebind(sc,"brick","block",(void **)&brick->block);
 	rebind(sc,"brick","plug_in_src",(void **)&brick->plug_in.src);
-	if(brick->plug_intern.store_data) rebind(sc,"brick","plug_intern_data",(void **)&brick->plug_intern.data);
-	else brick->plug_intern.data = NULL;
+
+	if(brick->plug_intern.store_data) 
+		rebind(sc,"brick","plug_intern_data",(void **)&brick->plug_intern.data);
+	else 	
+		brick->plug_intern.data = NULL;
+
+	if(brick->plug_intern.data_memory) 
+		rebind(sc,"brick","plug_intern_data_memory",(void **)&brick->plug_intern.data_memory);
 
 
 	rebind(sc,"brick","plug_out_dst",(void **)&brick->plug_out.dst);
@@ -510,6 +520,7 @@ t_brick *brick_new(const char *name)
 	brick->state.frame_loop = 0;
 	brick->state.remove_connected = 0;
 	brick->state.clone = 0;
+	brick->state.draw_value = 1;
 
 	brick->geom.block_pos=0;
 	brick->geom.height=20;

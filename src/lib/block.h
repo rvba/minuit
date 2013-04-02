@@ -100,7 +100,7 @@ struct Plug_Class
 	t_data_type type;
 	void (* make)(t_plug *plug);
 	void (* flow)(t_plug *plug);
-	void (* connect)(t_plug *plug);
+	void (* connect)(t_plug *self, t_plug *dst);
 	void (* disconnect)(t_plug *plug);
 };
 
@@ -123,6 +123,7 @@ struct Plug
 	int is_versatil;
 	int store_data;
 	int is_eval;
+	int is_volatil;
 
 	int flow_in;
 	int flow_out;
@@ -146,6 +147,7 @@ struct Plug
 	t_operator operator_type;
 
 	void *data;
+	void *data_memory;
 };
 
 /***		BRICK		***/

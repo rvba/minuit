@@ -33,7 +33,7 @@ void cls_plug_make_trigger(t_plug *plug);
 void cls_plug_make_operator(t_plug *plug);
 void cls_plug_make_vector(t_plug *plug);
 
-void cls_plug_connect_int(t_plug *plug)
+void cls_plug_connect_int(t_plug *self,t_plug *dst)
 {
 }
 
@@ -42,7 +42,7 @@ void cls_plug_disconnect_int(t_plug *plug)
 }
 
 
-void cls_plug_connect_float(t_plug *plug)
+void cls_plug_connect_float(t_plug *self,t_plug *dst)
 {
 }
 
@@ -50,7 +50,7 @@ void cls_plug_disconnect_float(t_plug *plug)
 {
 }
 
-void cls_plug_connect_string(t_plug *plug)
+void cls_plug_connect_string(t_plug *self,t_plug *dst)
 {
 }
 
@@ -58,7 +58,7 @@ void cls_plug_disconnect_string(t_plug *plug)
 {
 }
 
-void cls_plug_connect_pointer(t_plug *plug)
+void cls_plug_connect_pointer(t_plug *self, t_plug *dst)
 {
 }
 
@@ -66,7 +66,7 @@ void cls_plug_disconnect_pointer(t_plug *plug)
 {
 }
 
-void cls_plug_connect_mesh(t_plug *plug)
+void cls_plug_connect_mesh(t_plug *self, t_plug *dst)
 {
 }
 
@@ -74,7 +74,7 @@ void cls_plug_disconnect_mesh(t_plug *plug)
 {
 }
 
-void cls_plug_connect_vertex(t_plug *plug)
+void cls_plug_connect_vertex(t_plug *self, t_plug *dst)
 {
 }
 
@@ -82,7 +82,7 @@ void cls_plug_disconnect_vertex(t_plug *plug)
 {
 }
 
-void cls_plug_connect_face(t_plug *plug)
+void cls_plug_connect_face(t_plug *self, t_plug *dst)
 {
 }
 
@@ -90,7 +90,7 @@ void cls_plug_disconnect_face(t_plug *plug)
 {
 }
 
-void cls_plug_connect_vlst(t_plug *plug)
+void cls_plug_connect_vlst(t_plug *self, t_plug *dst)
 {
 }
 
@@ -98,7 +98,7 @@ void cls_plug_disconnect_vlst(t_plug *plug)
 {
 }
 
-void cls_plug_connect_lst(t_plug *plug)
+void cls_plug_connect_lst(t_plug *self, t_plug *dst)
 {
 }
 
@@ -106,7 +106,7 @@ void cls_plug_disconnect_lst(t_plug *plug)
 {
 }
 
-void cls_plug_connect_camera(t_plug *plug)
+void cls_plug_connect_camera(t_plug *self, t_plug *dst)
 {
 }
 
@@ -114,7 +114,7 @@ void cls_plug_disconnect_camera(t_plug *plug)
 {
 }
 
-void cls_plug_connect_char(t_plug *plug)
+void cls_plug_connect_char(t_plug *self, t_plug *dst)
 {
 }
 
@@ -122,7 +122,7 @@ void cls_plug_disconnect_char(t_plug *plug)
 {
 }
 
-void cls_plug_connect_object(t_plug *plug)
+void cls_plug_connect_object(t_plug *self, t_plug *dst)
 {
 }
 
@@ -130,7 +130,7 @@ void cls_plug_disconnect_object(t_plug *plug)
 {
 }
 
-void cls_plug_connect_selector(t_plug *plug)
+void cls_plug_connect_selector(t_plug *self, t_plug *dst)
 {
 }
 
@@ -138,7 +138,7 @@ void cls_plug_disconnect_selector(t_plug *plug)
 {
 }
 
-void cls_plug_connect_trigger(t_plug *plug)
+void cls_plug_connect_trigger(t_plug *self, t_plug *dst)
 {
 }
 
@@ -146,7 +146,7 @@ void cls_plug_disconnect_trigger(t_plug *plug)
 {
 }
 
-void cls_plug_connect_operator(t_plug *plug)
+void cls_plug_connect_operator(t_plug *self, t_plug *dst)
 {
 }
 
@@ -154,12 +154,62 @@ void cls_plug_disconnect_operator(t_plug *plug)
 {
 }
 
-void cls_plug_connect_vector(t_plug *plug)
+void cls_plug_connect_vector(t_plug *self, t_plug *dst)
 {
+	if(dst->is_volatil)
+	{
+		t_brick *brick = self->brick;
+		t_block *block = brick->block;
+		t_brick *brick_x = block_brick_get(block,"x");
+			
+		if(brick_x)
+		{
+			t_brick *brick_y = block_brick_get(block,"y");
+			t_brick *brick_z = block_brick_get(block,"z");
+
+			t_plug *plug_x = &brick_x->plug_intern;
+			t_plug *plug_y = &brick_y->plug_intern;
+			t_plug *plug_z = &brick_z->plug_intern;
+
+			plug_x->store_data = 0;
+			plug_y->store_data = 0;
+			plug_z->store_data = 0;
+
+			brick_x->state.draw_value = 0;
+			brick_y->state.draw_value = 0;
+			brick_z->state.draw_value = 0;
+		}
+	}
 }
 
 void cls_plug_disconnect_vector(t_plug *plug)
 {
+	t_brick *brick = plug->brick;
+	t_block *block = brick->block;
+	t_brick *brick_x = block_brick_get(block,"x");
+
+	if(brick_x)
+	{
+		t_brick *brick_y = block_brick_get(block,"y");
+		t_brick *brick_z = block_brick_get(block,"z");
+
+		t_plug *plug_x = &brick_x->plug_intern;
+		t_plug *plug_y = &brick_y->plug_intern;
+		t_plug *plug_z = &brick_z->plug_intern;
+
+		plug_x->data = plug_x->data_memory;
+		plug_y->data = plug_y->data_memory;
+		plug_z->data = plug_z->data_memory;
+
+		plug_x->store_data = 1;
+		plug_y->store_data = 1;
+		plug_z->store_data = 1;
+
+		brick_x->state.draw_value = 1;
+		brick_y->state.draw_value = 1;
+		brick_z->state.draw_value = 1;
+
+	}
 }
 
 
@@ -340,23 +390,26 @@ void __cls_plug_flow_float(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 
 		float increment=plug->brick->var.increment;
 
-		switch(src_type)
+		if(data)
 		{
-			case dt_int:
+			switch(src_type)
+			{
+				case dt_int:
 
-				*data=(float)drf_int(src_plug->data);
-				break;
+					*data=(float)drf_int(src_plug->data);
+					break;
 
-			case dt_float:
+				case dt_float:
 
-				*data=drf_float(src_plug->data);
-				break;
-			default:
-				plug_warning(plug,src_plug);
-				break;
+					*data=drf_float(src_plug->data);
+					break;
+				default:
+					plug_warning(plug,src_plug);
+					break;
+			}
+
+			if(increment) *data=*data * increment;  
 		}
-
-		if(increment) *data=*data * increment;  
 	}
 
 }
@@ -691,7 +744,7 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 					break;
 			}
 
-			// SET VECTOR
+			// set vector
 			if(plug_vector_in->is_connected)
 			{
 				if(vlst)
@@ -966,7 +1019,6 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 	t_brick *brick_y;
 	t_brick *brick_z;
 
-
 	t_plug *plug_x;
 	t_plug *plug_y;
 	t_plug *plug_z;
@@ -982,7 +1034,6 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 		brick_y = block_brick_get(block,"y");
 		brick_z = block_brick_get(block,"z");
 
-
 		plug_x = &brick_x->plug_intern;
 		plug_y = &brick_y->plug_intern;
 		plug_z = &brick_z->plug_intern;
@@ -991,19 +1042,6 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 		plug_y_in = &brick_y->plug_in;
 		plug_z_in = &brick_z->plug_in;
 
-		// CLOSE X Y Z
-		plug_x_in->flow_in = 0;
-		plug_y_in->flow_in = 0;
-		plug_z_in->flow_in = 0;
-
-		// RESET X Y Z
-		plug_x->data = NULL;
-		plug_y->data = NULL;
-		plug_z->data = NULL;
-
-		brick_x->state.draw_value = 0;
-		brick_y->state.draw_value = 0;
-		brick_z->state.draw_value = 0;
 	}
 
 	t_vector *vector;
@@ -1020,14 +1058,30 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 			case dt_vector:
 
 				vector = src_plug->data;
-				vector_data = vector->data;
 
+				if(src_plug->is_volatil)
+				{
+					if(brick_x && mode == mode_in)
+					{
+						plug_x_in->flow_in = 0;
+						plug_y_in->flow_in = 0;
+						plug_z_in->flow_in = 0;
+
+						plug_x->data = NULL;
+						plug_y->data = NULL;
+						plug_z->data = NULL;
+
+						brick_x->state.draw_value = 0;
+						brick_y->state.draw_value = 0;
+						brick_z->state.draw_value = 0;
+					}
+				}
+				
+				vector_data = vector->data;
 
 				//-- wait for initialisation from for loop
 				if(vector_data)
 				{
-					t_context *C = ctx_get();
-					if(C->ui->show_step) printf(":VECTOR is connected\n");
 					plug_x->data = vector_data;
 					plug_y->data = vector_data+1;
 					plug_z->data = vector_data+2;
@@ -1037,20 +1091,6 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 					plug_y_in->flow_in = 1;
 					plug_z_in->flow_in = 1;
 
-					brick_x->state.draw_value = 1;
-					brick_y->state.draw_value = 1;
-					brick_z->state.draw_value = 1;
-
-					/*
-					brick_x->cls->trigger(brick_x);
-					brick_y->cls->trigger(brick_y);
-					brick_z->cls->trigger(brick_z);
-					*/
-				}
-				else
-				{
-					t_context *C = ctx_get();
-					if(C->ui->show_step) printf(":VECTOR is NOT connected\n");
 				}
 
 				break;
@@ -1058,9 +1098,6 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 			default:
 				break;
 		}
-	}
-	else
-	{
 	}
 }
 

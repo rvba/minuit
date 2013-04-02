@@ -233,6 +233,8 @@ t_node *add_brick_switch(t_context *C,t_block *block,const char *name,void *data
 	// ACTION
 	brick->action=op_switch;
 
+	brick->state.draw_value = 0;
+
 	// PLUG
 	set_plug_option(brick);
 
@@ -265,6 +267,8 @@ t_node *add_brick_trigger(t_context *C,t_block *block,const char *name,void *f(t
 	// NEW BRICK
 	t_node *node_brick=brick_make(block,name,bt_trigger,dt_int,ptr);
 	t_brick *brick=node_brick->data;
+
+	brick->state.draw_value = 0;
 	
 	// ACTION
 	brick->action=f;
@@ -905,6 +909,8 @@ t_node *add_part_vlst(t_context *C,t_block *block,t_data_type type,const char *n
 
 		brick_count->action=op_set_vlst;
 		brick_count->state.use_loops = 0;
+		//XXX
+		brick_count->plug_intern.data_memory = NULL;
 
 		t_brick *brick=node->data;
 		brick->state.draw_outline=0;
@@ -924,6 +930,8 @@ t_node *add_part_vlst(t_context *C,t_block *block,t_data_type type,const char *n
 
 		brick_count->action=op_set_colors;
 		brick_count->state.use_loops = 0;
+		//XXX
+		brick_count->plug_intern.data_memory = NULL;
 
 		t_brick *brick=node->data;
 		brick->state.draw_outline=0;
@@ -1073,29 +1081,25 @@ t_node *add_maths(t_context *C,const char *name)
 
 t_node *add_get(t_context *C)
 {
-	// NEW BLOCK
+	// new block
 	t_node *node_block = add_block(C,"get");
 	t_block *block=node_block->data;
 	block->state.draw_outline=1;
 
-	// GET
-	//t_node *node_get = add_part_trigger_type(C,block,"get",op_get,dt_lst);
+	// get
 	t_node *node_get = add_part_trigger_type(C,block,"get",op_operator,dt_operator);
 	t_brick *brick_get = node_get->data;
 	brick_get->state.always_trigger = 1;
 	brick_get->plug_intern.operator_type = ot_get;
 
-	// RESULT
+	// result
 	t_node *node_result = add_part_trigger_type(C,block,"result",op_operator,dt_int);
 	t_brick *brick_result = node_result->data;
 
 	brick_result->state.is_versatil = 1;
 
-	// INDICE
-
-	//t_node *node_indice = add_part_slider_int_positive(C,block,"indice",NULL);
+	// indice
 	add_part_slider_int_positive(C,block,"indice",NULL);
-	//brick->state.is_versatil=1;
 
 	return node_block;
 }
@@ -1104,30 +1108,31 @@ t_node *add_get(t_context *C)
 
 t_node *add_for(t_context *C)
 {
-	// NEW BLOCK
+	// new block
 	t_node *node_block = add_block(C,"for");
 	t_block *block=node_block->data;
 	block->state.draw_outline=1;
 
-	// ADDD FOR
+	// add for
 	t_node *node_for = add_part_trigger_type(C,block,"for",op_operator,dt_operator);
 	t_brick *brick_for = node_for->data;
 	brick_for->state.always_trigger = 1;
 	t_plug *plug_for = &brick_for->plug_intern;
 	brick_for->plug_intern.operator_type = ot_for;
 
-	// INDICE
+	// indice
 	t_node *node_indice = add_part_int(C,block,"indice",NULL);
 	t_brick *brick_indice = node_indice->data;
 
-	// NO FLOW IN
+	// no flow in
 	brick_indice->plug_in.flow_in = 0;
 
-	// VECTOR
-
+	// vector
 	t_node *node_vector = add_part_vector(C,block,"vector");
 	t_brick *brick_vector = node_vector->data;
 	t_plug *plug_vector = &brick_vector->plug_intern;
+	plug_vector->is_volatil = 1;
+	brick_vector->state.draw_value = 0;
 
 	// parent
 	plug_add_parent(plug_vector,plug_for);
@@ -1140,10 +1145,8 @@ t_node *add_for(t_context *C)
 t_node *set_no_store(t_node *node)
 {
 	t_brick *brick = node->data;
-	t_plug *plug_intern = &brick->plug_intern;
 	t_plug *plug_in = &brick->plug_in;
 	plug_in->flow_in = 0;
-	plug_intern->store_data = 0;
 
 	return node;
 }
@@ -1156,7 +1159,6 @@ t_node *set_no_store_v(t_plug *plug,t_node *node)
 	t_plug *plug_in = &brick->plug_in;
 
 	plug_in->flow_in = 0;
-	plug_intern->store_data = 0;
 
 	// parent
 	plug_add_parent(plug_intern,plug);
@@ -1177,16 +1179,16 @@ t_node *add_vector(t_context *C)
 
 	t_node *node_vector = set_no_store(add_part_vector(C,block,"vector"));
 	t_brick *brick_vector = node_vector->data;
+	brick_vector->state.draw_value = 0;
 	t_plug *plug_intern = &brick_vector->plug_intern;
 
 	// ADD X Y Z
 
-	set_no_store_v(plug_intern,add_part_float(C,block,"x",NULL));
-	set_no_store_v(plug_intern,add_part_float(C,block,"y",NULL));
-	set_no_store_v(plug_intern,add_part_float(C,block,"z",NULL));
+	set_no_store_v(plug_intern,add_part_slider_float(C,block,"x",NULL));
+	set_no_store_v(plug_intern,add_part_slider_float(C,block,"y",NULL));
+	set_no_store_v(plug_intern,add_part_slider_float(C,block,"z",NULL));
 
 	return node_block;
-
 }
 
 // CONST
@@ -1247,10 +1249,7 @@ t_node *add_stack(t_context *C)
 	plug_add_parent(plug_counter,plug_plus);
 	plug_add_parent(plug_limit,plug_plus);
 
-
-
 	return node_block;
-
 }
 
 
