@@ -155,7 +155,7 @@ void ctx_reset(t_context *C)
 	// app special keys
 	t_app *app = C->app;
 
-	if(!(app->mouse->button_left == button_pressed))
+	if(!(app->mouse->button_left == button_pressed) && !(app->mouse->button_right == button_pressed))
 	{
 		app->keyboard->ctrl=0;
 		app->keyboard->shift=0;

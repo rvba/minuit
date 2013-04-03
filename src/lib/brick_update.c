@@ -111,33 +111,24 @@ void cls_brick_disconnect(t_brick *self)
 
 // MOUSE
 
-int brick_mouse_release(t_brick *brick)
+int brick_release_cloning(t_brick *brick)
 {
 	t_context *C=ctx_get();
-	if(C->ui->mouse_mode)
-	{
-		if(C->app->mouse->button_middle==button_released) return 1;
-		else return 0;
-	}
-	else
-	{
-		if(C->app->mouse->button_left==button_released) return 1;
-		else return 0;
-	}
+	if(C->app->mouse->button_right == button_released) return 1;
+	else return 0;
 }
 
-int brick_mouse_cloning(t_context *C,int mouse_over)
+int brick_start_cloning(t_context *C,int mouse_over)
 {
-	if(C->ui->mouse_mode)
-	{
-		if(mouse_over && C->app->mouse->button_middle==button_pressed) return 1;
-		else return 0;
-	}
-	else
-	{
-		if(mouse_over && C->app->mouse->button_left==button_pressed && C->app->keyboard->shift) return 1;
-		else return 0;
-	}
+	if(
+		mouse_over
+		&& (C->app->mouse->button_right == button_pressed)
+		&& (C->app->keyboard->ctrl)
+		)
+
+		return 1;
+	else 
+		return 0;
 }
 
 // TRIGGER
@@ -369,7 +360,7 @@ void cls_brick_update(t_brick *brick)
 
 	// MODES
 
-	if(!C->event->ui.pan)
+	if(!C->event->ui.pan && !C->event->camera_rotation)
 	{
 		switch(mode)
 		{
@@ -388,18 +379,8 @@ void cls_brick_update(t_brick *brick)
 
 				if(!C->event->is_brick_transformed)
 				{
-					// START MOVING
-					if(mouse_over && button_right==button_pressed) 
-					{
-						if(!C->event->ui.is_menu_mouse_show)
-						{
-							C->event->is_brick_transformed=1;
-							C->ui->brick_selected=brick;
-							brick->mode=bm_moving;
-						}
-					}
 					// START CLONING
-					else if(brick_mouse_cloning(C,mouse_over))
+					if(brick_start_cloning(C,mouse_over))
 					{
 						if(is_cloning)
 						{
@@ -415,6 +396,16 @@ void cls_brick_update(t_brick *brick)
 								C->ui->brick_selected=brick;
 								brick->mode=bm_cloning;
 							}
+						}
+					}
+					// START MOVING
+					else if(mouse_over && button_right==button_pressed) 
+					{
+						if(!C->event->ui.is_menu_mouse_show)
+						{
+							C->event->is_brick_transformed=1;
+							C->ui->brick_selected=brick;
+							brick->mode=bm_moving;
 						}
 					}
 
@@ -503,7 +494,7 @@ void cls_brick_update(t_brick *brick)
 				if(is_cloning)
 				{
 					// release
-					if(brick_mouse_release(brick))
+					if(brick_release_cloning(brick))
 					{
 						is_vec_stored=0;
 						is_cloning=0;
