@@ -33,7 +33,8 @@ void skt_tint(const char tint[])
 
 void skt_line(float *v1,float *v2,int width,float *color)
 {
-	glColor3f(color[0],color[1],color[2]);
+	float i = SKT->intensity;
+	glColor3f(color[0]*i,color[1]*i,color[2]*i);
 	glLineWidth(width);
 
 	glBegin(GL_LINES);
@@ -44,7 +45,8 @@ void skt_line(float *v1,float *v2,int width,float *color)
 
 void skt_closedline(float *points,int tot,float *color,int width)
 {
-	glColor3f(color[0],color[1],color[2]);
+	float i = SKT->intensity;
+	glColor3f(color[0]*i,color[1]*i,color[2]*i);
 	glLineWidth(width);
 
 	int p=0;
@@ -179,6 +181,8 @@ t_skt *skt_new(void)
 	skt->line_width=SKT_LINE_WIDTH_FRONT;
 	skt->with_scale=SKT_WITH_SCALE;
 	skt->scale=SKT_SCALE;
+	//skt->intensity=SKT_INTENSITY;
+	skt->intensity=1.0;
 	vset(skt->color,SKT_COLOR_FRONT,SKT_COLOR_FRONT,SKT_COLOR_FRONT);
 
 	return skt;

@@ -537,7 +537,6 @@ void vlst_add_data(t_vlst *vlst,void *ptr)
 
 void vlst_copy(t_vlst *dst,t_vlst *src)
 {
-	printf("VLST COPY\n");
 	if(src->type==dst->type)
 	{
 		t_vlst_type t=src->type;

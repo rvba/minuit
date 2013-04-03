@@ -18,6 +18,7 @@
 #define SKT_POINT_SIZE 2
 #define SKT_LINE_WIDTH_FRONT 1
 #define SKT_LINE_WIDTH_BACK 20
+#define SKT_INTENSITY 1
 
 #include "util.h"
 
@@ -35,6 +36,7 @@ struct Sketch
 	//point
 	int point_width;
 	float point_size;
+	float intensity;
 
 	//scale
 	int with_scale;

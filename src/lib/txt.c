@@ -683,10 +683,12 @@ void txt_draw(t_txt *txt)
 	t_context *C=ctx_get();
 	char *letter=txt->name;
 	float *c=C->ui->front_color;
+	t_skt *skt = C->skt;
+	float i = skt->intensity;
 
 	if(C->ui->use_bitmap_font && txt->use_bitmap_font)
 	{
-		glColor3f(c[0],c[1],c[2]); 
+		glColor3f(c[0]*i,c[1]*i,c[2]*i); 
 		glRasterPos2i(0,0);
 
 		void * font = GLUT_BITMAP_HELVETICA_10;
