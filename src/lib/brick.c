@@ -157,6 +157,33 @@ t_brick *brick_clone(t_block *block,t_brick *brick)
 	return clone_node->data;
 }
 
+t_brick *brick_copy(t_block *block,t_brick *brick)
+{
+	t_context *C=ctx_get();
+
+	C->scene->store=1;
+
+	t_plug *plug_intern=&brick->plug_intern;
+
+	t_data_type data_type = plug_intern->data_type;
+
+	void *data = plug_intern->data;
+	void *data_new = data_copy(data_type,data);
+
+	t_node *clone_node=brick_make(block,brick->name,brick->type,plug_intern->data_type,data_new);
+
+	t_brick *clone_brick=clone_node->data;
+
+	clone_brick->action=brick->action;
+	clone_brick->state.draw_name=brick->state.draw_name;
+	clone_brick->state.draw_value=brick->state.draw_value;
+	clone_brick->state.draw_outline=brick->state.draw_outline;
+
+	C->scene->store=0;
+
+	return clone_node->data;
+}
+
 // FREE
 
 void brick_selector_list_free(t_lst *lst)

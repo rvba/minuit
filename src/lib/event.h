@@ -151,6 +151,8 @@ struct Event
 
 	int camera_rotation;
 	int brick_copying;
+	int brick_cloning;
+	int brick_cloning_start;
 };
 
 t_event *event_new(void);

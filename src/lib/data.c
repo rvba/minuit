@@ -208,6 +208,140 @@ void *data_add(t_data_type type,void *data)
 	return NULL;
 }
 
+void *data_copy(t_data_type type,void *data)
+{
+	t_context *C=ctx_get();
+
+	float *_float;
+	char *_char;
+	char *_string=NULL;
+	//t_vlst *_vlst;
+	t_vector *_vector;
+	t_node *node;
+
+	size_t size;
+
+	void *data_new = data_add(type,data);
+
+	t_vlst *vlst_new;
+	t_vlst *vlst_old;
+
+	int *_int_new;
+	int *_int_old;
+
+	switch(type)
+	{
+		case dt_vector:
+
+			node = vector_add("vector");
+			_vector = node->data;
+			return _vector;
+
+			break;
+			
+		case dt_int:
+
+			_int_new = (int *)data_new;
+
+			return _int_new;
+
+			break;
+
+		case dt_char:
+			
+			_char = (char *)malloc(sizeof(char));
+
+			if(C->scene->store)
+			{
+				scene_add_data_var(C->scene,"char","char_data",sizeof(char),_char);
+			}
+
+			if(data) *_char=*((char*)data);
+			else  *_char=0; 
+
+			return _char;
+
+			break;
+
+			
+
+		case dt_float:
+
+			_float = (float *)malloc(sizeof(float));
+
+			if(C->scene->store)
+			{
+				scene_add_data_var(C->scene,"float","float_data",sizeof(float),_float);
+			}
+
+			if(data) *_float=*((float*)data);
+			else *_float=0;
+
+			return _float;
+
+			break;
+
+		case dt_string:
+
+			if(data)
+			{
+				size=sizeof(char)*(strlen(data)+1);
+				_string = (char *)malloc(size);
+				strcpy(_string,data);
+
+				if(C->scene->store)
+				{
+					scene_add_data_var(C->scene,"string","string_data",size,_string);
+				}
+			}
+
+			return _string;
+
+		case dt_mesh:
+			printf("[MESH]\n");
+			break;
+
+		case dt_vertex:
+			printf("[VERTEX]\n");
+			break;
+
+		case dt_face:
+			printf("[FACE]\n");
+			break;
+
+		case dt_camera:
+			printf("[CAMERA]\n");
+			break;
+
+		case dt_lst:
+			printf("[LST]\n");
+			break;
+
+		case dt_object:
+			printf("[OBJECT]\n");
+			break;
+
+		case dt_vlst:
+
+			vlst_new = (t_vlst *)data_new;
+			vlst_old = (t_vlst *)data;
+			vlst_copy(vlst_new,vlst_old);
+			//XXX
+			vlst_new->is_linked = 0;
+
+			return vlst_new;
+
+			break;
+
+		default:
+			printf("[ERROR data_add] Unknown data type:%s\n",data_name_get(type));
+			return NULL;
+			break;
+	}
+
+	return NULL;
+}
+
 void data_init(t_data_type type,void *data)
 {
 	int *_int;

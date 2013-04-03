@@ -19,7 +19,7 @@ void ctx_camera_movment(t_context *C)
 	// When No UI event
 	if(!C->event->is_brick_transformed)
 	{
-		// Start Camera Rotation 
+		// Release Camera Rotation
 		if(C->event->camera_rotation)
 		{
 			if(
@@ -29,7 +29,7 @@ void ctx_camera_movment(t_context *C)
 				)
 				C->event->camera_rotation = 0;
 		}
-		// Release Camera Rotation
+		// Start Camera Rotation 
 		else
 		{
 			if(

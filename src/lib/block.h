@@ -309,6 +309,7 @@ struct Brick
 
 // BLOCK
 
+t_block *	block_copy(t_block *block);
 t_block *	block_clone(t_block *block);
 t_brick*	block_brick_get(t_block *block,const char *name);
 void 		block_brick_add(t_block *block,t_node *node_brick);
@@ -351,6 +352,7 @@ void		block_unstore(t_block *block);
 
 // BRICK
 
+t_brick *	brick_copy(t_block *block,t_brick *brick);
 t_brick *	brick_clone(t_block *block,t_brick *brick);
 void 		plug_color_init(t_plug *plug);
 

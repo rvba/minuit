@@ -48,6 +48,32 @@ t_block *block_clone(t_block *block)
 	return clone_block;
 }
 
+t_block *block_copy(t_block *block)
+{
+	t_context *C=ctx_get();
+	C->scene->store=1;
+
+	t_node *clone_node = block_make(block->name,block->type);
+	t_block *clone_block = clone_node->data;
+
+	clone_block->state.draw_outline = block->state.draw_outline;
+
+	_add_block(C,clone_block);
+
+	t_link *l;
+	t_brick *b;
+
+	for(l=block->bricks->first;l;l=l->next)
+	{
+		b=l->data;
+		brick_copy(clone_block,b);
+	}
+
+	C->scene->store=0;
+
+	return clone_block;
+}
+
 void block_init(t_scene *sc,t_block *block);
 
 void _block_init(t_block *block)

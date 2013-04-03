@@ -9,8 +9,6 @@
 
 #include "context.h"
 
-int is_cloning=0;
-
 void show_buffer(void)
 {
 	t_context *C=ctx_get();
@@ -123,7 +121,7 @@ int brick_start_cloning(t_context *C,int mouse_over)
 	if(
 		mouse_over
 		&& (C->app->mouse->button_left == button_pressed)
-		&& (C->app->keyboard->ctrl)
+		&& (C->app->keyboard->ctrl || C->app->keyboard->shift)
 		)
 
 		return 1;
@@ -382,12 +380,14 @@ void cls_brick_update(t_brick *brick)
 					// START CLONING
 					if(brick_start_cloning(C,mouse_over))
 					{
-						if(is_cloning)
+						// start moving
+						if(C->event->brick_cloning_start)
 						{
 							C->event->is_brick_transformed=1;
 							C->ui->brick_selected=brick;
 							brick->mode=bm_moving;
 						}
+						// start cloning
 						else
 						{
 							if(!C->event->ui.is_menu_mouse_show)
@@ -395,6 +395,12 @@ void cls_brick_update(t_brick *brick)
 								C->event->is_brick_transformed=1;
 								C->ui->brick_selected=brick;
 								brick->mode=bm_cloning;
+
+								// Copy or Clone
+								if(C->app->keyboard->shift)
+									C->event->brick_copying = 1;
+								else if(C->app->keyboard->ctrl)
+									C->event->brick_cloning = 1;
 							}
 						}
 					}
@@ -491,13 +497,15 @@ void cls_brick_update(t_brick *brick)
 			case bm_moving:
 
 				// cloning
-				if(is_cloning)
+				if(C->event->brick_cloning_start)
 				{
 					// release
 					if(brick_release_cloning(brick))
 					{
 						is_vec_stored=0;
-						is_cloning=0;
+						C->event->brick_cloning_start=0;
+						C->event->brick_copying = 0;
+						C->event->brick_cloning = 0;
 						brick_release(brick);
 					}
 
@@ -554,9 +562,15 @@ void cls_brick_update(t_brick *brick)
 
 			case bm_cloning:
 
-				if(!is_cloning)
+				if(!C->event->brick_cloning_start)
 				{
-					t_block *clone_block=block_clone(brick->block);
+					t_block *clone_block;
+
+					if(C->event->brick_cloning)
+						clone_block = block_clone(brick->block);
+					else
+						clone_block = block_copy(brick->block);
+
 					t_brick *clone_brick=clone_block->bricks->first->data;
 
 					clone_brick->state.is_mouse_over=1;
@@ -566,7 +580,7 @@ void cls_brick_update(t_brick *brick)
 					brick_release(brick);
 					C->event->is_brick_transformed=1;
 
-					is_cloning=1;
+					C->event->brick_cloning_start=1;
 				}
 
 				break;

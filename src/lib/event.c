@@ -97,6 +97,8 @@ t_event *event_new(void)
 
 	event->camera_rotation = 0;
 	event->brick_copying = 0;
+	event->brick_cloning = 0;
+	event->brick_cloning_start = 0;
 
 	return event;
 }
