@@ -227,7 +227,7 @@ void *data_copy(t_data_type type,void *data)
 	t_vlst *vlst_old;
 
 	int *_int_new;
-	int *_int_old;
+	//int *_int_old;
 
 	switch(type)
 	{

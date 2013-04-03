@@ -41,8 +41,22 @@ void ctx_ui_switch_show_states(t_context *C)
 
 void ctx_ui_menu_hide(t_context *C)
 {
-	// don't hide menu if shift is pressed
-	if(!C->app->keyboard->shift)
+	// don't hide menu if Alt is pressed
+	int release = 1;
+	if(C->event->ui.is_menu_fixed)
+	{
+		if(C->app->mouse->button_right == button_pressed)
+		{
+			C->event->ui.is_menu_fixed = 0;
+			release = 1;
+		}
+		else
+		{
+			release = 0;
+		}
+	}
+
+	if(release)
 	{
 		C->ui->show_menu=0;
 		C->event->ui.is_menu_show=0;
@@ -279,6 +293,11 @@ void exe_add_action(t_action *action)
 
 void ctx_ui(t_context *C)
 {
+	if(C->app->keyboard->alt && C->ui->show_menu)
+	{
+		C->event->ui.is_menu_fixed = 1;
+	}
+
 	// INTRO test stop 
 	ctx_ui_intro(C);
 

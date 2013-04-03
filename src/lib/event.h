@@ -44,6 +44,7 @@ struct State_Event_UI
 	int is_menu_mouse_show:1;
 	int is_menu_pressed:1;
 	int is_menu_released:1;
+	int is_menu_fixed:1;
 	
 	int is_selection:1;
 

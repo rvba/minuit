@@ -55,6 +55,7 @@ void app_gl_keyboard_special(t_app *app)
 
 	if (modifier == GLUT_ACTIVE_SHIFT) app->keyboard->shift=1;
 	if (modifier == GLUT_ACTIVE_CTRL) app->keyboard->ctrl=1;
+	if (modifier == GLUT_ACTIVE_ALT) app->keyboard->alt=1;
 }
 
 void app_gl_keyboard(unsigned char key,int x,int y)

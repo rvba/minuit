@@ -107,6 +107,7 @@ struct Keyboard
 	unsigned char key_pressed;
 	int shift;
 	int ctrl;
+	int alt;
 	int special;
 };
 
