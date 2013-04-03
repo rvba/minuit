@@ -95,5 +95,7 @@ t_event *event_new(void)
 	event->switch_plug_out_follow_in = 0;
 	event->switch_plug_out_follow_out = 0;
 
+	event->camera_rotation = 0;
+
 	return event;
 }

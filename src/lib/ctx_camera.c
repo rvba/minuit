@@ -16,80 +16,99 @@ void ctx_camera_movment(t_context *C)
 	int dx = -app->mouse->sign_x * app->mouse->dx;
 	int dy = app->mouse->sign_y * app->mouse->dy; 
 
-
+	// When No UI event
 	if(!C->event->is_brick_transformed)
 	{
-
-	// perspective
-	if (camera->type == camera_frustum)
-	{
-		if (
-				(app->mouse->button_middle == button_pressed && (app->keyboard->shift==0))	
+		// Start Camera Rotation 
+		if(C->event->camera_rotation)
+		{
+			if(
+				(app->mouse->button_right == button_released)
+			&&	!(app->mouse->button_middle == button_pressed)
+				
+				)
+				C->event->camera_rotation = 0;
+		}
+		// Release Camera Rotation
+		else
+		{
+			if(
+				(
+				app->mouse->button_right == button_pressed
+			&&	app->keyboard->shift
+				)
 				||
-				(app->mouse->button_left==button_pressed && app->keyboard->shift==1)
+				app->mouse->button_middle == button_pressed
 			)
-	
-		{
-			// camera rotate
-			op_camera_rotate(C,(float)dx,(float)dy);
+				C->event->camera_rotation = 1;
 		}
-		else if ((app->mouse->button_middle == button_pressed) && (app->keyboard->shift==1))	
+
+		// perspective
+		if (camera->type == camera_frustum)
 		{
-			// camera translate	
-			op_camera_translate(C);
-		}
-		else if (app->mouse->button_left == button_pressed)	
-		{
-			if(app->keyboard->shift)
+			if(C->event->camera_rotation)
+		
 			{
-				C->ui->pan_x+=(C->app->mouse->dx*2*C->app->mouse->sign_x);
-				C->ui->pan_y+=(C->app->mouse->dy*2*C->app->mouse->sign_y);
+				// camera rotate
+				op_camera_rotate(C,(float)dx,(float)dy);
+			}
+			else if ((app->mouse->button_middle == button_pressed) && (app->keyboard->shift==1))	
+			{
+				// camera translate	
+				op_camera_translate(C);
+			}
+			else if (app->mouse->button_left == button_pressed)	
+			{
+				if(app->keyboard->shift)
+				{
+					C->ui->pan_x+=(C->app->mouse->dx*2*C->app->mouse->sign_x);
+					C->ui->pan_y+=(C->app->mouse->dy*2*C->app->mouse->sign_y);
+				}
+			}
+			else if (app->mouse->button_right == button_pressed)
+			{
+			}
+
+
+			if (app->mouse->wheel == wheel_up)
+			{
+				if(C->app->keyboard->shift)
+					C->ui->zoom-=.1;
+				else
+					op_camera_zoom(C,-1);
+
+				app->mouse->wheel=wheel_idle;
+			}
+
+			if (app->mouse->wheel == wheel_down)
+			{
+				if(C->app->keyboard->shift)
+					C->ui->zoom+=.1;
+				else
+					op_camera_zoom(C,1);
+
+				app->mouse->wheel=wheel_idle;
 			}
 		}
-		else if (app->mouse->button_right == button_pressed)
+		// ortho
+		else
 		{
-		}
+			if (app->mouse->wheel == wheel_up)
+			{
+				op_camera_set_ortho_zoom(C,-1);
+				app->mouse->wheel=wheel_idle;
+			}
 
-
-		if (app->mouse->wheel == wheel_up)
-		{
-			if(C->app->keyboard->shift)
-				C->ui->zoom-=.1;
-			else
-				op_camera_zoom(C,-1);
-
-			app->mouse->wheel=wheel_idle;
+			if (app->mouse->wheel == wheel_down)
+			{
+				op_camera_set_ortho_zoom(C,1);
+				app->mouse->wheel=wheel_idle;
+			}
+			if (app->mouse->button_left == button_pressed && app->keyboard->shift)
+			{
+				op_camera_set_ortho_pan(C);
+			}
 		}
-
-		if (app->mouse->wheel == wheel_down)
-		{
-			if(C->app->keyboard->shift)
-				C->ui->zoom+=.1;
-			else
-				op_camera_zoom(C,1);
-
-			app->mouse->wheel=wheel_idle;
-		}
-	}
-	// ortho
-	else
-	{
-		if (app->mouse->wheel == wheel_up)
-		{
-			op_camera_set_ortho_zoom(C,-1);
-			app->mouse->wheel=wheel_idle;
-		}
-
-		if (app->mouse->wheel == wheel_down)
-		{
-			op_camera_set_ortho_zoom(C,1);
-			app->mouse->wheel=wheel_idle;
-		}
-		if (app->mouse->button_left == button_pressed && app->keyboard->shift)
-		{
-			op_camera_set_ortho_pan(C);
-		}
-	}
 	}
 }
 

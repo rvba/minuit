@@ -148,6 +148,8 @@ struct Event
 	int switch_plug_out_open_out;
 	int switch_plug_out_follow_in;
 	int switch_plug_out_follow_out;
+
+	int camera_rotation;
 };
 
 t_event *event_new(void);
