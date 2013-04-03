@@ -87,21 +87,6 @@ void *data_add(t_data_type type,void *data)
 	{
 		case dt_vector:
 
-			/*
-			{
-				//XXX
-				_vector = vector_new("new_vector");
-
-				if(C->scene->store)
-				{
-					printf("store vector\n");
-					scene_add_data_var(C->scene,"vector","vector_data",sizeof(t_vector),_vector);
-				}
-
-				return _vector;
-			}
-			*/
-
 			node = vector_add("vector");
 			_vector = node->data;
 			return _vector;

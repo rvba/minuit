@@ -20,6 +20,7 @@
 #include "obj.h"
 #include "camera.h"
 #include "dict.h"
+#include "vector.h"
 
 t_node *	scene_get_data(t_scene *sc,void *ptr);
 t_node *	scene_get_var(t_scene *sc,void *ptr);

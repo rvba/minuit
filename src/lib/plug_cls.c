@@ -154,13 +154,29 @@ void cls_plug_disconnect_operator(t_plug *plug)
 {
 }
 
+// VECTOR
+
 void cls_plug_connect_vector(t_plug *self, t_plug *dst)
 {
+	t_brick *brick = self->brick;
+	t_block *block = brick->block;
+	t_brick *brick_x = block_brick_get(block,"x");
+	
+	t_plug *plug_in = &brick->plug_in;
+	t_plug *plug_out = &brick->plug_out;
+
+	// For Vector
 	if(dst->is_volatil)
 	{
-		t_brick *brick = self->brick;
-		t_block *block = brick->block;
-		t_brick *brick_x = block_brick_get(block,"x");
+		// change plug state
+		if(self->is_state_volatil)
+		{
+			plug_in->flow_in = 0;
+			plug_in->open_in = 1;
+			plug_out->open_out = 0;
+			plug_out->flow_out = 1;
+			plug_out->open_in = 1;
+		}
 			
 		if(brick_x)
 		{
@@ -188,6 +204,19 @@ void cls_plug_disconnect_vector(t_plug *plug)
 	t_block *block = brick->block;
 	t_brick *brick_x = block_brick_get(block,"x");
 
+	t_plug *plug_in = &brick->plug_in;
+	t_plug *plug_out = &brick->plug_out;
+
+	// change plug state
+	if(plug->is_state_volatil)
+	{
+		plug_in->flow_in = 1;
+		plug_in->open_in = 0;
+		plug_out->open_out = 1;
+		plug_out->flow_out = 0;
+		plug_out->open_in = 0;
+	}
+
 	if(brick_x)
 	{
 		t_brick *brick_y = block_brick_get(block,"y");
@@ -208,10 +237,8 @@ void cls_plug_disconnect_vector(t_plug *plug)
 		brick_x->state.draw_value = 1;
 		brick_y->state.draw_value = 1;
 		brick_z->state.draw_value = 1;
-
 	}
 }
-
 
 void plug_data_reset(t_plug *plug)
 {
@@ -1013,9 +1040,7 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 	t_brick *brick = plug->brick;
 	t_block *block = brick->block;
 
-	// get X Y Z bricks
-
-	t_brick *brick_x = block_brick_get(block,"x");
+	t_brick *brick_x;
 	t_brick *brick_y;
 	t_brick *brick_z;
 
@@ -1027,10 +1052,20 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 	t_plug *plug_y_in;
 	t_plug *plug_z_in;
 
-	// Not All Vectors have x y z in block
-	// Reset once
-	if(brick_x && mode == mode_in)
+	t_plug *plug_vector_in = &brick->plug_in;
+
+	t_vector *vector_self;
+	t_vector *vector_src;
+
+	float *vector_data;
+
+	brick_x = block_brick_get(block,"x");
+
+
+	// Get X Y Z bricks
+	if(brick_x && mode == mode_in) // case of vector + brick x y z
 	{
+
 		brick_y = block_brick_get(block,"y");
 		brick_z = block_brick_get(block,"z");
 
@@ -1044,9 +1079,22 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 
 	}
 
-	t_vector *vector;
+	// Set Vlst from X Y Z if not connected in  
 
-	float *vector_data;
+	if(brick_x &&  !plug_vector_in->is_connected)
+	{
+		vector_self = plug->data;
+		t_vlst *vlst = vector_self->vlst;
+
+		float *data = vlst->data;
+
+		if(plug_x->data)
+		{
+			data[0] = drf_float(plug_x->data);
+			data[1] = drf_float(plug_y->data);
+			data[2] = drf_float(plug_z->data);
+		}
+	}
 
 	if(src_plug)
 	{
@@ -1057,8 +1105,13 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 			// + VECTOR
 			case dt_vector:
 
-				vector = src_plug->data;
+				// copy vectors
+				vector_self = plug->data;
+				vector_src = src_plug->data;
 
+				vector_op_copy(vector_self,vector_src);
+
+				// for vector
 				if(src_plug->is_volatil)
 				{
 					if(brick_x && mode == mode_in)
@@ -1077,10 +1130,12 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 					}
 				}
 				
-				vector_data = vector->data;
+				// Check for Pointer
+				vector_data = vector_self->data;
 
+				// If Ptr : for loop
 				//-- wait for initialisation from for loop
-				if(vector_data)
+				if(brick_x && vector_data)
 				{
 					plug_x->data = vector_data;
 					plug_y->data = vector_data+1;
@@ -1091,6 +1146,23 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 					plug_y_in->flow_in = 1;
 					plug_z_in->flow_in = 1;
 
+				}
+				// Else : No loop
+				else if(brick_x && mode == mode_in)
+				{
+					// Get Vector Vlst
+					t_vlst *vlst = vector_self->vlst;
+					vector_data = vlst->data;
+
+					// set x y z
+					plug_x->data = vector_data;
+					plug_y->data = vector_data+1;
+					plug_z->data = vector_data+2;
+
+					// XXX(to go in connect fnc)  Don't Store Vlst Pointer
+					plug_x->store_data = 0;
+					plug_y->store_data = 0;
+					plug_z->store_data = 0;
 				}
 
 				break;

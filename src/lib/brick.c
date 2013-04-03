@@ -250,7 +250,6 @@ void brick_change_type_by_name(t_brick *brick,t_data_type type)
 {
 	t_context *C=ctx_get();
 
-
 	t_plug *plug_in=&brick->plug_in;
 	t_plug *plug_intern=&brick->plug_intern;
 	t_plug *plug_out=&brick->plug_out;
@@ -272,6 +271,7 @@ void brick_change_type_by_name(t_brick *brick,t_data_type type)
 		// build data
 		plug_intern->data=data_add(plug_intern->data_type,NULL);
 		plug_intern->data_memory = plug_intern->data;
+
 		// data init
 		data_init(plug_intern->data_type,plug_intern->data);
 
@@ -346,6 +346,7 @@ void plug_reset(t_plug *plug,const char *name)
 	plug->bang = 0;
 	plug->last_bang = 0;
 	plug->is_init=0;
+	plug->is_state_volatil = 1;
 
 	plug->flow_in = 1;
 	plug->flow_out = 0;
@@ -353,8 +354,7 @@ void plug_reset(t_plug *plug,const char *name)
 	plug->follow_out=1;
 	plug->open_in = 0;
 	plug->open_out = 1;
-	plug->let_in = 0;
-	plug->let_out = 0;
+
 	plug->is_eval = 0;
 	plug->is_volatil = 0;
 
@@ -376,7 +376,7 @@ t_brick *brick_rebind(t_scene *sc,void *ptr)
 	rebind(sc,"brick","plug_in_src",(void **)&brick->plug_in.src);
 
 	if(brick->plug_intern.store_data) 
-		rebind(sc,"brick","plug_intern_data",(void **)&brick->plug_intern.data);
+		rebind(sc,"brick",brick->name,(void **)&brick->plug_intern.data);
 	else 	
 		brick->plug_intern.data = NULL;
 

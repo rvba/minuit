@@ -880,7 +880,7 @@ void load_rebind(t_scene *sc)
 			case(nt_camera): break;
 			case(nt_dict):dict_rebind(sc,ptr); break;
 			case(nt_symbol): symbol_rebind(sc,ptr); break;
-			case(nt_vector) : break; //XXX
+			case(nt_vector) : vector_rebind(sc,ptr);break; 
 			default: printf("[ERROR load_data] Unknown type %s\n",node_name_get(node->type));break;
 		}
 

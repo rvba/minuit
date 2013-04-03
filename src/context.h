@@ -166,6 +166,9 @@ void ctx_get_mouse_pos(t_context *C,float *r);
 
 // CTX_UI
 
+void ctx_ui_freeze(t_context *C);
+void ctx_ui_switch_show_step(t_context *C);
+void ctx_ui_switch_show_states(t_context *C);
 void ctx_block_store(t_context *C,t_node *node);
 void ctx_ui_exec(t_context *C);
 void ctx_ui_menu_hide(t_context *C);

@@ -205,14 +205,18 @@ t_node *add_brick_vector(t_context *C,t_block *block,const char *name)
 	brick->state.always_trigger = 1;
 
 	//XXX
+	/*
 	t_plug *plug_out = &brick->plug_out;
 	t_plug *plug_in = &brick->plug_in;
+	*/
 
+	/*
 	plug_in->open_in = 1;
 	plug_in->flow_in = 0;
 	plug_out->open_out = 0;
 	plug_out->flow_out = 1;
 	plug_out->open_in = 1;
+	*/
 
 	// PLUG
 	set_plug_option(brick);
@@ -825,9 +829,9 @@ t_node *add_part_trigger(t_context *C,t_block *block,const char *name,void *f(t_
 
 t_node *add_part_vector(t_context *C,t_block *block,const char *name)
 {
-	t_node *node=add_brick_vector(C,block,name);
-	t_brick *brick=node->data;
-	brick->state.draw_outline=0;
+	t_node *node = add_brick_vector(C,block,name);
+	t_brick *brick = node->data;
+	brick->state.draw_outline = 0;
 	return node;
 }
 
@@ -1018,6 +1022,8 @@ t_node *add_clone(t_context *C)
 	return node_block;
 }
 
+// PIPE
+
 t_node *add_pipe(t_context *C)
 {
 	// NEW BLOCK
@@ -1039,8 +1045,6 @@ t_node *add_pipe(t_context *C)
 	brick_clone->plug_out.flow_out=0;
 	brick_clone->plug_in.flow_in=0;
 	brick_clone->plug_out.open_out=0;
-
-
 
 	return node_block;
 }
@@ -1134,6 +1138,11 @@ t_node *add_for(t_context *C)
 	plug_vector->is_volatil = 1;
 	brick_vector->state.draw_value = 0;
 
+	brick_vector->plug_in.flow_in = 0;
+	brick_vector->plug_in.open_in = 1;
+
+	brick_vector->plug_intern.is_state_volatil = 0;
+
 	// parent
 	plug_add_parent(plug_vector,plug_for);
 
@@ -1142,23 +1151,11 @@ t_node *add_for(t_context *C)
 
 // VECTOR
 
-t_node *set_no_store(t_node *node)
-{
-	t_brick *brick = node->data;
-	t_plug *plug_in = &brick->plug_in;
-	plug_in->flow_in = 0;
-
-	return node;
-}
-
-t_node *set_no_store_v(t_plug *plug,t_node *node)
+t_node *parent_brick_vector(t_plug *plug,t_node *node)
 {
 	t_brick *brick = node->data;
 
 	t_plug *plug_intern = &brick->plug_intern;
-	t_plug *plug_in = &brick->plug_in;
-
-	plug_in->flow_in = 0;
 
 	// parent
 	plug_add_parent(plug_intern,plug);
@@ -1177,16 +1174,16 @@ t_node *add_vector(t_context *C)
 
 	// ADD VECTOR
 
-	t_node *node_vector = set_no_store(add_part_vector(C,block,"vector"));
+	t_node *node_vector = add_part_vector(C,block,"vector");
 	t_brick *brick_vector = node_vector->data;
 	brick_vector->state.draw_value = 0;
 	t_plug *plug_intern = &brick_vector->plug_intern;
 
 	// ADD X Y Z
 
-	set_no_store_v(plug_intern,add_part_slider_float(C,block,"x",NULL));
-	set_no_store_v(plug_intern,add_part_slider_float(C,block,"y",NULL));
-	set_no_store_v(plug_intern,add_part_slider_float(C,block,"z",NULL));
+	parent_brick_vector(plug_intern,add_part_slider_float(C,block,"x",NULL));
+	parent_brick_vector(plug_intern,add_part_slider_float(C,block,"y",NULL));
+	parent_brick_vector(plug_intern,add_part_slider_float(C,block,"z",NULL));
 
 	return node_block;
 }

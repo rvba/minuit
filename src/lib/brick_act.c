@@ -508,7 +508,7 @@ void *op_equal(t_brick *brick)
 	return NULL;
 }
 
-// EQUAL
+// MOD
 
 void *op_mod(t_brick *brick)
 {
@@ -1075,7 +1075,6 @@ void *op_pointer(t_brick *brick)
 
 void op_maths_plug(t_operation operation,t_plug *dst,t_plug *src)
 {
-
 	t_context *C=ctx_get();
 
 	t_data_type type_dst=dst->data_type;
@@ -1094,6 +1093,9 @@ void op_maths_plug(t_operation operation,t_plug *dst,t_plug *src)
 	float *data_dst;
 	float *data;
 	t_data_type type=dt_null;
+
+	t_vector *vector_src;
+	t_vector *vector_dst;
 
 	t_plug *plug_src;
 
@@ -1228,7 +1230,35 @@ void op_maths_plug(t_operation operation,t_plug *dst,t_plug *src)
 
 			break;
 
-		
+		case(dt_vector):
+
+			switch(type_src)
+			{
+				case(dt_vector):
+
+					switch(operation)
+					{
+						case(t_op_add): 
+
+							vector_src = src->data;
+							vector_dst = dst->data;
+
+							vector_op_add(vector_dst,vector_src);
+
+							break;
+						default:
+							break;
+					}
+
+					break;
+
+				default:
+					break;
+
+			}
+
+			break;
+
 
 		default:printf("[?]\n");break;
 
@@ -1330,6 +1360,7 @@ void *op_maths(t_operation operation,t_brick *brick)
 	int is_int=0;
 	int is_float=0;
 	int is_vlst=0;
+	int is_vector=0;
 
 	//int pos=0;
 
@@ -1359,18 +1390,17 @@ void *op_maths(t_operation operation,t_brick *brick)
 			case(dt_int):is_int=1;break;
 			case(dt_float):is_float=1;break;
 			case(dt_vlst):is_vlst=1;break;
+			case(dt_vector):is_vector=1;break;
 			default:break;
 		}
 	}
 
-	// change type
-	// init result
+	// Change Type && Init Result
 
 	if(is_vlst)
 	{
 		brick_change_type_by_name(brick_result,dt_vlst);
 		t_vlst *v=get_first_vlst(block);
-		//pos=get_first_vlst_pos(block);
 		if(v) brick_result->plug_intern.data=v;
 		else printf("[ERROR] Can't get vlst\n");
 	}
@@ -1394,6 +1424,17 @@ void *op_maths(t_operation operation,t_brick *brick)
 			case(t_op_add): *r=0; break;
 			case(t_op_mult): *r=1; break;
 		}
+	}
+	else if(is_vector)
+	{
+		brick_change_type_by_name(brick_result,dt_vector);
+
+		t_plug *plug_vector = &brick_result->plug_intern;
+		t_vector *vector = plug_vector->data;
+		t_vlst *vlst = vector->vlst;
+		float *v = vlst->data;
+		
+		vset3f(v,0,0,0);
 	}
 
 	return NULL;

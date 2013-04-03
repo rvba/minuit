@@ -65,28 +65,7 @@ struct VLst
 	void *data;
 };
 
-struct Vector
-{
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
 
-	t_vector_cls *cls;
-
-	t_data_type type;
-	int length;
-
-	void *data;
-};
-
-struct Vector_Class
-{
-	void (* init)(t_vector *vector);
-};
-
-
-//void 		vlst_update_data(t_vlst *vlst);
 void 		vlst_update_data(t_vlst *vlst,t_vlst *caller);
 void		vlst_free(t_vlst *vlst);
 void 		vlst_init(t_vlst *vlst);
@@ -126,16 +105,12 @@ void 		lst_remove_all(t_lst *lst);
 void *		lst_get(t_lst *lst,char *name);
 
 t_node *	lst_find_node_by_name(t_lst *lst,const char *name);
-//void *		lst_get_by_id(t_lst *lst,int id);
 int 		lst_remove_by_id(t_lst *lst,int id);
 
 void list_remove_by_ptr(t_lst *lst,void *ptr);
 void list_free(t_lst *lst);
 void _link_free(t_link *link);
 
-t_vector *vector_new(const char *name);
-t_node *vector_add(const char *name);
-void vector_free(t_vector *vector);
 
 void lst_show_generic(t_lst *lst);
 

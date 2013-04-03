@@ -59,6 +59,7 @@ obj:=\
 	texture.o\
 	txt.o\
 	term.o\
+	vector.o\
 	vlst.o
 
 FLAG=-g -Wall -D$(DEBUG)
@@ -177,6 +178,8 @@ txt.o:txt.h txt.c
 	gcc -c txt.c $(FLAG) $(INC)   
 term.o:term.h term.c
 	gcc -c term.c $(FLAG) $(INC)
+vector.o:vector.h vector.c
+	gcc -c vector.c $(FLAG) $(INC)
 vlst.o:list.h vlst.c
 	gcc -c vlst.c $(FLAG) $(INC)
 

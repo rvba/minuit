@@ -120,10 +120,11 @@ struct Plug
 	int is_connected;
 	int is_updated;
 	int is_init;
-	int is_versatil;
-	int store_data;
+	int is_versatil;		// change plug type if connected
+	int store_data;			// for rebind
 	int is_eval;
-	int is_volatil;
+	int is_volatil;			// stored data is volatil
+	int is_state_volatil;		// plug ports can change state when connected
 
 	int flow_in;
 	int flow_out;
@@ -131,8 +132,6 @@ struct Plug
 	int follow_out;
 	int open_in;
 	int open_out;
-	int let_in;
-	int let_out;
 
 	int bang;
 	int last_bang;
@@ -142,7 +141,7 @@ struct Plug
 
 	t_lst *parents;
 	t_plug *child;
-	t_brick *brick;		// self
+	t_brick *brick;			// self
 	t_data_type data_type;
 	t_operator operator_type;
 
@@ -465,10 +464,10 @@ void 		plug_data_set(t_plug *plug,t_data_type type,void *data);
 
 
 
-void plug_add_parent(t_plug *plug,t_plug *parent);
-void plug_remove_parent(t_plug *plug);
+void 		plug_add_parent(t_plug *plug,t_plug *parent);
+void 		plug_remove_parent(t_plug *plug);
 
-void *op_stack(t_brick *brick);
+void 		*op_stack(t_brick *brick);
 
 #endif
 
