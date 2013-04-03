@@ -114,7 +114,7 @@ void cls_brick_disconnect(t_brick *self)
 int brick_release_cloning(t_brick *brick)
 {
 	t_context *C=ctx_get();
-	if(C->app->mouse->button_right == button_released) return 1;
+	if(C->app->mouse->button_left == button_released) return 1;
 	else return 0;
 }
 
@@ -122,7 +122,7 @@ int brick_start_cloning(t_context *C,int mouse_over)
 {
 	if(
 		mouse_over
-		&& (C->app->mouse->button_right == button_pressed)
+		&& (C->app->mouse->button_left == button_pressed)
 		&& (C->app->keyboard->ctrl)
 		)
 
@@ -556,7 +556,6 @@ void cls_brick_update(t_brick *brick)
 
 				if(!is_cloning)
 				{
-
 					t_block *clone_block=block_clone(brick->block);
 					t_brick *clone_brick=clone_block->bricks->first->data;
 

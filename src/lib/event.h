@@ -150,6 +150,7 @@ struct Event
 	int switch_plug_out_follow_out;
 
 	int camera_rotation;
+	int brick_copying;
 };
 
 t_event *event_new(void);

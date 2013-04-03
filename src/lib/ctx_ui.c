@@ -85,18 +85,22 @@ void ctx_ui_show_hide_menu(t_context *C)
 	if(!C->event->is_brick_transformed)
 	{
 		// check right brick status
-		if(!C->event->camera_rotation)
+		if(
+			!C->event->camera_rotation
+			&& !C->event->ui.pan
+			
+			)
 		{
-		if(C->app->mouse->button_right==button_pressed)	
-		{
-			C->event->ui.is_menu_pressed=1;
-		}
+			if(C->app->mouse->button_right==button_pressed)	
+			{
+				C->event->ui.is_menu_pressed=1;
+			}
 
-		if(C->app->mouse->button_right==button_released)	
-		{
-			if(C->event->ui.is_menu_pressed)
-				C->event->ui.is_menu_released=1;
-		}
+			if(C->app->mouse->button_right==button_released)	
+			{
+				if(C->event->ui.is_menu_pressed)
+					C->event->ui.is_menu_released=1;
+			}
 		}
 
 		// show/hide menu

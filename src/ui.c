@@ -235,7 +235,7 @@ void ui_draw(void)
 	t_context *C = ctx_get();
 
 	// PAN
-	if(C->app->mouse->button_left==button_pressed && C->app->keyboard->ctrl)
+	if(C->app->mouse->button_right == button_pressed && C->app->keyboard->ctrl)
 	{
 		C->ui->pan_x+=C->app->mouse->dx*C->app->mouse->sign_x*2;
 		C->ui->pan_y+=C->app->mouse->dy*C->app->mouse->sign_y*2;
@@ -243,7 +243,7 @@ void ui_draw(void)
 		C->event->ui.pan = 1;
 	}
 
-	if(C->event->ui.pan && C->app->mouse->button_left == button_released)
+	if(C->event->ui.pan && C->app->mouse->button_right == button_released)
 	{
 		C->event->ui.pan = 0;
 	}

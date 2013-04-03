@@ -96,6 +96,7 @@ t_event *event_new(void)
 	event->switch_plug_out_follow_out = 0;
 
 	event->camera_rotation = 0;
+	event->brick_copying = 0;
 
 	return event;
 }
