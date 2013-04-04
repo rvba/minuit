@@ -189,9 +189,9 @@ void *data_add(t_data_type type,void *data)
 			//XXX!!!
 			if(data)
 			{
-			_vlst=(t_vlst *)data;
+				_vlst=(t_vlst *)data;
 
-			return vlst_make("vlst",_vlst->type,_vlst->count);
+				return vlst_make("vlst",_vlst->type,_vlst->count);
 			}
 			else
 			{
@@ -226,7 +226,6 @@ void *data_copy(t_data_type type,void *data)
 	t_vlst *vlst_old;
 
 	int *_int_new;
-	//int *_int_old;
 
 	switch(type)
 	{

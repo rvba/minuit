@@ -1219,15 +1219,15 @@ t_node *add_stack(t_context *C)
 	t_block *block=node_block->data;
 	block->state.draw_outline=1;
 
-	// i
-	t_node *node_i = add_part_slider_int(C,block,"i",NULL);
-	t_brick *brick_i = node_i->data;
-	t_plug *plug_i = &brick_i->plug_intern;
-
 	// counter
 	t_node *node_counter = add_part_slider_int(C,block,"counter",NULL);
 	t_brick *brick_counter = node_counter->data;
 	t_plug *plug_counter = &brick_counter->plug_intern;
+
+	// i
+	t_node *node_i = add_part_slider_int(C,block,"i",NULL);
+	t_brick *brick_i = node_i->data;
+	t_plug *plug_i = &brick_i->plug_intern;
 
 	// limit
 	t_node *node_limit = add_part_slider_int(C,block,"limit",NULL);

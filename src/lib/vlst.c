@@ -182,7 +182,7 @@ void vlst_show(t_vlst *vlst)
 		int length=vlst->length;
 		void *dat=vlst->data;
 
-		printf("[VLST] %s count:%d length:%d\n",vlst->name,count,length);
+		printf("[VLST] name:%s count:%d length:%d\n",vlst->name,count,length);
 
 		if(vlst->type==_3f)
 		{
@@ -554,15 +554,12 @@ void vlst_copy(t_vlst *dst,t_vlst *src)
 	{
 		printf("[ERROR vlst_copy]Vlists don't match\n");
 	}
-
-	vlst_show(dst);
 }
 
 // SET
 
 void vlst_set(t_vlst *vlst,int i)
 {
-	printf("VLST SET\n");
 	vlst_copy(vlst,NULL);
 }
 
@@ -685,7 +682,6 @@ t_vlst *vlst_make(const char *name,t_vlst_type type,int count)
 
 t_vlst *vlst_duplicate(t_vlst *vlst)
 {
-	printf("VLST DUPLICATE\n");
 	t_vlst *vlst_new=vlst_make(vlst->name,vlst->type,vlst->count);
 	vlst_copy(vlst_new,vlst->data);
 
