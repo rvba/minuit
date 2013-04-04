@@ -107,31 +107,26 @@ t_brick_class *bricks[] = {
 void brick_make_trigger(t_brick *brick)
 {
 	brick->cls=&brick_trigger;
-//	brick->state.draw_value=0;
 }
 
 void brick_make_slider(t_brick *brick)
 {
 	brick->cls=&brick_slider;
-	//brick->state.draw_value=1;
 }
 
 void brick_make_menu(t_brick *brick)
 {
 	brick->cls=&brick_menu;
-	//brick->state.draw_value=0;
 }
 
 void brick_make_selector(t_brick *brick)
 {
 	brick->cls=&brick_selector;
-	//brick->state.draw_value=1;
 }
 
 void brick_make_switch(t_brick *brick)
 {
 	brick->cls=&brick_switch;
-	//brick->state.draw_value=0;
 }
 
 // INIT

@@ -1251,4 +1251,17 @@ t_node *add_stack(t_context *C)
 	return node_block;
 }
 
+// ++
+
+t_node *add_plusplus(t_context *C)
+{
+	t_node *node_block = add_slider_int_special(C,"++",op_plusplus); 
+	t_block *block = node_block->data;
+	t_brick *brick = block_brick_get(block,"++");
+	brick->plug_out.open_out = 0;
+	brick->plug_out.open_in = 0;
+
+	return node_block;
+}
+
 

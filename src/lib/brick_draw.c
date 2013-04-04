@@ -22,16 +22,6 @@ int brick_get_width(t_brick *brick)
 	}
 	else
 	{
-		/*
-		if(brick->state.draw_plugs)
-		{
-			return brick->geom.width + (brick->geom.height*2);
-		}
-		else
-		{
-			return brick->geom.width;
-		}
-		*/
 		return 0;
 	}
 

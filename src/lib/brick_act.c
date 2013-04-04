@@ -49,15 +49,7 @@ void *op_brick_add(t_brick *brick)
 	else if(is(name,"mod"))  		add_operator_double(C,"mod"); 
 	else if(is(name,"x")) 			add_maths(C,"x");
 	else if(is(name,"+"))  			add_maths(C,"+"); 
-	else if(is(name,"++")) 
-	{
-		t_node *_node_block = add_slider_int_special(C,"++",op_plusplus); 
-		t_block *_block = _node_block->data;
-		t_brick *_brick = block_brick_get(_block,"++");
-		_brick->plug_out.open_out = 0;
-		_brick->plug_out.open_in = 0;
-
-	}
+	else if(is(name,"++")) 			add_plusplus(C);
 	else if(is(name,"switch"))  		add_switch(C,"switch",NULL); 
 	else if(is(name,"clone"))  		add_clone(C); 
 	else if(is(name,"pipe")) 		add_pipe(C); 
@@ -1552,11 +1544,9 @@ void *__op_get(t_brick *brick)
 	if(plug_src)
 	{
 		// if src is type lst
-		//if(plug_src->data_type==dt_lst && plug_src->is_ready)
 		if(plug_src->data_type==dt_lst && plug_src_in->open_out)
 		{
 			// set ready
-			//plug->is_ready=1;
 			plug_out->open_out=1;
 			lst=plug_src->data;
 
@@ -1589,7 +1579,6 @@ void *__op_get(t_brick *brick)
 		}
 		else
 		{
-			//plug->is_ready=0;
 			plug_out->open_out=0;
 		}
 	}
@@ -1958,9 +1947,7 @@ void *op_stack(t_brick *brick)
 	int *counter = brick_counter->plug_intern.data;
 	int *limit = brick_limit->plug_intern.data;
 
-	//int *plus = brick->plug_intern.data;
-
-	// RESET BY FRAME
+	// reset by frame
 
 	if(brick->state.frame_loop != C->app->frame)
 	{
@@ -1973,7 +1960,7 @@ void *op_stack(t_brick *brick)
 		(*counter)++;
 	}
 
-	// TEST
+	// test
 
 	if(*counter > *limit)
 	{

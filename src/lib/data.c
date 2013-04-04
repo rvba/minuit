@@ -215,7 +215,6 @@ void *data_copy(t_data_type type,void *data)
 	float *_float;
 	char *_char;
 	char *_string=NULL;
-	//t_vlst *_vlst;
 	t_vector *_vector;
 	t_node *node;
 
@@ -369,19 +368,7 @@ void data_init(t_data_type type,void *data)
 
 			printf("XXX\n");
 
-			/*
-			if(data)
-			{
-				size=sizeof(char)*(strlen(data)+1);
-				_string = (char *)malloc(size);
-				strcpy(_string,data);
-
-				if(C->scene->store)
-				{
-					scene_add_data_var(C->scene,"string","string_data",size,_string);
-				}
-			}
-			*/
+			break;
 
 		case dt_char:
 
@@ -413,20 +400,28 @@ void data_init(t_data_type type,void *data)
 			break;
 
 		case dt_lst:
+
 			printf("[LST]\n");
+
 			break;
 
 		case dt_camera:
+
 			printf("[CAMERA]\n");
+
 			break;
 
 		case dt_vector:
+
 			//XXX
 			printf("[VECTOR]\n");
+
 			break;
 
 		default:
+
 			printf("[ERROR data_init] Unknown data type %s\n",data_name_get(type));
+
 			break;
 	}
 

@@ -9,8 +9,6 @@
 
 #include "context.h"
 
-// MENU HIDE
-
 void ctx_ui_freeze(t_context *C)
 {
 	if(C->ui->update_links) C->ui->update_links = 0;
@@ -91,8 +89,6 @@ void ctx_ui_menu_hide(t_context *C)
 
 void ctx_ui_menu_show(t_context *C)
 {
-	//UI
-
 	C->ui->show_menu=1;
 
 	C->event->ui.is_menu_show=1;
@@ -181,33 +177,33 @@ void ctx_ui_background_button_left_test(t_context *C)
 
 void ctx_ui_background(t_context *C)
 {
-	// TEST BACKGROUND
+	// test background
 	if(!C->event->is_brick_transformed && !C->app->keyboard->shift)
 	{
 		ctx_ui_background_button_left_test(C);
 	}
 
-	// IF BACKGROUND CLIC+RELEASE
+	// if background clic+release
 	if(
 		   C->event->is_background_button_left_pressed
 		&& C->event->is_background_button_left_released)
 	{
 		t_node *node=C->scene->selected; 
 
-		// DESSELECT CURRENT NODE
+		// desselect current node
 		if (node)
 		{
 			node->cls->set_state_selected(node,0);
 			C->scene->selected=NULL; 
 		}
 
-		// DESSELECT OTHER SELECTED NODES
+		// desselect other selected nodes
 		ctx_scene_clear_selections(C);
 
-		// HIDE MENU
+		// hide menu
 		ctx_ui_menu_hide(C);
 
-		// RESET BACKGROUND STATE
+		// reset background state
 		C->event->is_background_button_left_pressed=0;
 		C->event->is_background_button_left_released=0;
 	}

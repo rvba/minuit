@@ -58,10 +58,10 @@ void 		op_menu_rc_submenu_add(t_node *node, t_node *menu_sub,char *name);
 
 t_node *	op_new_cube(const char *name);
 t_node *	op_add_new_wire_cube(t_node *node);
-void add_mn(void);
+void 		add_mn(void);
 void *		op_add_mn(t_brick *brick);
 void *		op_add_camera(t_brick *brick);
-void*	 	op_add_camera_main(void);
+void *	 	op_add_camera_main(void);
 
 void 		op_link_object_mesh(t_node *node_object,t_node *node_mesh);
 
@@ -182,17 +182,14 @@ int 		op_apply_all(void);
 // OP_C
 
 void 		op_init(t_context *C);
-
 void 		op_brick_delete_node(t_node *n);
 
 // OP_ADD_BRICK
 
-t_lst *get_target_list(t_context *C);
-
+t_lst *		get_target_list(t_context *C);
 
 t_node *	add_brick_submenu(t_context *C,t_node *menu,t_node *submenu,const char *name);
-//t_node *	add_brick_submenu_contextual(t_context *C,t_node *menu,t_node *submenu,const char *name,const char *context);
-t_node *add_brick_submenu_contextual(t_context *C,t_node *menu,t_node *submenu,const char *name,t_node_type context);
+t_node *	add_brick_submenu_contextual(t_context *C,t_node *menu,t_node *submenu,const char *name,t_node_type context);
 t_node *	add_brick_selector(t_context *C,t_block *block,const char *name,void *data_target,int length);
 t_node *	add_brick(t_context *C,t_block *block,const char *name,const char *type,const char *data_type,void *data_target);
 t_node *	add_brick_slider_int(t_context *C,t_block *block,const char *name,void *data_target);
@@ -210,7 +207,7 @@ t_node *	add_maths(t_context *C,const char *name);
 t_node *	add_loop(t_context *C);
 t_node *	add_switch(t_context *C,const char *name,void *data);
 
-t_node *add_switch_custom(t_context *C,const char *name,void *data,void *(* f)(t_brick *brick));
+t_node *	add_switch_custom(t_context *C,const char *name,void *data,void *(* f)(t_brick *brick));
 t_node *	add_label(t_context *C,const char *name);
 t_node *	add_slider_float(t_context *C,const char *name,void *target_data);
 t_node *	add_slider_int(t_context *C,const char *name,void *target_data);
@@ -221,8 +218,8 @@ t_node *	add_operator_single(t_context *C,const char *type,void *(*f)(t_brick *b
 t_node *	add_multiplier(t_context *C,const char *type);
 t_node *	add_slider_float_custom(t_context *C,const char *name,void *(*f)(t_brick *brick));
 t_node *	add_slider_float_special(t_context *C,const char *name,void *(*f)(t_brick *brick));
-t_node *add_slider_int_special(t_context *C,const char *name,void *f(t_brick *brick));
-t_node *add_slider_char(t_context *C,const char *name,void *target_data);
+t_node *	add_slider_int_special(t_context *C,const char *name,void *f(t_brick *brick));
+t_node *	add_slider_char(t_context *C,const char *name,void *target_data);
 
 t_node *	add_slider_object(t_context *C,const char *name);
 t_node *	add_pointer_object(t_context *C,const char *name);
@@ -239,10 +236,11 @@ t_node *	add_loop_get(t_context *C);
 t_node *	add_get(t_context *C);
 t_node *	add_for(t_context *C);
 t_node *	add_vector(t_context *C);
-t_node *add_stack(t_context *C);
+t_node *	add_stack(t_context *C);
+t_node *	add_plusplus(t_context *C);
 
-t_node *add_const(t_context *C);
-void *op_const(t_brick *brick);
+t_node *	add_const(t_context *C);
+void *		op_const(t_brick *brick);
 
 
 void 		option_save(t_context *C);
@@ -251,9 +249,9 @@ void *		find_register(const char *target,const char *name);
 
 
 void 		op_add_global(t_context *C,t_block *block);
-t_node 		*add_pipe(t_context *C);
+t_node *	add_pipe(t_context *C);
 void 		*op_mod(t_brick *brick);
-void *op_float(t_brick *brick);
-void *op_int(t_brick *brick);
+void *		op_float(t_brick *brick);
+void *		op_int(t_brick *brick);
 
 #endif

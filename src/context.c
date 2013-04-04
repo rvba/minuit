@@ -47,7 +47,6 @@ t_context *ctx_init(int argc,char **argv)
 	CONTEXT=C;
 
 	// set fullscreen
-	//if(SET_FULLSCREEN && !C->app->off_screen) app_screen_fullscreen(C->app);
 	if(SET_FULLSCREEN && !C->app->off_screen) app_screen_set_fullscreen(C->app,1);
 
 	// init log
