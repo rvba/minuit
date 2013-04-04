@@ -162,8 +162,9 @@ void ctx_reset(t_context *C)
 	{
 		app->keyboard->ctrl=0;
 		app->keyboard->shift=0;
-		app->keyboard->alt = 0;
 	}
+
+	app->keyboard->alt = 0;
 }
 
 void ctx_update(t_context *C)
