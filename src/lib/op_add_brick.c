@@ -447,7 +447,7 @@ t_node *add_brick_pointer(t_context *C,t_block *block,const char *name,t_data_ty
 
 t_node *add_block(t_context *C,const char *name)
 {
-	// GET LIST
+	// get list
 	t_lst *list=get_target_list(C);
 
 	t_node *node_block=block_make(name,"block");
@@ -1101,6 +1101,8 @@ t_node *add_get(t_context *C)
 	t_brick *brick_result = node_result->data;
 
 	brick_result->state.is_versatil = 1;
+	t_plug *plug_result = &brick_result->plug_intern;
+	plug_result->is_volatil = 1;
 
 	// indice
 	add_part_slider_int_positive(C,block,"indice",NULL);
