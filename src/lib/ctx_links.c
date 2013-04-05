@@ -110,7 +110,7 @@ void ctx_links_store_roots(t_lst *lst, t_brick *brick)
 		if(plug_in->follow_in)
 		{
 			// and target is updated
-			if(plug_target->is_updated)
+			if(plug_target->is_updated || plug_target->is_in_loop)
 			{
 				brick->state.is_root = 1;
 				// this plug is root
@@ -142,10 +142,17 @@ int ctx_links_check_parents(t_brick *brick)
 		{
 			plug_parent = link->data;
 
-			if(!plug_parent->is_updated)
+			if(plug_parent->is_in_loop)
 			{
-				state = 0;
-				break;
+				state = 1;
+			}
+			else
+			{
+				if(!plug_parent->is_updated)
+				{
+					state = 0;
+					break;
+				}
 			}
 		}
 	}
@@ -187,9 +194,13 @@ void ctx_links_get_roots(t_context *C, t_lst *lst, t_lst *roots)
 			// check parents
 			if(all_updated)
 			{
-				// this plug is root
-				b->state.is_root = 1;
-				lst_add(roots,b,b->name);
+				t_plug *plug_intern = &b->plug_intern;
+				if(!plug_intern->is_in_loop)
+				{
+					// this plug is root
+					b->state.is_root = 1;
+					lst_add(roots,b,b->name);
+				}
 			}
 		}
 	}
