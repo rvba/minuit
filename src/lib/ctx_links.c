@@ -100,24 +100,30 @@ t_lst *block_branch_src_get(t_context *C,t_block *block)
 void ctx_links_store_roots(t_lst *lst, t_brick *brick)
 {
 	t_plug *plug_in = &brick->plug_in;
+	t_plug *plug_intern = &brick->plug_intern;
 	t_plug *plug_target_out = plug_in->src;
 	t_plug *plug_target = plug_target_out->src;
 
-	// if follow in
-	if(plug_in->follow_in)
+	if(!plug_intern->is_in_loop)
 	{
-		// and target is updated
-		if(plug_target->is_updated)
+		// if follow in
+		if(plug_in->follow_in)
 		{
-			// this plug is root
-			lst_add(lst, brick, brick->name);
+			// and target is updated
+			if(plug_target->is_updated)
+			{
+				brick->state.is_root = 1;
+				// this plug is root
+				lst_add(lst, brick, brick->name);
+			}
 		}
-	}
-	// else is no follow
-	else
-	{
-		// this plug is root
-		lst_add(lst , brick, brick->name);
+		// else is no follow
+		else
+		{
+			brick->state.is_root = 1;
+			// this plug is root
+			lst_add(lst , brick, brick->name);
+		}
 	}
 }
 
@@ -182,6 +188,7 @@ void ctx_links_get_roots(t_context *C, t_lst *lst, t_lst *roots)
 			if(all_updated)
 			{
 				// this plug is root
+				b->state.is_root = 1;
 				lst_add(roots,b,b->name);
 			}
 		}
@@ -308,6 +315,7 @@ int ctx_links_loop(t_context *C)
 
 		// TRIGGER BRICK
 		b->cls->trigger(b);
+		b->state.is_root = 0;
 
 		// REMOVE from LIST
 		lst_remove_by_id(BRICKS,b->id);
@@ -468,7 +476,7 @@ void ctx_links_update(t_context *C)
 
 				// RESET
 				ctx_links_reset(C,BRICKS);
-				ctx_links_init_loops(C);
+				//ctx_links_init_loops(C);
 			}
 
 			// STEP
@@ -534,8 +542,7 @@ void ctx_links_update(t_context *C)
 			// loop
 			ctx_links_loop(C);
 
-
-			ctx_links_init_loops(C);
+			//ctx_links_init_loops(C);
 
 			// free
 			lst_free(BRICKS);

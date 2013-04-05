@@ -258,12 +258,10 @@ void brick_draw_outline(t_brick *brick)
 		) 
 	{
 		float pos[3]={0,0,0};
-
-		// tot points
 		int tot=4;
-
 		float width = brick_get_width(brick);
 		float height = brick->geom.height;
+		int line_width=1;
 
 		// add plugs width
 		if(brick->state.draw_plugs)
@@ -272,7 +270,6 @@ void brick_draw_outline(t_brick *brick)
 		}
 
 		// set line width
-		int line_width=1;
 		if(brick->state.is_mouse_over)
 		{
 			 line_width=2; 
@@ -312,10 +309,12 @@ void brick_draw_outline(t_brick *brick)
 
 		if(C->ui->show_brick_step)
 		{
+			if(brick->state.is_root) line_width = 4;
+
 			if(brick->state.is_current)
 			{
 				color=yellow;
-				line_width=2;
+				line_width=4;
 
 			}
 			else

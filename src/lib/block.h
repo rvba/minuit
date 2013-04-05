@@ -240,9 +240,10 @@ struct Brick_State
 	int has_ref:1;
 	int use_dragging:1;
 	int use_loops:1;
-	int frame_loop;
 	int remove_connected:1;
+	int is_root:1;
 	int clone;
+	int frame_loop;
 
 };
 

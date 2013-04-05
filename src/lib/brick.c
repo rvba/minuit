@@ -547,6 +547,7 @@ t_brick *brick_new(const char *name)
 	brick->state.remove_connected = 0;
 	brick->state.clone = 0;
 	brick->state.draw_value = 1;
+	brick->state.is_root = 0;
 
 	brick->geom.block_pos=0;
 	brick->geom.height=20;
