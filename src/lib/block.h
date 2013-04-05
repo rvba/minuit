@@ -31,6 +31,13 @@ typedef enum Brick_Type t_brick_type;
 typedef struct Plug t_plug;
 typedef struct Plug_Class t_plug_class;
 
+typedef enum Plug_Mode
+{
+	mode_in,
+	mode_out
+
+}t_plug_mode;
+
 
 typedef enum Type_Operator
 {
@@ -100,8 +107,8 @@ struct Plug_Class
 	t_data_type type;
 	void (* make)(t_plug *plug);
 	void (* flow)(t_plug *plug);
-	void (* connect)(t_plug *self, t_plug *dst);
-	void (* disconnect)(t_plug *plug);
+	void (* connect)(t_plug_mode mode, t_plug *self, t_plug *dst);
+	void (* disconnect)(t_plug_mode mode, t_plug *plug);
 };
 
 // PLUG

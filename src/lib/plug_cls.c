@@ -9,11 +9,6 @@
 
 #include "op.h"
 
-typedef enum Plug_Mode
-{
-	mode_in,
-	mode_out
-}t_plug_mode;
 
 
 void cls_plug_make_float(t_plug *plug);
@@ -33,209 +28,284 @@ void cls_plug_make_trigger(t_plug *plug);
 void cls_plug_make_operator(t_plug *plug);
 void cls_plug_make_vector(t_plug *plug);
 
-void cls_plug_connect_general(t_plug *self, t_plug *dst);
-void cls_plug_disconnect_general(t_plug *self);
+void cls_plug_connect_general(t_plug_mode mode, t_plug *self, t_plug *dst);
+void cls_plug_disconnect_general(t_plug_mode mode, t_plug *self);
 
-void cls_plug_connect_int(t_plug *self,t_plug *dst)
+void cls_plug_connect_int(t_plug_mode mode, t_plug *self,t_plug *dst)
 {
 	// General
-	cls_plug_connect_general(self,dst);
+	cls_plug_connect_general(mode,self,dst);
 }
 
-void cls_plug_disconnect_int(t_plug *plug)
+void cls_plug_disconnect_int(t_plug_mode mode, t_plug *plug)
 {
 	// General
-	cls_plug_disconnect_general(plug);
+	cls_plug_disconnect_general(mode,plug);
 }
 
-void cls_plug_connect_float(t_plug *self,t_plug *dst)
+void cls_plug_connect_float(t_plug_mode mode, t_plug *self,t_plug *dst)
 {
 	// General
-	cls_plug_connect_general(self,dst);
+	cls_plug_connect_general(mode,self,dst);
 }
 
-void cls_plug_disconnect_float(t_plug *plug)
+void cls_plug_disconnect_float(t_plug_mode mode, t_plug *plug)
 {
 	// General
-	cls_plug_disconnect_general(plug);
+	cls_plug_disconnect_general(mode,plug);
 }
 
-void cls_plug_connect_string(t_plug *self,t_plug *dst)
+void cls_plug_connect_string(t_plug_mode mode, t_plug *self,t_plug *dst)
 {
 	// General
-	cls_plug_connect_general(self,dst);
+	cls_plug_connect_general(mode,self,dst);
 }
 
-void cls_plug_disconnect_string(t_plug *plug)
+void cls_plug_disconnect_string(t_plug_mode mode, t_plug *plug)
 {
 	// General
-	cls_plug_disconnect_general(plug);
+	cls_plug_disconnect_general(mode,plug);
 }
 
-void cls_plug_connect_pointer(t_plug *self, t_plug *dst)
+void cls_plug_connect_pointer(t_plug_mode mode, t_plug *self, t_plug *dst)
 {
 	// General
-	cls_plug_connect_general(self,dst);
+	cls_plug_connect_general(mode,self,dst);
 }
 
-void cls_plug_disconnect_pointer(t_plug *plug)
+void cls_plug_disconnect_pointer(t_plug_mode mode, t_plug *plug)
 {
 	// General
-	cls_plug_disconnect_general(plug);
+	cls_plug_disconnect_general(mode,plug);
 }
 
-void cls_plug_connect_mesh(t_plug *self, t_plug *dst)
+void cls_plug_connect_mesh(t_plug_mode mode, t_plug *self, t_plug *dst)
 {
 	// General
-	cls_plug_connect_general(self,dst);
+	cls_plug_connect_general(mode,self,dst);
 }
 
-void cls_plug_disconnect_mesh(t_plug *plug)
+void cls_plug_disconnect_mesh(t_plug_mode mode, t_plug *plug)
 {
 	// General
-	cls_plug_disconnect_general(plug);
+	cls_plug_disconnect_general(mode,plug);
 }
 
-void cls_plug_connect_vertex(t_plug *self, t_plug *dst)
+void cls_plug_connect_vertex(t_plug_mode mode, t_plug *self, t_plug *dst)
 {
 	// General
-	cls_plug_connect_general(self,dst);
+	cls_plug_connect_general(mode,self,dst);
 }
 
-void cls_plug_disconnect_vertex(t_plug *plug)
+void cls_plug_disconnect_vertex(t_plug_mode mode, t_plug *plug)
 {
 	// General
-	cls_plug_disconnect_general(plug);
+	cls_plug_disconnect_general(mode,plug);
 }
 
-void cls_plug_connect_face(t_plug *self, t_plug *dst)
+void cls_plug_connect_face(t_plug_mode mode, t_plug *self, t_plug *dst)
 {
 	// General
-	cls_plug_connect_general(self,dst);
+	cls_plug_connect_general(mode,self,dst);
 }
 
-void cls_plug_disconnect_face(t_plug *plug)
+void cls_plug_disconnect_face(t_plug_mode mode, t_plug *plug)
 {
 	// General
-	cls_plug_disconnect_general(plug);
+	cls_plug_disconnect_general(mode,plug);
 }
 
-void cls_plug_connect_vlst(t_plug *self, t_plug *dst)
+void cls_plug_connect_vlst(t_plug_mode mode, t_plug *self, t_plug *dst)
 {
 	// General
-	cls_plug_connect_general(self,dst);
+	cls_plug_connect_general(mode,self,dst);
 }
 
-void cls_plug_disconnect_vlst(t_plug *plug)
+void cls_plug_disconnect_vlst(t_plug_mode mode, t_plug *plug)
 {
 	// General
-	cls_plug_disconnect_general(plug);
+	cls_plug_disconnect_general(mode,plug);
 }
 
-void cls_plug_connect_lst(t_plug *self, t_plug *dst)
+void cls_plug_connect_lst(t_plug_mode mode, t_plug *self, t_plug *dst)
 {
 	// General
-	cls_plug_connect_general(self,dst);
+	cls_plug_connect_general(mode,self,dst);
 }
 
-void cls_plug_disconnect_lst(t_plug *plug)
+void cls_plug_disconnect_lst(t_plug_mode mode, t_plug *plug)
 {
 	// General
-	cls_plug_disconnect_general(plug);
+	cls_plug_disconnect_general(mode,plug);
 }
 
-void cls_plug_connect_camera(t_plug *self, t_plug *dst)
+void cls_plug_connect_camera(t_plug_mode mode, t_plug *self, t_plug *dst)
 {
 	// General
-	cls_plug_connect_general(self,dst);
+	cls_plug_connect_general(mode,self,dst);
 }
 
-void cls_plug_disconnect_camera(t_plug *plug)
+void cls_plug_disconnect_camera(t_plug_mode mode, t_plug *plug)
 {
 	// General
-	cls_plug_disconnect_general(plug);
+	cls_plug_disconnect_general(mode,plug);
 }
 
-void cls_plug_connect_char(t_plug *self, t_plug *dst)
+void cls_plug_connect_char(t_plug_mode mode, t_plug *self, t_plug *dst)
 {
 	// General
-	cls_plug_connect_general(self,dst);
+	cls_plug_connect_general(mode,self,dst);
 }
 
-void cls_plug_disconnect_char(t_plug *plug)
+void cls_plug_disconnect_char(t_plug_mode mode, t_plug *plug)
 {
 	// General
-	cls_plug_disconnect_general(plug);
+	cls_plug_disconnect_general(mode,plug);
 }
 
-void cls_plug_connect_object(t_plug *self, t_plug *dst)
+void cls_plug_connect_object(t_plug_mode mode, t_plug *self, t_plug *dst)
 {
 	// General
-	cls_plug_connect_general(self,dst);
+	cls_plug_connect_general(mode,self,dst);
 }
 
-void cls_plug_disconnect_object(t_plug *plug)
+void cls_plug_disconnect_object(t_plug_mode mode, t_plug *plug)
 {
 	// General
-	cls_plug_disconnect_general(plug);
+	cls_plug_disconnect_general(mode,plug);
 }
 
-void cls_plug_connect_selector(t_plug *self, t_plug *dst)
+void cls_plug_connect_selector(t_plug_mode mode, t_plug *self, t_plug *dst)
 {
 	// General
-	cls_plug_connect_general(self,dst);
+	cls_plug_connect_general(mode,self,dst);
 }
 
-void cls_plug_disconnect_selector(t_plug *plug)
+void cls_plug_disconnect_selector(t_plug_mode mode, t_plug *plug)
 {
 	// General
-	cls_plug_disconnect_general(plug);
+	cls_plug_disconnect_general(mode,plug);
 }
 
-void cls_plug_connect_trigger(t_plug *self, t_plug *dst)
+void cls_plug_connect_trigger(t_plug_mode mode, t_plug *self, t_plug *dst)
 {
 	// General
-	cls_plug_connect_general(self,dst);
+	cls_plug_connect_general(mode,self,dst);
 }
 
-void cls_plug_disconnect_trigger(t_plug *plug)
+void cls_plug_disconnect_trigger(t_plug_mode mode, t_plug *plug)
 {
 	// General
-	cls_plug_disconnect_general(plug);
+	cls_plug_disconnect_general(mode,plug);
 }
 
-void cls_plug_connect_operator(t_plug *self, t_plug *dst)
+void cls_plug_connect_operator(t_plug_mode mode, t_plug *self, t_plug *dst)
 {
 	// General
-	cls_plug_connect_general(self,dst);
+	cls_plug_connect_general(mode,self,dst);
 }
 
-void cls_plug_disconnect_operator(t_plug *plug)
+void cls_plug_disconnect_operator(t_plug_mode mode, t_plug *plug)
 {
 	// General
-	cls_plug_disconnect_general(plug);
+	cls_plug_disconnect_general(mode,plug);
 }
 
-void cls_plug_connect_general(t_plug *self, t_plug *dst)
+void set_in_loop(t_brick *brick, int state)
 {
-	if(dst->close_flow_in)
+	t_block *block = brick->block;
+	t_lst *lst = lst_new("lst");
+	block_branch_get(lst,block);
+
+	if(lst->first)
 	{
-		t_brick *brick = self->brick;
-		t_plug *plug_in = &brick->plug_in;
-		plug_in->flow_in = 0;
+		t_link *link;
+		t_brick *brick;
+		t_plug *plug;
+
+		for(link = lst->first; link; link = link->next)
+		{
+			brick = link->data;
+			plug = &brick->plug_intern;
+			plug->is_in_loop = state;
+		}
 	}
+
+	lst_free(lst);
 }
 
-void cls_plug_disconnect_general(t_plug *self)
+void cls_plug_connect_general(t_plug_mode mode, t_plug *self, t_plug *dst)
 {
 	t_brick *brick = self->brick;
 	t_plug *plug_in = &brick->plug_in;
+	t_plug *plug_out = &brick->plug_out;
+
+	t_brick *brick_dst = dst->brick;
+	t_plug *plug_dst_in = &brick_dst->plug_in;
+	t_plug *plug_dst_out = &brick_dst->plug_out;
+	
+	if(mode == mode_in)
+	{
+		plug_in->src = plug_dst_out;
+		plug_in->is_connected = 1;
+
+		if(brick->state.is_versatil)
+		{
+			if(self->data_type != dst->data_type)
+			{
+				brick_type_change(brick,dst);
+			}
+		}
+	}
+	else
+	{
+		plug_out->dst = plug_dst_in;
+		plug_out->is_connected = 1;
+	}
+
+	if(dst->close_flow_in)
+	{
+		t_plug *plug_in = &brick->plug_in;
+		plug_in->flow_in = 0;
+	}
+
+	if(dst->is_a_loop)
+	{
+		set_in_loop(brick,1);
+	}
+}
+
+void cls_plug_disconnect_general(t_plug_mode mode, t_plug *self)
+{
+	t_brick *brick = self->brick;
+	t_plug *plug_in = &brick->plug_in;
+	t_plug *plug_out = &brick->plug_out;
+
 	plug_in->flow_in = 1;
+
+	t_plug *dst = plug_out->dst;
+	
+
+	if(mode == mode_in)
+	{
+		plug_in->src = NULL;
+		plug_in->is_connected = 0;
+	}
+	else
+	{
+		plug_out->dst = NULL;
+		plug_out->is_connected = 0;
+
+		if(dst->is_a_loop)
+		{
+			set_in_loop(brick,0);
+		}
+	}
 }
 
 // VECTOR
 
-void cls_plug_connect_vector(t_plug *self, t_plug *dst)
+void cls_plug_connect_vector(t_plug_mode mode, t_plug *self, t_plug *dst)
 {
 	t_brick *brick = self->brick;
 	t_block *block = brick->block;
@@ -245,7 +315,7 @@ void cls_plug_connect_vector(t_plug *self, t_plug *dst)
 	t_plug *plug_out = &brick->plug_out;
 
 	// General
-	cls_plug_connect_general(self,dst);
+	cls_plug_connect_general(mode,self,dst);
 
 	// For Vector
 	if(dst->is_volatil)
@@ -280,7 +350,7 @@ void cls_plug_connect_vector(t_plug *self, t_plug *dst)
 	}
 }
 
-void cls_plug_disconnect_vector(t_plug *plug)
+void cls_plug_disconnect_vector(t_plug_mode mode, t_plug *plug)
 {
 	t_brick *brick = plug->brick;
 	t_block *block = brick->block;
@@ -290,7 +360,7 @@ void cls_plug_disconnect_vector(t_plug *plug)
 	t_plug *plug_out = &brick->plug_out;
 
 	// General
-	cls_plug_disconnect_general(plug);
+	cls_plug_disconnect_general(mode,plug);
 
 	// change plug state
 	if(plug->is_state_volatil)

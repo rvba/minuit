@@ -25,42 +25,13 @@ void show_buffer(void)
 
 // CONNECT
 
-void cls_brick_connect(t_brick *self,t_brick *src)
+void cls_brick_connect(t_brick *brick_in ,t_brick *brick_out)
 {
-	t_context *C=ctx_get();
+	t_plug *plug_brick_in = &brick_in->plug_intern;
+	t_plug *plug_brick_out = &brick_out->plug_intern;
 
-	char msg[40];
-	char *type=data_name_get(self->plug_intern.data_type);
-	sprintf(msg,"plug in :%s",type);
-	term_print(C->term,msg);
-
-	t_plug *plug_in=&self->plug_in;
-	t_plug *plug_out=&src->plug_out;
-
-	// connect bricks
-	plug_out->dst=plug_in;
-	plug_in->src=plug_out;
-
-	plug_in->is_connected=1;
-	plug_out->is_connected=1;
-
-	// versatil: change brick type
-	if(self->state.is_versatil)
-	{
-		if(plug_out->data_type!=plug_in->data_type)
-		{
-			brick_type_change(self,&src->plug_intern);
-		}
-	}
-
-	t_plug *plug_self = &self->plug_intern;
-	t_plug *plug_src = &src->plug_intern;
-
-	// plug_cls
-	plug_self->cls->connect(plug_self,plug_src);
-	plug_src->cls->connect(plug_src,plug_self);
-
-
+	plug_brick_in->cls->connect(mode_in, plug_brick_in, plug_brick_out);
+	plug_brick_out->cls->connect(mode_out, plug_brick_out, plug_brick_in);
 }
 
 // DISCONNECT
@@ -72,30 +43,16 @@ void cls_brick_disconnect(t_brick *self)
 	C->event->state=event_unlinking;
 
 	t_brick *brick_in=C->ui->brick_in;
+
 	t_plug *plug_in=&brick_in->plug_in;
 	t_plug *plug_target=plug_in->src;
 	t_brick *brick_out=plug_target->brick;
-	t_plug *plug_out=&brick_out->plug_out;
-	t_plug *plug_intern_self = &self->plug_intern;
+
+	t_plug *plug_intern_in = &brick_in->plug_intern;
 	t_plug *plug_intern_out = &brick_out->plug_intern;
 
-	// plug_cls
-	plug_intern_self->cls->disconnect(plug_intern_self);
-	plug_intern_out->cls->disconnect(plug_intern_out);
-
-	// set plug state
-	plug_in->is_connected=0;
-	plug_in->src=NULL;
-
-	plug_out->is_connected=0;
-	plug_out->dst=NULL;
-
-	// versatil: change brick type
-	if(self->state.is_versatil)
-	{
-		brick_type_reset(self);
-	}
-
+	plug_intern_in->cls->disconnect(mode_in , plug_intern_in);
+	plug_intern_out->cls->disconnect(mode_out ,plug_intern_out);
 
 	// change modes
 	self->mode=bm_idle;

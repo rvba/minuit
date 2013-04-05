@@ -269,10 +269,6 @@ void brick_type_change(t_brick *brick,t_plug *plug)
 	C->scene->store=0;
 }
 
-void brick_type_reset(t_brick *brick)
-{
-}
-
 void brick_change_type_by_name(t_brick *brick,t_data_type type)
 {
 	t_context *C=ctx_get();
