@@ -33,72 +33,6 @@ t_term *TERM_ROOT=NULL;
 // Recurse into connected Bricks with follow_in state
 // Get N
 
-t_lst *LST;
-
-/*
-void block_branch_get(int loop, t_lst *lst, t_block *block)
-{
-	t_link *link;
-	t_brick *block_brick;
-	t_plug *plug_in;
-	t_plug *plug_src;
-	t_brick *brick_source;
-	t_block *block_src;
-
-	t_link *l;
-	int *i;
-
-	if(loop == 0)
-	{
-		LST = lst_new("id");
-	}
-
-	for(link = block->bricks->first; link; link = link->next)
-	{
-		block_brick = link->data;
-		plug_in = &block_brick->plug_in;
-
-		int id = block_brick->id;
-		int is_double = 0;
-
-		for(l=LST->first;l;l=l->next)
-		{
-			i=l->data;
-			if(id == *i) is_double =1;
-		}
-
-		if(!is_double)
-		{
-			int *_i = (int *)malloc(sizeof(int));
-			*_i = id;
-			lst_add(LST,_i,"i");
-			lst_add(lst,block_brick,"brick");
-		}
-
-		if(plug_in->is_connected && plug_in->follow_in)
-		{
-			plug_src = plug_in->src;
-			brick_source = plug_src->brick;
-			block_src = brick_source->block;
-
-			// recurse
-			block_branch_get(loop+1,lst,block_src);
-		}
-	}
-
-	if(loop == 0) 
-	{
-		for(l=LST->first;l;l=l->next)
-		{
-			int *ii = l->data;
-			free(ii);
-		}
-		
-		lst_free(LST);
-	}
-}
-*/
-
 void block_branch_get(t_lst *lst, t_block *block)
 {
 	t_link *link;
@@ -156,146 +90,100 @@ t_lst *block_branch_src_get(t_context *C,t_block *block)
 			t_block *blk = t->block;
 
 			// get branch
-			//block_branch_get(0,lst,blk);
 			block_branch_get(lst,blk);
-
 		}
 	}
 
 	return lst;
 }
 
+void ctx_links_store_roots(t_lst *lst, t_brick *brick)
+{
+	t_plug *plug_in = &brick->plug_in;
+	t_plug *plug_target_out = plug_in->src;
+	t_plug *plug_target = plug_target_out->src;
+
+	// if follow in
+	if(plug_in->follow_in)
+	{
+		// and target is updated
+		if(plug_target->is_updated)
+		{
+			// this plug is root
+			lst_add(lst, brick, brick->name);
+		}
+	}
+	// else is no follow
+	else
+	{
+		// this plug is root
+		lst_add(lst , brick, brick->name);
+	}
+}
+
+int ctx_links_check_parents(t_brick *brick)
+{
+	t_plug *plug_intern = &brick->plug_intern;
+	t_plug *plug_parent;
+	t_link *link;
+
+	int state = 1;
+
+	// check parents state
+	if(plug_intern->parents)
+	{
+		for(link = plug_intern->parents->first; link; link = link->next)
+		{
+			plug_parent = link->data;
+
+			if(!plug_parent->is_updated)
+			{
+				state = 0;
+				break;
+			}
+		}
+	}
+
+	return state;
+}
+
 // Remove all NONE Root Bricks from ROOT
 // NONE Root = No PARENT or PARENT is UPDATED
-void links_get_roots(t_lst *lst,t_lst *roots)
+void ctx_links_get_roots(t_context *C, t_lst *lst, t_lst *roots)
 {
 	t_link *l;
 	t_brick *b;
-	t_plug *plug_intern;
 	t_plug *plug_in;
-
-	t_context *C = ctx_get();
-
-	if(C->ui->show_step) term_log("get roots");
 
 	// LOOP over list
 	for(l=lst->first;l;l=l->next)
 	{
 		b=l->data;
-		plug_in=&b->plug_in;
-		plug_intern = &b->plug_intern;
+		plug_in = &b->plug_in;
 
 		// if plug_in is connected
 		if(plug_in->is_connected)
 		{
-			t_plug *plug_target_out=plug_in->src;
-			t_plug *plug_target_intern = plug_target_out->src;
+			int all_updated = ctx_links_check_parents(b);
 
-			// PARENTS
-			if(plug_intern->parents)
+			// check parents 
+			if(all_updated)
 			{
-				t_link *_l;
-				t_plug *_p;
-
-				int all_updated = 1;
-
-				for(_l=plug_intern->parents->first;_l;_l=_l->next)
-				{
-					_p = _l->data;
-
-					if(!_p->is_updated)
-					{
-						all_updated = 0;
-						break;
-					}
-				}
-
-				if(all_updated)
-				{
-					if(C->ui->show_step) term_log("%s : parent updated",b->name);
-					// follow
-					if(plug_in->follow_in)
-					{
-						// is updated
-						if(plug_target_out->is_updated && plug_target_intern->is_updated)
-						{
-							// this plug is root
-							lst_add(roots,b,b->name);
-						}
-					}
-					// no follow
-					else
-					{
-						// this plug is root
-						lst_add(roots,b,b->name);
-					}
-				}
-			}
-			else
-			{
-				// follow
-				if(plug_in->follow_in)
-				{
-					// is updated
-					if(plug_target_out->is_updated && plug_target_intern->is_updated)
-					{
-						// this plug is root
-						lst_add(roots,b,b->name);
-					}
-				}
-				// no follow
-				else
-				{
-					// this plug is root
-					lst_add(roots,b,b->name);
-				}
+				// check conections
+				ctx_links_store_roots(roots,b);
 			}
 		}
-		// else
+		// else if plug_in is not connected
 		else
 		{
+			int all_updated = ctx_links_check_parents(b);
 
-			if(plug_intern->parents)
+			// check parents
+			if(all_updated)
 			{
-				t_link *_l;
-				t_plug *_p;
-
-				int all_updated = 1;
-
-				for(_l=plug_intern->parents->first;_l;_l=_l->next)
-				{
-					_p = _l->data;
-
-					if(!_p->is_updated)
-					{
-						all_updated = 0;
-						break;
-					}
-				}
-
-				if(all_updated)
-				{
-					// this plug is root
-					lst_add(roots,b,b->name);
-				}
-			}
-			// ADD
-			else
-			{
+				// this plug is root
 				lst_add(roots,b,b->name);
 			}
-		}
-	}
-
-	if(C->ui->show_step)
-	{
-		term_log("ROOT");
-		//printf("ROOT\n");
-		for(l=roots->first;l;l=l->next)
-		{
-			b = l->data;
-			term_log("%s",b->name);
-		//	printf("%s\n",b->name);
 		}
 	}
 }
@@ -395,7 +283,7 @@ int ctx_links_loop(t_context *C)
 			{
 				term_log("No more root");
 				lst_cleanup(ROOTS);
-				links_get_roots(BRICKS,ROOTS);
+				ctx_links_get_roots(C, BRICKS, ROOTS);
 				echo_root(C);
 			}
 			// FINISH
@@ -410,7 +298,7 @@ int ctx_links_loop(t_context *C)
 	else
 	{
 		// get roots
-		links_get_roots(BRICKS,ROOTS);
+		ctx_links_get_roots(C, BRICKS, ROOTS);
 	}
 
 	// TRIGGER ROOTS
@@ -428,7 +316,6 @@ int ctx_links_loop(t_context *C)
 		if(C->ui->show_step)
 		{
 			term_log("trigger %s",b->name);
-			//Printf("> trigger %s\n",b->name);
 			// remove from ROOTS
 			lst_remove_by_id(ROOTS,b->id);
 
