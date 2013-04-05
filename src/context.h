@@ -58,6 +58,7 @@ struct Context
 	t_draw *draw;
 	t_skt *skt;
 	t_term *term;
+	t_lst *terms;
 	t_server *server;
 };
 
@@ -203,7 +204,8 @@ void ctx_render(t_context *C);
 // CTX_LINKS.C
 
 t_lst *block_branch_src_get(t_context *C,t_block *block);
-void block_branch_get(int loop,t_lst *lst,t_block *block);
+//void block_branch_get(int loop,t_lst *lst,t_block *block);
+void block_branch_get(t_lst *lst,t_block *block);
 int ctx_links_loop(t_context *C);
 void ctx_links_update(t_context *C);
 void ctx_links_reset(t_context *C,t_lst *lst);

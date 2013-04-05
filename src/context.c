@@ -28,7 +28,8 @@ t_context *ctx_new(int argc,char **argv)
 	C->draw=draw_new();
 	C->skt=skt_new();
 	C->ui=ui_new();
-	C->term=term_new();
+	C->term=term_new("main");
+	C->terms = lst_new("terms");
 
 	C->camera=NULL;
 
@@ -59,7 +60,16 @@ t_context *ctx_init(int argc,char **argv)
 	ui_init();
 
 	// init term,mode
+	/*
+	t_term *term = term_new();
+	term->init(term);
+	lst_add(C->terms,term,"term");
+	C->term = term;
+	*/
+
+	lst_add(C->terms,C->term,"main term");
 	C->term->init(C->term);
+
 	C->mode->init(C->mode);
 
 	// init multi-threading

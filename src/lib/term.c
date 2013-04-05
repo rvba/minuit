@@ -91,6 +91,17 @@ void term_log(char *fmt, ...)
 	term_print(C->term,msg);
 }
 
+void term_echo(t_term *term,char *fmt, ...)
+{
+	char msg[40];
+	va_list ap;
+	va_start(ap,fmt);
+	vsprintf(msg,fmt,ap);
+	va_end(ap);
+
+	term_print(term,msg);
+}
+
 void term_draw(t_term *term)
 {
 	t_link *l;
@@ -116,9 +127,27 @@ void term_init(t_term *term)
 	term->loc_y=C->app->window->height*.9;
 }
 
-t_term *term_new(void)
+void term_free(t_term *term)
+{
+	t_link *link;
+	t_txt *line;
+
+	for(link = term->lines->first; link; link = link->next)
+	{
+		line = link->data;
+		txt_free(line);
+	}
+
+	lst_free(term->lines);
+
+	free(term);
+}
+
+t_term *term_new(const char *name)
 {
 	t_term *term  = (t_term *)malloc(sizeof(t_term));
+
+	set_name(term->name,name);
 
 	term->tot_line=CTX_TERM_TOT_LINE;
 	term->line=0;

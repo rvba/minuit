@@ -94,11 +94,30 @@ void link_free(t_link *link)
 	free(link);
 }
 
+t_link *lst_link_find_by_name(t_lst *lst, const char *name)
+{
+	t_link *link;
+	for(link = lst->first; link; link=link->next)
+	{
+		if(is(link->name,name))
+			return link;
+	}
+
+	return NULL;
+}
+
 // remove a link from the list and free it
 void lst_link_delete(t_lst *lst,t_link *link)
 {
 	lst_link_remove(lst,link);
 	link_free(link);
+}
+
+void lst_link_delete_by_name(t_lst *lst, const char *name)
+{
+	t_link *link = lst_link_find_by_name(lst, name);
+	if(link)
+		lst_link_delete(lst, link);
 }
 
 // remove and free all links from a list

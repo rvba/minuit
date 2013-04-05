@@ -11,9 +11,13 @@
 
 // STEP
 
+// All Bricks (from all Blocks) from Desk
 t_lst *BRICKS = NULL;
+
+// Stack of Root Bricks
 t_lst *ROOTS = NULL;
 
+// Display current Brick
 t_brick *brick_current=NULL;
 
 t_lst *ctx_links_lst_get(void)
@@ -21,15 +25,18 @@ t_lst *ctx_links_lst_get(void)
 	return BRICKS;
 }
 
+t_term *TERM_ROOT=NULL;
+
 // GET ROOT
 
 // Put All Bricks from Block into Lst
-// Recurse into connected Bricks
+// Recurse into connected Bricks with follow_in state
 // Get N
 
 t_lst *LST;
 
-void block_branch_get(int loop,t_lst *lst,t_block *block)
+/*
+void block_branch_get(int loop, t_lst *lst, t_block *block)
 {
 	t_link *link;
 	t_brick *block_brick;
@@ -46,14 +53,13 @@ void block_branch_get(int loop,t_lst *lst,t_block *block)
 		LST = lst_new("id");
 	}
 
-	for(link=block->bricks->first;link;link=link->next)
+	for(link = block->bricks->first; link; link = link->next)
 	{
 		block_brick = link->data;
 		plug_in = &block_brick->plug_in;
 
-
 		int id = block_brick->id;
-		int is_double=0;
+		int is_double = 0;
 
 		for(l=LST->first;l;l=l->next)
 		{
@@ -91,6 +97,35 @@ void block_branch_get(int loop,t_lst *lst,t_block *block)
 		lst_free(LST);
 	}
 }
+*/
+
+void block_branch_get(t_lst *lst, t_block *block)
+{
+	t_link *link;
+	t_brick *block_brick;
+	t_plug *plug_in;
+	t_plug *plug_src;
+	t_brick *brick_source;
+	t_block *block_src;
+
+	for(link = block->bricks->first; link; link = link->next)
+	{
+		block_brick = link->data;
+		plug_in = &block_brick->plug_in;
+
+		lst_add(lst,block_brick,"brick");
+
+		if(plug_in->is_connected && plug_in->follow_in)
+		{
+			plug_src = plug_in->src;
+			brick_source = plug_src->brick;
+			block_src = brick_source->block;
+
+			// recurse
+			block_branch_get(lst,block_src);
+		}
+	}
+}
 
 // GET BRANCH
 
@@ -121,7 +156,8 @@ t_lst *block_branch_src_get(t_context *C,t_block *block)
 			t_block *blk = t->block;
 
 			// get branch
-			block_branch_get(0,lst,blk);
+			//block_branch_get(0,lst,blk);
+			block_branch_get(lst,blk);
 
 		}
 	}
@@ -325,6 +361,20 @@ void set_brick_current(t_context *C,t_brick *b)
 
 	brick_current=b;
 }
+
+void echo_root(t_context *C)
+{
+	t_link *l;
+	t_brick *b;
+
+	term_echo(TERM_ROOT,"%d NEW ROOTS",C->app->frame);
+
+	for(l = ROOTS->first; l; l = l->next)
+	{
+		b = l->data;
+		term_echo(TERM_ROOT,"%s",b->name);
+	}
+}
 	
 int ctx_links_loop(t_context *C)
 {
@@ -346,6 +396,7 @@ int ctx_links_loop(t_context *C)
 				term_log("No more root");
 				lst_cleanup(ROOTS);
 				links_get_roots(BRICKS,ROOTS);
+				echo_root(C);
 			}
 			// FINISH
 			else
@@ -377,7 +428,7 @@ int ctx_links_loop(t_context *C)
 		if(C->ui->show_step)
 		{
 			term_log("trigger %s",b->name);
-			//printf("> trigger %s\n",b->name);
+			//Printf("> trigger %s\n",b->name);
 			// remove from ROOTS
 			lst_remove_by_id(ROOTS,b->id);
 
@@ -449,29 +500,14 @@ void ctx_links_init_loops(t_context *C)
 	t_link *l;
 	t_brick *b;
 	t_plug *p;
-	//t_lst *lst;
-	//t_block *block;
 
 	for(l=BRICKS->first;l;l=l->next)
 	{
 		b = l->data;
 		p = &b->plug_intern;
-		//block = b->block;
 
 		if(p->operator_type == ot_for)
 		{
-			/*
-			lst=lst_new("lst");
-			block_branch_get(lst,block);
-
-			// reset states
-			ctx_links_unreset(C,lst);
-
-			p->is_updated = 0;
-
-			lst_free(lst);
-			*/
-
 			if(C->ui->show_step) term_log("init for");
 
 			t_block *_block = b->block;
@@ -506,6 +542,7 @@ void ctx_links_update(t_context *C)
 			if(C->ui->step_reset)
 			{
 				term_log("reset");
+
 				// reset RESET
 				C->ui->step_reset = 0;
 
@@ -530,6 +567,14 @@ void ctx_links_update(t_context *C)
 			{
 				term_log("init");
 
+				// build second term
+				TERM_ROOT = term_new("root");
+				TERM_ROOT->init(TERM_ROOT);
+				TERM_ROOT->loc_x = 200;
+				TERM_ROOT->tot_line = 40;
+
+				lst_add(C->terms,TERM_ROOT,"root");
+
 				// BUILD LIST
 				BRICKS=ctx_links_build(C);
 				ROOTS=lst_new("root");
@@ -545,11 +590,6 @@ void ctx_links_update(t_context *C)
 				// RESET, wait for key pressed
 				C->ui->step = 0;
 	
-				//printf("---------------------------------\n");
-				//printf("BRICKS\n");
-
-				lst_show(BRICKS);
-
 				// LOOP
 				// IF LAST BRICK : RESET
 
@@ -565,6 +605,10 @@ void ctx_links_update(t_context *C)
 					// free
 					lst_free(__BRICKS);
 					lst_free(BRICKS);
+
+					// Remove Root Terminal
+					lst_link_delete_by_name(C->terms,"root");
+					term_free(TERM_ROOT);
 
 					BRICKS=NULL;
 					ROOTS=NULL;

@@ -164,7 +164,19 @@ void ui_draw_term(void)
 	t_context *C=ctx_get();
 	if(C->ui->show_term)
 	{
-		if(C->draw->mode==mode_draw) C->term->draw(C->term);
+		if(C->draw->mode==mode_draw)
+		{
+			t_link *l;
+			t_term *t;
+			for(l = C->terms->first; l; l = l->next)
+			{
+				t = l->data;
+				t->draw(t);
+			}
+
+			//C->term->draw(C->term);
+		}
+
 	}
 }
 

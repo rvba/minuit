@@ -19,6 +19,11 @@ typedef struct Term t_term;
 
 struct Term
 {
+	int id;
+	int id_chunk;
+	short users;
+	char name[_NAME_];
+
 	int tot_line;
 	int line;
 	int line_length;
@@ -35,8 +40,10 @@ struct Term
 	void (* init)(t_term *term);
 };
 
-t_term *term_new(void);
+void term_free(t_term *term);
+t_term *term_new(const char *name);
 void term_print(t_term *term,char *data);
 void term_log(char *fmt, ...);
+void term_echo(t_term *term,char *fmt, ...);
 
 #endif

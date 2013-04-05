@@ -822,7 +822,8 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 
 							// get branch (all bricks)
 							t_lst *lst=lst_new("lst");
-							block_branch_get(0,lst,block);
+							//block_branch_get(0,lst,block);
+							block_branch_get(lst,block);
 
 							// reset states
 							ctx_links_reset(C,lst);

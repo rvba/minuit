@@ -23,18 +23,7 @@
 #define UI_DRAW 1
 #define UI_SHOW_INTRO 1
 #define UI_SHOW_MOUSE 0
-#define UI_SHOW_TERM 0
-
-#define PRESSED 21
-#define RELEASED 22
-#define MOVING 23
-#define ACTING 24
-#define LINKING 25
-
-#define MENU_SHOW 30
-#define MENU_MOUSE_SHOW 31
-#define MENU_PRESSED 32
-#define MENU_RELEASED 33
+#define UI_SHOW_TERM 1
 
 
 // UI
@@ -98,7 +87,6 @@ struct Ui
 	int debug;
 
 	// selections
-	//t_node *brick_selected;
 	t_brick *brick_selected;
 	t_node *link;
 	t_node *link_node;
