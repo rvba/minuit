@@ -33,125 +33,204 @@ void cls_plug_make_trigger(t_plug *plug);
 void cls_plug_make_operator(t_plug *plug);
 void cls_plug_make_vector(t_plug *plug);
 
+void cls_plug_connect_general(t_plug *self, t_plug *dst);
+void cls_plug_disconnect_general(t_plug *self);
+
 void cls_plug_connect_int(t_plug *self,t_plug *dst)
 {
+	// General
+	cls_plug_connect_general(self,dst);
 }
 
 void cls_plug_disconnect_int(t_plug *plug)
 {
+	// General
+	cls_plug_disconnect_general(plug);
 }
-
 
 void cls_plug_connect_float(t_plug *self,t_plug *dst)
 {
+	// General
+	cls_plug_connect_general(self,dst);
 }
 
 void cls_plug_disconnect_float(t_plug *plug)
 {
+	// General
+	cls_plug_disconnect_general(plug);
 }
 
 void cls_plug_connect_string(t_plug *self,t_plug *dst)
 {
+	// General
+	cls_plug_connect_general(self,dst);
 }
 
 void cls_plug_disconnect_string(t_plug *plug)
 {
+	// General
+	cls_plug_disconnect_general(plug);
 }
 
 void cls_plug_connect_pointer(t_plug *self, t_plug *dst)
 {
+	// General
+	cls_plug_connect_general(self,dst);
 }
 
 void cls_plug_disconnect_pointer(t_plug *plug)
 {
+	// General
+	cls_plug_disconnect_general(plug);
 }
 
 void cls_plug_connect_mesh(t_plug *self, t_plug *dst)
 {
+	// General
+	cls_plug_connect_general(self,dst);
 }
 
 void cls_plug_disconnect_mesh(t_plug *plug)
 {
+	// General
+	cls_plug_disconnect_general(plug);
 }
 
 void cls_plug_connect_vertex(t_plug *self, t_plug *dst)
 {
+	// General
+	cls_plug_connect_general(self,dst);
 }
 
 void cls_plug_disconnect_vertex(t_plug *plug)
 {
+	// General
+	cls_plug_disconnect_general(plug);
 }
 
 void cls_plug_connect_face(t_plug *self, t_plug *dst)
 {
+	// General
+	cls_plug_connect_general(self,dst);
 }
 
 void cls_plug_disconnect_face(t_plug *plug)
 {
+	// General
+	cls_plug_disconnect_general(plug);
 }
 
 void cls_plug_connect_vlst(t_plug *self, t_plug *dst)
 {
+	// General
+	cls_plug_connect_general(self,dst);
 }
 
 void cls_plug_disconnect_vlst(t_plug *plug)
 {
+	// General
+	cls_plug_disconnect_general(plug);
 }
 
 void cls_plug_connect_lst(t_plug *self, t_plug *dst)
 {
+	// General
+	cls_plug_connect_general(self,dst);
 }
 
 void cls_plug_disconnect_lst(t_plug *plug)
 {
+	// General
+	cls_plug_disconnect_general(plug);
 }
 
 void cls_plug_connect_camera(t_plug *self, t_plug *dst)
 {
+	// General
+	cls_plug_connect_general(self,dst);
 }
 
 void cls_plug_disconnect_camera(t_plug *plug)
 {
+	// General
+	cls_plug_disconnect_general(plug);
 }
 
 void cls_plug_connect_char(t_plug *self, t_plug *dst)
 {
+	// General
+	cls_plug_connect_general(self,dst);
 }
 
 void cls_plug_disconnect_char(t_plug *plug)
 {
+	// General
+	cls_plug_disconnect_general(plug);
 }
 
 void cls_plug_connect_object(t_plug *self, t_plug *dst)
 {
+	// General
+	cls_plug_connect_general(self,dst);
 }
 
 void cls_plug_disconnect_object(t_plug *plug)
 {
+	// General
+	cls_plug_disconnect_general(plug);
 }
 
 void cls_plug_connect_selector(t_plug *self, t_plug *dst)
 {
+	// General
+	cls_plug_connect_general(self,dst);
 }
 
 void cls_plug_disconnect_selector(t_plug *plug)
 {
+	// General
+	cls_plug_disconnect_general(plug);
 }
 
 void cls_plug_connect_trigger(t_plug *self, t_plug *dst)
 {
+	// General
+	cls_plug_connect_general(self,dst);
 }
 
 void cls_plug_disconnect_trigger(t_plug *plug)
 {
+	// General
+	cls_plug_disconnect_general(plug);
 }
 
 void cls_plug_connect_operator(t_plug *self, t_plug *dst)
 {
+	// General
+	cls_plug_connect_general(self,dst);
 }
 
 void cls_plug_disconnect_operator(t_plug *plug)
 {
+	// General
+	cls_plug_disconnect_general(plug);
+}
+
+void cls_plug_connect_general(t_plug *self, t_plug *dst)
+{
+	if(dst->close_flow_in)
+	{
+		t_brick *brick = self->brick;
+		t_plug *plug_in = &brick->plug_in;
+		plug_in->flow_in = 0;
+	}
+}
+
+void cls_plug_disconnect_general(t_plug *self)
+{
+	t_brick *brick = self->brick;
+	t_plug *plug_in = &brick->plug_in;
+	plug_in->flow_in = 1;
 }
 
 // VECTOR
@@ -164,6 +243,9 @@ void cls_plug_connect_vector(t_plug *self, t_plug *dst)
 	
 	t_plug *plug_in = &brick->plug_in;
 	t_plug *plug_out = &brick->plug_out;
+
+	// General
+	cls_plug_connect_general(self,dst);
 
 	// For Vector
 	if(dst->is_volatil)
@@ -206,6 +288,9 @@ void cls_plug_disconnect_vector(t_plug *plug)
 
 	t_plug *plug_in = &brick->plug_in;
 	t_plug *plug_out = &brick->plug_out;
+
+	// General
+	cls_plug_disconnect_general(plug);
 
 	// change plug state
 	if(plug->is_state_volatil)
@@ -1064,7 +1149,7 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 
 
 	// Get X Y Z bricks
-	if(brick_x && mode == mode_in) // case of vector + brick x y z
+	if(brick_x) // case of vector + brick x y z
 	{
 
 		brick_y = block_brick_get(block,"y");
@@ -1082,18 +1167,27 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 
 	// Set Vlst from X Y Z if not connected in  
 
-	if(brick_x &&  !plug_vector_in->is_connected)
+	if(brick_x)
 	{
-		vector_self = plug->data;
-		t_vlst *vlst = vector_self->vlst;
+		int set_value;
 
-		float *data = vlst->data;
+		if(plug_vector_in->is_connected && plug_vector_in->flow_in)
+			set_value = 0;
+		else
+			set_value = 1;
 
-		if(plug_x->data)
+		if(set_value)
 		{
-			data[0] = drf_float(plug_x->data);
-			data[1] = drf_float(plug_y->data);
-			data[2] = drf_float(plug_z->data);
+			vector_self = plug->data;
+			t_vlst *vlst = vector_self->vlst;
+			float *data = vlst->data;
+
+			if(plug_x->data)
+			{
+				data[0] = drf_float(plug_x->data);
+				data[1] = drf_float(plug_y->data);
+				data[2] = drf_float(plug_z->data);
+			}
 		}
 	}
 

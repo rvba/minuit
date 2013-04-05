@@ -459,9 +459,23 @@ void cls_brick_update(t_brick *brick)
 					{
 						if(brick->state.is_clicable)
 						{
-							if(brick_clic && !plug_in->is_connected)
+							if(brick_clic)
 							{
-								if(brick->state.use_brick_blocking)
+								int trigger;
+
+								if(plug_in->is_connected)
+								{
+									if(plug_in->flow_in == 0)
+										trigger = 1;
+									else
+										trigger = 0;
+								}
+								else
+								{
+									trigger = 1;
+								}
+
+								if(trigger && brick->state.use_brick_blocking)
 								{
 									if(brick->state.is_idle)
 									{

@@ -838,6 +838,7 @@ void *op_clone(t_brick *brick)
 	// update bricks
 	if(tot_bricks>0)
 	{
+		// connected in
 		if(plug_in->is_connected)
 		{
 			t_link *l;
@@ -869,6 +870,7 @@ void *op_clone(t_brick *brick)
 			}
 		}
 
+		// connected out
 		if(plug_out->is_connected)
 		{
 			t_link *l;
@@ -894,10 +896,16 @@ void *op_clone(t_brick *brick)
 					t_plug *_p_out_i = _p_out->dst;
 					t_plug *_plug_out = _p_out_i->dst;
 
+					//XXX
+					_plug_out->flow_out = 0;
+
 					plug_in_clone->src=_plug_out;
 					plug_in_clone->is_connected=1;
 
 					b->cls->trigger(b);
+
+					//XXX
+					_plug_out->flow_out = 1;
 
 				}
 			}

@@ -374,6 +374,9 @@ void plug_reset(t_plug *plug,const char *name)
 	plug->last_bang = 0;
 	plug->is_init=0;
 	plug->is_state_volatil = 1;
+	plug->is_a_loop = 0;
+	plug->is_in_loop = 0;
+	plug->close_flow_in = 0;
 
 	plug->flow_in = 1;
 	plug->flow_out = 0;

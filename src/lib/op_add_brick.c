@@ -1019,6 +1019,9 @@ t_node *add_clone(t_context *C)
 	brick_clone->state.use_dragging = 0;
 	brick_clone->state.remove_connected = 1;
 
+	t_plug *plug_clone = &brick_clone->plug_intern;
+	plug_clone->close_flow_in = 1;
+
 	return node_block;
 }
 
@@ -1125,12 +1128,13 @@ t_node *add_for(t_context *C)
 	brick_for->state.always_trigger = 1;
 	t_plug *plug_for = &brick_for->plug_intern;
 	brick_for->plug_intern.operator_type = ot_for;
+	plug_for->is_a_loop = 1;
 
 	// indice
 	t_node *node_indice = add_part_int(C,block,"indice",NULL);
 	t_brick *brick_indice = node_indice->data;
-
-	// no flow in
+	t_plug *plug_indice = &brick_indice->plug_intern;
+	plug_indice->is_a_loop = 1;
 	brick_indice->plug_in.flow_in = 0;
 
 	// vector
@@ -1138,6 +1142,7 @@ t_node *add_for(t_context *C)
 	t_brick *brick_vector = node_vector->data;
 	t_plug *plug_vector = &brick_vector->plug_intern;
 	plug_vector->is_volatil = 1;
+	plug_vector->is_a_loop = 1;
 	brick_vector->state.draw_value = 0;
 
 	brick_vector->plug_in.flow_in = 0;
