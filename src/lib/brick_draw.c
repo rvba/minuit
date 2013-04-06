@@ -445,7 +445,7 @@ void brick_draw_txt(t_brick *brick)
 			}
 
 			// draw DATA
-			if(brick->state.draw_value)
+			if(brick->state.draw_value || C->ui->show_step)
 			{
 				brick->txt_data.draw(&brick->txt_data);
 			}

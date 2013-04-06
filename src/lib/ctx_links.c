@@ -509,7 +509,7 @@ void ctx_links_update(t_context *C)
 				TERM_ROOT = term_new("root");
 				TERM_ROOT->init(TERM_ROOT);
 				TERM_ROOT->loc_x = 200;
-				TERM_ROOT->tot_line = 40;
+				TERM_ROOT->tot_line = 35;
 
 				lst_add(C->terms,TERM_ROOT,"root");
 

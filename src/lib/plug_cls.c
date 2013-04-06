@@ -449,7 +449,6 @@ void plug_data_set(t_plug *plug,t_data_type type,void *data)
 	}
 }
 
-
 void plug_data_negate(t_plug *plug)
 {
 	switch (plug->data_type)
@@ -459,8 +458,6 @@ void plug_data_negate(t_plug *plug)
 		default: break;
 	}
 }
-
-			
 
 // input: 	plug_intern 
 // return: 	plug_intern
@@ -507,7 +504,6 @@ t_plug *plug_get_dst(t_plug *plug)
 
 void plug_warning(t_plug *dst_plug,t_plug *src_plug)
 {
-
 	/*
 	t_context *C=ctx_get();
 	char msg[40];
@@ -517,7 +513,6 @@ void plug_warning(t_plug *dst_plug,t_plug *src_plug)
 	sprintf(msg,"%d(%s)(%s)-(%s)(%s)",C->app->frame,src_plug->name,src_plug_type,dst_plug->name,dst_plug_type);
 	term_print(C->term,msg);
 	*/
-	
 }
 
 // FLOW
@@ -889,8 +884,6 @@ void set_for_loop(t_block *block ,int state)
 	t_brick *b;
 	t_plug *p;
 
-	int db = 0;
-
 	for(l=lst->first;l;l=l->next)
 	{
 		b=l->data;
@@ -900,8 +893,6 @@ void set_for_loop(t_block *block ,int state)
 
 	lst_free(lst);
 }
-
-int for_init=0;
 
 void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src)
 {
@@ -966,12 +957,14 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 				if(vlst)
 				{
 					// set vector, open for fisrt loop
-					if(!for_init)
+					//if(!for_init)
+					if(!plug->is_init)
 					{
 						if(C->ui->show_step) term_log("[FOR] init loop %d",brick->counter);
 
 						plug->is_eval = 1;
-						for_init = 1;
+						//for_init = 1;
+						plug->is_init = 1;
 
 						// get pointer
 						float *ptr = vlst->data;
@@ -1030,7 +1023,6 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 							// free
 							lst_free(lst);
 
-
 							// counter ++
 							brick->counter++;
 
@@ -1042,7 +1034,8 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 							// reset counter
 							brick->counter = 0;
 
-							for_init=0;
+							// reset init
+							plug->is_init = 0;
 
 							set_for_loop(block,1);
 

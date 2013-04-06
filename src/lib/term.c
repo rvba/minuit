@@ -9,7 +9,7 @@
 
 #include "op.h"
 
-#define CTX_TERM_TOT_LINE 20
+#define CTX_TERM_TOT_LINE 35
 #define CTX_TERM_LINE_LENGTH 30
 
 
