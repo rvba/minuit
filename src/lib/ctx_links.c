@@ -27,36 +27,66 @@ t_lst *ctx_links_lst_get(void)
 
 t_term *TERM_ROOT=NULL;
 
-// GET ROOT
+// GET BRANCH
 
-// Put All Bricks from Block into Lst
-// Recurse into connected Bricks with follow_in state
-// Get N
+int block_branch_done(t_lst *lst, t_block *new_block)
+{
+	t_link *link;
+	t_brick *brick;
+	t_block *block;
+
+	if(lst->first)
+	{
+		for(link = lst->first; link; link = link->next)
+		{
+			brick = link->data;
+			block = brick->block;
+
+			// return True if Same Block
+			if(block->id == new_block->id)
+			{
+				return 1;
+			}
+		}
+
+		return 0;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
 
 void block_branch_get(t_lst *lst, t_block *block)
 {
 	t_link *link;
 	t_brick *block_brick;
 	t_plug *plug_in;
+
 	t_plug *plug_src;
 	t_brick *brick_source;
 	t_block *block_src;
 
+	// for each brick in block
 	for(link = block->bricks->first; link; link = link->next)
 	{
 		block_brick = link->data;
 		plug_in = &block_brick->plug_in;
 
+		// add to list
 		lst_add(lst,block_brick,"brick");
 
+		// if connected && follow in 
 		if(plug_in->is_connected && plug_in->follow_in)
 		{
 			plug_src = plug_in->src;
 			brick_source = plug_src->brick;
 			block_src = brick_source->block;
 
-			// recurse
-			block_branch_get(lst,block_src);
+			// get branch if new block
+			if(!block_branch_done(lst,block_src))
+				block_branch_get(lst,block_src);
 		}
 	}
 }
@@ -299,7 +329,7 @@ int ctx_links_loop(t_context *C)
 			// get roots
 			if(BRICKS->last)
 			{
-				term_log("No more root");
+				term_log("[GET ROOTS]");
 				lst_cleanup(ROOTS);
 				ctx_links_get_roots(C, BRICKS, ROOTS);
 				echo_root(C);
@@ -307,7 +337,7 @@ int ctx_links_loop(t_context *C)
 			// FINISH
 			else
 			{
-				term_log("No more root + no more bricks");
+				term_log("[END] no root + no bricks");
 				return 1;
 			}
 		}
@@ -401,6 +431,7 @@ void ctx_links_reset_for(t_lst *lst)
 	}
 }
 		 
+/*
 void ctx_links_init_loops(t_context *C)
 {
 	t_link *l;
@@ -435,6 +466,7 @@ void ctx_links_init_loops(t_context *C)
 		}
 	}
 }
+*/
 
 void ctx_links_update(t_context *C)
 {
@@ -447,7 +479,7 @@ void ctx_links_update(t_context *C)
 			// RESET
 			if(C->ui->step_reset)
 			{
-				term_log("reset");
+				term_log("[RESET]");
 
 				// reset RESET
 				C->ui->step_reset = 0;
@@ -471,7 +503,7 @@ void ctx_links_update(t_context *C)
 			// INIT
 			if(!BRICKS)
 			{
-				term_log("init");
+				term_log("[INIT]");
 
 				// build second term
 				TERM_ROOT = term_new("root");

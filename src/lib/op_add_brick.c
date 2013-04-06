@@ -1144,10 +1144,8 @@ t_node *add_for(t_context *C)
 	plug_vector->is_volatil = 1;
 	plug_vector->is_a_loop = 1;
 	brick_vector->state.draw_value = 0;
-
 	brick_vector->plug_in.flow_in = 0;
 	brick_vector->plug_in.open_in = 1;
-
 	brick_vector->plug_intern.is_state_volatil = 0;
 
 	// parent

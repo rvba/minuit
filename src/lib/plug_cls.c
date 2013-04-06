@@ -254,22 +254,26 @@ void cls_plug_connect_general(t_plug_mode mode, t_plug *self, t_plug *dst)
 		{
 			if(self->data_type != dst->data_type)
 			{
+				// change type
 				brick_type_change(brick,dst);
 			}
 		}
 	}
 	else
 	{
+		// connect
 		plug_out->dst = plug_dst_in;
 		plug_out->is_connected = 1;
 	}
 
+	// close flow in
 	if(dst->close_flow_in)
 	{
 		t_plug *plug_in = &brick->plug_in;
 		plug_in->flow_in = 0;
 	}
 
+	// set in loop
 	if(dst->is_a_loop)
 	{
 		set_in_loop(brick,1);
@@ -282,25 +286,30 @@ void cls_plug_disconnect_general(t_plug_mode mode, t_plug *self)
 	t_plug *plug_in = &brick->plug_in;
 	t_plug *plug_out = &brick->plug_out;
 
+	// restore flow in
 	plug_in->flow_in = 1;
 
 	t_plug *dst = plug_out->dst;
-	
 
 	if(mode == mode_in)
 	{
+		// disconnect
 		plug_in->src = NULL;
 		plug_in->is_connected = 0;
 	}
 	else
 	{
-		plug_out->dst = NULL;
-		plug_out->is_connected = 0;
+		t_brick *brick_dst = dst->brick;
+		t_plug *plug_dst_intern = &brick_dst->plug_intern;
 
-		if(dst->is_a_loop)
+		// set in loop
+		if(plug_dst_intern->is_a_loop)
 		{
 			set_in_loop(brick,0);
 		}
+
+		plug_out->dst = NULL;
+		plug_out->is_connected = 0;
 	}
 }
 
@@ -499,14 +508,16 @@ t_plug *plug_get_dst(t_plug *plug)
 void plug_warning(t_plug *dst_plug,t_plug *src_plug)
 {
 
+	/*
 	t_context *C=ctx_get();
 	char msg[40];
 	char *src_plug_type=data_name_get(src_plug->data_type);
 	char *dst_plug_type=data_name_get(dst_plug->data_type);
 
 	sprintf(msg,"%d(%s)(%s)-(%s)(%s)",C->app->frame,src_plug->name,src_plug_type,dst_plug->name,dst_plug_type);
-
 	term_print(C->term,msg);
+	*/
+	
 }
 
 // FLOW
@@ -868,6 +879,28 @@ void cls_plug_flow_pointer(t_plug *plug)
 
 // FOR 
 
+void set_for_loop(t_block *block ,int state)
+{
+	t_context *C =ctx_get();
+	// get branch (all bricks)
+	t_lst *lst = block_branch_src_get(C,block);
+
+	t_link *l;
+	t_brick *b;
+	t_plug *p;
+
+	int db = 0;
+
+	for(l=lst->first;l;l=l->next)
+	{
+		b=l->data;
+		p=&b->plug_intern;
+		p->is_in_loop = state;
+	}
+
+	lst_free(lst);
+}
+
 int for_init=0;
 
 void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src)
@@ -906,10 +939,10 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 
 			switch(src_type)
 			{
-				// + VLST
+				// + vlst
 				case dt_vlst:
 
-					// SET VLST
+					// set vlst
 					vlst = src_plug->data;
 
 					// SET vector
@@ -935,8 +968,8 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 					// set vector, open for fisrt loop
 					if(!for_init)
 					{
+						if(C->ui->show_step) term_log("[FOR] init loop %d",brick->counter);
 
-						if(C->ui->show_step) term_log(":FOR loop (INIT) %d",brick->counter);
 						plug->is_eval = 1;
 						for_init = 1;
 
@@ -949,34 +982,23 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 						// set indice
 						*data_indice=0;
 
-						t_plug *plug_vector_src = plug_vector_in->src;
-						t_brick *brick_vector_src = plug_vector_src->brick;
-
-						brick_vector_src->cls->trigger(brick_vector_src);
+						// trigger vector
+					//	brick_vector_src->cls->trigger(brick_vector_src);
 
 						t_lst *BRICKS = ctx_links_lst_get();
 						lst_add(BRICKS,brick,"for");
 
-						// get branch (all bricks)
-						t_lst *lst = block_branch_src_get(C,block);
+						// set loop
+						set_for_loop(block,0);
 
-						t_link *l;
-						t_brick *b;
-						t_plug *p;
-						for(l=lst->first;l;l=l->next)
-						{
-							b=l->data;
-							p=&b->plug_intern;
-							p->is_in_loop = 0;
-						}
+						brick->counter = 0;
 
-						lst_free(lst);
 					}
 					else
 					{
 						if(brick->counter < vlst->count)
 						{
-							if(C->ui->show_step) term_log(":FOR loop %d",brick->counter);
+							if(C->ui->show_step) term_log("[FOR] loop %d",brick->counter);
 							// get pointer
 							float *ptr = vlst->data;
 
@@ -1022,29 +1044,28 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 
 							for_init=0;
 
+							set_for_loop(block,1);
 
-						t_lst *lst = block_branch_src_get(C,block);
-
-						t_link *l;
-						t_brick *b;
-						t_plug *p;
-						for(l=lst->first;l;l=l->next)
-						{
-							b=l->data;
-							p=&b->plug_intern;
-							p->is_in_loop = 1;
-						}
-
-						lst_free(lst);
 						}
 					}
+				}
+				else
+				{
+					// set loop
+					set_for_loop(block,0);
 				}
 			}
 			else
 			{
 				*data_indice = 0;
-
+				// set loop
+				set_for_loop(block,0);
 			}
+		}
+		else
+		{
+			// set loop
+			set_for_loop(block,0);
 		}
 	}
 }
@@ -1218,6 +1239,8 @@ void cls_plug_flow_operator(t_plug *plug)
 
 void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 {
+	t_context *C = ctx_get();
+
 	t_brick *brick = plug->brick;
 	t_block *block = brick->block;
 
@@ -1327,6 +1350,7 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 				//-- wait for initialisation from for loop
 				if(brick_x && vector_data)
 				{
+					if(C->ui->show_step) term_log("[VECTOR] set pointer %p",vector_data);
 					plug_x->data = vector_data;
 					plug_y->data = vector_data+1;
 					plug_z->data = vector_data+2;
@@ -1340,6 +1364,7 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 				// Else : No loop
 				else if(brick_x && mode == mode_in)
 				{
+					if(C->ui->show_step) term_log("[VECTOR] set vlst");
 					// Get Vector Vlst
 					t_vlst *vlst = vector_self->vlst;
 					vector_data = vlst->data;
