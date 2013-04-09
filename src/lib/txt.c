@@ -735,6 +735,7 @@ void txt_free(t_txt *txt)
 void txt_init(t_txt *txt,const char *name)
 {
 	if(name) strncpy(txt->name,name,_NAME_LONG_);
+	else bzero(txt->name,_NAME_LONG_);
 
 	txt->grid_step=TXT_GRID_STEP;
 	txt->grid_size_x=TXT_GRID_SIZE_X;

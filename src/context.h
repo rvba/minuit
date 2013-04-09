@@ -205,8 +205,9 @@ void ctx_render(t_context *C);
 
 t_lst *block_branch_src_get(t_context *C,t_block *block);
 //void block_branch_get(int loop,t_lst *lst,t_block *block);
+void ctx_links_step_cleanup(t_context *C);
 void block_branch_get(t_lst *lst,t_block *block);
-int ctx_links_loop(t_context *C);
+void ctx_links_loop(t_context *C);
 void ctx_links_update(t_context *C);
 void ctx_links_reset(t_context *C,t_lst *lst);
 
@@ -229,7 +230,6 @@ void ctx_module_add(t_context *C,char *name,void *data);
 
 t_context *ctx_get(void);
 t_context *ctx_init(int argc,char **argv);
-void ctx_links_init(void);
 void exe_init(void);
 void brick_remove(t_dict *args);
 

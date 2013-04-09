@@ -133,6 +133,7 @@ t_link *lst_get_by_id(t_lst *lst,int id)
 int lst_remove_by_id(t_lst *lst,int id)
 {
 	t_link *link=lst_get_by_id(lst,id);
+
 	if(link)
 	{
 		lst_link_delete(lst,link);

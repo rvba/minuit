@@ -40,6 +40,7 @@ struct Term
 	void (* init)(t_term *term);
 };
 
+void term_reset(t_term *term);
 void term_free(t_term *term);
 t_term *term_new(const char *name);
 void term_print(t_term *term,char *data);

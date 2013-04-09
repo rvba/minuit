@@ -9,6 +9,7 @@
 
 #include "op.h"
 
+#define db_main 0
 
 
 void cls_plug_make_float(t_plug *plug);
@@ -211,6 +212,7 @@ void cls_plug_disconnect_operator(t_plug_mode mode, t_plug *plug)
 	cls_plug_disconnect_general(mode,plug);
 }
 
+// Set all Branch In Loop
 void set_in_loop(t_brick *brick, int state)
 {
 	t_block *block = brick->block;
@@ -226,9 +228,13 @@ void set_in_loop(t_brick *brick, int state)
 
 		for(link = lst->first; link; link = link->next)
 		{
+			int i;
+			i=0;
+			i++;
 			brick = link->data;
 			plug = &brick->plug_intern;
 			plug->is_in_loop = state;
+			//printf("in loop: %s\n",brick->name);
 		}
 	}
 
@@ -274,9 +280,13 @@ void cls_plug_connect_general(t_plug_mode mode, t_plug *self, t_plug *dst)
 	}
 
 	// set in loop
-	if(dst->is_a_loop)
+	//XXX
+	if(!self->is_a_loop)
 	{
-		set_in_loop(brick,1);
+		if(dst->is_a_loop || dst->is_in_loop)
+		{
+			set_in_loop(brick,1);
+		}
 	}
 }
 
@@ -920,7 +930,7 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 		vector->data = NULL;
 
 		// if for connected
-		if(plug_in->is_connected )
+		if(plug_in->is_connected)
 		{
 			// get src
 			t_plug *src_plug = plug_get_src(plug);
@@ -936,7 +946,7 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 					// set vlst
 					vlst = src_plug->data;
 
-					// SET vector
+					// Set vector
 					if(vlst)
 					{
 						vector->data = vlst->data;
@@ -956,52 +966,38 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 			{
 				if(vlst)
 				{
-					// set vector, open for fisrt loop
-					//if(!for_init)
-					if(!plug->is_init)
+					if(brick->counter < vlst->count)
 					{
-						if(C->ui->show_step) term_log("[FOR] init loop %d",brick->counter);
-
-						plug->is_eval = 1;
-						//for_init = 1;
-						plug->is_init = 1;
+						// set is_in_loop
+						set_for_loop(block,0);
 
 						// get pointer
 						float *ptr = vlst->data;
 
 						// set pointer
-						vector->data = ptr;
+						vector->data = ptr + (vlst->length * brick->counter);
 
 						// set indice
-						*data_indice=0;
+						*data_indice=brick->counter;
 
-						// trigger vector
-					//	brick_vector_src->cls->trigger(brick_vector_src);
-
-						t_lst *BRICKS = ctx_links_lst_get();
-						lst_add(BRICKS,brick,"for");
-
-						// set loop
-						set_for_loop(block,0);
-
-						brick->counter = 0;
-
-					}
-					else
-					{
-						if(brick->counter < vlst->count)
+						// First Loop
+						if(!plug->is_init)
 						{
-							if(C->ui->show_step) term_log("[FOR] loop %d",brick->counter);
-							// get pointer
-							float *ptr = vlst->data;
+							if(C->ui->show_step)
+							{
+								term_log("[FOR][%d] FIRST LOOP, add for",brick->counter);
+							}
 
-							// set pointer
-							vector->data = ptr + (vlst->length * brick->counter);
+							plug->is_init = 1;
+							plug->is_updated = 0;
+							t_lst *BRICKS = ctx_links_lst_get();
+							lst_add(BRICKS,brick,brick->name);
+						}
+						else
+						{
+							if(db_main) printf("%d counter %d ++\n",C->app->frame,brick->counter);
+							if(C->ui->show_step) term_log("[FOR][%d]",brick->counter);
 
-							// set indice
-							*data_indice=brick->counter;
-
-							// get branch (all bricks)
 							t_lst *lst=lst_new("lst");
 							block_branch_get(lst,block);
 
@@ -1013,9 +1009,9 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 
 							t_link *l;
 							t_brick *b;
+
 							for(l=lst->first;l;l=l->next)
 							{
-
 								b = l->data;
 								lst_add(BRICKS,l->data,b->name);
 							}
@@ -1025,29 +1021,42 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 
 							// counter ++
 							brick->counter++;
-
-						}
-						else
-						{
-							//XXX
-							vector->data = NULL;
-							// reset counter
-							brick->counter = 0;
-
-							// reset init
-							plug->is_init = 0;
-
-							set_for_loop(block,1);
-
 						}
 					}
+					// Last Loop : counter > vlst
+					else
+					{
+						if(db_main) printf("%d counter %d >>>\n",C->app->frame,brick->counter);
+						if(C->ui->show_step)
+						{
+							term_log("[FOR][%d] END LOOP",brick->counter);
+						}
+
+						// reset vector
+						vector->data = NULL;
+
+						// reset counter
+						brick->counter = 0;
+
+						// reset init
+						plug->is_init = 0;
+
+						// reset indice
+						*data_indice = 0;
+
+						// reset is_in_loop
+						set_for_loop(block,1);
+
+					}
 				}
+				// no vlst
 				else
 				{
 					// set loop
 					set_for_loop(block,0);
 				}
 			}
+			// plug vector in not connected
 			else
 			{
 				*data_indice = 0;
@@ -1055,6 +1064,7 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 				set_for_loop(block,0);
 			}
 		}
+		// for not connected
 		else
 		{
 			// set loop

@@ -482,6 +482,8 @@ void 		plug_remove_parent(t_plug *plug);
 
 void 		*op_stack(t_brick *brick);
 
+void set_for_loop(t_block *block ,int state);
+
 #endif
 
 

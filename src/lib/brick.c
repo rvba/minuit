@@ -469,6 +469,7 @@ void brick_init(t_scene *sc,t_brick *brick)
 	plug_out->src = plug_intern;
 
 	plug_intern->bang = 0;
+	plug_intern->is_init = 0;
 }
 
 

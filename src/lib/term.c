@@ -127,7 +127,7 @@ void term_init(t_term *term)
 	term->loc_y=C->app->window->height*.9;
 }
 
-void term_free(t_term *term)
+void term_reset(t_term *term)
 {
 	t_link *link;
 	t_txt *line;
@@ -138,7 +138,29 @@ void term_free(t_term *term)
 		txt_free(line);
 	}
 
+	lst_cleanup(term->lines);
+	term->cursor = NULL;
+	term->is_init = 0;
+
+	term->line=0;
+}
+
+void term_free(t_term *term)
+{
+	t_link *link;
+	t_txt *line;
+
+	if(term->lines->first)
+	{
+		for(link = term->lines->first; link; link = link->next)
+		{
+			line = link->data;
+			txt_free(line);
+		}
+	}
+
 	lst_free(term->lines);
+	link_free(term->cursor);
 
 	free(term);
 }
