@@ -1149,7 +1149,9 @@ t_node *add_for(t_context *C)
 	brick_vector->plug_intern.is_state_volatil = 0;
 
 	// parent
-	plug_add_parent(plug_vector,plug_for);
+	//plug_add_parent(plug_vector,plug_for);
+	//XXX
+	plug_add_parent(plug_for,plug_vector);
 
 	return node_block;
 }

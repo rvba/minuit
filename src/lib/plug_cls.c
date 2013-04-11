@@ -904,6 +904,30 @@ void set_for_loop(t_block *block ,int state)
 	lst_free(lst);
 }
 
+void __cls_plug_for_add_bricks(t_context *C, t_block *block)
+{
+	t_lst *lst=lst_new("lst");
+	block_branch_get(lst,block);
+
+	// reset states
+	ctx_links_reset(C,lst);
+
+	// add to loop
+	t_lst *BRICKS = ctx_links_lst_get();
+
+	t_link *l;
+	t_brick *b;
+
+	for(l=lst->first;l;l=l->next)
+	{
+		b = l->data;
+		lst_add(BRICKS,l->data,b->name);
+	}
+
+	// free
+	lst_free(lst);
+}
+
 void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src)
 {
 	t_context *C =ctx_get();
@@ -968,69 +992,30 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 				{
 					if(brick->counter < vlst->count)
 					{
-						// set is_in_loop
+						if(C->ui->show_step) term_log("[FOR][%d]",brick->counter);
+
+						// Unlock Loop 
 						set_for_loop(block,0);
 
-						// get pointer
+						// Get Vlst Pointer
 						float *ptr = vlst->data;
 
-						// set pointer
+						// Set Vector Pointer
 						vector->data = ptr + (vlst->length * brick->counter);
 
-						// set indice
+						// Set Indice
 						*data_indice=brick->counter;
 
-						// First Loop
-						if(!plug->is_init)
-						{
-							if(C->ui->show_step)
-							{
-								term_log("[FOR][%d] FIRST LOOP, add for",brick->counter);
-							}
+						// Add Loop
+						__cls_plug_for_add_bricks(C,block);
 
-							plug->is_init = 1;
-							plug->is_updated = 0;
-							t_lst *BRICKS = ctx_links_lst_get();
-							lst_add(BRICKS,brick,brick->name);
-						}
-						else
-						{
-							if(db_main) printf("%d counter %d ++\n",C->app->frame,brick->counter);
-							if(C->ui->show_step) term_log("[FOR][%d]",brick->counter);
-
-							t_lst *lst=lst_new("lst");
-							block_branch_get(lst,block);
-
-							// reset states
-							ctx_links_reset(C,lst);
-
-							// add to loop
-							t_lst *BRICKS = ctx_links_lst_get();
-
-							t_link *l;
-							t_brick *b;
-
-							for(l=lst->first;l;l=l->next)
-							{
-								b = l->data;
-								lst_add(BRICKS,l->data,b->name);
-							}
-
-							// free
-							lst_free(lst);
-
-							// counter ++
-							brick->counter++;
-						}
+						// Counter ++
+						brick->counter++;
 					}
 					// Last Loop : counter > vlst
 					else
 					{
-						if(db_main) printf("%d counter %d >>>\n",C->app->frame,brick->counter);
-						if(C->ui->show_step)
-						{
-							term_log("[FOR][%d] END LOOP",brick->counter);
-						}
+						if(C->ui->show_step)  term_log("[FOR][%d] END LOOP",brick->counter); 
 
 						// reset vector
 						vector->data = NULL;
@@ -1046,7 +1031,6 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 
 						// reset is_in_loop
 						set_for_loop(block,1);
-
 					}
 				}
 				// no vlst
