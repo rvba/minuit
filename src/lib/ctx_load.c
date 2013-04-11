@@ -1058,9 +1058,11 @@ void load_read(t_scene *sc,const char *path)
 			fread(version,sizeof(char)*GIT,1,file);
 			if(!is(C->app->git,version))
 			{
+				/*
 				printf("[WARNING] Git versions differs\n");
 				printf("[WARNING] file:%s\n",version);
 				printf("[WARNING] current:%s\n",C->app->git);
+				*/
 			}
 		}
 
