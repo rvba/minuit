@@ -9,19 +9,7 @@
 
 #include "op.h"
 
-typedef enum Type_Parent
-{
-	t_parent_child,
-	t_child_parent
-}t_parent;
-
-typedef enum Type_Operation 
-{
-	t_op_add,
-	t_op_mult
-
-}t_operation;
-
+// SET UPDATED
 
 void brick_set_updated(t_brick *brick)
 {
@@ -823,28 +811,36 @@ void *op_pipe(t_brick *brick)
 
 void *op_clone(t_brick *brick)
 {
-	// add bricks
-	op_add_bricks(brick,NULL,1,t_parent_child);
-
 	t_block *block = brick->block;
+	int tot_bricks = block->tot_bricks;
 	t_plug *plug_in = &brick->plug_in;
 	t_plug *plug_intern = &brick->plug_intern;
 	t_plug *plug_out = &brick->plug_out;
-	int tot_bricks = block->tot_bricks;
+	t_plug *plug_target = NULL;
+	t_plug *plug_src = NULL;
 
-	// flow
-	plug_intern->cls->flow(plug_intern);
+	// Add bricks
+	op_add_bricks(brick,NULL,1,t_parent_child);
 
-	// update bricks
+	// Update bricks
 	if(tot_bricks>0)
 	{
 		// connected in
 		if(plug_in->is_connected)
 		{
+			plug_src = plug_get_src(plug_intern);
+			plug_target = plug_src->dst;
+		}
+		else if(plug_out->is_connected)
+		{
+			plug_src = plug_get_dst(plug_intern);
+			plug_target = plug_src->dst;
+		}
+
+		if(plug_src)
+		{
 			t_link *l;
 			t_brick *b;
-
-			t_plug *plug_src = plug_get_src(plug_intern);
 
 			for(l = block->bricks->first;l;l = l->next)
 			{
@@ -862,56 +858,14 @@ void *op_clone(t_brick *brick)
 					}
 
 					// connect 
-					t_plug *_plug_out = plug_in->src;
-
-					plug_in_clone->src=_plug_out;
+					plug_in_clone->src=plug_target;
 					plug_in_clone->is_connected=1;
-				}
-			}
-		}
-
-		// connected out
-		if(plug_out->is_connected)
-		{
-			t_link *l;
-			t_brick *b;
-
-			t_plug *plug_src = plug_get_dst(plug_intern);
-
-			for(l = block->bricks->first;l;l = l->next)
-			{
-				b = l->data;
-				if(!is(b->name,"clone"))
-				{
-					t_plug *plug_clone = &b->plug_intern;
-					t_plug *plug_in_clone = &b->plug_in;
-
-					if(plug_clone->data_type != plug_src->data_type)
-					{
-						t_brick *brick_clone = plug_clone->brick;
-						brick_type_change(brick_clone,plug_src);
-					}
-
-					t_plug *_p_out = plug_out->dst;
-					t_plug *_p_out_i = _p_out->dst;
-					t_plug *_plug_out = _p_out_i->dst;
-
-					//XXX
-					_plug_out->flow_out = 0;
-
-					plug_in_clone->src=_plug_out;
-					plug_in_clone->is_connected=1;
-
-					b->cls->trigger(b);
-
-					//XXX
-					_plug_out->flow_out = 1;
-
 				}
 			}
 		}
 	}
 
+	// Set Updated
 	brick_set_updated(brick);
 
 	return NULL;

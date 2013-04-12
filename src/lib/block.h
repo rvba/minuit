@@ -48,6 +48,19 @@ typedef enum Type_Operator
 
 }t_operator;
 
+typedef enum Type_Parent
+{
+	t_parent_child,
+	t_child_parent
+}t_parent;
+
+typedef enum Type_Operation 
+{
+	t_op_add,
+	t_op_mult
+
+}t_operation;
+
 /***		BLOCK		***/
 
 struct Block_Class
@@ -416,7 +429,7 @@ void *		op_mult(t_brick *brick);
 void * 		op_and(t_brick *brick);
 void *		op_slider(t_brick *brick);
 void *		op_slider_positive(t_brick *brick);
-void *op_slider_positive_non_zero(t_brick *brick);
+void *		op_slider_positive_non_zero(t_brick *brick);
 void *		op_if(t_brick *brick);
 void *		op_equal(t_brick *brick);
 void *		op_while(t_brick *brick);
@@ -425,7 +438,6 @@ void *		op_window(t_brick *brick);
 void *		op_set_selected(t_brick *brick);
 void *		op_pointer(t_brick *brick);
 void *		op_delete(t_brick *brick);
-//void *		op_get(t_brick *brick);
 void *		op_pipe(t_brick *brick);
 void *		op_rewind(t_brick *brick);
 void *		op_not(t_brick *brick);
@@ -434,12 +446,10 @@ void *		op_set_colors(t_brick *brick);
 void *		op_rnd(t_brick *brick);
 void *		op_neg(t_brick *brick);
 void *		op_is_last(t_brick *brick);
-//void *		op_for(t_brick *brick);
 void *		op_operator(t_brick *brick);
 void *		op_vector(t_brick *brick);
-void *op_bang(t_brick *brick);
-
-void *op_do_quit(t_brick *brick);
+void *		op_bang(t_brick *brick);
+void *		op_do_quit(t_brick *brick);
 
 // BRICK_UPDATE
 
@@ -482,7 +492,7 @@ void 		plug_remove_parent(t_plug *plug);
 
 void 		*op_stack(t_brick *brick);
 
-void set_for_loop(t_block *block ,int state);
+void 		set_for_loop(t_block *block ,int state);
 
 #endif
 
