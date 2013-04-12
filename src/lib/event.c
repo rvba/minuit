@@ -101,5 +101,7 @@ t_event *event_new(void)
 	event->brick_cloning = 0;
 	event->brick_cloning_start = 0;
 
+	event->loop_step = 0;
+
 	return event;
 }

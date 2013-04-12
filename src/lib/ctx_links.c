@@ -443,6 +443,7 @@ void ctx_links_reloop(t_context *C)
 	{
 		// Step ++
 		loop_step++;
+		C->event->loop_step++;
 
 		// Loop While Bricks
 		if(BRICKS->last)

@@ -124,6 +124,8 @@ void *op_slider(t_brick *brick)
 			}
 			else
 			{
+				if(C->event->loop_step == 0)
+				{
 				if(brick->plug_intern.data_type==dt_int)
 				{
 					int *data=brick->plug_intern.data;
@@ -136,6 +138,7 @@ void *op_slider(t_brick *brick)
 					float *data=brick->plug_intern.data;
 					if(delta_x>0) *data 	+= inc * dx;
 					else *data 		-= inc * dx;
+				}
 				}
 			}
 		}

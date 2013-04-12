@@ -333,5 +333,7 @@ void ctx_ui(t_context *C)
 	// POST EXE
 	ctx_exe(C);
 
+	// RESET 
+	C->event->loop_step = 0;
 	C->event->brick_delete = 0;
 }

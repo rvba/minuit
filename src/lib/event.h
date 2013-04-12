@@ -154,6 +154,8 @@ struct Event
 	int brick_copying;
 	int brick_cloning;
 	int brick_cloning_start;
+
+	int loop_step;
 };
 
 t_event *event_new(void);
