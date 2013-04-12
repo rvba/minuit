@@ -840,6 +840,8 @@ void rebind(t_scene *sc,const char *type,const char *name,void **ptr)
 		{
 			printf("[ERROR rebind] Can't find data %s %s\n",type,name);
 			check_ok=0;
+			t_context *C = ctx_get();
+			C->event->load_error = 1;
 		}
 	}
 }
@@ -1161,6 +1163,11 @@ void load_file(t_context *C,const char *path)
 	// set file path
 	file_set_location(C->app->file,path);
 	file_init(C->app->file);
+
+	if(C->event->load_error)
+	{
+		term_log("WARNING: Load Error");
+	}
 }
 
 

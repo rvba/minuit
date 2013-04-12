@@ -156,6 +156,7 @@ struct Event
 	int brick_cloning_start;
 
 	int loop_step;
+	int load_error;
 };
 
 t_event *event_new(void);
