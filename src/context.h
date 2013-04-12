@@ -122,6 +122,7 @@ struct Option
 	int draw_divx;
 	int draw_divy;
 	int draw_show_axis_world;
+	int draw_lights;
 
 	int fullscreen;
 	int color;

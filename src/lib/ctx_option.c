@@ -91,6 +91,7 @@ void option_load(t_context *C,t_node *node)
 
 	C->draw->color = option->color;
 	op_set_color(C,C->draw->color);
+	C->draw->draw_lights = option->draw_lights;
 
 }
 
@@ -148,6 +149,7 @@ void option_save(t_context *C)
 
 	option->fullscreen = C->app->window->fullscreen;
 	option->color = C->draw->color;
+	option->draw_lights = C->draw->draw_lights;
 
 }
 
