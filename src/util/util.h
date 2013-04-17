@@ -278,8 +278,9 @@ int tcp_client(void);
 t_link *lst_link_find_by_name(t_lst *lst, const char *name);
 void lst_link_delete_by_name(t_lst *lst, const char *name);
 
-void lst_show(t_lst *lst);
-t_link *lst_add(t_lst *lst,void *data,const char *name);
+void 		lst_show(t_lst *lst);
+t_link *	lst_add(t_lst *lst,void *data,const char *name);
+void 		lst_add_lst(t_lst *dst, t_lst *src);
 void		lst_link_remove(t_lst *lst,t_link *link);
 void 		lst_delete_all(t_lst *lst);
 void 		lst_link_delete(t_lst *lst,t_link *link);

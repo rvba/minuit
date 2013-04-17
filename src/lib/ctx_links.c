@@ -376,6 +376,170 @@ void ctx_links_remove_loop(t_context *C)
 	}
 }
 
+// GET NEXT
+
+void ctx_links_get_next(t_lst *lst, int order)
+{
+	t_link *link;
+	t_block *block;
+	t_lst *tmp = NULL;
+	t_lst *connections;
+
+	// Loop over Blocks
+	for(link = lst->first; link; link = link->next)
+	{
+		block = link->data;
+
+		// Set Order
+		//block->graph_order = order;
+		block_set_graph_order(block,order);
+
+		// Get Out Connections
+		connections = block_get_connections("out",block);
+
+		// If Connections
+		if(connections)
+		{
+			// Build Tmp
+			if(!tmp) tmp = lst_new("tmp");
+
+			// Merge to tmp
+			lst_add_lst(tmp,connections);
+
+			// Free Connections
+			lst_free(connections);
+		}
+	}
+
+	// If Connections
+	if(tmp)
+	{
+		// Cleanup Lst
+		lst_cleanup(lst);
+
+		// Remove Doubles
+		lst_remove_doubles(tmp);
+
+		// Add to Main
+		lst_add_lst(lst,tmp);
+
+		// Free Tmp
+		lst_free(tmp);
+
+		// Go Recursive
+		ctx_links_get_next(lst, order+1);
+	}
+}
+
+// SET BLOCK ORDER
+
+void ctx_links_set_order(t_context *C)
+{
+	t_lst *lst = C->scene->global;
+	t_lst *blocks = lst_new("blocks");
+	t_link *link;
+	t_block *block;
+
+	// Get Roots
+	for(link = lst->first; link; link = link->next)
+	{
+		block = link->data;
+
+		// IF No In Connections
+		if(!block_is_connected("in",block))
+		{
+			// Add to Blocks
+			lst_add(blocks,block,"block");
+		}
+	}
+
+	// Get Next
+	if(blocks->first)
+	{
+		// Set Order Next
+		ctx_links_get_next(blocks,0);
+
+		// Free Blocks Lst
+		lst_free(blocks);
+	}
+}
+
+int ctx_links_get_order_lower(t_context *C, t_lst *lst)
+{
+	t_link *link;
+	t_block *brick;
+	int order = -1;
+
+	for(link = lst->first; link; link = link->next)
+	{
+		brick = link->data; 
+
+		//Set First Order
+		if(order == -1)
+		{
+			order = brick->graph_order;
+		}
+		else
+		{
+
+		// Get Lower
+		if(brick->graph_order < order)
+			order = brick->graph_order;
+		}
+	}
+
+	return order;
+}
+
+void ctx_links_fill_order(t_context *C,int order, t_lst *roots, t_lst *lst)
+{
+	t_lst *tmp = NULL;
+	t_link *link;
+	t_brick *brick;
+
+	if(roots->first)
+	{
+		for(link = roots->first; link; link = link->next)
+		{
+			brick = link->data;
+
+			if(brick->graph_order == order)
+			{
+				lst_add(lst,brick,"brick");
+			}
+			else
+			{
+				if(!tmp) tmp = lst_new("tmp");
+				lst_add(tmp,brick,"brick");
+			}
+		}
+
+		if(tmp)
+		{
+			lst_cleanup(roots);
+			lst_add_lst(roots,tmp);
+			lst_free(tmp);
+			ctx_links_fill_order(C, order+1, roots, lst);
+		}
+	}
+}
+
+void ctx_links_set_roots_order(t_context *C)
+{
+	t_lst *roots = ROOTS;
+	t_lst *lst = lst_new("lst");
+
+	int order_lower = ctx_links_get_order_lower(C,roots);
+
+	ctx_links_fill_order(C,order_lower,roots,lst);
+
+	lst_cleanup(roots);
+	lst_add_lst(roots,lst);
+	lst_free(lst);
+}
+
+
+// GET ROOTS
 
 void ctx_links_get_roots(t_context *C)
 {
@@ -425,6 +589,11 @@ void ctx_links_get_roots(t_context *C)
 			}
 		}
 	}
+
+	// Set Order
+
+	ctx_links_set_roots_order(C);
+
 }
 
 // RELOOP
@@ -552,6 +721,9 @@ t_lst *ctx_links_build(t_context *C)
 		t_link *link;
 		t_block *block = l->data;
 
+		// Reset Graph Pos
+		block->graph_order = -1;
+
 		for(link=block->bricks->first;link;link=link->next)
 		{
 			t_brick *brick = link->data;
@@ -618,6 +790,9 @@ void ctx_links_reset(t_context *C,t_lst *lst)
 		b->state.is_root = 0;
 		b->state.is_current = 0;
 	}
+
+	// Set Order
+	ctx_links_set_order(C);
 }
 
 void ctx_links_step_reset(t_context *C)

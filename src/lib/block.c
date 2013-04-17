@@ -9,6 +9,144 @@
 
 #include "op.h"
 
+void block_set_graph_order(t_block *block, int order)
+{
+	t_link *link;
+	t_brick *brick;
+
+	block->graph_order = order;
+
+	for(link = block->bricks->first; link; link = link->next)
+	{
+		brick = link->data;
+		brick->graph_order = order;
+	}
+}
+
+int block_is_in_lst(t_lst *lst, t_block *block_dst)
+{
+	if(lst->first)
+	{
+		t_link *link;
+		t_block *block_src;
+
+		for(link = lst->first; link; link = link->next)
+		{
+			block_src  = link->data;
+			if(block_src->id == block_dst->id)
+			{
+				return 1;
+			}
+		}
+
+		return 0;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+int block_is_connected(const char *gate, t_block *block)
+{
+	t_link *link;
+	t_brick *brick;
+	t_plug *plug;
+
+	int plug_in;
+	int follow;
+
+	if(is(gate,"in")) plug_in = 1;
+	else plug_in = 0;
+
+	if(block->bricks->first)
+	{
+		for(link = block->bricks->first; link; link = link->next)
+		{
+			brick = link->data;
+
+			if(plug_in)
+			{
+				plug = &brick->plug_in;
+				follow = plug->follow_in;
+			}
+			else
+			{
+				plug = &brick->plug_out;
+				follow = plug->follow_out;
+			}
+
+			if(plug->is_connected && follow)
+			{
+				return 1;
+			}
+
+		}
+
+		return 0;
+	}
+	else
+	{
+		return 0;
+	}
+
+}
+
+t_lst *block_get_connections(const char *gate,t_block *block)
+{
+	t_link *link;
+	t_brick *brick;
+	t_brick *brick_dst;
+	t_block *block_dst;
+	t_plug *plug_dst;
+	t_plug *plug;
+	int plug_in;
+	int follow;
+	t_lst *lst = NULL;
+
+	if(is(gate,"in")) plug_in = 1;
+	else plug_in = 0;
+
+	if(block->bricks->first)
+	{
+		for(link = block->bricks->first; link; link = link->next)
+		{
+			brick = link->data;
+
+			if(plug_in)
+			{
+				plug = &brick->plug_in;
+				follow = plug->follow_in;
+			}
+			else
+			{
+				plug = &brick->plug_out;
+				follow = plug->follow_out;
+			}
+
+			if(plug->is_connected && follow)
+			{
+				if(!lst) lst = lst_new("connections");
+
+				if(plug_in) plug_dst = plug->src;
+				else plug_dst = plug->dst;
+
+				brick_dst = plug_dst->brick;
+
+				block_dst = brick_dst->block;
+
+				if(!block_is_in_lst(lst,block_dst))
+				{
+					lst_add(lst,block_dst,"block");
+				}
+			}
+
+		}
+	}
+
+	return lst;
+}
+
 void _add_block(t_context *C,t_block *block)
 {
 	// GET LIST
@@ -327,6 +465,7 @@ t_block *block_new(const char *name)
 
 	block->tot_bricks=0;
 	block->width=0;
+	block->graph_order = -1;
 
 	block->draw=block_draw;
 

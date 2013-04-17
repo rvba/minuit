@@ -373,6 +373,7 @@ void plug_reset(t_plug *plug,const char *name)
 	plug->is_a_loop = 0;
 	plug->is_in_loop = 0;
 	plug->close_flow_in = 0;
+	plug->use_flow = 1;
 
 	plug->flow_in = 1;
 	plug->flow_out = 0;
@@ -562,6 +563,8 @@ t_brick *brick_new(const char *name)
 	brick->cls=NULL;
 	brick->action=NULL;
 	brick->menu=NULL;
+
+	brick->graph_order = -1;
 
 	brick->mode=bm_idle;
 

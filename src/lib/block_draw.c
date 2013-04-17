@@ -253,6 +253,23 @@ void block_draw_outline(t_block *block)
 		points[11]=d[2];
 
 		skt_closedline(points,tot,color,line_width);
+
+		if(C->ui->show_step)
+		{
+			char order[3];
+			float p[3] = {0,0,0};
+			float vv[3] = {-10,-10,0};
+			vadd(p,a,vv);
+			sprintf(order,"%d",block->graph_order);
+
+			t_txt *txt = txt_new(order);
+			txt_init(txt,order);
+			glPushMatrix();
+				glTranslatef(p[0],p[1],p[2]);
+				txt->draw(txt);
+			glPopMatrix();
+			txt_free(txt);
+		}
 	}
 }
 

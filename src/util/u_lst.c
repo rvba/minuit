@@ -38,6 +38,17 @@ t_link *lst_add(t_lst *lst,void *data,const char *name)
 	return link;
 }
 
+// merge two lists
+void lst_add_lst(t_lst *dst, t_lst *src)
+{
+	t_link *link;
+	for(link = src->first; link; link = link->next)
+	{
+		lst_add(dst, link->data, link->name);
+	}
+}
+	
+
 // show links in list
 void lst_show(t_lst *lst)
 {

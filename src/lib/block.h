@@ -104,6 +104,7 @@ struct Block
 	t_block_state state;			// block state
 
 	int tot_bricks; 			// drawing plugs
+	int graph_order;				// unset = -1
 
 	t_lst *bricks;
 	t_brick *submenu;
@@ -148,6 +149,7 @@ struct Plug
 	int is_a_loop;
 	int is_in_loop;
 	int close_flow_in;		// will close target's flow in
+	int use_flow;
 
 	int flow_in;
 	int flow_out;
@@ -300,6 +302,8 @@ struct Brick
 
 	int col_clone[3];
 
+	int graph_order;
+
 	t_brick_mode mode;			// unique mode
 	t_brick_state state;			// multiple states
 	t_brick_geometry geom;			// geometry
@@ -333,6 +337,9 @@ struct Brick
 
 // BLOCK
 
+void 		block_set_graph_order(t_block *block, int order);
+int 		block_is_connected(const char *gate, t_block *block);
+t_lst 		*block_get_connections(const char *gate,t_block *block);
 t_block *	block_copy(t_block *block);
 t_block *	block_clone(t_block *block);
 t_brick*	block_brick_get(t_block *block,const char *name);

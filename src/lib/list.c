@@ -9,6 +9,49 @@
 
 #include "op.h"
 
+// REMOVE DOUBLE
+
+void lst_remove_double(t_lst *lst, t_link *current)
+{
+	t_link *link;
+	t_link *link_to_remove = NULL;
+	t_generic *generic = (t_generic *) current->data;
+	int id = generic->id;
+
+	for(link = current->next; link; link = link->next)
+	{
+		t_generic *g = (t_generic *) link->data;
+
+		// remove previous stored link
+		if(link_to_remove)
+		{
+			lst_link_delete(lst, link_to_remove);
+			link_to_remove = NULL;
+		}
+
+		if(g->id == id)
+		{
+			// store link to remove
+			link_to_remove = link;
+		}
+	}
+
+	// case of last link double
+	if(link_to_remove) lst_link_delete(lst, link_to_remove);
+}
+
+// REMOVE DOUBLES (generic ID)
+
+void lst_remove_doubles(t_lst *lst)
+{
+	t_link *link;
+
+	for(link = lst->first; link; link = link->next)
+	{
+		lst_remove_double(lst, link);
+	}
+}
+
 void lst_show_generic(t_lst *lst)
 {
 	printf("lst_show %s\n",lst->name);

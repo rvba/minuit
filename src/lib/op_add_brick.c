@@ -453,6 +453,8 @@ t_node *add_block(t_context *C,const char *name)
 	t_node *node_block=block_make(name,"block");
 	t_block *block=node_block->data;
 
+	block->state.draw_outline = 1;
+
 	// ADD TO MAIN LIST
 	list_add_global(list,block);
 
@@ -1018,6 +1020,10 @@ t_node *add_clone(t_context *C)
 	brick_clone->plug_out.open_out=0;
 	brick_clone->state.use_dragging = 0;
 	brick_clone->state.remove_connected = 1;
+
+	brick_clone->plug_out.use_flow = 0;
+	brick_clone->plug_in.use_flow = 0;
+	brick_clone->plug_intern.use_flow = 0;
 
 	t_plug *plug_clone = &brick_clone->plug_intern;
 	plug_clone->close_flow_in = 1;

@@ -273,7 +273,7 @@ void cls_plug_connect_general(t_plug_mode mode, t_plug *self, t_plug *dst)
 	}
 
 	// close flow in
-	if(dst->close_flow_in)
+	if(dst->close_flow_in && self->use_flow)
 	{
 		t_plug *plug_in = &brick->plug_in;
 		plug_in->flow_in = 0;
@@ -297,7 +297,8 @@ void cls_plug_disconnect_general(t_plug_mode mode, t_plug *self)
 	t_plug *plug_out = &brick->plug_out;
 
 	// restore flow in
-	plug_in->flow_in = 1;
+	if(self->use_flow)
+		plug_in->flow_in = 1;
 
 	t_plug *dst = plug_out->dst;
 

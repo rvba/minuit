@@ -65,6 +65,7 @@ struct VLst
 	void *data;
 };
 
+void lst_remove_doubles(t_lst *lst);
 
 void 		vlst_update_data(t_vlst *vlst,t_vlst *caller);
 void		vlst_free(t_vlst *vlst);

@@ -840,8 +840,8 @@ void *op_clone(t_brick *brick)
 			plug_target = plug_src->dst;
 		}
 
-		if(plug_src)
-		{
+		//if(plug_src)
+		//{
 			t_link *l;
 			t_brick *b;
 
@@ -854,18 +854,24 @@ void *op_clone(t_brick *brick)
 					t_plug *plug_in_clone = &b->plug_in;
 
 					// match current target type
-					if(plug_clone->data_type != plug_src->data_type)
+					if(plug_src)
 					{
-						t_brick *brick_clone = plug_clone->brick;
-						brick_type_change(brick_clone,plug_src);
+						if(plug_clone->data_type != plug_src->data_type)
+						{
+							t_brick *brick_clone = plug_clone->brick;
+							brick_type_change(brick_clone,plug_src);
+						}
 					}
 
 					// connect 
 					plug_in_clone->src=plug_target;
-					plug_in_clone->is_connected=1;
+					if(plug_target)
+						plug_in_clone->is_connected=1;
+					else
+						plug_in_clone->is_connected=0;
 				}
 			}
-		}
+		//}
 	}
 
 	// Set Updated
