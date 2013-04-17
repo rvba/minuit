@@ -942,6 +942,7 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 	t_brick *brick_vector = block_brick_get(block,"vector");
 
 	t_plug *plug_indice = &brick_indice->plug_intern;
+	t_plug *plug_indice_in = &brick_indice->plug_in;
 	t_plug *plug_vector = &brick_vector->plug_intern;
 	t_plug *plug_vector_in = &brick_vector->plug_in;
 
@@ -991,6 +992,8 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 			{
 				if(vlst)
 				{
+					plug_indice_in->open_in = 1;
+
 					if(brick->counter < vlst->count)
 					{
 						if(C->ui->show_step) term_log("[FOR][%d]",brick->counter);
@@ -1039,6 +1042,8 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 				{
 					// set loop
 					set_for_loop(block,0);
+					//
+					plug_indice_in->open_in = 0;
 				}
 			}
 			// plug vector in not connected
@@ -1054,6 +1059,8 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 		{
 			// set loop
 			set_for_loop(block,0);
+			//
+			plug_indice_in->open_in = 0;
 		}
 	}
 }

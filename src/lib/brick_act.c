@@ -852,6 +852,7 @@ void *op_clone(t_brick *brick)
 				{
 					t_plug *plug_clone = &b->plug_intern;
 					t_plug *plug_in_clone = &b->plug_in;
+					t_plug *plug_out_clone = &b->plug_out;
 
 					// match current target type
 					if(plug_src)
@@ -866,9 +867,19 @@ void *op_clone(t_brick *brick)
 					// connect 
 					plug_in_clone->src=plug_target;
 					if(plug_target)
+					{
 						plug_in_clone->is_connected=1;
+						t_brick *brick_indice = plug_target->brick;
+						if(brick_indice->plug_in.open_in)
+							plug_out_clone->open_out = 1;
+						else
+							plug_out_clone->open_out = 0;
+					}
 					else
+					{
 						plug_in_clone->is_connected=0;
+						plug_out_clone->open_out = 0;
+					}
 				}
 			}
 		//}
