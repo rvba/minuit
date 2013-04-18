@@ -21,7 +21,7 @@
 #define LOG_SCENE_NODES 1
 #define LOG_CHECK 0
 #define LOG_REBIND 0
-#define MINUIT_VERSION 0.3
+#define MINUIT_VERSION 0.4
 
 typedef struct VLst t_vlst;
 typedef enum VLst_Type t_vlst_type;
