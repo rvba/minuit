@@ -254,9 +254,6 @@ void *find_ref(t_scene *sc,t_data *data)
 
 			t_object *object=node->data;
 
-			// REBIND
-			data->ref=object;
-
 			if(is(data->name,"loc_x"))  p=&object->loc[0]; 
 			else if(is(data->name,"loc_y"))  	p=&object->loc[1]; 
 			else if(is(data->name,"loc_z"))  	p=&object->loc[2]; 
@@ -272,9 +269,6 @@ void *find_ref(t_scene *sc,t_data *data)
 				return NULL;
 			}
 
-			// REBIND
-			data->pointer=p;
-			// return 
 			return p;
 
 		}
@@ -321,9 +315,6 @@ void *find_ref(t_scene *sc,t_data *data)
 
 			void *p;
 
-			// REBIND
-			data->ref=material;
-
 			if(is(data->name,"red"))  			p=&material->color[0]; 
 			else if(is(data->name,"green"))  		p=&material->color[1]; 
 			else if(is(data->name,"blue"))  		p=&material->color[2]; 
@@ -334,9 +325,6 @@ void *find_ref(t_scene *sc,t_data *data)
 				return NULL;
 			}
 
-			// REBIND
-			data->pointer=p;
-			// return 
 			return p;
 
 		}
@@ -355,19 +343,14 @@ void *find_ref(t_scene *sc,t_data *data)
 
 			void *p;
 
-			// REBIND
-			data->ref=mesh;
-
 			if(is(data->name,"vertex"))  			p=&mesh->vertex; 
+			else if(is(data->name,"colors"))  			p=&mesh->colors; 
 			else
 			{
 				printf("[ERROR strutc_ref_get] Unknown name [%s] \n",data->name);
 				return NULL;
 			}
 
-			// REBIND
-			data->pointer=p;
-			// return 
 			return p;
 
 		}
@@ -386,9 +369,6 @@ void *find_ref(t_scene *sc,t_data *data)
 
 			void *p;
 
-			// REBIND
-			data->ref=vlst;
-
 			if(is(data->name,"count"))  			p=&vlst->count_new; 
 			else
 			{
@@ -396,9 +376,6 @@ void *find_ref(t_scene *sc,t_data *data)
 				return NULL;
 			}
 
-			// REBIND
-			data->pointer=p;
-			// return 
 			return p;
 
 		}
@@ -662,56 +639,16 @@ void load_store(t_scene *sc)
 			else if(is(d->type,"struct_ref"))
 			{
 
-				if(is(d->target,"object"))
-				{
-				}
-				else if(is(d->target,"material"))
-				{
-				}
-				else if(is(d->target,"mesh"))
-				{
-				}
+				// get new object reference
+				void *p = find_ref(sc,d);
 
-				else if(is(d->target,"vlst"))
-				{
-				}
-				else if(is(d->target,"plug"))
-				{
-					t_node *node=find_by_ptr(sc,d->ref);
+				// get new pointer
+				t_node *node=find_by_ptr(sc,d->ref);
+				void *data=node->data;
 
-					if(node)
-					{
-						void *p;
-
-						t_brick *brick=node->data;
-
-						// REBIND
-						d->ref=brick;
-
-						if(is(d->name,"in"))  p=&brick->plug_in; 
-						else if(is(d->name,"intern"))  p=&brick->plug_intern; 
-						else if(is(d->name,"out"))  p=&brick->plug_out; 
-						//else if(is(d->name,"parent"))  p=&brick->plug_intern.parent; 
-						else
-						{
-							printf("[ERROR strutc_ref_get object] Unknown name %s \n",d->name);
-						}
-
-						// REBIND
-						d->pointer=p;
-					}
-					else
-					{
-						printf("[ERROR load_store plug] can't find node\n");
-					}
-				
-
-				}
-				else
-				{
-					printf("[ERROR load_store] Unknown target %s\n",d->target);
-				}
-
+				// set new pointers
+				d->ref=data;
+				d->pointer=p;
 
 				// store
 				n->id_chunk_self=mem_store(ct_node,n->type,sizeof(t_node),1,n);
