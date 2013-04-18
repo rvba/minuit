@@ -57,7 +57,7 @@
 
 char *LOG;
 
-#ifdef __DEBUG__
+#ifdef WITH_DEBUG
 #define log(msg) __log__ msg 
 #else
 #define log(msg) (void)0

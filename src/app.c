@@ -281,7 +281,11 @@ t_app *app_new(int argc,char **argv)
 	app->load_file = 0;
 	app->loaded_file = 0;
 
+	#ifdef WITH_GIT
 	strncpy(app->git,git,GIT);
+	#else
+	strcpy(app->git,"null");
+	#endif
 
 	app->client=0;
 	app->slave=0;

@@ -9,15 +9,9 @@
 
 #include "context.h"
 
-#ifdef MIDI
-#include "midi.h"
-#endif
-
 int main(int argc, char **argv)
 {
 	t_context *C = ctx_init(argc,argv);
-	
 	app_launch(C->app);
-
 	return 0;
 }

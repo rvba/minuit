@@ -1016,7 +1016,9 @@ void load_read(t_scene *sc,const char *path)
 	void *data; 		// struct memory allocation
 	char magic;		// read magic
 	int limit=0;		// max size
+	#ifdef WITH_DEBUG
 	int file_size;		// size of bin
+	#endif
 
 	t_chunk *c;
 
@@ -1025,7 +1027,9 @@ void load_read(t_scene *sc,const char *path)
 
 	// FILE SIZE
 	fseek (file,0,SEEK_END);
+	#ifdef WITH_DEBUG
 	file_size = (int)ftell(file);
+	#endif
 	rewind(file);
 
 	// NEW CHUNK

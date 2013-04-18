@@ -202,7 +202,9 @@ t_app *app_init(int argc,char **argv);
 void app_clock(t_app *app);
 t_app *app_get(void);
 
+#ifdef WITH_GIT
 extern const char *git;
+#endif
 
 
 #endif

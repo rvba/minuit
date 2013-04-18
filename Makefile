@@ -2,25 +2,18 @@
 # ROOT 
 #
 
-LIBS:= -lminuit -llib -lutil -lpng12 -ljpeg -lz -llo -lGLEW -lGLU -lGL -lglut -lpthread  
+LIBS:= -lminuit -llib -lutil -lpng12 -ljpeg -lz -lGLU -lGL -lglut -lpthread  
 INC:= -Isrc -Isrc/util -Isrc/lib 
 DIR:= -Lsrc -Lsrc/util -Lsrc/lib 
 
 WITH_LIBLO=1
-DEBUG=__DEBUG__
-#VERSION=$(`echo git log -n 1 | head -n 1`)
+DEBUG=0
 
 export WITH_LIBLO
 export DEBUG
-#export VERSION
-
 
 # TARGETS
-#all:gitversion.c app tags
 all:app tags
-
-#gitversion.c:.git/HEAD .git/index
-#	@echo "const char *gitversion = \"$(shell git rev-parse HEAD)\";" > $@
 
 # MINUIT
 app:
@@ -44,7 +37,6 @@ install:
 .PHONY : clean
 
 clean:
-	#rm ./gitversion.c
 	cd ./src && $(MAKE) clean
 	rm -f ./minuit
 	rm -f ./tags

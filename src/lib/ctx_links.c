@@ -30,41 +30,6 @@ t_brick *brick_current=NULL;
 t_term *TERM_ROOT=NULL;
 t_term *TERM_BRICKS=NULL;
 
-// Debug
-
-void _show_bricks(void)
-{
-	t_link *l;
-	t_brick *b;
-
-	printf("[BRICKS]\n");
-
-	for(l=BRICKS->first;l;l=l->next)
-	{
-		b=l->data;
-		printf("%s\n",b->name);
-	}
-
-	printf("[]\n");
-}
-
-
-void _show_roots(void)
-{
-	t_link *l;
-	t_brick *b;
-
-	printf("[ROOTS]\n");
-
-	for(l=ROOTS->first;l;l=l->next)
-	{
-		b=l->data;
-		printf("%s\n",b->name);
-	}
-
-	printf("[]\n");
-}
-
 // Show Bricks Stack
 
 void term_bricks_show(void)
@@ -250,8 +215,6 @@ void ctx_links_store_roots(t_lst *lst, t_brick *brick)
 		if(plug_in->follow_in)
 		{
 			// and target is updated
-			//XXX
-			//if(plug_target->is_updated || plug_target->is_in_loop)
 			if(plug_target->is_updated)
 			{
 				// this plug is root
@@ -391,7 +354,6 @@ void ctx_links_get_next(t_lst *lst, int order)
 		block = link->data;
 
 		// Set Order
-		//block->graph_order = order;
 		block_set_graph_order(block,order);
 
 		// Get Out Connections
@@ -713,12 +675,6 @@ void ctx_links_find_roots(t_context *C)
 	else
 	{
 		ctx_links_get_roots(C);
-
-		if(db_main)
-		{
-			printf("ctx_links_find_roots\n");
-			_show_roots();
-		}
 	}
 }
 

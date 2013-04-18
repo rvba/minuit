@@ -2,10 +2,25 @@
 # SRC
 #
 
-FLAG= -g -Wall -D$(DEBUG)
+ifeq ($(DEBUG),1)
+FLAG= -g -Wall -DWITH_DEBUG
+else
+FLAG= 
+endif
 INC=-I. -Iutil -Ilib 
 
+GIT=
+
+ifeq ($(wildcard ../.git/HEAD),)
+MINUIT=app.o scene.o context.o draw.o ui.o node.o 
+else
+
 MINUIT=app.o scene.o context.o draw.o ui.o node.o git.c git.o
+GIT=-DWITH_GIT
+
+endif
+
+export WITH_GIT
 
 .PHONY:util lib mod
 all:util lib mod libminuit.a
@@ -21,7 +36,7 @@ minuit.o : minuit.c
 	gcc -c minuit.c $(FLAG) $(INC) $(GFLAG)   
 
 app.o : app.h app.c
-	gcc -c app.c $(FLAG) $(INC)   
+	gcc -c app.c $(FLAG) $(INC) $(GIT)   
 
 scene.o: scene.h scene.c
 	gcc -c scene.c $(FLAG) $(INC)   
@@ -40,6 +55,7 @@ node.o : node.h node.c
 
 git.c:../.git/HEAD ../.git/index
 	@echo "const char *git = \"$(shell git rev-parse HEAD)\";" > $@
+
 git.o:git.c
 	gcc -c git.c
 

@@ -62,7 +62,11 @@ obj:=\
 	vector.o\
 	vlst.o
 
-FLAG=-g -Wall -D$(DEBUG)
+ifeq ($(DEBUG),1)
+FLAG=-g -Wall -DWITH_DEBUG
+else
+FLAG= 
+endif
 INC=-I./ -I../ -I../util  
 
 liblib.a:$(obj)
