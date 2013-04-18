@@ -840,49 +840,60 @@ void *op_clone(t_brick *brick)
 			plug_target = plug_src->dst;
 		}
 
-		//if(plug_src)
-		//{
-			t_link *l;
-			t_brick *b;
+		t_link *l;
+		t_brick *b;
 
-			for(l = block->bricks->first;l;l = l->next)
+		for(l = block->bricks->first;l;l = l->next)
+		{
+			b = l->data;
+			if(!is(b->name,"clone"))
 			{
-				b = l->data;
-				if(!is(b->name,"clone"))
+				t_plug *plug_clone = &b->plug_intern;
+				t_plug *plug_in_clone = &b->plug_in;
+				t_plug *plug_out_clone = &b->plug_out;
+
+				// match current target type
+				if(plug_src)
 				{
-					t_plug *plug_clone = &b->plug_intern;
-					t_plug *plug_in_clone = &b->plug_in;
-					t_plug *plug_out_clone = &b->plug_out;
-
-					// match current target type
-					if(plug_src)
+					if(plug_clone->data_type != plug_src->data_type)
 					{
-						if(plug_clone->data_type != plug_src->data_type)
-						{
-							t_brick *brick_clone = plug_clone->brick;
-							brick_type_change(brick_clone,plug_src);
-						}
+						t_brick *brick_clone = plug_clone->brick;
+						brick_type_change(brick_clone,plug_src);
 					}
+				}
 
-					// connect 
-					plug_in_clone->src=plug_target;
-					if(plug_target)
+				// connect 
+				plug_in_clone->src=plug_target;
+
+				if(plug_target)
+				{
+					plug_in_clone->is_connected=1;
+
+					t_brick *brick_target = plug_target->brick;
+				
+					if(plug_in->is_connected)
 					{
-						plug_in_clone->is_connected=1;
-						t_brick *brick_indice = plug_target->brick;
-						if(brick_indice->plug_in.open_in)
+						if(brick_target->plug_out.open_out)
 							plug_out_clone->open_out = 1;
 						else
 							plug_out_clone->open_out = 0;
 					}
-					else
+					else if(plug_out->is_connected)
 					{
-						plug_in_clone->is_connected=0;
-						plug_out_clone->open_out = 0;
+						if(brick_target->plug_in.open_in)
+							plug_out_clone->open_out = 1;
+						else
+							plug_out_clone->open_out = 0;
+
 					}
 				}
+				else
+				{
+					plug_in_clone->is_connected=0;
+					plug_out_clone->open_out = 0;
+				}
 			}
-		//}
+		}
 	}
 
 	// Set Updated

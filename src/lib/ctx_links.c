@@ -546,6 +546,7 @@ void ctx_links_get_roots(t_context *C)
 	t_link *l;
 	t_brick *b;
 	t_plug *plug_in;
+	t_plug *plug_intern;
 
 	t_lst *lst = BRICKS;
 	t_lst *roots = ROOTS;
@@ -558,9 +559,38 @@ void ctx_links_get_roots(t_context *C)
 	{
 		b=l->data;
 		plug_in = &b->plug_in;
+		plug_intern = &b->plug_intern;
+
+		int go = 1;
+
+		if(plug_intern->is_a_loop)
+		{
+			t_block *block = b->block;
+			// get branch (all bricks)
+			t_lst *lst = block_branch_src_get(C,block);
+
+			t_link *l;
+			t_brick *b;
+			t_plug *p;
+
+			for(l=lst->first;l;l=l->next)
+			{
+				b=l->data;
+				p=&b->plug_intern;
+				if(!p->is_updated)
+				{
+					go = 0;
+					break;
+				}
+			}
+
+			lst_free(lst);
+
+		}
+
 
 		// if plug_in is connected
-		if(plug_in->is_connected)
+		if(plug_in->is_connected && go)
 		{
 			int all_updated = ctx_links_check_parents(b);
 
@@ -572,7 +602,7 @@ void ctx_links_get_roots(t_context *C)
 			}
 		}
 		// else if plug_in is not connected
-		else
+		else if (go)
 		{
 			int all_updated = ctx_links_check_parents(b);
 
