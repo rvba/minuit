@@ -7,7 +7,7 @@ INC:= -Isrc -Isrc/util -Isrc/lib
 DIR:= -Lsrc -Lsrc/util -Lsrc/lib 
 
 WITH_LIBLO=1
-DEBUG=0
+DEBUG=1
 
 export WITH_LIBLO
 export DEBUG
