@@ -808,6 +808,32 @@ t_node *add_slider_object(t_context *C,const char *name)
 	return NULL;
 }
 
+// SLIDER CAMERA
+
+t_node *add_slider_camera(t_context *C,const char *name)
+{
+	t_camera *camera = C->camera;
+	t_node *node;
+
+	if(is(name,"pos x"))
+	{
+		scene_add_ref(C->scene,"struct_ref","camera","pos_x",&camera->pos[0],camera);
+		node = add_slider_float(C,"cam pos x",&camera->pos[0]);
+	}
+	else if(is(name,"pos y"))
+	{
+		scene_add_ref(C->scene,"struct_ref","camera","pos_y",&camera->pos[1],camera);
+		node = add_slider_float(C,"cam pos y",&camera->pos[1]);
+	}
+	else if(is(name,"pos z"))
+	{
+		scene_add_ref(C->scene,"struct_ref","camera","pos_z",&camera->pos[2],camera);
+		node = add_slider_float(C,"cam pos z",&camera->pos[2]);
+	}
+
+	return node;
+}
+
 
 // PART LABEL
 

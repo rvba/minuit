@@ -28,6 +28,8 @@
 t_lst *NODES;
 t_lst *DATA;
 
+int load_error;
+
 // DEBUG
 
 int check(t_node *node,const char *name_data,const char *name_ptr)
@@ -233,6 +235,7 @@ void *find_struct(const char *target,const char *name)
 		return node->data;
 	}
 	{
+		load_error = 1;
 		printf("[ERROR app_get] Unknown target %s\n",name);
 		log((LOG_REBIND,"[ERROR app_get] Unknown target %s\n",name));
 	}
@@ -265,7 +268,8 @@ void *find_ref(t_scene *sc,t_data *data)
 			else if(is(data->name,"scl_z"))  	p=&object->size[2]; 
 			else
 			{
-				printf("[ERROR strutc_ref_get object] Unknown name %s \n",data->name);
+				printf("[ERROR struct_ref_get object] Unknown name %s \n",data->name);
+				load_error = 1;
 				return NULL;
 			}
 
@@ -275,6 +279,7 @@ void *find_ref(t_scene *sc,t_data *data)
 		else
 		{
 			printf("[ERROR struct_ref_get] ref %s %s:Can't get node \n",data->target,data->name);
+			load_error = 1;
 			return NULL;
 		}
 	}
@@ -294,6 +299,7 @@ void *find_ref(t_scene *sc,t_data *data)
 			else
 			{
 				printf("[ERROR strutc_ref_get object] Unknown name %s \n",data->name);
+				load_error = 1;
 				return NULL;
 			}
 
@@ -303,6 +309,7 @@ void *find_ref(t_scene *sc,t_data *data)
 		else
 		{
 			printf("[ERROR struct_ref_get] ref %s %s:Can't get node \n",data->target,data->name);
+			load_error = 1;
 			return NULL;
 		}
 	}
@@ -322,6 +329,7 @@ void *find_ref(t_scene *sc,t_data *data)
 			else
 			{
 				printf("[ERROR strutc_ref_get] Unknown name [%s] \n",data->name);
+				load_error = 1;
 				return NULL;
 			}
 
@@ -331,6 +339,7 @@ void *find_ref(t_scene *sc,t_data *data)
 		else
 		{
 			printf("[ERROR strutc_ref_get] ref %s %s:Can't get node \n",data->target,data->name);
+			load_error = 1;
 			return NULL;
 		}
 	}
@@ -348,6 +357,7 @@ void *find_ref(t_scene *sc,t_data *data)
 			else
 			{
 				printf("[ERROR strutc_ref_get] Unknown name [%s] \n",data->name);
+				load_error = 1;
 				return NULL;
 			}
 
@@ -357,6 +367,7 @@ void *find_ref(t_scene *sc,t_data *data)
 		else
 		{
 			printf("[ERROR strutc_ref_get] ref %s %s:Can't get node \n",data->target,data->name);
+			load_error = 1;
 			return NULL;
 		}
 	}
@@ -373,6 +384,7 @@ void *find_ref(t_scene *sc,t_data *data)
 			else
 			{
 				printf("[ERROR strutc_ref_get] Unknown name [%s] \n",data->name);
+				load_error = 1;
 				return NULL;
 			}
 
@@ -382,12 +394,44 @@ void *find_ref(t_scene *sc,t_data *data)
 		else
 		{
 			printf("[ERROR strutc_ref_get] ref %s %s:Can't get node \n",data->target,data->name);
+			load_error = 1;
 			return NULL;
 		}
+	}
+	else if(is(data->target,"camera"))
+	{
+		t_node *node=find_by_ptr(sc,data->ref);
+		if(node)
+		{
+			t_camera *camera = node->data;
+
+			void *p;
+
+			if(is(data->name,"pos_x"))  			p=&camera->pos[0]; 
+			else if(is(data->name,"pos_y"))  			p=&camera->pos[1]; 
+			else if(is(data->name,"pos_z"))  			p=&camera->pos[2]; 
+			else
+			{
+				printf("[ERROR strutc_ref_get] Unknown name [%s] \n",data->name);
+				load_error = 1;
+				return NULL;
+			}
+
+			return p;
+		}
+		else
+		{
+			printf("[ERROR strutc_ref_get] ref %s %s:Can't get node \n",data->target,data->name);
+			load_error = 1;
+			return NULL;
+		}
+
+
 	}
 	else
 	{
 		printf("[ERROR strutc_ref_get] Unknown target %s \n",data->target);
+		load_error = 1;
 		return NULL;
 	}
 }
@@ -560,7 +604,6 @@ void load_scene(t_context *C,t_scene *sc)
 			if(is(g->name,"main_camera"))
 			{
 				t_camera *camera=n->data;
-				t_context *C=ctx_get();
 				C->camera=camera;
 			}
 		}
@@ -624,6 +667,7 @@ void load_store(t_scene *sc)
 				else
 				{
 					printf("[ERROR load_store] dynamic : can't find node for %s\n",d->name);
+					load_error = 1;
 				}
 			}
 			else if(is(d->type,"app_node"))
@@ -666,6 +710,7 @@ void load_store(t_scene *sc)
 			else
 			{
 				printf("[ERROR load_store] Unknown type (%s)\n",d->type);
+				load_error = 1;
 			}
 		}
 
@@ -765,6 +810,7 @@ void rebind(t_scene *sc,const char *type,const char *name,void **ptr)
 				else
 				{
 					printf("[ERROR rebind] Unknown type %s\n",data->type);
+					load_error = 1;
 				}
 			}
 			// [DIRECT DATA] t_struct
@@ -777,8 +823,7 @@ void rebind(t_scene *sc,const char *type,const char *name,void **ptr)
 		{
 			printf("[ERROR rebind] Can't find data %s %s\n",type,name);
 			check_ok=0;
-			t_context *C = ctx_get();
-			C->event->load_error = 1;
+			load_error = 1;
 		}
 	}
 }
@@ -820,7 +865,10 @@ void load_rebind(t_scene *sc)
 			case(nt_dict):dict_rebind(sc,ptr); break;
 			case(nt_symbol): symbol_rebind(sc,ptr); break;
 			case(nt_vector) : vector_rebind(sc,ptr);break; 
-			default: printf("[ERROR load_data] Unknown type %s\n",node_name_get(node->type));break;
+			default:
+				printf("[ERROR load_data] Unknown type %s\n",node_name_get(node->type));
+				load_error = 1;
+				break;
 		}
 
 	}
@@ -862,6 +910,7 @@ void load_var(t_scene *sc)
 				else
 				{
 					printf("[ERROR load_var] Can't find node for %s\n",d->name);
+					load_error = 1;
 				}
 			}
 		}
@@ -925,6 +974,7 @@ void load_node(t_scene *sc)
 			else
 			{
 				printf("[ERROR load_node] Can't find chunk, node class:%s\n",node_name_get(n->type));
+				load_error = 1;
 
 			}
 		}
@@ -1048,6 +1098,9 @@ void load_file(t_context *C,const char *path)
 
 /** INIT **/
 
+	// Init Error
+	load_error = 0;
+
 	// create a new scene
 	t_scene *sc=scene_init();
 
@@ -1105,7 +1158,7 @@ void load_file(t_context *C,const char *path)
 	file_set_location(C->app->file,path);
 	file_init(C->app->file);
 
-	if(C->event->load_error)
+	if(load_error)
 	{
 		term_log("WARNING: Load Error");
 	}

@@ -600,10 +600,6 @@ void register_set(t_context *C)
 	scene_add_data(C->scene,"app_data","app","msec",			&C->app->clock->msec);
 	scene_add_data(C->scene,"app_data","app","loaded_file",			&C->app->loaded_file);
 
-	scene_add_data(C->scene,"app_data","app","cam_pos_x",			&C->camera->pos[0]);
-	scene_add_data(C->scene,"app_data","app","cam_pos_y",			&C->camera->pos[1]);
-	scene_add_data(C->scene,"app_data","app","cam_pos_z",			&C->camera->pos[2]);
-
 	// struct
 
 	scene_add_data(C->scene,"app_struct","block","menu_node",		menu_node);

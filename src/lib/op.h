@@ -223,6 +223,7 @@ t_node *	add_slider_char(t_context *C,const char *name,void *target_data);
 
 t_node *	add_slider_object(t_context *C,const char *name);
 t_node *	add_pointer_object(t_context *C,const char *name);
+t_node *	add_slider_camera(t_context *C,const char *name);
 
 
 t_node *	add_part_label(t_context *C,t_block *block,const char *name);

@@ -60,13 +60,6 @@ t_context *ctx_init(int argc,char **argv)
 	ui_init();
 
 	// init term,mode
-	/*
-	t_term *term = term_new();
-	term->init(term);
-	lst_add(C->terms,term,"term");
-	C->term = term;
-	*/
-
 	lst_add(C->terms,C->term,"main term");
 	C->term->init(C->term);
 
