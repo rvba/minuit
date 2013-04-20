@@ -273,6 +273,7 @@ t_app *app_new(int argc,char **argv)
 	app->off_screen=0;
 	app->frame=0;
 	app->timer=0;
+	app->timer_add = 1;
 	app->timer_count=0;
 	app->loop=APP_LOOP;
 	app->buffer=APP_BUFFER;

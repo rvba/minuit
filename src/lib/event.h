@@ -55,7 +55,8 @@ struct State_Event_UI
 	int is_drawing:1;
 	int is_linking:1;
 	int is_linking_released:1;
-	int is_typing:1;
+	int typing_start:1;
+	int typing_end:1;
 };
 
 struct Event

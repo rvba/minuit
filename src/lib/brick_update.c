@@ -251,17 +251,17 @@ void cls_brick_update(t_brick *brick)
 
 	int button_left=C->app->mouse->button_left;
 	int button_right=C->app->mouse->button_right;
-	int button_middle=C->app->mouse->button_middle;
+	//int button_middle=C->app->mouse->button_middle;
 	int mouse_over = is_mouse_over_brick(C,brick);
 	int brick_clic=0;
-	int button_middle_clic=0;
+	//int button_middle_clic=0;
 
 	float mouse_pos[3];
 	vset(mouse_pos,0,0,0);
 
 
 	if(mouse_over && button_left==button_pressed && (brick->state.is_mouse_over_plug_in==0) && (brick->state.is_mouse_over_plug_out==0)) brick_clic=1;
-	if(mouse_over && button_middle==button_pressed) button_middle_clic=1;
+	//if(mouse_over && button_middle==button_pressed) button_middle_clic=1;
 
 	// IDLE
 
@@ -407,8 +407,15 @@ void cls_brick_update(t_brick *brick)
 					}
 
 					// START TYPING
-					else if(button_middle_clic)
+					else if(mouse_over && (button_left == button_pressed) && C->app->keyboard->alt)
 					{
+						if(!C->event->ui.is_menu_mouse_show)
+						{
+							C->event->is_brick_transformed=1;
+							C->ui->brick_selected=brick;
+							brick->mode=bm_typing;
+							C->event->ui.typing_start = 1;
+						}
 					}
 
 					// START TRIGGER 
@@ -525,7 +532,6 @@ void cls_brick_update(t_brick *brick)
 							vadd(v,mouse_pos,vec);
 							vcp(block_pos,v);
 						}
-					
 					}
 				}
 
@@ -645,8 +651,36 @@ void cls_brick_update(t_brick *brick)
 				break;
 
 			case bm_typing:
-				break;
 
+				//release
+				if(C->event->ui.typing_start && C->event->ui.typing_end)
+				{
+					brick->mode=bm_idle;
+					C->event->is_brick_transformed=0;
+					C->event->is_typing=0;
+					bzero(&C->event->buffer_char[0],20);
+					C->event->buffer_char_counter=0;
+					C->event->ui.typing_start = 0;
+					C->event->ui.typing_end = 0;
+				}
+				// change data
+				else
+				{
+					t_plug *plug = &brick->plug_intern;
+
+					if(plug->data_type==dt_int)
+					{
+						int *dt=plug->data;
+						*dt=atoi(C->event->buffer_char);
+					}
+					else if(plug->data_type==dt_float)
+					{
+						float *dt=plug->data;
+						*dt=atof(C->event->buffer_char);
+					}
+				}
+
+				break;
 		}
 	}
 }

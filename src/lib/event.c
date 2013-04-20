@@ -26,6 +26,9 @@ t_event *event_new(void)
 	event->ui.is_menu_show=0;
 	event->ui.is_menu_mouse_show=0;
 	event->ui.is_menu_fixed = 0;
+	event->ui.typing_start = 0;
+	event->ui.typing_end = 0;
+
 	event->ui.pan = 0;
 
 	event->is_selection=0;

@@ -132,7 +132,8 @@ struct App
 	int slave;
 	
 	int frame;
-	int timer;
+	float timer;
+	float timer_add;
 	int timer_count;
 	int loop;
 	int buffer; // single/double

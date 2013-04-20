@@ -50,7 +50,32 @@ void switch_desk(t_context *C)
 	}
 }
 
-void keymap_main(unsigned char key)
+void keymap_typing(unsigned char key)
+{
+	t_context *C=ctx_get();
+	t_event *event = C->event;
+
+	char char_key;
+
+	switch(key)
+	{
+		case 0:
+			break;
+
+		// RETURN
+		case 13:
+			event->ui.typing_end = 1;
+			break;
+
+		default:
+			char_key = (char)key;
+			strncat(C->event->buffer_char,&char_key,1);
+			C->event->buffer_char_counter++;
+			break;
+	}
+}
+
+void keymap_command(unsigned char key)
 {
 	t_context *C=ctx_get();
 	t_event *event = C->event;
@@ -161,6 +186,22 @@ void keymap_main(unsigned char key)
 		case 1: load_last(C);break; 	//F1
 		case 2: save_file(C);break; 	//F2
 		case 3: save_file_increment(C);break; 		//F3
+	}
+}
+
+
+void keymap_main(unsigned char key)
+{
+	t_context *C=ctx_get();
+	t_event *event = C->event;
+
+	if(event->ui.typing_start)
+	{
+		keymap_typing(key);
+	}
+	else
+	{
+		keymap_command(key);
 	}
 }
 
