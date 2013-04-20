@@ -31,6 +31,7 @@ void *op_brick_add(t_brick *brick)
 
 	     if(is(name,"frame")) 		add_slider_int(C,"frame",&C->app->frame); 
 	else if(is(name,"timer"))  		add_slider_float(C,"timer",&C->app->timer); 
+	else if(is(name,"timer low"))  		add_slider_float(C,"timer low",&C->app->timer_add_low); 
 	else if(is(name,"=")) 			add_operator_double(C,"=");
 	else if(is(name,">"))  			add_operator_double(C,">"); 
 	else if(is(name,"<"))  			add_operator_double(C,"<"); 

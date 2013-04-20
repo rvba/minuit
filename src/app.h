@@ -134,6 +134,7 @@ struct App
 	int frame;
 	float timer;
 	float timer_add;
+	float timer_add_low;
 	int timer_count;
 	int loop;
 	int buffer; // single/double

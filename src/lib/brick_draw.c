@@ -11,7 +11,7 @@
 #include "txt.h"
 #include "context.h"
 
-#define _PRECISION "%-.2f"
+#define _PRECISION "%-.4f"
 
 int brick_get_width(t_brick *brick)
 {

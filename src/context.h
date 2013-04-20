@@ -90,6 +90,8 @@ struct Option
 	int window_width;
 	int window_height;
 
+	float timer_add_low;
+
 	// skecth
 
 	float skt_color[3];

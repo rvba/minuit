@@ -387,6 +387,7 @@ t_node *make_menu_time(void)
 	add_brick_trigger(C,block,"msec",op_brick_add);
 	add_brick_trigger(C,block,"frame",op_brick_add);
 	add_brick_trigger(C,block,"timer",op_brick_add);
+	add_brick_trigger(C,block,"timer low",op_brick_add);
 
 	return menu;
 }
@@ -596,6 +597,7 @@ void register_set(t_context *C)
 	// data
 	scene_add_data(C->scene,"app_data","app","frame",			&C->app->frame);
 	scene_add_data(C->scene,"app_data","app","timer",			&C->app->timer);
+	scene_add_data(C->scene,"app_data","app","timer low",			&C->app->timer_add_low);
 	scene_add_data(C->scene,"app_data","app","sec",				&C->app->clock->sec);
 	scene_add_data(C->scene,"app_data","app","msec",			&C->app->clock->msec);
 	scene_add_data(C->scene,"app_data","app","loaded_file",			&C->app->loaded_file);
@@ -658,6 +660,7 @@ void register_set(t_context *C)
 
 	dict_symbol_add(dict_app,"frame",dt_pointer,&C->app->frame);
 	dict_symbol_add(dict_app,"timer",dt_pointer,&C->app->timer);
+	dict_symbol_add(dict_app,"timer low",dt_pointer,&C->app->timer_add_low);
 	dict_symbol_add(dict_app,"sec",dt_pointer,&C->app->clock->sec);
 	dict_symbol_add(dict_app,"msec",dt_pointer,&C->app->clock->msec);
 	dict_symbol_add(dict_app,"loaded_file",dt_pointer,&C->app->loaded_file);

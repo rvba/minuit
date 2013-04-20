@@ -49,6 +49,7 @@ void option_load(t_context *C,t_node *node)
 	C->app->window->height_def=option->window_height_def;
 	C->app->window->width=option->window_width;
 	C->app->window->height=option->window_height;
+	C->app->timer_add_low = option->timer_add_low;
 
 	// sketch
 
@@ -111,6 +112,7 @@ void option_save(t_context *C)
 	option->window_height_def=C->app->window->height_def;
 	option->window_width=C->app->window->width;
 	option->window_height=C->app->window->height;
+	option->timer_add_low = C->app->timer_add_low;
 
 	// sketch
 
