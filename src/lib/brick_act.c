@@ -1515,6 +1515,7 @@ void *op_set_selected(t_brick *brick)
 
 // GET
 
+
 void *__op_get(t_brick *brick)
 {
 	t_plug *plug=&brick->plug_intern;

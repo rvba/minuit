@@ -150,6 +150,7 @@ struct Plug
 	int is_in_loop;
 	int close_flow_in;		// will close target's flow in
 	int use_flow;
+	int is_parent;
 
 	int flow_in;
 	int flow_out;
@@ -383,6 +384,7 @@ void		block_unstore(t_block *block);
 
 // BRICK
 
+void plug_child_remove_all_parents(t_plug *child);
 t_brick *	brick_copy(t_block *block,t_brick *brick);
 t_brick *	brick_clone(t_block *block,t_brick *brick);
 void 		plug_color_init(t_plug *plug);

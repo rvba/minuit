@@ -1128,6 +1128,7 @@ t_node *add_get(t_context *C)
 	// get
 	t_node *node_get = add_part_trigger_type(C,block,"get",op_operator,dt_operator);
 	t_brick *brick_get = node_get->data;
+	t_plug *plug_get = &brick_get->plug_intern;
 	brick_get->state.always_trigger = 1;
 	brick_get->plug_intern.operator_type = ot_get;
 
@@ -1140,7 +1141,12 @@ t_node *add_get(t_context *C)
 	plug_result->is_volatil = 1;
 
 	// indice
-	add_part_slider_int_positive(C,block,"indice",NULL);
+	t_node *node_indice = add_part_slider_int_positive(C,block,"indice",NULL);
+	t_brick *brick_indice = node_indice->data;
+	t_plug *plug_indice = &brick_indice->plug_intern;
+
+	plug_add_parent(plug_result,plug_get);
+	plug_add_parent(plug_get,plug_indice);
 
 	return node_block;
 }
@@ -1175,6 +1181,7 @@ t_node *add_for(t_context *C)
 	t_plug *plug_vector = &brick_vector->plug_intern;
 	plug_vector->is_volatil = 1;
 	plug_vector->is_a_loop = 1;
+	plug_vector->is_parent = 1;
 	brick_vector->state.draw_value = 0;
 	brick_vector->plug_in.flow_in = 0;
 	brick_vector->plug_in.open_in = 1;
@@ -1190,14 +1197,15 @@ t_node *add_for(t_context *C)
 
 // VECTOR
 
-t_node *parent_brick_vector(t_plug *plug,t_node *node)
+t_node *parent_brick_vector(t_plug *plug_vector, t_node *node)
 {
 	t_brick *brick = node->data;
 
 	t_plug *plug_intern = &brick->plug_intern;
 
 	// parent
-	plug_add_parent(plug_intern,plug);
+	//plug_add_parent(plug_intern,plug_vector);
+	plug_add_parent(plug_vector,plug_intern);
 
 	return node;
 }
@@ -1216,13 +1224,13 @@ t_node *add_vector(t_context *C)
 	t_node *node_vector = add_part_vector(C,block,"vector");
 	t_brick *brick_vector = node_vector->data;
 	brick_vector->state.draw_value = 0;
-	t_plug *plug_intern = &brick_vector->plug_intern;
+	t_plug *plug_vector = &brick_vector->plug_intern;
 
 	// ADD X Y Z
 
-	parent_brick_vector(plug_intern,add_part_slider_float(C,block,"x",NULL));
-	parent_brick_vector(plug_intern,add_part_slider_float(C,block,"y",NULL));
-	parent_brick_vector(plug_intern,add_part_slider_float(C,block,"z",NULL));
+	parent_brick_vector(plug_vector, add_part_slider_float(C,block,"x",NULL));
+	parent_brick_vector(plug_vector, add_part_slider_float(C,block,"y",NULL));
+	parent_brick_vector(plug_vector, add_part_slider_float(C,block,"z",NULL));
 
 	return node_block;
 }

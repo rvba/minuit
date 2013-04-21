@@ -9,28 +9,36 @@
 
 #include "op.h"
 
-void plug_add_parent(t_plug *plug,t_plug *parent)
+void plug_add_parent(t_plug *child, t_plug *parent)
 {
 	t_context *C = ctx_get();
 
-	// add new list
-	if(!plug->parents)
+	// if not parents yet
+	if(!child->parents)
 	{
+		// add list
 		t_node *node_list = scene_add(C->scene,nt_list,"parent");
 		t_lst *list = node_list->data;
-
-		plug->parents = list;
+		child->parents = list;
 	}
 
-	list_add(plug->parents,parent);
+	// add parent
+	list_add(child->parents,parent);
 
-	parent->child=plug;
+	// remember child
+	parent->child = child;
 }
 
-void plug_remove_from_parent(t_plug *plug, t_brick *brick)
+// Empty Parents List
+void plug_child_remove_all_parents(t_plug *child)
 {
-
-
+	t_context *C = ctx_get();
+	if(child->parents)
+	{
+		//list_free(child->parents);
+		scene_struct_delete(C->scene,child->parents);
+		child->parents = NULL;
+	}
 }
 
 void plug_remove_child(t_plug *plug)
@@ -50,7 +58,7 @@ void plug_remove_child(t_plug *plug)
 	}
 }
 
-void plug_remove_parent(t_plug *plug)
+void plug_child_remove_parent(t_plug *plug)
 {
 	t_context *C = ctx_get();
 
@@ -81,7 +89,7 @@ void plug_remove_parent(t_plug *plug)
 		}
 		else
 		{
-			printf("[ERROR plug_remove_parent] Can't find link\n");
+			printf("[ERROR plug_child_remove_parent] Can't find link\n");
 		}
 	}
 }
@@ -220,7 +228,8 @@ int brick_delete(t_brick *brick,int remove_connected)
 		dlink("block",brick->block);
 
 		t_plug *plug = &brick->plug_intern;
-		if(plug->child) plug_remove_parent(plug);
+
+		if(plug->child) plug_child_remove_parent(plug);
 		if(plug->parents) plug_remove_child(plug);
 
 		scene_struct_delete(C->scene,brick);
@@ -374,6 +383,7 @@ void plug_reset(t_plug *plug,const char *name)
 	plug->is_in_loop = 0;
 	plug->close_flow_in = 0;
 	plug->use_flow = 1;
+	plug->is_parent = 0;
 
 	plug->flow_in = 1;
 	plug->flow_out = 0;

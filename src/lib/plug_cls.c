@@ -234,7 +234,6 @@ void set_in_loop(t_brick *brick, int state)
 			brick = link->data;
 			plug = &brick->plug_intern;
 			plug->is_in_loop = state;
-			//printf("in loop: %s\n",brick->name);
 		}
 	}
 
@@ -330,10 +329,25 @@ void cls_plug_connect_vector(t_plug_mode mode, t_plug *self, t_plug *dst)
 {
 	t_brick *brick = self->brick;
 	t_block *block = brick->block;
-	t_brick *brick_x = block_brick_get(block,"x");
-	
 	t_plug *plug_in = &brick->plug_in;
 	t_plug *plug_out = &brick->plug_out;
+
+	t_brick *brick_x = block_brick_get(block,"x");
+	t_brick *brick_y;
+	t_brick *brick_z;
+	t_plug *plug_x; 
+	t_plug *plug_y; 
+	t_plug *plug_z; 
+
+	if(brick_x)
+	{
+		brick_y = block_brick_get(block,"y");
+		brick_z = block_brick_get(block,"z");
+
+		plug_x = &brick_x->plug_intern;
+		plug_y = &brick_y->plug_intern;
+		plug_z = &brick_z->plug_intern;
+	}
 
 	// General
 	cls_plug_connect_general(mode,self,dst);
@@ -353,13 +367,6 @@ void cls_plug_connect_vector(t_plug_mode mode, t_plug *self, t_plug *dst)
 			
 		if(brick_x)
 		{
-			t_brick *brick_y = block_brick_get(block,"y");
-			t_brick *brick_z = block_brick_get(block,"z");
-
-			t_plug *plug_x = &brick_x->plug_intern;
-			t_plug *plug_y = &brick_y->plug_intern;
-			t_plug *plug_z = &brick_z->plug_intern;
-
 			plug_x->store_data = 0;
 			plug_y->store_data = 0;
 			plug_z->store_data = 0;
@@ -369,16 +376,54 @@ void cls_plug_connect_vector(t_plug_mode mode, t_plug *self, t_plug *dst)
 			brick_z->state.draw_value = 0;
 		}
 	}
+
+	// Vector Target
+	//if((dst->data_type == dt_vector) && brick_x)
+	if(
+		brick_x
+		&&
+		(dst->is_parent
+		||
+		((dst->data_type == dt_vector) && (mode == mode_in))
+		)
+		)
+	{
+		// Change Parent/Child Order
+		plug_child_remove_all_parents(self);
+
+		t_context *C = ctx_get();
+
+		C->scene->store = 1;
+		plug_add_parent(plug_x,self);
+		plug_add_parent(plug_y,self);
+		plug_add_parent(plug_z,self);
+		C->scene->store = 0;
+	}
 }
 
 void cls_plug_disconnect_vector(t_plug_mode mode, t_plug *plug)
 {
 	t_brick *brick = plug->brick;
 	t_block *block = brick->block;
-	t_brick *brick_x = block_brick_get(block,"x");
-
 	t_plug *plug_in = &brick->plug_in;
 	t_plug *plug_out = &brick->plug_out;
+
+	t_brick *brick_x = block_brick_get(block,"x");
+	t_brick *brick_y;
+	t_brick *brick_z;
+	t_plug *plug_x; 
+	t_plug *plug_y; 
+	t_plug *plug_z; 
+
+	if(brick_x)
+	{
+		brick_y = block_brick_get(block,"y");
+		brick_z = block_brick_get(block,"z");
+
+		plug_x = &brick_x->plug_intern;
+		plug_y = &brick_y->plug_intern;
+		plug_z = &brick_z->plug_intern;
+	}
 
 	// General
 	cls_plug_disconnect_general(mode,plug);
@@ -395,13 +440,6 @@ void cls_plug_disconnect_vector(t_plug_mode mode, t_plug *plug)
 
 	if(brick_x)
 	{
-		t_brick *brick_y = block_brick_get(block,"y");
-		t_brick *brick_z = block_brick_get(block,"z");
-
-		t_plug *plug_x = &brick_x->plug_intern;
-		t_plug *plug_y = &brick_y->plug_intern;
-		t_plug *plug_z = &brick_z->plug_intern;
-
 		plug_x->data = plug_x->data_memory;
 		plug_y->data = plug_y->data_memory;
 		plug_z->data = plug_z->data_memory;
@@ -413,6 +451,19 @@ void cls_plug_disconnect_vector(t_plug_mode mode, t_plug *plug)
 		brick_x->state.draw_value = 1;
 		brick_y->state.draw_value = 1;
 		brick_z->state.draw_value = 1;
+
+		// Remove Parents
+		plug_child_remove_all_parents(plug_x);
+		plug_child_remove_all_parents(plug_y);
+		plug_child_remove_all_parents(plug_z);
+
+		t_context *C = ctx_get();
+		// Set Parent
+		C->scene->store = 1;
+		plug_add_parent(plug, plug_x);
+		plug_add_parent(plug, plug_y);
+		plug_add_parent(plug, plug_z);
+		C->scene->store = 0;
 	}
 }
 
@@ -1185,16 +1236,20 @@ void __cls_plug_flow_operator_get(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 							t_block *block_vector = brick_vector->block;
 
 							t_brick *brick_x = block_brick_get(block_vector,"x");
-							t_brick *brick_y = block_brick_get(block_vector,"y");
-							t_brick *brick_z = block_brick_get(block_vector,"z");
 
-							brick_x->state.draw_value=1;
-							brick_y->state.draw_value=1;
-							brick_z->state.draw_value=1;
+							if(brick_x)
+							{
+								t_brick *brick_y = block_brick_get(block_vector,"y");
+								t_brick *brick_z = block_brick_get(block_vector,"z");
 
-							brick_x->action = op_slider;
-							brick_y->action = op_slider;
-							brick_z->action = op_slider;
+								brick_x->state.draw_value=1;
+								brick_y->state.draw_value=1;
+								brick_z->state.draw_value=1;
+
+								brick_x->action = op_slider;
+								brick_y->action = op_slider;
+								brick_z->action = op_slider;
+							}
 						}
 					}
 				}
