@@ -1307,6 +1307,8 @@ int get_first_vlst_pos(t_block *block)
 	return pos;
 }
 
+// OP MATHS COMPUTE
+
 void op_maths_exe(t_operation operation,t_brick *brick)
 {
 	t_link *l;
@@ -1319,9 +1321,10 @@ void op_maths_exe(t_operation operation,t_brick *brick)
 
 	int pos=0;
 
+	// Get Pos
 	pos=get_first_vlst_pos(block);
 
-	// offset first two bricks operator, result
+	// Offset first two bricks operator, result
 	l=block->bricks->first;
 	l=l->next;
 	l=l->next;
@@ -1333,22 +1336,23 @@ void op_maths_exe(t_operation operation,t_brick *brick)
 		b=l->data;
 		p=&b->plug_intern;
 		// don't evaluate result plug
-		if(this_pos != pos) op_maths_plug(operation,plug_result,p);
+		if(this_pos != pos) 
+			// compute
+			op_maths_plug(operation,plug_result,p);
 		this_pos++;
 	}
 }
 
+// OP MATHS SET TYPE 
+
 void *op_maths(t_operation operation,t_brick *brick)
 {
-
 	// get result type
 
 	int is_int=0;
 	int is_float=0;
 	int is_vlst=0;
 	int is_vector=0;
-
-	//int pos=0;
 
 	t_link *l;
 	t_brick *b;
@@ -1380,6 +1384,7 @@ void *op_maths(t_operation operation,t_brick *brick)
 			default:break;
 		}
 	}
+
 
 	// Change Type && Init Result
 

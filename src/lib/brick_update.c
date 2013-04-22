@@ -310,6 +310,27 @@ void cls_brick_update(t_brick *brick)
 		else if(event->switch_plug_out_flow_out)	brick_plug_change_state(&plug_out->flow_out);
 		else if(event->switch_plug_out_open_out)	brick_plug_change_state(&plug_out->open_out);
 		else if(event->switch_plug_out_follow_out)	brick_plug_change_state(&plug_out->follow_out);
+
+		else if(event->switch_brick_debug)		
+		{
+			if(brick->state.debug)
+			{
+				term_log("%s: debug off",brick->name);
+				brick->state.debug = 0;
+			}
+			else
+			{
+				term_log("%s: debug on",brick->name);
+				brick->state.debug = 1;
+			}
+		}
+	}
+
+	if(brick->state.is_mouse_over && brick->state.debug)
+	{
+		t_plug *plug = &brick->plug_intern;
+		term_log("%d) brick %s",C->app->frame, brick->name);
+		plug_debug(plug);
 	}
 
 

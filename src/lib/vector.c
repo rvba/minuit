@@ -25,11 +25,49 @@ void vector_free(t_vector *vector)
 
 void vector_show(t_vector *vector)
 {
-	printf( "vector %s\n", vector->name);
-	printf( "type %s\n", data_name_get(vector->type));
-	printf( "length %d\n", vector->length);
-	printf( "data %p\n", vector->data);
-	printf( "vlst %p\n", vector->vlst);
+	t_context *C = ctx_get();
+
+	if(C->event->debug_console)
+	{
+		term_log( "vector %s\n", vector->name);
+		term_log( "type %s\n", data_name_get(vector->type));
+		term_log( "length %d\n", vector->length);
+		term_log( "data %p\n", vector->data);
+		if(vector->data)
+		{
+			int *data_int;
+
+			switch(vector->type)
+			{
+				case dt_float:
+					switch(vector->length)
+					{
+						case 3:
+							data_int = vector->data;
+							term_log( "[v3] %f %f %f",
+								drf_float(data_int),
+								drf_float(data_int+1),
+								drf_float(data_int+2)
+								);
+							break;
+						default:
+							break;
+					}
+					break;
+				default:
+					break;
+			}
+		}
+	}
+
+	if(C->event->debug_terminal)
+	{
+		printf( "vector %s\n", vector->name);
+		printf( "type %s\n", data_name_get(vector->type));
+		printf( "length %d\n", vector->length);
+		printf( "data %p\n", vector->data);
+		printf( "vlst %p\n", vector->vlst);
+	}
 
 	if(vector->vlst) vlst_show(vector->vlst);
 }

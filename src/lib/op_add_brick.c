@@ -1084,7 +1084,7 @@ t_node *add_pipe(t_context *C)
 	return node_block;
 }
 
-// ADD
+// MATHS
 
 t_node *add_maths(t_context *C,const char *name)
 {
@@ -1094,10 +1094,10 @@ t_node *add_maths(t_context *C,const char *name)
 	block->state.draw_outline = 1;
 
 	// CLONE
-
 	t_node *node_brick_clone = add_part_slider_int( C, block, name, NULL);
 	t_brick *brick_clone=node_brick_clone->data;
 
+	// Brick Result
 	add_part_slider_int(C,block,"result",NULL);
 
 	brick_clone->plug_out.flow_out=0;

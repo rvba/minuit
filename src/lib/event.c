@@ -65,6 +65,8 @@ t_event *event_new(void)
 	event->debug_select=CTX_DEBUG_SELECT;
 	event->debug_mouse=CTX_DEBUG_MOUSE;
 	event->debug_process=DEBUG_PROCESS;
+	event->debug_console=DEBUG_CONSOLE;
+	event->debug_terminal=DEBUG_TERMINAL;
 	event->show_term=CTX_SHOW_TERM;
 	event->free_scene=FREE_SCENE;
 
@@ -98,6 +100,8 @@ t_event *event_new(void)
 	event->switch_plug_out_open_out = 0;
 	event->switch_plug_out_follow_in = 0;
 	event->switch_plug_out_follow_out = 0;
+
+	event->switch_brick_debug = 0;
 
 	event->camera_rotation = 0;
 	event->brick_copying = 0;

@@ -124,6 +124,8 @@ struct Event
 	int debug_mouse;
 	int debug_process;
 	int show_term;
+	int debug_console;
+	int debug_terminal;
 	int free_scene;
 	int last_frame; //last recorded camera
 
@@ -150,6 +152,8 @@ struct Event
 	int switch_plug_out_open_out;
 	int switch_plug_out_follow_in;
 	int switch_plug_out_follow_out;
+
+	int switch_brick_debug;
 
 	int camera_rotation;
 	int brick_copying;

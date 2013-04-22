@@ -258,6 +258,7 @@ struct Brick_State
 	int use_loops:1;
 	int remove_connected:1;
 	int is_root:1;
+	int debug:1;
 	int clone;
 	int frame_loop;
 
@@ -502,6 +503,7 @@ void 		plug_remove_parent(t_plug *plug);
 void 		*op_stack(t_brick *brick);
 
 void 		set_for_loop(t_block *block ,int state);
+void plug_debug(t_plug *plug);
 
 #endif
 

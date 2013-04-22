@@ -62,6 +62,7 @@ t_node *make_menu_debug(void)
 	add_brick_switch(C,block,"debug mouse",&C->event->debug_mouse);
 	add_brick_switch(C,block,"debug keyboard",&C->app->debug_keyboard);
 	add_brick_switch(C,block,"debug select",&C->event->debug_select);
+	add_brick_switch(C,block,"debug console",&C->event->debug_console);
 
 	return menu;
 }

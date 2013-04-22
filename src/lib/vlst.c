@@ -175,6 +175,7 @@ void vlst_add_vlst(t_vlst *vlst_dst,t_vlst *vlst_src)
 
 void vlst_show(t_vlst *vlst)
 {
+	t_context *C = ctx_get();
 	if(vlst)
 	{
 		int i;
@@ -182,14 +183,19 @@ void vlst_show(t_vlst *vlst)
 		int length=vlst->length;
 		void *dat=vlst->data;
 
-		printf("[VLST] name:%s count:%d length:%d\n",vlst->name,count,length);
+		if(C->event->debug_terminal)
+			printf("[VLST] name:%s count:%d length:%d\n",vlst->name,count,length);
+		if(C->event->debug_console)
+			term_log("[VLST] name:%s count:%d length:%d\n",vlst->name,count,length);
 
 		if(vlst->type==_3f)
 		{
 			float *d=(float *)dat;
 			for(i=0;i<count;i++)
 			{
-				printf("[%d] %f %f %f\n",i,d[0],d[1],d[2]);
+				if(C->event->debug_terminal)
+					printf("[%d] %f %f %f\n",i,d[0],d[1],d[2]);
+				if(C->event->debug_console) term_log("[%d] %f %f %f\n",i,d[0],d[1],d[2]);
 				d+=length;
 			}
 		}

@@ -32,6 +32,23 @@ void cls_plug_make_vector(t_plug *plug);
 void cls_plug_connect_general(t_plug_mode mode, t_plug *self, t_plug *dst);
 void cls_plug_disconnect_general(t_plug_mode mode, t_plug *self);
 
+void plug_debug(t_plug *plug)
+{
+	t_data_type type = plug->data_type;
+	void *data = plug->data;
+
+	switch(type)
+	{
+		case dt_int: term_log("%d", drf_int(data)); break;
+		case dt_float: term_log("%f", drf_float(data)); break;
+		case dt_vector: vector_show(data); break;
+		case dt_vlst: vlst_show(data); break;
+		default:
+			term_log("unknown type %s", data_name_get(type));
+			break;
+	}
+}
+
 void cls_plug_connect_int(t_plug_mode mode, t_plug *self,t_plug *dst)
 {
 	// General
@@ -352,7 +369,7 @@ void cls_plug_connect_vector(t_plug_mode mode, t_plug *self, t_plug *dst)
 	// General
 	cls_plug_connect_general(mode,self,dst);
 
-	// For Vector
+	// For/Get  Vector
 	if(dst->is_volatil)
 	{
 		// change plug state
@@ -371,9 +388,11 @@ void cls_plug_connect_vector(t_plug_mode mode, t_plug *self, t_plug *dst)
 			plug_y->store_data = 0;
 			plug_z->store_data = 0;
 
+			/*
 			brick_x->state.draw_value = 0;
 			brick_y->state.draw_value = 0;
 			brick_z->state.draw_value = 0;
+			*/
 		}
 	}
 
@@ -1313,13 +1332,12 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 
 	float *vector_data;
 
+	// Get X Y Z bricks
 	brick_x = block_brick_get(block,"x");
 
-
-	// Get X Y Z bricks
-	if(brick_x) // case of vector + brick x y z
+	// If Vector has x,y,z bricks
+	if(brick_x) 
 	{
-
 		brick_y = block_brick_get(block,"y");
 		brick_z = block_brick_get(block,"z");
 
@@ -1350,6 +1368,7 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 			t_vlst *vlst = vector_self->vlst;
 			float *data = vlst->data;
 
+			// Set vector from x y z
 			if(plug_x->data)
 			{
 				data[0] = drf_float(plug_x->data);
@@ -1368,7 +1387,7 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 			// + VECTOR
 			case dt_vector:
 
-				// copy vectors
+				// Copy Vectors
 				vector_self = plug->data;
 				vector_src = src_plug->data;
 
@@ -1387,9 +1406,11 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 						plug_y->data = NULL;
 						plug_z->data = NULL;
 
+						/*
 						brick_x->state.draw_value = 0;
 						brick_y->state.draw_value = 0;
 						brick_z->state.draw_value = 0;
+						*/
 					}
 				}
 				

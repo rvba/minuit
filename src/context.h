@@ -30,6 +30,8 @@
 #define GLFONT 1
 #define FREE_SCENE 0
 #define DEBUG_PROCESS 0
+#define DEBUG_CONSOLE 1
+#define DEBUG_TERMINAL 0
 
 #define CTX_SHOW_TERM 1
 #define CTX_FIXED_BUTTON 0

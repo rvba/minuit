@@ -100,6 +100,8 @@ void keymap_command(unsigned char key)
 		case 'F': event->switch_plug_out_open_out = 1; break;
 		case 'V': event->switch_plug_out_follow_out = 1; break;
 
+		case 'b': event->switch_brick_debug = 1; break;
+
 		//
 
 		case '*': draw_switch_axis_world(C->draw);break;

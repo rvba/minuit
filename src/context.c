@@ -154,6 +154,8 @@ void ctx_reset(t_context *C)
 	event->switch_plug_out_follow_in = 0;
 	event->switch_plug_out_follow_out = 0;
 
+	event->switch_brick_debug = 0;
+
 	// app special keys
 	t_app *app = C->app;
 
