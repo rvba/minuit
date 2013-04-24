@@ -57,6 +57,8 @@ struct State_Event_UI
 	int is_linking_released:1;
 	int typing_start:1;
 	int typing_end:1;
+
+	int use_point_global_width:1;
 };
 
 struct Event

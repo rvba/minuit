@@ -100,6 +100,8 @@ struct Ui
 	t_lst *screens;
 	t_link *screen_link_active;
 	int screen_direction;
+
+	int mouse_size;
 };
 
 // UI.C
@@ -128,6 +130,8 @@ int op_ui_alphabet_switch(t_node *node);
 void op_screen_switch();
 
 void ui_draw_desk(void);
+
+void ui_draw_mouse(void);
 
 
 #endif

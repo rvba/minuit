@@ -53,7 +53,6 @@ void engine_cleanup(t_engine *engine)
 
 	if(engine->garbage->first)
 	{
-		lst_show(engine->garbage);
 		for(link = engine->garbage->first; link; link = link->next)
 		{
 			process = link->data;

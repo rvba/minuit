@@ -101,6 +101,7 @@ t_node *make_menu_ui(void)
 	add_brick_switch(C,block,"show brick step",&C->ui->show_brick_step);
 	add_brick_switch(C,block,"video build",&C->app->video_build);
 	add_brick_slider_int(C,block,"video offset",&C->app->video_offset);
+	add_brick_slider_int(C,block,"mouse size",&C->ui->mouse_size);
 
 	return menu;
 }

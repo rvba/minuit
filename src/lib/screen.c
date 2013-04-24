@@ -56,6 +56,7 @@ void screen_generic(t_screen *screen)
 	glPushMatrix();
 	glLoadIdentity();
 
+	ui_draw_mouse();
 	ui_draw_menu();
 	//ui_draw_blocks();
 	ui_draw_debug();
@@ -85,6 +86,7 @@ void screen_main(t_screen *screen)
 	glPushMatrix();
 	glLoadIdentity();
 
+	ui_draw_mouse();
 	ui_draw_intro();
 	ui_draw_lines();
 	ui_draw_status_bar();
@@ -110,6 +112,8 @@ void screen_desk(t_screen *screen)
 
 	glTranslatef(C->ui->pan_x,C->ui->pan_y,0);
 
+
+	ui_draw_mouse();
 	ui_draw_intro();
 	ui_draw_lines();
 	ui_draw_status_bar();

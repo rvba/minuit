@@ -11,6 +11,31 @@
 
 t_txt *txt_intro;
 
+void ui_draw_mouse(void)
+{
+	t_context *C = ctx_get();
+
+	if(C->ui->show_mouse && (C->draw->mode != mode_selection))
+	{
+		float *color=C->ui->front_color;
+		float pos[3];
+
+		vset(pos,0,0,0);
+
+		pos[0] = (float) C->app->mouse->x;
+		pos[1] = (float) C->app->mouse->y;
+		pos[2] = 0;
+
+		glPushMatrix();
+		glLoadIdentity();
+		C->event->ui.use_point_global_width = 0;
+		skt_point(pos,C->ui->mouse_size,color);
+		C->event->ui.use_point_global_width = 1;
+		glPopMatrix();
+
+	}
+}
+
 void ui_draw_lines(void)
 {
 	t_context *C=ctx_get();
@@ -334,6 +359,7 @@ t_ui *ui_new(void)
 	ui->screens = lst_new("lst");
 	ui->screen_link_active = NULL;
 	ui->screen_direction = 1;
+	ui->mouse_size = 9;
 
 	return ui;
 }

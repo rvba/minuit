@@ -28,6 +28,7 @@ t_event *event_new(void)
 	event->ui.is_menu_fixed = 0;
 	event->ui.typing_start = 0;
 	event->ui.typing_end = 0;
+	event->ui.use_point_global_width = 1;
 
 	event->ui.pan = 0;
 

@@ -7,7 +7,8 @@
  *
  */
 
-#include "sketch.h"
+//#include "sketch.h"
+#include "op.h"
 
 // LOCAL
 t_skt *SKT=NULL;
@@ -93,8 +94,17 @@ void skt_line_quad(float *a,float *b,float *c,float *d,int line_width,float *col
 
 void skt_point(float *pos,int width,float *color) 
 {
+	t_context *C = ctx_get();
+
 	glEnable(GL_POINT_SMOOTH);
-	glPointSize(width*SKT->point_size*SKT->scale);
+
+	float scale;
+	if(C->event->ui.use_point_global_width)
+		scale = SKT->scale * SKT->point_size;
+	else
+		scale = 1;
+
+	glPointSize(width * scale);
 	glColor3f(color[0],color[1],color[2]);
 
 	glBegin(GL_POINTS);
