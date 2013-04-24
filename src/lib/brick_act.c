@@ -1422,7 +1422,7 @@ void *op_maths(t_operation operation,t_brick *brick)
 
 		t_plug *plug_vector = &brick_result->plug_intern;
 		t_vector *vector = plug_vector->data;
-		t_vlst *vlst = vector->vlst;
+		t_vlst *vlst = vector->vector;
 		float *v = vlst->data;
 		
 		vset3f(v,0,0,0);

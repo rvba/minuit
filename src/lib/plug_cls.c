@@ -340,7 +340,7 @@ void cls_plug_disconnect_general(t_plug_mode mode, t_plug *self)
 	}
 }
 
-// VECTOR
+// CONNECT VECTOR
 
 void cls_plug_connect_vector(t_plug_mode mode, t_plug *self, t_plug *dst)
 {
@@ -1023,7 +1023,7 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 	if(mode == mode_in)
 	{
 		// reset vector
-		vector->data = NULL;
+		vector->pointer = NULL;
 
 		// if for connected
 		if(plug_in->is_connected)
@@ -1045,7 +1045,7 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 					// Set vector
 					if(vlst)
 					{
-						vector->data = vlst->data;
+						vector->pointer = vlst->data;
 						vector->type = vlst->data_type;
 						vector->length = vlst->length;
 					}
@@ -1075,7 +1075,7 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 						float *ptr = vlst->data;
 
 						// Set Vector Pointer
-						vector->data = ptr + (vlst->length * brick->counter);
+						vector->pointer = ptr + (vlst->length * brick->counter);
 
 						// Set Indice
 						*data_indice=brick->counter;
@@ -1092,7 +1092,7 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 						if(C->ui->show_step)  term_log("[FOR][%d] END LOOP",brick->counter); 
 
 						// reset vector
-						vector->data = NULL;
+						vector->pointer = NULL;
 
 						// reset counter
 						brick->counter = 0;
@@ -1225,7 +1225,7 @@ void __cls_plug_flow_operator_get(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 						// get pointer
 						float *ptr = vlst->data;
 						// do pointer arithmetic
-						vector->data = ptr + (vlst->length * i);
+						vector->pointer = ptr + (vlst->length * i);
 
 					}
 					else
@@ -1233,7 +1233,7 @@ void __cls_plug_flow_operator_get(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 						t_vector *vector = plug_result->data;
 						set_int(plug_indice->data,vlst->count-1);
 						float *ptr = vlst->data;
-						vector->data = ptr + (vlst->length * (vlst->count-1));
+						vector->pointer = ptr + (vlst->length * (vlst->count-1));
 					}
 
 					t_plug *plug_result_out = &brick_result->plug_out;
@@ -1365,7 +1365,7 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 		if(set_value)
 		{
 			vector_self = plug->data;
-			t_vlst *vlst = vector_self->vlst;
+			t_vlst *vlst = vector_self->vector;
 			float *data = vlst->data;
 
 			// Set vector from x y z
@@ -1378,13 +1378,14 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 		}
 	}
 
+	// If Src or Dst
 	if(src_plug)
 	{
 		t_data_type type = src_plug->data_type;
 
 		switch(type)
 		{
-			// + VECTOR
+			// case VECTOR
 			case dt_vector:
 
 				// Copy Vectors
@@ -1415,7 +1416,7 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 				}
 				
 				// Check for Pointer
-				vector_data = vector_self->data;
+				vector_data = vector_self->pointer;
 
 				// If Ptr : for loop
 				//-- wait for initialisation from for loop
@@ -1437,7 +1438,7 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 				{
 					if(C->ui->show_step) term_log("[VECTOR] set vlst");
 					// Get Vector Vlst
-					t_vlst *vlst = vector_self->vlst;
+					t_vlst *vlst = vector_self->vector;
 					vector_data = vlst->data;
 
 					// set x y z

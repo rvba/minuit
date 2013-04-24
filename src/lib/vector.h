@@ -23,8 +23,8 @@ struct Vector
 	t_data_type type;
 	int length;
 
-	void *data;
-	t_vlst *vlst;
+	void *pointer;
+	t_vlst *vector; // need data refactoring, generic data storage
 };
 
 struct Vector_Class
