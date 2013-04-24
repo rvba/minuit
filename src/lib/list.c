@@ -237,6 +237,21 @@ t_link *list_add(t_lst *lst,void *data)
 
 void list_remove(t_lst *lst);
 
+void list_remove_by_name(t_lst *lst, const char *name)
+{
+	t_link *link;
+	t_generic *g;
+
+	for(link = lst->first; link; link = link->next)
+	{
+		g = (t_generic *) link->data;
+		if(is (g->name, name))
+		{
+			lst_link_remove(lst,link);
+		}
+	}
+}
+
 void _link_free(t_link *link)
 {
 	free(link);

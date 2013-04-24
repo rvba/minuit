@@ -36,6 +36,30 @@ void __log__(int status,char *fmt, ...)
 	}
 }
 
+/*
+size_t get_memory_peak(void)
+{
+    struct rusage rusage;
+    getrusage( RUSAGE_SELF, &rusage );
+    return (size_t)(rusage.ru_maxrss * 1024L);
+}
+*/
+
+size_t get_memory_usage(void)
+{
+    long rss = 0L;
+    FILE* fp = NULL;
+    if ( (fp = fopen( "/proc/self/statm", "r" )) == NULL )
+        return (size_t)0L;     	// open error 
+    if ( fscanf( fp, "%*s%ld", &rss ) != 1 )
+    {
+        fclose( fp );
+        return (size_t)0L;     // read error
+    }
+    fclose( fp );
+    return (size_t)rss * (size_t)sysconf( _SC_PAGESIZE);
+}
+
 inline void negate_int(void *_dst)
 {
 	int *dst = _dst;
@@ -143,6 +167,11 @@ void clock_init(t_clock *clock)
 	gettimeofday(&tv,NULL);
 	clock->start_time=tv.tv_sec * 1000 + tv.tv_usec/1000;
 	clock->limit=0.05;
+}
+
+void clock_free(t_clock *clock)
+{
+	free(clock);
 }
 
 // CLOCK

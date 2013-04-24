@@ -137,9 +137,13 @@ struct Event
 	char standby_char;
 	char *standby_string;
 	int video_record;
+	int video_store;
+	int video_stop_call;
 	int video_stop;
 	int video_init;
 	int video_frame;
+	int video_frame_number;
+	int video_frames_in_memory;
 
 	int brick_delete;
 

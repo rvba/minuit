@@ -35,6 +35,7 @@
 #include <jpeglib.h>
 #include <png.h>
 #include <sys/stat.h>
+#include <sys/resource.h>
 
 #define PI 3.14159655f
 
@@ -245,6 +246,7 @@ void set_name_long(char *dst,const char *src);
 void set_path(char *dst,const char *src);
 inline int is(const char a[],const char b[]);
 void clock_init(t_clock *clock);
+void clock_free(t_clock *clock);
 t_clock *clock_new(void);
 
 // IMG
@@ -426,5 +428,6 @@ void sys_git_get(void);
 
 void img_save_video(int width, int height, const char *name,unsigned char *image);
 
+size_t get_memory_usage(void);
 
 #endif

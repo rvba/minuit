@@ -150,8 +150,11 @@ struct App
 
 	t_file *file;
 	t_lst *video_frames;
+	t_lst *video_frames_swap;
+
 	int video_offset;
 	int video_build;
+	int video_limit;
 };
 
 int app_get_frame(void);

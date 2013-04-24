@@ -43,6 +43,7 @@ struct Engine
 	float global_freq;
 
 	t_lst *processes;
+	t_lst *garbage;
 };
 
 // ENGINE.C
@@ -55,6 +56,9 @@ void engine_stop(void);
 void engine_start_job(t_engine *engine,int id);
 void engine_stop_job(t_engine *engine,int id);
 
-t_process *engine_process_get(t_engine *engine,char *name);
+t_process *engine_process_get(t_engine *engine,const char *name);
+void engine_process_remove(t_engine *engine, const char *name);
+
+void engine_cleanup(t_engine *engine);
 
 #endif

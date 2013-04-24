@@ -113,6 +113,7 @@ void list_free(t_lst *lst);
 void _link_free(t_link *link);
 
 
+void list_remove_by_name(t_lst *lst, const char *name);
 void lst_show_generic(t_lst *lst);
 
 void list_cleanup(t_lst *lst);

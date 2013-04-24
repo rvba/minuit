@@ -14,7 +14,10 @@ typedef struct Process t_process;
 
 struct Process
 {
-	char *name;
+	int id;
+	int id_chunk;
+	short users;
+	char name[_NAME_];
 
 	pthread_t thread;
 	t_clock *clock;
@@ -27,6 +30,10 @@ struct Process
 	int limit;
 	int play;
 	int cycle;
+	int done;
+	int busy;
 };
+
+void process_free(t_process *process);
 
 #endif

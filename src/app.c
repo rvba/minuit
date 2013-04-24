@@ -12,6 +12,7 @@
 #define APP_BUFFER 1
 #define APP_PLAY 1
 #define APP_WITH_GLUT 1
+#define APP_VIDEO_LIMIT 20
 
 #include "app.h"
 
@@ -310,8 +311,10 @@ t_app *app_new(int argc,char **argv)
 	file_init(app->file);
 
 	app->video_frames = lst_new("video");
+	app->video_frames_swap = lst_new("video swap");
 	app->video_offset = 0;
-	app->video_build = 0;
+	app->video_build = 1;
+	app->video_limit = APP_VIDEO_LIMIT;
 
 	clock_init(app->clock);
 
