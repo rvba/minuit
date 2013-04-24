@@ -149,6 +149,9 @@ struct App
 	char *file_path;
 
 	t_file *file;
+	t_lst *video_frames;
+	int video_offset;
+	int video_build;
 };
 
 int app_get_frame(void);

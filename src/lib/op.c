@@ -99,7 +99,8 @@ t_node *make_menu_ui(void)
 	add_brick_switch(C,block,"show states",&C->ui->show_states);
 	add_brick_switch(C,block,"show step",&C->ui->show_step);
 	add_brick_switch(C,block,"show brick step",&C->ui->show_brick_step);
-	add_brick_switch(C,block,"video",&C->event->video);
+	add_brick_switch(C,block,"video build",&C->app->video_build);
+	add_brick_slider_int(C,block,"video offset",&C->app->video_offset);
 
 	return menu;
 }

@@ -161,41 +161,76 @@ void ctx_render_selection(t_context *C)
 	}
 }
 
-int video_init=0;
-unsigned char *buffer=NULL;
+void ctx_switch_record_video(t_context *C)
+{
+	if(C->event->video_record)
+	{
+		C->event->video_stop= 1;
+		term_log("record stop");
+	}
+	else
+	{
+		C->event->video_record = 1;
+		term_log("record start");
+	}
+}
 
-int frame_offset=10;
-int last_frame;
 
 void ctx_render_video(t_context *C)
 {
-	/*
 	int width = C->app->window->width;
 	int height = C->app->window->height;
 
-	if(!video_init)
+	if(C->event->video_init)
 	{
-		video_init = 1;
-		buffer = (unsigned char *)malloc(sizeof(unsigned char *)*width*height*4);
-		last_frame=0;
+		C->event->video_init = 1;
+		C->event->video_frame = C->app->frame;
 	}
 
-	int f = C->app->frame - last_frame ;
-
-	if(f>frame_offset) 
+	if(C->event->video_stop)
 	{
-		last_frame = C->app->frame;
+		C->event->video_stop = 0;
 
-	glPixelStorei(GL_PACK_ALIGNMENT, 1);
-	glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, buffer);
+		t_link *link;
+		unsigned char *frame;
+		int f = 1;
 
-	char name[30];
-	sprintf(name,"./video/%d.jpg",C->app->frame);
-	img_save_video(width,height,name,buffer);
+		for(link = C->app->video_frames->first; link; link = link->next)
+		{
+			frame = link->data;
+			char filename[200];
+			sprintf(filename,"video/f%04d.jpg",f);
+			img_save_video(width,height,filename,frame);
+			free(frame);
+			f++;
+		}
 
+		if(C->app->video_build)
+		{
+			system("ffmpeg -f image2 -i video/f%04d.jpg -r 25 -b 5000k video/video.avi &");
+		}
+
+		lst_cleanup(C->app->video_frames);
+
+		C->event->video_record = 0;
+		C->event->video_init = 0;
 	}
-	*/
+	else
+	{
+		int f = C->app->frame - C->event->video_frame;
 
+		if(f >= C->app->video_offset) 
+		{
+			C->event->video_frame = C->app->frame;
+
+			unsigned char *buffer = (unsigned char *)malloc(sizeof(unsigned char *)*width*height*4);
+
+			glPixelStorei(GL_PACK_ALIGNMENT, 1);
+			glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, buffer);
+
+			lst_add(C->app->video_frames,buffer,"frame");
+		}
+	}
 }
 
 void ctx_render(t_context *C)
@@ -210,6 +245,6 @@ void ctx_render(t_context *C)
 
 		app_swap(C->app);
 
-		if(C->event->video) ctx_render_video(C);
+		if(C->event->video_record) ctx_render_video(C);
 	}
 }

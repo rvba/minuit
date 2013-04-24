@@ -122,8 +122,6 @@ void ctx_app(t_context *C)
 	ctx_load_file(C);
 	// set time
 	app_clock(C->app);
-	// save image
-	screen_record();
 	// frame++
 	C->app->frame++;
 	// set timer

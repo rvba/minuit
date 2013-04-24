@@ -136,7 +136,11 @@ struct Event
 	int standby_int;
 	char standby_char;
 	char *standby_string;
-	int video;
+	int video_record;
+	int video_stop;
+	int video_init;
+	int video_frame;
+
 	int brick_delete;
 
 	int switch_plug_in_flow_in;

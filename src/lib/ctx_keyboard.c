@@ -136,6 +136,7 @@ void keymap_command(unsigned char key)
 				else
 				op_camera_rotate(C,0,-15);break; // down
 
+		case 'a': ctx_switch_record_video(C); break;
 		case 'q': op_quit(NULL);break;
 		case '.': op_camera_reset_pos(C->camera);break;
 		case '5': op_camera_switch_type(C->camera);break;

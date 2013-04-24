@@ -309,6 +309,10 @@ t_app *app_new(int argc,char **argv)
 	app->file = file_new("void");
 	file_init(app->file);
 
+	app->video_frames = lst_new("video");
+	app->video_offset = 0;
+	app->video_build = 0;
+
 	clock_init(app->clock);
 
 	return app;

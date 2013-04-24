@@ -83,7 +83,10 @@ t_event *event_new(void)
 	event->standby_int=0;
 	event->standby_char='\0';
 	event->standby_string=NULL;
-	event->video = 0;
+	event->video_record = 0;
+	event->video_init = 0;
+	event->video_frame =0;
+	event->video_stop = 0;
 
 	event->brick_delete = 0;
 

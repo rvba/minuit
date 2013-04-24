@@ -238,4 +238,6 @@ t_context *ctx_init(int argc,char **argv);
 void exe_init(void);
 void brick_remove(t_dict *args);
 
+void ctx_switch_record_video(t_context *C);
+
 #endif

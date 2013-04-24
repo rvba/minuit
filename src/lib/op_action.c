@@ -136,6 +136,7 @@ int op_quit(t_node *node)
 
 // SCREEN
 
+/*
 void screen_start_record(void)
 { 
 	t_context *C = ctx_get();
@@ -150,6 +151,7 @@ void screen_stop_record(void)
 	if(C->event->rec_save)
 		system("ffmpeg -f image2 -i ./data/movie/file-%04d.jpg -r 25 -b 5000k ./data/movie/out.avi &");
 }
+*/
 
 void screen_capture(const char name[])
 {
@@ -158,6 +160,7 @@ void screen_capture(const char name[])
 	img_save_jpg(C->app->window->width,C->app->window->height,name);
 }
 
+/*
 void screen_record(void)
 {
 	t_context *C = ctx_get();
@@ -186,6 +189,7 @@ void screen_record(void)
 		C->event->frame_rec++;
 	}
 }
+*/
 
 
 
