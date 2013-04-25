@@ -651,13 +651,13 @@ void txt_layout_init(void)
 
 }
 
-void txt_letter_draw(char letter,float factor_x,float factor_y)
+void txt_letter_draw(char letter,float factor_x,float factor_y, int line_width)
 {
 	int *points=LAYOUT[(int)letter];
 
 	if(points)
 	{
-		glLineWidth(1);
+		glLineWidth(line_width);
 		glBegin(GL_LINES);
 
 			while(*points!=_BK)
@@ -686,27 +686,79 @@ void txt_draw(t_txt *txt)
 	t_skt *skt = C->skt;
 	float i = skt->intensity;
 
+	int font_type;
+	void * font;
+	float zoom = C->ui->zoom;
+	int line_width = 1;
+
 	if(C->ui->use_bitmap_font && txt->use_bitmap_font)
+	{
+		font_type = 1;
+		font = GLUT_BITMAP_HELVETICA_10;
+
+		if(C->event->ui.use_scale)
+		{
+			if(zoom > 1.3)
+			{
+				font_type = 2;
+			}
+			else if(zoom > 1.1)
+			{
+				font = GLUT_BITMAP_HELVETICA_12;
+			}
+			else if(zoom > 0.9)
+			{
+				font = GLUT_BITMAP_HELVETICA_10;
+			}
+			else if(zoom > 0.5)
+			{
+				font_type = 2;
+			}
+			else
+			{
+				font_type = 0;
+			}
+		}
+
+	}
+	else
+	{
+		font_type = 2;
+
+	
+	}
+
+
+	if(font_type == 1)
 	{
 		glColor3f(c[0]*i,c[1]*i,c[2]*i); 
 		glRasterPos2i(0,0);
 
-		void * font = GLUT_BITMAP_HELVETICA_10;
+		//void * font = GLUT_BITMAP_HELVETICA_10;
+
 		while(*letter)
 		{
 			glutBitmapCharacter(font,*letter);
 			letter++;
 		}
 	}
-	else
+	else if(font_type == 2)
 	{
 		glPushMatrix();
 
 		glColor3f(c[0],c[1],c[2]); 
+
+		float _zoom = 0.7;
+
+		if(zoom > 1.8)
+		{
+			line_width = 2;
+		}
+
 		while(*letter)
 		{
-			txt_letter_draw(*letter,txt->letter_scale_x,txt->letter_scale_y);
-			glTranslatef(txt->letter_width,0,0);
+			txt_letter_draw(*letter,txt->letter_scale_x*_zoom,txt->letter_scale_y*_zoom, line_width);
+			glTranslatef(txt->letter_width*_zoom,0,0);
 			letter++;
 		}
 

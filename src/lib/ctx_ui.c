@@ -121,6 +121,7 @@ void ctx_ui_show_hide_menu(t_context *C)
 		if(
 			!C->event->camera_rotation
 			&& !C->event->ui.pan
+			&& !C->event->ui.zoom
 			
 			)
 		{
@@ -237,8 +238,8 @@ void ctx_ui_linking(t_context *C)
 
 	// mouse pos
 
-	C->event->end_x=C->app->mouse->x;
-	C->event->end_y=C->app->mouse->y;
+	C->event->end_x=(C->app->mouse->x-C->ui->pan_x)/C->ui->zoom;
+	C->event->end_y=(C->app->mouse->y-C->ui->pan_y)/C->ui->zoom;
 }
 
 // UPDATE MOUSE MENU

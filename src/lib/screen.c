@@ -111,6 +111,8 @@ void screen_desk(t_screen *screen)
 	glLoadIdentity();
 
 	glTranslatef(C->ui->pan_x,C->ui->pan_y,0);
+	float zoom = C->ui->zoom;
+	glScalef(zoom,zoom,zoom);
 
 
 	ui_draw_mouse();

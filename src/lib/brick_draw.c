@@ -135,8 +135,10 @@ void brick_draw_link(t_brick *brick)
 			float bx = (float)block_target->pos[0]-brick->geom.height/2;
 			float by = (float)block_target->pos[1]+(float)((brick_target->geom.block_pos*brick->geom.height)+(brick->geom.height/2));
 
-			float v1[3] = {ax,ay,0};
-			float v2[3] = {bx,by,0};
+			float zoom = C->ui->zoom;
+
+			float v1[3] = {ax*zoom,ay*zoom,0};
+			float v2[3] = {bx*zoom,by*zoom,0};
 			float *color=C->ui->front_color;
 			int width=1;
 			

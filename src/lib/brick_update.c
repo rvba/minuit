@@ -245,23 +245,19 @@ void cls_brick_update(t_brick *brick)
 	t_context *C = ctx_get();
 	t_brick_mode mode = brick->mode;
 
-
 	t_plug *plug_in = &brick->plug_in;
 	t_plug *plug_out = &brick->plug_out;
 
 	int button_left=C->app->mouse->button_left;
 	int button_right=C->app->mouse->button_right;
-	//int button_middle=C->app->mouse->button_middle;
 	int mouse_over = is_mouse_over_brick(C,brick);
 	int brick_clic=0;
-	//int button_middle_clic=0;
 
 	float mouse_pos[3];
 	vset(mouse_pos,0,0,0);
 
 
 	if(mouse_over && button_left==button_pressed && (brick->state.is_mouse_over_plug_in==0) && (brick->state.is_mouse_over_plug_out==0)) brick_clic=1;
-	//if(mouse_over && button_middle==button_pressed) button_middle_clic=1;
 
 	// IDLE
 
@@ -336,7 +332,7 @@ void cls_brick_update(t_brick *brick)
 
 	// MODES
 
-	if(!C->event->ui.pan && !C->event->camera_rotation)
+	if(!C->event->ui.pan && !C->event->camera_rotation && !C->event->ui.zoom)
 	{
 		switch(mode)
 		{

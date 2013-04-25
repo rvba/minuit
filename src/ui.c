@@ -14,7 +14,6 @@ t_txt *txt_intro;
 void ui_draw_mouse(void)
 {
 	t_context *C = ctx_get();
-
 	if(C->ui->show_mouse && (C->draw->mode != mode_selection))
 	{
 		float *color=C->ui->front_color;
@@ -32,7 +31,6 @@ void ui_draw_mouse(void)
 		skt_point(pos,C->ui->mouse_size,color);
 		C->event->ui.use_point_global_width = 1;
 		glPopMatrix();
-
 	}
 }
 
@@ -41,14 +39,18 @@ void ui_draw_lines(void)
 	t_context *C=ctx_get();
 	if(C->event->is_drawing && C->draw->mode==mode_draw)
 	{
+		float zoom = C->ui->zoom;
+
 		float start[3] = {
-				(float)C->event->start_x/C->ui->zoom,
-				(float)C->event->start_y/C->ui->zoom,
+				(float)C->event->start_x,
+				(float)C->event->start_y,
+				0
 				};
 
 		float end[3] = {
-				(float)C->event->end_x - C->ui->pan_x,
-				(float)C->event->end_y - C->ui->pan_y,
+				(float)C->event->end_x ,
+				(float)C->event->end_y ,
+				0
 				};
 
 		float *color=C->ui->front_color;
@@ -110,10 +112,8 @@ void ui_draw_grid(void)
 		skt_line(d,a,w,color);
 
 		// divisions
-		
 		float xx = (float)divx;
 		float yy = (float)divy;
-
 		float dx = width/xx;
 		float dy = height/yy;
 
@@ -124,13 +124,11 @@ void ui_draw_grid(void)
 
 			float l0[3]={x,0,0};
 			float l1[3]={x,height,0};
-
 			float l2[3]={x+1,0,0};
 			float l3[3]={x+1,height,0};
 
 			skt_line(l0,l1,w,color);
 			skt_line(l2,l3,w,color);
-			
 		}
 			
 		// horizontals
@@ -140,7 +138,6 @@ void ui_draw_grid(void)
 
 			float l0[3]={0,y,0};
 			float l1[3]={width,y,0};
-			
 			float l2[3]={0,y+1,0};
 			float l3[3]={width,y+1,0};
 
@@ -189,6 +186,8 @@ void ui_draw_term(void)
 	t_context *C=ctx_get();
 	if(C->ui->show_term)
 	{
+		C->event->ui.use_scale = 0;
+
 		if(C->draw->mode==mode_draw)
 		{
 			t_link *l;
@@ -198,10 +197,9 @@ void ui_draw_term(void)
 				t = l->data;
 				t->draw(t);
 			}
-
-			//C->term->draw(C->term);
 		}
 
+		C->event->ui.use_scale = 1;
 	}
 }
 
@@ -215,9 +213,11 @@ void ui_draw_menu(void)
 
 	if(C->ui->show_menu)
 	{
+		C->event->ui.use_scale = 0;
 		node=scene_node_get(C->scene,"block","menu_mouse");
 		menu=node->data;
 		menu->cls->draw(menu);
+		C->event->ui.use_scale = 1;
 	}
 }
 
@@ -280,9 +280,18 @@ void ui_draw(void)
 		C->event->ui.pan = 1;
 	}
 
-	if(C->event->ui.pan && C->app->mouse->button_right == button_released)
+	if(
+		(C->event->ui.pan || C->event->ui.zoom)
+		&& C->app->mouse->button_right == button_released)
 	{
 		C->event->ui.pan = 0;
+		C->event->ui.zoom = 0;
+	}
+
+	if(C->app->mouse->button_right == button_pressed && C->app->keyboard->alt)
+	{
+		C->event->ui.zoom = 1;
+		C->ui->zoom+=(C->app->mouse->sign_y * C->app->mouse->dy * 0.01);
 	}
 
 	if(C->ui->draw)
@@ -301,7 +310,6 @@ void ui_init(void)
 	txt_intro->use_bitmap_font=0;
 
 	t_context *C=ctx_get();
-	//op_switch_color(C);
 	op_set_color(C,C->draw->color);
 }
 
