@@ -9,20 +9,6 @@
 
 #include "context.h"
 
-void show_buffer(void)
-{
-	t_context *C=ctx_get();
-	int i;
-
-	printf("buffer:");
-	for(i=0;i<C->event->buffer_char_counter;i++)
-	{
-		printf("%c",C->event->buffer_char[i]);
-	}
-
-	printf("\n");
-}
-
 // CONNECT
 
 void cls_brick_connect(t_brick *brick_in ,t_brick *brick_out)
@@ -77,6 +63,7 @@ int brick_start_cloning(t_context *C,int mouse_over)
 {
 	if(
 		mouse_over
+		&& !C->event->ui.is_menu_show
 		&& (C->app->mouse->button_left == button_pressed)
 		&& (C->app->keyboard->ctrl || C->app->keyboard->shift)
 		)
@@ -321,6 +308,8 @@ void cls_brick_update(t_brick *brick)
 			}
 		}
 	}
+
+	// Debug
 
 	if(brick->state.is_mouse_over && brick->state.debug)
 	{

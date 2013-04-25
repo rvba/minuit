@@ -70,9 +70,10 @@ void ctx_ui_menu_hide(t_context *C)
 	}
 	else
 	{
-		if(C->app->keyboard->alt)
+		if(C->app->keyboard->shift)
 		{
 			C->event->ui.is_menu_fixed = 1;
+			C->app->keyboard->shift = 0;
 			release = 0;
 		}
 	}
@@ -99,13 +100,12 @@ void ctx_ui_menu_show(t_context *C)
 	C->event->ui.is_menu_released=0;
 
 	// set new menu location  
-	float r[2];
-	ctx_get_mouse_pos(C,r);
 
-	C->ui->menu_pos[0] = r[0]+10;
-	C->ui->menu_pos[1] = r[1]+10;
+	C->ui->menu_pos[0] = C->app->mouse->x + 10;
+	C->ui->menu_pos[1] = C->app->mouse->y + 10;
 
 	t_node *menu = scene_node_get(C->scene,"block","menu_mouse");
+
 	t_block *m = menu->data;
 	m->pos[0] = C->ui->menu_pos[0];
 	m->pos[1] = C->ui->menu_pos[1];
@@ -181,7 +181,8 @@ void ctx_ui_background_button_left_test(t_context *C)
 void ctx_ui_background(t_context *C)
 {
 	// test background
-	if(!C->event->is_brick_transformed && !C->app->keyboard->shift)
+	//if(!C->event->is_brick_transformed && !C->app->keyboard->shift)
+	if(!C->event->is_brick_transformed)
 	{
 		ctx_ui_background_button_left_test(C);
 	}

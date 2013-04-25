@@ -33,6 +33,8 @@ t_event *event_new(void)
 
 	event->ui.pan = 0;
 	event->ui.zoom = 0;
+	event->ui.pan_x = 0;
+	event->ui.pan_y = 0;
 
 	event->is_selection=0;
 

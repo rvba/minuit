@@ -115,8 +115,9 @@ int is_mouse_over_brick(t_context *C,t_brick *brick)
 
 void ctx_get_mouse_pos(t_context *C,float *r)
 {
-		float x = ((float)(C->app->mouse->x));
-		float y = ((float)(C->app->mouse->y));
-		r[0]=x;
-		r[1]=y;
+	float x = (float)(C->app->mouse->x-C->ui->pan_x)/C->ui->zoom;
+	float y = (float)(C->app->mouse->y-C->ui->pan_y)/C->ui->zoom;
+
+	r[0]=x;
+	r[1]=y;
 }

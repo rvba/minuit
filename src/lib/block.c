@@ -149,15 +149,11 @@ t_lst *block_get_connections(const char *gate,t_block *block)
 
 void _add_block(t_context *C,t_block *block)
 {
-	// GET LIST
+	// get list
 	t_lst *list=get_target_list(C);
 
-	// ADD TO MAIN LIST
+	// add to main list
 	list_add_global(list,block);
-
-	// SET BLOCK POS
-	vset3f(block->pos,C->app->mouse->x,C->app->mouse->y,0);
-
 }
 
 t_block *block_clone(t_block *block)

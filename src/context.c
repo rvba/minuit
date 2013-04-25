@@ -162,6 +162,7 @@ void ctx_reset(t_context *C)
 	if(
 		!(app->mouse->button_left == button_pressed) 
 		&& !(app->mouse->button_right == button_pressed)
+		&& !(C->event->ui.is_menu_show)
 		)
 	{
 		app->keyboard->ctrl=0;

@@ -57,17 +57,6 @@ void ctx_camera_movment(t_context *C)
 				// camera translate	
 				op_camera_translate(C);
 			}
-			else if (app->mouse->button_left == button_pressed)	
-			{
-				if(app->keyboard->shift)
-				{
-					C->ui->pan_x+=(C->app->mouse->dx*2*C->app->mouse->sign_x);
-					C->ui->pan_y+=(C->app->mouse->dy*2*C->app->mouse->sign_y);
-				}
-			}
-			else if (app->mouse->button_right == button_pressed)
-			{
-			}
 
 
 			if (app->mouse->wheel == wheel_up)

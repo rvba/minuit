@@ -39,8 +39,6 @@ void ui_draw_lines(void)
 	t_context *C=ctx_get();
 	if(C->event->is_drawing && C->draw->mode==mode_draw)
 	{
-		float zoom = C->ui->zoom;
-
 		float start[3] = {
 				(float)C->event->start_x,
 				(float)C->event->start_y,
@@ -274,8 +272,9 @@ void ui_draw(void)
 	// PAN
 	if(C->app->mouse->button_right == button_pressed && C->app->keyboard->ctrl)
 	{
-		C->ui->pan_x+=C->app->mouse->dx*C->app->mouse->sign_x*2;
-		C->ui->pan_y+=C->app->mouse->dy*C->app->mouse->sign_y*2;
+
+		C->ui->pan_x = C->event->ui.pan_x + (C->app->mouse->x - C->app->mouse->last_x);
+		C->ui->pan_y = C->event->ui.pan_y + (C->app->mouse->y - C->app->mouse->last_y);
 
 		C->event->ui.pan = 1;
 	}
@@ -286,12 +285,19 @@ void ui_draw(void)
 	{
 		C->event->ui.pan = 0;
 		C->event->ui.zoom = 0;
+
+		C->event->ui.pan_x = C->ui->pan_x;
+		C->event->ui.pan_y = C->ui->pan_y;
 	}
 
 	if(C->app->mouse->button_right == button_pressed && C->app->keyboard->alt)
 	{
 		C->event->ui.zoom = 1;
-		C->ui->zoom+=(C->app->mouse->sign_y * C->app->mouse->dy * 0.01);
+		float zoom = C->ui->zoom;
+		zoom += C->app->mouse->sign_y * C->app->mouse->dy * 0.01;
+
+		if(zoom  > 0.1)
+			C->ui->zoom+=(C->app->mouse->sign_y * C->app->mouse->dy * 0.01);
 	}
 
 	if(C->ui->draw)

@@ -458,8 +458,12 @@ t_node *add_block(t_context *C,const char *name)
 	// ADD TO MAIN LIST
 	list_add_global(list,block);
 
+	float p[2];
+	ctx_get_mouse_pos(C,p);
+
 	// SET BLOCK POS
-	vset3f(block->pos,C->app->mouse->x-C->ui->pan_x,C->app->mouse->y-C->ui->pan_y,0);
+	//vset3f(block->pos,C->app->mouse->x-C->ui->pan_x,C->app->mouse->y-C->ui->pan_y,0);
+	vset3f(block->pos,p[0],p[1],0);
 
 	return node_block;
 }

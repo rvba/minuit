@@ -20,3 +20,4 @@ out
 git.c
 minuit.save
 minuit.log
+video/*

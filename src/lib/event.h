@@ -61,6 +61,9 @@ struct State_Event_UI
 
 	int use_point_global_width:1;
 	int use_scale:1;
+
+	int pan_x;
+	int pan_y;
 };
 
 struct Event
