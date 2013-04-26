@@ -101,6 +101,12 @@ void vector_op_copy(t_vector *dst, t_vector *src)
 	float *v_dst = vlst_dst->data;
 
 	vcp(v_dst,v_src);
+
+	if(dst->pointer)
+	{
+		float *p = dst->pointer;
+		vset(v_dst,p[0],p[1],p[2]);
+	}
 }
 
 void vector_default(t_vector *vector)

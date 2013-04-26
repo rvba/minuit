@@ -168,6 +168,8 @@ t_block *block_clone(t_block *block)
 
 	_add_block(C,clone_block);
 
+	vcp(clone_block->pos,block->pos);
+
 	t_link *l;
 	t_brick *b;
 
@@ -193,6 +195,8 @@ t_block *block_copy(t_block *block)
 	clone_block->state.draw_outline = block->state.draw_outline;
 
 	_add_block(C,clone_block);
+
+	vcp(clone_block->pos,block->pos);
 
 	t_link *l;
 	t_brick *b;
