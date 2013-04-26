@@ -67,13 +67,15 @@ t_event *event_new(void)
 	event->rec=0;
 	event->rec_save=0;
 	event->recording=0;
+	event->show_term=CTX_SHOW_TERM;
 
 	event->debug_select=CTX_DEBUG_SELECT;
 	event->debug_mouse=CTX_DEBUG_MOUSE;
 	event->debug_process=DEBUG_PROCESS;
 	event->debug_console=DEBUG_CONSOLE;
 	event->debug_terminal=DEBUG_TERMINAL;
-	event->show_term=CTX_SHOW_TERM;
+	event->debug_loop = DEBUG_LOOP;
+
 	event->free_scene=FREE_SCENE;
 
 	vset(event->color_front,1,1,1);

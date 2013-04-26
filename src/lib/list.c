@@ -52,6 +52,34 @@ void lst_remove_doubles(t_lst *lst)
 	}
 }
 
+void list_show(t_lst *lst)
+{
+	t_context *C = ctx_get();
+
+	t_link *l;
+	t_generic *g;
+
+	if(C->event->debug_terminal)
+	{
+		printf("lst_show %s\n",lst->name);
+		for(l=lst->first;l;l=l->next)
+		{
+			g = (t_generic *) l->data;
+			printf("%s\n",g->name);
+		}
+	}
+
+	if(C->event->debug_console)
+	{
+		term_log("lst_show %s\n",lst->name);
+		for(l=lst->first;l;l=l->next)
+		{
+			g = (t_generic *) l->data;
+			term_log("%s\n",g->name);
+		}
+	}
+}
+
 void lst_show_generic(t_lst *lst)
 {
 	printf("lst_show %s\n",lst->name);
@@ -148,7 +176,6 @@ void lst_node_delete_all(t_lst *lst)
 
 // FIND NODE BY ID
 
-//void *lst_get_by_id(t_lst *lst,int id)
 t_link *lst_get_by_id(t_lst *lst,int id)
 {
 	t_link *l;

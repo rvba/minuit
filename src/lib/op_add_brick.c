@@ -60,6 +60,7 @@ t_node *add_brick_slider_int(t_context *C,t_block *block,const char *name,void *
 	
 	// ACTION
 	brick->action=op_slider;
+	brick->state.draw_outline = 0;
 
 	// PLUG
 	set_plug_option(brick);
@@ -77,6 +78,7 @@ t_node *add_brick_slider_char(t_context *C,t_block *block,const char *name,void 
 	
 	// ACTION
 	brick->action=op_slider;
+	brick->state.draw_outline = 0;
 
 	// PLUG
 	set_plug_option(brick);
@@ -96,6 +98,7 @@ t_node *add_brick_slider_float(t_context *C,t_block *block,const char *name,void
 	
 	// ACTION
 	brick->action=op_slider;
+	brick->state.draw_outline = 0;
 
 	// PLUG
 	set_plug_option(brick);
@@ -113,6 +116,7 @@ t_node *add_brick_float(t_context *C,t_block *block,const char *name,void *data_
 	
 	// ACTION
 	brick->action=op_float;
+	brick->state.draw_outline = 0;
 
 	// PLUG
 	set_plug_option(brick);
@@ -455,14 +459,13 @@ t_node *add_block(t_context *C,const char *name)
 
 	block->state.draw_outline = 1;
 
-	// ADD TO MAIN LIST
+	// add to main list
 	list_add_global(list,block);
 
 	float p[2];
 	ctx_get_mouse_pos(C,p);
 
-	// SET BLOCK POS
-	//vset3f(block->pos,C->app->mouse->x-C->ui->pan_x,C->app->mouse->y-C->ui->pan_y,0);
+	// set block pos
 	vset3f(block->pos,p[0],p[1],0);
 
 	return node_block;

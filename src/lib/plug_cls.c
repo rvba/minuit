@@ -254,8 +254,19 @@ void set_in_loop(t_brick *brick, int state)
 		}
 	}
 
+
+	t_context *C = ctx_get();
+	if(C->event->debug_loop)
+	{
+		term_log("set in loop %s",brick->name);
+		list_show(lst);
+	}
+
 	lst_free(lst);
+
 }
+
+// CONNECT GENERAL
 
 void cls_plug_connect_general(t_plug_mode mode, t_plug *self, t_plug *dst)
 {
@@ -267,36 +278,39 @@ void cls_plug_connect_general(t_plug_mode mode, t_plug *self, t_plug *dst)
 	t_plug *plug_dst_in = &brick_dst->plug_in;
 	t_plug *plug_dst_out = &brick_dst->plug_out;
 	
+	// Mode In
 	if(mode == mode_in)
 	{
+		// Connect
 		plug_in->src = plug_dst_out;
 		plug_in->is_connected = 1;
 
+		// Versatil
 		if(brick->state.is_versatil)
 		{
 			if(self->data_type != dst->data_type)
 			{
-				// change type
+				// Change Type
 				brick_type_change(brick,dst);
 			}
 		}
 	}
+	// Mode Out
 	else
 	{
-		// connect
+		// Connect
 		plug_out->dst = plug_dst_in;
 		plug_out->is_connected = 1;
 	}
 
-	// close flow in
+	// Close flow in
 	if(dst->close_flow_in && self->use_flow)
 	{
 		t_plug *plug_in = &brick->plug_in;
 		plug_in->flow_in = 0;
 	}
 
-	// set in loop
-	//XXX
+	// Set in Loop
 	if(!self->is_a_loop)
 	{
 		if(dst->is_a_loop || dst->is_in_loop)
@@ -306,24 +320,28 @@ void cls_plug_connect_general(t_plug_mode mode, t_plug *self, t_plug *dst)
 	}
 }
 
+// DISCONNECT GENERAL
+
 void cls_plug_disconnect_general(t_plug_mode mode, t_plug *self)
 {
 	t_brick *brick = self->brick;
 	t_plug *plug_in = &brick->plug_in;
 	t_plug *plug_out = &brick->plug_out;
+	t_plug *dst = plug_out->dst;
 
-	// restore flow in
+	// Restore Flow In
 	if(self->use_flow)
 		plug_in->flow_in = 1;
 
-	t_plug *dst = plug_out->dst;
 
+	// Mode IN
 	if(mode == mode_in)
 	{
-		// disconnect
+		// Disconnect
 		plug_in->src = NULL;
 		plug_in->is_connected = 0;
 	}
+	// Mode Out
 	else
 	{
 		t_brick *brick_dst = dst->brick;
@@ -335,6 +353,7 @@ void cls_plug_disconnect_general(t_plug_mode mode, t_plug *self)
 			set_in_loop(brick,0);
 		}
 
+		// Disconnect
 		plug_out->dst = NULL;
 		plug_out->is_connected = 0;
 	}

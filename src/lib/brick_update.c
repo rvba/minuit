@@ -202,15 +202,20 @@ void brick_release(t_brick *brick)
 	C->ui->brick_selected=NULL;
 }
 
+// REMOVE
+
 void brick_remove(t_dict *args)
 {
 	t_context *C = ctx_get();
 
 	t_brick *brick = dict_pop_data(args,"brick");
-
 	t_block *block = brick->block;
-	list_remove_by_ptr(C->scene->global,block);
-	scene_struct_delete(C->scene,block);
+
+	if(!block_is_connected("in",block) && !block_is_connected("out",block))
+	{
+		list_remove_by_ptr(C->scene->global,block);
+		scene_struct_delete(C->scene,block);
+	}
 }
 
 
@@ -387,12 +392,6 @@ void cls_brick_update(t_brick *brick)
 							C->ui->brick_selected=brick;
 							brick->mode=bm_linking;
 							C->ui->brick_out=brick;
-
-							char msg[40];
-							char *type=data_name_get(brick->plug_intern.data_type);
-							sprintf(msg,"plug out:%s",type);
-							term_print(C->term,msg);
-
 						}
 					}
 

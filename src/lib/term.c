@@ -102,6 +102,8 @@ void term_echo(t_term *term,char *fmt, ...)
 	term_print(term,msg);
 }
 
+// DRAW
+
 void term_draw(t_term *term)
 {
 	t_link *l;
@@ -110,6 +112,7 @@ void term_draw(t_term *term)
 	glPushMatrix();
 	glLoadIdentity();
 	glTranslatef(term->loc_x,term->loc_y,0);
+
 	for(l=term->lines->first;l;l=l->next)
 	{
 		t=l->data;
@@ -119,6 +122,8 @@ void term_draw(t_term *term)
 	glPopMatrix();
 }
 
+// INIT
+
 void term_init(t_term *term)
 {
 	t_context *C=ctx_get();
@@ -126,6 +131,8 @@ void term_init(t_term *term)
 	term->loc_x=20;
 	term->loc_y=C->app->window->height*.9;
 }
+
+// RESET
 
 void term_reset(t_term *term)
 {
@@ -144,6 +151,8 @@ void term_reset(t_term *term)
 
 	term->line=0;
 }
+
+// FREE
 
 void term_free(t_term *term)
 {
@@ -164,6 +173,8 @@ void term_free(t_term *term)
 
 	free(term);
 }
+
+// NEW
 
 t_term *term_new(const char *name)
 {

@@ -129,12 +129,15 @@ struct Event
 	int recording;
 	int rec_save;
 	int frame_rec;
+	int show_term;
+
 	int debug_select;
 	int debug_mouse;
 	int debug_process;
-	int show_term;
 	int debug_console;
 	int debug_terminal;
+	int debug_loop;
+
 	int free_scene;
 	int last_frame; //last recorded camera
 

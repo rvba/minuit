@@ -151,7 +151,12 @@ void keymap_command(unsigned char key)
 		case 't': switch_txt(C);break;
 		case 'l': scene_log(C->scene);break;
 		case 'n': C->ui->step = 1; break;
-		case 'r': C->ui->step_reset = 1; break;
+		case 'r':
+			if(C->app->keyboard->alt)
+				term_reset(C->term);
+			else
+				C->ui->step_reset = 1;
+			break;
 		case 'd': C->event->brick_delete = 1; break;
 		case 'k': ctx_ui_switch_show_step(C); break;
 		case 'j': ctx_ui_switch_show_states(C); break;
