@@ -470,6 +470,7 @@ void brick_draw_txt(t_brick *brick)
 
 void brick_draw(t_brick *brick)
 {
+	t_context *C = ctx_get();
 	int draw=1;
 	if(is(brick->name,"object"))
 	{
@@ -489,6 +490,11 @@ void brick_draw(t_brick *brick)
 		{
 			draw=0;
 		}
+	}
+
+	if(brick->plug_intern.is_in_loop)
+	{
+		C->event->ui.draw_in_loop = 1;
 	}
 
 	if(draw)

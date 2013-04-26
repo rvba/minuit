@@ -182,6 +182,12 @@ void block_draw_outline(t_block *block)
 		points[10]=d[1];
 		points[11]=d[2];
 
+		if(C->event->ui.draw_in_loop)
+		{
+			glLineStipple(2, 0xAAAA);
+			glEnable(GL_LINE_STIPPLE);
+		}
+
 		skt_closedline(points,tot,color,line_width);
 
 		if(C->ui->show_step)
@@ -200,14 +206,25 @@ void block_draw_outline(t_block *block)
 			glPopMatrix();
 			txt_free(txt);
 		}
+
+		if(C->event->ui.draw_in_loop)
+		{
+			glDisable(GL_LINE_STIPPLE);
+		}
 	}
 }
 
 void cls_block_draw_block(t_block *block)
 {
+	t_context *C = ctx_get();
+
+	C->event->ui.draw_in_loop = 0;
+
 	block_update_data(block);
 	block_update_width(block);
 	block_draw_bricks(block);
 	block_draw_outline(block);
+
+	C->event->ui.draw_in_loop = 0;
 }
 	
