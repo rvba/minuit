@@ -4,16 +4,10 @@
 *.swp
 *.blend1
 *.blend2
+*.mtl
 minuit
-src/util/util
 tags
 doxyfiles
-record
-data/images/*
-data/screen*
-.cproject
-.project
-Release
 mn
 *.mn
 out

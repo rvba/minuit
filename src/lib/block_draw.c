@@ -85,39 +85,6 @@ void block_update_width(t_block *block)
 
 }
 
-int block_ref_draw_bricks(t_block *block)
-{
-	t_link *link;
-	t_brick *brick;
-
-	int pos = block->cursor;
-
-	glPushMatrix();
-	//glLoadIdentity();
-
-	// translate to block pos
-	glTranslatef(block->pos[0],block->pos[1],0);
-
-	// loop over bricks
-	for(link=block->bricks->first;link;link=link->next)
-	{
-		brick = link->data;
-
-		// pos++
-		pos++;
-
-		// draw brick
-		brick->cls->draw(brick);
-
-		// translate y
-		glTranslatef(0,brick->geom.height,0);
-	}
-
-	glPopMatrix();
-
-	return pos;
-}
-
 int block_draw_bricks(t_block *block)
 {
 	t_link *link;
@@ -126,24 +93,12 @@ int block_draw_bricks(t_block *block)
 	int pos = block->cursor;
 	int offset=2;
 
+	glPushMatrix();
 
-	// root
-	if(block->state.is_root)
-	{
-		glPushMatrix();
-		glLoadIdentity();
-		glTranslatef(block->pos[0],block->pos[1],0);
-		//glLoadIdentity();
-	}
+	// Translate to Block Pos
+	glTranslatef(block->pos[0],block->pos[1],0);
 
-	// translate to block pos
-	//glTranslatef(block->pos[0],block->pos[1],0);
-	//glPushMatrix();
-	//glLoadIdentity();
-
-
-
-	// loop over bricks
+	// Loop over Bricks
 	for(link=block->bricks->first;link;link=link->next)
 	{
 		brick = link->data;
@@ -151,56 +106,31 @@ int block_draw_bricks(t_block *block)
 		// pos++
 		pos++;
 
-		// draw brick
+		// Draw brick
 		brick->cls->draw(brick);
 
-		// translate y
-		if(brick->state.is_contextual)
-		{
-
-			t_context *C=ctx_get();
-
-			if(C->scene->selected)
-			{
-				t_node *node=C->scene->selected;
-				if(node->type==brick->context)
-				{
-					glTranslatef(0,brick->geom.height,0);
-				}
-			}
-		}
-		else
-		{
-			glTranslatef(0,brick->geom.height,0);
-		}
-
-		// if menu brick
+		// Sub-menu
 		if(brick->cls->type==bt_menu)
 		{
 			if(brick->state.show_menu)
 			{
-				// leaf
 				glPushMatrix();
 
 					// translate left
 					glTranslatef(((block->width)+offset),0,0);
-					// translate down
-					glTranslatef(0,-brick->geom.height,0);
-
 					// draw sub-block
 					t_block *menu = brick->menu;
-					menu->draw(menu);
+					menu->cls->draw(menu);
 
 				glPopMatrix();
 			}
 		}
+
+		// Translate y
+		glTranslatef(0,brick->geom.height,0);
 	}
 
-	// root
-	if(block->state.is_root)
-	{
-		glPopMatrix();
-	}
+	glPopMatrix();
 
 	return pos;
 }
@@ -273,33 +203,11 @@ void block_draw_outline(t_block *block)
 	}
 }
 
-void block_draw(t_block *block)
-{
-	block_update_data(block);
-	block_update_width(block);
-	block_draw_bricks(block);
-	block_draw_outline(block);
-}
-
-void cls_block_draw_generic(t_block *self)
-{
-}
-void cls_block_draw_menu(t_block *self)
-{
-}
-void cls_block_draw_ref(t_block *block)
-{
-	block_update_data(block);
-	block_update_width(block);
-	block_ref_draw_bricks(block);
-	block_draw_outline(block);
-}
-
 void cls_block_draw_block(t_block *block)
 {
 	block_update_data(block);
 	block_update_width(block);
-	block_ref_draw_bricks(block);
+	block_draw_bricks(block);
 	block_draw_outline(block);
 }
 	

@@ -219,7 +219,7 @@ void browser_draw(void)
 	browser_build();
 	t_block *block=BROWSER_BUTTONS->data;
 	block->state.set_global_width=1;
-	block->draw(block);
+	block->cls->draw(block);
 }
 
 void screen_browser(t_screen *screen)

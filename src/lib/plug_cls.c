@@ -1332,10 +1332,8 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 
 	float *vector_data;
 
-	// Get X Y Z bricks
+	// Get XYZ
 	brick_x = block_brick_get(block,"x");
-
-	// If Vector has x,y,z bricks
 	if(brick_x) 
 	{
 		brick_y = block_brick_get(block,"y");
@@ -1351,8 +1349,7 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 
 	}
 
-	// Set Vlst from X Y Z if not connected in  
-
+	// Set Vector Vlst from XYZ   
 	if(brick_x)
 	{
 		int set_value;
@@ -1368,7 +1365,7 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 			t_vlst *vlst = vector_self->vector;
 			float *data = vlst->data;
 
-			// Set vector from x y z
+			// Set vector from 
 			if(plug_x->data)
 			{
 				data[0] = drf_float(plug_x->data);
@@ -1395,6 +1392,7 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 				vector_op_copy(vector_self,vector_src);
 
 				// for vector
+				// Close XYZ
 				if(src_plug->is_volatil)
 				{
 					if(brick_x && mode == mode_in)
@@ -1423,11 +1421,13 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 				if(brick_x && vector_data)
 				{
 					if(C->ui->show_step) term_log("[VECTOR] set pointer %p",vector_data);
+
+					// Point XYZ
 					plug_x->data = vector_data;
 					plug_y->data = vector_data+1;
 					plug_z->data = vector_data+2;
 
-					// open x y z
+					// Open XYZ
 					plug_x_in->flow_in = 1;
 					plug_y_in->flow_in = 1;
 					plug_z_in->flow_in = 1;

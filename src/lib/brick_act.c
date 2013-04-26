@@ -1385,7 +1385,6 @@ void *op_maths(t_operation operation,t_brick *brick)
 		}
 	}
 
-
 	// Change Type && Init Result
 
 	if(is_vlst)

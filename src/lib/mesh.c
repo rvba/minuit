@@ -78,7 +78,7 @@ t_mesh *mesh_rebind(t_scene *sc,void *ptr)
 void mesh_add_brick_vertex(t_context *C,t_mesh *mesh)
 {
 	// block
-	t_node *_node_block=block_make("desk","ref");
+	t_node *_node_block=block_make("desk","block");
 	t_block *_block=_node_block->data;
 
 	// outline
@@ -99,7 +99,7 @@ void mesh_add_brick_mesh(t_context *C,t_mesh *mesh)
 {
 	// block
 
-	t_node *node_block=block_make("desk","ref");
+	t_node *node_block=block_make("desk","block");
 	t_block *block=node_block->data;
 
 	// outline
@@ -120,7 +120,7 @@ void mesh_add_brick_mesh(t_context *C,t_mesh *mesh)
 void mesh_add_brick_color(t_context *C,t_mesh *mesh)
 {
 	// block
-	t_node *_node_block = block_make("desk","ref");
+	t_node *_node_block = block_make("desk","block");
 	t_block *_block = _node_block->data;
 
 	// outline

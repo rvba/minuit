@@ -210,7 +210,7 @@ t_node *object_add(const char *type,const char *name)
 	scene_add_data_node(C->scene,"app_node","object",name,node);
 
 	// add global reference
-	t_node *node_block=block_make(name,"ref");
+	t_node *node_block=block_make(name,"block");
 	t_block *block=node_block->data;
 	object->ref=block;
 

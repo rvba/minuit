@@ -240,19 +240,6 @@ void cls_block_make_block(t_block *block);
 void cls_block_make_menu(t_block *block);
 void cls_block_make_ref(t_block *block);
 
-
-// generic
-t_block_class block_generic =
-{
-	.cls_type="block",
-	.type="generic",
-	.make=cls_block_make,
-	.link=cls_block_link,
-	.draw=cls_block_draw_generic,
-	.update=cls_block_generic_update,
-	.init=_block_init,
-};
-
 // menu
 t_block_class block_menu =
 {
@@ -260,7 +247,7 @@ t_block_class block_menu =
 	.type="menu",
 	.make=cls_block_make_menu,
 	.link=cls_block_link,
-	.draw=block_draw,
+	.draw=cls_block_draw_block,
 	.update=cls_block_menu_update,
 	.init=_block_init,
 };
@@ -277,23 +264,6 @@ t_block_class block_block =
 	.init=_block_init,
 };
 
-//ref
-t_block_class block_ref =
-{
-	.cls_type="block",
-	.type="ref",
-	.make=cls_block_make_ref,
-	.link=cls_block_link,
-	.draw=cls_block_draw_ref,
-	.update=cls_block_ref_update,
-	.init=_block_init,
-};
-
-void cls_block_make(t_block *block)
-{
-	block->cls=&block_generic;
-}
-
 void cls_block_make_block(t_block *block)
 {
 	block->cls=&block_block;
@@ -304,19 +274,10 @@ void cls_block_make_menu(t_block *block)
 	block->cls=&block_menu;
 }
 
-void cls_block_make_ref(t_block *block)
-{
-	block->cls=&block_ref;
-}
-
 t_block_class *blocks[] = {
-	&block_generic,
 	&block_menu,
 	&block_block,
-	&block_ref,
 	};
-
-
 
 void block_cls_init(t_block *block)
 {
@@ -394,9 +355,6 @@ t_block *block_rebind(t_scene *sc,void *ptr)
 	
 	rebind(sc,"block","bricks",(void **)&block->bricks);
 
-	// methods
-	block->draw=block_draw;
-
 	// reset
 	block->selected=NULL;
 	block->submenu=NULL;
@@ -408,7 +366,6 @@ t_block *block_rebind(t_scene *sc,void *ptr)
 
 	return block;
 }
-
 
 // MAKE
 
@@ -435,8 +392,6 @@ t_node *block_make(const char *name,const char *type)
 t_block *block_new(const char *name)
 {
 	t_block *block  = (t_block *)malloc(sizeof(t_block));
-
-	block->cls=&block_generic;
 
 	block->id=0;
 	block->id_chunk=0;
@@ -466,8 +421,6 @@ t_block *block_new(const char *name)
 	block->tot_bricks=0;
 	block->width=0;
 	block->graph_order = -1;
-
-	block->draw=block_draw;
 
 	return block;
 }

@@ -104,13 +104,11 @@ struct Block
 	t_block_state state;			// block state
 
 	int tot_bricks; 			// drawing plugs
-	int graph_order;				// unset = -1
+	int graph_order;			// unset > -1
 
 	t_lst *bricks;
 	t_brick *submenu;
-	t_brick *selected;
-
-	void (* draw)(t_block *block);
+	t_brick *selected;			// submenu
 };
 
 /***		PLUG		***/
