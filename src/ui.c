@@ -325,6 +325,8 @@ t_ui *ui_new(void)
 {
 	t_ui *ui = (t_ui *)malloc(sizeof(t_ui));
 
+	ui->draw_plug_state = 1;
+
 	ui->show_intro=UI_SHOW_INTRO;
 	ui->show_menu = 0;
 	ui->show_nodes = 0;

@@ -114,15 +114,14 @@ void brick_draw_link(t_brick *brick)
 
 	if(brick->state.draw_plugs)
 	{
-		t_plug *plug;
 		// draw line from plug_out
-		plug = &brick->plug_out;
+		t_plug *plug_out = &brick->plug_out;
 
-		if(plug->dst) 
+		if(plug_out->dst) 
 		{
 
 			t_block *block=brick->block;
-			t_plug *plug_target=plug->dst;
+			t_plug *plug_target=plug_out->dst;
 			t_brick *brick_target=plug_target->brick;
 
 			t_block *block_target=brick_target->block;
@@ -146,6 +145,24 @@ void brick_draw_link(t_brick *brick)
 			glLoadIdentity();
 			glTranslatef(C->ui->pan_x,C->ui->pan_y,0);
 			skt_line(v1,v2,width,color);
+
+			// draw plug state
+			if(C->ui->draw_plug_state)
+			{
+				if(plug_out->flow_out)
+				{
+					skt_point(v1,3,C->ui->front_color);
+				}
+
+				if(plug_target->flow_in)
+				{
+					skt_point(v2,3,C->ui->front_color);
+				}
+			}
+
+
+
+
 			glPopMatrix();
 		}
 	}

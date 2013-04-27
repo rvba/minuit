@@ -104,6 +104,7 @@ t_node *make_menu_ui(void)
 	add_brick_switch(C,block,"video build",&C->app->video_build);
 	add_brick_slider_int(C,block,"video offset",&C->app->video_offset);
 	add_brick_slider_int(C,block,"mouse size",&C->ui->mouse_size);
+	add_brick_slider_int(C,block,"draw plug state",&C->ui->draw_plug_state);
 
 	return menu;
 }

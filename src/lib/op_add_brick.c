@@ -48,7 +48,42 @@ void *add_brick_data(t_data_type type,void *data)
 }
 
 
-// NEW BRICK SLIDER INT
+
+
+/**		BLOCK		**/
+
+
+// NEW BLOCK 
+
+
+t_node *add_block(t_context *C,const char *name)
+{
+	// get list
+	t_lst *list=get_target_list(C);
+
+	t_node *node_block=block_make(name,"block");
+	t_block *block=node_block->data;
+
+	// Draw Outline
+	block->state.draw_outline = 1;
+
+	// add to main list
+	list_add_global(list,block);
+
+	float p[2];
+	ctx_get_mouse_pos(C,p);
+
+	// set block pos
+	vset3f(block->pos,p[0],p[1],0);
+
+	return node_block;
+}
+
+
+/**		BRICK		**/
+
+
+// BRICK SLIDER INT
 
 t_node *add_brick_slider_int(t_context *C,t_block *block,const char *name,void *data_target)
 {
@@ -60,13 +95,14 @@ t_node *add_brick_slider_int(t_context *C,t_block *block,const char *name,void *
 	
 	// ACTION
 	brick->action=op_slider;
-	brick->state.draw_outline = 0;
 
 	// PLUG
 	set_plug_option(brick);
 
 	return node_brick;
 }
+
+// BRICK SLIDER CHAR
 
 t_node *add_brick_slider_char(t_context *C,t_block *block,const char *name,void *data_target)
 {
@@ -78,7 +114,6 @@ t_node *add_brick_slider_char(t_context *C,t_block *block,const char *name,void 
 	
 	// ACTION
 	brick->action=op_slider;
-	brick->state.draw_outline = 0;
 
 	// PLUG
 	set_plug_option(brick);
@@ -98,13 +133,14 @@ t_node *add_brick_slider_float(t_context *C,t_block *block,const char *name,void
 	
 	// ACTION
 	brick->action=op_slider;
-	brick->state.draw_outline = 0;
 
 	// PLUG
 	set_plug_option(brick);
 
 	return node_brick;
 }
+
+// BRICK FLOAT
 
 t_node *add_brick_float(t_context *C,t_block *block,const char *name,void *data_target)
 {
@@ -116,7 +152,6 @@ t_node *add_brick_float(t_context *C,t_block *block,const char *name,void *data_
 	
 	// ACTION
 	brick->action=op_float;
-	brick->state.draw_outline = 0;
 
 	// PLUG
 	set_plug_option(brick);
@@ -155,14 +190,14 @@ t_node *add_brick_slider_int_custom(t_context *C,t_block *block,const char *name
 	
 	// ACTION
 	brick->action=f;
-	// versatil
-	//brick->state.is_versatil=1;
 
 	// PLUG
 	set_plug_option(brick);
 
 	return node_brick;
 }
+
+// BRICK INT
 
 t_node *add_brick_int(t_context *C,t_block *block,const char *name,void *data_target)
 {
@@ -174,8 +209,6 @@ t_node *add_brick_int(t_context *C,t_block *block,const char *name,void *data_ta
 	
 	// ACTION
 	brick->action=op_int;
-	// versatil
-	//brick->state.is_versatil=1;
 
 	// PLUG
 	set_plug_option(brick);
@@ -196,6 +229,8 @@ t_node *add_brick_label(t_context *C,t_block *block,const char *name)
 
 	return node_brick;
 }
+
+// BRICK VECTOR
 
 t_node *add_brick_vector(t_context *C,t_block *block,const char *name)
 {
@@ -237,17 +272,20 @@ t_node *add_brick_switch(t_context *C,t_block *block,const char *name,void *data
 	// NEW BRICK
 	t_node *node_brick=brick_make(block,name,bt_switch,dt_int,ptr);
 	t_brick *brick=node_brick->data;
+
+	// Dont Draw Value
+	brick->state.draw_value = 0;
 	
 	// ACTION
 	brick->action=op_switch;
-
-	brick->state.draw_value = 0;
 
 	// PLUG
 	set_plug_option(brick);
 
 	return node_brick;
 }
+
+// BRICK SWITCH CUSTOM
 
 t_node *add_brick_switch_custom(t_context *C,t_block *block,const char *name,void *data_target,void *(* f)(t_brick *brick))
 {
@@ -275,9 +313,9 @@ t_node *add_brick_trigger(t_context *C,t_block *block,const char *name,void *f(t
 	// NEW BRICK
 	t_node *node_brick=brick_make(block,name,bt_trigger,dt_int,ptr);
 	t_brick *brick=node_brick->data;
-
+	// Dont Draw Value
 	brick->state.draw_value = 0;
-	
+
 	// ACTION
 	brick->action=f;
 
@@ -365,7 +403,6 @@ t_node *add_brick_submenu_contextual(t_context *C,t_node *menu,t_node *submenu,c
 
 	brick->state.is_contextual=1;
 
-	//set_name(brick->context,context);
 	brick->context=context;
 
 	// PLUG
@@ -445,402 +482,7 @@ t_node *add_brick_pointer(t_context *C,t_block *block,const char *name,t_data_ty
 	return node;
 }
 
-
-// NEW BLOCK 
-
-
-t_node *add_block(t_context *C,const char *name)
-{
-	// get list
-	t_lst *list=get_target_list(C);
-
-	t_node *node_block=block_make(name,"block");
-	t_block *block=node_block->data;
-
-	block->state.draw_outline = 1;
-
-	// add to main list
-	list_add_global(list,block);
-
-	float p[2];
-	ctx_get_mouse_pos(C,p);
-
-	// set block pos
-	vset3f(block->pos,p[0],p[1],0);
-
-	return node_block;
-}
-
-//  TRIGGER
-
-t_node *add_trigger(t_context *C,const char *name,void*(* f)(t_brick *brick))
-{
-	// BLOCK
-	t_node *node_block = add_block(C,"trigger");
-	t_block *block=node_block->data;
-
-	// LABEL
-	add_brick_trigger(C,block,name,f);
-
-	return node_block;
-}
-
-//  TRIGGER ALWAYS
-
-t_node *add_trigger_always(t_context *C,const char *name,void*(* f)(t_brick *brick))
-{
-	// BLOCK
-	t_node *node_block = add_block(C,"trigger");
-	t_block *block=node_block->data;
-
-	// LABEL
-	t_node *node_brick=add_brick_trigger(C,block,name,f);
-	t_brick *brick=node_brick->data;
-
-	brick->state.always_trigger=1;
-
-	return node_block;
-}
-
-//  LABEL
-
-t_node *add_label(t_context *C,const char *name)
-{
-	// BLOCK
-	t_node *node_block = add_block(C,"label");
-	t_block *block=node_block->data;
-
-	// LABEL
-	add_brick_label(C,block,name);
-
-	return node_block;
-}
-
-//  SWITCH 
-
-t_node *add_switch(t_context *C,const char *name,void *data)
-{
-	// BLOCK
-	t_node *node_block = add_block(C,"switch");
-	t_block *block=node_block->data;
-
-	// BRICK SWICH
-	add_brick_switch(C,block,name,data);
-
-	return node_block;
-}
-
-t_node *add_switch_custom(t_context *C,const char *name,void *data,void *(* f)(t_brick *brick))
-{
-	// BLOCK
-	t_node *node_block = add_block(C,"switch");
-	t_block *block=node_block->data;
-
-	// BRICK SWICH
-	t_node *node_switch = add_brick_switch_custom(C,block,name,data,f);
-	t_brick *brick_switch = node_switch->data;
-
-	brick_switch->state.always_trigger = 1;
-
-	return node_block;
-}
-
-// MULTIPLIER 
-
-t_node *add_multiplier(t_context *C,const char *type)
-{
-	// BLOCK
-	t_node *node_block = add_block(C,"mulitplier");
-	t_block *block=node_block->data;
-
-	t_node *node_brick=add_brick_slider_float(C,block,"multiplier",NULL);
-	t_brick *brick=node_brick->data;
-
-	if(is(type,"10"))  brick->var.increment=10; 
-	else if(is(type,"100"))  brick->var.increment=100; 
-	else if(is(type,".1"))  brick->var.increment=.1; 
-	else if(is(type,".01"))  brick->var.increment=.01; 
-	else if(is(type,".001"))  brick->var.increment=.001; 
-
-	return node_block;
-}
-
-//  OPERATOR DOUBLE
-
-t_node *add_operator_double(t_context *C,const char *type)
-{
-	// BLOCK
-	t_node *node_block = add_block(C,type);
-	t_block *block=node_block->data;
-	block->state.draw_outline=1;
-
-	t_node *node_op_2 = add_brick_operand(C,block,"b"); //XXX name ! -> op_add
-
-	// RESULT
-	t_node *brick_result=add_brick_operator(C,block,type);
-	t_brick *result=brick_result->data;
-	
-	// OPERANDS
-	t_node *node_op_1 = add_brick_operand(C,block,"a");
-
-	t_brick *brick_op_1=node_op_1->data;
-	t_brick *brick_op_2=node_op_2->data;
-
-	brick_op_1->state.is_versatil=1;
-	brick_op_2->state.is_versatil=1;
-
-	// ACTIONS
-	if(is(type,">"))  			result->action=op_superior;
-	else if(is(type,"<"))  			result->action=op_inferior;
-	else if(is(type,"="))  			result->action=op_equal;
-	else if(is(type,"mod"))  		result->action=op_mod;
-
-	plug_add_parent(&result->plug_intern,&brick_op_1->plug_intern);
-	plug_add_parent(&result->plug_intern,&brick_op_2->plug_intern);
-
-	return node_block;
-}
-
-//  OPERATOR SINGLE
-
-t_node *add_operator_single(t_context *C,const char *type,void *f(t_brick *brick))
-{
-	// BLOCK
-	t_node *node_block=add_slider_float(C,type,NULL);
-	t_brick *brick=get_block_first_brick(node_block);
-
-	// ACTION
-	brick->action=f;
-
-	return node_block;
-}
-
-
-//  SLIDER INT   
-
-t_node *add_slider_int(t_context *C,const char *name,void *target_data)
-{
-	// NEW BLOCK
-	t_node *node_block = add_block(C,name);
-	t_block *block=node_block->data;
-
-	// NEW BRICK
-	t_node *node_brick=add_brick_slider_int(C,block,name,target_data);
-	t_brick *brick=node_brick->data;
-
-	// SET ACTION
-	brick->action=op_slider;
-
-	return node_block;
-}
-
-
-
-t_node *add_slider_char(t_context *C,const char *name,void *target_data)
-{
-	// NEW BLOCK
-	t_node *node_block = add_block(C,name);
-	t_block *block=node_block->data;
-
-	// NEW BRICK
-	t_node *node_brick=add_brick_slider_char(C,block,name,target_data);
-	t_brick *brick=node_brick->data;
-
-	// SET ACTION
-	brick->action=op_slider;
-
-	return node_block;
-}
-
-t_node *add_slider_int_custom(t_context *C,const char *name,void *target_data,void*(* f)(t_brick *b))
-{
-	// NEW BLOCK
-	t_node *node_block = add_block(C,name);
-	t_block *block=node_block->data;
-
-	// NEW BRICK
-	t_node *node_brick=add_brick_slider_int(C,block,name,target_data);
-	t_brick *brick=node_brick->data;
-
-	// SET ACTION
-	brick->action=f;
-	brick->state.is_versatil=1;
-
-	return node_block;
-}
-
-//  SLIDER FLOAT   
-
-t_node *add_slider_float(t_context *C,const char *name,void *target_data)
-{
-	// NEW BLOCK
-	t_node *node_block = add_block(C,name);
-	t_block *block=node_block->data;
-
-	// NEW BRICK
-	t_node *node_brick=add_brick_slider_float(C,block,name,target_data);
-	t_brick *brick=node_brick->data;
-
-	// SET ACTION
-	brick->action=op_slider;
-
-	return node_block;
-}
-
-//  SLIDER INT POSITIVE  
-
-t_node *add_slider_int_positive(t_context *C,const char *name,void *target_data)
-{
-	// BLOCK
-	t_node *node_block=add_slider_int(C,name,target_data);
-	t_brick *brick=get_block_first_brick(node_block);
-
-	// SET ACTION
-	brick->action=op_slider_positive;
-
-	return node_block;
-}
-
-//  SLIDER FLOAT CUSTOM
-
-t_node *add_slider_float_custom(t_context *C,const char *name,void *f(t_brick *brick))
-{
-	// NEW SLIDER
-	t_node *node_block=add_slider_float(C,name,NULL);
-	t_brick *brick=get_block_first_brick(node_block);
-
-	// SET ACTION
-	brick->action=f;
-
-	return node_block;
-}
-
-//  SLIDER FLOAT SPECIAL
-
-t_node *add_slider_float_special(t_context *C,const char *name,void *f(t_brick *brick))
-{
-	// NEW SLIDER
-	t_node *node_block=add_slider_float(C,name,NULL);
-	t_brick *brick=get_block_first_brick(node_block);
-
-	// SET ACTION
-	brick->action=f;
-
-	return node_block;
-}
-
-t_node *add_slider_int_special(t_context *C,const char *name,void *f(t_brick *brick))
-{
-	// NEW SLIDER
-	t_node *node_block=add_slider_int(C,name,NULL);
-	t_brick *brick=get_block_first_brick(node_block);
-
-	// SET ACTION
-	brick->action=f;
-
-	return node_block;
-}
-
-// REF
-
-void add_slider_ref(t_context *C,t_object *object,const char *name)
-{
-	t_mesh *mesh=NULL;
-	t_material *mat=NULL;
-	
-	if(object->mesh) mesh=object->mesh;
-	if(mesh)
-	{
-		 if(mesh->material) mat=mesh->material;
-	}
-
-	if(is(name,"pos x")) 		scene_add_ref(C->scene,"struct_ref","object","loc_x",&object->loc[0],object);
-	else if(is(name,"pos y"))	scene_add_ref(C->scene,"struct_ref","object","loc_y",&object->loc[1],object);
-	else if(is(name,"pos z"))	scene_add_ref(C->scene,"struct_ref","object","loc_z",&object->loc[2],object);
-	else if(is(name,"rot x"))	scene_add_ref(C->scene,"struct_ref","object","rot_x",&object->rot[0],object);
-	else if(is(name,"rot y"))	scene_add_ref(C->scene,"struct_ref","object","rot_y",&object->rot[1],object);
-	else if(is(name,"rot z"))	scene_add_ref(C->scene,"struct_ref","object","rot_z",&object->rot[2],object);
-	else if(is(name,"scl x"))	scene_add_ref(C->scene,"struct_ref","object","scl_x",&object->size[0],object);
-	else if(is(name,"scl y"))	scene_add_ref(C->scene,"struct_ref","object","scl_y",&object->size[1],object);
-	else if(is(name,"scl z"))	scene_add_ref(C->scene,"struct_ref","object","scl_z",&object->size[2],object);
-	else if(is(name,"red") && mat)	scene_add_ref(C->scene,"struct_ref","material","red",&mat->color[0],mat);
-	else if(is(name,"green") && mat)	scene_add_ref(C->scene,"struct_ref","material","green",&mat->color[1],mat);
-	else if(is(name,"blue") && mat)		scene_add_ref(C->scene,"struct_ref","material","blue",&mat->color[2],mat);
-	else if(is(name,"alpha") && mat)	scene_add_ref(C->scene,"struct_ref","material","alpha",&mat->color[3],mat);
-
-}
-
-void add_slider_target(t_context *C,t_object *object,const char *name)
-{
-	t_mesh *mesh=NULL;
-	t_material *material=NULL;
-	t_block *block=object->ref;
-	
-	if(object->mesh) mesh=object->mesh;
-	if(mesh)
-	{
-		 if(mesh->material) material=mesh->material;
-	}
-
-	if(is(name,"pos x")) 		add_part_slider_float(C,block,"pos x",&object->loc[0]);
-	else if(is(name,"pos y")) 	add_part_slider_float(C,block,"pos y",&object->loc[1]);
-	else if(is(name,"pos z")) 	add_part_slider_float(C,block,"pos z",&object->loc[2]);
-	else if(is(name,"rot x")) 	add_part_slider_float(C,block,"rot x",&object->rot[0]);
-	else if(is(name,"rot y")) 	add_part_slider_float(C,block,"rot y",&object->rot[1]);
-	else if(is(name,"rot z")) 	add_part_slider_float(C,block,"rot z",&object->rot[2]);
-	else if(is(name,"scl x")) 	add_part_slider_float(C,block,"scl x",&object->size[0]);
-	else if(is(name,"scl y")) 	add_part_slider_float(C,block,"scl y",&object->size[1]);
-	else if(is(name,"scl z")) 	add_part_slider_float(C,block,"scl z",&object->size[2]);
-	else if(is(name,"red") && material) 	add_part_slider_float(C,block,"red",&material->color[0]);
-	else if(is(name,"green") && material) 	add_part_slider_float(C,block,"green",&material->color[1]);
-	else if(is(name,"blue") && material) 	add_part_slider_float(C,block,"blue",&material->color[2]);
-	else if(is(name,"alpha") && material) 	add_part_slider_float(C,block,"alpha",&material->color[3]);
-
-}
-
-// SLIDER OBJECT
-
-t_node *add_slider_object(t_context *C,const char *name)
-{
-	t_node *selected=C->scene->selected;
-
-	if(selected)
-	{
-		t_object *object=selected->data; 
-
-		add_slider_ref(C,object,name);
-		add_slider_target(C,object,name);
-	}
-
-	return NULL;
-}
-
-// SLIDER CAMERA
-
-t_node *add_slider_camera(t_context *C,const char *name)
-{
-	t_camera *camera = C->camera;
-	t_node *node;
-
-	if(is(name,"pos x"))
-	{
-		scene_add_ref(C->scene,"struct_ref","camera","pos_x",&camera->pos[0],camera);
-		node = add_slider_float(C,"cam pos x",&camera->pos[0]);
-	}
-	else if(is(name,"pos y"))
-	{
-		scene_add_ref(C->scene,"struct_ref","camera","pos_y",&camera->pos[1],camera);
-		node = add_slider_float(C,"cam pos y",&camera->pos[1]);
-	}
-	else if(is(name,"pos z"))
-	{
-		scene_add_ref(C->scene,"struct_ref","camera","pos_z",&camera->pos[2],camera);
-		node = add_slider_float(C,"cam pos z",&camera->pos[2]);
-	}
-
-	return node;
-}
-
+/**		PART		**/
 
 // PART LABEL
 
@@ -1028,6 +670,384 @@ t_node *add_part_pointer(t_context *C,t_block *block,t_data_type type,const char
 
 	return node;
 }
+
+
+//  TRIGGER
+
+t_node *add_trigger(t_context *C,const char *name,void*(* f)(t_brick *brick))
+{
+	// BLOCK
+	t_node *node_block = add_block(C,"trigger");
+	t_block *block=node_block->data;
+
+	// LABEL
+	add_brick_trigger(C,block,name,f);
+
+	return node_block;
+}
+
+//  TRIGGER ALWAYS
+
+t_node *add_trigger_always(t_context *C,const char *name,void*(* f)(t_brick *brick))
+{
+	// BLOCK
+	t_node *node_block = add_block(C,"trigger");
+	t_block *block=node_block->data;
+
+	// LABEL
+	t_node *node_brick=add_brick_trigger(C,block,name,f);
+	t_brick *brick=node_brick->data;
+
+	brick->state.always_trigger=1;
+
+	return node_block;
+}
+
+//  LABEL
+
+t_node *add_label(t_context *C,const char *name)
+{
+	// BLOCK
+	t_node *node_block = add_block(C,"label");
+	t_block *block=node_block->data;
+
+	// LABEL
+	add_brick_label(C,block,name);
+
+	return node_block;
+}
+
+//  SWITCH 
+
+t_node *add_switch(t_context *C,const char *name,void *data)
+{
+	// BLOCK
+	t_node *node_block = add_block(C,"switch");
+	t_block *block=node_block->data;
+
+	// BRICK SWICH
+	add_brick_switch(C,block,name,data);
+
+	return node_block;
+}
+
+// SWITCH CUSTOM
+
+t_node *add_switch_custom(t_context *C,const char *name,void *data,void *(* f)(t_brick *brick))
+{
+	// BLOCK
+	t_node *node_block = add_block(C,"switch");
+	t_block *block=node_block->data;
+
+	// BRICK SWICH
+	t_node *node_switch = add_brick_switch_custom(C,block,name,data,f);
+	t_brick *brick_switch = node_switch->data;
+
+	brick_switch->state.always_trigger = 1;
+
+	return node_block;
+}
+
+// MULTIPLIER 
+
+t_node *add_multiplier(t_context *C,const char *type)
+{
+	// BLOCK
+	t_node *node_block = add_block(C,"mulitplier");
+	t_block *block=node_block->data;
+
+	t_node *node_brick=add_brick_slider_float(C,block,"multiplier",NULL);
+	t_brick *brick=node_brick->data;
+
+	if(is(type,"10"))  brick->var.increment=10; 
+	else if(is(type,"100"))  brick->var.increment=100; 
+	else if(is(type,".1"))  brick->var.increment=.1; 
+	else if(is(type,".01"))  brick->var.increment=.01; 
+	else if(is(type,".001"))  brick->var.increment=.001; 
+
+	return node_block;
+}
+
+//  OPERATOR DOUBLE
+
+t_node *add_operator_double(t_context *C,const char *type)
+{
+	// BLOCK
+	t_node *node_block = add_block(C,type);
+	t_block *block=node_block->data;
+	block->state.draw_outline=1;
+
+	t_node *node_op_2 = add_brick_operand(C,block,"b"); //XXX name ! -> op_add
+
+	// RESULT
+	t_node *brick_result=add_brick_operator(C,block,type);
+	t_brick *result=brick_result->data;
+	
+	// OPERANDS
+	t_node *node_op_1 = add_brick_operand(C,block,"a");
+
+	t_brick *brick_op_1=node_op_1->data;
+	t_brick *brick_op_2=node_op_2->data;
+
+	brick_op_1->state.is_versatil=1;
+	brick_op_2->state.is_versatil=1;
+
+	// ACTIONS
+	if(is(type,">"))  			result->action=op_superior;
+	else if(is(type,"<"))  			result->action=op_inferior;
+	else if(is(type,"="))  			result->action=op_equal;
+	else if(is(type,"mod"))  		result->action=op_mod;
+
+	plug_add_parent(&result->plug_intern,&brick_op_1->plug_intern);
+	plug_add_parent(&result->plug_intern,&brick_op_2->plug_intern);
+
+	return node_block;
+}
+
+//  OPERATOR SINGLE
+
+t_node *add_operator_single(t_context *C,const char *type,void *f(t_brick *brick))
+{
+	// BLOCK
+	t_node *node_block=add_slider_float(C,type,NULL);
+	t_brick *brick=get_block_first_brick(node_block);
+
+	// ACTION
+	brick->action=f;
+
+	return node_block;
+}
+
+
+//  SLIDER INT   
+
+t_node *add_slider_int(t_context *C,const char *name,void *target_data)
+{
+	// NEW BLOCK
+	t_node *node_block = add_block(C,name);
+	t_block *block=node_block->data;
+
+	// NEW BRICK
+	t_node *node_brick=add_part_slider_int(C,block,name,target_data);
+	t_brick *brick=node_brick->data;
+
+	// SET ACTION
+	brick->action=op_slider;
+
+	return node_block;
+}
+
+
+// SLIDER CHAR
+
+t_node *add_slider_char(t_context *C,const char *name,void *target_data)
+{
+	// NEW BLOCK
+	t_node *node_block = add_block(C,name);
+	t_block *block=node_block->data;
+
+	// NEW BRICK
+	t_node *node_brick=add_brick_slider_char(C,block,name,target_data);
+	t_brick *brick=node_brick->data;
+
+	// SET ACTION
+	brick->action=op_slider;
+
+	return node_block;
+}
+
+t_node *add_slider_int_custom(t_context *C,const char *name,void *target_data,void*(* f)(t_brick *b))
+{
+	// NEW BLOCK
+	t_node *node_block = add_block(C,name);
+	t_block *block=node_block->data;
+
+	// NEW BRICK
+	t_node *node_brick=add_brick_slider_int(C,block,name,target_data);
+	t_brick *brick=node_brick->data;
+
+	// SET ACTION
+	brick->action=f;
+	brick->state.is_versatil=1;
+
+	return node_block;
+}
+
+//  SLIDER FLOAT   
+
+t_node *add_slider_float(t_context *C,const char *name,void *target_data)
+{
+	// NEW BLOCK
+	t_node *node_block = add_block(C,name);
+	t_block *block=node_block->data;
+
+	// NEW BRICK
+	t_node *node_brick=add_brick_slider_float(C,block,name,target_data);
+	t_brick *brick=node_brick->data;
+
+	// SET ACTION
+	brick->action=op_slider;
+
+	return node_block;
+}
+
+//  SLIDER INT POSITIVE  
+
+t_node *add_slider_int_positive(t_context *C,const char *name,void *target_data)
+{
+	// BLOCK
+	t_node *node_block=add_slider_int(C,name,target_data);
+	t_brick *brick=get_block_first_brick(node_block);
+
+	// SET ACTION
+	brick->action=op_slider_positive;
+
+	return node_block;
+}
+
+//  SLIDER FLOAT CUSTOM
+
+t_node *add_slider_float_custom(t_context *C,const char *name,void *f(t_brick *brick))
+{
+	// NEW SLIDER
+	t_node *node_block=add_slider_float(C,name,NULL);
+	t_brick *brick=get_block_first_brick(node_block);
+
+	// SET ACTION
+	brick->action=f;
+
+	return node_block;
+}
+
+//  SLIDER FLOAT SPECIAL
+
+t_node *add_slider_float_special(t_context *C,const char *name,void *f(t_brick *brick))
+{
+	// NEW SLIDER
+	t_node *node_block=add_slider_float(C,name,NULL);
+	t_brick *brick=get_block_first_brick(node_block);
+
+	// SET ACTION
+	brick->action=f;
+
+	return node_block;
+}
+
+// SLIDER INT SPECIAL
+
+t_node *add_slider_int_special(t_context *C,const char *name,void *f(t_brick *brick))
+{
+	// NEW SLIDER
+	t_node *node_block=add_slider_int(C,name,NULL);
+	t_brick *brick=get_block_first_brick(node_block);
+
+	// SET ACTION
+	brick->action=f;
+
+	return node_block;
+}
+
+// REF
+
+void add_slider_ref(t_context *C,t_object *object,const char *name)
+{
+	t_mesh *mesh=NULL;
+	t_material *mat=NULL;
+	
+	if(object->mesh) mesh=object->mesh;
+	if(mesh)
+	{
+		 if(mesh->material) mat=mesh->material;
+	}
+
+	if(is(name,"pos x")) 		scene_add_ref(C->scene,"struct_ref","object","loc_x",&object->loc[0],object);
+	else if(is(name,"pos y"))	scene_add_ref(C->scene,"struct_ref","object","loc_y",&object->loc[1],object);
+	else if(is(name,"pos z"))	scene_add_ref(C->scene,"struct_ref","object","loc_z",&object->loc[2],object);
+	else if(is(name,"rot x"))	scene_add_ref(C->scene,"struct_ref","object","rot_x",&object->rot[0],object);
+	else if(is(name,"rot y"))	scene_add_ref(C->scene,"struct_ref","object","rot_y",&object->rot[1],object);
+	else if(is(name,"rot z"))	scene_add_ref(C->scene,"struct_ref","object","rot_z",&object->rot[2],object);
+	else if(is(name,"scl x"))	scene_add_ref(C->scene,"struct_ref","object","scl_x",&object->size[0],object);
+	else if(is(name,"scl y"))	scene_add_ref(C->scene,"struct_ref","object","scl_y",&object->size[1],object);
+	else if(is(name,"scl z"))	scene_add_ref(C->scene,"struct_ref","object","scl_z",&object->size[2],object);
+	else if(is(name,"red") && mat)	scene_add_ref(C->scene,"struct_ref","material","red",&mat->color[0],mat);
+	else if(is(name,"green") && mat)	scene_add_ref(C->scene,"struct_ref","material","green",&mat->color[1],mat);
+	else if(is(name,"blue") && mat)		scene_add_ref(C->scene,"struct_ref","material","blue",&mat->color[2],mat);
+	else if(is(name,"alpha") && mat)	scene_add_ref(C->scene,"struct_ref","material","alpha",&mat->color[3],mat);
+
+}
+
+void add_slider_target(t_context *C,t_object *object,const char *name)
+{
+	t_mesh *mesh=NULL;
+	t_material *material=NULL;
+	t_block *block=object->ref;
+	
+	if(object->mesh) mesh=object->mesh;
+	if(mesh)
+	{
+		 if(mesh->material) material=mesh->material;
+	}
+
+	if(is(name,"pos x")) 		add_part_slider_float(C,block,"pos x",&object->loc[0]);
+	else if(is(name,"pos y")) 	add_part_slider_float(C,block,"pos y",&object->loc[1]);
+	else if(is(name,"pos z")) 	add_part_slider_float(C,block,"pos z",&object->loc[2]);
+	else if(is(name,"rot x")) 	add_part_slider_float(C,block,"rot x",&object->rot[0]);
+	else if(is(name,"rot y")) 	add_part_slider_float(C,block,"rot y",&object->rot[1]);
+	else if(is(name,"rot z")) 	add_part_slider_float(C,block,"rot z",&object->rot[2]);
+	else if(is(name,"scl x")) 	add_part_slider_float(C,block,"scl x",&object->size[0]);
+	else if(is(name,"scl y")) 	add_part_slider_float(C,block,"scl y",&object->size[1]);
+	else if(is(name,"scl z")) 	add_part_slider_float(C,block,"scl z",&object->size[2]);
+	else if(is(name,"red") && material) 	add_part_slider_float(C,block,"red",&material->color[0]);
+	else if(is(name,"green") && material) 	add_part_slider_float(C,block,"green",&material->color[1]);
+	else if(is(name,"blue") && material) 	add_part_slider_float(C,block,"blue",&material->color[2]);
+	else if(is(name,"alpha") && material) 	add_part_slider_float(C,block,"alpha",&material->color[3]);
+
+}
+
+// SLIDER OBJECT
+
+t_node *add_slider_object(t_context *C,const char *name)
+{
+	t_node *selected=C->scene->selected;
+
+	if(selected)
+	{
+		t_object *object=selected->data; 
+
+		add_slider_ref(C,object,name);
+		add_slider_target(C,object,name);
+	}
+
+	return NULL;
+}
+
+// SLIDER CAMERA
+
+t_node *add_slider_camera(t_context *C,const char *name)
+{
+	t_camera *camera = C->camera;
+	t_node *node;
+
+	if(is(name,"pos x"))
+	{
+		scene_add_ref(C->scene,"struct_ref","camera","pos_x",&camera->pos[0],camera);
+		node = add_slider_float(C,"cam pos x",&camera->pos[0]);
+	}
+	else if(is(name,"pos y"))
+	{
+		scene_add_ref(C->scene,"struct_ref","camera","pos_y",&camera->pos[1],camera);
+		node = add_slider_float(C,"cam pos y",&camera->pos[1]);
+	}
+	else if(is(name,"pos z"))
+	{
+		scene_add_ref(C->scene,"struct_ref","camera","pos_z",&camera->pos[2],camera);
+		node = add_slider_float(C,"cam pos z",&camera->pos[2]);
+	}
+
+	return node;
+}
+
+
 
 // CLONE
 

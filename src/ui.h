@@ -50,6 +50,8 @@ struct Ui
 	float font_width;
 	int use_bitmap_font;
 
+	int draw_plug_state;
+
 	// show
 	int show_menu;
 	int show_nodes;
