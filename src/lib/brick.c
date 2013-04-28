@@ -418,7 +418,11 @@ t_brick *brick_rebind(t_scene *sc,void *ptr)
 		brick->plug_intern.data = NULL;
 
 	if(brick->plug_intern.data_memory) 
+	{
 		rebind(sc,"brick","plug_intern_data_memory",(void **)&brick->plug_intern.data_memory);
+		if(brick->plug_intern.data == NULL)
+			brick->plug_intern.data = brick->plug_intern.data_memory;
+	}
 
 
 	rebind(sc,"brick","plug_out_dst",(void **)&brick->plug_out.dst);

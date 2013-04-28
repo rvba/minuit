@@ -80,32 +80,33 @@ void vector_op_add(t_vector *dst,t_vector *src)
 	float *data_src = vlst_src->data;
 	float *data_dst = vlst_dst->data;
 
-	float result[] = {0,0,0};
-
-	// Copy Vlst Data
-	vadd(result,data_src,data_dst);
-
-	vset3f(data_dst,result[0],result[1],result[2]);
-}
-
-void vector_op_copy(t_vector *dst, t_vector *src)
-{
-	dst->type = src->type;
-	dst->length = src->length;
-	dst->pointer = src->pointer;
-
-	t_vlst *vlst_src = src->vector;
-	t_vlst *vlst_dst = dst->vector;
-
-	float *v_src = vlst_src->data;
-	float *v_dst = vlst_dst->data;
-
-	vcp(v_dst,v_src);
+	t_context *C = ctx_get();
 
 	if(dst->pointer)
 	{
-		float *p = dst->pointer;
-		vset(v_dst,p[0],p[1],p[2]);
+		if(src->pointer)
+		{
+			if(C->ui->show_step) term_log("src ptr dst ptr");
+			vadd(dst->pointer, dst->pointer, src->pointer);
+		}
+		else
+		{
+			if(C->ui->show_step) term_log("src ptr dst data");
+			vadd(dst->pointer, dst->pointer, data_src);
+		}
+	}
+	else
+	{
+		if(src->pointer)
+		{
+			if(C->ui->show_step) term_log("src ptr dst data");
+			vadd(data_dst,data_dst, src->pointer);
+		}
+		else
+		{
+			if(C->ui->show_step) term_log("src data dst data");
+			vadd(data_dst,data_dst, data_src);
+		}
 	}
 }
 

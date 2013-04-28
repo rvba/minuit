@@ -211,7 +211,7 @@ void ctx_render(t_context *C);
 
 t_lst *block_branch_src_get(t_context *C,t_block *block);
 //void block_branch_get(int loop,t_lst *lst,t_block *block);
-void ctx_links_step_cleanup(t_context *C);
+void ctx_links_term_cleanup(t_context *C);
 void block_branch_get(t_lst *lst,t_block *block);
 void ctx_links_loop(t_context *C);
 void ctx_links_update(t_context *C);

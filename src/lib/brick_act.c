@@ -653,6 +653,7 @@ void exe_add_brick_child_parent(t_dict *args)
 	t_context *C = ctx_get();
 
 	t_brick *brick = dict_pop_data(args,"brick");
+	t_plug *plug_brick = &brick->plug_intern;
 	t_brick *brick_target = dict_pop_data(args,"target");
 
 	t_block *block=brick->block;
@@ -667,7 +668,9 @@ void exe_add_brick_child_parent(t_dict *args)
 	t_plug *p_in = &b->plug_in;
 	
 	t_plug *plug_target = &brick_target->plug_intern;
-	plug_add_parent(plug_target,p_intern);
+	//plug_add_parent(plug_target,p_intern);
+	plug_add_parent(plug_brick,p_intern);
+	plug_add_parent(plug_target,plug_brick);
 	p_in->follow_in=1;
 
 	C->scene->store=0;
@@ -823,10 +826,10 @@ void *op_clone(t_brick *brick)
 	t_plug *plug_target = NULL;
 	t_plug *plug_src = NULL;
 
-	// Add bricks
+	// Add New Bricks
 	op_add_bricks(brick,NULL,1,t_parent_child);
 
-	// Update bricks
+	// Update Clones
 	if(tot_bricks>0)
 	{
 		// connected in
@@ -853,7 +856,7 @@ void *op_clone(t_brick *brick)
 				t_plug *plug_in_clone = &b->plug_in;
 				t_plug *plug_out_clone = &b->plug_out;
 
-				// match current target type
+				// Change Type 
 				if(plug_src)
 				{
 					if(plug_clone->data_type != plug_src->data_type)
@@ -863,7 +866,7 @@ void *op_clone(t_brick *brick)
 					}
 				}
 
-				// connect 
+				// Connect Clone
 				plug_in_clone->src=plug_target;
 
 				if(plug_target)

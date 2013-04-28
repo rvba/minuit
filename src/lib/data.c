@@ -413,7 +413,7 @@ void data_init(t_data_type type,void *data)
 		case dt_vector:
 
 			//XXX
-			printf("[VECTOR]\n");
+			//printf("[VECTOR]\n");
 
 			break;
 

@@ -11,6 +11,11 @@
 
 #define db_main 0
 
+// Step Error
+int loop_error = 0;
+int loop_limit = 50;
+int loop_current = 0;
+
 // Step Counter
 int loop_step = 0;
 
@@ -40,11 +45,19 @@ void term_bricks_show(void)
 	term_reset(TERM_BRICKS);
 	term_echo(TERM_BRICKS,"BRICKS");
 
-	for(l=BRICKS->first;l;l=l->next)
+	if(BRICKS)
 	{
-		b=l->data;
-		term_echo(TERM_BRICKS,"%s",b->name);
+		for(l=BRICKS->first;l;l=l->next)
+		{
+			b=l->data;
+			term_echo(TERM_BRICKS,"%s",b->name);
+		}
 	}
+	else
+	{
+		term_echo(TERM_BRICKS,"NO BRICKS");
+	}
+	
 }
 
 // Show Roots Stack
@@ -96,7 +109,8 @@ void ctx_links_build_terms(t_context *C)
 	}
 
 	// Reset Main Term
-	term_reset(C->term);
+	if(C->ui->show_step)
+		term_reset(C->term);
 }
 
 // GET BRANCH
@@ -592,27 +606,39 @@ void ctx_links_get_roots(t_context *C)
 
 void ctx_links_reloop(t_context *C)
 {
-	if(C->ui->show_step)
+	if(loop_current > loop_limit)
 	{
-		if(!BRICKS->last)
-		{
-			term_echo(C->term,"[Last Brick]");
-			stop_step = 1;
-		}
+		term_log("%d LOOP LIMIT",C->app->frame);
+		term_bricks_show();
+		term_roots_show();
+		loop_error = 1;
 	}
 	else
 	{
-		// Step ++
-		loop_step++;
-		C->event->loop_step++;
+		loop_current++;
 
-		// Loop While Bricks
-		if(BRICKS->last)
+		if(C->ui->show_step)
 		{
-			// Cleanup Roots
-			lst_cleanup(ROOTS);
-			// Loop Again
-			ctx_links_loop(C);
+			if(!BRICKS->last)
+			{
+				term_echo(C->term,"[Last Brick]");
+				stop_step = 1;
+			}
+		}
+		else
+		{
+			// Step ++
+			loop_step++;
+			C->event->loop_step++;
+
+			// Loop While Bricks
+			if(BRICKS->last)
+			{
+				// Cleanup Roots
+				lst_cleanup(ROOTS);
+				// Loop Again
+				ctx_links_loop(C);
+			}
 		}
 	}
 }
@@ -628,7 +654,7 @@ void ctx_links_trigger(t_context *C)
 		{
 			b=l->data;
 
-			if(C->ui->show_step) term_echo(C->term,"trigger %s",b->name);
+			if(C->ui->show_step || loop_error ) term_echo(C->term,"%d trigger %s",C->app->frame,b->name);
 
 			// *** Trigger
 			b->cls->trigger(b);
@@ -682,8 +708,6 @@ void ctx_links_find_roots(t_context *C)
 
 void ctx_links_loop(t_context *C)
 {
-	if(!C->ui->show_step && db_main) printf("%d ctx_links_loop\n",loop_step);
-
 	// Get roots
 	ctx_links_find_roots(C);
 
@@ -779,6 +803,9 @@ void ctx_links_reset(t_context *C,t_lst *lst)
 
 	// Set Order
 	ctx_links_set_order(C);
+
+	// Reset Current
+	loop_current = 0;
 }
 
 void ctx_links_step_reset(t_context *C)
@@ -818,7 +845,7 @@ void ctx_links_step_reset(t_context *C)
 
 // STEP CLEANUP
 
-void ctx_links_step_cleanup(t_context *C)
+void ctx_links_term_cleanup(t_context *C)
 {
 	// Reset Terminals
 
@@ -916,6 +943,7 @@ void ctx_links_init(t_context *C)
 	{
 		// Reset States
 		ctx_links_reset(C,BRICKS);
+		ctx_links_build_terms(C);
 	}
 }
 

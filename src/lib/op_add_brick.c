@@ -243,20 +243,6 @@ t_node *add_brick_vector(t_context *C,t_block *block,const char *name)
 
 	brick->state.always_trigger = 1;
 
-	//XXX
-	/*
-	t_plug *plug_out = &brick->plug_out;
-	t_plug *plug_in = &brick->plug_in;
-	*/
-
-	/*
-	plug_in->open_in = 1;
-	plug_in->flow_in = 0;
-	plug_out->open_out = 0;
-	plug_out->flow_out = 1;
-	plug_out->open_in = 1;
-	*/
-
 	// PLUG
 	set_plug_option(brick);
 
@@ -856,6 +842,8 @@ t_node *add_slider_char(t_context *C,const char *name,void *target_data)
 	return node_block;
 }
 
+// SLIDER INT CUSTOM
+
 t_node *add_slider_int_custom(t_context *C,const char *name,void *target_data,void*(* f)(t_brick *b))
 {
 	// NEW BLOCK
@@ -880,9 +868,10 @@ t_node *add_slider_float(t_context *C,const char *name,void *target_data)
 	// NEW BLOCK
 	t_node *node_block = add_block(C,name);
 	t_block *block=node_block->data;
+	block->state.draw_outline = 1;
 
 	// NEW BRICK
-	t_node *node_brick=add_brick_slider_float(C,block,name,target_data);
+	t_node *node_brick=add_part_slider_float(C,block,name,target_data);
 	t_brick *brick=node_brick->data;
 
 	// SET ACTION
@@ -975,6 +964,8 @@ void add_slider_ref(t_context *C,t_object *object,const char *name)
 	else if(is(name,"alpha") && mat)	scene_add_ref(C->scene,"struct_ref","material","alpha",&mat->color[3],mat);
 
 }
+
+// SLIDER TARGET
 
 void add_slider_target(t_context *C,t_object *object,const char *name)
 {
@@ -1227,11 +1218,8 @@ t_node *add_for(t_context *C)
 t_node *parent_brick_vector(t_plug *plug_vector, t_node *node)
 {
 	t_brick *brick = node->data;
-
 	t_plug *plug_intern = &brick->plug_intern;
-
-	// parent
-	//plug_add_parent(plug_intern,plug_vector);
+	plug_intern->store_data = 0;
 	plug_add_parent(plug_vector,plug_intern);
 
 	return node;
