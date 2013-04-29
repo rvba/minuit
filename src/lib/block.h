@@ -228,6 +228,7 @@ struct Brick_State
 	int use_min_width:1;
 	int use_block_width:1;
 	int is_mouse_mode:1;
+	int draw:1;
 
 	// OFF
 

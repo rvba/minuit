@@ -127,7 +127,7 @@ int block_draw_bricks(t_block *block)
 		}
 
 		// Translate y
-		glTranslatef(0,brick->geom.height,0);
+		if(brick->state.draw) glTranslatef(0,brick->geom.height,0);
 	}
 
 	glPopMatrix();

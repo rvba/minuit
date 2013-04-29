@@ -487,25 +487,28 @@ void brick_draw_txt(t_brick *brick)
 
 void brick_draw(t_brick *brick)
 {
-	t_context *C = ctx_get();
-	int draw=1;
+	t_context *C=ctx_get();
+
 	if(is(brick->name,"object"))
 	{
-		t_context *C=ctx_get();
+
+		brick->state.draw = 1;
+
 		if(C->scene->selected)
 		{
 			t_node *node=C->scene->selected;
+
 			if(node->type==nt_object)
 			{
 			}
 			else
 			{
-				draw=0;
+				brick->state.draw = 0;
 			}
 		}
 		else
 		{
-			draw=0;
+			brick->state.draw = 0;
 		}
 	}
 
@@ -514,7 +517,7 @@ void brick_draw(t_brick *brick)
 		C->event->ui.draw_in_loop = 1;
 	}
 
-	if(draw)
+	if(brick->state.draw)
 	{
 		brick_draw_txt(brick);
 		brick_draw_in(brick);
