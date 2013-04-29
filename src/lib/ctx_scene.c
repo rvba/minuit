@@ -11,7 +11,8 @@
 
 // Selections and updates
 
-void ctx_scene_set_selected(t_context *C,t_node *node)
+//void ctx_scene_set_selected(t_context *C,t_node *node)
+void ctx_scene_set_selected(t_context *C,void *data)
 {
 	t_node *selected=C->scene->selected;
 
@@ -23,6 +24,8 @@ void ctx_scene_set_selected(t_context *C,t_node *node)
 	}
 
 	// set selected
+	t_generic *g = (t_generic *)data;
+	t_node *node  =scene_node_get_by_id_global(C->scene,g->id);
 	node->cls->set_state_selected(node,1);
 	C->scene->selected=node;
 	C->ui->show_nodes=0;

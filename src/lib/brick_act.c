@@ -1511,10 +1511,11 @@ void *op_set_selected(t_brick *brick)
 
 	if(brick->mode==bm_triggering) 
 	{
+		printf("set selected\n");
+
 		if(plug->data)
 		{
-			t_node *node=plug->data;
-			ctx_scene_set_selected(C,node);
+			ctx_scene_set_selected(C,plug->data);
 		}
 	}
 

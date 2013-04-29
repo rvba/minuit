@@ -185,7 +185,7 @@ void ctx_ui(t_context *C);
 // CTX_SCENE
 
 void ctx_scene_clear_selections(t_context *C);
-void ctx_scene_set_selected(t_context *C,t_node *node);
+void ctx_scene_set_selected(t_context *C,void *data);
 void ctx_scene(t_context *C);
 
 // CTX_PROCESS
@@ -210,7 +210,6 @@ void ctx_render(t_context *C);
 // CTX_LINKS.C
 
 t_lst *block_branch_src_get(t_context *C,t_block *block);
-//void block_branch_get(int loop,t_lst *lst,t_block *block);
 void ctx_links_term_cleanup(t_context *C);
 void block_branch_get(t_lst *lst,t_block *block);
 void ctx_links_loop(t_context *C);

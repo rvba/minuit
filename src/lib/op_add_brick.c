@@ -631,7 +631,8 @@ t_node *add_part_selector(t_context *C,t_block *block,const char *name,t_node *n
 	brick->state.draw_value=1;
 	brick->state.always_trigger = 1;
 	t_plug *plug=&brick->plug_intern;
-	plug->data=node;
+	plug->data=node->data;
+
 	return node_brick;
 }
 
