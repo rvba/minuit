@@ -53,6 +53,9 @@ void *op_brick_add(t_brick *brick)
 	else if(is(name,"msec")) 		add_slider_int(C,"msec",&C->app->clock->msec);
 	else if(is(name,"cos")) 		add_operator_single(C,"cos",op_cos);
 	else if(is(name,"sin")) 		add_operator_single(C,"sin",op_sin);
+	else if(is(name,"cam_eye_x")) 		add_slider_camera(C,"eye x");
+	else if(is(name,"cam_eye_y")) 		add_slider_camera(C,"eye y");
+	else if(is(name,"cam_eye_z")) 		add_slider_camera(C,"eye z");
 	else if(is(name,"cam_pos_x")) 		add_slider_camera(C,"pos x");
 	else if(is(name,"cam_pos_y")) 		add_slider_camera(C,"pos y");
 	else if(is(name,"cam_pos_z")) 		add_slider_camera(C,"pos z");

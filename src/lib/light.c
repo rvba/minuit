@@ -24,10 +24,6 @@ t_node *light_make(const char *name)
 	t_node *node=scene_add(C->scene,nt_light,name);
 	t_light *light=node->data;
 
-	// set menu
-	t_node *menu = scene_node_get(C->scene,"block","menu_node");
-	light->menu=menu->data;
-
 	// set pos
 	vset3f(light->pos,3,3,3);
 

@@ -161,25 +161,6 @@ t_node *make_menu_skt(void)
 	return menu;
 }
 
-// menu camera 
-
-t_node *make_menu_camera(void)
-{
-	t_context *C=ctx_get();
-	t_node *menu=block_make("menu_camera","menu");
-	t_block *block=menu->data;
-
-	add_brick_slider_float(C,block,"eye x",&C->camera->eye[0]);
-	add_brick_slider_float(C,block,"eye y",&C->camera->eye[1]);
-	add_brick_slider_float(C,block,"eye z",&C->camera->eye[2]);
-
-	add_brick_slider_float(C,block,"pos x",&C->camera->pos[0]);
-	add_brick_slider_float(C,block,"pos y",&C->camera->pos[1]);
-	add_brick_slider_float(C,block,"pos z",&C->camera->pos[2]);
-
-	return menu;
-}
-
 // menu draw
 
 t_node *make_menu_draw(void)
@@ -411,6 +392,9 @@ t_node *make_menu_cam(void)
 	add_brick_trigger(C,block,"cam_pos_z",op_brick_add);
 	add_brick_trigger(C,block,"cam_rot_xy",op_brick_add);
 	add_brick_trigger(C,block,"cam_rot_z",op_brick_add);
+	add_brick_trigger(C,block,"cam_eye_x",op_brick_add);
+	add_brick_trigger(C,block,"cam_eye_y",op_brick_add);
+	add_brick_trigger(C,block,"cam_eye_z",op_brick_add);
 
 	return menu;
 }
@@ -458,32 +442,6 @@ t_node *make_menu_brick_add(void)
 	return menu;
 }
 
-// OBJECT
-
-void make_menu_object(void)
-{
-	t_context *C = ctx_get();
-	t_node *menu=block_make("menu_node","menu");
-
-	// store menu
-	t_block *b=menu->data;
-	menu_node=b;
-
-	t_node *add = make_menu_brick_add();
-
-	t_node *draw = scene_node_get(C->scene,"block","menu_draw");
-	t_node *sketch = scene_node_get(C->scene,"block","menu_sketch");
-	t_node *set = scene_node_get(C->scene,"block","menu_set");
-	t_node *menu_object=make_menu_brick_object();
-
-	add_brick_submenu(C,menu,add,"bricks");
-	add_brick_submenu(C,menu,menu_object,"object");
-	add_brick_submenu(C,menu,draw,"draw");
-	add_brick_submenu(C,menu,sketch,"sketch");
-	add_brick_submenu(C,menu,set,"set");
-
-}
-
 // MOUSE
 
 void make_menu_mouse(void) 
@@ -496,15 +454,12 @@ void make_menu_mouse(void)
 	t_node *set = make_menu_set();
 	t_node *skt = make_menu_skt();
 	t_node *draw = make_menu_draw();
-	t_node *cam = make_menu_camera();
 
 	add_brick_submenu(C,menu,add,"add");
 	add_brick_submenu(C,menu,brick,"brick");
 	add_brick_submenu(C,menu,set,"set");
 	add_brick_submenu(C,menu,skt,"sketch");
 	add_brick_submenu(C,menu,draw,"draw");
-	add_brick_submenu(C,menu,cam,"camera");
-
 }
 
 // MAKE
@@ -512,7 +467,6 @@ void make_menu_mouse(void)
 void op_menu_init(t_context *C)
 {
 	make_menu_mouse();
-	make_menu_object();
 }
 
 // REGISTER GET
@@ -673,6 +627,9 @@ void register_set(t_context *C)
 	dict_symbol_add(dict_app,"cam_pos_x",dt_pointer,&C->camera->pos[0]);
 	dict_symbol_add(dict_app,"cam_pos_y",dt_pointer,&C->camera->pos[1]);
 	dict_symbol_add(dict_app,"cam_pos_z",dt_pointer,&C->camera->pos[2]);
+	dict_symbol_add(dict_app,"cam_eye_x",dt_pointer,&C->camera->eye[0]);
+	dict_symbol_add(dict_app,"cam_eye_y",dt_pointer,&C->camera->eye[1]);
+	dict_symbol_add(dict_app,"cam_eye_z",dt_pointer,&C->camera->eye[2]);
 
 	// MOUSE
 

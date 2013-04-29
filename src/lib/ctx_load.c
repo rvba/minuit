@@ -410,6 +410,9 @@ void *find_ref(t_scene *sc,t_data *data)
 			if(is(data->name,"pos_x"))  			p=&camera->pos[0]; 
 			else if(is(data->name,"pos_y"))  			p=&camera->pos[1]; 
 			else if(is(data->name,"pos_z"))  			p=&camera->pos[2]; 
+			else if(is(data->name,"eye_x"))  			p=&camera->eye[0]; 
+			else if(is(data->name,"eye_y"))  			p=&camera->eye[1]; 
+			else if(is(data->name,"eye_z"))  			p=&camera->eye[2]; 
 			else
 			{
 				printf("[ERROR strutc_ref_get] Unknown name [%s] \n",data->name);
