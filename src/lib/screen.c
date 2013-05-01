@@ -51,7 +51,8 @@ void screen_switch_to_main(void)
 void screen_generic(t_screen *screen)
 {
 	t_context *C=ctx_get();
-	op_camera_switch_2d(C,0,0);
+	t_camera *camera = C->camera;
+	op_camera_switch_2d(C,camera,0,0);
 
 	glPushMatrix();
 	glLoadIdentity();
@@ -72,7 +73,7 @@ void screen_generic(t_screen *screen)
 
 	glPopMatrix();
 
-	op_camera_switch_3d(C);
+	op_camera_switch_3d(C, camera);
 }
 
 // MAIN SCREEN
@@ -80,8 +81,9 @@ void screen_generic(t_screen *screen)
 void screen_main(t_screen *screen)
 {
 	t_context *C=ctx_get();
+	t_camera *camera = C->camera;
 
-	op_camera_switch_2d(C,0,0);
+	op_camera_switch_2d(C,camera,0,0);
 
 	glPushMatrix();
 	glLoadIdentity();
@@ -98,14 +100,15 @@ void screen_main(t_screen *screen)
 	//ui_draw_blocks();
 
 	glPopMatrix();
-	op_camera_switch_3d(C);
+	op_camera_switch_3d(C, camera);
 }
 
 void screen_desk(t_screen *screen)
 {
 	t_context *C=ctx_get();
+	t_camera *camera = C->camera;
 
-	op_camera_switch_2d(C,0,0);
+	op_camera_switch_2d(C,camera,0,0);
 
 	glPushMatrix();
 	glLoadIdentity();
@@ -131,7 +134,7 @@ void screen_desk(t_screen *screen)
 	ui_draw_desk();
 
 	glPopMatrix();
-	op_camera_switch_3d(C);
+	op_camera_switch_3d(C, camera);
 }
 
 // NEW

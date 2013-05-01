@@ -933,10 +933,11 @@ void *op_window(t_brick *brick)
 
 	t_context *C=ctx_get();
 	t_app *app = app_get();
+	t_camera *camera = C->camera;
 	app->window->viewport_width=app->window->width;
 	app->window->viewport_height=app->window->height;
 	glutReshapeWindow(app->window->width,app->window->height);
-	op_camera_frustum_init(C->camera);
+	op_camera_frustum_init(camera);
 
 	return NULL;
 }
@@ -946,12 +947,13 @@ void *op_window(t_brick *brick)
 void *op_camera_rotate_xy(t_brick *brick)
 {
 	t_context *C=ctx_get();
+	t_camera *camera = C->camera;
 
 	op_slider(brick);
 
 	float *data=brick->plug_intern.data;
 
-	op_camera_rotate(C,*data,0);	
+	op_camera_rotate(C,camera,*data,0);	
 
 	return NULL;
 }
@@ -961,12 +963,13 @@ void *op_camera_rotate_xy(t_brick *brick)
 void *op_camera_rotate_z(t_brick *brick)
 {
 	t_context *C=ctx_get();
+	t_camera *camera = C->camera;
 
 	op_slider(brick);
 
 	float *data=brick->plug_intern.data;
 
-	op_camera_rotate(C,0,*data);	
+	op_camera_rotate(C,camera,0,*data);	
 
 	return NULL;
 }

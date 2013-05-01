@@ -113,7 +113,7 @@ void op_camera_translate_key(t_camera *camera,float x,float y)
 	camera->is_moving=1;
 }
 
-void op_camera_switch_2d(t_context *C,int z,int p)
+void op_camera_switch_2d(t_context *C, t_camera *camera, int z,int p)
 {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -123,10 +123,10 @@ void op_camera_switch_2d(t_context *C,int z,int p)
 	int width = app->window->width;
 	int height = app->window->height;
 
-	double left = C->camera->ui_left;
-	double right = C->camera->ui_right;	
-	double bottom = C->camera->ui_bottom;
-	double top = C->camera->ui_top;
+	double left = camera->ui_left;
+	double right = camera->ui_right;	
+	double bottom = camera->ui_bottom;
+	double top = camera->ui_top;
 
 	float pan_x=-C->ui->pan_x*p;
 	float pan_y=-C->ui->pan_y*p;
@@ -149,16 +149,15 @@ void op_camera_switch_2d(t_context *C,int z,int p)
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void op_camera_switch_3d(t_context *C)
+void op_camera_switch_3d(t_context *C, t_camera *camera)
 {
-	op_camera_update(C);
+	op_camera_update(C, camera);
 	op_3d_orientation();
 }
 
-void op_camera_update(t_context *C)
+void op_camera_update(t_context *C, t_camera *camera)
 {
 	t_app *app=C->app;
-	t_camera *camera=C->camera;
 
 	glViewport(0,0,app->window->viewport_width,app->window->viewport_height);
 
@@ -278,10 +277,9 @@ void op_camera_frustum_init(t_camera *camera)
 	camera->ui_top = height;
 }
 
-void op_camera_reset(t_context *C)
+void op_camera_reset(t_context *C, t_camera *camera)
 {
 	t_app *app=C->app;
-	t_camera *camera=C->camera;
 
 	vset(camera->cross,0,0,0);
 	vset(camera->pos,0,0,0);
@@ -301,7 +299,7 @@ void op_camera_reset(t_context *C)
 	camera->ortho_near=CAM_ORTHO_NEAR;
 	camera->ortho_far=CAM_ORTHO_FAR;
 
-	op_camera_update(C);
+	op_camera_update(C, camera);
 }
 
 void op_camera_reset_pos(t_camera *camera)
@@ -309,10 +307,8 @@ void op_camera_reset_pos(t_camera *camera)
 	vset(camera->pos,0,0,0);
 }
 
-void op_camera_rotate(t_context *C,float dx,float dy)
+void op_camera_rotate(t_context *C, t_camera *camera, float dx,float dy)
 {
-	t_camera *camera=C->camera;
-
 	float speed = camera->speed;
 
 	float x = camera->eye[0];
@@ -341,10 +337,9 @@ void op_camera_rotate(t_context *C,float dx,float dy)
 	camera->is_moving=1;
 }
 
-void op_camera_translate(t_context *C)
+void op_camera_translate(t_context *C, t_camera *camera)
 {
 	t_app *app=C->app;
-	t_camera *camera=C->camera;
 
 	float speed = -camera->speed / OP_CAM_SPEED;
 	float delta = 0.0001;
@@ -363,30 +358,25 @@ void op_camera_translate(t_context *C)
 	camera->is_moving=1;
 }
 
-void op_camera_zoom(t_context *C,int dir)
+void op_camera_zoom(t_context *C, t_camera *camera, int dir)
 {
-	t_camera *camera =C->camera;
-
 	vmul(camera->eye, 1 + (30 * .005 * camera->speed * dir));
 	camera->is_moving=1;
 }
 
-void op_camera_set_ortho_zoom(t_context *C,int i)
+void op_camera_set_ortho_zoom(t_context *C, t_camera *camera, int i)
 {
-	t_camera *camera=C->camera;
-
 	float speed = camera->speed;
 	camera->ortho_zoom = camera->ortho_zoom + (i * OP_CAM_ORTHO_ZOOM_FAC * speed);
 	camera->new_ortho_zoom+=.005*i;
 
 	camera->is_moving=1;
-	op_camera_update(C);
+	op_camera_update(C, camera);
 }
 
-void op_camera_set_ortho_pan(t_context *C)
+void op_camera_set_ortho_pan(t_context *C, t_camera *camera)
 {
 	t_app *app=C->app;
-	t_camera *camera=C->camera;
 
 	float speed = camera->speed;
 	float d = .001;

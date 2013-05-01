@@ -12,7 +12,7 @@
 int VIEWPORT_WIDTH;
 int VIEWPORT_HEIGHT;
 
-void ctx_camera_set(t_context *C);
+void ctx_camera_set(t_context *C, t_camera *camera);
 
 /** set drawing options for the selection pass*/
 void ctx_render_set_selection_pass(t_context *C)
@@ -75,12 +75,13 @@ void ctx_render_set_full_pass(t_context *C)
 void ctx_render_scene(void)
 {
 	t_context *C = ctx_get();
+	t_camera *camera = C->camera;
 	if(C->draw->with_draw_pass && C->scene->is_ready)
 	{
 		// set draw mode
 		ctx_render_set_full_pass(C);
 		// draw the ui and the scene
-		ctx_camera_set(C);
+		ctx_camera_set(C, camera);
 		draw_scene(C->draw,C->scene);
 	}
 }
@@ -88,6 +89,7 @@ void ctx_render_scene(void)
 /** grab the color under the mouse*/
 void ctx_render_selection_pass(t_context *C)
 {
+	t_camera *camera = C->camera;
 	// PIXEL
 	unsigned char pixel[3];
 	memset(pixel,3,0);
@@ -111,7 +113,7 @@ void ctx_render_selection_pass(t_context *C)
 	*/
 
 
-	ctx_camera_set(C);
+	ctx_camera_set(C,camera);
 
 	// DRAW SCENE
 	if(C->scene->is_ready) draw_scene(C->draw,C->scene);
@@ -146,10 +148,10 @@ void ctx_render_selection_pass(t_context *C)
 }
 
 /** update camera */
-void ctx_camera_set(t_context *C)
+void ctx_camera_set(t_context *C, t_camera *camera)
 {
 	// set frustum
-	op_camera_update(C);
+	op_camera_update(C, camera);
 	// flip global orientation (model)
 	op_3d_orientation(); 
 }

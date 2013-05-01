@@ -9,10 +9,9 @@
 
 #include "op.h"
 
-void ctx_camera_movment(t_context *C)
+void ctx_camera_movment(t_context *C, t_camera *camera)
 {
 	t_app *app=C->app;
-	t_camera *camera = C->camera;
 	int dx = -app->mouse->sign_x * app->mouse->dx;
 	int dy = app->mouse->sign_y * app->mouse->dy; 
 
@@ -50,12 +49,12 @@ void ctx_camera_movment(t_context *C)
 		
 			{
 				// camera rotate
-				op_camera_rotate(C,(float)dx,(float)dy);
+				op_camera_rotate(C, camera, (float)dx,(float)dy);
 			}
 			else if ((app->mouse->button_middle == button_pressed) && (app->keyboard->shift==1))	
 			{
 				// camera translate	
-				op_camera_translate(C);
+				op_camera_translate(C, camera);
 			}
 
 
@@ -64,7 +63,7 @@ void ctx_camera_movment(t_context *C)
 				if(C->app->keyboard->shift)
 					C->ui->zoom-=.1;
 				else
-					op_camera_zoom(C,-1);
+					op_camera_zoom(C, camera, -1);
 
 				app->mouse->wheel=wheel_idle;
 			}
@@ -74,7 +73,7 @@ void ctx_camera_movment(t_context *C)
 				if(C->app->keyboard->shift)
 					C->ui->zoom+=.1;
 				else
-					op_camera_zoom(C,1);
+					op_camera_zoom(C, camera,1);
 
 				app->mouse->wheel=wheel_idle;
 			}
@@ -84,18 +83,18 @@ void ctx_camera_movment(t_context *C)
 		{
 			if (app->mouse->wheel == wheel_up)
 			{
-				op_camera_set_ortho_zoom(C,-1);
+				op_camera_set_ortho_zoom(C, camera,-1);
 				app->mouse->wheel=wheel_idle;
 			}
 
 			if (app->mouse->wheel == wheel_down)
 			{
-				op_camera_set_ortho_zoom(C,1);
+				op_camera_set_ortho_zoom(C,camera,1);
 				app->mouse->wheel=wheel_idle;
 			}
 			if (app->mouse->button_left == button_pressed && app->keyboard->shift)
 			{
-				op_camera_set_ortho_pan(C);
+				op_camera_set_ortho_pan(C, camera);
 			}
 		}
 	}
@@ -112,9 +111,10 @@ void op_check_window(t_context *C)
 
 void ctx_camera(t_context *C)
 {
+	t_camera *camera = C->camera;
 	C->camera->is_moving=0;
 	op_check_window(C);
-	op_camera_change_speed(C->camera);
-	ctx_camera_movment(C);
+	op_camera_change_speed(camera);
+	ctx_camera_movment(C, camera);
 }
 	

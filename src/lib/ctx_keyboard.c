@@ -78,6 +78,7 @@ void keymap_command(unsigned char key)
 {
 	t_context *C=ctx_get();
 	t_event *event = C->event;
+	t_camera *camera = C->camera;
 
 	switch(key)
 	{
@@ -104,10 +105,10 @@ void keymap_command(unsigned char key)
 		//
 
 		case '*': draw_switch_axis_world(C->draw);break;
-		case '_': op_camera_translate_key(C->camera,-10,0);break;//right
-		case '-': op_camera_translate_key(C->camera,10,0);break;//left
-		case '&': op_camera_translate_key(C->camera,0,10);break;//up
-		case ']': op_camera_translate_key(C->camera,0,-10);break;//down
+		case '_': op_camera_translate_key(camera,-10,0);break;//right
+		case '-': op_camera_translate_key(camera,10,0);break;//left
+		case '&': op_camera_translate_key(camera,0,10);break;//up
+		case ']': op_camera_translate_key(camera,0,-10);break;//down
 
 		case '@': 
 			if(C->scene->selected)
@@ -115,37 +116,37 @@ void keymap_command(unsigned char key)
 				C->ui->pan_x+=10;
 			}
 			else
-				op_camera_rotate(C,10,0);
+				op_camera_rotate(C,camera,10,0);
 			break; //right
 		case '^': 	
 			if(C->scene->selected)
 				C->ui->pan_x-=10;
 			else
-				op_camera_rotate(C,-10,0);
+				op_camera_rotate(C,camera,-10,0);
 			break; //left
 		case '(': 
 			
 				if(C->scene->selected)
 					C->ui->pan_y+=10;
 				else
-					op_camera_rotate(C,0,15);break; //up
+					op_camera_rotate(C,camera,0,15);break; //up
 		case ')': 
 				if(C->scene->selected)
 					C->ui->pan_y-=10;
 				else
-				op_camera_rotate(C,0,-15);break; // down
+				op_camera_rotate(C,camera,0,-15);break; // down
 
 		case 'a': ctx_switch_record_video(C); break;
 		case 'q': op_quit(NULL);break;
-		case '.': op_camera_reset_pos(C->camera);break;
-		case '5': op_camera_switch_type(C->camera);break;
+		case '.': op_camera_reset_pos(camera);break;
+		case '5': op_camera_switch_type(camera);break;
 		case 'z': app_screen_switch_fullscreen(C->app);break;
 		case 'm': C->draw->with_draw_pass=0; break;
-		case '7': op_camera_view_top(C->camera);break;
-		case '1': op_camera_view_front(C->camera);break;
-		case '9': op_camera_view_axo(C->camera);break;
-		case '3': op_camera_view_left(C->camera);break;
-		case '2': op_camera_ortho_rotate(C->camera,-5,0,0);break;
+		case '7': op_camera_view_top(camera);break;
+		case '1': op_camera_view_front(camera);break;
+		case '9': op_camera_view_axo(camera);break;
+		case '3': op_camera_view_left(camera);break;
+		case '2': op_camera_ortho_rotate(camera,-5,0,0);break;
 		case 'x': op_switch_color(C);break;
 		case 't': switch_txt(C);break;
 		case 'l': scene_log(C->scene);break;

@@ -225,8 +225,9 @@ void browser_draw(void)
 void screen_browser(t_screen *screen)
 {
 	t_context *C=ctx_get();
+	t_camera *camera = C->camera;
 
-	op_camera_switch_2d(C,0,0);
+	op_camera_switch_2d(C,camera,0,0);
 
 	glPushMatrix();
 	glLoadIdentity();
@@ -235,7 +236,7 @@ void screen_browser(t_screen *screen)
 	browser_draw();
 
 	glPopMatrix();
-	op_camera_switch_3d(C);
+	op_camera_switch_3d(C, camera);
 }
 
 void browser_init(void)
