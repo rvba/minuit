@@ -92,11 +92,12 @@ void *op_brick_add(t_brick *brick)
 	else if(is(name,"and")) 		add_maths(C,"and"); 
 	else if(is(name,"stack")) 		add_stack(C); 
 
-	// store
+	// Store
 	C->scene->store=0;
 
-	brick_set_updated(brick);
-
+	// Switch Desk
+	if(!C->ui->show_desk) switch_desk(C);
+		
 	return NULL;
 }
 
@@ -194,9 +195,6 @@ void *op_slider(t_brick *brick)
 		}
 	}
 
-	// update
-	brick_set_updated(brick);
-
 	return NULL;
 }
 
@@ -211,9 +209,6 @@ void *op_slider_positive(t_brick *brick)
 	int *val = brick->plug_intern.data;
 	if(*val < 0) *val=0; 
 
-	// update
-	brick_set_updated(brick);
-
 	return NULL;
 }
 
@@ -225,9 +220,6 @@ void *op_slider_positive_non_zero(t_brick *brick)
 	// set positive
 	int *val = brick->plug_intern.data;
 	if(*val < 1) *val=1; 
-
-	// update
-	brick_set_updated(brick);
 
 	return NULL;
 }
@@ -270,8 +262,6 @@ void *op_selector(t_brick *brick)
 		brick_release(brick);
 	}
 
-	brick_set_updated(brick);
-
 	return NULL;
 }
 
@@ -312,8 +302,6 @@ void *op_switch(t_brick *brick)
 		brick->state.is_released=1;
 		brick_release(brick);
 	}
-
-	brick_set_updated(brick);
 
 	return NULL;
 }
@@ -372,8 +360,6 @@ void *op_superior(t_brick *brick)
 		*result = 0;
 	}
 
-	brick_set_updated(brick);
-
 	return NULL;
 }
 
@@ -430,8 +416,6 @@ void *op_inferior(t_brick *brick)
 	{
 		*result = 0;
 	}
-
-	brick_set_updated(brick);
 
 	return NULL;
 }
@@ -490,8 +474,6 @@ void *op_equal(t_brick *brick)
 		*result = 0;
 	}
 
-	brick_set_updated(brick);
-
 	return NULL;
 }
 
@@ -548,8 +530,6 @@ void *op_mod(t_brick *brick)
 		*result = 0;
 	}
 
-	brick_set_updated(brick);
-
 	return NULL;
 }
 
@@ -580,8 +560,6 @@ void *op_plusplus(t_brick *brick)
 				break;
 		}
 	}
-
-	brick_set_updated(brick);
 
 	return NULL;
 }
@@ -903,9 +881,6 @@ void *op_clone(t_brick *brick)
 		}
 	}
 
-	// Set Updated
-	brick_set_updated(brick);
-
 	return NULL;
 }
 
@@ -927,8 +902,6 @@ void *op_sin(t_brick *brick)
 	// release
 	if(brick->mode==bm_triggering) brick_release(brick);
 
-	brick_set_updated(brick);
-
 	return NULL;
 }
 
@@ -949,8 +922,6 @@ void *op_cos(t_brick *brick)
 	// release
 	if(brick->mode==bm_triggering) brick_release(brick);
 
-	brick_set_updated(brick);
-
 	return NULL;
 }
 
@@ -967,8 +938,6 @@ void *op_window(t_brick *brick)
 	glutReshapeWindow(app->window->width,app->window->height);
 	op_camera_frustum_init(C->camera);
 
-	brick_set_updated(brick);
-
 	return NULL;
 }
 
@@ -984,8 +953,6 @@ void *op_camera_rotate_xy(t_brick *brick)
 
 	op_camera_rotate(C,*data,0);	
 
-	brick_set_updated(brick);
-
 	return NULL;
 }
 
@@ -1000,8 +967,6 @@ void *op_camera_rotate_z(t_brick *brick)
 	float *data=brick->plug_intern.data;
 
 	op_camera_rotate(C,0,*data);	
-
-	brick_set_updated(brick);
 
 	return NULL;
 }
@@ -1022,8 +987,6 @@ void *op_delete(t_brick *brick)
 		C->scene->selected=NULL;
 	}
 
-	brick_set_updated(brick);
-
 	return NULL;
 }
 
@@ -1033,8 +996,6 @@ void *op_menu(t_brick *brick)
 {
 	brick_release(brick);
 
-	brick_set_updated(brick);
-
 	return NULL;
 }
 
@@ -1043,8 +1004,6 @@ void *op_menu(t_brick *brick)
 void *op_void(t_brick *brick)
 {
 	brick_release(brick);
-
-	brick_set_updated(brick);
 
 	return NULL;
 }
@@ -1057,8 +1016,6 @@ void *op_pointer(t_brick *brick)
 
 	// flow
 	plug_intern->cls->flow(plug_intern);
-
-	brick_set_updated(brick);
 
 	return NULL;
 }
@@ -1440,7 +1397,6 @@ void *op_add(t_brick *brick)
 {
 	op_maths(t_op_add,brick);
 	op_maths_exe(t_op_add,brick);
-	brick_set_updated(brick);
 	return NULL;
 }
 
@@ -1448,7 +1404,6 @@ void *op_mult(t_brick *brick)
 {
 	op_maths(t_op_mult,brick);
 	op_maths_exe(t_op_mult,brick);
-	brick_set_updated(brick);
 	return NULL;
 }
 
@@ -1516,8 +1471,6 @@ void *op_set_selected(t_brick *brick)
 			ctx_scene_set_selected(C,plug->data);
 		}
 	}
-
-	brick_set_updated(brick);
 
 	return NULL;
 }
@@ -1587,8 +1540,6 @@ void *__op_get(t_brick *brick)
 		}
 	}
 
-	brick_set_updated(brick);
-
 	return NULL;
 }
 
@@ -1600,9 +1551,6 @@ void *op_rewind(t_brick *brick)
 
 	// flow
 	plug_intern->cls->flow(plug_intern);
-
-	// update
-	brick_set_updated(brick);
 
 	return NULL;
 }
@@ -1632,8 +1580,6 @@ void *op_not(t_brick *brick)
 			break;
 		default:printf("op_not need an int\n");break;
 	}
-
-	brick_set_updated(brick);
 
 	return NULL;
 }
@@ -1679,8 +1625,6 @@ void *op_set_vlst(t_brick *brick)
 		}
 	}
 
-	brick_set_updated(brick);
-
 	return NULL;
 }
 
@@ -1703,8 +1647,6 @@ void *op_set_colors(t_brick *brick)
 		if(vlst->count != vlst->count_new) vlst_update_data(vlst,NULL);
 	}
 
-	brick_set_updated(brick);
-
 	return NULL;
 }
 
@@ -1715,8 +1657,6 @@ void *op_rnd(t_brick *brick)
 	t_plug *plug_intern=&brick->plug_intern;
 	int *data=plug_intern->data;
 	*data=u_randrange(0,100);
-
-	brick_set_updated(brick);
 
 	return NULL;
 }
@@ -1734,9 +1674,6 @@ void *op_neg(t_brick *brick)
 	// negate
 	if(plug_in->is_connected)
 		plug_data_negate(plug_intern);
-
-	// update
-	brick_set_updated(brick);
 
 	return NULL;
 }
@@ -1778,8 +1715,6 @@ void *op_is_last(t_brick *brick)
 		*data = 0;
 	}
 
-	brick_set_updated(brick);
-
 	return NULL;
 }
 
@@ -1791,8 +1726,6 @@ void *op_for(t_brick *brick)
 
 	// flow
 	plug_intern->cls->flow(plug_intern);
-
-	brick_set_updated(brick);
 
 	return NULL;
 }
@@ -1806,8 +1739,6 @@ void *op_operator(t_brick *brick)
 	// flow
 	plug_intern->cls->flow(plug_intern);
 
-	brick_set_updated(brick);
-
 	return NULL;
 }
 
@@ -1820,8 +1751,6 @@ void *op_vector(t_brick *brick)
 
 	// flow
 	plug_intern->cls->flow(plug_intern);
-
-	brick_set_updated(brick);
 
 	return NULL;
 }
@@ -1855,8 +1784,6 @@ void *op_bang(t_brick *brick)
 		*state=0;
 	}
 
-	brick_set_updated(brick);
-
 	return NULL;
 }
 
@@ -1868,8 +1795,6 @@ void *op_float(t_brick *brick)
 	plug_intern->cls->flow(plug_intern);
 
 	if(brick->mode == bm_triggering)	brick_release(brick);
-	brick_set_updated(brick);
-
 	return NULL;
 }
 
@@ -1882,8 +1807,6 @@ void *op_int(t_brick *brick)
 	plug_intern->cls->flow(plug_intern);
 
 	if(brick->mode == bm_triggering)	brick_release(brick);
-	brick_set_updated(brick);
-
 	return NULL;
 }
 
@@ -1897,8 +1820,6 @@ void *op_do_quit(t_brick *brick)
 	int i = drf_int(plug_intern->data);
 
 	if(i) op_quit(NULL);
-
-	brick_set_updated(brick);
 
 	return NULL;
 }
@@ -1924,8 +1845,6 @@ void *op_const(t_brick *brick)
 
 		*_const = *_i;
 	}
-
-	brick_set_updated(brick);
 
 	if(brick->mode == bm_triggering)
 		brick_release(brick);
@@ -1972,7 +1891,6 @@ void *op_stack(t_brick *brick)
 		(*i)++;
 	}
 
-	brick_set_updated(brick);
 	if(brick->mode == bm_triggering) brick_release(brick);
 
 	return NULL;

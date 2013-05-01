@@ -338,6 +338,7 @@ t_ui *ui_new(void)
 	ui->show_states = 0;
 	ui->show_step = 0;
 	ui->show_brick_step = 0;
+	ui->show_desk = 0;
 	ui->step = 0;
 	ui->step_reset = 0;
 

@@ -154,6 +154,7 @@ void load_last(t_context *C);
 
 // CTX_KEYBOARD
 
+void switch_desk(t_context *C);
 void keymap_main(unsigned char key);
 void keymap_generic(unsigned char key);
 void ctx_keyboard(t_context *C);

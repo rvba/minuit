@@ -64,6 +64,7 @@ struct Ui
 	int show_states;
 	int show_step;
 	int show_brick_step;
+	int show_desk;
 
 	int step;
 	int step_reset;

@@ -87,31 +87,32 @@ void cls_brick_trigger_number(t_brick *brick)
 			brick->state.frame_loop = frame;
 			if(brick->action) brick->action(brick);
 		}
-		else
-		{
-			brick_set_updated(brick);
-		}
 	}
 	else
 	{
 		if(brick->action) brick->action(brick);
 	}
 
+	brick_set_updated(brick);
+
 }
 
 void cls_brick_trigger_switch(t_brick *brick)
 {
 	brick->action(brick);
+	brick_set_updated(brick);
 }
 
 void cls_brick_trigger_selector(t_brick *brick)
 {
 	brick->action(brick);
+	brick_set_updated(brick);
 }
 
 void cls_brick_trigger_menu(t_brick *brick)
 {
 	brick->action(brick);
+	brick_set_updated(brick);
 }
 
 void cls_brick_trigger_operator(t_brick *brick)
@@ -119,16 +120,19 @@ void cls_brick_trigger_operator(t_brick *brick)
 	brick->action(brick);
 	if(brick->mode == bm_triggering)
 		brick_release(brick);
+	brick_set_updated(brick);
 }
 
 void cls_brick_trigger_vlst(t_brick *brick)
 {
 	brick->action(brick);
+	brick_set_updated(brick);
 }
 
 void cls_brick_trigger_lst(t_brick *brick)
 {
 	brick->action(brick);
+	brick_set_updated(brick);
 }
 
 void cls_brick_trigger_generic(t_brick *brick)
@@ -184,12 +188,14 @@ void cls_brick_trigger_generic(t_brick *brick)
 			}
 		}
 	}
+
+	brick_set_updated(brick);
 }
 
 void cls_brick_trigger_action_default(t_brick *brick)
 {
 	brick->action(brick);
-
+	brick_set_updated(brick);
 }
 
 // RELEASE

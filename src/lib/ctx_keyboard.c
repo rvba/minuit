@@ -35,18 +35,17 @@ void switch_txt(t_context *C)
 	else C->ui->use_bitmap_font=1;
 }
 
-int __screen=0;
 void switch_desk(t_context *C)
 {
-	if(__screen==0)
+	if(C->ui->show_desk)
 	{
-		__screen=1;
-		screen_switch_by_name("screen_desk");
+		C->ui->show_desk = 0;
+		screen_switch_by_name("screen_main");
 	}
 	else
 	{
-		__screen=0;
-		screen_switch_by_name("screen_main");
+		C->ui->show_desk = 1;
+		screen_switch_by_name("screen_desk");
 	}
 }
 
