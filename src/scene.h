@@ -21,6 +21,7 @@
 #include "camera.h"
 #include "dict.h"
 #include "vector.h"
+#include "viewport.h"
 
 t_node *	scene_get_data(t_scene *sc,void *ptr);
 t_node *	scene_get_var(t_scene *sc,void *ptr);

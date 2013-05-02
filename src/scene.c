@@ -940,6 +940,7 @@ t_scene *scene_init(void)
 	sc->dicts=lst_new("dicts");
 	sc->symbols=lst_new("symbols");
 	sc->vectors=lst_new("vectors");
+	sc->viewports=lst_new("viewports");
 
 	sc->tmp_colors=lst_new("tmp_colors");
 

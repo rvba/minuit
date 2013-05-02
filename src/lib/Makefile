@@ -60,6 +60,7 @@ obj:=\
 	txt.o\
 	term.o\
 	vector.o\
+	viewport.o\
 	vlst.o
 
 ifeq ($(DEBUG),1)
@@ -186,6 +187,8 @@ vector.o:vector.h vector.c
 	gcc -c vector.c $(FLAG) $(INC)
 vlst.o:list.h vlst.c
 	gcc -c vlst.c $(FLAG) $(INC)
+viewport.o:viewport.h viewport.c
+	gcc -c viewport.c $(FLAG) $(INC)
 
 .PHONY:clean
 clean:

@@ -62,6 +62,7 @@ enum Data_Type
 	dt_trigger,
 	dt_operator,
 	dt_vector,
+	dt_viewport
 };
 
 enum Node_Type
@@ -87,7 +88,8 @@ enum Node_Type
 	nt_camera,
 	nt_dict,
 	nt_symbol,
-	nt_vector
+	nt_vector,
+	nt_viewport,
 };
 	
 
@@ -192,6 +194,7 @@ struct Scene
 	t_lst *dicts;
 	t_lst *symbols;
 	t_lst *vectors;
+	t_lst *viewports;
 
 	// selections
 	t_node *selected;
