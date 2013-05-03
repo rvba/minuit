@@ -102,6 +102,7 @@ struct Draw
 
 void draw_clear(float r,float g,float b,float a);
 t_draw *draw_new(void);
+void draw_init(t_draw *draw);
 void draw_scene(t_draw *draw, t_scene *scene);
 void draw_switch_axis_world(t_draw *draw);
 void draw_mesh_direct(t_draw *draw,t_scene *scene,t_mesh *mesh);

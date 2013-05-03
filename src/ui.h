@@ -105,6 +105,8 @@ struct Ui
 	int screen_direction;
 
 	int mouse_size;
+
+	t_camera *camera;
 };
 
 // UI.C

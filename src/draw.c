@@ -583,7 +583,7 @@ void draw_init(t_draw *draw)
 void draw_scene(t_draw *draw, t_scene *scene)
 {
 	// INIT
-	draw_init(draw);
+	//draw_init(draw);
 
 	// DRAW
 
@@ -591,8 +591,6 @@ void draw_scene(t_draw *draw, t_scene *scene)
 	draw_objects(draw,scene);
 	draw_axis_world(draw);
 
-	// UI
-	ui_draw();
 }
 
 t_draw *draw_new(void)

@@ -241,4 +241,6 @@ void brick_remove(t_dict *args);
 
 void ctx_switch_record_video(t_context *C);
 
+void ctx_get_selection(t_context *C);
+
 #endif

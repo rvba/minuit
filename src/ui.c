@@ -317,6 +317,8 @@ void ui_init(void)
 
 	t_context *C=ctx_get();
 	op_set_color(C,C->draw->color);
+
+	C->ui->camera = camera_new("camera_ui");
 }
 
 // NEW
@@ -377,6 +379,7 @@ t_ui *ui_new(void)
 	ui->screen_link_active = NULL;
 	ui->screen_direction = 1;
 	ui->mouse_size = 9;
+	ui->camera = NULL;
 
 	return ui;
 }

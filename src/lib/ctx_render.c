@@ -79,7 +79,7 @@ void ctx_render_scene(void)
 	if(C->draw->with_draw_pass && C->scene->is_ready)
 	{
 		// set draw mode
-		ctx_render_set_full_pass(C);
+		//ctx_render_set_full_pass(C);
 		// draw the ui and the scene
 		ctx_camera_set(C, camera);
 		draw_scene(C->draw,C->scene);
@@ -87,9 +87,9 @@ void ctx_render_scene(void)
 }
 
 /** grab the color under the mouse*/
+/*
 void ctx_render_selection_pass(t_context *C)
 {
-	t_camera *camera = C->camera;
 	// PIXEL
 	unsigned char pixel[3];
 	memset(pixel,3,0);
@@ -104,27 +104,44 @@ void ctx_render_selection_pass(t_context *C)
 	// set selection pass
 	ctx_render_set_selection_pass(C);
 
-	/*
-	if (C->draw->with_restrict_matrix)
-	{
-		C->app->window->viewport_width=VIEWPORT_WIDTH/10;
-		C->app->window->viewport_height=VIEWPORT_HEIGHT/10;
-	}
-	*/
-
-
-	ctx_camera_set(C,camera);
-
 	// DRAW SCENE
 	if(C->scene->is_ready) draw_scene(C->draw,C->scene);
 
-	/*
-	if ( C->draw->with_restrict_matrix)
-	{
-		C->app->window->viewport_width=VIEWPORT_WIDTH;
-		C->app->window->viewport_height=VIEWPORT_HEIGHT;
-	}
-	*/
+	// read pixel under mouse
+
+	glPixelStorei(GL_PACK_ALIGNMENT,1); 
+	glReadPixels(x,y,1,1,GL_RGBA,GL_UNSIGNED_BYTE,pixel); 
+
+	int r = (int)pixel[0];
+	int g = (int)pixel[1];
+	int b = (int)pixel[2];
+	int a = (int)pixel[3];
+
+	// store pixel color
+	C->event->color[0]=r;
+	C->event->color[1]=g;
+	C->event->color[2]=b;
+	C->event->color[3]=a;
+
+	// debug
+	if (C->event->debug_select)
+		 printf("pixel color : %d %d %d %d\n",C->event->color[0],C->event->color[1],C->event->color[2],a);
+}
+*/
+
+void ctx_get_selection(t_context *C)
+{
+	// PIXEL
+	unsigned char pixel[3];
+	memset(pixel,3,0);
+
+	// VIEWPORT
+	GLint viewport[4];
+	memset(viewport,4,0);
+	glGetIntegerv(GL_VIEWPORT,viewport);
+
+	int x = C->app->mouse->x;
+	int y = C->app->mouse->y;
 
 	// read pixel under mouse
 
@@ -156,6 +173,7 @@ void ctx_camera_set(t_context *C, t_camera *camera)
 	op_3d_orientation(); 
 }
 
+/*
 void ctx_render_selection(t_context *C)
 {
 	if(C->draw->with_selection_pass)
@@ -163,6 +181,7 @@ void ctx_render_selection(t_context *C)
 		ctx_render_selection_pass(C); 
 	}
 }
+*/
 
 void ctx_switch_record_video(t_context *C)
 {
@@ -328,11 +347,28 @@ void ctx_render(t_context *C)
 		VIEWPORT_WIDTH=C->app->window->viewport_width;
 		VIEWPORT_HEIGHT=C->app->window->viewport_height;
 
-		ctx_render_selection(C);
-		ctx_render_scene();
+		// Selection Pass
+		if(C->draw->with_selection_pass)
+		{
+			ctx_render_set_selection_pass(C);
+			draw_init(C->draw);
+			draw_scene(C->draw,C->scene);
+			ui_draw();
 
+			// Get Color
+			ctx_get_selection(C);
+		}
+
+		// Render Pass
+		ctx_render_set_full_pass(C);
+		draw_init(C->draw);
+		ctx_render_scene();
+		ui_draw();
+
+		// Swap
 		app_swap(C->app);
 
+		// Video Record
 		if(C->event->video_record) ctx_render_video(C);
 	}
 }
