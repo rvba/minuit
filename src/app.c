@@ -19,13 +19,6 @@
 // used for GL calls without args
 t_app *APP;
 
-/*
-int app_get_frame(void)
-{
-	return APP->frame;
-}
-*/
-
 t_app *app_get(void)
 {
 	return APP;
@@ -99,7 +92,6 @@ void app_sleep(t_app *app)
 
 void app_gl_idle(void)
 {
-	//t_app *app = app_get();
 	t_app *app = APP;
 
 	// reset mouse
@@ -137,26 +129,6 @@ void app_swap(t_app *app)
 		glFlush();
 	}
 }
-
-/*
-void app_update_viewport(t_app *app)
-{
-	app->dsp_func();
-}
-
-void app_set_dsp_func(t_app *app ,void(*dsp_func)(void))
-{
-	app->dsp_func = dsp_func;
-}
-*/
-	
-/*
-void app_set_main_func(t_app *app,void(*func)(void))
-{
-	app->main_func = func;
-}
-*/
-
 
 void app_launch(t_app *app)
 {
@@ -271,7 +243,6 @@ t_app *app_init(int argc,char **argv)
 
 t_app *app_new(int argc,char **argv)
 {
-	// APP
 	t_app *app = (t_app *)malloc(sizeof(t_app));
 
 	app->argc=argc;
@@ -306,9 +277,6 @@ t_app *app_new(int argc,char **argv)
 	// GLUT
 	if(app->with_glut) glutInit(&app->argc, app->argv);
 
-	//glewInit();
-
-	// STRUCTS
 	app->mouse=mouse_new();
 	app->window=window_new(app->with_glut);
 	app->keyboard=keyboard_new();
