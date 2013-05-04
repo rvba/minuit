@@ -18,16 +18,17 @@ obj:=\
 	brick_update.o\
 	brick_cls.o\
 	camera.o\
-	ctx_keyboard.o\
-	ctx_mouse.o\
-	ctx_ui.o\
-	ctx_scene.o\
-	ctx_render.o\
-	ctx_links.o\
 	ctx_camera.o\
-	ctx_process.o\
-	ctx_option.o\
+	ctx_keyboard.o\
+	ctx_links.o\
 	ctx_load.o\
+	ctx_option.o\
+	ctx_process.o\
+	ctx_mouse.o\
+	ctx_render.o\
+	ctx_scene.o\
+	ctx_ui.o\
+	ctx_video.o\
 	data.o\
 	dict.o\
 	engine.o\
@@ -121,6 +122,8 @@ ctx_scene.o:../context.h ctx_scene.c
 	gcc -c ctx_scene.c $(FLAG) $(INC)
 ctx_render.o:../context.h ctx_render.c
 	gcc -c ctx_render.c $(FLAG) $(INC)
+ctx_video.o:../context.h ctx_video.c
+	gcc -c ctx_video.c $(FLAG) $(INC)
 data.o:data.h data.c
 	gcc -c data.c $(FLAG) $(INC)
 dict.o:dict.h dict.c

@@ -146,7 +146,6 @@ void check_check(const char *type,const char *name);
 int check(t_node *node,const char *name_data,const char *name_ptr);
 void load_file(t_context *C,const char *path);
 void save_file(t_context *C);
-//void save_file(t_context *C,const char *path);
 void save_file_increment(t_context *C);
 void *ctx_get_pointer(void *ptr);
 void rebind(t_scene *sc,const char *type,const char *name,void **ptr);
@@ -200,12 +199,6 @@ void process_launch(t_process *process);
 
 // CTX_RENDER
 
-void ctx_render_set_selection_pass(t_context *C);
-void ctx_render_set_full_pass(t_context *C);
-void ctx_render_scene(void);
-void ctx_render_selection_pass(t_context *C);
-void ctx_render_set_camera(t_context *C);
-void ctx_render_selection(t_context *C);
 void ctx_render(t_context *C);
 
 // CTX_LINKS.C
@@ -242,5 +235,10 @@ void brick_remove(t_dict *args);
 void ctx_switch_record_video(t_context *C);
 
 void ctx_get_selection(t_context *C);
+
+
+// VIDEO
+
+void ctx_render_video(t_context *C);
 
 #endif

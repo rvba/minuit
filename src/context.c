@@ -70,8 +70,10 @@ t_context *ctx_init(int argc,char **argv)
 	ctx_thread_init(C);
 
 	// set gl callbacks
-	app_set_main_func(C->app,ctx_handler);
-	app_set_dsp_func(C->app,ctx_render_scene);
+	C->app->main_func = ctx_handler;
+
+	//app_set_main_func(C->app,ctx_handler);
+	//app_set_dsp_func(C->app,ctx_render_scene);
 
 	// add global
 	C->scene->store=1;

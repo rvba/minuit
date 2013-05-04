@@ -19,10 +19,12 @@
 // used for GL calls without args
 t_app *APP;
 
+/*
 int app_get_frame(void)
 {
 	return APP->frame;
 }
+*/
 
 t_app *app_get(void)
 {
@@ -97,7 +99,8 @@ void app_sleep(t_app *app)
 
 void app_gl_idle(void)
 {
-	t_app *app = app_get();
+	//t_app *app = app_get();
+	t_app *app = APP;
 
 	// reset mouse
 	app->mouse->dx=0;
@@ -135,6 +138,7 @@ void app_swap(t_app *app)
 	}
 }
 
+/*
 void app_update_viewport(t_app *app)
 {
 	app->dsp_func();
@@ -144,11 +148,14 @@ void app_set_dsp_func(t_app *app ,void(*dsp_func)(void))
 {
 	app->dsp_func = dsp_func;
 }
+*/
 	
+/*
 void app_set_main_func(t_app *app,void(*func)(void))
 {
 	app->main_func = func;
 }
+*/
 
 
 void app_launch(t_app *app)

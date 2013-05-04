@@ -582,15 +582,9 @@ void draw_init(t_draw *draw)
 
 void draw_scene(t_draw *draw, t_scene *scene)
 {
-	// INIT
-	//draw_init(draw);
-
-	// DRAW
-
 	draw_lights(draw,scene);
 	draw_objects(draw,scene);
 	draw_axis_world(draw);
-
 }
 
 t_draw *draw_new(void)
@@ -607,7 +601,6 @@ t_draw *draw_new(void)
 	vset4f(draw->front_color,0,0,0,0);
 
 	draw->mode=mode_draw;
-	//draw->color=color_white;
 	draw->color=DRAW_COLOR;
 
 	draw->with_selection_pass=DRAW_SELECTION_PASS; 

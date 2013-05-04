@@ -12,8 +12,6 @@
 int VIEWPORT_WIDTH;
 int VIEWPORT_HEIGHT;
 
-void ctx_camera_set(t_context *C, t_camera *camera);
-
 /** set drawing options for the selection pass*/
 void ctx_render_set_selection_pass(t_context *C)
 {
@@ -71,64 +69,6 @@ void ctx_render_set_full_pass(t_context *C)
 	C->draw->with_face=C->event->with_face;
 }
 
-/** the drawing callback */
-void ctx_render_scene(void)
-{
-	t_context *C = ctx_get();
-	t_camera *camera = C->camera;
-	if(C->draw->with_draw_pass && C->scene->is_ready)
-	{
-		// set draw mode
-		//ctx_render_set_full_pass(C);
-		// draw the ui and the scene
-		ctx_camera_set(C, camera);
-		draw_scene(C->draw,C->scene);
-	}
-}
-
-/** grab the color under the mouse*/
-/*
-void ctx_render_selection_pass(t_context *C)
-{
-	// PIXEL
-	unsigned char pixel[3];
-	memset(pixel,3,0);
-	// VIEWPORT
-	GLint viewport[4];
-	memset(viewport,4,0);
-	glGetIntegerv(GL_VIEWPORT,viewport);
-
-	int x = C->app->mouse->x;
-	int y = C->app->mouse->y;
-
-	// set selection pass
-	ctx_render_set_selection_pass(C);
-
-	// DRAW SCENE
-	if(C->scene->is_ready) draw_scene(C->draw,C->scene);
-
-	// read pixel under mouse
-
-	glPixelStorei(GL_PACK_ALIGNMENT,1); 
-	glReadPixels(x,y,1,1,GL_RGBA,GL_UNSIGNED_BYTE,pixel); 
-
-	int r = (int)pixel[0];
-	int g = (int)pixel[1];
-	int b = (int)pixel[2];
-	int a = (int)pixel[3];
-
-	// store pixel color
-	C->event->color[0]=r;
-	C->event->color[1]=g;
-	C->event->color[2]=b;
-	C->event->color[3]=a;
-
-	// debug
-	if (C->event->debug_select)
-		 printf("pixel color : %d %d %d %d\n",C->event->color[0],C->event->color[1],C->event->color[2],a);
-}
-*/
-
 void ctx_get_selection(t_context *C)
 {
 	// PIXEL
@@ -173,173 +113,6 @@ void ctx_camera_set(t_context *C, t_camera *camera)
 	op_3d_orientation(); 
 }
 
-/*
-void ctx_render_selection(t_context *C)
-{
-	if(C->draw->with_selection_pass)
-	{
-		ctx_render_selection_pass(C); 
-	}
-}
-*/
-
-void ctx_switch_record_video(t_context *C)
-{
-	if(C->event->video_record)
-	{
-		C->event->video_stop_call = 1;
-		C->ui->show_mouse = 0;
-		term_log("record stop");
-	}
-	else
-	{
-		C->event->video_record = 1;
-		C->ui->show_mouse = 1;
-		term_log("record start");
-	}
-}
-
-void ctx_render_build_frames(t_context *C, t_lst *lst)
-{
-	t_link *link;
-	unsigned char *frame;
-
-	int width = C->app->window->width;
-	int height = C->app->window->height;
-
-	for(link = lst->first; link; link = link->next)
-	{
-		frame = link->data;
-		char filename[200];
-		sprintf(filename,"video/f%04d.jpg",C->event->video_frame_number);
-		img_save_video(width,height,filename,frame);
-		C->event->video_frame_number++;
-	}
-}
-
-void ctx_render_free_frames(t_context *C, t_lst *lst)
-{
-	t_link *link;
-	unsigned char *frame;
-
-	for(link = lst->first; link; link = link->next)
-	{
-		frame = link->data;
-		free(frame);
-	}
-
-	lst_free(lst);
-}
-
-void *ctx_record_process(void *ptr)
-{
-	t_context *C = ctx_get();
-	t_process *process = (t_process *) ptr;
-
-
-	if(C->app->video_frames_swap)
-	{
-		process->busy = 1;
-		ctx_render_build_frames(C,C->app->video_frames_swap);
-		ctx_render_free_frames(C,C->app->video_frames_swap);
-		C->app->video_frames_swap = NULL;
-		process->busy = 0;
-	}
-
-	return NULL;
-}
-
-void ctx_render_video(t_context *C)
-{
-	int width = C->app->window->width;
-	int height = C->app->window->height;
-
-	if(!C->event->video_init)
-	{
-		C->event->video_init = 1;
-		C->event->video_store = 1;
-		C->event->video_frame = C->app->frame;
-		C->event->video_frame_number = 1;
-
-		C->event->video_frames_in_memory = 0;
-
-		t_process *process=process_add(C,"record",ctx_record_process);
-		process_launch(process);
-	}
-
-	if(C->event->video_stop)
-	{
-		C->event->video_store = 0;
-		t_process *process = engine_process_get(C->engine, "record");
-
-		if(!process->busy)
-		{
-			engine_process_remove(C->engine,"record");
-
-			if(C->app->video_build)
-			{
-				system("ffmpeg -f image2 -i video/f%04d.jpg -r 25 -b 5000k video/video.avi &");
-			}
-
-			C->event->video_stop = 0;
-			C->event->video_stop_call = 0;
-			C->event->video_record = 0;
-			C->event->video_init = 0;
-		}
-	}
-	else if(C->event->video_record)
-	{
-		int f = C->app->frame - C->event->video_frame;
-
-		if(f >= C->app->video_offset) 
-		{
-			if(C->event->video_store)
-			{
-				if(C->event->video_stop_call)
-				{
-					t_process *process = engine_process_get(C->engine, "record");
-
-					if(!process->busy)
-					{
-						t_lst *lst = lst_copy(C->app->video_frames);
-						lst_cleanup(C->app->video_frames);
-						C->app->video_frames_swap = lst;
-						C->event->video_frames_in_memory = 0;
-
-						C->event->video_stop = 1;
-					}
-				}
-				else
-				{
-					C->event->video_frame = C->app->frame;
-
-					unsigned char *buffer = (unsigned char *)malloc(sizeof(unsigned char *)*width*height*4);
-
-					glPixelStorei(GL_PACK_ALIGNMENT, 1);
-					glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, buffer);
-
-					lst_add(C->app->video_frames,buffer,"frame");
-
-					C->event->video_frames_in_memory++;
-
-					if(C->event->video_frames_in_memory > C->app->video_limit)
-					{
-						t_process *process = engine_process_get(C->engine, "record");
-
-						if(!process->busy)
-						{
-							t_lst *lst = lst_copy(C->app->video_frames);
-							lst_cleanup(C->app->video_frames);
-							C->app->video_frames_swap = lst;
-							C->event->video_frames_in_memory = 0;
-						}
-					}
-				}
-			}
-		}
-	}
-}
-
 void ctx_render(t_context *C)
 {
 	if(!C->app->off_screen)
@@ -347,11 +120,14 @@ void ctx_render(t_context *C)
 		VIEWPORT_WIDTH=C->app->window->viewport_width;
 		VIEWPORT_HEIGHT=C->app->window->viewport_height;
 
+		t_camera *camera = C->camera;
+
 		// Selection Pass
 		if(C->draw->with_selection_pass)
 		{
 			ctx_render_set_selection_pass(C);
 			draw_init(C->draw);
+			ctx_camera_set(C, camera);
 			draw_scene(C->draw,C->scene);
 			ui_draw();
 
@@ -360,12 +136,16 @@ void ctx_render(t_context *C)
 		}
 
 		// Render Pass
-		ctx_render_set_full_pass(C);
-		draw_init(C->draw);
-		ctx_render_scene();
-		ui_draw();
+		if(C->draw->with_draw_pass)
+		{
+			ctx_render_set_full_pass(C);
+			draw_init(C->draw);
+			ctx_camera_set(C, camera);
+			draw_scene(C->draw,C->scene);
+			ui_draw();
+		}
 
-		// Swap
+		// Swap Buffers
 		app_swap(C->app);
 
 		// Video Record
