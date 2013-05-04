@@ -104,15 +104,6 @@ void ctx_get_selection(t_context *C)
 		 printf("pixel color : %d %d %d %d\n",C->event->color[0],C->event->color[1],C->event->color[2],a);
 }
 
-/** update camera */
-void ctx_camera_set(t_context *C, t_camera *camera)
-{
-	// set frustum
-	op_camera_update(C, camera);
-	// flip global orientation (model)
-	op_3d_orientation(); 
-}
-
 void ctx_render(t_context *C)
 {
 	if(!C->app->off_screen)
@@ -127,7 +118,7 @@ void ctx_render(t_context *C)
 		{
 			ctx_render_set_selection_pass(C);
 			draw_init(C->draw);
-			ctx_camera_set(C, camera);
+			op_camera_update(C, camera);
 			draw_scene(C->draw,C->scene);
 			ui_draw();
 
@@ -140,7 +131,7 @@ void ctx_render(t_context *C)
 		{
 			ctx_render_set_full_pass(C);
 			draw_init(C->draw);
-			ctx_camera_set(C, camera);
+			op_camera_update(C, camera);
 			draw_scene(C->draw,C->scene);
 			ui_draw();
 		}

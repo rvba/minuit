@@ -263,12 +263,8 @@ void ui_draw_screens(t_context *C)
 	}
 }
 
-// DRAW
-
-void ui_draw(void)
+void ui_navigation(t_context *C)
 {
-	t_context *C = ctx_get();
-
 	// PAN
 	if(C->app->mouse->button_right == button_pressed && C->app->keyboard->ctrl)
 	{
@@ -299,11 +295,24 @@ void ui_draw(void)
 		if(zoom  > 0.1)
 			C->ui->zoom+=(C->app->mouse->sign_y * C->app->mouse->dy * 0.01);
 	}
+}
 
-	if(C->ui->draw)
-	{
-		ui_draw_screens(C);
-	}
+void ui_camera(t_context *C)
+{
+	t_camera *camera = C->ui->camera;
+
+	op_camera_update(C, camera);
+}
+
+// DRAW
+
+void ui_draw(void)
+{
+	t_context *C = ctx_get();
+
+	ui_navigation(C);
+	//ui_camera(C);
+	if(C->ui->draw) ui_draw_screens(C);
 }
 
 // INIT
