@@ -172,6 +172,30 @@ void object_free(t_object *object)
 
 }
 
+// REF
+
+void *object_get_ref(t_object *object, const char *ref)
+{
+	void *p;
+
+	if(is(ref,"loc_x"))  p=&object->loc[0]; 
+	else if(is(ref,"loc_y"))  	p=&object->loc[1]; 
+	else if(is(ref,"loc_z"))  	p=&object->loc[2]; 
+	else if(is(ref,"rot_x"))  	p=&object->rot[0]; 
+	else if(is(ref,"rot_y"))  	p=&object->rot[1]; 
+	else if(is(ref,"rot_z"))  	p=&object->rot[2]; 
+	else if(is(ref,"scl_x"))  	p=&object->size[0]; 
+	else if(is(ref,"scl_y"))  	p=&object->size[1]; 
+	else if(is(ref,"scl_z"))  	p=&object->size[2]; 
+	else
+	{
+		printf("[ERROR object_get_ref] Unknown ref %s \n",ref);
+		return NULL;
+	}
+
+	return p;
+}
+
 // REBIND
 
 t_object *object_rebind(t_scene *sc,void *ptr)

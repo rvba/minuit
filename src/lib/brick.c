@@ -400,6 +400,24 @@ void plug_reset(t_plug *plug,const char *name)
 	vseti(plug->idcol,0,0,0);
 }
 
+// REF
+
+void *brick_get_ref(t_brick *brick, const char *ref)
+{
+	void *p;
+
+	if(is(ref,"in"))  p=&brick->plug_in; 
+	else if(is(ref,"intern"))  p=&brick->plug_intern; 
+	else if(is(ref,"out"))  p=&brick->plug_out; 
+	else
+	{
+		printf("[ERROR berick_get_ref] Unknown ref %s \n",ref);
+		return NULL;
+	}
+
+	return p;
+}
+
 // REBIND
 
 t_brick *brick_rebind(t_scene *sc,void *ptr)

@@ -30,6 +30,7 @@ struct Material
 	float s_color[4];
 };
 
+void *material_get_ref(t_material *material, const char *ref);
 t_material*	material_new(const char *name);
 t_material*	material_rebind(t_scene *sc,void *ptr);
 

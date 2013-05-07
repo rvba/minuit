@@ -10,6 +10,24 @@
 #include "op.h"
 
 
+void *material_get_ref(t_material *material, const char *ref)
+{
+	void *p;
+
+	if(is(ref,"red"))  			p=&material->color[0]; 
+	else if(is(ref,"green"))  		p=&material->color[1]; 
+	else if(is(ref,"blue"))  		p=&material->color[2]; 
+	else if(is(ref,"alpha"))  		p=&material->color[3]; 
+	else
+	{
+		printf("[ERROR material_get_ref] Unknown ref [%s] \n",ref);
+		return NULL;
+	}
+
+	return p;
+}
+
+
 // REBIND
 
 t_material *material_rebind(t_scene *sc,void *ptr)

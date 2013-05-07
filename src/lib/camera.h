@@ -108,6 +108,7 @@ struct Camera
 	int rec_mode;
 };
 
+void *camera_get_ref(t_camera *camera, const char *ref);
 
 void camera_show(t_camera *camera);
 t_camera *	camera_clone(t_camera *source);

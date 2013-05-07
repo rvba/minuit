@@ -402,6 +402,7 @@ void 		brick_init(t_scene *sc,t_brick *brick);
 void 		_brick_init(t_brick *brick);
 
 t_brick *	brick_new(const char *name);
+void *brick_get_ref(t_brick *brick, const char *ref);
 t_brick *	brick_rebind(t_scene *sc,void *ptr);
 t_node 		*brick_make(t_block *block,const char *name,t_brick_type brick_type,t_data_type data_type,void *data_target);
 

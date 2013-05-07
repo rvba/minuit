@@ -247,198 +247,31 @@ void *find_struct(const char *target,const char *name)
 
 void *find_ref(t_scene *sc,t_data *data)
 {
-	if(is(data->target,"object"))
+
+	// Get Node
+	t_node *node=find_by_ptr(sc,data->ref);
+
+	if(node)
 	{
-		t_node *node=find_by_ptr(sc,data->ref);
-
-		if(node)
+		// Get Ref
+		void *ptr = node->cls->get_ref(node,data->name);
+		if(ptr)
 		{
-			void *p;
-
-			t_object *object=node->data;
-
-			if(is(data->name,"loc_x"))  p=&object->loc[0]; 
-			else if(is(data->name,"loc_y"))  	p=&object->loc[1]; 
-			else if(is(data->name,"loc_z"))  	p=&object->loc[2]; 
-			else if(is(data->name,"rot_x"))  	p=&object->rot[0]; 
-			else if(is(data->name,"rot_y"))  	p=&object->rot[1]; 
-			else if(is(data->name,"rot_z"))  	p=&object->rot[2]; 
-			else if(is(data->name,"scl_x"))  	p=&object->size[0]; 
-			else if(is(data->name,"scl_y"))  	p=&object->size[1]; 
-			else if(is(data->name,"scl_z"))  	p=&object->size[2]; 
-			else
-			{
-				printf("[ERROR struct_ref_get object] Unknown name %s \n",data->name);
-				load_error = 1;
-				return NULL;
-			}
-
-			return p;
-
+			return ptr;
 		}
 		else
 		{
-			printf("[ERROR struct_ref_get] ref %s %s:Can't get node \n",data->target,data->name);
 			load_error = 1;
 			return NULL;
 		}
-	}
-	else if(is(data->target,"plug"))
-	{
-		t_node *node=find_by_ptr(sc,data->ref);
-
-		if(node)
-		{
-			void *p;
-
-			t_brick *brick=node->data;
-
-			if(is(data->name,"in"))  p=&brick->plug_in; 
-			else if(is(data->name,"intern"))  p=&brick->plug_intern; 
-			else if(is(data->name,"out"))  p=&brick->plug_out; 
-			else
-			{
-				printf("[ERROR strutc_ref_get object] Unknown name %s \n",data->name);
-				load_error = 1;
-				return NULL;
-			}
-
-			return p;
-
-		}
-		else
-		{
-			printf("[ERROR struct_ref_get] ref %s %s:Can't get node \n",data->target,data->name);
-			load_error = 1;
-			return NULL;
-		}
-	}
-	else if(is(data->target,"material"))
-	{
-		t_node *node=find_by_ptr(sc,data->ref);
-		if(node)
-		{
-			t_material *material=node->data;
-
-			void *p;
-
-			if(is(data->name,"red"))  			p=&material->color[0]; 
-			else if(is(data->name,"green"))  		p=&material->color[1]; 
-			else if(is(data->name,"blue"))  		p=&material->color[2]; 
-			else if(is(data->name,"alpha"))  		p=&material->color[3]; 
-			else
-			{
-				printf("[ERROR strutc_ref_get] Unknown name [%s] \n",data->name);
-				load_error = 1;
-				return NULL;
-			}
-
-			return p;
-
-		}
-		else
-		{
-			printf("[ERROR strutc_ref_get] ref %s %s:Can't get node \n",data->target,data->name);
-			load_error = 1;
-			return NULL;
-		}
-	}
-	else if(is(data->target,"mesh"))
-	{
-		t_node *node=find_by_ptr(sc,data->ref);
-		if(node)
-		{
-			t_mesh *mesh=node->data;
-
-			void *p;
-
-			if(is(data->name,"vertex"))  			p=&mesh->vertex; 
-			else if(is(data->name,"colors"))  			p=&mesh->colors; 
-			else
-			{
-				printf("[ERROR strutc_ref_get] Unknown name [%s] \n",data->name);
-				load_error = 1;
-				return NULL;
-			}
-
-			return p;
-
-		}
-		else
-		{
-			printf("[ERROR strutc_ref_get] ref %s %s:Can't get node \n",data->target,data->name);
-			load_error = 1;
-			return NULL;
-		}
-	}
-	else if(is(data->target,"vlst"))
-	{
-		t_node *node=find_by_ptr(sc,data->ref);
-		if(node)
-		{
-			t_vlst *vlst=node->data;
-
-			void *p;
-
-			if(is(data->name,"count"))  			p=&vlst->count_new; 
-			else
-			{
-				printf("[ERROR strutc_ref_get] Unknown name [%s] \n",data->name);
-				load_error = 1;
-				return NULL;
-			}
-
-			return p;
-
-		}
-		else
-		{
-			printf("[ERROR strutc_ref_get] ref %s %s:Can't get node \n",data->target,data->name);
-			load_error = 1;
-			return NULL;
-		}
-	}
-	else if(is(data->target,"camera"))
-	{
-		t_node *node=find_by_ptr(sc,data->ref);
-		if(node)
-		{
-			t_camera *camera = node->data;
-
-			void *p;
-
-			if(is(data->name,"pos_x"))  			p=&camera->pos[0]; 
-			else if(is(data->name,"pos_y"))  			p=&camera->pos[1]; 
-			else if(is(data->name,"pos_z"))  			p=&camera->pos[2]; 
-			else if(is(data->name,"eye_x"))  			p=&camera->eye[0]; 
-			else if(is(data->name,"eye_y"))  			p=&camera->eye[1]; 
-			else if(is(data->name,"eye_z"))  			p=&camera->eye[2]; 
-			else
-			{
-				printf("[ERROR strutc_ref_get] Unknown name [%s] \n",data->name);
-				load_error = 1;
-				return NULL;
-			}
-
-			return p;
-		}
-		else
-		{
-			printf("[ERROR strutc_ref_get] ref %s %s:Can't get node \n",data->target,data->name);
-			load_error = 1;
-			return NULL;
-		}
-
-
 	}
 	else
 	{
-		printf("[ERROR strutc_ref_get] Unknown target %s \n",data->target);
+		printf("[ERROR struct_ref_get] ref %s %s:Can't get node \n",data->target,data->name);
 		load_error = 1;
 		return NULL;
 	}
 }
-
 
 // FREE
 

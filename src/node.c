@@ -100,6 +100,42 @@ int dlink(const char *type,void *ptr)
 	return 0;
 }
 
+void *cls_node_get_ref_object(t_node *node, const char *ref)
+{
+	return object_get_ref(node->data, ref);
+}
+
+void *cls_node_get_ref_brick(t_node *node, const char *ref)
+{
+	return brick_get_ref(node->data, ref);
+}
+
+void *cls_node_get_ref_material(t_node *node, const char *ref)
+{
+	return material_get_ref(node->data, ref);
+}
+
+void *cls_node_get_ref_mesh(t_node *node, const char *ref)
+{
+	return mesh_get_ref(node->data, ref);
+}
+
+void *cls_node_get_ref_vlst(t_node *node, const char *ref)
+{
+	return vlst_get_ref(node->data, ref);
+}
+
+void *cls_node_get_ref_camera(t_node *node, const char *ref)
+{
+	return vlst_get_ref(node->data, ref);
+}
+
+void *cls_node_get_ref(t_node *node, const char *ref)
+{
+	printf("get ref not implemented\n");
+	return NULL;
+}
+
 void cls_node_id_add(t_node *node)
 {
 	t_context *C=ctx_get();
@@ -389,6 +425,7 @@ t_node_class generic= {
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=scene_generic_free,
+	.get_ref = cls_node_get_ref,
 };
 
 t_node_class mesh= {
@@ -403,6 +440,7 @@ t_node_class mesh= {
 	.set_state_selected=cls_node_mesh_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=scene_mesh_free,
+	.get_ref = cls_node_get_ref_mesh,
 };
 
 t_node_class block= {
@@ -417,6 +455,7 @@ t_node_class block= {
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=scene_block_free,
+	.get_ref = cls_node_get_ref,
 };
 
 t_node_class brick= {
@@ -430,6 +469,7 @@ t_node_class brick= {
 	.init=cls_node_init_brick,
 	.is_mouse_over=cls_node_brick_is_mouse_over,
 	.free=scene_brick_free,
+	.get_ref = cls_node_get_ref_brick,
 };
 
 t_node_class light= {
@@ -444,6 +484,7 @@ t_node_class light= {
 	.set_state_selected=cls_node_light_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=scene_light_free,
+	.get_ref = cls_node_get_ref,
 };
 
 t_node_class object= {
@@ -458,6 +499,7 @@ t_node_class object= {
 	.set_state_selected=cls_node_object_set_state_selected,
 	.is_mouse_over=cls_node_object_is_mouse_over,
 	.free=scene_object_free,
+	.get_ref = cls_node_get_ref_object,
 };
 
 t_node_class screen= {
@@ -472,6 +514,7 @@ t_node_class screen= {
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=scene_screen_free,
+	.get_ref = cls_node_get_ref,
 };
 
 t_node_class file= {
@@ -486,6 +529,7 @@ t_node_class file= {
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=scene_file_free,
+	.get_ref = cls_node_get_ref,
 };
 
 t_node_class image= {
@@ -500,6 +544,7 @@ t_node_class image= {
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=scene_image_free,
+	.get_ref = cls_node_get_ref,
 };
 
 t_node_class material= {
@@ -514,6 +559,7 @@ t_node_class material= {
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=scene_material_free,
+	.get_ref = cls_node_get_ref_material,
 };
 
 t_node_class list= {
@@ -528,6 +574,7 @@ t_node_class list= {
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=scene_list_free,
+	.get_ref = cls_node_get_ref,
 };
 
 t_node_class _link_= {
@@ -542,6 +589,7 @@ t_node_class _link_= {
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=scene_link_free,
+	.get_ref = cls_node_get_ref,
 };
 
 t_node_class data= {
@@ -556,6 +604,7 @@ t_node_class data= {
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=scene_data_free,
+	.get_ref = cls_node_get_ref,
 };
 
 t_node_class texture= {
@@ -570,6 +619,7 @@ t_node_class texture= {
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=scene_texture_free,
+	.get_ref = cls_node_get_ref,
 };
 
 t_node_class var= {
@@ -584,6 +634,7 @@ t_node_class var= {
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=scene_var_free,
+	.get_ref = cls_node_get_ref,
 };
 
 t_node_class option= {
@@ -598,6 +649,7 @@ t_node_class option= {
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=scene_option_free,
+	.get_ref = cls_node_get_ref,
 };
 
 t_node_class vlst= {
@@ -612,6 +664,7 @@ t_node_class vlst= {
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=scene_vlst_free,
+	.get_ref = cls_node_get_ref_vlst,
 };
 
 t_node_class camera= {
@@ -626,6 +679,7 @@ t_node_class camera= {
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=scene_camera_free,
+	.get_ref = cls_node_get_ref_camera,
 };
 
 t_node_class dict= {
@@ -640,6 +694,7 @@ t_node_class dict= {
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=scene_dict_free,
+	.get_ref = cls_node_get_ref,
 };
 
 t_node_class symbol= {
@@ -654,6 +709,7 @@ t_node_class symbol= {
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=scene_symbol_free,
+	.get_ref = cls_node_get_ref,
 };
 
 t_node_class vector= {
@@ -668,6 +724,7 @@ t_node_class vector= {
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=scene_vector_free,
+	.get_ref = cls_node_get_ref,
 };
 
 t_node_class viewport= {
@@ -682,6 +739,7 @@ t_node_class viewport= {
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=scene_viewport_free,
+	.get_ref = cls_node_get_ref,
 };
 
 

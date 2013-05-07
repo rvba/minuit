@@ -129,6 +129,7 @@ t_node*		mesh_make(
 			int *quads,
 			int *tris);
 
+void *mesh_get_ref(t_mesh *mesh, const char *ref);
 t_mesh*		mesh_rebind(t_scene *sc,void *ptr);
 void 		mesh_init(t_scene *sc,t_mesh *mesh);
 

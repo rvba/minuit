@@ -103,6 +103,25 @@ void camera_init(t_camera *camera)
 	camera->cls=&cls_camera;
 }
 
+void *camera_get_ref(t_camera *camera, const char *ref)
+{
+	void *p;
+
+	if(is(ref,"pos_x"))  			p=&camera->pos[0]; 
+	else if(is(ref,"pos_y"))  			p=&camera->pos[1]; 
+	else if(is(ref,"pos_z"))  			p=&camera->pos[2]; 
+	else if(is(ref,"eye_x"))  			p=&camera->eye[0]; 
+	else if(is(ref,"eye_y"))  			p=&camera->eye[1]; 
+	else if(is(ref,"eye_z"))  			p=&camera->eye[2]; 
+	else
+	{
+		printf("[ERROR camera_get_ref] Unknown ref [%s] \n",ref);
+		return NULL;
+	}
+
+	return p;
+}
+
 t_camera *camera_new(const char *name)
 {
 	t_camera *camera  = (t_camera *)malloc(sizeof(t_camera));

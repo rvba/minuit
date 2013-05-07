@@ -72,6 +72,8 @@ void		vlst_free(t_vlst *vlst);
 void 		vlst_init(t_vlst *vlst);
 t_vlst *	vlst_new(const char *name);
 t_vlst *	vlst_make(const char *name,t_vlst_type type,int count);
+
+void *vlst_get_ref(t_vlst *vlst, const char *ref);
 t_vlst *	vlst_rebind(t_scene *sc,void *ptr);
 void 		vlst_normal_3f(t_vlst *dst,t_vlst *vertex,t_vlst *face);
 void 		vlst_normal_4f(t_vlst *dst,t_vlst *vertex,t_vlst *face);

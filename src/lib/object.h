@@ -62,6 +62,7 @@ struct Object
 };
 
 // METHODS
+void *object_get_ref(t_object *object, const char *ref);
 
 void 		object_mesh_add(t_node *node,t_node *mesh);
 void 		object_draw_add(t_node *node,void (* func)(t_node *node));

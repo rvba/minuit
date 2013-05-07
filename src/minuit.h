@@ -133,6 +133,7 @@ struct NodeClass
 
 	void (* set_state_selected)(t_node *node,int state);
 	int (* is_mouse_over)(t_node *node);
+	void *(* get_ref)(t_node *node, const char *ref);
 };
 
 // NODE

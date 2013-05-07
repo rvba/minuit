@@ -32,6 +32,7 @@ void cls_plug_make_vector(t_plug *plug);
 void cls_plug_connect_general(t_plug_mode mode, t_plug *self, t_plug *dst);
 void cls_plug_disconnect_general(t_plug_mode mode, t_plug *self);
 
+
 void plug_debug(t_plug *plug)
 {
 	t_data_type type = plug->data_type;

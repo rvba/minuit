@@ -28,6 +28,21 @@ t_mesh_cls cls_mesh=
 	.init=cls_mesh_init,
 };
 
+void *mesh_get_ref(t_mesh *mesh, const char *ref)
+{
+	void *p;
+
+	if(is(ref,"vertex"))  			p=&mesh->vertex; 
+	else if(is(ref,"colors"))  			p=&mesh->colors; 
+	else
+	{
+		printf("[ERROR mesh_get_ref] Unknown ref [%s] \n",ref);
+		return NULL;
+	}
+
+	return p;
+}
+
 
 // REBIND
 
