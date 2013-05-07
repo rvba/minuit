@@ -59,8 +59,6 @@ void screen_generic(t_screen *screen)
 
 	ui_draw_mouse();
 	ui_draw_menu();
-	//ui_draw_blocks();
-	ui_draw_debug();
 
 	glPushMatrix();
 	float scale=4;
@@ -92,7 +90,6 @@ void screen_main(t_screen *screen)
 	ui_draw_intro();
 	ui_draw_lines();
 	ui_draw_status_bar();
-	ui_draw_debug();
 	ui_draw_term();
 	ui_draw_grid();
 
@@ -122,7 +119,6 @@ void screen_desk(t_screen *screen)
 	ui_draw_intro();
 	ui_draw_lines();
 	ui_draw_status_bar();
-	ui_draw_debug();
 	ui_draw_term();
 	ui_draw_grid();
 

@@ -30,6 +30,7 @@ char *name_camera = "camera";
 char *name_trigger = "trigger";
 char *name_operator = "operator";
 char *name_vector = "vector";
+char *name_vewport = "viewport";
 
 
 void cls_data_init(t_data *data)

@@ -73,6 +73,7 @@ void scene_dict_free(t_scene *sc,t_node *node);
 void scene_symbol_free(t_scene *sc,t_node *node);
 void scene_var_free(t_scene *sc,t_node *node);
 void scene_generic_free(t_scene *sc,t_node *node);
+void scene_viewport_free(t_scene *sc,t_node *node);
 
 void scene_screen_free(t_scene *sc,t_node *node);
 void scene_file_free(t_scene *sc,t_node *node) ;

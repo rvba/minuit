@@ -225,7 +225,7 @@ void browser_draw(void)
 void screen_browser(t_screen *screen)
 {
 	t_context *C=ctx_get();
-	t_camera *camera = C->camera;
+	t_camera *camera = C->ui->camera;
 
 	op_camera_switch_2d(C,camera,0,0);
 

@@ -1017,38 +1017,51 @@ t_node *add_slider_object(t_context *C,const char *name)
 
 t_node *add_slider_camera(t_context *C,const char *name)
 {
-	t_camera *camera = C->camera;
+	// Get default Viewport
+	t_node *node_viewport = scene_node_get(C->scene,"viewport","viewport");
+	t_viewport *viewport = NULL;
+	t_camera *camera = NULL;
+
+	if(node_viewport)
+	{
+		viewport = node_viewport->data;
+		camera = viewport->camera;
+	}
+
 	t_node *node;
 
-	if(is(name,"pos x"))
+	if(camera)
 	{
-		scene_add_ref(C->scene,"struct_ref","camera","pos_x",&camera->pos[0],camera);
-		node = add_slider_float(C,"cam pos x",&camera->pos[0]);
-	}
-	else if(is(name,"pos y"))
-	{
-		scene_add_ref(C->scene,"struct_ref","camera","pos_y",&camera->pos[1],camera);
-		node = add_slider_float(C,"cam pos y",&camera->pos[1]);
-	}
-	else if(is(name,"pos z"))
-	{
-		scene_add_ref(C->scene,"struct_ref","camera","pos_z",&camera->pos[2],camera);
-		node = add_slider_float(C,"cam pos z",&camera->pos[2]);
-	}
-	else if(is(name,"eye x"))
-	{
-		scene_add_ref(C->scene,"struct_ref","camera","eye_x",&camera->eye[1],camera);
-		node = add_slider_float(C,"cam eye x",&camera->eye[1]);
-	}
-	else if(is(name,"eye y"))
-	{
-		scene_add_ref(C->scene,"struct_ref","camera","eye_y",&camera->eye[2],camera);
-		node = add_slider_float(C,"cam eye y",&camera->eye[2]);
-	}
-	else if(is(name,"eye z"))
-	{
-		scene_add_ref(C->scene,"struct_ref","camera","eye_z",&camera->eye[3],camera);
-		node = add_slider_float(C,"cam eye z",&camera->eye[3]);
+		if(is(name,"pos x"))
+		{
+			scene_add_ref(C->scene,"struct_ref","camera","pos_x",&camera->pos[0],camera);
+			node = add_slider_float(C,"cam pos x",&camera->pos[0]);
+		}
+		else if(is(name,"pos y"))
+		{
+			scene_add_ref(C->scene,"struct_ref","camera","pos_y",&camera->pos[1],camera);
+			node = add_slider_float(C,"cam pos y",&camera->pos[1]);
+		}
+		else if(is(name,"pos z"))
+		{
+			scene_add_ref(C->scene,"struct_ref","camera","pos_z",&camera->pos[2],camera);
+			node = add_slider_float(C,"cam pos z",&camera->pos[2]);
+		}
+		else if(is(name,"eye x"))
+		{
+			scene_add_ref(C->scene,"struct_ref","camera","eye_x",&camera->eye[1],camera);
+			node = add_slider_float(C,"cam eye x",&camera->eye[1]);
+		}
+		else if(is(name,"eye y"))
+		{
+			scene_add_ref(C->scene,"struct_ref","camera","eye_y",&camera->eye[2],camera);
+			node = add_slider_float(C,"cam eye y",&camera->eye[2]);
+		}
+		else if(is(name,"eye z"))
+		{
+			scene_add_ref(C->scene,"struct_ref","camera","eye_z",&camera->eye[3],camera);
+			node = add_slider_float(C,"cam eye z",&camera->eye[3]);
+		}
 	}
 
 	return node;

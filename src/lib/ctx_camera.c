@@ -57,7 +57,6 @@ void ctx_camera_movment(t_context *C, t_camera *camera)
 				op_camera_translate(C, camera);
 			}
 
-
 			if (app->mouse->wheel == wheel_up)
 			{
 				if(C->app->keyboard->shift)
@@ -65,6 +64,7 @@ void ctx_camera_movment(t_context *C, t_camera *camera)
 				else
 					op_camera_zoom(C, camera, -1);
 
+				// XXX
 				app->mouse->wheel=wheel_idle;
 			}
 
@@ -75,6 +75,7 @@ void ctx_camera_movment(t_context *C, t_camera *camera)
 				else
 					op_camera_zoom(C, camera,1);
 
+				// XXX
 				app->mouse->wheel=wheel_idle;
 			}
 		}
@@ -100,21 +101,28 @@ void ctx_camera_movment(t_context *C, t_camera *camera)
 	}
 }
 
-void op_check_window(t_context *C)
+void op_check_window(t_context *C, t_camera *camera)
 {
-	if(C->app->window->change)
-	{
-		op_camera_frustum_init(C->camera);
-		C->app->window->change=0;
-	}
+	op_camera_frustum_init(camera);
+	C->app->window->change=0;
 }
 
 void ctx_camera(t_context *C)
 {
-	t_camera *camera = C->camera;
-	C->camera->is_moving=0;
-	op_check_window(C);
-	op_camera_change_speed(camera);
-	ctx_camera_movment(C, camera);
+	t_link *link;
+	t_node *node;
+	t_camera *camera;
+
+	for(link = C->scene->cameras->first; link; link = link->next)
+	{
+		node = link->data;
+		camera = node->data;
+
+		camera->is_moving = 0;
+
+		op_check_window(C, camera);
+		op_camera_change_speed(camera);
+		ctx_camera_movment(C, camera);
+	}
 }
 	

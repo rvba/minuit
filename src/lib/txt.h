@@ -54,7 +54,6 @@ void txt_layout_init(void);
 float txt_get_length(t_txt *txt);
 
 void txt_draw_direct_2d(char *string,float pos[3],float *color,float scale);
-void txt_draw_3d(char *string,float pos[3]);
 void txt_free(t_txt *txt);
 
 void txt_init(t_txt *txt,const char *name);

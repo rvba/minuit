@@ -147,16 +147,6 @@ void ui_draw_grid(void)
 	}
 }
 
-void ui_draw_debug(void)
-{
-	t_context *C=ctx_get();
-	if(C->draw->mode==mode_draw)
-	{
-		if(C->event->debug_mouse) op_debug_mouse(); 
-		if(C->event->debug_process)  op_debug_process(); 
-	}
-}
-
 void ui_draw_status_bar(void)
 {
 	t_context *C=ctx_get();
@@ -248,7 +238,6 @@ void ui_draw_screens(t_context *C)
 	t_node *n;
 	t_screen *s;
 
-
 	if(l)
 	{
 		for(;l;l=l->next)
@@ -297,13 +286,6 @@ void ui_navigation(t_context *C)
 	}
 }
 
-void ui_camera(t_context *C)
-{
-	t_camera *camera = C->ui->camera;
-
-	op_camera_update(C, camera);
-}
-
 // DRAW
 
 void ui_draw(void)
@@ -311,7 +293,6 @@ void ui_draw(void)
 	t_context *C = ctx_get();
 
 	ui_navigation(C);
-	//ui_camera(C);
 	if(C->ui->draw) ui_draw_screens(C);
 }
 

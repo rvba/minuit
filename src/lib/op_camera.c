@@ -12,8 +12,6 @@
 #define OP_CAM_SPEED 50
 #define OP_CAM_ORTHO_ZOOM_FAC 10
 
-/** record mode : clone camera and link it to last one **/
-
 void op_3d_orientation(void)
 {
 	glRotatef(-90,1,0,0);
@@ -173,7 +171,7 @@ void op_camera_update(t_context *C, t_camera *camera)
 
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		if(camera->restrict_matrix)
+		if(C->draw->with_restrict_matrix && (C->draw->mode == mode_selection))
 		{
 			GLint viewport[4];
 			glGetIntegerv(GL_VIEWPORT,viewport);
@@ -202,7 +200,7 @@ void op_camera_update(t_context *C, t_camera *camera)
 	{
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		if(camera->restrict_matrix)
+		if(C->draw->with_restrict_matrix && (C->draw->mode == mode_selection))
 		{
 			GLint viewport[4];
 			glGetIntegerv(GL_VIEWPORT,viewport);
@@ -247,7 +245,6 @@ void op_camera_frustum_init(t_camera *camera)
 	double r=3.14159265/180;
 	double fovy = CAM_FOVY;
 	double near = CAM_NEAR;
-	//double far = CAM_FAR;
 	int w=app->window->width;
 	int h=app->window->height;
 	double aspect = (double)((double)w/(double)h);

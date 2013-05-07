@@ -99,6 +99,7 @@ t_lst *scene_lst_get(t_scene *sc,const char *type)
 	else if(is(type,"camera"))  lst=sc->cameras; 
 	else if(is(type,"dict"))  lst=sc->dicts; 
 	else if(is(type,"symbols"))  lst=sc->symbols; 
+	else if(is(type,"viewport"))  lst=sc->viewports; 
 
 	if(lst)
 	{
@@ -506,6 +507,14 @@ void scene_node_free(t_scene *sc,t_node *node)
 	//printf("node free %d\n",node->id);
 	lst_remove_node(node->cls->lst,node);
 	node->cls->free(sc,node);
+	lst_remove_node(sc->nodes,node);
+}
+
+void scene_viewport_free(t_scene *sc,t_node *node)
+{
+	//printf("node free %d\n",node->id);
+	lst_remove_node(node->cls->lst,node);
+	//node->cls->free(sc,node);
 	lst_remove_node(sc->nodes,node);
 }
 

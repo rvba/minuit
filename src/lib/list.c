@@ -242,7 +242,7 @@ t_node *lst_find_node_by_name(t_lst *lst,const char *name)
 	}
 	else
 	{
-		printf("[ERROR lst_find_node by name] Empty list\n");
+		//printf("[ERROR lst_find_node by name] Empty list\n");
 		return NULL;
 	}
 }

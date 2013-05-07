@@ -27,8 +27,41 @@ t_node *op_new_cube(const char *name)
 	return cube;
 }
 
+void *op_add_viewport(t_brick *brick)
+{
+	t_context *C = ctx_get();
+	term_print(C->term,"+ viewport");
+
+	C->scene->store=1;
+
+	t_node *node = viewport_add("viewport");
+
+	C->scene->store=0;
+
+	return node;
+}
+
+void *op_new_camera(const char *name)
+{
+	t_context *C = ctx_get();
+	term_print(C->term,"+ camera");
+
+	C->scene->store=1;
+
+	t_node *node_object=object_add("camera",name);
+	t_object *object=node_object->data;
+
+	t_node *node_camera=camera_make(name);
+
+	object->cls->link(object,node_camera);
+
+	C->scene->store=0;
+	return node_object;
+}
+
 void *op_add_camera(t_brick *brick)
 {
+	/*
 	t_context *C = ctx_get();
 	term_print(C->term,"+ camera");
 
@@ -43,6 +76,9 @@ void *op_add_camera(t_brick *brick)
 
 	C->scene->store=0;
 	return node_object;
+	*/
+	t_node *node = op_new_camera("default");
+	return node;
 }
 
 void* op_add_camera_main(void)
@@ -100,6 +136,7 @@ void *op_add_default(t_brick *brick)
 {
 	op_add_light(NULL);
 	op_add_cube(NULL);
+	op_add_viewport(NULL);
 	return NULL;
 }
 

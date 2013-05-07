@@ -582,10 +582,6 @@ void draw_init(t_draw *draw)
 
 void draw_scene(t_draw *draw, t_scene *scene)
 {
-	// Flip 3D Axis
-	op_3d_orientation(); 
-
-	// Draw
 	draw_lights(draw,scene);
 	draw_objects(draw,scene);
 	draw_axis_world(draw);

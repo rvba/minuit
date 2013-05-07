@@ -30,9 +30,6 @@ t_context *ctx_new(int argc,char **argv)
 	C->ui=ui_new();
 	C->term=term_new("main");
 	C->terms = lst_new("terms");
-
-	C->camera=NULL;
-
 	C->mode=mode_new();
 	C->server=server_new();
 
@@ -72,9 +69,6 @@ t_context *ctx_init(int argc,char **argv)
 	// set gl callbacks
 	C->app->main_func = ctx_handler;
 
-	//app_set_main_func(C->app,ctx_handler);
-	//app_set_dsp_func(C->app,ctx_render_scene);
-
 	// add global
 	C->scene->store=1;
 
@@ -83,12 +77,6 @@ t_context *ctx_init(int argc,char **argv)
 	C->scene->global=global;
 
 	C->scene->store=0;
-
-	// add camera
-	t_node *node_camera=op_add_camera_main(); //! store=0
-	t_object *ob_camera=node_camera->data;
-	t_camera *cam=ob_camera->data;
-	C->camera=cam;
 
 	// build menus, register datas
 	op_init(C); 
@@ -178,7 +166,7 @@ void ctx_update(t_context *C)
 	ctx_camera(C);
 	ctx_keyboard(C);	
 	ctx_ui(C);
-	ctx_scene(C); // selection status for: meshes,lights
+	ctx_scene(C); 
 	ctx_mode(C);
 }
 
@@ -186,14 +174,9 @@ void ctx_update(t_context *C)
 
 void ctx_handler(void)
 {
-	t_context *C = CONTEXT;
-
-	// draw 
-	ctx_render(C);
-	// update
-	ctx_update(C);
-	//reset
-	ctx_reset(C);
+	ctx_render(CONTEXT);
+	ctx_update(CONTEXT);
+	ctx_reset(CONTEXT);
 }
 
 

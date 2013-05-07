@@ -9,20 +9,14 @@
 
 #include "op.h"
 
-int VIEWPORT_WIDTH;
-int VIEWPORT_HEIGHT;
+// RENDER PASS
 
-/** set drawing options for the selection pass*/
 void ctx_render_set_selection_pass(t_context *C)
 {
-	t_camera *camera=C->camera;
-	if(C->draw->with_restrict_matrix)
-		camera->restrict_matrix=1;
-	else
-		camera->restrict_matrix=0;
-
+	// Mode
 	C->draw->mode=mode_selection;
 
+	// Mate Rendering
 	C->draw->with_light=0;
 	C->draw->with_material=0;
 	C->draw->with_normal=0;
@@ -30,7 +24,7 @@ void ctx_render_set_selection_pass(t_context *C)
 	C->draw->with_depth=1;
 	C->draw->with_blend=0;
 
-	//set white background
+	// Set White background
 	if(C->draw->with_clear)
 	{
 		C->draw->background_color[0]=255;
@@ -40,12 +34,11 @@ void ctx_render_set_selection_pass(t_context *C)
 	}
 }
 
-/** set drawing options for the main pass*/
+// SELECTION PASS
+
 void ctx_render_set_full_pass(t_context *C)
 {
-	t_camera *camera=C->camera;
-	camera->restrict_matrix=0;
-
+	// Mode
 	C->draw->mode=mode_draw;
 
 	C->draw->with_light=1;
@@ -54,7 +47,6 @@ void ctx_render_set_full_pass(t_context *C)
 	C->draw->with_light=C->event->with_light;
 	C->draw->with_texture=C->event->with_texture;
 	C->draw->with_polygon_offset=C->event->with_polygon_offset;
-
 	C->draw->with_depth=C->event->with_depth;
 	C->draw->with_highlight=C->event->with_highlight;
 	C->draw->with_blend=C->event->with_blend;
@@ -106,20 +98,28 @@ void ctx_get_selection(t_context *C)
 
 void ctx_render(t_context *C)
 {
+	t_link *link;
+	t_node *node;
+	t_viewport *viewport;
+	t_scene *scene = C->scene;
+
+	// Check Not Off Screen
 	if(!C->app->off_screen)
 	{
-		VIEWPORT_WIDTH=C->app->window->viewport_width;
-		VIEWPORT_HEIGHT=C->app->window->viewport_height;
-
-		t_camera *camera = C->camera;
-
 		// Selection Pass
 		if(C->draw->with_selection_pass)
 		{
 			ctx_render_set_selection_pass(C);
 			draw_init(C->draw);
-			op_camera_update(C, camera);
-			draw_scene(C->draw,C->scene);
+
+			// Draw Screens
+			for(link = C->scene->viewports->first; link; link = link->next)
+			{
+				node = link->data;
+				viewport = node->data;
+				viewport_draw(viewport);
+			}
+
 			ui_draw();
 
 			// Get Color
@@ -131,8 +131,16 @@ void ctx_render(t_context *C)
 		{
 			ctx_render_set_full_pass(C);
 			draw_init(C->draw);
-			op_camera_update(C, camera);
-			draw_scene(C->draw,C->scene);
+
+			// Draw Screens
+			for(link = scene->viewports->first; link; link = link->next)
+			{
+				node = link->data;
+				viewport = node->data;
+				viewport_draw(viewport);
+			}
+
+
 			ui_draw();
 		}
 

@@ -44,7 +44,6 @@ struct Data
 char *name_null;
 char *name_int;
 char *name_default;
-
 char *name_float;
 char *name_string;
 char *name_char;
@@ -61,6 +60,7 @@ char *name_camera;
 char *name_trigger;
 char *name_operator;
 char *name_vector;
+char *name_vewport;
 
 char *data_name_get(t_data_type);
 

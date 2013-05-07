@@ -56,6 +56,7 @@ void 		op_menu_rc_submenu_add(t_node *node, t_node *menu_sub,char *name);
 
 // OP_ADD
 
+void *op_new_camera(const char *name);
 t_node *	op_new_cube(const char *name);
 t_node *	op_add_new_wire_cube(t_node *node);
 void 		add_mn(void);
@@ -254,5 +255,6 @@ t_node *	add_pipe(t_context *C);
 void 		*op_mod(t_brick *brick);
 void *		op_float(t_brick *brick);
 void *		op_int(t_brick *brick);
+void op_3d_orientation(void);
 
 #endif

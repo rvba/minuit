@@ -52,10 +52,7 @@ struct Context
 	t_app *app;
 	t_mode *mode;
 	t_engine *engine;
-
 	t_scene *scene;
-	t_camera *camera;
-
 	t_event *event;
 	t_ui *ui;
 	t_draw *draw;

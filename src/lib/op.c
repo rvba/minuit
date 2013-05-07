@@ -59,7 +59,6 @@ t_node *make_menu_debug(void)
 	t_block *block=menu->data;
 
 	add_brick_switch(C,block,"show terminal",&C->ui->show_term);
-	add_brick_switch(C,block,"debug mouse",&C->event->debug_mouse);
 	add_brick_switch(C,block,"debug keyboard",&C->app->debug_keyboard);
 	add_brick_switch(C,block,"debug select",&C->event->debug_select);
 	add_brick_switch(C,block,"debug console",&C->event->debug_console);
@@ -624,12 +623,6 @@ void register_set(t_context *C)
 	dict_symbol_add(dict_app,"sec",dt_pointer,&C->app->clock->sec);
 	dict_symbol_add(dict_app,"msec",dt_pointer,&C->app->clock->msec);
 	dict_symbol_add(dict_app,"loaded_file",dt_pointer,&C->app->loaded_file);
-	dict_symbol_add(dict_app,"cam_pos_x",dt_pointer,&C->camera->pos[0]);
-	dict_symbol_add(dict_app,"cam_pos_y",dt_pointer,&C->camera->pos[1]);
-	dict_symbol_add(dict_app,"cam_pos_z",dt_pointer,&C->camera->pos[2]);
-	dict_symbol_add(dict_app,"cam_eye_x",dt_pointer,&C->camera->eye[0]);
-	dict_symbol_add(dict_app,"cam_eye_y",dt_pointer,&C->camera->eye[1]);
-	dict_symbol_add(dict_app,"cam_eye_z",dt_pointer,&C->camera->eye[2]);
 
 	// MOUSE
 

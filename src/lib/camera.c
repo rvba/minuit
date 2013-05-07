@@ -28,6 +28,20 @@ t_camera *camera_clone(t_camera *source)
 	return target;
 }
 
+void camera_show(t_camera *camera)
+{
+	printf("Camera: %s\n",camera->name);
+	printf("frustum\n");
+	printf("left %f\n",camera->f_left);
+	printf("right %f\n",camera->f_right);
+	printf("bottom %f\n",camera->f_bottom);
+	printf("top %f\n",camera->f_top);
+	printf("aspect %f\n",camera->f_aspect);
+	printf("fovy %f\n",camera->f_fovy);
+	printf("near %f\n",camera->f_near);
+	printf("far %f\n",camera->f_far);
+}
+
 void camera_copy(t_camera *target,t_camera *source)
 {
 	target->type = source->type;
@@ -69,6 +83,12 @@ void camera_copy(t_camera *target,t_camera *source)
 void camera_free(t_camera *camera)
 {
 	free(camera);
+}
+
+t_node *camera_add(const char *name)
+{
+	t_node *node = camera_make(name); //XXX
+	return node;
 }
 
 t_node *camera_make(const char *name)

@@ -597,19 +597,8 @@ void load_scene(t_context *C,t_scene *sc)
 	{
 		n=l->data;	// node
 
-		// ADD TO SCENE
+		// add to scene
 		scene_node_load(C->scene,n);
-
-		if(n->type==nt_camera)
-		{
-			t_generic *g=(t_generic *)n->data;
-
-			if(is(g->name,"main_camera"))
-			{
-				t_camera *camera=n->data;
-				C->camera=camera;
-			}
-		}
 	}
 
 	// load data
@@ -868,6 +857,7 @@ void load_rebind(t_scene *sc)
 			case(nt_dict):dict_rebind(sc,ptr); break;
 			case(nt_symbol): symbol_rebind(sc,ptr); break;
 			case(nt_vector) : vector_rebind(sc,ptr);break; 
+			case(nt_viewport) : viewport_rebind(sc,ptr);break; 
 			default:
 				printf("[ERROR load_data] Unknown type %s\n",node_name_get(node->type));
 				load_error = 1;
@@ -940,8 +930,6 @@ void load_node(t_scene *sc)
 		n=l->data;	// node
 
 		// 0) BIND NODE CLS (MAKE NODE)
-
-		//printf("load %s\n",node_name_get(n->type));
 
 		node_init(n,n->type);
 
@@ -1111,13 +1099,7 @@ void load_file(t_context *C,const char *path)
 	sc->tmp_node=lst_new("tmp_node");
 	sc->tmp_data=lst_new("tmp_data");
 
-	// remove object camera
-
-	t_node *node_object_camera=scene_node_get(C->scene,"object","main_camera");
-	scene_node_free(C->scene,node_object_camera);
-
 /** READ **/
-
 	
 	// read file, allocate memory, store in id
 	load_read(sc,path);

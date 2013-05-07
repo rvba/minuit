@@ -24,11 +24,18 @@ struct Viewport
 
 	int width;
 	int height;
+
+	int x;
+	int y;
+
 	t_camera *camera;
 };
 
-
+void viewport_draw(t_viewport *viewport);
+t_viewport *viewport_rebind(t_scene *scene, void **ptr);
+t_node *viewport_add(const char *name);
 t_viewport *viewport_new(const char *name);
+t_node *viewport_make(const char *name);
 
 
 #endif

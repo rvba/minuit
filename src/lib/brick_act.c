@@ -931,14 +931,10 @@ void *op_window(t_brick *brick)
 {
 	op_slider(brick);
 
-	t_context *C=ctx_get();
 	t_app *app = app_get();
-	t_camera *camera = C->camera;
 	app->window->viewport_width=app->window->width;
 	app->window->viewport_height=app->window->height;
 	glutReshapeWindow(app->window->width,app->window->height);
-	op_camera_frustum_init(camera);
-
 	return NULL;
 }
 
@@ -947,13 +943,22 @@ void *op_window(t_brick *brick)
 void *op_camera_rotate_xy(t_brick *brick)
 {
 	t_context *C=ctx_get();
-	t_camera *camera = C->camera;
 
 	op_slider(brick);
 
 	float *data=brick->plug_intern.data;
 
-	op_camera_rotate(C,camera,*data,0);	
+	// Get default Viewport
+	t_node *node_viewport = scene_node_get(C->scene,"viewport","viewport");
+	t_viewport *viewport;
+	t_camera *camera;
+
+	if(node_viewport)
+	{
+		viewport = node_viewport->data;
+		camera = viewport->camera;
+		op_camera_rotate(C,camera,*data,0);	
+	}
 
 	return NULL;
 }
@@ -963,13 +968,21 @@ void *op_camera_rotate_xy(t_brick *brick)
 void *op_camera_rotate_z(t_brick *brick)
 {
 	t_context *C=ctx_get();
-	t_camera *camera = C->camera;
 
-	op_slider(brick);
+	// Get default Viewport
+	t_node *node_viewport = scene_node_get(C->scene,"viewport","viewport");
+	t_viewport *viewport;
+	t_camera *camera;
 
-	float *data=brick->plug_intern.data;
+	if(node_viewport)
+	{
+		viewport = node_viewport->data;
+		camera = viewport->camera;
 
-	op_camera_rotate(C,camera,0,*data);	
+		op_slider(brick);
+		float *data=brick->plug_intern.data;
+		op_camera_rotate(C,camera,0,*data);	
+	}
 
 	return NULL;
 }
