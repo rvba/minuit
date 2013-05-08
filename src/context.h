@@ -201,6 +201,7 @@ void process_launch(t_process *process);
 // CTX_RENDER
 
 void ctx_render(t_context *C);
+void ctx_render_scene(t_context *C);
 
 // CTX_LINKS.C
 

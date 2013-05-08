@@ -96,12 +96,68 @@ void ctx_get_selection(t_context *C)
 		 printf("pixel color : %d %d %d %d\n",C->event->color[0],C->event->color[1],C->event->color[2],a);
 }
 
-void ctx_render(t_context *C)
+void ctx_render_scene(t_context *C)
 {
+	t_scene *scene = C->scene;
 	t_link *link;
 	t_node *node;
 	t_viewport *viewport;
+
+	//ctx_render_set_full_pass(C);
+	//draw_init(C->draw);
+
+	// Draw Screens
+	for(link = scene->viewports->first; link; link = link->next)
+	{
+		node = link->data;
+		viewport = node->data;
+		viewport_draw(viewport);
+	}
+}
+
+void ctx_render_scene_selection_pass(t_context *C)
+{
+	ctx_render_set_selection_pass(C);
+	draw_init(C->draw);
+	ctx_render_scene(C);
+}
+
+void ctx_render_scene_full_pass(t_context *C)
+{
+	ctx_render_set_full_pass(C);
+	draw_init(C->draw);
+	ctx_render_scene(C);
+}
+
+/*
+void ctx_render_scene(void)
+{
+	t_context *C = ctx_get();
 	t_scene *scene = C->scene;
+	t_link *link;
+	t_node *node;
+	t_viewport *viewport;
+
+	ctx_render_set_full_pass(C);
+	draw_init(C->draw);
+
+	// Draw Screens
+	for(link = scene->viewports->first; link; link = link->next)
+	{
+		node = link->data;
+		viewport = node->data;
+		viewport_draw(viewport);
+	}
+}
+*/
+
+
+void ctx_render(t_context *C)
+{
+	//t_link *link;
+	//t_node *node;
+	//t_viewport *viewport;
+	//t_scene *scene = C->scene;
 
 	// Check Not Off Screen
 	if(!C->app->off_screen)
@@ -109,7 +165,10 @@ void ctx_render(t_context *C)
 		// Selection Pass
 		if(C->draw->with_selection_pass)
 		{
+
+			/*
 			ctx_render_set_selection_pass(C);
+
 			draw_init(C->draw);
 
 			// Draw Screens
@@ -119,6 +178,9 @@ void ctx_render(t_context *C)
 				viewport = node->data;
 				viewport_draw(viewport);
 			}
+			*/
+
+			ctx_render_scene_selection_pass(C);
 
 			ui_draw();
 
@@ -129,6 +191,7 @@ void ctx_render(t_context *C)
 		// Render Pass
 		if(C->draw->with_draw_pass)
 		{
+			/*
 			ctx_render_set_full_pass(C);
 			draw_init(C->draw);
 
@@ -139,6 +202,9 @@ void ctx_render(t_context *C)
 				viewport = node->data;
 				viewport_draw(viewport);
 			}
+			*/
+
+			ctx_render_scene_full_pass(C);
 
 
 			ui_draw();
