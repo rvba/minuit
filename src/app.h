@@ -122,7 +122,6 @@ struct App
 	char git[GIT];
 	
 	void (*main_func)(void);
-	//void (*dsp_func)(void);
 
 	int off_screen; //off screen rendering
 	int with_glut; // use GLUT

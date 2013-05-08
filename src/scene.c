@@ -118,17 +118,6 @@ t_node *scene_get_data(t_scene *sc,void *ptr)
 	t_node *n;
 	t_data *d;
 
-	/*
-	printf("scene_get_data %p\n",ptr);
-	for(l=sc->datas->first;l;l=l->next)
-	{
-		n=l->data;
-		d=n->data;
-		printf("%p\n",d->pointer);
-		if(d->pointer==ptr) return n;
-	}
-	*/
-
 	for(l=sc->datas->first;l;l=l->next)
 	{
 		n=l->data;
@@ -146,16 +135,6 @@ t_node *scene_get_var(t_scene *sc,void *ptr)
 {
 	t_link *l;
 	t_node *n;
-
-	/*
-	printf("scene_get_var %p\n",ptr);
-
-	for(l=sc->vars->first;l;l=l->next)
-	{
-		n=l->data;
-		printf("%p\n",n->id_ptr);
-	}
-	*/
 
 	for(l=sc->vars->first;l;l=l->next)
 	{
@@ -271,8 +250,6 @@ t_node *scene_node_get(t_scene *sc,const char *type,const char *name)
 		return NULL;
 	}
 }
-
-
 
 
 /***	 COLOR	***/
@@ -504,7 +481,6 @@ void scene_var_free(t_scene *sc,t_node *node)
 
 void scene_node_free(t_scene *sc,t_node *node)
 {
-	//printf("node free %d\n",node->id);
 	lst_remove_node(node->cls->lst,node);
 	node->cls->free(sc,node);
 	lst_remove_node(sc->nodes,node);
@@ -512,7 +488,6 @@ void scene_node_free(t_scene *sc,t_node *node)
 
 void scene_viewport_free(t_scene *sc,t_node *node)
 {
-	//printf("node free %d\n",node->id);
 	lst_remove_node(node->cls->lst,node);
 	//node->cls->free(sc,node);
 	lst_remove_node(sc->nodes,node);
@@ -741,7 +716,6 @@ t_node *scene_add_node(t_scene *sc,t_node_type type,const char *name)
 
 	// make node (init cls,size,lst)
 	node_init(node,type);
-	//node->cls->init(node);
 
 	// build data (allocate struct data (!var), add node->id=g->id (!var))
 	node->cls->build(node,name);
@@ -750,7 +724,6 @@ t_node *scene_add_node(t_scene *sc,t_node_type type,const char *name)
 	if(node->cls->lst) lst_add(node->cls->lst,node,name); 
 
 	// add to nodes list
-	//printf("scene add node:%s %d\n",name,node->id);
 	lst_add(sc->nodes,node,name);
 
 	// store data

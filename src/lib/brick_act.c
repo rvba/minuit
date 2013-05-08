@@ -649,7 +649,6 @@ void exe_add_brick_child_parent(t_dict *args)
 	t_plug *p_in = &b->plug_in;
 	
 	t_plug *plug_target = &brick_target->plug_intern;
-	//plug_add_parent(plug_target,p_intern);
 	plug_add_parent(plug_brick,p_intern);
 	plug_add_parent(plug_target,plug_brick);
 	p_in->follow_in=1;
@@ -1485,74 +1484,6 @@ void *op_set_selected(t_brick *brick)
 		if(plug->data)
 		{
 			ctx_scene_set_selected(C,plug->data);
-		}
-	}
-
-	return NULL;
-}
-
-// GET
-
-
-void *__op_get(t_brick *brick)
-{
-	t_plug *plug=&brick->plug_intern;
-	t_plug *plug_in=&brick->plug_in;
-	t_plug *plug_out=&brick->plug_out;
-	t_plug *plug_src=NULL;
-
-	t_plug *plug_src_in;
-
-	if(plug_in->is_connected)
-	{
-		t_plug *plug_source=plug_in->src;
-		t_brick *brick_in=plug_source->brick;
-		plug_src=&brick_in->plug_intern;
-		plug_src_in = &brick_in->plug_in;
-	}
-
-	t_lst *lst;
-	t_link *link;
-
-	if(plug_src)
-	{
-		// if src is type lst
-		if(plug_src->data_type==dt_lst && plug_src_in->open_out)
-		{
-			// set ready
-			plug_out->open_out=1;
-			lst=plug_src->data;
-
-			// if lst
-			if(lst)
-			{
-				if(!lst->current)
-				{
-					if(lst->first)
-					{
-						printf("op_get set first\n");
-						lst->current=lst->first;
-					}
-				}
-				else
-				{
-					link=lst->current;
-					if(link->next)
-					{
-						printf("op_get set next\n");
-						lst->current=link->next;
-					}
-
-					//XXX change type
-					plug->data_type=dt_camera;
-					t_camera *camera=link->data;
-					plug->data=camera;
-				}
-			}
-		}
-		else
-		{
-			plug_out->open_out=0;
 		}
 	}
 

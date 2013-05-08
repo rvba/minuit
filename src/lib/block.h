@@ -384,7 +384,7 @@ void		block_unstore(t_block *block);
 
 // BRICK
 
-void plug_child_remove_all_parents(t_plug *child);
+void 		plug_child_remove_all_parents(t_plug *child);
 t_brick *	brick_copy(t_block *block,t_brick *brick);
 t_brick *	brick_clone(t_block *block,t_brick *brick);
 void 		plug_color_init(t_plug *plug);
@@ -402,7 +402,7 @@ void 		brick_init(t_scene *sc,t_brick *brick);
 void 		_brick_init(t_brick *brick);
 
 t_brick *	brick_new(const char *name);
-void *brick_get_ref(t_brick *brick, const char *ref);
+void *		brick_get_ref(t_brick *brick, const char *ref);
 t_brick *	brick_rebind(t_scene *sc,void *ptr);
 t_node 		*brick_make(t_block *block,const char *name,t_brick_type brick_type,t_data_type data_type,void *data_target);
 
@@ -503,7 +503,7 @@ void 		plug_remove_parent(t_plug *plug);
 void 		*op_stack(t_brick *brick);
 
 void 		set_for_loop(t_block *block ,int state);
-void plug_debug(t_plug *plug);
+void 		plug_debug(t_plug *plug);
 
 #endif
 

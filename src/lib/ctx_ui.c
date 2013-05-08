@@ -183,7 +183,6 @@ void ctx_ui_background_button_left_test(t_context *C)
 void ctx_ui_background(t_context *C)
 {
 	// test background
-	//if(!C->event->is_brick_transformed && !C->app->keyboard->shift)
 	if(!C->event->is_brick_transformed)
 	{
 		ctx_ui_background_button_left_test(C);

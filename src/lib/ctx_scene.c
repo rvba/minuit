@@ -11,7 +11,6 @@
 
 // Selections and updates
 
-//void ctx_scene_set_selected(t_context *C,t_node *node)
 void ctx_scene_set_selected(t_context *C,void *data)
 {
 	t_node *selected=C->scene->selected;

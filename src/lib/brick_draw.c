@@ -160,9 +160,6 @@ void brick_draw_link(t_brick *brick)
 				}
 			}
 
-
-
-
 			glPopMatrix();
 		}
 	}
@@ -248,13 +245,10 @@ void brick_draw_plug(t_brick *brick,int is_out)
 		if(plug->is_connected) vset3f(c,0,1,0);
 		else vset3f(c,1,0,0);
 
-		//float pos2[3]={pos[0],pos[1]+brick->geom.height,0};
-
 		pos[1] += brick->geom.height / 2;
 		if(is_out) pos[0] += brick->geom.height +5 ;
 		else pos[0] -= 5;
 
-		//skt_msh_square(pos,brick->geom.height,c);
 		skt_point(pos,3,c);
 
 		if(is_out) brick_draw_plug_state(brick,&brick->plug_out,brick->geom.width+brick->geom.height+brick->geom.height/4);
@@ -477,8 +471,7 @@ void brick_draw_txt(t_brick *brick)
 			// draw DATA
 			if(brick->state.draw_value || C->ui->show_step)
 			{
-				//if(brick->txt_data.name)
-					brick->txt_data.draw(&brick->txt_data);
+				brick->txt_data.draw(&brick->txt_data);
 			}
 
 		glPopMatrix();

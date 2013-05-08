@@ -341,12 +341,6 @@ void cls_node_init_mesh(t_node *node)
 {
 	cls_node_init_generic(node);
 	t_mesh *mesh=node->data;
-	/*
-	//XXX
-	t_context *C=ctx_get();
-	mesh_init(C->scene,mesh);
-	*/
-	//mesh->cls->init(mesh);
 	t_context *C=ctx_get();
 	mesh_init(C->scene,mesh);
 }
@@ -356,13 +350,6 @@ void cls_node_init_object(t_node *node)
 	cls_node_init_generic(node);
 	t_object *object=node->data;
 	object->cls->init(object);
-
-	//XXX
-	/*
-	cls_node_init_generic(node);
-	t_object *object=node->data;
-	mesh_init(mesh);
-	*/
 }
 
 void cls_node_init_var(t_node *node)
@@ -379,10 +366,6 @@ void cls_node_init_var(t_node *node)
 void cls_node_init_camera(t_node *node)
 {
 	cls_node_init_generic(node);
-	/*
-	t_camera *camera=node->data;
-	camera->cls->init(camera);
-	*/
 }
 
 void cls_node_init_dict(t_node *node)
@@ -405,10 +388,6 @@ void cls_node_init_vector(t_node *node)
 void cls_node_init_viewport(t_node *node)
 {
 	cls_node_init_generic(node);
-	/*
-	t_vector *vector=node->data;
-	vector->cls->init(vector);
-	*/
 }
 
 // CLASSES

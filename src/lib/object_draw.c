@@ -39,30 +39,8 @@ void cls_object_draw_mesh(t_object *object)
 		glRotatef(y,0,1,0);
 		glRotatef(x,1,0,0);
 
-		// mesh draw
-
 		if(mesh)
 		{
-			// MESH
-
-			// update
-			/*
-			if(mesh->state.need_update)
-			{
-				mesh_init_buffers(mesh);
-			}
-			*/
-
-			t_vlst *vertex=mesh->vertex;
-
-			if(vertex->need_update)
-			{
-				/*
-				mesh_init_buffers(mesh);
-				vertex->need_update=0;
-				*/
-			}
-
 			// selected
 			if(object->is_selected)
 			{

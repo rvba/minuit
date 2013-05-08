@@ -184,7 +184,6 @@ void dict_free(t_dict *dict)
 		for(l=dict->symbols->first;l;l=l->next)
 		{
 			s = l->data;
-			//symbol_free(s);
 			scene_struct_delete(sc,s);
 		}
 

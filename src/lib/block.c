@@ -227,8 +227,6 @@ void cls_block_link(t_block *self,t_node *target)
 		t_lst *lst=target->data;
 		self->bricks=lst;
 		target->users++;
-
-		//printf("cls_block_link %s\n",lst->name);
 	}
 
 	else printf("[ERROR:cls_block_link] Unknown node type %s",node_name_get(target->type));

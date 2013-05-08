@@ -42,7 +42,6 @@ void app_screen_set_fullscreen(t_app *app,int state)
 
 		if (app->window->fullscreen == 1)
 		{
-			//app->window->fullscreen = 1;
 			app->window->width = glutGet(GLUT_SCREEN_WIDTH);
 			app->window->height = glutGet(GLUT_SCREEN_HEIGHT);
 			app->window->change=1;
@@ -51,7 +50,6 @@ void app_screen_set_fullscreen(t_app *app,int state)
 		}
 		else if (app->window->fullscreen == 0)
 		{
-			//app->window->fullscreen = 0;
 			app->window->width=app->window->width_def; 
 			app->window->height=app->window->height_def;
 			app->window->change=1;
