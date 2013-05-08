@@ -127,7 +127,7 @@ void *cls_node_get_ref_vlst(t_node *node, const char *ref)
 
 void *cls_node_get_ref_camera(t_node *node, const char *ref)
 {
-	return vlst_get_ref(node->data, ref);
+	return camera_get_ref(node->data, ref);
 }
 
 void *cls_node_get_ref(t_node *node, const char *ref)
