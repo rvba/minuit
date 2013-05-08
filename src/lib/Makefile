@@ -26,6 +26,7 @@ obj:=\
 	ctx_process.o\
 	ctx_mouse.o\
 	ctx_render.o\
+	ctx_save.o\
 	ctx_scene.o\
 	ctx_ui.o\
 	ctx_video.o\
@@ -118,6 +119,8 @@ ctx_keyboard.o:../context.h ctx_keyboard.c
 	gcc -c ctx_keyboard.c $(FLAG) $(INC)
 ctx_ui.o:../context.h ctx_ui.c
 	gcc -c ctx_ui.c $(FLAG) $(INC)
+ctx_save.o:../context.h ctx_save.c
+	gcc -c ctx_save.c $(FLAG) $(INC)
 ctx_scene.o:../context.h ctx_scene.c
 	gcc -c ctx_scene.c $(FLAG) $(INC)
 ctx_render.o:../context.h ctx_render.c

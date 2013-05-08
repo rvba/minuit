@@ -142,11 +142,15 @@ void check_init(const char *type,const char *name);
 void check_check(const char *type,const char *name);
 int check(t_node *node,const char *name_data,const char *name_ptr);
 void load_file(t_context *C,const char *path);
-void save_file(t_context *C);
-void save_file_increment(t_context *C);
 void *ctx_get_pointer(void *ptr);
 void rebind(t_scene *sc,const char *type,const char *name,void **ptr);
 void load_last(t_context *C);
+
+// CTX_SAVE
+
+void save_file(t_context *C);
+void save_file_increment(t_context *C);
+
 
 // CTX_KEYBOARD
 
