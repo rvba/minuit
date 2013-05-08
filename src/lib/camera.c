@@ -32,14 +32,14 @@ void camera_show(t_camera *camera)
 {
 	printf("Camera: %s\n",camera->name);
 	printf("frustum\n");
-	printf("left %f\n",camera->f_left);
-	printf("right %f\n",camera->f_right);
-	printf("bottom %f\n",camera->f_bottom);
-	printf("top %f\n",camera->f_top);
-	printf("aspect %f\n",camera->f_aspect);
-	printf("fovy %f\n",camera->f_fovy);
-	printf("near %f\n",camera->f_near);
-	printf("far %f\n",camera->f_far);
+	printf("left %f\n",camera->left);
+	printf("right %f\n",camera->right);
+	printf("bottom %f\n",camera->bottom);
+	printf("top %f\n",camera->top);
+	printf("aspect %f\n",camera->aspect);
+	printf("fovy %f\n",camera->fovy);
+	printf("near %f\n",camera->near);
+	printf("far %f\n",camera->far);
 }
 
 void camera_copy(t_camera *target,t_camera *source)
@@ -61,19 +61,14 @@ void camera_copy(t_camera *target,t_camera *source)
 	target->ortho_near=source->ortho_near;
 	target->ortho_far=source->ortho_far;
 
-	target->o_left=source->o_left;
-	target->o_right=source->o_right;
-	target->o_bottom=source->o_bottom;
-	target->o_top=source->o_top;
-
-	target->f_aspect=source->f_aspect;
-	target->f_fovy=source->f_fovy;
-	target->f_left=source->f_left;
-	target->f_right=source->f_right;
-	target->f_bottom=source->f_bottom;
-	target->f_top=source->f_top;
-	target->f_near=source->f_near;
-	target->f_far=source->f_far;
+	target->aspect=source->aspect;
+	target->fovy=source->fovy;
+	target->left=source->left;
+	target->right=source->right;
+	target->bottom=source->bottom;
+	target->top=source->top;
+	target->near=source->near;
+	target->far=source->far;
 
 	target->zenith=source->zenith;
 
@@ -145,34 +140,17 @@ t_camera *camera_new(const char *name)
 
 	vset(camera->ortho_location,0,0,0);
 	vset(camera->ortho_rotation,1,0,0);
-
 	camera->ortho_near=CAM_ORTHO_NEAR;
 	camera->ortho_far=CAM_ORTHO_FAR;
-	camera->new_ortho_zoom=0.01;
-
-	camera->f_near=CAM_NEAR;
-	camera->f_far=CAM_FAR;
-	camera->f_left=0;
-	camera->f_right=0;
-	camera->f_bottom=0;
-	camera->f_top=0;
-
-	camera->o_left=0;
-	camera->o_right=0;
-	camera->o_bottom=0;
-	camera->o_top=0;
-
-	camera->ui_left=0;
-	camera->ui_right=0;
-	camera->ui_bottom=0;
-	camera->ui_top=0;
-	camera->ui_zoom=0.01;
-
+	camera->near=CAM_NEAR;
+	camera->far=CAM_FAR;
+	camera->left=0;
+	camera->right=0;
+	camera->bottom=0;
+	camera->top=0;
 	camera->zenith=0;
 	camera->frame=0;
-
 	camera->is_moving=CAM_IS_MOVING;
-	camera->rec_mode=CAM_REC_MODE;
 
 	return camera;
 }

@@ -56,7 +56,7 @@ void 		op_menu_rc_submenu_add(t_node *node, t_node *menu_sub,char *name);
 
 // OP_ADD
 
-void *op_new_camera(const char *name);
+void *		op_new_camera(const char *name);
 t_node *	op_new_cube(const char *name);
 t_node *	op_add_new_wire_cube(t_node *node);
 void 		add_mn(void);
@@ -142,6 +142,7 @@ void 		op_ui_switch_axis(void);
 // OP_CAMERA
 
 void 		op_3d_orientation(void);
+t_camera *	op_camera_get_current(void);
 void 		op_camera_view_top(t_camera *camera);
 void 		op_camera_view_axo(t_camera *camera);
 void 		op_camera_view_front(t_camera *camera);
@@ -152,7 +153,7 @@ void 		op_camera_switch_view(t_camera *camera);
 void 		op_camera_switch_type(t_camera *camera);
 void 		op_camera_change_speed(t_camera *camera);
 void 		op_camera_translate_key(t_camera *camera,float x,float y);
-void 		op_camera_switch_2d(t_context *C, t_camera *camera, int z,int p);
+void 		op_camera_switch_2d(t_context *C, t_camera *camera);
 void 		op_camera_switch_3d(t_context *C, t_camera *camera);
 void 		op_camera_update(t_context *C, t_camera *camera);
 void 		op_camera_frustum_init(t_camera *camera);

@@ -34,7 +34,6 @@ t_node *screen_new_generic(char *name)
 void screen_main_make(void)
 {
 	t_context *C=ctx_get();
-	//t_node *node=scene_add(C->scene,"screen","screen_main");
 	t_node *node=scene_add(C->scene,nt_screen,"screen_main");
 	t_screen *screen=node->data;
 
@@ -53,7 +52,6 @@ void screen_main_make(void)
 void screen_desk_make(void)
 {
 	t_context *C=ctx_get();
-	//t_node *node=scene_add(C->scene,"screen","screen_desk");
 	t_node *node=scene_add(C->scene,nt_screen,"screen_desk");
 	t_screen *screen=node->data;
 

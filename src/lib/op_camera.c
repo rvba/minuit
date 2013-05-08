@@ -12,6 +12,24 @@
 #define OP_CAM_SPEED 50
 #define OP_CAM_ORTHO_ZOOM_FAC 10
 
+t_camera *op_camera_get_current(void)
+{
+	t_context *C = ctx_get();
+	t_camera *camera = NULL;
+
+	// Get default Viewport
+	t_node *node_viewport = scene_node_get(C->scene,"viewport","viewport");
+	t_viewport *viewport = NULL;
+
+	if(node_viewport)
+	{
+		viewport = node_viewport->data;
+		camera = viewport->camera;
+	}
+
+	return camera;
+}
+
 void op_3d_orientation(void)
 {
 	glRotatef(-90,1,0,0);
@@ -111,7 +129,7 @@ void op_camera_translate_key(t_camera *camera,float x,float y)
 	camera->is_moving=1;
 }
 
-void op_camera_switch_2d(t_context *C, t_camera *camera, int z,int p)
+void op_camera_switch_2d(t_context *C, t_camera *camera)
 {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -121,25 +139,16 @@ void op_camera_switch_2d(t_context *C, t_camera *camera, int z,int p)
 	int width = app->window->width;
 	int height = app->window->height;
 
-	double left = camera->ui_left;
-	double right = camera->ui_right;	
-	double bottom = camera->ui_bottom;
-	double top = camera->ui_top;
-
-	float pan_x=-C->ui->pan_x*p;
-	float pan_y=-C->ui->pan_y*p;
-	float zoom;
-
-	if(z)
-		zoom=C->ui->zoom;
-	else
-		zoom=1;
+	double left = camera->left;
+	double right = camera->right;	
+	double bottom = camera->bottom;
+	double top = camera->top;
 
 	glOrtho(
-		0+left+pan_x,
-		(width * zoom)+right+pan_x,
-		0+bottom+pan_y,
-		(height * zoom)+top+pan_y,
+		0 + left,
+		width + right,
+		0 + bottom,
+		height + top,
 		-1,
 		1
 		);
@@ -162,10 +171,10 @@ void op_camera_update(t_context *C, t_camera *camera)
 	// ORTHO
 	if (camera->type == camera_ortho)
 	{
-		double left = camera->o_left;
-		double right = camera->o_right;	
-		double bottom = camera->o_bottom;
-		double top = camera->o_top;
+		double left = camera->left;
+		double right = camera->right;	
+		double bottom = camera->bottom;
+		double top = camera->top;
 
 		float z=camera->ortho_zoom;
 
@@ -209,12 +218,12 @@ void op_camera_update(t_context *C, t_camera *camera)
 			gluPickMatrix((double)x,(double)y,1.0f,1.0f,viewport);
 		}
 		glFrustum(
-			camera->f_left,
-			camera->f_right,
-			camera->f_bottom,
-			camera->f_top,
-			camera->f_near,
-			camera->f_far);
+			camera->left,
+			camera->right,
+			camera->bottom,
+			camera->top,
+			camera->near,
+			camera->far);
 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
@@ -252,26 +261,17 @@ void op_camera_frustum_init(t_camera *camera)
 	double height = near*tangent;
 	double width = height*aspect;
 
-	camera->f_fovy=fovy;
-	camera->f_aspect=aspect;
-	camera->f_left = -width;
-	camera->f_right = width;
-	camera->f_bottom = -height;
-	camera->f_top = height;
-	camera->f_near = CAM_NEAR;
-	camera->f_far = CAM_FAR;
+	camera->fovy=fovy;
+	camera->aspect=aspect;
+	camera->left = -width;
+	camera->right = width;
+	camera->bottom = -height;
+	camera->top = height;
+	camera->near = CAM_NEAR;
+	camera->far = CAM_FAR;
 
-	camera->o_left = -width;
-	camera->o_right = width;
-	camera->o_bottom = -height;
-	camera->o_top = height;
 	camera->ortho_near=CAM_ORTHO_NEAR;
 	camera->ortho_far=CAM_ORTHO_FAR;
-
-	camera->ui_left = -width;
-	camera->ui_right = width;
-	camera->ui_bottom = -height;
-	camera->ui_top = height;
 }
 
 void op_camera_reset(t_context *C, t_camera *camera)
@@ -285,10 +285,10 @@ void op_camera_reset(t_context *C, t_camera *camera)
 	vset(camera->up,0,1,0);
 	camera->ortho_view = 0;
 	camera->ortho_zoom = CAM_ORTHO_ZOOM;
-	camera->f_near = CAM_NEAR;
-	camera->f_far = CAM_FAR;
-	camera->f_aspect =(double)((double)app->window->width/(double)app->window->height);
-	camera->f_fovy = 60;
+	camera->near = CAM_NEAR;
+	camera->far = CAM_FAR;
+	camera->aspect =(double)((double)app->window->width/(double)app->window->height);
+	camera->fovy = 60;
 	camera->zenith = 0;
 	camera->angle = 90;
 	vset(camera->ortho_location,0,0,0);
@@ -365,7 +365,6 @@ void op_camera_set_ortho_zoom(t_context *C, t_camera *camera, int i)
 {
 	float speed = camera->speed;
 	camera->ortho_zoom = camera->ortho_zoom + (i * OP_CAM_ORTHO_ZOOM_FAC * speed);
-	camera->new_ortho_zoom+=.005*i;
 
 	camera->is_moving=1;
 	op_camera_update(C, camera);

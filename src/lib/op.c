@@ -14,7 +14,7 @@
 
 t_block *menu_node=NULL;
 
-float global_pos=0;
+float global_pos=1;
 
 void op_add_global(t_context *C,t_block *block)
 {

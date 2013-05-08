@@ -61,22 +61,6 @@ void *op_new_camera(const char *name)
 
 void *op_add_camera(t_brick *brick)
 {
-	/*
-	t_context *C = ctx_get();
-	term_print(C->term,"+ camera");
-
-	C->scene->store=1;
-
-	t_node *node_object=object_add("camera","camera");
-	t_object *object=node_object->data;
-
-	t_node *node_camera=camera_make("camera");
-
-	object->cls->link(object,node_camera);
-
-	C->scene->store=0;
-	return node_object;
-	*/
 	t_node *node = op_new_camera("default");
 	return node;
 }
@@ -208,7 +192,6 @@ void add_mn(void)
 
 		if(is(file->ext,"mn"))
 		{
-			//load_file(C,file->path);
 			load_file(C,file->location);
 		}
 		else

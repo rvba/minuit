@@ -650,7 +650,6 @@ void scene_node_load(t_scene *sc,t_node *node)
 	// INIT NODE && DATA
 	node->cls->init(node);
 
-
 	if(node->type==nt_var)
 	{
 		lst_add(node->cls->lst,node,node_name_get(node->type));

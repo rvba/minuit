@@ -397,7 +397,7 @@ t_block *block_new(const char *name)
 	block->users=0;
 	bzero(block->type,_NAME_);
 
-	block->pos[0]=0;
+	block->pos[0]=1;
 	block->pos[1]=0;
 	block->pos[2]=0;
 	block->pos[3]=1;
