@@ -262,13 +262,24 @@ void ctx_block_mouse_update(t_context *C)
 
 void ctx_desk_update(t_context *C)
 {
-	t_link *l;
-	t_block *b;
+	t_link *link;
 
-	for(l=C->scene->global->first;l;l=l->next)
+	for(link = C->scene->sets->first; link; link = link->next)
 	{
-		b=l->data;
-		b->cls->update(b);
+		t_node *node = link->data;
+		t_set *set = node->data;
+		t_lst *lst = set->lst;
+		t_link *l = lst->first;
+
+		if(l)
+		{
+			for(;l;l=l->next)
+			{
+				t_block *b;
+				b=l->data;
+				b->cls->update(b);
+			}
+		}
 	}
 }
 

@@ -14,11 +14,11 @@
 #define __MINUIT_H
 
 #define LOG_ALWAYS 1
-#define LOG_MEMORY 1
+#define LOG_MEMORY 0
 #define LOG_SAVE 0
 #define LOG_READ 0
 #define LOG_SCENE 0
-#define LOG_SCENE_NODES 1
+#define LOG_SCENE_NODES 0
 #define LOG_CHECK 0
 #define LOG_REBIND 0
 #define MINUIT_VERSION 0.4
@@ -90,6 +90,7 @@ enum Node_Type
 	nt_symbol,
 	nt_vector,
 	nt_viewport,
+	nt_set,
 };
 	
 
@@ -170,10 +171,7 @@ struct Scene
 	int color[3];	
 	int use_tmp_colors;
 	
-	// nodes
 	t_lst *nodes;
-
-	// structs
 
 	t_lst *files;
 	t_lst *textures;
@@ -186,9 +184,7 @@ struct Scene
 	t_lst *cameras;
 	t_lst *screens; 
 	t_lst *images;
-
 	t_lst *datas;
-	t_lst *vars;
 	t_lst *vlst;
 	t_lst *lists;
 	t_lst *links;
@@ -196,6 +192,9 @@ struct Scene
 	t_lst *symbols;
 	t_lst *vectors;
 	t_lst *viewports;
+	t_lst *sets;
+
+	t_lst *vars;
 
 	// selections
 	t_node *selected;
@@ -206,9 +205,6 @@ struct Scene
 	t_lst *tmp_colors;
 	t_lst *tmp_node;
 	t_lst *tmp_data;
-
-	// global
-	t_lst *global;
 };
 
 char *node_name_get(t_node_type type);

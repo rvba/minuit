@@ -14,7 +14,25 @@ int set_draw_plug=1;
 // GET LIST
 t_lst *get_target_list(t_context *C)
 {
-	return C->scene->global;
+	if(C->scene->sets->first)
+	{
+		t_node *node  = C->scene->sets->first->data;
+		t_set  *set = node->data;
+		t_lst *lst = set->lst;
+
+		return lst;
+	}
+	else
+	{
+		op_new_set("set");
+
+		t_link *link = C->scene->sets->first;
+		t_node *node = link->data;
+		t_set *set = node->data;
+		t_lst *lst = set->lst;
+
+		return lst;
+	}
 }
 
 // GET FIRST BRICK
@@ -68,7 +86,7 @@ t_node *add_block(t_context *C,const char *name)
 	block->state.draw_outline = 1;
 
 	// add to main list
-	list_add_global(list,block);
+	list_add(list,block);
 
 	float p[2];
 	ctx_get_mouse_pos(C,p);

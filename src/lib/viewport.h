@@ -7,8 +7,8 @@
  *
  */
 
- #ifndef __VIEWPORT_H
- #define __VIEWPORT_H
+#ifndef __VIEWPORT_H
+#define __VIEWPORT_H
 
 #include "minuit.h"
 

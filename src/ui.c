@@ -215,6 +215,8 @@ void ui_draw_desk(void)
 {
 	t_context *C=ctx_get();
 
+	/*
+
 	t_link *l;
 	t_block *b;
 
@@ -226,6 +228,27 @@ void ui_draw_desk(void)
 		{
 			b=l->data;
 			b->cls->draw(b);
+		}
+	}
+	*/
+
+	t_link *link;
+
+	for(link = C->scene->sets->first; link; link = link->next)
+	{
+		t_node *node = link->data;
+		t_set *set = node->data;
+		t_lst *lst = set->lst;
+		t_link *l = lst->first;
+
+		if(l)
+		{
+			for(;l;l=l->next)
+			{
+				t_block *b;
+				b=l->data;
+				b->cls->draw(b);
+			}
 		}
 	}
 }

@@ -7,7 +7,7 @@
  *
  */
 
-#include "context.h"
+#include "op.h"
 
 // CONNECT
 
@@ -219,7 +219,9 @@ void brick_remove(t_dict *args)
 
 	if(!block_is_connected("in",block) && !block_is_connected("out",block))
 	{
-		list_remove_by_ptr(C->scene->global,block);
+		t_lst *lst = get_target_list(C);
+
+		list_remove_by_ptr(lst,block);
 		scene_struct_delete(C->scene,block);
 	}
 }

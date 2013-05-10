@@ -35,6 +35,24 @@ t_brick *brick_current=NULL;
 t_term *TERM_ROOT=NULL;
 t_term *TERM_BRICKS=NULL;
 
+t_lst *ctx_links_get_set_lst(t_context *C)
+{
+	t_link *link  = C->scene->sets->first;
+
+	if(link)
+	{
+		t_node *node = link->data;
+		t_set *set = node->data;
+		t_lst *lst = set->lst;
+
+		return lst;
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
 // Show Bricks Stack
 
 void term_bricks_show(void)
@@ -411,7 +429,10 @@ void ctx_links_get_next(t_lst *lst, int order)
 
 void ctx_links_set_order(t_context *C)
 {
-	t_lst *lst = C->scene->global;
+	//t_lst *lst = C->scene->global;
+	t_lst *lst = ctx_links_get_set_lst(C);
+	if(lst)
+	{
 	t_lst *blocks = lst_new("blocks");
 	t_link *link;
 	t_block *block;
@@ -437,6 +458,7 @@ void ctx_links_set_order(t_context *C)
 
 		// Free Blocks Lst
 		lst_free(blocks);
+	}
 	}
 }
 
@@ -718,26 +740,34 @@ void ctx_links_loop(t_context *C)
 	ctx_links_reloop(C);
 }
 
+
 // BUILD BRICKS
 
 t_lst *ctx_links_build(t_context *C)
 {
 	t_lst *lst = lst_new("lst");
+
 	t_link *l;
 
 	// Get All Bricks from All Blocks
-	for(l=C->scene->global->first;l;l=l->next)
+
+	t_lst *set_lst = ctx_links_get_set_lst(C);
+
+	if(set_lst)
 	{
-		t_link *link;
-		t_block *block = l->data;
-
-		// Reset Graph Pos
-		block->graph_order = -1;
-
-		for(link=block->bricks->first;link;link=link->next)
+		for(l=set_lst->first;l;l=l->next)
 		{
-			t_brick *brick = link->data;
-			lst_add(lst,brick,brick->name);
+			t_link *link;
+			t_block *block = l->data;
+
+			// Reset Graph Pos
+			block->graph_order = -1;
+
+			for(link=block->bricks->first;link;link=link->next)
+			{
+				t_brick *brick = link->data;
+				lst_add(lst,brick,brick->name);
+			}
 		}
 	}
 

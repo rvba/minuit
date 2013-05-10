@@ -22,6 +22,7 @@
 #include "dict.h"
 #include "vector.h"
 #include "viewport.h"
+#include "set.h"
 
 t_node *	scene_get_data(t_scene *sc,void *ptr);
 t_node *	scene_get_var(t_scene *sc,void *ptr);
@@ -74,6 +75,7 @@ void scene_symbol_free(t_scene *sc,t_node *node);
 void scene_var_free(t_scene *sc,t_node *node);
 void scene_generic_free(t_scene *sc,t_node *node);
 void scene_viewport_free(t_scene *sc,t_node *node);
+void scene_set_free(t_scene *sc,t_node *node);
 
 void scene_screen_free(t_scene *sc,t_node *node);
 void scene_file_free(t_scene *sc,t_node *node) ;

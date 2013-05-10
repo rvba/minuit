@@ -27,6 +27,24 @@ t_node *op_new_cube(const char *name)
 	return cube;
 }
 
+void *op_new_set(const char *name)
+{
+	t_context *C = ctx_get();
+	term_print(C->term,"+ set");
+
+	t_node *node = set_add(name);
+
+	return node;
+}
+
+void *op_add_set(t_brick *brick)
+{
+	t_context *C = ctx_get();
+	C->scene->store=1;
+	C->scene->store=0;
+	return NULL;
+}
+
 void *op_add_viewport(t_brick *brick)
 {
 	t_context *C = ctx_get();

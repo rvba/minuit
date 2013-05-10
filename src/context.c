@@ -69,15 +69,6 @@ t_context *ctx_init(int argc,char **argv)
 	// set gl callbacks
 	C->app->main_func = ctx_handler;
 
-	// add global
-	C->scene->store=1;
-
-	t_node *node_global=scene_add(C->scene,nt_list,"global");
-	t_lst *global=node_global->data;
-	C->scene->global=global;
-
-	C->scene->store=0;
-
 	// build menus, register datas
 	op_init(C); 
 

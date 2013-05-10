@@ -555,6 +555,7 @@ void load_rebind(t_scene *sc)
 			case(nt_symbol): symbol_rebind(sc,ptr); break;
 			case(nt_vector) : vector_rebind(sc,ptr);break; 
 			case(nt_viewport) : viewport_rebind(sc,ptr);break; 
+			case(nt_set) : set_rebind(sc,ptr);break; 
 			default:
 				printf("[ERROR load_data] Unknown type %s\n",node_name_get(node->type));
 				load_error = 1;

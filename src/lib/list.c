@@ -253,7 +253,6 @@ t_link *list_add(t_lst *lst,void *data)
 
 	t_generic *g = (t_generic *)data;
 
-	//t_node *node=scene_add(C->scene,"link",g->name);
 	t_node *node=scene_add(C->scene,nt_link,g->name);
 	t_link *link=node->data;
 	link->data=data;
@@ -349,7 +348,8 @@ t_link *list_add_global(t_lst *lst,void *data)
 	t_context *C=ctx_get();
 
 	//t_node *node=scene_add(C->scene,"link","glink");
-	t_node *node=scene_add(C->scene,nt_link,"glink");
+	//t_node *node=scene_add(C->scene,nt_link,"glink");
+	t_node *node=scene_add(C->scene,nt_link,"link");
 	t_link *link=node->data;
 	link->data=data;
 	lst_push_back(lst,link);

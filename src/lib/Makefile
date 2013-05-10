@@ -57,6 +57,7 @@ obj:=\
 	screen_browser.o\
 	screen_init.o\
 	server.o\
+	set.o\
 	sketch.o\
 	texture.o\
 	txt.o\
@@ -175,6 +176,8 @@ plug_cls.o:block.h plug_cls.c
 	gcc -c plug_cls.c $(FLAG) $(INC)
 server.o:server.h server.c
 	gcc -c server.c $(FLAG) $(INC)
+set.o:set.h set.c
+	gcc -c set.c $(FLAG) $(INC)
 screen.o:screen.h screen.c 
 	gcc -c screen.c $(FLAG) $(INC)
 screen_browser.o:op.h screen_browser.c 

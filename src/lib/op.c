@@ -28,7 +28,11 @@ void op_add_global(t_context *C,t_block *block)
 
 	global_pos+=(brick_height*tot_brick);
 
-	list_add_global(C->scene->global,block);
+	t_lst *set_lst = get_target_list(C);
+
+	list_add_global(set_lst,block);
+
+	//list_add_global(C->scene->global,block);
 }
 
 // menu process

@@ -100,6 +100,7 @@ t_lst *scene_lst_get(t_scene *sc,const char *type)
 	else if(is(type,"dict"))  lst=sc->dicts; 
 	else if(is(type,"symbols"))  lst=sc->symbols; 
 	else if(is(type,"viewport"))  lst=sc->viewports; 
+	else if(is(type,"set"))  lst=sc->sets; 
 
 	if(lst)
 	{
@@ -493,6 +494,13 @@ void scene_viewport_free(t_scene *sc,t_node *node)
 	lst_remove_node(sc->nodes,node);
 }
 
+void scene_set_free(t_scene *sc,t_node *node)
+{
+	lst_remove_node(node->cls->lst,node);
+	//node->cls->free(sc,node);
+	lst_remove_node(sc->nodes,node);
+}
+
 // cleanup (free stack)
 
 void scene_cleanup(t_scene *sc)
@@ -657,45 +665,11 @@ void scene_node_load(t_scene *sc,t_node *node)
 	}
 	else
 	{
-
-		t_generic *g=(t_generic *)node->data;
+		t_generic *g = (t_generic *) node->data;
 		lst_add(sc->nodes,node,g->name);
-
-		// ADD TO GLOBAL LIST
-		if(is(g->name,"global"))
-		{
-			log((LOG_SCENE,"loading global\n"));
-
-			t_lst *lst=node->data;
-
-
-			// get global list
-			t_node *node_global=scene_node_get(sc,"list","global");
-			t_lst *list=node_global->data;
-
-			// store links
-			sc->store=1;
-
-			t_link *l;
-			for(l=lst->first;l;l=l->next)
-			{
-				log((LOG_SCENE,"add %s\n",l->name));
-
-				// ADD TO GLOBAL LIST
-				list_add_global(list,l->data);
-			}
-
-			sc->store=0;
-		}
-
-		// ADD TO LIST
-		else
-		{
-			if(node->cls->lst)
-			{
-				lst_add(node->cls->lst,node,node_name_get(node->type));
-			}
-		}
+		// option have no lst
+		if(node->cls->lst)
+			lst_add(node->cls->lst,node,node_name_get(node->type));
 	}
 }
 
@@ -922,11 +896,9 @@ t_scene *scene_init(void)
 	sc->symbols=lst_new("symbols");
 	sc->vectors=lst_new("vectors");
 	sc->viewports=lst_new("viewports");
+	sc->sets=lst_new("sets");
 
 	sc->tmp_colors=lst_new("tmp_colors");
-
-	// global
-	sc->global=NULL;
 
 	// load file
 	sc->tmp_node=NULL;

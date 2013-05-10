@@ -1,4 +1,4 @@
-/* 
+ /*
  * Copyright (c) 2012 Milovann Yanatchkov 
  *
  * This file is part of Minuit, a free software
@@ -58,7 +58,6 @@ void cls_object_show(t_object *object)
 
 void cls_object_link(t_object *self,t_node *target)
 {
-	//if(is(target->cls->type,"mesh"))
 	if(target->type==nt_mesh)
 	{
 		t_mesh *mesh=target->data;
@@ -66,29 +65,18 @@ void cls_object_link(t_object *self,t_node *target)
 		target->users++;
 
 	}
-	/*
-	else if(is(target->cls->type,"block"))
-	{
-		t_block *block=target->data;
-		self->menu=block;
-		target->users++;
-	}
-	*/
-	//else if(is(target->cls->type,"list"))
 	else if(target->type==nt_list)
 	{
 		t_lst *lst=target->data;
 		self->blocks=lst;
 		target->users++;
 	}
-	//else if(is(target->cls->type,"camera"))
 	else if(target->type==nt_camera)
 	{
 		t_camera *camera=target->data;
 		self->data=camera;
 		target->users++;
 	}
-	//else printf("[ERROR:cls_object_link] Unknown node type %s",target->cls->type);
 	else printf("[ERROR:cls_object_link] Unknown node type %s",node_name_get(target->type));
 }
 
@@ -155,7 +143,8 @@ void object_free(t_object *object)
 	if(object->ref)
 	{
 		// remove from global list
-		list_remove_by_ptr(C->scene->global,object->ref);
+		t_lst *lst = get_target_list(C);
+		list_remove_by_ptr(lst,object->ref);
 		// free block
 		scene_struct_delete(sc,object->ref);
 	}
