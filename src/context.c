@@ -75,7 +75,7 @@ t_context *ctx_init(int argc,char **argv)
 	// add screens to sceen
 	screen_main_make();
 	screen_browser_make();
-	screen_desk_make();
+	screen_sets_make();
 
 	// add texture
 	op_texture_add("./data/image.png");

@@ -42,9 +42,9 @@ void screen_browser_make(void);
 
 t_node *screen_new_generic(char *name);
 void screen_main_make(void);
-void screen_desk_make(void);
+void screen_sets_make(void);
 
-void screen_desk(t_screen *screen);
+void screen_sets(t_screen *screen);
 
 // SCREEN.C
 

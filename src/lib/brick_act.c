@@ -96,7 +96,7 @@ void *op_brick_add(t_brick *brick)
 	C->scene->store=0;
 
 	// Switch Desk
-	if(!C->ui->show_desk) switch_desk(C);
+	if(!C->ui->show_sets) switch_sets(C);
 		
 	return NULL;
 }

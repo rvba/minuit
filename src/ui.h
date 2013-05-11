@@ -64,7 +64,7 @@ struct Ui
 	int show_states;
 	int show_step;
 	int show_brick_step;
-	int show_desk;
+	int show_sets;
 
 	int step;
 	int step_reset;
@@ -138,7 +138,7 @@ int op_ui_alphabet_switch(t_node *node);
 
 void op_screen_switch();
 
-void ui_draw_desk(void);
+void ui_draw_sets(void);
 
 void ui_draw_mouse(void);
 

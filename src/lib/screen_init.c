@@ -49,19 +49,19 @@ void screen_main_make(void)
 
 // MAKE DESK
 
-void screen_desk_make(void)
+void screen_sets_make(void)
 {
 	t_context *C=ctx_get();
-	t_node *node=scene_add(C->scene,nt_screen,"screen_desk");
+	t_node *node=scene_add(C->scene,nt_screen,"screen_sets");
 	t_screen *screen=node->data;
 
 	screen->keymap=keymap_main;
-	screen->draw=screen_desk;
+	screen->draw=screen_sets;
 
 	screen->is_active=0;
 	screen->is_visible=0;
 
-	t_link *link=lst_add(C->ui->screens,node,"screen_desk");
+	t_link *link=lst_add(C->ui->screens,node,"screen_sets");
 	C->ui->screen_link_active=link;
 };
 

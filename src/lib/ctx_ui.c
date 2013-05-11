@@ -260,7 +260,7 @@ void ctx_block_mouse_update(t_context *C)
 
 // DESK
 
-void ctx_desk_update(t_context *C)
+void ctx_sets_update(t_context *C)
 {
 	t_link *link;
 
@@ -387,7 +387,7 @@ void ctx_ui(t_context *C)
 	ctx_block_mouse_update(C); 
 
 	// UPDATE DESK 
-	ctx_desk_update(C); 
+	ctx_sets_update(C); 
 	
 	// UPDATE LINKING 
 	ctx_ui_linking(C);

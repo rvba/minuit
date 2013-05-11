@@ -211,26 +211,9 @@ void ui_draw_menu(void)
 
 // DRAW DESK
 
-void ui_draw_desk(void)
+void ui_draw_sets(void)
 {
 	t_context *C=ctx_get();
-
-	/*
-
-	t_link *l;
-	t_block *b;
-
-	l=C->scene->global->first;
-
-	if(l)
-	{
-		for(;l;l=l->next)
-		{
-			b=l->data;
-			b->cls->draw(b);
-		}
-	}
-	*/
 
 	t_link *link;
 
@@ -353,7 +336,7 @@ t_ui *ui_new(void)
 	ui->show_states = 0;
 	ui->show_step = 0;
 	ui->show_brick_step = 0;
-	ui->show_desk = 0;
+	ui->show_sets = 0;
 	ui->step = 0;
 	ui->step_reset = 0;
 

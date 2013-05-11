@@ -35,17 +35,17 @@ void switch_txt(t_context *C)
 	else C->ui->use_bitmap_font=1;
 }
 
-void switch_desk(t_context *C)
+void switch_sets(t_context *C)
 {
-	if(C->ui->show_desk)
+	if(C->ui->show_sets)
 	{
-		C->ui->show_desk = 0;
+		C->ui->show_sets = 0;
 		screen_switch_by_name("screen_main");
 	}
 	else
 	{
-		C->ui->show_desk = 1;
-		screen_switch_by_name("screen_desk");
+		C->ui->show_sets = 1;
+		screen_switch_by_name("screen_sets");
 	}
 }
 
@@ -158,7 +158,7 @@ void keymap_command(unsigned char key)
 
 		// tab
 		case 9:
-			switch_desk(C);
+			switch_sets(C);
 			// reset key
 			C->app->keyboard->key_pressed=0;
 			break;

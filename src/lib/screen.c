@@ -99,7 +99,7 @@ void screen_main(t_screen *screen)
 	op_camera_switch_3d(C, camera);
 }
 
-void screen_desk(t_screen *screen)
+void screen_sets(t_screen *screen)
 {
 	t_context *C=ctx_get();
 	t_camera *camera = C->ui->camera;
@@ -126,7 +126,7 @@ void screen_desk(t_screen *screen)
 	ui_draw_menu();
 	glPopMatrix();
 
-	ui_draw_desk();
+	ui_draw_sets();
 
 	glPopMatrix();
 	op_camera_switch_3d(C, camera);
