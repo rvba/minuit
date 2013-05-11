@@ -69,6 +69,10 @@ struct Ui
 	int step;
 	int step_reset;
 
+	int use_threading;
+	int threading_on;
+	int graph_updated;
+
 	// brick flags
 	int fixed_menu;
 	int flow_brick;

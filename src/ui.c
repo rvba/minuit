@@ -358,6 +358,9 @@ t_ui *ui_new(void)
 	ui->step_reset = 0;
 
 	ui->update_links = 1;
+	ui->use_threading = 0;
+	ui->threading_on = 0;
+	ui->graph_updated = 1;
 
 	ui->draw=UI_DRAW;
 	ui->font_width = 1;

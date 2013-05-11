@@ -1044,6 +1044,8 @@ void ctx_links_continuous(t_context *C)
 
 void ctx_links_update(t_context *C)
 {
+	C->ui->graph_updated = 0;
+
 	// Freeze 
 	if(C->ui->update_links)
 	{
@@ -1058,6 +1060,8 @@ void ctx_links_update(t_context *C)
 			ctx_links_continuous(C);
 		}
 	}
+
+	C->ui->graph_updated = 1;
 }
 
 
