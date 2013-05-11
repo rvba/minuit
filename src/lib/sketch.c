@@ -7,7 +7,6 @@
  *
  */
 
-//#include "sketch.h"
 #include "op.h"
 
 // LOCAL

@@ -151,12 +151,12 @@ void brick_draw_link(t_brick *brick)
 			{
 				if(plug_out->flow_out)
 				{
-					skt_point(v1,3,C->ui->front_color);
+					skt_point(v1,7,C->ui->front_color);
 				}
 
 				if(plug_target->flow_in)
 				{
-					skt_point(v2,3,C->ui->front_color);
+					skt_point(v2,7,C->ui->front_color);
 				}
 			}
 
@@ -181,7 +181,7 @@ void brick_draw_plug_state(t_brick *brick,t_plug *plug,float pos)
 	float pos_open_out[3]={x+raw,mid,0};
 	float pos_follow_out[3]={x+raw,mid-offset,0};
 
-	int width = 2;
+	int width = 4;
 
 	float red[3] = {1,0,0};
 	float green[3] = {0,1,0};
