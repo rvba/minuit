@@ -131,19 +131,19 @@ void *op_slider(t_brick *brick)
 			{
 				if(C->event->loop_step == 0)
 				{
-				if(brick->plug_intern.data_type==dt_int)
-				{
-					int *data=brick->plug_intern.data;
-					if(delta_x>0) *data 	+=  dx;
-					else *data 		-=  dx;
-				}
-				else if(brick->plug_intern.data_type==dt_float)
-				{
-					float inc=.1;
-					float *data=brick->plug_intern.data;
-					if(delta_x>0) *data 	+= inc * dx;
-					else *data 		-= inc * dx;
-				}
+					if(brick->plug_intern.data_type==dt_int)
+					{
+						int *data=brick->plug_intern.data;
+						if(delta_x>0) *data 	+=  dx;
+						else *data 		-=  dx;
+					}
+					else if(brick->plug_intern.data_type==dt_float)
+					{
+						float inc=.1;
+						float *data=brick->plug_intern.data;
+						if(delta_x>0) *data 	+= inc * dx;
+						else *data 		-= inc * dx;
+					}
 				}
 			}
 		}
@@ -211,6 +211,8 @@ void *op_slider_positive(t_brick *brick)
 
 	return NULL;
 }
+
+// SLIDER POSITIVE NON ZERO
 
 void *op_slider_positive_non_zero(t_brick *brick)
 {
@@ -477,7 +479,7 @@ void *op_equal(t_brick *brick)
 	return NULL;
 }
 
-// MOD
+// MODULO
 
 void *op_mod(t_brick *brick)
 {
@@ -789,7 +791,6 @@ void *op_pipe(t_brick *brick)
 		}
 	}
 
-	//XXX!!! set updated missing ??
 	return NULL;
 }
 
@@ -937,7 +938,7 @@ void *op_window(t_brick *brick)
 	return NULL;
 }
 
-// CAMERA
+// CAMERA ROTATE XY
 
 void *op_camera_rotate_xy(t_brick *brick)
 {
@@ -962,7 +963,7 @@ void *op_camera_rotate_xy(t_brick *brick)
 	return NULL;
 }
 
-// CAMERA
+// CAMERA ROTATE Z
 
 void *op_camera_rotate_z(t_brick *brick)
 {
@@ -1035,7 +1036,7 @@ void *op_pointer(t_brick *brick)
 	return NULL;
 }
 
-// ADD
+// MATHS
 
 void op_maths_plug(t_operation operation,t_plug *dst,t_plug *src)
 {
@@ -1253,7 +1254,6 @@ t_vlst *get_first_vlst(t_block *block)
 	}
 
 	return NULL;
-
 }
 
 int get_first_vlst_pos(t_block *block)
@@ -1340,7 +1340,7 @@ void *op_maths(t_operation operation,t_brick *brick)
 	t_brick *brick_result=block_brick_get(block,"result");
 	t_plug *plug_result=&brick_result->plug_intern;
 
-	// ADD BRICKS
+	// add bricks
 	op_add_bricks(brick,brick_result,2,t_child_parent);
 
 	// offset first two bricks
@@ -1433,7 +1433,7 @@ void *op_and(t_brick *brick)
 	t_plug *plug_result=&brick_result->plug_intern;
 	int *result = plug_result->data;
 
-	// ADD BRICKS
+	// add bricks
 	op_add_bricks(brick,brick_result,2,t_child_parent);
 
 	int pos=0;

@@ -257,7 +257,12 @@ void cls_brick_update(t_brick *brick)
 	vset(mouse_pos,0,0,0);
 
 
-	if(mouse_over && button_left==button_pressed && (brick->state.is_mouse_over_plug_in==0) && (brick->state.is_mouse_over_plug_out==0)) brick_clic=1;
+	if(	 mouse_over && button_left==button_pressed
+		&& (brick->state.is_mouse_over_plug_in==0)
+		&& (brick->state.is_mouse_over_plug_out==0)
+		)
+		
+		brick_clic=1;
 
 	// IDLE
 
