@@ -203,12 +203,9 @@ int app_free(t_app *app)
 
 // INIT
 
-t_app *app_init(int argc,char **argv)
+void app_init(t_app *app)
 {
-	// APP
-	t_app *app = app_new(argc,argv);
-
-	// store to local
+	// Store Localy
 	APP = app;
 
 	// GL
@@ -236,7 +233,8 @@ t_app *app_init(int argc,char **argv)
 		else glx_win(app);
 	}
 
-	return app;
+	// Set Fullscreen
+	if(SET_FULLSCREEN && !app->off_screen) app_screen_set_fullscreen(app,1);
 }
 
 // NEW

@@ -46,7 +46,7 @@ t_node *	scene_add_ref(t_scene *sc,const char *type,const char *target,const cha
 void 		scene_add_data_var(t_scene *sc,const char *name,const char *name_var,int size,void *ptr);
 
 void 		scene_free(t_scene *sc);
-t_scene*	scene_init(void);
+void 		scene_init(t_scene *scene);
 int 		scene_delete_by_id(t_scene *sc,const char *type,int id);
 void 		scene_data_load(t_scene *sc);
 void 		scene_struct_delete(t_scene *sc,void *ptr);
@@ -84,5 +84,6 @@ void scene_material_free(t_scene *sc,t_node *node);
 void scene_option_free(t_scene *sc,t_node *node) ;
 
 t_node *scene_struct_get(t_scene *sc,void *ptr);
+t_scene *scene_new(void);
 
 #endif

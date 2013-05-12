@@ -122,15 +122,6 @@ void term_draw(t_term *term)
 	glPopMatrix();
 }
 
-// INIT
-
-void term_init(t_term *term)
-{
-	t_context *C=ctx_get();
-
-	term->loc_x=20;
-	term->loc_y=C->app->window->height*.9;
-}
 
 // RESET
 
@@ -174,6 +165,16 @@ void term_free(t_term *term)
 	free(term);
 }
 
+// INIT
+
+void _term_init(t_term *term)
+{
+	t_context *C=ctx_get();
+
+	term->loc_x=20;
+	term->loc_y=C->app->window->height*.9;
+}
+
 // NEW
 
 t_term *term_new(const char *name)
@@ -193,8 +194,17 @@ t_term *term_new(const char *name)
 	term->loc_y=0;
 
 	term->draw=term_draw;
-	term->init=term_init;
+	term->init=_term_init;
 
 	return term;
 };
+
+void term_init(void)
+{
+	t_context *C = ctx_get();
+	lst_add(C->terms,C->term,"main term");
+	C->term->init(C->term);
+}
+
+
 

@@ -53,5 +53,6 @@ void screen_switch_to_main(void);
 void screen_generic(t_screen *screen);
 void screen_main(t_screen *screen);
 t_screen *screen_new(const char *name);
+void screen_init(void);
 
 #endif

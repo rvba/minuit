@@ -154,3 +154,12 @@ t_screen *screen_new(const char *name)
 	return screen;
 }
 
+void screen_init(void)
+{
+	screen_main_make();
+	screen_browser_make();
+	screen_sets_make();
+}
+
+
+

@@ -21,9 +21,9 @@ t_context *ctx_new(int argc,char **argv)
 {
 	t_context *C = (t_context *)malloc(sizeof(t_context));
 
-	C->app=app_init(argc,argv); 
+	C->app = app_new(argc,argv);
 	C->event=event_new();
-	C->scene=scene_init(); 
+	C->scene=scene_new(); 
 	C->engine=engine_new("engine");
 	C->draw=draw_new();
 	C->skt=skt_new();
@@ -38,50 +38,27 @@ t_context *ctx_new(int argc,char **argv)
 
 t_context *ctx_init(int argc,char **argv)
 {
-	// new context
+	// New Context
 	t_context *C = ctx_new(argc,argv);
 
-	// store localy
+	// Store Local
 	CONTEXT=C;
 
-	// set fullscreen
-	if(SET_FULLSCREEN && !C->app->off_screen) app_screen_set_fullscreen(C->app,1);
-
-	// init log
+	// Init
+	scene_init(C->scene);
+	app_init(C->app);
 	log_init();
-
-	// init mem
 	mem_init();
-
-	// init ui
 	ui_init();
-
-	// init term,mode
-	lst_add(C->terms,C->term,"main term");
-	C->term->init(C->term);
-
-	C->mode->init(C->mode);
-
-	// init multi-threading
-	// add process to scene
+	term_init();
+	mode_init(C->mode);
 	ctx_thread_init(C);
-
-	// set gl callbacks
-	C->app->main_func = ctx_handler;
-
-	// build menus, register datas
 	op_init(C); 
-
-	// add screens to sceen
-	screen_main_make();
-	screen_browser_make();
-	screen_sets_make();
-
-	// add texture
-	op_texture_add("./data/image.png");
-
-	// exe init
+	screen_init();
 	exe_init();
+
+	// Set GL Callback
+	C->app->main_func = ctx_handler;
 
 	return C;
 }

@@ -849,15 +849,9 @@ void scene_add_data_var(t_scene *sc,const char *name,const char *name_var,int si
 	node_var->id_chunk=mem_store(ct_data,nt_var,size,1,ptr);
 }
 
-
-
-
 /***	INIT	***/
 
-
-
-
-t_scene *scene_init(void)
+t_scene *scene_new(void)
 {
 	// new scene
 	t_scene *sc = (t_scene *)malloc(sizeof(t_scene));
@@ -904,8 +898,11 @@ t_scene *scene_init(void)
 	sc->tmp_node=NULL;
 	sc->tmp_data=NULL;
 	
-	// store localy
-	SCENE=sc;
-
 	return sc;
+}
+
+void scene_init(t_scene *scene)
+{
+	// Store Localy
+	SCENE = scene;
 }

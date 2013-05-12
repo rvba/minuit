@@ -19,6 +19,7 @@
 #define WIN_X 0  
 #define WIN_Y 0
 #define APP_DEBUG 0
+#define SET_FULLSCREEN  1
 
 #define GIT 128
 
@@ -204,7 +205,7 @@ void app_set_main_func(t_app *app,void(*func)(void));
 int app_free(t_app *app);
 void app_launch(t_app *app);
 t_app *app_new(int argc,char **argv);
-t_app *app_init(int argc,char **argv);
+void app_init(t_app *app);
 
 void app_clock(t_app *app);
 t_app *app_get(void);

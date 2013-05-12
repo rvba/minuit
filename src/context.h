@@ -26,7 +26,6 @@
 #define PAN_Y 0
 
 #define WITH_HIGHLIGHT 0
-#define SET_FULLSCREEN  1
 #define GLFONT 1
 #define FREE_SCENE 0
 #define DEBUG_PROCESS 0
@@ -44,6 +43,7 @@
 
 typedef struct Context t_context;
 typedef struct Option t_option;
+typedef struct Action t_action;
 
 // CONTEXT
 
@@ -62,8 +62,6 @@ struct Context
 	t_server *server;
 };
 
-typedef struct Action t_action;
-
 struct Action
 {
 	char name[_NAME_];
@@ -71,10 +69,6 @@ struct Action
 	void (* act)(t_dict *args);
 	t_dict *args;
 };
-
-void action_free(t_action *action);
-t_action *action_new(const char *name);
-void exe_add_action(t_action *action);
 
 struct Option
 {
@@ -131,7 +125,15 @@ struct Option
 
 };
 
+// OPTION
+
 t_option *option_new(const char *name);
+
+// ACTION
+
+void action_free(t_action *action);
+t_action *action_new(const char *name);
+void exe_add_action(t_action *action);
 
 
 // CTX_LOAD

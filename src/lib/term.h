@@ -43,6 +43,7 @@ struct Term
 void term_reset(t_term *term);
 void term_free(t_term *term);
 t_term *term_new(const char *name);
+void term_init(void);
 void term_print(t_term *term,char *data);
 void term_log(char *fmt, ...);
 void term_echo(t_term *term,char *fmt, ...);

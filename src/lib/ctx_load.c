@@ -788,7 +788,8 @@ void load_file(t_context *C,const char *path)
 	load_error = 0;
 
 	// create a new scene
-	t_scene *sc=scene_init();
+	//t_scene *sc=scene_init();
+	t_scene *sc=scene_new();
 
 	// init tmp lists
 	sc->tmp_node=lst_new("tmp_node");
