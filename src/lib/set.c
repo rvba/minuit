@@ -37,6 +37,12 @@ t_node *set_make(const char *name)
 	set->lst = lst;
 	return node_set;
 };
+
+void set_free(t_set *set)
+{
+	t_context *C = ctx_get();
+	if(set->lst) scene_struct_delete(C->scene,set->lst);
+}
 	
 t_set *set_new(const char *name)
 {

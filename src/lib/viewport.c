@@ -88,6 +88,13 @@ t_node *viewport_make(const char *name)
 	return node_viewport;
 }
 
+void viewport_free(t_viewport *viewport)
+{
+	t_context *C = ctx_get();
+	if(viewport->camera)
+		scene_struct_delete(C->scene,viewport->camera);
+}
+
 // NEW
 
 t_viewport *viewport_new(const char *name)

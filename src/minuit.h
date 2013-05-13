@@ -67,7 +67,6 @@ enum Data_Type
 
 enum Node_Type
 {
-	nt_generic,
 	nt_null,
 	nt_mesh,
 	nt_block,

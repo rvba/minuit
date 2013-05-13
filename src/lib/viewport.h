@@ -34,6 +34,7 @@ struct Viewport
 void viewport_draw(t_viewport *viewport);
 t_viewport *viewport_rebind(t_scene *scene, void **ptr);
 t_node *viewport_add(const char *name);
+void viewport_free(t_viewport *viewport);
 t_viewport *viewport_new(const char *name);
 t_node *viewport_make(const char *name);
 

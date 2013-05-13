@@ -26,6 +26,7 @@ struct Set
 
 t_set *set_rebind(t_scene *sc, void **ptr);
 t_node *set_add(const char *name);
+void set_free(t_set *set);
 t_node *set_make(const char *name);
 t_set *set_new(const char *name);
 

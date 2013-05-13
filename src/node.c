@@ -9,7 +9,6 @@
 
 #include "op.h"
 
-int node_make_generic(t_node *node);
 int node_make_mesh(t_node *node);
 int node_make_block(t_node *node);
 int node_make_brick(t_node *node);
@@ -34,7 +33,6 @@ int node_make_viewport(t_node *node);
 int node_make_set(t_node *node);
 
 char *node_name_null="node_null";
-char *node_name_generic="node_generic";
 char *node_name_brick="node_brick";
 char *node_name_mesh="node_mesh";
 char *node_name_block="node_block";
@@ -62,7 +60,6 @@ char *node_name_get(t_node_type type)
 {
 	switch(type)
 	{
-		case(nt_generic):return node_name_generic;break;
 		case(nt_null):return node_name_null;break;
 		case(nt_brick):return node_name_brick;break;
 		case(nt_mesh):return node_name_mesh;break;
@@ -100,6 +97,8 @@ int dlink(const char *type,void *ptr)
 	return 0;
 }
 
+// GET REF
+
 void *cls_node_get_ref_object(t_node *node, const char *ref)
 {
 	return object_get_ref(node->data, ref);
@@ -135,6 +134,8 @@ void *cls_node_get_ref(t_node *node, const char *ref)
 	printf("get ref not implemented\n");
 	return NULL;
 }
+
+// BUILD
 
 void cls_node_id_add(t_node *node)
 {
@@ -212,9 +213,6 @@ void cls_node_build(t_node *node,const char *name)
 
 		case nt_null: 
 			printf("[WARNING node_cls_build] null node\n");
-			break;
-		case nt_generic:
-			printf("[WARNING node_cls_build] generic node\n");
 			break;
 		case nt_var: 
 			cls_node_build_var(node,name);
@@ -316,11 +314,6 @@ void cls_node_image_free(t_scene *sc,t_node *node) {}
 void cls_node_material_free(t_scene *sc,t_node *node) {}
 void cls_node_option_free(t_scene *sc,t_node *node) {}
 
-
-void cls_node_generic_free(t_scene *sc,t_node *node)
-{
-}
-
 void cls_node_texture_free(t_scene *sc,t_node *node)
 {
 	texture_free(node->data);
@@ -388,17 +381,17 @@ void cls_node_symbol_free(t_scene *sc,t_node *node)
 
 void cls_node_var_free(t_scene *sc,t_node *node)
 {
-	// var->data freed elsewhere
+	// freed elsewhere
 }
 
 void cls_node_viewport_free(t_scene *sc,t_node *node)
 {
-	//node->cls->free(sc,node);
+	viewport_free(node->data);
 }
 
 void cls_node_set_free(t_scene *sc,t_node *node)
 {
-	//node->cls->free(sc,node);
+	set_free(node->data);
 }
 
 // INIT
@@ -490,21 +483,6 @@ void cls_node_init_set(t_node *node)
 }
 
 // CLASSES
-
-t_node_class generic= {
-	.type=nt_generic,
-	.size=0,
-	.lst=NULL,
-	.build=cls_node_build,
-	.make=node_make_generic, 
-	.link=cls_node_link,
-	.del=cls_node_del,
-	.init=cls_node_init_generic,
-	.set_state_selected=cls_node_set_state_selected,
-	.is_mouse_over=cls_node_is_mouse_over,
-	.free=cls_node_generic_free,
-	.get_ref = cls_node_get_ref,
-};
 
 t_node_class mesh= {
 	.type=nt_mesh,
@@ -838,13 +816,6 @@ t_node_class set = {
 
 // MAKE
 
-int node_make_generic(t_node *node)
-{
-	node->cls=&generic;
-	node->type = nt_generic;
-	return 1;
-}
-
 int node_make_mesh(t_node *node)
 {
 	t_context *C=ctx_get();
@@ -1062,7 +1033,6 @@ int node_make_set(t_node *node)
 // TYPES
 
 t_node_class *nodes[] = {
-				&generic,
 				&mesh,
 				&block,
 				&brick,
