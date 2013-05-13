@@ -19,6 +19,7 @@ char *LOG;
 #endif
 
 void __log__(int status,char *fmt, ...);
+void log_init(void);
 
 int debug_lst;
 

@@ -316,9 +316,6 @@ int u_randrange(int start,int end);
 
 int u_lookup(char *word,char *array[]);
 
-// LOG
-
-void log_init(void);
 
 
 inline void set_float(void *_ptr,float i);
