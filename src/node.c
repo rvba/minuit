@@ -92,13 +92,10 @@ char *node_name_get(t_node_type type)
 
 int dlink(const char *type,void *ptr)
 {
-	//t_context *C=ctx_get();
 	t_generic *g=(t_generic *)ptr;
 	g->users--;
 	if(g->users<=0) 
 	{
-		// dev>null
-		//scene_delete_by_id(C->scene,type,g->id);
 	}
 	return 0;
 }
@@ -312,6 +309,101 @@ void cls_node_link(t_node *node)
 {
 }
 
+
+// FREE
+
+void cls_node_light_free(t_scene *sc,t_node *node) {}
+void cls_node_screen_free(t_scene *sc,t_node *node) {}
+void cls_node_file_free(t_scene *sc,t_node *node) {}
+void cls_node_image_free(t_scene *sc,t_node *node) {}
+void cls_node_material_free(t_scene *sc,t_node *node) {}
+void cls_node_option_free(t_scene *sc,t_node *node) {}
+
+
+void cls_node_generic_free(t_scene *sc,t_node *node)
+{
+}
+
+void cls_node_texture_free(t_scene *sc,t_node *node)
+{
+	texture_free(node->data);
+}
+
+void cls_node_vector_free(t_scene *sc,t_node *node)
+{
+	vector_free(node->data);
+}
+
+void cls_node_list_free(t_scene *sc,t_node *node)
+{
+	list_free(node->data);
+}
+
+void cls_node_camera_free(t_scene *sc,t_node *node)
+{
+	free(node->data);
+}
+
+void cls_node_mesh_free(t_scene *sc,t_node *node)
+{
+	mesh_free(node->data);
+}
+
+void cls_node_brick_free(t_scene *sc,t_node *node)
+{
+	brick_free(node->data);
+}
+
+void cls_node_block_free(t_scene *sc,t_node *node)
+{
+	block_free(node->data);
+}
+
+void cls_node_object_free(t_scene *sc,t_node *node)
+{
+	object_free(node->data);
+}
+
+void cls_node_data_free(t_scene *sc,t_node *node)
+{
+	data_free(node->data);
+}
+
+void cls_node_vlst_free(t_scene *sc,t_node *node)
+{
+	vlst_free(node->data); 
+}
+
+void cls_node_link_free(t_scene *sc,t_node *node)
+{
+	_link_free(node->data); 
+}
+
+void cls_node_dict_free(t_scene *sc,t_node *node)
+{
+	dict_free(node->data);
+}
+
+void cls_node_symbol_free(t_scene *sc,t_node *node)
+{
+	symbol_free(node->data);
+}
+
+void cls_node_var_free(t_scene *sc,t_node *node)
+{
+	// var->data freed elsewhere
+}
+
+void cls_node_viewport_free(t_scene *sc,t_node *node)
+{
+	//node->cls->free(sc,node);
+}
+
+void cls_node_set_free(t_scene *sc,t_node *node)
+{
+	//node->cls->free(sc,node);
+}
+
 // INIT
 
 // get Scene ID
@@ -413,7 +505,7 @@ t_node_class generic= {
 	.init=cls_node_init_generic,
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
-	.free=scene_generic_free,
+	.free=cls_node_generic_free,
 	.get_ref = cls_node_get_ref,
 };
 
@@ -428,7 +520,7 @@ t_node_class mesh= {
 	.init=cls_node_init_mesh,
 	.set_state_selected=cls_node_mesh_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
-	.free=scene_mesh_free,
+	.free=cls_node_mesh_free,
 	.get_ref = cls_node_get_ref_mesh,
 };
 
@@ -443,7 +535,7 @@ t_node_class block= {
 	.init=cls_node_init_block,
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
-	.free=scene_block_free,
+	.free=cls_node_block_free,
 	.get_ref = cls_node_get_ref,
 };
 
@@ -457,7 +549,7 @@ t_node_class brick= {
 	.del=cls_node_del,
 	.init=cls_node_init_brick,
 	.is_mouse_over=cls_node_brick_is_mouse_over,
-	.free=scene_brick_free,
+	.free=cls_node_brick_free,
 	.get_ref = cls_node_get_ref_brick,
 };
 
@@ -472,7 +564,7 @@ t_node_class light= {
 	.init=cls_node_init_generic,
 	.set_state_selected=cls_node_light_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
-	.free=scene_light_free,
+	.free=cls_node_light_free,
 	.get_ref = cls_node_get_ref,
 };
 
@@ -487,7 +579,7 @@ t_node_class object= {
 	.init=cls_node_init_generic,
 	.set_state_selected=cls_node_object_set_state_selected,
 	.is_mouse_over=cls_node_object_is_mouse_over,
-	.free=scene_object_free,
+	.free=cls_node_object_free,
 	.get_ref = cls_node_get_ref_object,
 };
 
@@ -502,7 +594,7 @@ t_node_class screen= {
 	.init=cls_node_init_generic,
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
-	.free=scene_screen_free,
+	.free=cls_node_screen_free,
 	.get_ref = cls_node_get_ref,
 };
 
@@ -517,7 +609,7 @@ t_node_class file= {
 	.init=cls_node_init_generic,
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
-	.free=scene_file_free,
+	.free=cls_node_file_free,
 	.get_ref = cls_node_get_ref,
 };
 
@@ -532,7 +624,7 @@ t_node_class image= {
 	.init=cls_node_init_generic,
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
-	.free=scene_image_free,
+	.free=cls_node_image_free,
 	.get_ref = cls_node_get_ref,
 };
 
@@ -547,7 +639,7 @@ t_node_class material= {
 	.init=cls_node_init_generic,
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
-	.free=scene_material_free,
+	.free=cls_node_material_free,
 	.get_ref = cls_node_get_ref_material,
 };
 
@@ -562,7 +654,7 @@ t_node_class list= {
 	.init=cls_node_init_generic,
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
-	.free=scene_list_free,
+	.free=cls_node_list_free,
 	.get_ref = cls_node_get_ref,
 };
 
@@ -577,7 +669,7 @@ t_node_class _link_= {
 	.init=cls_node_init_generic,
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
-	.free=scene_link_free,
+	.free=cls_node_link_free,
 	.get_ref = cls_node_get_ref,
 };
 
@@ -592,7 +684,7 @@ t_node_class data= {
 	.init=cls_node_init_generic,
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
-	.free=scene_data_free,
+	.free=cls_node_data_free,
 	.get_ref = cls_node_get_ref,
 };
 
@@ -607,7 +699,7 @@ t_node_class texture= {
 	.init=cls_node_init_generic,
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
-	.free=scene_texture_free,
+	.free=cls_node_texture_free,
 	.get_ref = cls_node_get_ref,
 };
 
@@ -622,7 +714,7 @@ t_node_class var= {
 	.init=cls_node_init_var,
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
-	.free=scene_var_free,
+	.free=cls_node_var_free,
 	.get_ref = cls_node_get_ref,
 };
 
@@ -637,7 +729,7 @@ t_node_class option= {
 	.init=cls_node_init_generic,
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
-	.free=scene_option_free,
+	.free=cls_node_option_free,
 	.get_ref = cls_node_get_ref,
 };
 
@@ -652,7 +744,7 @@ t_node_class vlst= {
 	.init=cls_node_init_generic,
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
-	.free=scene_vlst_free,
+	.free=cls_node_vlst_free,
 	.get_ref = cls_node_get_ref_vlst,
 };
 
@@ -667,7 +759,7 @@ t_node_class camera= {
 	.init=cls_node_init_camera,
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
-	.free=scene_camera_free,
+	.free=cls_node_camera_free,
 	.get_ref = cls_node_get_ref_camera,
 };
 
@@ -682,7 +774,7 @@ t_node_class dict= {
 	.init=cls_node_init_generic,
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
-	.free=scene_dict_free,
+	.free=cls_node_dict_free,
 	.get_ref = cls_node_get_ref,
 };
 
@@ -697,7 +789,7 @@ t_node_class symbol= {
 	.init=cls_node_init_symbol,
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
-	.free=scene_symbol_free,
+	.free=cls_node_symbol_free,
 	.get_ref = cls_node_get_ref,
 };
 
@@ -712,7 +804,7 @@ t_node_class vector= {
 	.init=cls_node_init_vector,
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
-	.free=scene_vector_free,
+	.free=cls_node_vector_free,
 	.get_ref = cls_node_get_ref,
 };
 
@@ -727,7 +819,7 @@ t_node_class viewport= {
 	.init=cls_node_init_viewport,
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
-	.free=scene_viewport_free,
+	.free=cls_node_viewport_free,
 	.get_ref = cls_node_get_ref,
 };
 
@@ -742,7 +834,7 @@ t_node_class set = {
 	.init=cls_node_init_set,
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
-	.free=scene_set_free,
+	.free=cls_node_set_free,
 	.get_ref = cls_node_get_ref,
 };
 

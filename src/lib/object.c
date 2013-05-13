@@ -158,7 +158,6 @@ void object_free(t_object *object)
 	}
 
 	free(object);
-
 }
 
 // REF

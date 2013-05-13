@@ -147,36 +147,6 @@ t_node *scene_get_var(t_scene *sc,void *ptr)
 	return NULL;
 }
 
-
-// get node by id
-
-t_node *scene_node_get_by_id(t_scene *sc,const char *type,int id)
-{
-	t_lst *lst=(t_lst *)scene_lst_get(sc,type);
-
-	if(lst)
-	{
-		t_link *l;
-		t_node *n;
-		for(l=lst->first;l;l=l->next)
-		{
-			n=l->data;
-			if(n->id==id)
-			{
-				return n;
-			}
-		}
-		
-		printf("[ERROR scene_node_get] Node not found:%s\n",type);
-		return NULL;
-	}
-	else
-	{
-		printf("[ERROR scene_node_get] Unknown type:%s\n",type);
-		return NULL;
-	}
-}
-
 t_node *scene_node_get_by_id_global(t_scene *sc,int id)
 {
 	t_link *l;
@@ -344,162 +314,28 @@ int scene_id_get(t_scene *sc)
 /***	 FREE	***/
 
 
-
-
-// delete by id
-
-int scene_delete_by_id(t_scene *sc,const char *type,int id)
-{
-	printf("scene_delete_by_id\n");
-	t_node *node = scene_node_get_by_id(sc,type,id);
-
-	if(node)
-	{
-		scene_node_delete(sc,node);
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
-}
-
 void scene_mem_remove(t_scene *sc,t_node *node)
 {
 	mem_remove(node->id_chunk);
 	mem_remove(node->id_chunk_self);
 }
 
-void scene_light_free(t_scene *sc,t_node *node) {}
-void scene_screen_free(t_scene *sc,t_node *node) {}
-void scene_file_free(t_scene *sc,t_node *node) {}
-void scene_image_free(t_scene *sc,t_node *node) {}
-void scene_material_free(t_scene *sc,t_node *node) {}
-void scene_option_free(t_scene *sc,t_node *node) {}
-
-
-void scene_generic_free(t_scene *sc,t_node *node)
-{
-}
-void scene_texture_free(t_scene *sc,t_node *node)
-{
-	texture_free(node->data);
-	free(node);
-}
-
-void scene_vector_free(t_scene *sc,t_node *node)
-{
-	scene_mem_remove(sc,node);
-	vector_free(node->data);
-	free(node);
-}
-
-void scene_list_free(t_scene *sc,t_node *node)
-{
-	scene_mem_remove(sc,node);
-	list_free(node->data);
-	free(node);
-}
-
-void scene_camera_free(t_scene *sc,t_node *node)
-{
-	scene_mem_remove(sc,node);
-	free(node->data);
-	free(node);
-}
-
-void scene_mesh_free(t_scene *sc,t_node *node)
-{
-	scene_mem_remove(sc,node);
-	t_mesh *mesh = node->data;
-	mesh_free(mesh);
-	free(node);
-}
-
-void scene_brick_free(t_scene *sc,t_node *node)
-{
-	scene_mem_remove(sc,node);
-	brick_free(node->data);
-	free(node);
-}
-
-void scene_block_free(t_scene *sc,t_node *node)
-{
-	t_block *block=node->data;
-	scene_mem_remove(sc,node);
-	block_free(block);
-	free(node);
-}
-
-void scene_object_free(t_scene *sc,t_node *node)
-{
-	scene_mem_remove(sc,node);
-	object_free(node->data);
-	free(node);
-}
-
-void scene_data_free(t_scene *sc,t_node *node)
-{
-	scene_mem_remove(sc,node);
-	data_free(node->data);
-	free(node);
-}
-
-void scene_vlst_free(t_scene *sc,t_node *node)
-{
-	scene_mem_remove(sc,node);
-	vlst_free(node->data); //free vector
-	free(node);
-}
-
-void scene_link_free(t_scene *sc,t_node *node)
-{
-	scene_mem_remove(sc,node);
-	_link_free(node->data); //XXX void
-	free(node);
-}
-
-void scene_dict_free(t_scene *sc,t_node *node)
-{
-	scene_mem_remove(sc,node);
-	dict_free(node->data);
-	free(node);
-}
-
-void scene_symbol_free(t_scene *sc,t_node *node)
-{
-	scene_mem_remove(sc,node);
-	symbol_free(node->data);
-	free(node);
-}
-
-void scene_var_free(t_scene *sc,t_node *node)
-{
-	scene_mem_remove(sc,node);
-	// var->data freed elsewhere
-	free(node);
-}
-
 void scene_node_free(t_scene *sc,t_node *node)
 {
+	// Remove from Lst
 	lst_remove_node(node->cls->lst,node);
+	lst_remove_node(sc->nodes,node);
+
+	// Remove from Memory
+	scene_mem_remove(sc,node);
+
+	// Free Struct
 	node->cls->free(sc,node);
-	lst_remove_node(sc->nodes,node);
+
+	// Free Node
+	free(node);
 }
 
-void scene_viewport_free(t_scene *sc,t_node *node)
-{
-	lst_remove_node(node->cls->lst,node);
-	//node->cls->free(sc,node);
-	lst_remove_node(sc->nodes,node);
-}
-
-void scene_set_free(t_scene *sc,t_node *node)
-{
-	lst_remove_node(node->cls->lst,node);
-	//node->cls->free(sc,node);
-	lst_remove_node(sc->nodes,node);
-}
 
 // cleanup (free stack)
 
