@@ -167,6 +167,9 @@ void load_option(t_context *C,t_scene *sc)
 		printf("[ERROR load_option] Can't find option\n");
 	}
 }
+void option_free(t_option *option)
+{
+}
 
 t_option *option_new(const char *name)
 {

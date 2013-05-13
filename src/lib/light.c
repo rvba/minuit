@@ -33,6 +33,10 @@ t_node *light_make(const char *name)
 	return node;
 }
 
+void light_free(t_light *light)
+{
+}
+
 t_light *light_new(const char *name)
 {
 	t_light *light = (t_light *)malloc(sizeof(t_light));

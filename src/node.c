@@ -307,12 +307,35 @@ void cls_node_link(t_node *node)
 
 // FREE
 
-void cls_node_light_free(t_scene *sc,t_node *node) {}
-void cls_node_screen_free(t_scene *sc,t_node *node) {}
-void cls_node_file_free(t_scene *sc,t_node *node) {}
-void cls_node_image_free(t_scene *sc,t_node *node) {}
-void cls_node_material_free(t_scene *sc,t_node *node) {}
-void cls_node_option_free(t_scene *sc,t_node *node) {}
+void cls_node_light_free(t_scene *sc,t_node *node)
+{
+	light_free(node->data);
+}
+
+void cls_node_screen_free(t_scene *sc,t_node *node)
+{
+	screen_free(node->data);
+}
+
+void cls_node_file_free(t_scene *sc,t_node *node)
+{
+	file_free(node->data);
+}
+
+void cls_node_image_free(t_scene *sc,t_node *node)
+{
+	image_free(node->data);
+}
+
+void cls_node_material_free(t_scene *sc,t_node *node)
+{
+	material_free(node->data);
+}
+
+void cls_node_option_free(t_scene *sc,t_node *node)
+{
+	option_free(node->data);
+}
 
 void cls_node_texture_free(t_scene *sc,t_node *node)
 {

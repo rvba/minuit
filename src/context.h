@@ -127,6 +127,7 @@ struct Option
 
 // OPTION
 
+void option_free(t_option *option);
 t_option *option_new(const char *name);
 
 // ACTION

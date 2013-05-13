@@ -31,6 +31,7 @@ struct Material
 };
 
 void *material_get_ref(t_material *material, const char *ref);
+void material_free(t_material *material);
 t_material*	material_new(const char *name);
 t_material*	material_rebind(t_scene *sc,void *ptr);
 

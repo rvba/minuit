@@ -38,6 +38,12 @@ t_material *material_rebind(t_scene *sc,void *ptr)
 	return material;
 }
 
+// FREE
+
+void material_free(t_material *material)
+{
+}
+
 // NEW
 
 t_material *material_new(const char *name)

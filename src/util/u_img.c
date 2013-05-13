@@ -9,6 +9,10 @@
 
 #include "util.h"
 
+void image_free(t_image *image)
+{
+}
+
 t_image *image_new(const char *name)
 {
 	t_image *image = (t_image *)malloc(sizeof(t_image));

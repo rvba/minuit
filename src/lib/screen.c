@@ -132,6 +132,12 @@ void screen_sets(t_screen *screen)
 	op_camera_switch_3d(C, camera);
 }
 
+// FREE
+
+void screen_free(t_screen *screen)
+{
+}
+
 // NEW
 
 t_screen *screen_new(const char *name)
@@ -153,6 +159,8 @@ t_screen *screen_new(const char *name)
 	
 	return screen;
 }
+
+// INIT
 
 void screen_init(void)
 {

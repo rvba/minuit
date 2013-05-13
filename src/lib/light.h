@@ -35,6 +35,7 @@ struct Light
 };
 
 void 		light_show(t_light *light);
+void 		light_free(t_light *light);
 t_light*	light_new(const char *name);
 t_light*	light_rebind(t_scene *sc,void *ptr);
 t_node*		light_make(const char *name);

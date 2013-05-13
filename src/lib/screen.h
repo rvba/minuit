@@ -52,6 +52,7 @@ void screen_switch_by_name(char *name);
 void screen_switch_to_main(void);
 void screen_generic(t_screen *screen);
 void screen_main(t_screen *screen);
+void screen_free(t_screen *screen);
 t_screen *screen_new(const char *name);
 void screen_init(void);
 

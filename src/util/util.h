@@ -251,6 +251,7 @@ t_clock *clock_new(void);
 
 // IMG
 
+void image_free(t_image *image);
 t_image *image_new(const char *name);
 t_image *img_read_jpg(char* Name);
 void img_save_jpg(int width,int height,const char name[]);
@@ -400,6 +401,7 @@ void file_data_add(t_file *file,char *data);
 void file_open(t_file *file);
 void file_close(t_file *file);
 int file_init(t_file *file);
+void file_free(t_file *file);
 
 
 // LOG
