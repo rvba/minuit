@@ -117,6 +117,11 @@ void *camera_get_ref(t_camera *camera, const char *ref)
 	return p;
 }
 
+t_camera *camera_rebind(t_scene *scene, void *ptr)
+{
+	return ptr;
+}
+
 t_camera *camera_new(const char *name)
 {
 	t_camera *camera  = (t_camera *)malloc(sizeof(t_camera));

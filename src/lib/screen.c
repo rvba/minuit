@@ -138,6 +138,13 @@ void screen_free(t_screen *screen)
 {
 }
 
+// REBIND
+
+t_screen *screen_rebind(t_scene *scene, void *ptr)
+{
+	return ptr;
+}
+
 // NEW
 
 t_screen *screen_new(const char *name)

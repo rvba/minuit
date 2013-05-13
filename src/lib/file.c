@@ -7,10 +7,11 @@
  *
  */
 
-#include "util.h"
+#include "op.h"
 
 #define PATH_LIMIT 1024
 #define S_DEBUG 0
+
 
 int file_exists(t_file *file)
 {
@@ -469,6 +470,13 @@ int file_path_split(t_file *file)
 
 		return 1;
 	}
+}
+
+// REBIND
+
+t_file *file_rebind(t_scene *scene, void *ptr)
+{
+	return ptr;
 }
 
 // INIT

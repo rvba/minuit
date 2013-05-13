@@ -11,6 +11,7 @@
 #define _APP_H
 
 #include "util.h"
+#include "file.h"
 
 #define APP_KEY_ESC  27
 #define APP_KEY_ENTER 13

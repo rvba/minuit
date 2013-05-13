@@ -103,6 +103,7 @@ t_camera *	camera_clone(t_camera *source);
 void 		camera_copy(t_camera *target,t_camera *source);
 void 		camera_free(t_camera *camera);
 t_node *	camera_add(const char *name);
+t_camera *	camera_rebind(t_scene *scene, void *ptr);
 t_camera *	camera_new(const char *name);
 t_node *	camera_make(const char *name);
 

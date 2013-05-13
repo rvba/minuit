@@ -34,8 +34,10 @@ obj:=\
 	dict.o\
 	engine.o\
 	event.o\
+	file.o\
 	light.o\
 	list.o\
+	log.o\
 	material.o\
 	memory.o\
 	mesh.o\
@@ -136,10 +138,14 @@ engine.o:engine.h
 	gcc -c engine.c $(FLAG) $(INC)
 event.o:event.h
 	gcc -c event.c $(FLAG) $(INC)
+file.o:file.h
+	gcc -c file.c $(FLAG) $(INC)
 light.o:light.h light.c
 	gcc -c light.c $(FLAG) $(INC)
 list.o:list.h list.c
 	gcc -c list.c $(FLAG) $(INC)
+log.o:log.h log.c
+	gcc -c log.c $(FLAG) $(INC)
 material.o:material.h material.c
 	gcc -c material.c $(FLAG) $(INC)
 memory.o:memory.h memory.c

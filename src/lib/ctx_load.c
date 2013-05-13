@@ -510,27 +510,28 @@ void load_rebind(t_scene *sc)
 
 		switch(node->type)
 		{
-			case(nt_link): link_rebind(sc,ptr);break;
-			case(nt_list): lst_rebind(sc,ptr); break;
-			case(nt_object): object_rebind(sc,ptr); break;
-			case(nt_mesh): mesh_rebind(sc,ptr); break;
-			case(nt_brick): brick_rebind(sc,ptr); break;
-			case(nt_block): block_rebind(sc,ptr); break;
-			case(nt_light): light_rebind(sc,ptr); break;
-			case(nt_material): material_rebind(sc,ptr); break;
-			case(nt_vlst): vlst_rebind(sc,ptr); break;
-			case(nt_data): break;
-			case(nt_file): break;
-			case(nt_texture): break;
-			case(nt_screen): break;
+			case(nt_link): 		link_rebind(sc,ptr);break;
+			case(nt_list): 		lst_rebind(sc,ptr); break;
+			case(nt_object): 	object_rebind(sc,ptr); break;
+			case(nt_mesh): 		mesh_rebind(sc,ptr); break;
+			case(nt_brick): 	brick_rebind(sc,ptr); break;
+			case(nt_block): 	block_rebind(sc,ptr); break;
+			case(nt_light): 	light_rebind(sc,ptr); break;
+			case(nt_material): 	material_rebind(sc,ptr); break;
+			case(nt_vlst): 		vlst_rebind(sc,ptr); break;
+			case(nt_data): 		data_rebind(sc,ptr);break;
+			case(nt_file): 		file_rebind(sc,ptr);break;
+			case(nt_texture): 	texture_rebind(sc,ptr);break;
+			case(nt_screen): 	screen_rebind(sc,ptr);break;
+			case(nt_option): 	option_rebind(sc,ptr);break;
+			case(nt_camera): 	camera_rebind(sc,ptr);break;
+			case(nt_dict): 		dict_rebind(sc,ptr); break;
+			case(nt_symbol): 	symbol_rebind(sc,ptr); break;
+			case(nt_vector) : 	vector_rebind(sc,ptr);break; 
+			case(nt_viewport) : 	viewport_rebind(sc,ptr);break; 
+			case(nt_set) : 		set_rebind(sc,ptr);break; 
+
 			case(nt_var): break;
-			case(nt_option):break;
-			case(nt_camera): break;
-			case(nt_dict):dict_rebind(sc,ptr); break;
-			case(nt_symbol): symbol_rebind(sc,ptr); break;
-			case(nt_vector) : vector_rebind(sc,ptr);break; 
-			case(nt_viewport) : viewport_rebind(sc,ptr);break; 
-			case(nt_set) : set_rebind(sc,ptr);break; 
 			default:
 				printf("[ERROR load_data] Unknown type %s\n",node_name_get(node->type));
 				load_error = 1;

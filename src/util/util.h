@@ -23,7 +23,6 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h> 
-//#include <GL/glew.h>
 #include <GL/gl.h>
 #include <GL/glx.h>
 #include <GL/glext.h>
@@ -56,22 +55,8 @@
 #include "liblo.h"
 #endif
 
-char *LOG;
-
-#ifdef WITH_DEBUG
-#define log(msg) __log__ msg 
-#else
-#define log(msg) (void)0
-#endif
-
-void __log__(int status,char *fmt, ...);
-
-int debug_lst;
 
 typedef struct Clock t_clock;
-typedef struct Line t_line;
-typedef struct File t_file;
-typedef struct Word t_word;
 typedef struct MN_Socket t_socket;
 typedef struct Link t_link;
 typedef struct Lst t_lst;
@@ -106,7 +91,6 @@ struct Image
 	GLenum format;
 
 	unsigned char *data;
-
 };
 
 // LINK
@@ -185,51 +169,6 @@ struct Clock
 	int min;
 };
 
-// WORD
-
-struct Word
-{
-	int size;
-	char *data;
-};
-
-// LINE
-
-struct Line
-{
-	int size;
-	char *data;
-	t_lst *words;
-};
-
-// FILE
-
-struct File
-{
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
-
-	char location[_PATH_];
-	char path[_PATH_];
-	char ext[_EXT_];
-
-	int is_relative;
-	int is_directory;
-	int has_extention;
-
-	int tot_directories;
-	char **directories;
-
-	long data_size;
-	int tot_line;
-
-	FILE *file; // stream
-	char *data; // content of file
-
-	t_lst *lines;
-};
 
 // NAMEVAL
 
@@ -310,7 +249,6 @@ void s_remove_newline(char *target,char *src);
 void s_write_time(char *string);
 int s_append(char *dest,char *src,int pos);
 void s_store(char *target,char source,int pos);
-int s_path_split(t_file *file);
 
 // TERM
 
@@ -377,32 +315,6 @@ int u_randrange(int start,int end);
 // SORT
 
 int u_lookup(char *word,char *array[]);
-
-// FILE
-
-int file_exists(t_file *file);
-void file_set_location(t_file *file, const char *path);
-void file_build_location(t_file *file);
-int file_path_split(t_file *file);
-void file_go_directory(t_file *file,char *name);
-void file_go_backward(t_file *file);
-int word_equal(t_word *word,const char *string);
-void word_show(t_word *word);
-void line_read_words(t_line *line);
-void line_show(t_line *line);
-t_line *line_new(void);
-t_file *file_new(const char *path);
-void file_free(t_file *file);
-void file_show(t_file *file);
-void file_read(t_file *file);
-void file_read_lines(t_file *file);
-void file_write(t_file *file);
-void file_data_add(t_file *file,char *data);
-void file_open(t_file *file);
-void file_close(t_file *file);
-int file_init(t_file *file);
-void file_free(t_file *file);
-
 
 // LOG
 

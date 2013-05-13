@@ -23,7 +23,6 @@ obj=\
 	u_volume.o\
 	u_off_screen.o\
 	util.o\
-	u_file.o\
 	u_client.o\
 	u_system.o\
 	u_lst.o\
@@ -64,8 +63,6 @@ u_volume.o:util.h u_volume.c
 	gcc -c u_volume.c $(FLAG) $(INC)
 u_off_screen.o:util.h u_off_screen.c
 	gcc -c u_off_screen.c $(FLAG) $(INC)
-u_file.o:util.h u_file.c
-	gcc -c u_file.c $(FLAG) $(INC)
 util.o: util.h util.c
 	gcc -c util.c -o util.o $(FLAG) $(INC)
 

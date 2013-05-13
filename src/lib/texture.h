@@ -33,6 +33,8 @@ struct Texture
 	GLubyte *texels;
 };
 
+
+t_texture* 	texture_rebind(t_scene *scene, void *ptr);
 t_texture*	texture_new(const char *name);
 void 		texture_free(t_texture *texture);
 void 		texture_image_bind(t_texture *texture,t_image *image);

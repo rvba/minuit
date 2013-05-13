@@ -427,6 +427,11 @@ void data_init(t_data_type type,void *data)
 
 }
 
+t_data *data_rebind(t_scene *sc,void *ptr)
+{
+	return ptr;
+}
+
 t_data *data_new(const char *name)
 {
 	t_data *data = (t_data *)malloc(sizeof(t_data));

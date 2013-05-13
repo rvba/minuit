@@ -129,6 +129,7 @@ struct Option
 
 void option_free(t_option *option);
 t_option *option_new(const char *name);
+t_option *option_rebind(t_scene *scene, void *ptr);
 
 // ACTION
 

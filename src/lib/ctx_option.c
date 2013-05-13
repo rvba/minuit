@@ -167,6 +167,11 @@ void load_option(t_context *C,t_scene *sc)
 		printf("[ERROR load_option] Can't find option\n");
 	}
 }
+
+t_option *option_rebind(t_scene *scene, void *ptr)
+{
+	return ptr;
+}
 void option_free(t_option *option)
 {
 }

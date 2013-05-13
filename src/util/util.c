@@ -9,32 +9,6 @@
 
 #include "util.h"
 
-t_file *LOG_FILE;
-
-void log_init(void)
-{
-	t_file *file = file_new("minuit.log");
-	file_open(file);
-	fprintf(file->file,"LOG\n");
-	file_close(file);
-	LOG_FILE=file;
-}
-
-void __log__(int status,char *fmt, ...)
-{
-	if(status)
-	{
-		t_file *file=LOG_FILE;
-		file->file=fopen(file->location,"a");
-
-		va_list ap;
-		va_start(ap,fmt);
-		vfprintf(file->file,fmt,ap);
-		va_end(ap);
-
-		file_close(file);
-	}
-}
 
 /*
 size_t get_memory_peak(void)
