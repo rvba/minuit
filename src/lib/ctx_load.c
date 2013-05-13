@@ -174,12 +174,10 @@ t_node *find_by_ptr(t_scene *sc,void *ptr)
 	t_link *l;
 	t_node *n;
 
-
 	// loop over tmp_node
 	for(l=sc->tmp_node->first;l;l=l->next)
 	{
 		n=l->data;
-
 
 		// data->pointer 
 		if(n->type==nt_data)
@@ -247,7 +245,6 @@ void *find_struct(const char *target,const char *name)
 
 void *find_ref(t_scene *sc,t_data *data)
 {
-
 	// Get Node
 	t_node *node=find_by_ptr(sc,data->ref);
 
@@ -255,6 +252,7 @@ void *find_ref(t_scene *sc,t_data *data)
 	{
 		// Get Ref
 		void *ptr = node->cls->get_ref(node,data->name);
+
 		if(ptr)
 		{
 			return ptr;
@@ -292,7 +290,8 @@ void load_scene(t_context *C,t_scene *sc)
 	// Loop tmp nodes  
 	for(l=sc->tmp_node->first;l;l=l->next)
 	{
-		n=l->data;	// node
+		// node
+		n=l->data;	
 
 		// add to scene
 		scene_node_load(C->scene,n);
@@ -324,11 +323,7 @@ void load_store(t_scene *sc)
 		{
 			d=n->data;
 
-			// global
-			if(is(g->name,"global"))
-			{
-			}
-			else if(is(d->type,"dynamic"))
+			if(is(d->type,"dynamic"))
 			{
 				// find var
 				t_node *var=find_new(sc,d->pointer);
@@ -361,17 +356,18 @@ void load_store(t_scene *sc)
 			}
 			else if(is(d->type,"app_node"))
 			{
+				// get internal node by id
+				t_node *node=find_by_id(sc,d->id_node);
+				d->pointer=node;
 
 				n->id_chunk_self=mem_store(ct_node,n->type,sizeof(t_node),1,n);
 				n->id_chunk=mem_store(ct_data,n->type,n->cls->size,1,n->data);
 				n->id_ptr=n->data;
 
 				g->id_chunk=n->id_chunk;
-
 			}
 			else if(is(d->type,"struct_ref"))
 			{
-
 				// get new object reference
 				void *p = find_ref(sc,d);
 
@@ -403,7 +399,6 @@ void load_store(t_scene *sc)
 			}
 		}
 
-
 		// ELSE
 		else if(n->type==nt_var)
 		{
@@ -412,36 +407,20 @@ void load_store(t_scene *sc)
 		}
 		else
 		{
+			// Option
 			if(n->type==nt_option)
 			{
 				// don't store
 			}
+			// Regular Struct
 			else
 			{
+				// store
+				n->id_chunk_self=mem_store(ct_node,n->type,sizeof(t_node),1,n);
+				n->id_chunk=mem_store(ct_data,n->type,n->cls->size,1,n->data);
+				n->id_ptr=n->data;
 
-				// global list
-
-				d=n->data;
-
-				if(is(g->name,"global"))
-				{
-				}
-				else if(is(g->name,"glink"))
-				{
-				}
-
-				// regular struct
-
-				else
-				{
-					// store
-
-					n->id_chunk_self=mem_store(ct_node,n->type,sizeof(t_node),1,n);
-					n->id_chunk=mem_store(ct_data,n->type,n->cls->size,1,n->data);
-					n->id_ptr=n->data;
-
-					g->id_chunk=n->id_chunk;
-				}
+				g->id_chunk=n->id_chunk;
 			}
 		}
 	}
@@ -490,11 +469,7 @@ void rebind(t_scene *sc,const char *type,const char *name,void **ptr)
 				{
 					// get internal node by id
 					t_node *n=find_by_id(sc,data->id_node);
-
 					*ptr=n;
-
-					// store !
-					data->pointer=n;
 				}
 				else
 				{
@@ -561,7 +536,6 @@ void load_rebind(t_scene *sc)
 				load_error = 1;
 				break;
 		}
-
 	}
 }
 
@@ -788,7 +762,6 @@ void load_file(t_context *C,const char *path)
 	load_error = 0;
 
 	// create a new scene
-	//t_scene *sc=scene_init();
 	t_scene *sc=scene_new();
 
 	// init tmp lists
