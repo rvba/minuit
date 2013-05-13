@@ -163,7 +163,6 @@ void cls_node_build_var(t_node *node,const char *name)
 
 void cls_node_build(t_node *node,const char *name)
 {
-
 	void *p;
 
 	switch(node->type)
@@ -180,9 +179,7 @@ void cls_node_build(t_node *node,const char *name)
 			break;
 		case nt_screen:		p = screen_new(name);
 			break;
-		case nt_file:		
-					p = file_new(name);
-					file_init(p);
+		case nt_file:		p = file_new(name);
 			break;
 		case nt_image:		p = image_new(name);
 			break;
