@@ -14,7 +14,6 @@ all:libutil.a
 
 obj=\
 	u_string.o\
-	u_term.o\
 	u_vector.o\
 	u_calc.o\
 	u_main.o\
@@ -53,8 +52,6 @@ u_calc.o : util.h u_calc.c
 	gcc -c u_calc.c $(FLAG) $(INC) 
 u_string.o: util.h u_string.c
 	gcc -c u_string.c $(FLAG) $(INC) 
-u_term.o: util.h u_term.c
-	gcc -c u_term.c $(FLAG) $(INC) 
 u_rand.o: util.h u_rand.c
 	gcc -c u_rand.c $(FLAG) $(INC)
 u_sort.o:util.h u_sort.c
