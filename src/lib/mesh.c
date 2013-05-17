@@ -132,8 +132,10 @@ void mesh_add_brick_mesh(t_context *C,t_mesh *mesh)
 	op_add_global(C,block);
 }
 
-void mesh_add_brick_color(t_context *C,t_mesh *mesh)
+void mesh_add_brick_color(t_mesh *mesh)
 {
+	t_context *C = ctx_get();
+
 	// block
 	t_node *_node_block = block_make("color","block");
 	t_block *_block = _node_block->data;
@@ -163,7 +165,7 @@ void mesh_add_brick_color(t_context *C,t_mesh *mesh)
 	}
 }
 
-void mesh_add_default_color(t_context *C,t_mesh *mesh)
+void mesh_add_default_color(t_mesh *mesh)
 {
 	int tot_vertex=mesh->var.tot_vertex;
 
@@ -180,7 +182,7 @@ void mesh_add_default_color(t_context *C,t_mesh *mesh)
 		colors+=3;
 	}
 
-	mesh_add_brick_color(C,mesh);
+	mesh_add_brick_color(mesh);
 }
 
 // MAKE
@@ -238,7 +240,7 @@ t_node *mesh_make(
 	}
 
 	// add default color
-	mesh_add_default_color(C,mesh);
+	//mesh_add_default_color(C,mesh);
 
 	// add brick vertex
 	mesh_add_brick_vertex(C,mesh);

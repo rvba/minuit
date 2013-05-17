@@ -73,6 +73,7 @@ void *op_brick_add(t_brick *brick)
 	else if(is(name,"red")) 		add_slider_object(C,"red");
 	else if(is(name,"green")) 		add_slider_object(C,"green");
 	else if(is(name,"blue")) 		add_slider_object(C,"blue");
+	else if(is(name,"color")) 		add_slider_object(C,"color");
 	else if(is(name,"alpha")) 		add_slider_object(C,"alpha");
 	else if(is(name,"label")) 		add_label(C,"label");
 	else if(is(name,"get")) 		add_get(C);

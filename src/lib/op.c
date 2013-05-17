@@ -189,6 +189,7 @@ t_node *make_menu_draw(void)
 
 // menu object
 
+/*
 t_node *make_menu_brick_object(void)
 {
 	t_context *C=ctx_get();
@@ -199,6 +200,7 @@ t_node *make_menu_brick_object(void)
 	
 	return menu;
 }
+*/
 
 // menu add object
 
@@ -222,7 +224,7 @@ t_node *make_menu_node_add(void)
 
 // menu node
 
-t_node *make_menu_node(void)
+t_node *make_menu_object(void)
 {
 	t_context *C=ctx_get();
 	t_node *menu=block_make("menu_brick_node","menu");
@@ -246,6 +248,17 @@ t_node *make_menu_node(void)
 	add_brick_trigger(C,block,"alpha",op_brick_add);
 
 	add_brick_trigger(C,block,"mesh",op_brick_add);
+
+	return menu;
+}
+
+t_node *make_menu_mesh(void)
+{
+	t_context *C=ctx_get();
+	t_node *menu=block_make("menu_brick_mesh","menu");
+	t_block *block=menu->data;
+
+	add_brick_trigger(C,block,"color",op_brick_add);
 
 	return menu;
 }
@@ -440,8 +453,11 @@ t_node *make_menu_brick_add(void)
 	t_node *menu_mouse=make_submenu_mouse();
 	add_brick_submenu(C,menu,menu_mouse,"mouse");
 
-	t_node *menu_node=make_menu_node();
-	add_brick_submenu_contextual(C,menu,menu_node,"object",nt_object);
+	t_node *menu_object=make_menu_object();
+	add_brick_submenu_contextual(C,menu,menu_object,"object",nt_object);
+
+	t_node *menu_mesh=make_menu_mesh();
+	add_brick_submenu_contextual(C,menu,menu_mesh,"mesh",nt_mesh);
 
 	return menu;
 }

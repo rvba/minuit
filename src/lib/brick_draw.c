@@ -478,32 +478,46 @@ void brick_draw_txt(t_brick *brick)
 	}
 }
 
+void brick_draw_check_context(t_brick *brick)
+{
+	t_context *C = ctx_get();
+	t_node *node = C->scene->selected;
+	t_node_type type; 
+	t_node_type context = brick->context;
+	t_object *object;
+
+	if(brick->state.is_contextual)
+	{
+		brick->state.draw = 0;
+
+		if(node)
+		{
+			type = node->type;
+
+			if(context == nt_object)
+			{
+				if(type == nt_object)
+					brick->state.draw = 1;
+			}
+			else
+			{
+				if(type == nt_object)
+				{
+					object = node->data;
+
+					if((context == nt_mesh) && object->mesh)
+						brick->state.draw = 1;
+				}
+			}
+		}
+	}
+}
+
 void brick_draw(t_brick *brick)
 {
 	t_context *C=ctx_get();
 
-	if(is(brick->name,"object"))
-	{
-
-		brick->state.draw = 1;
-
-		if(C->scene->selected)
-		{
-			t_node *node=C->scene->selected;
-
-			if(node->type==nt_object)
-			{
-			}
-			else
-			{
-				brick->state.draw = 0;
-			}
-		}
-		else
-		{
-			brick->state.draw = 0;
-		}
-	}
+	brick_draw_check_context(brick);
 
 	if(brick->plug_intern.is_in_loop)
 	{

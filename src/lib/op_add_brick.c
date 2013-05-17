@@ -406,7 +406,6 @@ t_node *add_brick_submenu_contextual(t_context *C,t_node *menu,t_node *submenu,c
 	t_brick *brick=node->data;
 
 	brick->state.is_contextual=1;
-
 	brick->context=context;
 
 	// PLUG
@@ -1011,6 +1010,7 @@ void add_slider_target(t_context *C,t_object *object,const char *name)
 	else if(is(name,"green") && material) 	add_part_slider_float(C,block,"green",&material->color[1]);
 	else if(is(name,"blue") && material) 	add_part_slider_float(C,block,"blue",&material->color[2]);
 	else if(is(name,"alpha") && material) 	add_part_slider_float(C,block,"alpha",&material->color[3]);
+	else if(is(name,"color") && mesh) 	mesh_add_default_color(mesh); 
 
 }
 
