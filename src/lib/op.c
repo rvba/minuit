@@ -187,23 +187,7 @@ t_node *make_menu_draw(void)
 	return menu;
 }
 
-// menu object
-
-/*
-t_node *make_menu_brick_object(void)
-{
-	t_context *C=ctx_get();
-	t_node *menu=block_make("menu_brick_object","menu");
-	t_block *block=menu->data;
-
-	add_brick_trigger(C,block,"delete",op_delete);
-	
-	return menu;
-}
-*/
-
 // menu add object
-
 
 t_node *make_menu_node_add(void)
 {
@@ -252,6 +236,8 @@ t_node *make_menu_object(void)
 	return menu;
 }
 
+// menu mesh
+
 t_node *make_menu_mesh(void)
 {
 	t_context *C=ctx_get();
@@ -259,6 +245,7 @@ t_node *make_menu_mesh(void)
 	t_block *block=menu->data;
 
 	add_brick_trigger(C,block,"color",op_brick_add);
+	add_brick_trigger(C,block,"faces",op_brick_add);
 
 	return menu;
 }
@@ -558,7 +545,6 @@ void register_set(t_context *C)
 	scene_add_data(C->scene,"app_data","func","op_pipe",			op_pipe);
 	scene_add_data(C->scene,"app_data","func","op_not",			op_not);
 	scene_add_data(C->scene,"app_data","func","op_set_vlst",		op_set_vlst);
-	scene_add_data(C->scene,"app_data","func","op_set_colors",		op_set_colors);
 	scene_add_data(C->scene,"app_data","func","op_rnd",			op_rnd);
 	scene_add_data(C->scene,"app_data","func","op_neg",			op_neg);
 	scene_add_data(C->scene,"app_data","func","op_is_last",			op_is_last);
@@ -620,7 +606,6 @@ void register_set(t_context *C)
 	dict_symbol_add(dict_func,"op_rnd",dt_pointer,op_rnd);
 	dict_symbol_add(dict_func,"op_neg",dt_pointer,op_neg);
 	dict_symbol_add(dict_func,"op_is_last",dt_pointer,op_is_last);
-	dict_symbol_add(dict_func,"op_set_colors",dt_pointer,op_set_colors);
 	dict_symbol_add(dict_func,"op_vector",dt_pointer,op_vector);
 	dict_symbol_add(dict_func,"op_bang",dt_pointer,op_bang);
 	dict_symbol_add(dict_func,"op_operator",dt_pointer,op_operator);

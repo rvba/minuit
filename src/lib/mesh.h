@@ -139,5 +139,6 @@ void 		mesh_init(t_scene *sc,t_mesh *mesh);
 void mesh_init_buffers(t_mesh *mesh,t_mesh_buffer_type type);
 void mesh_add_brick_color(t_mesh *mesh);
 void mesh_add_default_color(t_mesh *mesh);
+void mesh_add_brick_faces(t_mesh *mesh);
 
 #endif

@@ -577,54 +577,24 @@ t_node *add_part_vlst(t_context *C,t_block *block,t_data_type type,const char *n
 {
 	t_node *node;
 
-	if(is(name,"vertex"))
-	{
-		// add vlst
-		node=add_brick_vlst(C,block,name,type,ptr);
+	node=add_brick_vlst(C,block,name,type,ptr);
 
-		t_vlst *vlst=ptr;
+	t_vlst *vlst=ptr;
 
-		// add vertex count
+	scene_add_ref(C->scene,"struct_ref","vlst","count",&vlst->count_new,vlst);
 
-		scene_add_ref(C->scene,"struct_ref","vlst","count",&vlst->count_new,vlst);
+	t_node *node_count=add_part_slider_int_positive(C,block,"count:",&vlst->count_new);
+	t_brick *brick_count=node_count->data;
 
-		t_node *node_count=add_part_slider_int_positive(C,block,"count:",&vlst->count_new);
-		t_brick *brick_count=node_count->data;
+	brick_count->state.use_loops = 0;
+	brick_count->plug_intern.data_memory = NULL;
+	brick_count->action=op_set_vlst;
 
-		brick_count->action=op_set_vlst;
-		brick_count->state.use_loops = 0;
-		//XXX
-		brick_count->plug_intern.data_memory = NULL;
-
-		t_brick *brick=node->data;
-		brick->state.draw_outline=0;
-	}
-	else if(is(name,"colors"))
-	{
-		node=add_brick_vlst(C,block,name,type,ptr);
-
-		t_vlst *vlst=ptr;
-
-		// vertex count
-
-		scene_add_ref(C->scene,"struct_ref","vlst","count",&vlst->count_new,vlst);
-
-		t_node *node_count=add_part_slider_int_positive(C,block,"count:",&vlst->count_new);
-		t_brick *brick_count=node_count->data;
-
-		brick_count->action=op_set_colors;
-		brick_count->state.use_loops = 0;
-		//XXX
-		brick_count->plug_intern.data_memory = NULL;
-
-		t_brick *brick=node->data;
-		brick->state.draw_outline=0;
-
-	}
+	t_brick *brick=node->data;
+	brick->state.draw_outline=0;
 
 	return node;
 }
-
 
 // PART LST
 
@@ -980,6 +950,7 @@ void add_slider_ref(t_context *C,t_object *object,const char *name)
 	else if(is(name,"green") && mat)	scene_add_ref(C->scene,"struct_ref","material","green",&mat->color[1],mat);
 	else if(is(name,"blue") && mat)		scene_add_ref(C->scene,"struct_ref","material","blue",&mat->color[2],mat);
 	else if(is(name,"alpha") && mat)	scene_add_ref(C->scene,"struct_ref","material","alpha",&mat->color[3],mat);
+	else if(is(name,"quad face") && mesh)	scene_add_ref(C->scene,"struct_ref","mesh","quad_face",&mesh->quad_face,mesh);
 
 }
 
@@ -1011,6 +982,7 @@ void add_slider_target(t_context *C,t_object *object,const char *name)
 	else if(is(name,"blue") && material) 	add_part_slider_float(C,block,"blue",&material->color[2]);
 	else if(is(name,"alpha") && material) 	add_part_slider_float(C,block,"alpha",&material->color[3]);
 	else if(is(name,"color") && mesh) 	mesh_add_default_color(mesh); 
+	else if(is(name,"faces") && mesh) 	mesh_add_brick_faces(mesh); 
 
 }
 

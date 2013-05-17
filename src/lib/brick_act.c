@@ -74,6 +74,7 @@ void *op_brick_add(t_brick *brick)
 	else if(is(name,"green")) 		add_slider_object(C,"green");
 	else if(is(name,"blue")) 		add_slider_object(C,"blue");
 	else if(is(name,"color")) 		add_slider_object(C,"color");
+	else if(is(name,"faces")) 		add_slider_object(C,"faces");
 	else if(is(name,"alpha")) 		add_slider_object(C,"alpha");
 	else if(is(name,"label")) 		add_label(C,"label");
 	else if(is(name,"get")) 		add_get(C);
@@ -1545,8 +1546,16 @@ void *op_set_vlst(t_brick *brick)
 
 	t_block *block=brick->block;
 
-	//XXX not color ...
-	t_brick *brick_vlst=block_brick_get(block,"vertex");
+	t_brick *brick_vlst;
+
+	if(is(block->name,"vertex"))
+		brick_vlst=block_brick_get(block,"vertex");
+	else if(is(block->name,"color"))
+		brick_vlst=block_brick_get(block,"colors");
+	else if(is(block->name,"faces"))
+		brick_vlst=block_brick_get(block,"quads");
+	else
+		printf("err!\n");
 
 	t_vlst *vlst=brick_vlst->plug_intern.data;
 
@@ -1571,28 +1580,6 @@ void *op_set_vlst(t_brick *brick)
 				vlst_update_data(vlst,NULL);
 			}
 		}
-	}
-
-	return NULL;
-}
-
-// SET COLORS
-
-void *op_set_colors(t_brick *brick)
-{
-	t_context *C=ctx_get();
-
-	op_slider_positive(brick);
-
-	t_block *block=brick->block;
-
-	t_brick *brick_vlst=block_brick_get(block,"colors");
-
-	t_vlst *vlst=brick_vlst->plug_intern.data;
-
-	if(C->app->mouse->button_left==button_released)
-	{
-		if(vlst->count != vlst->count_new) vlst_update_data(vlst,NULL);
 	}
 
 	return NULL;

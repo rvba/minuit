@@ -108,6 +108,23 @@ void mesh_add_brick_vertex(t_context *C,t_mesh *mesh)
 	op_add_global(C,_block);
 }
 
+void mesh_add_brick_faces(t_mesh *mesh)
+{
+	t_context *C = ctx_get();
+	// block
+	t_node *_node_block=block_make("faces","block");
+	t_block *_block=_node_block->data;
+
+	// outline
+	_block->state.draw_outline=1;
+
+	scene_add_ref(C->scene,"struct_ref","mesh","faces",&mesh->quads,mesh);
+	add_part_vlst(C,_block,dt_vlst,"quads",mesh->quads);
+
+	// add to global list
+	op_add_global(C,_block);
+}
+
 // ADD BRICK MESH
 
 void mesh_add_brick_mesh(t_context *C,t_mesh *mesh)
@@ -238,9 +255,6 @@ t_node *mesh_make(
 		vlst_add_data(mesh->tris,tris);
 
 	}
-
-	// add default color
-	//mesh_add_default_color(C,mesh);
 
 	// add brick vertex
 	mesh_add_brick_vertex(C,mesh);
