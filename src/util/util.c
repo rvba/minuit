@@ -95,6 +95,11 @@ inline int drf_int(void *ptr)
 	return *((int *)ptr);
 }
 
+inline int drf_uint(void *ptr)
+{
+	return *((unsigned int *)ptr);
+}
+
 inline float drf_float(void *ptr)
 {
 	return *((float *)ptr);

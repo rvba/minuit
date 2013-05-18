@@ -23,6 +23,16 @@ void vector_free(t_vector *vector)
 {
 }
 
+int vector_is_different(t_vector *dst, t_vector *src)
+{
+	if(src->length != dst->length)
+		return 1;
+	else if(src->type != dst->type)
+		return 1;
+	else
+		return 0;
+}
+
 void vector_show(t_vector *vector)
 {
 	t_context *C = ctx_get();

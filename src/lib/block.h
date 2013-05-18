@@ -81,7 +81,7 @@ struct Block_State
 	int draw_outline:1;
 	int draw_plugs:1;
 	int is_mouse_over:1;
-	int set_global_width:1;
+	int update_geometry:1;
 };
 
 struct Block
@@ -258,9 +258,9 @@ struct Brick_State
 	int remove_connected:1;
 	int is_root:1;
 	int debug:1;
+	int has_components:1;
 	int clone;
 	int frame_loop;
-
 };
 
 // BRICK GEOMETRY
@@ -296,14 +296,14 @@ struct Brick
 	t_brick_class *cls;			// cls
 
 	t_brick_type type;
-	t_node_type context;
+	t_node_type context;			// contextual menus
 
 	int idcol_right[3];			// col
 	int idcol_left[3];
 
-	int col_clone[3];
-
-	int graph_order;
+	int graph_order;			// Graph 
+	int counter;				// For Loop
+	int block_order;			// Internal Block Id
 
 	t_brick_mode mode;			// unique mode
 	t_brick_state state;			// multiple states
@@ -325,8 +325,6 @@ struct Brick
 
 	// action
 	void *(* action)(t_brick *brick);	
-	
-	int counter;
 };
 
 
@@ -338,6 +336,7 @@ struct Brick
 
 // BLOCK
 
+t_brick *	block_brick_get_by_order(t_block *block, int order);
 void 		block_set_graph_order(t_block *block, int order);
 int 		block_is_connected(const char *gate, t_block *block);
 t_lst 		*block_get_connections(const char *gate,t_block *block);
@@ -352,13 +351,6 @@ t_block *	block_new(const char *name);
 t_block *	block_rebind(t_scene *sc,void *ptr);
 
 
-// BLOCK_UDPATE
-
-void		ctx_block_unstore(void);
-void 		context_set_block(void);
-void 		cls_block_update(t_block *block);
-
-
 // BLOCK DRAW
 
 int 		brick_get_width(t_brick *brick);
@@ -368,13 +360,15 @@ void		cls_block_draw_menu(t_block *self);
 void		cls_block_draw_ref(t_block *self);
 void		cls_block_draw_block(t_block *self);
 
-// BLOCK UPDATE
+// BLOCK_UDPATE
 
+void		ctx_block_unstore(void);
+void 		context_set_block(void);
+void 		cls_block_update(t_block *block);
 void		cls_block_generic_update(t_block *self);
 void		cls_block_ref_update(t_block *self);
 void		cls_block_menu_update(t_block *self);
 void		cls_block_block_update(t_block *self);
-
 void		block_unstore(t_block *block);
 
 

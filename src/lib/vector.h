@@ -24,7 +24,7 @@ struct Vector
 	int length;
 
 	void *pointer;
-	t_vlst *vector; // need data refactoring, generic data storage
+	t_vlst *vector; 
 };
 
 struct Vector_Class
@@ -32,6 +32,8 @@ struct Vector_Class
 	void (* init)(t_vector *vector);
 };
 
+
+int vector_is_different(t_vector *dst, t_vector *src);
 t_vector *vector_new(const char *name);
 t_node *vector_add(const char *name);
 void vector_free(t_vector *vector);

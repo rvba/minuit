@@ -218,7 +218,7 @@ void browser_draw(void)
 {
 	browser_build();
 	t_block *block=BROWSER_BUTTONS->data;
-	block->state.set_global_width=1;
+	block->state.update_geometry=1;
 	block->cls->draw(block);
 }
 

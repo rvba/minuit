@@ -88,6 +88,12 @@ void brick_build_txt(t_brick *brick)
 				snprintf(txt,30,"%-d",drf_int(plug_intern->data));
 				txt_data->data_change(txt_data,txt);
 				break;
+
+			case dt_uint:
+				snprintf(txt,30,"%-u",drf_uint(plug_intern->data));
+				txt_data->data_change(txt_data,txt);
+				break;
+
 			case dt_char:
 				txt[0]=drf_char(plug_intern->data);
 				txt[1]='\0';

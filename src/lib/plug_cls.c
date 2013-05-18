@@ -14,6 +14,7 @@
 
 void cls_plug_make_float(t_plug *plug);
 void cls_plug_make_int(t_plug *plug);
+void cls_plug_make_uint(t_plug *plug);
 void cls_plug_make_string(t_plug *plug);
 void cls_plug_make_pointer(t_plug *plug);
 void cls_plug_make_mesh(t_plug *plug);
@@ -57,6 +58,18 @@ void cls_plug_connect_int(t_plug_mode mode, t_plug *self,t_plug *dst)
 }
 
 void cls_plug_disconnect_int(t_plug_mode mode, t_plug *plug)
+{
+	// General
+	cls_plug_disconnect_general(mode,plug);
+}
+
+void cls_plug_connect_uint(t_plug_mode mode, t_plug *self,t_plug *dst)
+{
+	// General
+	cls_plug_connect_general(mode,self,dst);
+}
+
+void cls_plug_disconnect_uint(t_plug_mode mode, t_plug *plug)
 {
 	// General
 	cls_plug_disconnect_general(mode,plug);
@@ -453,12 +466,57 @@ void cls_plug_connect_vector(t_plug_mode mode, t_plug *self, t_plug *dst)
 
 		t_context *C = ctx_get();
 
+		// XXX XYZW
+
+
 		// Set XYZ to be Childs of Vector
 		C->scene->store = 1;
 		plug_add_parent(plug_x,self);
 		plug_add_parent(plug_y,self);
 		plug_add_parent(plug_z,self);
 		C->scene->store = 0;
+	}
+
+	// Show Vector components
+
+	if(brick->state.has_components)
+	{
+		if(dst->data_type == dt_vector)
+		{
+			t_vector *vector_dst = dst->data;
+			t_vector *vector_src = self->data;
+			t_brick *brick_vector;
+			int i;
+
+			/*
+			for(i = 0; i < vector_dst->length; i++)
+			{
+				brick_vector = block_brick_get_by_order(block, i+1); 
+				brick_vector->state.draw = 1;
+			}
+			*/
+			printf("%d\n",vector_dst->length);
+
+			for(i = 0; i < 4; i++)
+			{
+				brick_vector = block_brick_get_by_order(block, i+1); 
+
+				if(i < vector_dst->length)
+				{
+					brick_vector->state.draw = 1;
+					if(vector_src->type != vector_dst->type)
+						brick_change_type_by_name(brick_vector,vector_dst->type);
+				}
+				else
+				{
+					brick_vector->state.draw = 0;
+				}
+			}
+		}
+
+		// Update Geometry
+
+		block->state.update_geometry = 1;
 	}
 }
 
@@ -785,6 +843,49 @@ void __cls_plug_flow_int(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 
 
 void cls_plug_flow_int(t_plug *plug)
+{
+	_cls_flow_(plug,__cls_plug_flow_int);
+}
+
+// UNSIGNED INT
+
+void __cls_plug_flow_uint(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
+{
+	if(src_plug)
+	{
+		t_data_type src_type=src_plug->data_type;
+
+		unsigned int *data=plug->data;
+
+		float increment=plug->brick->var.increment;
+
+		switch(src_type)
+		{
+			/*
+			case dt_int:
+
+				*data=drf_int(src_plug->data);
+				break;
+
+			case dt_float:
+
+				*data=(int)drf_float(src_plug->data);
+				break;
+			case dt_lst:
+				break;
+				*/
+
+			default:
+				plug_warning(plug,src_plug);
+				break;
+		}
+
+		if(increment) *data=*data * increment;  
+	}
+}
+
+
+void cls_plug_flow_uint(t_plug *plug)
 {
 	_cls_flow_(plug,__cls_plug_flow_int);
 }
@@ -1269,11 +1370,25 @@ void __cls_plug_flow_operator_get(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 				if(vlst)
 				{
 					t_plug _plug;
+					t_vector vector;
+					vector.type = vlst->data_type;
+					vector.length = vlst->length;
 					_plug.data_type = dt_vector;
+					_plug.data = &vector;
 
-					// change type to vector
-					if(brick_result->plug_intern.data_type != dt_vector)
+					// Change Result Type
+
+					if(brick_result->plug_intern.data_type == dt_vector)
+					{
+						t_vector *vector_dst = brick_result->plug_intern.data;
+
+						if(vector_is_different(vector_dst, &vector))
+							brick_type_change(brick_result,&_plug);
+					}
+					else
+					{
 						brick_type_change(brick_result,&_plug);
+					}
 
 					// get indice
 					int i = drf_int(plug_indice->data);
@@ -1614,6 +1729,17 @@ t_plug_class plug_int ={
 	.disconnect = cls_plug_disconnect_int,
 };
 
+// UINT
+
+t_plug_class plug_uint ={
+	.cls_type="plug",
+	.type=dt_uint,
+	.make=cls_plug_make_uint,
+	.flow=cls_plug_flow_uint,
+	.connect = cls_plug_connect_uint,
+	.disconnect = cls_plug_disconnect_uint,
+};
+
 // STRING
 
 t_plug_class plug_string ={
@@ -1779,6 +1905,11 @@ void cls_plug_make_int(t_plug *plug)
 	plug->cls=&plug_int;
 }
 
+void cls_plug_make_uint(t_plug *plug)
+{
+	plug->cls=&plug_uint;
+}
+
 void cls_plug_make_string(t_plug *plug)
 {
 	plug->cls=&plug_int;
@@ -1853,6 +1984,7 @@ void cls_plug_make_vector(t_plug *plug)
 t_plug_class *plugs[] = {
 	&plug_float,
 	&plug_int,
+	&plug_uint,
 	&plug_char,
 	&plug_string,
 	&plug_mesh,

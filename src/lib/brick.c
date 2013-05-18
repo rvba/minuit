@@ -270,7 +270,7 @@ void brick_type_change(t_brick *brick,t_plug *plug)
 	plug_intern->data_memory = plug_intern->data;
 
 	// data init
-	data_init(plug_intern->data_type,plug_intern->data);
+	data_init(plug_intern->data_type, plug_intern->data, plug->data);
 
 	// brick init
 	brick_cls_init(brick);
@@ -305,7 +305,7 @@ void brick_change_type_by_name(t_brick *brick,t_data_type type)
 		plug_intern->data_memory = plug_intern->data;
 
 		// data init
-		data_init(plug_intern->data_type,plug_intern->data);
+		data_init(plug_intern->data_type,plug_intern->data, NULL);
 
 		brick_cls_init(brick);
 
@@ -584,6 +584,7 @@ t_brick *brick_new(const char *name)
 	brick->state.is_root = 0;
 	brick->state.debug = 0;
 	brick->state.draw = 1;
+	brick->state.has_components = 0;
 
 	brick->geom.block_pos=0;
 	brick->geom.height=20;
@@ -599,6 +600,7 @@ t_brick *brick_new(const char *name)
 	brick->menu=NULL;
 
 	brick->graph_order = -1;
+	brick->block_order = 0;
 
 	brick->mode=bm_idle;
 

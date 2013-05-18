@@ -29,7 +29,7 @@ void block_update_data(t_block *block)
 		}
 
 		// build width (once)
-		if(block->state.set_global_width)
+		if(block->state.update_geometry)
 		{
 			brick_build_width(brick);
 		}
@@ -39,9 +39,9 @@ void block_update_data(t_block *block)
 
 // update geometry
 
-void block_update_width(t_block *block)
+void block_update_geometry(t_block *block)
 {
-	if(block->state.set_global_width)
+	if(block->state.update_geometry)
 	{
 		t_link *link;
 
@@ -49,19 +49,19 @@ void block_update_width(t_block *block)
 		float width=0;
 
 		// switch state
-		block->state.set_global_width=0;
+		block->state.update_geometry=0;
 
 		// reset block height
 		block->height=0;
-
 
 		// loop over bricks
 		for(link=block->bricks->first;link;link=link->next)
 		{
 			t_brick *brick = link->data;
 
-			// store brick height
-			block->height=brick->geom.height;
+			// Height
+			if(brick->state.draw)
+				block->height += brick->geom.height;
 
 			// set draw plugs
 			if(brick->state.draw_plugs)
@@ -161,10 +161,10 @@ void block_draw_outline(t_block *block)
 			width+=(h*2);
 		}
 
-		float a[3]={pos[0],pos[1],0};
-		float b[3]={a[0],a[1]+(block->height*block->tot_bricks),0};
-		float c[3]={b[0]+width,b[1],0};
-		float d[3]={c[0],c[1]-(block->height*block->tot_bricks),0};
+		float a[3]={pos[0], pos[1], 0};
+		float b[3]={a[0],a[1] + block->height ,0};
+		float c[3]={b[0] + width, b[1], 0};
+		float d[3]={c[0], c[1] - block->height ,0};
 
 		points[0]=a[0];
 		points[1]=a[1];
@@ -222,7 +222,7 @@ void cls_block_draw_block(t_block *block)
 	C->event->ui.use_point_global_width = 0;
 
 	block_update_data(block);
-	block_update_width(block);
+	block_update_geometry(block);
 	block_draw_bricks(block);
 	block_draw_outline(block);
 

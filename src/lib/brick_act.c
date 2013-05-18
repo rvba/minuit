@@ -139,6 +139,12 @@ void *op_slider(t_brick *brick)
 						if(delta_x>0) *data 	+=  dx;
 						else *data 		-=  dx;
 					}
+					if(brick->plug_intern.data_type==dt_int)
+					{
+						unsigned int *data=brick->plug_intern.data;
+						if(delta_x>0) *data 	+=  dx;
+						else *data 		-=  dx;
+					}
 					else if(brick->plug_intern.data_type==dt_float)
 					{
 						float inc=.1;
@@ -173,6 +179,12 @@ void *op_slider(t_brick *brick)
 					if(brick->plug_intern.data_type==dt_int)
 					{
 						int *data=brick->plug_intern.data;
+						if(brick->state.is_left_pressed) 	*data -= 1; 
+						else if(brick->state.is_right_pressed) 	*data += 1; 
+					}
+					else if(brick->plug_intern.data_type==dt_uint)
+					{
+						unsigned int *data=brick->plug_intern.data;
 						if(brick->state.is_left_pressed) 	*data -= 1; 
 						else if(brick->state.is_right_pressed) 	*data += 1; 
 					}
@@ -630,7 +642,7 @@ void exe_add_brick_parent_child(t_dict *args)
 
 	C->scene->store=0;
 
-	block->state.set_global_width=1;
+	block->state.update_geometry=1;
 }
 
 void exe_add_brick_child_parent(t_dict *args)
@@ -659,7 +671,7 @@ void exe_add_brick_child_parent(t_dict *args)
 
 	C->scene->store=0;
 
-	block->state.set_global_width=1;
+	block->state.update_geometry=1;
 }
 
 void action_free(t_action *action)

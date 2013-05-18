@@ -331,6 +331,7 @@ inline void negate_float(void *_dst);
 
 
 inline int drf_int(void *ptr);
+inline int drf_uint(void *ptr);
 inline float drf_float(void *ptr);
 inline char drf_char(void *ptr);
 inline char *drf_string(void *ptr);

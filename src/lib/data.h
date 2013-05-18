@@ -66,7 +66,8 @@ char *data_name_get(t_data_type);
 
 
 void		print_type(t_data_type type);
-void 		data_init(t_data_type type,void *data);
+//void 		data_init(t_data_type type,void *data);
+void		 data_init(t_data_type type,void *data_dst, void *data_src);
 void *		data_add(t_data_type type,void *data);
 void *		data_copy(t_data_type type,void *data);
 t_data *	data_rebind(t_scene *sc,void *ptr);

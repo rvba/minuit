@@ -74,6 +74,7 @@ void *data_add(t_data_type type,void *data)
 	t_context *C=ctx_get();
 
 	int *_int;
+	unsigned int *_uint;
 	float *_float;
 	char *_char;
 	char *_string=NULL;
@@ -108,6 +109,23 @@ void *data_add(t_data_type type,void *data)
 			else  *_int=0; 
 
 			return _int;
+
+			break;
+
+		case dt_uint:
+
+			_uint = (unsigned int *)malloc(sizeof(unsigned int));
+
+			if(C->scene->store)
+			{
+				scene_add_data_var(C->scene, "uint", "uint_data", sizeof(unsigned int), _uint);
+			}
+
+
+			if(data) *_uint = *((unsigned int*) data);
+			else  *_uint = 0; 
+
+			return _uint;
 
 			break;
 
@@ -341,9 +359,10 @@ void *data_copy(t_data_type type,void *data)
 	return NULL;
 }
 
-void data_init(t_data_type type,void *data)
+void data_init(t_data_type type,void *data_dst, void *data_src)
 {
 	int *_int;
+	unsigned int *_uint;
 	float *_float;
 	t_vlst *_vlst;
 	char *_char;
@@ -352,15 +371,22 @@ void data_init(t_data_type type,void *data)
 	{
 		case dt_int:
 
-			_int=(int*)data;
-			*_int=0; 
+			_int = (int*) data_dst;
+			*_int = 0; 
+
+			break;
+
+		case dt_uint:
+
+			_uint = (unsigned int*) data_dst;
+			*_uint = 0; 
 
 			break;
 
 		case dt_float:
 
-			_float=(float*)data;
-			*_float=0;
+			_float = (float*) data_dst;
+			*_float = 0;
 
 			break;
 
@@ -372,8 +398,8 @@ void data_init(t_data_type type,void *data)
 
 		case dt_char:
 
-			_char=(char *)data;
-			*_char=0;
+			_char = (char *) data_dst;
+			*_char = 0;
 
 			break;
 
@@ -392,10 +418,10 @@ void data_init(t_data_type type,void *data)
 		case dt_vlst:
 
 			//XXX!!!
-			if(data)
+			if(data_dst)
 			{
-			_vlst=(t_vlst *)data;
-			vlst_init(_vlst);
+				_vlst = (t_vlst *) data_dst;
+				vlst_init(_vlst);
 			}
 			break;
 
@@ -413,8 +439,14 @@ void data_init(t_data_type type,void *data)
 
 		case dt_vector:
 
-			//XXX
-			//printf("[VECTOR]\n");
+			if(data_src)
+			{
+				t_vector *vector_src = (t_vector *) data_src;
+				t_vector *vector_dst = (t_vector *) data_dst;
+
+				vector_dst->length = vector_src->length;
+				vector_dst->type = vector_src->type;
+			}
 
 			break;
 

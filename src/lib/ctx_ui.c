@@ -377,29 +377,29 @@ void ctx_ui(t_context *C)
 	// Threading
 	ctx_ui_threading(C);
 
-	// INTRO test stop 
+	// intro test stop 
 	ctx_ui_intro(C);
 
-	// TEST BACKGROUND 
+	// test background 
 	ctx_ui_background(C);
 
-	// UPDATE MOUSE MENU
+	// update mouse menu
 	ctx_block_mouse_update(C); 
 
-	// UPDATE DESK 
+	// update desk 
 	ctx_sets_update(C); 
 	
-	// UPDATE LINKING 
+	// update linking 
 	ctx_ui_linking(C);
 
-	// GRAPH update
+	// graph update
 	if(!C->ui->use_threading && C->ui->graph_updated)
 	ctx_links_update(C);
 
-	// POST EXE
+	// post exe
 	ctx_exe(C);
 
-	// RESET 
+	// reset 
 	C->event->loop_step = 0;
 	C->event->brick_delete = 0;
 }

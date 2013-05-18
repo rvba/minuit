@@ -322,6 +322,23 @@ t_brick *block_brick_get(t_block *block,const char *name)
 	return NULL;
 }
 
+t_brick *block_brick_get_by_order(t_block *block, int order)
+{
+	t_brick *brick;
+	t_link *l;
+
+	for(l=block->bricks->first;l;l=l->next)
+	{
+		brick=l->data;
+		if(brick->block_order == order)
+		{
+			return brick;
+		}
+	}
+
+	return NULL;
+}
+
 void block_brick_init(t_node *node_brick)
 {
 	t_brick *brick=node_brick->data;
@@ -414,7 +431,7 @@ t_block *block_new(const char *name)
 	block->state.draw_outline=0;
 	block->state.draw_plugs=0;
 	block->state.is_mouse_over=0;
-	block->state.set_global_width=1;
+	block->state.update_geometry=1;
 
 	block->tot_bricks=0;
 	block->width=0;

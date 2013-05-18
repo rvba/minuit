@@ -188,53 +188,60 @@ void vlst_show(t_vlst *vlst)
 		if(C->event->debug_console)
 			term_log("[VLST] name:%s count:%d length:%d\n",vlst->name,count,length);
 
-		if(vlst->type==_3f)
+		if(dat)
 		{
-			float *d=(float *)dat;
-			for(i=0;i<count;i++)
+			if(vlst->type==_3f)
 			{
-				if(C->event->debug_terminal)
-					printf("[%d] %f %f %f\n",i,d[0],d[1],d[2]);
-				if(C->event->debug_console) term_log("[%d] %f %f %f\n",i,d[0],d[1],d[2]);
-				d+=length;
+				float *d=(float *)dat;
+				for(i=0;i<count;i++)
+				{
+					if(C->event->debug_terminal)
+						printf("[%d] %f %f %f\n",i,d[0],d[1],d[2]);
+					if(C->event->debug_console) term_log("[%d] %f %f %f\n",i,d[0],d[1],d[2]);
+					d+=length;
+				}
 			}
-		}
-		if(vlst->type==_4f)
-		{
-			float *d=(float *)dat;
-			for(i=0;i<count;i++)
+			if(vlst->type==_4f)
 			{
-				printf("[%d] %f %f %f %f\n",i,d[0],d[1],d[2],d[3]);
-				d+=length;
+				float *d=(float *)dat;
+				for(i=0;i<count;i++)
+				{
+					printf("[%d] %f %f %f %f\n",i,d[0],d[1],d[2],d[3]);
+					d+=length;
+				}
 			}
-		}
-		if(vlst->type==_3ui)
-		{
-			unsigned int *d=(unsigned int *)dat;
-			for(i=0;i<count;i++)
+			if(vlst->type==_3ui)
 			{
-				printf("[%d] %u %u %u \n",i,d[0],d[1],d[2]);
-				d+=length;
+				unsigned int *d=(unsigned int *)dat;
+				for(i=0;i<count;i++)
+				{
+					printf("[%d] %u %u %u \n",i,d[0],d[1],d[2]);
+					d+=length;
+				}
 			}
-		}
-		if(vlst->type==_4ui)
-		{
-			unsigned int *d=(unsigned int *)dat;
-			for(i=0;i<count;i++)
+			if(vlst->type==_4ui)
 			{
-				printf("[%d] %u %u %u %u\n",i,d[0],d[1],d[2],d[3]);
-				d+=length;
+				unsigned int *d=(unsigned int *)dat;
+				for(i=0;i<count;i++)
+				{
+					printf("[%d] %u %u %u %u\n",i,d[0],d[1],d[2],d[3]);
+					d+=length;
+				}
 			}
-		}
 
-		if(vlst->type==_4i)
-		{
-			int *d=(int *)dat;
-			for(i=0;i<count;i++)
+			if(vlst->type==_4i)
 			{
-				printf("[%d] %d %d %d %d\n",i,d[0],d[1],d[2],d[3]);
-				d+=length;
+				int *d=(int *)dat;
+				for(i=0;i<count;i++)
+				{
+					printf("[%d] %d %d %d %d\n",i,d[0],d[1],d[2],d[3]);
+					d+=length;
+				}
 			}
+		}
+		else
+		{
+			printf("NO DATA\n");
 		}
 	}
 }

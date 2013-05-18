@@ -1232,9 +1232,11 @@ t_node *add_for(t_context *C)
 
 // VECTOR
 
-t_node *parent_brick_vector(t_plug *plug_vector, t_node *node)
+t_node *parent_brick_vector(t_plug *plug_vector, t_node *node, int order)
 {
 	t_brick *brick = node->data;
+	brick->block_order = order;
+	brick->state.draw = 0;
 	t_plug *plug_intern = &brick->plug_intern;
 	plug_intern->store_data = 0;
 	plug_add_parent(plug_vector,plug_intern);
@@ -1256,13 +1258,15 @@ t_node *add_vector(t_context *C)
 	t_node *node_vector = add_part_vector(C,block,"vector");
 	t_brick *brick_vector = node_vector->data;
 	brick_vector->state.draw_value = 0;
+	brick_vector->state.has_components = 1;
 	t_plug *plug_vector = &brick_vector->plug_intern;
 
 	// ADD X Y Z
 
-	parent_brick_vector(plug_vector, add_part_slider_float(C,block,"x",NULL));
-	parent_brick_vector(plug_vector, add_part_slider_float(C,block,"y",NULL));
-	parent_brick_vector(plug_vector, add_part_slider_float(C,block,"z",NULL));
+	parent_brick_vector(plug_vector, add_part_slider_float(C,block,"x",NULL),1);
+	parent_brick_vector(plug_vector, add_part_slider_float(C,block,"y",NULL),2);
+	parent_brick_vector(plug_vector, add_part_slider_float(C,block,"z",NULL),3);
+	parent_brick_vector(plug_vector, add_part_slider_float(C,block,"w",NULL),4);
 
 	return node_block;
 }
