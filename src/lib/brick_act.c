@@ -91,6 +91,7 @@ void *op_brick_add(t_brick *brick)
 	else if(is(name,"last?")) 		node = add_switch_custom(C,"last?",NULL,op_is_last);
 	else if(is(name,"for")) 		node = add_for(C);
 	else if(is(name,"vector")) 		node = add_vector(C);
+	else if(is(name,"vector 3d")) 		node = add_vector_3d(C);
 	else if(is(name,"bang")) 		node = add_slider_int_custom(C,"bang",NULL,op_bang); 
 	else if(is(name,"quit")) 		node = add_trigger_always(C,"quit",op_do_quit); 
 	else if(is(name,"const")) 		node = add_const(C); 

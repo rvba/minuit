@@ -189,5 +189,10 @@ t_vector *vector_new(const char *name)
 
 	vector->cls=&cls_vector;
 
+	vector->has_limit_low = 0;
+	vector->has_limit_high = 0;
+	vector->limit_int_low = 0;
+	vector->limit_int_high = 0;
+
 	return vector;
 }

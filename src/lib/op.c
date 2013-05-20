@@ -31,8 +31,6 @@ void op_add_global(t_context *C,t_block *block)
 	t_lst *set_lst = get_target_list(C);
 
 	list_add_global(set_lst,block);
-
-	//list_add_global(C->scene->global,block);
 }
 
 // menu process
@@ -335,7 +333,6 @@ t_node *make_menu_ops(void)
 	add_brick_trigger(C,block,"clone",op_brick_add);
 	add_brick_trigger(C,block,"pipe",op_brick_add);
 	add_brick_trigger(C,block,"for",op_brick_add);
-	add_brick_trigger(C,block,"vector",op_brick_add);
 	add_brick_trigger(C,block,"bang",op_brick_add);
 	add_brick_trigger(C,block,"stack",op_brick_add);
 	add_brick_trigger(C,block,"quit",op_brick_add);
@@ -343,25 +340,16 @@ t_node *make_menu_ops(void)
 	return menu;
 }
 
-// operator
+// vector
 
-t_node *make_menu_operators(void)
+t_node *make_menu_vector(void)
 {
 	t_context *C=ctx_get();
-	t_node *menu=block_make("menu_operators","menu");
+	t_node *menu=block_make("menu_vector","menu");
+	t_block *block=menu->data;
 
-
-	t_node *menu_lst=make_menu_lst();
-	add_brick_submenu(C,menu,menu_lst,"lst");
-
-	t_node *menu_logic=make_menu_logic();
-	add_brick_submenu(C,menu,menu_logic,"logic");
-
-	t_node *menu_maths=make_menu_maths();
-	add_brick_submenu(C,menu,menu_maths,"maths");
-
-	t_node *menu_ops=make_menu_ops();
-	add_brick_submenu(C,menu,menu_ops,"ops");
+	add_brick_trigger(C,block,"vector",op_brick_add);
+	add_brick_trigger(C,block,"vector 3d",op_brick_add);
 
 	return menu;
 }
@@ -426,10 +414,22 @@ t_node *make_menu_brick_add(void)
 	t_node *menu=block_make("menu_brick_add","menu");
 
 	t_node *menu_num=make_menu_num();
-	add_brick_submenu(C,menu,menu_num,"number");
+	add_brick_submenu(C,menu,menu_num,"scalar");
 
-	t_node *menu_operators=make_menu_operators();
-	add_brick_submenu(C,menu,menu_operators,"operators");
+	t_node *menu_vector=make_menu_vector();
+	add_brick_submenu(C,menu,menu_vector,"vector");
+
+	t_node *menu_lst=make_menu_lst();
+	add_brick_submenu(C,menu,menu_lst,"list");
+
+	t_node *menu_logic=make_menu_logic();
+	add_brick_submenu(C,menu,menu_logic,"logic");
+
+	t_node *menu_maths=make_menu_maths();
+	add_brick_submenu(C,menu,menu_maths,"maths");
+
+	t_node *menu_ops=make_menu_ops();
+	add_brick_submenu(C,menu,menu_ops,"ops");
 
 	t_node *menu_time=make_menu_time();
 	add_brick_submenu(C,menu,menu_time,"time");

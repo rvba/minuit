@@ -1345,8 +1345,7 @@ void __cls_plug_flow_operator_get(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 					_plug.data_type = dt_vector;
 					_plug.data = &vector_new;
 
-					// Change Result Type
-
+					// Change Vector Type
 					if(brick_result->plug_intern.data_type == dt_vector)
 					{
 						t_vector *vector_dst = brick_result->plug_intern.data;
@@ -1368,37 +1367,6 @@ void __cls_plug_flow_operator_get(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 					// Set Pointer
 					vector = plug_result->data;
 					vector->pointer = vlst_get_pointer(vlst, vlst->length * i);
-
-
-					t_plug *plug_result_out = &brick_result->plug_out;
-
-					// open vector
-					if(plug_result_out->is_connected)
-					{
-						t_plug *plug_vector = plug_get_dst(plug_result);
-
-						if(plug_vector->data_type == dt_vector)
-						{
-							t_brick *brick_vector = plug_vector->brick;
-							t_plug *plug_vector_in = &brick_vector->plug_in;
-
-							// flow in
-							plug_vector_in->flow_in=1;
-
-							t_block *block_vector = brick_vector->block;
-
-							int i;
-							vector = plug_result->data;
-							t_brick *brick_component;
-
-							for(i = 0; i < vector->length; i++)
-							{
-								brick_component = block_brick_get_by_order(block_vector,i);
-								brick_component->state.draw_value = 1;
-								brick_component->action = op_slider;
-							}
-						}
-					}
 				}
 
 				break;
@@ -1537,7 +1505,8 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 					brick_component = block_brick_get_by_order(block,i);
 					plug_intern_component = &brick_component->plug_intern;
 
-					vlst_set_data(vlst,&plug_intern_component->data,i);
+					if(plug_intern_component->data) // crash with vector for ...
+						vlst_set_data(vlst,plug_intern_component->data,i);
 				}
 			}
 		}

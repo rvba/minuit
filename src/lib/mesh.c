@@ -254,7 +254,6 @@ t_node *mesh_make(
 
 		mesh->tris=vlst_make("tris", dt_uint, 3,tottri);
 		vlst_add_data(mesh->tris,tris);
-
 	}
 
 	// add brick vertex

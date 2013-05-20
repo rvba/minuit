@@ -241,6 +241,7 @@ t_node *	add_loop_get(t_context *C);
 t_node *	add_get(t_context *C);
 t_node *	add_for(t_context *C);
 t_node *	add_vector(t_context *C);
+t_node *	add_vector_3d(t_context *C);
 t_node *	add_stack(t_context *C);
 t_node *	add_plusplus(t_context *C);
 

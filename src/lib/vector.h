@@ -25,6 +25,11 @@ struct Vector
 
 	void *pointer;
 	t_vlst *vector; 
+
+	int has_limit_low;
+	int has_limit_high;
+	int limit_int_low;
+	int limit_int_high;
 };
 
 struct Vector_Class
