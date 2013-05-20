@@ -1198,11 +1198,8 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 						// Unlock Loop 
 						set_for_loop(block,0);
 
-						// Get Vlst Pointer
-						float *ptr = vlst->data;
-
 						// Set Vector Pointer
-						vector->pointer = ptr + (vlst->length * brick->counter);
+						vector->pointer = vlst_get_pointer(vlst, vlst->length * brick->counter);
 
 						// Set Indice
 						*data_indice=brick->counter;
