@@ -139,7 +139,7 @@ void *op_slider(t_brick *brick)
 						if(delta_x>0) *data 	+=  dx;
 						else *data 		-=  dx;
 					}
-					if(brick->plug_intern.data_type==dt_int)
+					if(brick->plug_intern.data_type==dt_uint)
 					{
 						unsigned int *data=brick->plug_intern.data;
 						if(delta_x>0) *data 	+=  dx;

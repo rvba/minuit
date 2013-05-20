@@ -790,6 +790,11 @@ void __cls_plug_flow_int(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 				*data=drf_int(src_plug->data);
 				break;
 
+			case dt_uint:
+
+				*data=(int)drf_uint(src_plug->data);
+				break;
+
 			case dt_float:
 
 				*data=(int)drf_float(src_plug->data);
@@ -826,19 +831,20 @@ void __cls_plug_flow_uint(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 
 		switch(src_type)
 		{
-			/*
 			case dt_int:
+				*data=(unsigned int) drf_int(src_plug->data);
+				break;
 
-				*data=drf_int(src_plug->data);
+			case dt_uint:
+				*data= drf_uint(src_plug->data);
 				break;
 
 			case dt_float:
 
-				*data=(int)drf_float(src_plug->data);
+				*data=(unsigned int) drf_float(src_plug->data);
 				break;
 			case dt_lst:
 				break;
-				*/
 
 			default:
 				plug_warning(plug,src_plug);
