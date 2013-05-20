@@ -52,6 +52,12 @@ inline void set_int(void *_ptr,int i)
 	*ptr=i;
 }
 
+inline void set_uint(void *_ptr,int i)
+{
+	unsigned int *ptr = (unsigned int *)_ptr;
+	*ptr=(unsigned int) i;
+}
+
 inline void set_float(void *_ptr,float i)
 {
 	float *ptr = (float *)_ptr;

@@ -261,6 +261,8 @@ struct Brick_State
 	int has_components:1;
 	int clone;
 	int frame_loop;
+	int has_limit_low:1;
+	int has_limit_high:1;
 };
 
 // BRICK GEOMETRY
@@ -283,6 +285,10 @@ struct Brick_Var
 	int selector;
 	int selector_length;
 	char selector_list[_LIST_*_NAME_LONG_];
+	int limit_int_low;
+	int limit_int_high;
+	float limit_float_low;
+	float limit_float_high;
 };
 
 // BRICK
@@ -414,6 +420,7 @@ void 		cls_brick_build_txt(t_brick *brick);
 
 // BRICK_ACT
 
+void *		op_limit(t_brick *brick);
 void *		op_selector(t_brick *brick);
 void *		op_brick_node_action(t_brick *brick);
 void *		op_void(t_brick *brick);

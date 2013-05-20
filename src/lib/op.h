@@ -56,8 +56,8 @@ void 		op_menu_rc_submenu_add(t_node *node, t_node *menu_sub,char *name);
 
 // OP_ADD
 
-void *op_add_set(t_brick *brick);
-void *op_new_set(const char *name);
+void *		op_add_set(t_brick *brick);
+void *		op_new_set(const char *name);
 void *		op_new_camera(const char *name);
 t_node *	op_new_cube(const char *name);
 t_node *	op_add_new_wire_cube(t_node *node);

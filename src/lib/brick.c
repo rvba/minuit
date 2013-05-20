@@ -585,6 +585,8 @@ t_brick *brick_new(const char *name)
 	brick->state.debug = 0;
 	brick->state.draw = 1;
 	brick->state.has_components = 0;
+	brick->state.has_limit_low = 0;
+	brick->state.has_limit_high = 0;
 
 	brick->geom.block_pos=0;
 	brick->geom.height=20;
@@ -594,6 +596,10 @@ t_brick *brick_new(const char *name)
 	brick->var.increment=0;
 	brick->var.selector=0;
 	brick->var.selector_length=0;
+	brick->var.limit_int_low = 0;
+	brick->var.limit_int_high = 0;
+	brick->var.limit_float_low = 0;
+	brick->var.limit_float_high = 0;
 
 	brick->cls=NULL;
 	brick->action=NULL;

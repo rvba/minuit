@@ -320,6 +320,7 @@ int u_lookup(char *word,char *array[]);
 
 inline void set_float(void *_ptr,float i);
 inline void set_int(void *_ptr,int i);
+inline void set_uint(void *_ptr,int i);
 
 inline void flow_int_int(void *_dst, void *_src);
 inline void flow_int_float(void *_dst, void *_src);

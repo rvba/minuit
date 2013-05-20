@@ -23,83 +23,157 @@ void brick_set_updated(t_brick *brick)
 void *op_brick_add(t_brick *brick)
 {
 	t_context *C = ctx_get();
+	t_node *node;
+	t_block *this_block;
+	t_brick *this_brick;
 
 	// store
 	C->scene->store=1;
 
 	char *name=brick->name;
 
-	     if(is(name,"frame")) 		add_slider_int(C,"frame",&C->app->frame); 
-	else if(is(name,"timer"))  		add_slider_float(C,"timer",&C->app->timer); 
-	else if(is(name,"timer low"))  		add_slider_float(C,"timer low",&C->app->timer_add_low); 
-	else if(is(name,"=")) 			add_operator_double(C,"=");
-	else if(is(name,">"))  			add_operator_double(C,">"); 
-	else if(is(name,"<"))  			add_operator_double(C,"<"); 
-	else if(is(name,"mod"))  		add_operator_double(C,"mod"); 
-	else if(is(name,"x")) 			add_maths(C,"x");
-	else if(is(name,"+"))  			add_maths(C,"+"); 
-	else if(is(name,"++")) 			add_plusplus(C);
-	else if(is(name,"switch"))  		add_switch(C,"switch",NULL); 
-	else if(is(name,"clone"))  		add_clone(C); 
-	else if(is(name,"pipe")) 		add_pipe(C); 
-	else if(is(name,"sec")) 		add_slider_int(C,"sec",&C->app->clock->sec);
-	else if(is(name,"int")) 		add_slider_int(C,"int",NULL);
-	else if(is(name,"float")) 		add_slider_float(C,"float",NULL);
-	else if(is(name,"10")) 			add_multiplier(C,"10");
-	else if(is(name,"100")) 		add_multiplier(C,"100");
-	else if(is(name,".1")) 			add_multiplier(C,".1");
-	else if(is(name,".01")) 		add_multiplier(C,".01");
-	else if(is(name,".001")) 		add_multiplier(C,".001");
-	else if(is(name,"msec")) 		add_slider_int(C,"msec",&C->app->clock->msec);
-	else if(is(name,"cos")) 		add_operator_single(C,"cos",op_cos);
-	else if(is(name,"sin")) 		add_operator_single(C,"sin",op_sin);
-	else if(is(name,"cam_eye_x")) 		add_slider_camera(C,"eye x");
-	else if(is(name,"cam_eye_y")) 		add_slider_camera(C,"eye y");
-	else if(is(name,"cam_eye_z")) 		add_slider_camera(C,"eye z");
-	else if(is(name,"cam_pos_x")) 		add_slider_camera(C,"pos x");
-	else if(is(name,"cam_pos_y")) 		add_slider_camera(C,"pos y");
-	else if(is(name,"cam_pos_z")) 		add_slider_camera(C,"pos z");
-	else if(is(name,"cam_rot_xy")) 		add_slider_float_custom(C,"cam rot xy",op_camera_rotate_xy); 
-	else if(is(name,"cam_rot_z")) 		add_slider_float_custom(C,"cam rot z",op_camera_rotate_z); 
-	else if(is(name,"pos x")) 		add_slider_object(C,"pos x");
-	else if(is(name,"pos y")) 		add_slider_object(C,"pos y");
-	else if(is(name,"pos z")) 		add_slider_object(C,"pos z");
-	else if(is(name,"rot x")) 		add_slider_object(C,"rot x");
-	else if(is(name,"rot y")) 		add_slider_object(C,"rot y");
-	else if(is(name,"rot z")) 		add_slider_object(C,"rot z");
-	else if(is(name,"scl x")) 		add_slider_object(C,"scl x");
-	else if(is(name,"scl y")) 		add_slider_object(C,"scl y");
-	else if(is(name,"scl z")) 		add_slider_object(C,"scl z");
-	else if(is(name,"red")) 		add_slider_object(C,"red");
-	else if(is(name,"green")) 		add_slider_object(C,"green");
-	else if(is(name,"blue")) 		add_slider_object(C,"blue");
-	else if(is(name,"color")) 		add_slider_object(C,"color");
-	else if(is(name,"faces")) 		add_slider_object(C,"faces");
-	else if(is(name,"alpha")) 		add_slider_object(C,"alpha");
-	else if(is(name,"label")) 		add_label(C,"label");
-	else if(is(name,"get")) 		add_get(C);
-	else if(is(name,"rewind")) 		add_trigger_always(C,"rewind",op_rewind); 
-	else if(is(name,"not")) 		add_slider_int_custom(C,"not",NULL,op_not); 
-	else if(is(name,"mouse_x")) 		add_slider_int(C,"mouse x",&C->app->mouse->x); 
-	else if(is(name,"mouse_y")) 		add_slider_int(C,"mouse y",&C->app->mouse->y); 
-	else if(is(name,"keyboard")) 		add_slider_char(C,"keyboard",&C->app->keyboard->key_pressed); 
-	else if(is(name,"rnd")) 		add_slider_int_custom(C,"rnd",NULL,op_rnd);
-	else if(is(name,"neg")) 		add_slider_int_custom(C,"neg",NULL,op_neg);
-	else if(is(name,"last?")) 		add_switch_custom(C,"last?",NULL,op_is_last);
-	else if(is(name,"for")) 		add_for(C);
-	else if(is(name,"vector")) 		add_vector(C);
-	else if(is(name,"bang")) 		add_slider_int_custom(C,"bang",NULL,op_bang); 
-	else if(is(name,"quit")) 		add_trigger_always(C,"quit",op_do_quit); 
-	else if(is(name,"const")) 		add_const(C); 
-	else if(is(name,"and")) 		add_maths(C,"and"); 
-	else if(is(name,"stack")) 		add_stack(C); 
+	     if(is(name,"frame")) 		node = add_slider_int(C,"frame",&C->app->frame); 
+	else if(is(name,"timer"))  		node = add_slider_float(C,"timer",&C->app->timer); 
+	else if(is(name,"timer low"))  		node = add_slider_float(C,"timer low",&C->app->timer_add_low); 
+	else if(is(name,"=")) 			node = add_operator_double(C,"=");
+	else if(is(name,">"))  			node = add_operator_double(C,">"); 
+	else if(is(name,"<"))  			node = add_operator_double(C,"<"); 
+	else if(is(name,"mod"))  		node = add_operator_double(C,"mod"); 
+	else if(is(name,"x")) 			node = add_maths(C,"x");
+	else if(is(name,"+"))  			node = add_maths(C,"+"); 
+	else if(is(name,"++")) 			node = add_plusplus(C);
+	else if(is(name,"switch"))  		node = add_switch(C,"switch",NULL); 
+	else if(is(name,"clone"))  		node = add_clone(C); 
+	else if(is(name,"pipe")) 		node = add_pipe(C); 
+	else if(is(name,"sec")) 		node = add_slider_int(C,"sec",&C->app->clock->sec);
+	else if(is(name,"int")) 		node = add_slider_int(C,"int",NULL);
+	else if(is(name,"float")) 		node = add_slider_float(C,"float",NULL);
+	else if(is(name,"10")) 			node = add_multiplier(C,"10");
+	else if(is(name,"100")) 		node = add_multiplier(C,"100");
+	else if(is(name,".1")) 			node = add_multiplier(C,".1");
+	else if(is(name,".01")) 		node = add_multiplier(C,".01");
+	else if(is(name,".001")) 		node = add_multiplier(C,".001");
+	else if(is(name,"msec")) 		node = add_slider_int(C,"msec",&C->app->clock->msec);
+	else if(is(name,"cos")) 		node = add_operator_single(C,"cos",op_cos);
+	else if(is(name,"sin")) 		node = add_operator_single(C,"sin",op_sin);
+	else if(is(name,"cam_eye_x")) 		node = add_slider_camera(C,"eye x");
+	else if(is(name,"cam_eye_y")) 		node = add_slider_camera(C,"eye y");
+	else if(is(name,"cam_eye_z")) 		node = add_slider_camera(C,"eye z");
+	else if(is(name,"cam_pos_x")) 		node = add_slider_camera(C,"pos x");
+	else if(is(name,"cam_pos_y")) 		node = add_slider_camera(C,"pos y");
+	else if(is(name,"cam_pos_z")) 		node = add_slider_camera(C,"pos z");
+	else if(is(name,"cam_rot_xy")) 		node = add_slider_float_custom(C,"cam rot xy",op_camera_rotate_xy); 
+	else if(is(name,"cam_rot_z")) 		node = add_slider_float_custom(C,"cam rot z",op_camera_rotate_z); 
+	else if(is(name,"pos x")) 		node = add_slider_object(C,"pos x");
+	else if(is(name,"pos y")) 		node = add_slider_object(C,"pos y");
+	else if(is(name,"pos z")) 		node = add_slider_object(C,"pos z");
+	else if(is(name,"rot x")) 		node = add_slider_object(C,"rot x");
+	else if(is(name,"rot y")) 		node = add_slider_object(C,"rot y");
+	else if(is(name,"rot z")) 		node = add_slider_object(C,"rot z");
+	else if(is(name,"scl x")) 		node = add_slider_object(C,"scl x");
+	else if(is(name,"scl y")) 		node = add_slider_object(C,"scl y");
+	else if(is(name,"scl z")) 		node = add_slider_object(C,"scl z");
+	else if(is(name,"red")) 		node = add_slider_object(C,"red");
+	else if(is(name,"green")) 		node = add_slider_object(C,"green");
+	else if(is(name,"blue")) 		node = add_slider_object(C,"blue");
+	else if(is(name,"color")) 		node = add_slider_object(C,"color");
+	else if(is(name,"faces")) 		node = add_slider_object(C,"faces");
+	else if(is(name,"alpha")) 		node = add_slider_object(C,"alpha");
+	else if(is(name,"label")) 		node = add_label(C,"label");
+	else if(is(name,"get")) 		node = add_get(C);
+	else if(is(name,"rewind")) 		node = add_trigger_always(C,"rewind",op_rewind); 
+	else if(is(name,"not")) 		node = add_slider_int_custom(C,"not",NULL,op_not); 
+	else if(is(name,"mouse_x")) 		node = add_slider_int(C,"mouse x",&C->app->mouse->x); 
+	else if(is(name,"mouse_y")) 		node = add_slider_int(C,"mouse y",&C->app->mouse->y); 
+	else if(is(name,"keyboard")) 		node = add_slider_char(C,"keyboard",&C->app->keyboard->key_pressed); 
+	else if(is(name,"rnd")) 		node = add_slider_int_custom(C,"rnd",NULL,op_rnd);
+	else if(is(name,"neg")) 		node = add_slider_int_custom(C,"neg",NULL,op_neg);
+	else if(is(name,"last?")) 		node = add_switch_custom(C,"last?",NULL,op_is_last);
+	else if(is(name,"for")) 		node = add_for(C);
+	else if(is(name,"vector")) 		node = add_vector(C);
+	else if(is(name,"bang")) 		node = add_slider_int_custom(C,"bang",NULL,op_bang); 
+	else if(is(name,"quit")) 		node = add_trigger_always(C,"quit",op_do_quit); 
+	else if(is(name,"const")) 		node = add_const(C); 
+	else if(is(name,"and")) 		node = add_maths(C,"and"); 
+	else if(is(name,"stack")) 		node = add_stack(C); 
 
 	// Store
 	C->scene->store=0;
 
 	// Switch Desk
 	if(!C->ui->show_sets) switch_sets(C);
+
+	// Limit
+
+	if(node)
+	{
+		this_block = node->data;
+		t_link *link;
+		for(link = this_block->bricks->first; link; link = link->next)
+		{
+			this_brick = link->data;
+			op_limit(this_brick);
+		}
+	}
 		
+	return NULL;
+}
+
+
+// LIMIT
+
+void *op_limit(t_brick *brick)
+{
+	if(brick->state.has_limit_low)
+	{
+		switch(brick->plug_intern.data_type)
+		{
+			case(dt_float):
+				if(drf_float(brick->plug_intern.data) < brick->var.limit_float_low)
+					set_float(brick->plug_intern.data,brick->var.limit_float_low);
+				break;
+
+			case(dt_int):
+				if(drf_int(brick->plug_intern.data) < brick->var.limit_int_low)
+					set_int(brick->plug_intern.data,brick->var.limit_int_low);
+				break;
+
+			case(dt_uint):
+				if(drf_uint(brick->plug_intern.data) < brick->var.limit_int_low)
+					set_uint(brick->plug_intern.data,brick->var.limit_int_low);
+				break;
+
+			default:
+				printf("[op_limit] case not implemented : %s\n",data_name_get(brick->plug_intern.data_type));
+				break;
+		}
+	}
+
+	if(brick->state.has_limit_high)
+	{
+		switch(brick->plug_intern.data_type)
+		{
+			case(dt_float):
+				if(drf_float(brick->plug_intern.data) > brick->var.limit_float_high)
+					set_float(brick->plug_intern.data,brick->var.limit_float_high);
+				break;
+
+			case(dt_int):
+				if(drf_int(brick->plug_intern.data) > brick->var.limit_int_high)
+					set_int(brick->plug_intern.data,brick->var.limit_int_high);
+				break;
+
+			case(dt_uint):
+				if(drf_uint(brick->plug_intern.data) > brick->var.limit_int_high)
+					set_uint(brick->plug_intern.data,brick->var.limit_int_high);
+				break;
+
+			default:
+				printf("[op_limit] case not implemented : %s\n",data_name_get(brick->plug_intern.data_type));
+				break;
+		}
+	}
+
 	return NULL;
 }
 
@@ -207,6 +281,11 @@ void *op_slider(t_brick *brick)
 				}
 			}
 		}
+
+		// Limit
+
+		op_limit(brick);
+
 	}
 
 	return NULL;
