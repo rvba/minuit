@@ -186,7 +186,7 @@ void mesh_add_default_color(t_mesh *mesh)
 {
 	int tot_vertex=mesh->var.tot_vertex;
 
-	mesh->colors=vlst_make("color",_3f,tot_vertex);
+	mesh->colors=vlst_make("color",dt_float, 3, tot_vertex);
 	mesh->state.has_color=1;
 
 	t_vlst *vlst=mesh->colors;
@@ -232,7 +232,7 @@ t_node *mesh_make(
 	mesh->var.tot_tri_face=tottri;
 
 	// add vertex list
-	mesh->vertex=vlst_make("vertex",_3f,totvert);
+	mesh->vertex=vlst_make("vertex", dt_float, 3, totvert);
 	vlst_add_data(mesh->vertex,verts);
 
 	// add quad list
@@ -241,7 +241,7 @@ t_node *mesh_make(
 		mesh->state.has_quad=1;
 		mesh->state.has_face=1;
 
-		mesh->quads=vlst_make("quads",_4ui,totquad);
+		mesh->quads=vlst_make("quads", dt_uint, 4, totquad);
 		vlst_add_data(mesh->quads,quads);
 	}
 
@@ -251,7 +251,7 @@ t_node *mesh_make(
 		mesh->state.has_tri=1;
 		mesh->state.has_face=1;
 
-		mesh->tris=vlst_make("tris",_3ui,tottri);
+		mesh->tris=vlst_make("tris", dt_uint, 3,tottri);
 		vlst_add_data(mesh->tris,tris);
 
 	}

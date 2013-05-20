@@ -32,7 +32,7 @@ void mesh_line_add(t_mesh *mesh,int *lines,int totline)
 
 void mesh_uv_add(t_mesh *mesh,int *uvs,int totuv)
 {
-	mesh->quad_uv=vlst_make("quad_uv",_2i,totuv);
+	mesh->quad_uv=vlst_make("quad_uv",dt_int, 2, totuv);
 	vlst_add_data(mesh->quad_uv,uvs);
 }
 
@@ -46,16 +46,14 @@ void mesh_line_cube_add(t_mesh *mesh)
 
 void mesh_buffer_add_vbo(t_mesh *mesh)
 {
-	//t_context *C=ctx_get();
-
 	if(mesh->quads)
 	{
 		int tot_quad=mesh->var.tot_quad_face;
 
-		if(!mesh->quad_vertex) mesh->quad_vertex=vlst_make("quad_vertex",_3f,tot_quad*4);
-		if(!mesh->quad_face) mesh->quad_face=vlst_make("quad_face",_4ui,tot_quad);
-		if(!mesh->quad_color) mesh->quad_color=vlst_make("quad_color",_3f,tot_quad * 4);
-		if(!mesh->quad_normal) mesh->quad_normal=vlst_make("quad_normal",_3f,tot_quad * 4);
+		if(!mesh->quad_vertex) mesh->quad_vertex=vlst_make("quad_vertex", dt_float, 3, tot_quad*4);
+		if(!mesh->quad_face) mesh->quad_face=vlst_make("quad_face", dt_uint, 4,tot_quad);
+		if(!mesh->quad_color) mesh->quad_color=vlst_make("quad_color", dt_float, 3, tot_quad * 4);
+		if(!mesh->quad_normal) mesh->quad_normal=vlst_make("quad_normal", dt_float , 3,tot_quad * 4);
 
 	}
 
@@ -63,10 +61,10 @@ void mesh_buffer_add_vbo(t_mesh *mesh)
 	{
 		int tot_tri=mesh->var.tot_tri_face;
 
-		if(!mesh->tri_vertex) mesh->tri_vertex=vlst_make("tri_vertex",_3f,tot_tri*3);
-		if(!mesh->tri_face) mesh->tri_face=vlst_make("tri_face",_3ui,tot_tri);
-		if(!mesh->tri_color) mesh->tri_color=vlst_make("tri_color",_3f,tot_tri*3);
-		if(!mesh->tri_normal) mesh->tri_normal=vlst_make("tri_normal",_3f,tot_tri*3);
+		if(!mesh->tri_vertex) mesh->tri_vertex=vlst_make("tri_vertex", dt_float, 3, tot_tri*3);
+		if(!mesh->tri_face) mesh->tri_face=vlst_make("tri_face", dt_uint, 3, tot_tri);
+		if(!mesh->tri_color) mesh->tri_color=vlst_make("tri_color", dt_float, 3, tot_tri*3);
+		if(!mesh->tri_normal) mesh->tri_normal=vlst_make("tri_normal", dt_float, 3, tot_tri*3);
 
 	}
 }
@@ -106,7 +104,7 @@ void mesh_buffer_add_direct(t_mesh *mesh)
 	{
 		int tot_quad=mesh->var.tot_quad_face;
 
-		if(!mesh->quad_normal) mesh->quad_normal=vlst_make("quad_normal",_3f,tot_quad);
+		if(!mesh->quad_normal) mesh->quad_normal=vlst_make("quad_normal", dt_float, 3, tot_quad);
 	}
 }
 

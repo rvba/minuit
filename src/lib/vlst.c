@@ -18,12 +18,12 @@ void *vlst_get_pointer(t_vlst *vlst, int indice)
 {
 	void *ptr = vlst->data;
 
-	switch(vlst->data_type)
+	switch(vlst->type)
 	{
 		case(dt_float): return grf_float(ptr, indice); break;
 		case(dt_uint): return grf_uint(ptr, indice); break;
 		default: 
-			printf("[ERR vlst_get_pointer] Unknown type %s\n",data_name_get(vlst->data_type));
+			printf("[ERR vlst_get_pointer] Unknown type %s\n",data_name_get(vlst->type));
 			return NULL;
 			break;
 	}
@@ -33,12 +33,12 @@ void vlst_set_data(t_vlst *vlst, void *data, int indice)
 {
 	void *ptr = vlst->data;
 
-	switch(vlst->data_type)
+	switch(vlst->type)
 	{
 		case(dt_float): srf_float(ptr, data, indice); break;
 		case(dt_uint): srf_uint(ptr, data,  indice); break;
 		default: 
-			printf("[ERR vlst_set_data] Unknown type %s\n",data_name_get(vlst->data_type));
+			printf("[ERR vlst_set_data] Unknown type %s\n",data_name_get(vlst->type));
 			break;
 	}
 }
@@ -149,29 +149,10 @@ void vlst_float_add(t_vlst *vlst,t_data_type type,void *data)
 	}
 }
 
-
-void vlst_add_number(t_vlst *vlst,t_data_type type,void *data)
-{
-	int is_float=0;
-	//int is_int=0;
-
-	switch(vlst->type)
-	{
-		case(_1f): is_float=1;break;
-		case(_2f): is_float=1;break;
-		case(_3f): is_float=1;break;
-		case(_4f): is_float=1;break;
-		default:printf("???????\n");
-	}
-
-	if(is_float) vlst_float_add(vlst,type,data);
-	else printf("...???\n");
-
-}
-
-
 void vlst_add_vlst(t_vlst *vlst_dst,t_vlst *vlst_src) 
 {
+	printf(".........................\n");
+	/*
 	int i,j;
 	int p=0;
 
@@ -200,6 +181,7 @@ void vlst_add_vlst(t_vlst *vlst_dst,t_vlst *vlst_src)
 	{
 		printf("[WARNING vlst_add_vlst] vlst are not equal\n");
 	}
+	*/
 }
 
 void vlst_show(t_vlst *vlst)
@@ -219,52 +201,60 @@ void vlst_show(t_vlst *vlst)
 
 		if(dat)
 		{
-			if(vlst->type==_3f)
+			if(vlst->type == dt_float)
 			{
-				float *d=(float *)dat;
-				for(i=0;i<count;i++)
+				if(vlst->length == 3)
 				{
-					if(C->event->debug_terminal)
-						printf("[%d] %f %f %f\n",i,d[0],d[1],d[2]);
-					if(C->event->debug_console) term_log("[%d] %f %f %f\n",i,d[0],d[1],d[2]);
-					d+=length;
+					float *d=(float *)dat;
+					for(i=0;i<count;i++)
+					{
+						if(C->event->debug_terminal)
+							printf("[%d] %f %f %f\n",i,d[0],d[1],d[2]);
+						if(C->event->debug_console) term_log("[%d] %f %f %f\n",i,d[0],d[1],d[2]);
+						d+=length;
+					}
+				}
+				else if(vlst->length == 4)
+				{
+					float *d=(float *)dat;
+					for(i=0;i<count;i++)
+					{
+						printf("[%d] %f %f %f %f\n",i,d[0],d[1],d[2],d[3]);
+						d+=length;
+					}
 				}
 			}
-			if(vlst->type==_4f)
+			else if(vlst->type == dt_uint)
 			{
-				float *d=(float *)dat;
-				for(i=0;i<count;i++)
+				if(vlst->length == 3)
 				{
-					printf("[%d] %f %f %f %f\n",i,d[0],d[1],d[2],d[3]);
-					d+=length;
+					unsigned int *d=(unsigned int *)dat;
+					for(i=0;i<count;i++)
+					{
+						printf("[%d] %u %u %u \n",i,d[0],d[1],d[2]);
+						d+=length;
+					}
+				}
+				else if(vlst->length == 4)
+				{
+					unsigned int *d=(unsigned int *)dat;
+					for(i=0;i<count;i++)
+					{
+						printf("[%d] %u %u %u %u\n",i,d[0],d[1],d[2],d[3]);
+						d+=length;
+					}
 				}
 			}
-			if(vlst->type==_3ui)
+			else if(vlst->type == dt_int)
 			{
-				unsigned int *d=(unsigned int *)dat;
-				for(i=0;i<count;i++)
+				if(vlst->length == 4)
 				{
-					printf("[%d] %u %u %u \n",i,d[0],d[1],d[2]);
-					d+=length;
-				}
-			}
-			if(vlst->type==_4ui)
-			{
-				unsigned int *d=(unsigned int *)dat;
-				for(i=0;i<count;i++)
-				{
-					printf("[%d] %u %u %u %u\n",i,d[0],d[1],d[2],d[3]);
-					d+=length;
-				}
-			}
-
-			if(vlst->type==_4i)
-			{
-				int *d=(int *)dat;
-				for(i=0;i<count;i++)
-				{
-					printf("[%d] %d %d %d %d\n",i,d[0],d[1],d[2],d[3]);
-					d+=length;
+					int *d=(int *)dat;
+					for(i=0;i<count;i++)
+					{
+						printf("[%d] %d %d %d %d\n",i,d[0],d[1],d[2],d[3]);
+						d+=length;
+					}
 				}
 			}
 		}
@@ -565,32 +555,24 @@ void vlst_vertex(const char *type,t_vlst *dst,t_vlst *vertex,t_vlst *face)
 
 void vlst_add_data(t_vlst *vlst,void *ptr)
 {
-	t_vlst_type t=vlst->type;
+	t_data_type t=vlst->type;
 
-	if	(t==_1i || t==_2i || t==_3i || t==_4i)
-		 _loop_int(vlst->data,ptr,vlst->count,vlst->length);
-	else if	(t==_1f || t==_2f || t==_3f || t==_4f)
-		 _loop_float(vlst->data,ptr,vlst->count,vlst->length);
-	else if	(t==_1ui || t==_2ui || t==_3ui || t==_4ui)
-		 _loop_unsigned_int(vlst->data,ptr,vlst->count,vlst->length);
-	else 	
-		printf("[ERROR vlst_add_data] Unknown type %d\n",t);
+	if (t == dt_int) _loop_int(vlst->data,ptr,vlst->count,vlst->length);
+	else if	(t == dt_float) _loop_float(vlst->data,ptr,vlst->count,vlst->length);
+	else if	(t == dt_uint) _loop_unsigned_int(vlst->data,ptr,vlst->count,vlst->length);
+	else 	printf("[ERROR vlst_add_data] Unknown type %d\n",t);
 }
 
 void vlst_copy(t_vlst *dst,t_vlst *src)
 {
 	if(src->type==dst->type)
 	{
-		t_vlst_type t=src->type;
+		t_data_type t=src->type;
 
-		if	(t==_1i || t==_2i || t==_3i || t==_4i)
-			 _loop_int(dst->data,src->data,src->count,src->length);
-		else if	(t==_1f || t==_2f || t==_3f || t==_4f)
-			 _loop_float(dst->data,src->data,src->count,src->length);
-		else if	(t==_1ui || t==_2ui || t==_3ui || t==_4ui)
-			 _loop_unsigned_int(dst->data,src->data,src->count,src->length);
-		else 	
-			printf("[ERROR vlst_copy] Unknown type %d\n",t);
+		if (t == dt_int) _loop_int(dst->data,src->data,src->count,src->length);
+		else if	(t == dt_float) _loop_float(dst->data,src->data,src->count,src->length);
+		else if	(t == dt_uint) _loop_unsigned_int(dst->data,src->data,src->count,src->length);
+		else 	printf("[ERROR vlst_copy] Unknown type %d\n",t);
 	}
 	else
 	{
@@ -609,106 +591,32 @@ void vlst_set(t_vlst *vlst,int i)
 
 void vlst_build(t_vlst *vlst,void *ptr)
 {
-	t_vlst_type t=vlst->type;
+	t_data_type t = vlst->type;
 
-	if	(t==_1i || t==_2i || t==_3i || t==_4i)
-		 _face_int(ptr,vlst->data,vlst->count,vlst->length);
-	else if	(t==_1f || t==_2f || t==_3f || t==_4f)
-		 _face_float((float *)vlst->data,(float *)ptr,vlst->count,vlst->length);
-	else if	(t==_1ui || t==_2ui || t==_3ui || t==_4ui)
-		 _face_unsigned_int(ptr,vlst->data,vlst->count,vlst->length);
-	else 	
-		printf("[ERROR _copy] Unknown type %d\n",t);
+	if (t == dt_int) _face_int(ptr,vlst->data,vlst->count,vlst->length);
+	else if	(t == dt_float) _face_float((float *)vlst->data,(float *)ptr,vlst->count,vlst->length);
+	else if	(t == dt_uint) _face_unsigned_int(ptr,vlst->data,vlst->count,vlst->length);
+	else 	printf("[ERROR _copy] Unknown type %d\n",t);
 }
 
 // MAKE
 
-t_vlst *vlst_make(const char *name,t_vlst_type type,int count)
+t_vlst *vlst_make(const char *name,t_data_type type, int length, int count)
 {
 	t_context *C=ctx_get();
 
 	t_node *node_vlst=scene_add(C->scene,nt_vlst,name);
 	t_vlst *vlst=node_vlst->data;
 
-	vlst->type=type;
+	vlst->type = type;
+	vlst->length = length;
 	vlst->count=count;
 	vlst->count_new=vlst->count;
 
-
-	if(type==_1i)
-	{
-		vlst->size=sizeof(int);
-		vlst->length=1;
-		vlst->data_type=dt_int;
-	}
-	else if(type==_2i)
-	{
-		vlst->size=sizeof(int); 
-		vlst->length=2;
-		vlst->data_type=dt_int;
-	}
-	else if(type==_3i) 
-	{
-		vlst->size=sizeof(int);
-		vlst->length=3;
-		vlst->data_type=dt_int;
-	}
-	else if(type==_4i)
-	{ 
-		vlst->size=sizeof(int);
-		vlst->length=4;
-		vlst->data_type=dt_int;
-	}
-	else if(type==_1f) 
-	{
-		vlst->size=sizeof(float); 
-		vlst->length=1; 
-		vlst->data_type=dt_float;
-	}
-	else if(type==_2f)
-	{ 
-		vlst->size=sizeof(float); 
-		vlst->length=2;
-		vlst->data_type=dt_float;
-	}
-	else if(type==_3f)
-	{ 
-		vlst->size=sizeof(float); 
-		vlst->length=3;
-		vlst->data_type=dt_float;
-	}
-	else if(type==_4f)
-	{ 
-		vlst->size=sizeof(float); 
-		vlst->length=4;
-		vlst->data_type=dt_float;
-	}
-	else if(type==_1ui)
-	{
-		vlst->size=sizeof(unsigned int); 
-		vlst->length=1;
-		vlst->data_type=dt_uint;
-	}
-	else if(type==_2ui)
-	{
-		vlst->size=sizeof(unsigned int);
-		vlst->length=2;
-		vlst->data_type=dt_uint;
-	}
-	else if(type==_3ui) 
-	{
-		vlst->size=sizeof(unsigned int);
-		vlst->length=3;
-		vlst->data_type=dt_uint;
-	}
-	else if(type==_4ui)
-	{
-		vlst->size=sizeof(unsigned int);
-		vlst->length=4;
-		vlst->data_type=dt_uint;
-	}
-
-	else printf("[ERROR vlst_make] Unknown type %d\n",type);
+	if(type == dt_int) vlst->size = sizeof(int);
+	else if(type == dt_uint) vlst->size = sizeof(unsigned int);
+	else if(type == dt_float) vlst->size = sizeof(float);
+	else printf("[ERROR vlst_make] Unknown type %s\n",data_name_get(type));
 
 	vlst->data=malloc((vlst->size)*(vlst->length)*(vlst->count));
 
@@ -724,7 +632,7 @@ t_vlst *vlst_make(const char *name,t_vlst_type type,int count)
 
 t_vlst *vlst_duplicate(t_vlst *vlst)
 {
-	t_vlst *vlst_new=vlst_make(vlst->name,vlst->type,vlst->count);
+	t_vlst *vlst_new=vlst_make(vlst->name,vlst->type,vlst->length,vlst->count);
 	vlst_copy(vlst_new,vlst->data);
 
 	return vlst_new;
@@ -781,7 +689,7 @@ t_vlst *vlst_new(const char *name)
 	vlst->id_chunk=0;
 	set_name(vlst->name,name);
 	vlst->users=0;
-	vlst->type=_0;
+	vlst->type=dt_null;
 	vlst->count=0;
 	vlst->count_new=0;
 	vlst->data=NULL;

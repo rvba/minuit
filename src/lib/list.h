@@ -12,33 +12,6 @@
 #ifndef _LIST_H
 #define _LIST_H
 
-
-enum VLst_Type
-{
-	_0,
-	_1f,
-	_2f,
-	_3f,
-	_4f,
-	_1i,
-	_2i,
-	_3i,
-	_4i,
-	_1ui,
-	_2ui,
-	_3ui,
-	_4ui,
-	_1c,
-	_2c,
-	_3c,
-	_4c,
-	_1uc,
-	_2uc,
-	_3uc,
-	_4uc,
-
-};
-
 struct VLst
 {
 	int id;
@@ -47,8 +20,6 @@ struct VLst
 	char name[_NAME_];
 
 	// generic
-
-	t_vlst_type type;
 
 	int count;	// number of block
 	int length;	// number of element in block 
@@ -60,22 +31,22 @@ struct VLst
 
 	t_vlst *link;
 	
-	t_data_type data_type;
+	t_data_type type;
 
 	void *data;
 };
 
-void lst_remove_doubles(t_lst *lst);
+void 		lst_remove_doubles(t_lst *lst);
 
 void 		vlst_update_data(t_vlst *vlst,t_vlst *caller);
 void		vlst_free(t_vlst *vlst);
 void 		vlst_init(t_vlst *vlst);
 t_vlst *	vlst_new(const char *name);
-t_vlst *	vlst_make(const char *name,t_vlst_type type,int count);
+t_vlst *	vlst_make(const char *name,t_data_type type,int length, int count);
 
-void *vlst_get_ref(t_vlst *vlst, const char *ref);
-void *vlst_get_pointer(t_vlst *vlst, int indice);
-void vlst_set_data(t_vlst *vlst, void *data, int indice);
+void *		vlst_get_ref(t_vlst *vlst, const char *ref);
+void *		vlst_get_pointer(t_vlst *vlst, int indice);
+void 		vlst_set_data(t_vlst *vlst, void *data, int indice);
 
 t_vlst *	vlst_rebind(t_scene *sc,void *ptr);
 void 		vlst_normal_3f(t_vlst *dst,t_vlst *vertex,t_vlst *face);
@@ -113,15 +84,15 @@ void *		lst_get(t_lst *lst,char *name);
 t_node *	lst_find_node_by_name(t_lst *lst,const char *name);
 int 		lst_remove_by_id(t_lst *lst,int id);
 
-void list_remove_by_ptr(t_lst *lst,void *ptr);
-void list_free(t_lst *lst);
-void _link_free(t_link *link);
+void 		list_remove_by_ptr(t_lst *lst,void *ptr);
+void 		list_free(t_lst *lst);
+void 		_link_free(t_link *link);
 
 
-void list_remove_by_name(t_lst *lst, const char *name);
-void lst_show_generic(t_lst *lst);
+void 		list_remove_by_name(t_lst *lst, const char *name);
+void 		lst_show_generic(t_lst *lst);
 
-void list_cleanup(t_lst *lst);
-void list_show(t_lst *lst);
+void 		list_cleanup(t_lst *lst);
+void 		list_show(t_lst *lst);
 
 #endif

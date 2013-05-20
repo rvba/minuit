@@ -148,7 +148,7 @@ void vector_default(t_vector *vector)
 {
 	vector->length = 3;
 	vector->type = dt_float;
-	vector->vector = vlst_make("name",_3f,1);
+	vector->vector = vlst_make("name", dt_float, 3, 1);
 	vset3f(vector->vector->data,0,0,0);
 }
 

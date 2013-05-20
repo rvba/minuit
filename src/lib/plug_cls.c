@@ -1173,7 +1173,7 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 					if(vlst)
 					{
 						vector->pointer = vlst->data;
-						vector->type = vlst->data_type;
+						vector->type = vlst->type;
 						vector->length = vlst->length;
 					}
 
@@ -1336,7 +1336,7 @@ void __cls_plug_flow_operator_get(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 				{
 					t_plug _plug;
 					t_vector vector;
-					vector.type = vlst->data_type;
+					vector.type = vlst->type;
 					vector.length = vlst->length;
 					_plug.data_type = dt_vector;
 					_plug.data = &vector;
