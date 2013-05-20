@@ -1335,11 +1335,12 @@ void __cls_plug_flow_operator_get(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 				if(vlst)
 				{
 					t_plug _plug;
-					t_vector vector;
-					vector.type = vlst->type;
-					vector.length = vlst->length;
+					t_vector vector_new;
+					t_vector *vector;
+					vector_new.type = vlst->type;
+					vector_new.length = vlst->length;
 					_plug.data_type = dt_vector;
-					_plug.data = &vector;
+					_plug.data = &vector_new;
 
 					// Change Result Type
 
@@ -1347,7 +1348,7 @@ void __cls_plug_flow_operator_get(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 					{
 						t_vector *vector_dst = brick_result->plug_intern.data;
 
-						if(vector_is_different(vector_dst, &vector))
+						if(vector_is_different(vector_dst, &vector_new))
 							brick_type_change(brick_result,&_plug);
 					}
 					else
@@ -1355,31 +1356,19 @@ void __cls_plug_flow_operator_get(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 						brick_type_change(brick_result,&_plug);
 					}
 
-					// get indice
+					// Get Indice
 					int i = drf_int(plug_indice->data);
 
-					// if < indice
-					if(i < vlst->count)
-					{
-						t_vector *vector = plug_result->data;
+					// Limit Indice
+					if(i >= vlst->count) set_int(plug_indice->data,vlst->count-1);
 
-						// get pointer
-						float *ptr = vlst->data;
-						// do pointer arithmetic
-						vector->pointer = ptr + (vlst->length * i);
+					// Set Pointer
+					vector = plug_result->data;
+					vector->pointer = vlst_get_pointer(vlst, vlst->length * i);
 
-					}
-					else
-					{
-						t_vector *vector = plug_result->data;
-						set_int(plug_indice->data,vlst->count-1);
-						float *ptr = vlst->data;
-						vector->pointer = ptr + (vlst->length * (vlst->count-1));
-					}
 
 					t_plug *plug_result_out = &brick_result->plug_out;
 
-					//XXX
 					// open vector
 					if(plug_result_out->is_connected)
 					{
@@ -1390,25 +1379,20 @@ void __cls_plug_flow_operator_get(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 							t_brick *brick_vector = plug_vector->brick;
 							t_plug *plug_vector_in = &brick_vector->plug_in;
 
-							// FLOW IN
+							// flow in
 							plug_vector_in->flow_in=1;
 
 							t_block *block_vector = brick_vector->block;
 
-							t_brick *brick_x = block_brick_get(block_vector,"x");
+							int i;
+							vector = plug_result->data;
+							t_brick *brick_component;
 
-							if(brick_x)
+							for(i = 0; i < vector->length; i++)
 							{
-								t_brick *brick_y = block_brick_get(block_vector,"y");
-								t_brick *brick_z = block_brick_get(block_vector,"z");
-
-								brick_x->state.draw_value=1;
-								brick_y->state.draw_value=1;
-								brick_z->state.draw_value=1;
-
-								brick_x->action = op_slider;
-								brick_y->action = op_slider;
-								brick_z->action = op_slider;
+								brick_component = block_brick_get_by_order(block_vector,i);
+								brick_component->state.draw_value = 1;
+								brick_component->action = op_slider;
 							}
 						}
 					}
