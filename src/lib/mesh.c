@@ -34,6 +34,7 @@ void *mesh_get_ref(t_mesh *mesh, const char *ref)
 
 	if(is(ref,"vertex"))  			p=&mesh->vertex; 
 	else if(is(ref,"colors"))  			p=&mesh->colors; 
+	else if(is(ref,"faces"))  			p=&mesh->quads; 
 	else
 	{
 		printf("[ERROR mesh_get_ref] Unknown ref [%s] \n",ref);
