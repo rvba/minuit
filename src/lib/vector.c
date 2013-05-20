@@ -23,6 +23,30 @@ void vector_free(t_vector *vector)
 {
 }
 
+void vector_copy_pointer(t_vector *dst, t_vector *src)
+{
+	dst->pointer = src->pointer;
+	dst->length = src->length;
+	dst->type = src->type;
+	//XXX vector cls !!!
+}
+	
+
+void *vector_get_pointer(t_vector *vector, int indice)
+{
+	void *ptr = vector->pointer;
+
+	switch(vector->type)
+	{
+		case(dt_float): return grf_float(ptr, indice); break;
+		case(dt_uint): return grf_uint(ptr, indice); break;
+		default: 
+			printf("[ERR vector_get_pointer] Unknown type %s\n",data_name_get(vector->type));
+			return NULL;
+			break;
+	}
+}
+
 int vector_is_different(t_vector *dst, t_vector *src)
 {
 	if(src->length != dst->length)

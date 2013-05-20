@@ -329,6 +329,11 @@ inline void flow_float_int(void *_dst, void *_src);
 inline void negate_int(void *_dst);
 inline void negate_float(void *_dst);
 
+inline void srf_float(void *ptr, void *data, int indice);
+inline void srf_uint(void *ptr, void *data, int indice);
+
+inline void *grf_float(void *ptr, int indice);
+inline void *grf_uint(void *ptr, int indice);
 
 inline int drf_int(void *ptr);
 inline int drf_uint(void *ptr);

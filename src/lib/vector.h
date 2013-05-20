@@ -32,7 +32,9 @@ struct Vector_Class
 	void (* init)(t_vector *vector);
 };
 
+void *vector_get_pointer(t_vector *vector, int indice);
 
+void vector_copy_pointer(t_vector *dst, t_vector *src);
 int vector_is_different(t_vector *dst, t_vector *src);
 t_vector *vector_new(const char *name);
 t_node *vector_add(const char *name);

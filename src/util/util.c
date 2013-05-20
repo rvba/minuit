@@ -90,6 +90,32 @@ inline void flow_float_int(void *_dst, void *_src)
 	*dst = (float)*src;
 }
 
+inline void srf_float(void *ptr, void *data, int indice)
+{
+	float *pointer = (float *) ptr;
+	float *d = (float *) data;
+	pointer[indice] = *d;
+}
+
+inline void srf_uint(void *ptr, void *data, int indice)
+{
+	unsigned int *pointer = (unsigned int *) ptr;
+	unsigned int *d = (unsigned int *) data;
+	pointer[indice] = *d;
+}
+
+inline void *grf_float(void *ptr, int indice)
+{
+	float *pointer = (float *)ptr;
+	return pointer + indice;
+}
+
+inline void *grf_uint(void *ptr, int indice)
+{
+	unsigned int *pointer = (unsigned int  *)ptr;
+	return pointer + indice;
+}
+
 inline int drf_int(void *ptr)
 {
 	return *((int *)ptr);

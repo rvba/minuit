@@ -600,7 +600,7 @@ t_brick *brick_new(const char *name)
 	brick->menu=NULL;
 
 	brick->graph_order = -1;
-	brick->block_order = 0;
+	brick->block_order = -1;
 
 	brick->mode=bm_idle;
 

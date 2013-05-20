@@ -1263,10 +1263,10 @@ t_node *add_vector(t_context *C)
 
 	// ADD X Y Z
 
-	parent_brick_vector(plug_vector, add_part_slider_float(C,block,"x",NULL),1);
-	parent_brick_vector(plug_vector, add_part_slider_float(C,block,"y",NULL),2);
-	parent_brick_vector(plug_vector, add_part_slider_float(C,block,"z",NULL),3);
-	parent_brick_vector(plug_vector, add_part_slider_float(C,block,"w",NULL),4);
+	parent_brick_vector(plug_vector, add_part_slider_float(C,block,"x",NULL),0);
+	parent_brick_vector(plug_vector, add_part_slider_float(C,block,"y",NULL),1);
+	parent_brick_vector(plug_vector, add_part_slider_float(C,block,"z",NULL),2);
+	parent_brick_vector(plug_vector, add_part_slider_float(C,block,"w",NULL),3);
 
 	return node_block;
 }

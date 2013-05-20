@@ -375,25 +375,6 @@ void cls_plug_connect_vector(t_plug_mode mode, t_plug *self, t_plug *dst)
 	t_plug *plug_in = &brick->plug_in;
 	t_plug *plug_out = &brick->plug_out;
 
-	t_brick *brick_x = block_brick_get(block,"x");
-	t_brick *brick_y;
-	t_brick *brick_z;
-	t_plug *plug_x; 
-	t_plug *plug_y; 
-	t_plug *plug_z; 
-
-	// Get XYZ
-	if(brick_x)
-	{
-		brick_y = block_brick_get(block,"y");
-		brick_z = block_brick_get(block,"z");
-
-		plug_x = &brick_x->plug_intern;
-		plug_y = &brick_y->plug_intern;
-		plug_z = &brick_z->plug_intern;
-	}
-
-
 	// General
 	cls_plug_connect_general(mode,self,dst);
 
@@ -415,38 +396,29 @@ void cls_plug_connect_vector(t_plug_mode mode, t_plug *self, t_plug *dst)
 			
 		// Don't Store Pointers
 		// CLOSE
-		if(brick_x)
+		if(brick->state.has_components)
 		{
-			plug_x->store_data = 0;
-			plug_y->store_data = 0;
-			plug_z->store_data = 0;
+			t_brick *brick_component;
+			t_plug *plug_in_component;
+			t_plug *plug_intern_component;
+			int i;
 
-			/*
-			brick_x->state.draw_value = 0;
-			brick_y->state.draw_value = 0;
-			brick_z->state.draw_value = 0;
-			*/
+			for(i = 0; i < 4; i++)
+			{
+				brick_component = block_brick_get_by_order(block, i); 
+				plug_in_component = &brick_component->plug_in;
+				plug_intern_component = &brick_component->plug_intern;
 
-			// Close XYZ
-
-			t_plug *plug_x_in = &brick_x->plug_in;
-			t_plug *plug_y_in = &brick_y->plug_in;
-			t_plug *plug_z_in = &brick_z->plug_in;
-
-			plug_x_in->flow_in = 0;
-			plug_y_in->flow_in = 0;
-			plug_z_in->flow_in = 0;
-
-			plug_x->data = NULL;
-			plug_y->data = NULL;
-			plug_z->data = NULL;
-
+				plug_in_component->flow_in = 0;
+				plug_intern_component->data = NULL;
+				plug_intern_component->store_data = 0;
+			}
 		}
 	}
 
 	// Vector Target
 	if(
-		brick_x
+		brick->state.has_components
 		&&
 		(
 			// Mode Out : For Vector
@@ -465,15 +437,27 @@ void cls_plug_connect_vector(t_plug_mode mode, t_plug *self, t_plug *dst)
 		plug_child_remove_all_parents(self);
 
 		t_context *C = ctx_get();
+		t_vector *vector_dst = dst->data;
 
-		// XXX XYZW
-
-
-		// Set XYZ to be Childs of Vector
 		C->scene->store = 1;
-		plug_add_parent(plug_x,self);
-		plug_add_parent(plug_y,self);
-		plug_add_parent(plug_z,self);
+
+		if(brick->state.has_components)
+		{
+			t_brick *brick_component;
+			t_plug *plug_intern_component;
+			int i;
+
+			for(i = 0; i < 4; i++)
+			{
+				brick_component = block_brick_get_by_order(block, i); 
+				plug_intern_component = &brick_component->plug_intern;
+
+				if(i < vector_dst->length)
+					plug_add_parent(plug_intern_component,self);
+
+			}
+		}
+
 		C->scene->store = 0;
 	}
 
@@ -484,32 +468,29 @@ void cls_plug_connect_vector(t_plug_mode mode, t_plug *self, t_plug *dst)
 		if(dst->data_type == dt_vector)
 		{
 			t_vector *vector_dst = dst->data;
-			t_vector *vector_src = self->data;
-			t_brick *brick_vector;
-			int i;
 
-			/*
-			for(i = 0; i < vector_dst->length; i++)
+			if(vector_dst)
 			{
-				brick_vector = block_brick_get_by_order(block, i+1); 
-				brick_vector->state.draw = 1;
-			}
-			*/
-			printf("%d\n",vector_dst->length);
+				t_vector *vector_src = self->data;
+				t_brick *brick_component;
+				int i;
 
-			for(i = 0; i < 4; i++)
-			{
-				brick_vector = block_brick_get_by_order(block, i+1); 
+				for(i = 0; i < 4; i++)
+				{
+					brick_component = block_brick_get_by_order(block, i); 
 
-				if(i < vector_dst->length)
-				{
-					brick_vector->state.draw = 1;
-					if(vector_src->type != vector_dst->type)
-						brick_change_type_by_name(brick_vector,vector_dst->type);
-				}
-				else
-				{
-					brick_vector->state.draw = 0;
+					if(i < vector_dst->length)
+					{
+						brick_component->state.draw = 1;
+						//brick_component->state.is_active = 1;
+						if(vector_src->type != vector_dst->type)
+							brick_change_type_by_name(brick_component,vector_dst->type);
+					}
+					else
+					{
+						brick_component->state.draw = 0;
+						//brick_component->state.is_active = 0;
+					}
 				}
 			}
 		}
@@ -534,24 +515,6 @@ void cls_plug_disconnect_vector(t_plug_mode mode, t_plug *plug)
 	else
 		plug_dst = plug_out->dst;
 
-	t_brick *brick_x = block_brick_get(block,"x");
-	t_brick *brick_y;
-	t_brick *brick_z;
-	t_plug *plug_x; 
-	t_plug *plug_y; 
-	t_plug *plug_z; 
-
-	if(brick_x)
-	{
-		brick_y = block_brick_get(block,"y");
-		brick_z = block_brick_get(block,"z");
-
-		plug_x = &brick_x->plug_intern;
-		plug_y = &brick_y->plug_intern;
-		plug_z = &brick_z->plug_intern;
-	}
-
-
 	// General
 	cls_plug_disconnect_general(mode,plug);
 
@@ -571,29 +534,31 @@ void cls_plug_disconnect_vector(t_plug_mode mode, t_plug *plug)
 		plug_in->open_in = 1;
 	}
 
-	if(brick_x)
+	if(brick->state.has_components)
 	{
-		plug_x->data = plug_x->data_memory;
-		plug_y->data = plug_y->data_memory;
-		plug_z->data = plug_z->data_memory;
-
-		brick_x->state.draw_value = 1;
-		brick_y->state.draw_value = 1;
-		brick_z->state.draw_value = 1;
-
-		// Remove XYZ's Parents
-		plug_child_remove_all_parents(plug_x);
-		plug_child_remove_all_parents(plug_y);
-		plug_child_remove_all_parents(plug_z);
-
 		t_context *C = ctx_get();
 
-		// Set Vector Child of XYZ
-		C->scene->store = 1;
-		plug_add_parent(plug, plug_x);
-		plug_add_parent(plug, plug_y);
-		plug_add_parent(plug, plug_z);
-		C->scene->store = 0;
+		t_brick *brick_component;
+		t_plug *plug_intern_component;
+
+		int i;
+
+		for(i = 0; i < 4; i++)
+		{
+			brick_component = block_brick_get_by_order(block, i);
+			plug_intern_component = &brick_component->plug_intern;
+
+			plug_intern_component->data = plug_intern_component->data_memory;
+			brick_component->state.draw_value = 1;
+			plug_child_remove_all_parents(plug_intern_component);
+
+			C->scene->store = 1;
+			if(i < vector->length)
+			{
+				plug_add_parent(plug, plug_intern_component);
+			}
+			C->scene->store = 0;
+		}
 	}
 
 	// If Dst Volatil, Reset Pointer
@@ -1489,37 +1454,8 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 	t_brick *brick = plug->brick;
 	t_block *block = brick->block;
 
-	t_brick *brick_x;
-	t_brick *brick_y;
-	t_brick *brick_z;
-
-	t_plug *plug_x;
-	t_plug *plug_y;
-	t_plug *plug_z;
-
-	t_plug *plug_x_in;
-	t_plug *plug_y_in;
-	t_plug *plug_z_in;
-
 	t_vector *vector_self = plug->data;
 	t_vector *vector_src;
-
-	// Get XYZ
-	brick_x = block_brick_get(block,"x");
-	if(brick_x) 
-	{
-		brick_y = block_brick_get(block,"y");
-		brick_z = block_brick_get(block,"z");
-
-		plug_x = &brick_x->plug_intern;
-		plug_y = &brick_y->plug_intern;
-		plug_z = &brick_z->plug_intern;
-
-		plug_x_in = &brick_x->plug_in;
-		plug_y_in = &brick_y->plug_in;
-		plug_z_in = &brick_z->plug_in;
-
-	}
 
 	// If Src or Dst
 	if(src_plug)
@@ -1538,21 +1474,27 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 				if(vector_src->pointer)
 				{
 					// Copy Pointer
-					vector_self->pointer = vector_src->pointer;
+					vector_copy_pointer(vector_self, vector_src);
 
-					float *vector_pointer = vector_self->pointer;
-
-					if(brick_x)
+					if(brick->state.has_components)
 					{
-						// XYZ Point To Pointer
-						plug_x->data = vector_pointer;
-						plug_y->data = vector_pointer+1;
-						plug_z->data = vector_pointer+2;
+						int i;
+						t_brick *brick_component;
+						t_plug *plug_intern_component;
+						t_plug *plug_in_component;
 
-						// Open XYZ
-						plug_x_in->flow_in = 1;
-						plug_y_in->flow_in = 1;
-						plug_z_in->flow_in = 1;
+						for(i=0; i < vector_self->length; i++)
+						{
+							brick_component = block_brick_get_by_order(block,i);
+							plug_intern_component = &brick_component->plug_intern;
+							plug_in_component = &brick_component->plug_in;
+
+							// Get Pointer
+							plug_intern_component->data = vector_get_pointer(vector_self,i);
+
+							// Open Flow In
+							plug_in_component->flow_in = 1;
+						}
 					}
 
 					if(C->ui->show_step) term_log("[VECTOR] set pointer %p",vector_self->pointer);
@@ -1563,23 +1505,25 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 					t_vlst *vlst_src = vector_src->vector;
 					t_vlst *vlst_dst = vector_self->vector;
 
-					float *v_src = vlst_src->data;
-					float *v_dst = vlst_dst->data;
+					vlst_copy(vlst_dst, vlst_src);
 
-					// Copy Data
-					vcp(v_dst,v_src);
-
-					// If XYZ
-					if(brick_x)
+					if(brick->state.has_components)
 					{
-						// Set XYZ Value
-						plug_x->data = v_dst;
-						plug_y->data = v_dst+1;
-						plug_z->data = v_dst+2;
+						int i;
+						t_brick *brick_component;
+						t_plug *plug_intern_component;
 
-						plug_x->store_data = 0;
-						plug_y->store_data = 0;
-						plug_z->store_data = 0;
+						for(i=0; i < vector_self->length; i++)
+						{
+							brick_component = block_brick_get_by_order(block,i);
+							plug_intern_component = &brick_component->plug_intern;
+
+							// Get Pointer
+							plug_intern_component->data = vlst_get_pointer(vlst_dst,i);
+
+							// Don't Store Pointer 
+							plug_intern_component->store_data  = 0;
+						}
 					}
 				}
 
@@ -1594,18 +1538,19 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 	{
 		if(mode == mode_in)
 		{
-			// If XYZ   
-			if(brick_x)
+			if(brick->state.has_components)
 			{
-				// Flow XYZ to Vector Data 
-				if(plug_x->data)
-				{
-					t_vlst *vlst = vector_self->vector;
-					float *vector_data = vlst->data;
+				int i;
+				t_brick *brick_component;
+				t_plug *plug_intern_component;
+				t_vlst *vlst = vector_self->vector;
 
-					vector_data[0] = drf_float(plug_x->data);
-					vector_data[1] = drf_float(plug_y->data);
-					vector_data[2] = drf_float(plug_z->data);
+				for(i=0; i < vector_self->length; i++)
+				{
+					brick_component = block_brick_get_by_order(block,i);
+					plug_intern_component = &brick_component->plug_intern;
+
+					vlst_set_data(vlst,&plug_intern_component->data,i);
 				}
 			}
 		}

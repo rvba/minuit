@@ -14,6 +14,35 @@
 
 void __vlst_update_data(t_vlst *vlst,t_vlst *caller);
 
+void *vlst_get_pointer(t_vlst *vlst, int indice)
+{
+	void *ptr = vlst->data;
+
+	switch(vlst->data_type)
+	{
+		case(dt_float): return grf_float(ptr, indice); break;
+		case(dt_uint): return grf_uint(ptr, indice); break;
+		default: 
+			printf("[ERR vlst_get_pointer] Unknown type %s\n",data_name_get(vlst->data_type));
+			return NULL;
+			break;
+	}
+}
+
+void vlst_set_data(t_vlst *vlst, void *data, int indice)
+{
+	void *ptr = vlst->data;
+
+	switch(vlst->data_type)
+	{
+		case(dt_float): srf_float(ptr, data, indice); break;
+		case(dt_uint): srf_uint(ptr, data,  indice); break;
+		default: 
+			printf("[ERR vlst_set_data] Unknown type %s\n",data_name_get(vlst->data_type));
+			break;
+	}
+}
+
 void exe_vlst(t_dict *args)
 {
 	t_vlst *vlst = dict_pop_data(args,"vlst");
