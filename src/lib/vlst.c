@@ -9,9 +9,6 @@
 
 #include "op.h"
 
-/***		VLST		***/
-
-
 void __vlst_update_data(t_vlst *vlst,t_vlst *caller);
 
 void *vlst_get_pointer(t_vlst *vlst, int indice)
@@ -70,37 +67,37 @@ void vlst_update_data(t_vlst *vlst,t_vlst *caller)
 void vlst_data_init(t_vlst *vlst, int old_count)
 {
 	int i,j;
-	unsigned int *uint_ptr;
-	printf("old:%d\n",old_count);
-	printf("count:%d\n",vlst->count);
+	int indice;
 
-	vlst_show(vlst);
+	indice = old_count * vlst->length;
 
 	for(i = old_count; i < vlst->count; i++)
 	{
-		printf(":%d\n",i);
-		switch(vlst->type)
+		for(j = 0; j < vlst->length; j++)
 		{
-			case(dt_uint):
-				uint_ptr = vlst->data + (i * vlst->length);
+			switch(vlst->type)
+			{
+				case(dt_uint):
+					set_uint(grf_uint(vlst->data, indice),0);
+					break;
 
-				for(j = 0; j < vlst->length; j++)
-				{
-					*(uint_ptr + j) = 0;
-				}
+				case(dt_int):
+					set_int(grf_int(vlst->data, indice),0);
+					break;
 
+				case(dt_float):
+					set_float(grf_float(vlst->data, indice),0);
+					break;
+				default:
+					printf("[vlst_data_init] %s not implemented\n", data_name_get(vlst->type));
+					break;
+			}
 
-				break;
-
-			default:
-				break;
+			indice++;
 		}
 	}
-
-	vlst_show(vlst);
 }
 	
-
 void __vlst_update_data(t_vlst *vlst,t_vlst *caller)
 {
 	t_context *C=ctx_get();

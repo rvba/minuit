@@ -116,6 +116,12 @@ inline void *grf_float(void *ptr, int indice)
 	return pointer + indice;
 }
 
+inline void *grf_int(void *ptr, int indice)
+{
+	int *pointer = (int  *)ptr;
+	return pointer + indice;
+}
+
 inline void *grf_uint(void *ptr, int indice)
 {
 	unsigned int *pointer = (unsigned int  *)ptr;
