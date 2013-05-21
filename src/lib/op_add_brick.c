@@ -1288,6 +1288,23 @@ t_node *add_vector_3d(t_context *C)
 	return node_block;
 }
 
+// VECTOR 2D
+
+t_node *add_vector_2d(t_context *C)
+{
+	t_node *node_block = add_vector(C);
+	t_block *block = node_block->data;
+	
+	int i;
+	for(i = 0; i < 2; i++)
+	{
+		t_brick *brick = block_brick_get_by_order(block, i);
+		brick->state.draw = 1;
+	}
+
+	return node_block;
+}
+
 // CONST
 
 t_node *add_const(t_context *C)

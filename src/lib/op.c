@@ -348,8 +348,9 @@ t_node *make_menu_vector(void)
 	t_node *menu=block_make("menu_vector","menu");
 	t_block *block=menu->data;
 
-	add_brick_trigger(C,block,"vector",op_brick_add);
 	add_brick_trigger(C,block,"vector 3d",op_brick_add);
+	add_brick_trigger(C,block,"vector 2d",op_brick_add);
+	add_brick_trigger(C,block,"vector",op_brick_add);
 
 	return menu;
 }
@@ -429,7 +430,7 @@ t_node *make_menu_brick_add(void)
 	add_brick_submenu(C,menu,menu_maths,"maths");
 
 	t_node *menu_ops=make_menu_ops();
-	add_brick_submenu(C,menu,menu_ops,"ops");
+	add_brick_submenu(C,menu,menu_ops,"operator");
 
 	t_node *menu_time=make_menu_time();
 	add_brick_submenu(C,menu,menu_time,"time");

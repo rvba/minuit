@@ -482,14 +482,12 @@ void cls_plug_connect_vector(t_plug_mode mode, t_plug *self, t_plug *dst)
 					if(i < vector_dst->length)
 					{
 						brick_component->state.draw = 1;
-						//brick_component->state.is_active = 1;
 						if(vector_src->type != vector_dst->type)
 							brick_change_type_by_name(brick_component,vector_dst->type);
 					}
 					else
 					{
 						brick_component->state.draw = 0;
-						//brick_component->state.is_active = 0;
 					}
 				}
 			}
@@ -1367,6 +1365,19 @@ void __cls_plug_flow_operator_get(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 					// Set Pointer
 					vector = plug_result->data;
 					vector->pointer = vlst_get_pointer(vlst, vlst->length * i);
+
+					// Set Vlst Limit
+					if(vlst->has_limit_high)
+					{
+						vector->has_limit_high = 1;
+						vector->limit_int_high = vlst->count;
+					}
+
+					if(vlst->has_limit_low)
+					{
+						vector->has_limit_low = 1;
+						vector->limit_int_low = 0;
+					}
 				}
 
 				break;
@@ -1441,6 +1452,20 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 						for(i=0; i < vector_self->length; i++)
 						{
 							brick_component = block_brick_get_by_order(block,i);
+
+							// Set Brick Limit
+							if(vector_self->has_limit_high)
+							{
+								brick_component->state.has_limit_high = 1;
+								brick_component->var.limit_int_high = vector_self->limit_int_high;
+							}
+
+							if(vector_self->has_limit_low)
+							{
+								brick_component->state.has_limit_low = 1;
+								brick_component->var.limit_int_low = vector_self->limit_int_low;
+							}
+
 							plug_intern_component = &brick_component->plug_intern;
 							plug_in_component = &brick_component->plug_in;
 

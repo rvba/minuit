@@ -67,6 +67,40 @@ void vlst_update_data(t_vlst *vlst,t_vlst *caller)
 	exe_add_action(action);
 }
 
+void vlst_data_init(t_vlst *vlst, int old_count)
+{
+	int i,j;
+	unsigned int *uint_ptr;
+	printf("old:%d\n",old_count);
+	printf("count:%d\n",vlst->count);
+
+	vlst_show(vlst);
+
+	for(i = old_count; i < vlst->count; i++)
+	{
+		printf(":%d\n",i);
+		switch(vlst->type)
+		{
+			case(dt_uint):
+				uint_ptr = vlst->data + (i * vlst->length);
+
+				for(j = 0; j < vlst->length; j++)
+				{
+					*(uint_ptr + j) = 0;
+				}
+
+
+				break;
+
+			default:
+				break;
+		}
+	}
+
+	vlst_show(vlst);
+}
+	
+
 void __vlst_update_data(t_vlst *vlst,t_vlst *caller)
 {
 	t_context *C=ctx_get();
@@ -83,6 +117,8 @@ void __vlst_update_data(t_vlst *vlst,t_vlst *caller)
 		scene_node_free(C->scene,node_data);
 		scene_node_free(C->scene,node_var);
 
+		int old_count = vlst->count;
+
 		// set count
 		vlst->count=vlst->count_new;
 
@@ -94,6 +130,9 @@ void __vlst_update_data(t_vlst *vlst,t_vlst *caller)
 
 		// set new ptr
 		vlst->data=new_ptr;
+
+		// init
+		vlst_data_init(vlst,old_count);
 
 		// add new data,var
 		C->scene->store=1;
@@ -195,9 +234,9 @@ void vlst_show(t_vlst *vlst)
 		void *dat=vlst->data;
 
 		if(C->event->debug_terminal)
-			printf("[VLST] name:%s count:%d length:%d\n",vlst->name,count,length);
+			printf("[VLST] type:%s name:%s count:%d length:%d\n",data_name_get(vlst->type), vlst->name, count, length);
 		if(C->event->debug_console)
-			term_log("[VLST] name:%s count:%d length:%d\n",vlst->name,count,length);
+			term_log("[VLST] type:%s name:%s count:%d length:%d",data_name_get(vlst->type), vlst->name, count, length);
 
 		if(dat)
 		{
@@ -210,7 +249,9 @@ void vlst_show(t_vlst *vlst)
 					{
 						if(C->event->debug_terminal)
 							printf("[%d] %f %f %f\n",i,d[0],d[1],d[2]);
-						if(C->event->debug_console) term_log("[%d] %f %f %f\n",i,d[0],d[1],d[2]);
+						if(C->event->debug_console)
+							term_log("[%d] %f %f %f",i,d[0],d[1],d[2]);
+
 						d+=length;
 					}
 				}
@@ -219,11 +260,16 @@ void vlst_show(t_vlst *vlst)
 					float *d=(float *)dat;
 					for(i=0;i<count;i++)
 					{
-						printf("[%d] %f %f %f %f\n",i,d[0],d[1],d[2],d[3]);
+						if(C->event->debug_terminal)
+							printf("[%d] %f %f %f %f\n",i,d[0],d[1],d[2],d[3]);
+						if(C->event->debug_console)
+							term_log("[%d] %f %f %f %f",i,d[0],d[1],d[2],d[3]);
+
 						d+=length;
 					}
 				}
 			}
+
 			else if(vlst->type == dt_uint)
 			{
 				if(vlst->length == 3)
@@ -231,7 +277,11 @@ void vlst_show(t_vlst *vlst)
 					unsigned int *d=(unsigned int *)dat;
 					for(i=0;i<count;i++)
 					{
-						printf("[%d] %u %u %u \n",i,d[0],d[1],d[2]);
+						if(C->event->debug_terminal)
+							printf("[%d] %u %u %u \n",i,d[0],d[1],d[2]);
+						if(C->event->debug_console)
+							term_log("[%d] %u %u %u",i,d[0],d[1],d[2]);
+
 						d+=length;
 					}
 				}
@@ -240,7 +290,10 @@ void vlst_show(t_vlst *vlst)
 					unsigned int *d=(unsigned int *)dat;
 					for(i=0;i<count;i++)
 					{
-						printf("[%d] %u %u %u %u\n",i,d[0],d[1],d[2],d[3]);
+						if(C->event->debug_terminal)
+							printf("[%d] %u %u %u %u\n",i,d[0],d[1],d[2],d[3]);
+						if(C->event->debug_console)
+							term_log("[%d] %u %u %u %u",i,d[0],d[1],d[2],d[3]);
 						d+=length;
 					}
 				}
@@ -252,7 +305,10 @@ void vlst_show(t_vlst *vlst)
 					int *d=(int *)dat;
 					for(i=0;i<count;i++)
 					{
-						printf("[%d] %d %d %d %d\n",i,d[0],d[1],d[2],d[3]);
+						if(C->event->debug_terminal)
+							printf("[%d] %d %d %d %d\n",i,d[0],d[1],d[2],d[3]);
+						if(C->event->debug_console)
+							term_log("[%d] %d %d %d %d",i,d[0],d[1],d[2],d[3]);
 						d+=length;
 					}
 				}
@@ -696,6 +752,10 @@ t_vlst *vlst_new(const char *name)
 	vlst->need_update=0;
 	vlst->is_linked=0;
 	vlst->link=NULL;
+	vlst->has_limit_high = 0;
+	vlst->has_limit_low = 0;
+	vlst->limit_low = -1;
+	vlst->limit_high = -1;
 
 	return vlst;
 }

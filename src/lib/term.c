@@ -82,7 +82,7 @@ void term_print(t_term *term,char *data)
 void term_log(char *fmt, ...)
 {
 	t_context *C = ctx_get();
-	char msg[40];
+	char msg[400];
 	va_list ap;
 	va_start(ap,fmt);
 	vsprintf(msg,fmt,ap);
@@ -93,7 +93,7 @@ void term_log(char *fmt, ...)
 
 void term_echo(t_term *term,char *fmt, ...)
 {
-	char msg[40];
+	char msg[400];
 	va_list ap;
 	va_start(ap,fmt);
 	vsprintf(msg,fmt,ap);
