@@ -52,6 +52,7 @@ void *op_brick_add(t_brick *brick)
 	else if(is(name,"=")) 			node = add_operator_double(C,"=");
 	else if(is(name,">"))  			node = add_operator_double(C,">"); 
 	else if(is(name,"<"))  			node = add_operator_double(C,"<"); 
+	else if(is(name,"if")) 			node = add_if(C); 
 	else if(is(name,"mod"))  		node = add_operator_double(C,"mod"); 
 	else if(is(name,"x")) 			node = add_maths(C,"x");
 	else if(is(name,"+"))  			node = add_maths(C,"+"); 
@@ -1938,4 +1939,24 @@ void *op_stack(t_brick *brick)
 	return NULL;
 }
 
+void *op_if(t_brick *brick)
+{
+	t_block *block = brick->block;
+	t_brick *brick_result = block_brick_get(block,"result");
+	t_brick *brick_true = block_brick_get(block,"true");
+	t_brick *brick_false = block_brick_get(block,"false");
+
+	if(drf_int(brick->plug_intern.data) == 1)
+	{
+		brick_copy_data(brick_result,brick_true);
+	}
+	else
+	{
+		brick_copy_data(brick_result,brick_false);
+	}
+
+	if(brick->mode == bm_triggering) brick_release(brick);
+
+	return NULL;
+}
 

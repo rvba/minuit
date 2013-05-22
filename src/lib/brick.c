@@ -9,6 +9,22 @@
 
 #include "op.h"
 
+int brick_is_different(t_brick *dst, t_brick *src)
+{
+	if(dst->plug_intern.data != src->plug_intern.data)
+		return 1;
+	else
+		return 0;
+}
+
+void brick_copy_data(t_brick *dst, t_brick *src)
+{
+	if(brick_is_different(dst,src))
+		brick_type_change(dst,&src->plug_intern);
+
+	dst->plug_intern.data = src->plug_intern.data;
+}
+
 void brick_binding_add(t_brick *brick, t_data_type type, void *data)
 {
 	t_context *C = ctx_get();

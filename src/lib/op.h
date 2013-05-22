@@ -244,6 +244,7 @@ t_node *	add_vector(t_context *C);
 t_node *	add_vector_3d(t_context *C);
 t_node *	add_vector_2d(t_context *C);
 t_node *	add_stack(t_context *C);
+t_node * 	add_if(t_context *C);
 t_node *	add_plusplus(t_context *C);
 
 t_node *	add_const(t_context *C);
@@ -260,7 +261,7 @@ t_node *	add_pipe(t_context *C);
 void 		*op_mod(t_brick *brick);
 void *		op_float(t_brick *brick);
 void *		op_int(t_brick *brick);
-void op_3d_orientation(void);
+void 		op_3d_orientation(void);
 
 t_lst *get_target_list(t_context *C);
 

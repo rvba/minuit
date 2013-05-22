@@ -1381,4 +1381,42 @@ t_node *add_plusplus(t_context *C)
 	return node_block;
 }
 
+t_node *add_if(t_context *C)
+{
+	// NEW BLOCK
+	t_node *node_block = add_block(C,"if");
+	t_block *block=node_block->data;
+	block->state.draw_outline=1;
+
+	// if
+	t_node *node_if = add_part_slider_int(C,block,"if",NULL);
+	t_brick *brick_if = node_if->data;
+	t_plug *plug_if = &brick_if->plug_intern;
+
+	// true
+	t_node *node_true = add_part_slider_int(C,block,"true",NULL);
+	t_brick *brick_true = node_true->data;
+	t_plug *plug_true = &brick_true->plug_intern;
+
+	// false
+	t_node *node_false = add_part_slider_int(C,block,"false",NULL);
+	t_brick *brick_false = node_false->data;
+	t_plug *plug_false = &brick_false->plug_intern;
+
+	// result
+	t_node *node_result = add_part_slider_int(C,block,"result",NULL);
+	t_brick *brick_result = node_false->data;
+	t_plug *plug_result = &brick_result->plug_intern;
+
+	//brick_limit->state.use_loops = 0;
+
+	brick_if->action = op_if;
+
+	plug_add_parent(plug_true,plug_if);
+	plug_add_parent(plug_false,plug_if);
+	plug_add_parent(plug_result,plug_if);
+
+	return node_block;
+}
+
 

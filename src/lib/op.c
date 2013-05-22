@@ -299,6 +299,7 @@ t_node *make_menu_logic(void)
 	add_brick_trigger(C,block,"=",op_brick_add);
 	add_brick_trigger(C,block,"not",op_brick_add);
 	add_brick_trigger(C,block,"and",op_brick_add);
+	add_brick_trigger(C,block,"if",op_brick_add);
 
 	return menu;
 }
@@ -322,7 +323,7 @@ t_node *make_menu_maths(void)
 	return menu;
 }
 
-// ops
+// operators
 
 t_node *make_menu_ops(void)
 {

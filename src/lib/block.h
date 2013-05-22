@@ -385,6 +385,8 @@ void		block_unstore(t_block *block);
 
 // BRICK
 
+int 		brick_is_different(t_brick *dst, t_brick *src);
+void 		brick_copy_data(t_brick *dst, t_brick *src);
 void 		brick_binding_add(t_brick *brick, t_data_type type, void *data);
 void 		plug_child_remove_all_parents(t_plug *child);
 t_brick *	brick_copy(t_block *block,t_brick *brick);
