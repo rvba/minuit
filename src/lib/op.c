@@ -172,6 +172,7 @@ t_node *make_menu_draw(void)
 	t_block *block=menu->data;
 
 	add_brick_switch(C,block,"face",&C->event->with_face);
+	add_brick_switch(C,block,"face outline",&C->event->with_face_outline);
 	add_brick_switch(C,block,"points",&C->event->with_point);
 	add_brick_switch(C,block,"texture",&C->event->with_texture);
 	add_brick_switch(C,block,"normal",&C->event->with_normal);

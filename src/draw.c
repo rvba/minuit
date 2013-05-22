@@ -251,11 +251,14 @@ void draw_mesh_direct(t_draw *draw,t_scene *scene,t_mesh *mesh)
 
 	
 	// quads
-	if(q && draw->with_face)
+	//if(q && draw->with_face)
+	if(q)
 	{
 
 		t_vlst *vlst_quad=mesh->quad_normal;
 		float *normals=vlst_quad->data;
+
+		float outline[4*3];
 
 		j=0;
 		for(i=0;i<quads->count;i++)
@@ -277,11 +280,26 @@ void draw_mesh_direct(t_draw *draw,t_scene *scene,t_mesh *mesh)
 				}
 
 				// vertex
+				if(draw->with_face)
+					glVertex3f(v[(q[j]*3)],v[(q[j]*3)+1],v[(q[j]*3)+2]);
 
-				glVertex3f(v[(q[j]*3)],v[(q[j]*3)+1],v[(q[j]*3)+2]);
+				outline[(n*3)+0] = v[(q[j]*3)+0]; 
+				outline[(n*3)+1] = v[(q[j]*3)+1]; 
+				outline[(n*3)+2] = v[(q[j]*3)+2]; 
+
 				j++;
 			}
 			glEnd();
+
+			if(draw->with_face_outline)
+			{
+				glDisable(GL_LIGHTING);
+				if(draw->with_face)
+					skt_closedline(outline,4,draw->back_color,1);
+				else
+					skt_closedline(outline,4,draw->front_color,1);
+				glEnable(GL_LIGHTING);
+			}
 		}
 	}
 
@@ -599,6 +617,7 @@ t_draw *draw_new(void)
 	draw->background_color[3]=DRAW_COLOR_BACKGROUND_ALPHA;
 
 	vset4f(draw->front_color,0,0,0,0);
+	vset4f(draw->back_color,1,1,1,0);
 
 	draw->mode=mode_draw;
 	draw->color=DRAW_COLOR;
@@ -620,6 +639,7 @@ t_draw *draw_new(void)
 	draw->with_point=DRAW_WITH_POINT;
 	draw->with_point_id=DRAW_WITH_POINT_ID;
 	draw->with_face=DRAW_WITH_FACE;
+	draw->with_face_outline=DRAW_WITH_FACE_OUTLINE;
 	draw->with_highlight=DRAW_WITH_HIGHLIGHT;
 	draw->with_light=DRAW_WITH_LIGHT;
 	draw->with_depth=DRAW_WITH_DEPTH;

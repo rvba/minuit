@@ -52,6 +52,7 @@ t_event *event_new(void)
 	event->with_light=1;
 	event->with_depth=1;
 	event->with_face=1;
+	event->with_face_outline=0;
 	event->with_point=0;
 	event->with_point_id=0;
 	event->with_highlight=WITH_HIGHLIGHT;

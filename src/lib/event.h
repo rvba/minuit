@@ -119,6 +119,7 @@ struct Event
 	int with_point;
 	int with_point_id;
 	int with_face;
+	int with_face_outline;
 	int with_highlight;
 	int with_blend;
 

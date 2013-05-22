@@ -34,6 +34,7 @@
 #define DRAW_WITH_EDGE 0
 #define DRAW_WITH_POINT_ID 0;
 #define DRAW_WITH_FACE 1;
+#define DRAW_WITH_FACE_OUTLINE 0;
 #define DRAW_WITH_DEPTH 1;
 #define DRAW_WITH_POLYGON_OFFSET 1;
 #define DRAW_WITH_NORMAL 1
@@ -66,6 +67,7 @@ struct Draw
 {
 	int background_color[4];
 	float front_color[4];
+	float back_color[4];
 
 	t_draw_mode mode;
 	t_color_mode color;
@@ -83,6 +85,7 @@ struct Draw
 	int with_point;
 	int with_point_id;
 	int with_face;
+	int with_face_outline;
 	int with_blend;
 	int with_restrict_matrix;
 
