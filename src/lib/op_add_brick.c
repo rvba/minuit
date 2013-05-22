@@ -984,6 +984,8 @@ void add_slider_target(t_context *C,t_object *object,const char *name)
 	else if(is(name,"color") && mesh) 	mesh_add_default_color(mesh); 
 	else if(is(name,"faces") && mesh) 	mesh_add_brick_faces(mesh); 
 
+	block->state.update_geometry = 1;
+
 }
 
 // SLIDER OBJECT
