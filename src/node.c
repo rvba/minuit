@@ -230,8 +230,11 @@ void cls_node_build(t_node *node,const char *name)
 
 	node->data=p;
 	node->id_ptr=node->data;
-	cls_node_id_add(node);
-	cls_node_user_add(node);
+	if(node->type != nt_var)
+	{
+		cls_node_id_add(node);
+		cls_node_user_add(node);
+	}
 
 }
 
