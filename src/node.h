@@ -38,6 +38,7 @@ char *node_name_dict;
 char *node_name_symbol;
 char *node_name_vector;
 char *node_name_set;
+char *node_name_binding;
 
 t_node*		node_load(void *ptr,const char *type);
 void		node_init(t_node *node,t_node_type type);

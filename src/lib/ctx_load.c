@@ -530,6 +530,7 @@ void load_rebind(t_scene *sc)
 			case(nt_vector) : 	vector_rebind(sc,ptr);break; 
 			case(nt_viewport) : 	viewport_rebind(sc,ptr);break; 
 			case(nt_set) : 		set_rebind(sc,ptr);break; 
+			case(nt_binding) : 	binding_rebind(sc,ptr);break; 
 
 			case(nt_var): break;
 			default:

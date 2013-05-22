@@ -9,6 +9,7 @@ obj:=\
 	app_mouse.o\
 	app_window.o\
 	app_x.o\
+	binding.o\
 	block.o\
 	block_draw.o\
 	block_update.o\
@@ -88,6 +89,8 @@ app_window.o:../app.h app_window.c
 	gcc -c app_window.c $(FLAG) $(INC)
 app_x.o:../app.h app_x.c
 	gcc -c app_x.c $(FLAG) $(INC)
+binding.o:binding.h binding.c
+	gcc -c binding.c $(FLAG) $(INC)
 block.o:block.h block.c
 	gcc -c block.c $(FLAG) $(INC)
 block_draw.o:block.h block_draw.c 

@@ -9,6 +9,26 @@
 
 #include "op.h"
 
+void brick_binding_add(t_brick *brick, t_data_type type, void *data)
+{
+	t_context *C = ctx_get();
+	t_plug *plug_intern = &brick->plug_intern;
+	if(!plug_intern->bindings)
+	{
+		t_node *node_list = scene_add(C->scene,nt_list,"binding");
+		t_lst *list = node_list->data;
+		plug_intern->bindings = list;
+	}
+
+	t_node *node_binding = scene_add(C->scene,nt_binding,"binding");
+	t_binding *binding = node_binding->data;
+
+	binding->type = type;
+	binding->data = data;
+
+	list_add(plug_intern->bindings,binding);
+}
+
 void plug_add_parent(t_plug *child, t_plug *parent)
 {
 	t_context *C = ctx_get();
@@ -398,6 +418,8 @@ void plug_reset(t_plug *plug,const char *name)
 	plug->data_type=dt_null;
 	plug->operator_type = ot_null;
 	vseti(plug->idcol,0,0,0);
+
+	plug->bindings = NULL;
 }
 
 // REF
@@ -457,6 +479,8 @@ t_brick *brick_rebind(t_scene *sc,void *ptr)
 		brick_clone_change_name(brick);
 		brick_build_width(brick);
 	}
+
+	rebind(sc,"brick", "bindings", (void **) &brick->plug_intern.bindings);
 
 	return brick;
 }
@@ -633,6 +657,11 @@ void brick_free(t_brick *brick)
 	if(plug_intern->parents)
 	{
 		scene_struct_delete(C->scene,plug_intern->parents);
+	}
+
+	if(plug_intern->bindings)
+	{
+		scene_struct_delete(C->scene, plug_intern->bindings);
 	}
 
 	if(brick->state.has_ref)

@@ -104,6 +104,11 @@ void mesh_add_brick_vertex(t_context *C,t_mesh *mesh)
 
 	scene_add_ref(C->scene,"struct_ref","mesh","vertex",&mesh->vertex,mesh);
 	add_part_vlst(C,_block,dt_vlst,"vertex",mesh->vertex);
+	t_brick *brick_count = block_brick_get(_block,"count:");
+
+	// Bind
+	printf("bidind tot %d\n",mesh->var.tot_vertex);
+	brick_binding_add(brick_count, dt_int, &mesh->var.tot_vertex);
 
 	// add to global list
 	op_add_global(C,_block);

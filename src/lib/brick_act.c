@@ -13,6 +13,20 @@
 
 void brick_set_updated(t_brick *brick)
 {
+	t_plug *plug = &brick->plug_intern;
+
+	// Bindings
+	if(plug->bindings)
+	{
+		t_link *link;
+		for(link = plug->bindings->first; link; link = link->next)
+		{
+			t_binding *binding = link->data;
+			binding_update(binding,plug->data);
+		}
+	}
+
+	// Set Updated
 	brick->plug_in.is_updated = 1;
 	brick->plug_intern.is_updated = 1;
 	brick->plug_out.is_updated = 1;

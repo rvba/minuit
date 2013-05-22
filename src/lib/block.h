@@ -163,6 +163,7 @@ struct Plug
 	t_plug *src;
 	t_plug *dst;
 
+	t_lst *bindings;
 	t_lst *parents;
 	t_plug *child;
 	t_brick *brick;			// self
@@ -384,6 +385,7 @@ void		block_unstore(t_block *block);
 
 // BRICK
 
+void 		brick_binding_add(t_brick *brick, t_data_type type, void *data);
 void 		plug_child_remove_all_parents(t_plug *child);
 t_brick *	brick_copy(t_block *block,t_brick *brick);
 t_brick *	brick_clone(t_block *block,t_brick *brick);

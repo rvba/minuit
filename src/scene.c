@@ -727,6 +727,7 @@ t_scene *scene_new(void)
 	sc->vectors=lst_new("vectors");
 	sc->viewports=lst_new("viewports");
 	sc->sets=lst_new("sets");
+	sc->bindings=lst_new("bindings");
 
 	sc->tmp_colors=lst_new("tmp_colors");
 

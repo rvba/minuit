@@ -34,7 +34,7 @@ struct VLst
 	int limit_low;
 
 	t_vlst *link;
-	
+
 	t_data_type type;
 
 	void *data;

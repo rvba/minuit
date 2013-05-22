@@ -319,6 +319,8 @@ t_brick *block_brick_get(t_block *block,const char *name)
 		}
 	}
 
+	printf("[ERROR block_brick_get] Can't find brick %s\n",name);
+
 	return NULL;
 }
 

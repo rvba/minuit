@@ -62,7 +62,8 @@ enum Data_Type
 	dt_trigger,
 	dt_operator,
 	dt_vector,
-	dt_viewport
+	dt_viewport,
+	dt_binding,
 };
 
 enum Node_Type
@@ -90,6 +91,7 @@ enum Node_Type
 	nt_vector,
 	nt_viewport,
 	nt_set,
+	nt_binding,
 };
 	
 
@@ -192,6 +194,7 @@ struct Scene
 	t_lst *vectors;
 	t_lst *viewports;
 	t_lst *sets;
+	t_lst *bindings;
 
 	t_lst *vars;
 

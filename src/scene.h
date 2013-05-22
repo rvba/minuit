@@ -25,6 +25,7 @@
 #include "set.h"
 #include "file.h"
 #include "log.h"
+#include "binding.h"
 
 t_node *	scene_get_data(t_scene *sc,void *ptr);
 t_node *	scene_get_var(t_scene *sc,void *ptr);
