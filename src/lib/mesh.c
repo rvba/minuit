@@ -35,6 +35,7 @@ void *mesh_get_ref(t_mesh *mesh, const char *ref)
 	if(is(ref,"vertex"))  			p=&mesh->vertex; 
 	else if(is(ref,"colors"))  			p=&mesh->colors; 
 	else if(is(ref,"faces"))  			p=&mesh->quads; 
+	else if(is(ref,"tot vertex"))  			p=&mesh->var.tot_vertex; 
 	else
 	{
 		printf("[ERROR mesh_get_ref] Unknown ref [%s] \n",ref);
@@ -101,14 +102,13 @@ void mesh_add_brick_vertex(t_context *C,t_mesh *mesh)
 	_block->state.draw_outline=1;
 
 	// add vertex
-
 	scene_add_ref(C->scene,"struct_ref","mesh","vertex",&mesh->vertex,mesh);
 	add_part_vlst(C,_block,dt_vlst,"vertex",mesh->vertex);
 	t_brick *brick_count = block_brick_get(_block,"count:");
 
 	// Bind
-	printf("bidind tot %d\n",mesh->var.tot_vertex);
 	brick_binding_add(brick_count, dt_int, &mesh->var.tot_vertex);
+	scene_add_ref(C->scene,"struct_ref","mesh","tot vertex",&mesh->var.tot_vertex,mesh);
 
 	// add to global list
 	op_add_global(C,_block);
