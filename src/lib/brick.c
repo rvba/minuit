@@ -11,7 +11,7 @@
 
 int brick_is_different(t_brick *dst, t_brick *src)
 {
-	if(dst->plug_intern.data != src->plug_intern.data)
+	if(dst->plug_intern.data_type != src->plug_intern.data_type)
 		return 1;
 	else
 		return 0;

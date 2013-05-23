@@ -1396,11 +1396,13 @@ t_node *add_if(t_context *C)
 	// true
 	t_node *node_true = add_part_slider_int(C,block,"true",NULL);
 	t_brick *brick_true = node_true->data;
+	brick_true->state.is_versatil = 1;
 	t_plug *plug_true = &brick_true->plug_intern;
 
 	// false
 	t_node *node_false = add_part_slider_int(C,block,"false",NULL);
 	t_brick *brick_false = node_false->data;
+	brick_false->state.is_versatil = 1;
 	t_plug *plug_false = &brick_false->plug_intern;
 
 	// result

@@ -561,6 +561,7 @@ void register_set(t_context *C)
 	scene_add_data(C->scene,"app_data","func","op_and",			op_and);
 	scene_add_data(C->scene,"app_data","func","op_mod",			op_mod);
 	scene_add_data(C->scene,"app_data","func","op_stack",			op_stack);
+	scene_add_data(C->scene,"app_data","func","op_if",			op_if);
 
 
 	// data
@@ -619,6 +620,7 @@ void register_set(t_context *C)
 	dict_symbol_add(dict_func,"op_and",dt_pointer,op_and);
 	dict_symbol_add(dict_func,"op_mod",dt_pointer,op_mod);
 	dict_symbol_add(dict_func,"op_stack",dt_pointer,op_stack);
+	dict_symbol_add(dict_func,"op_if",dt_pointer,op_if);
 
 
 	// APP

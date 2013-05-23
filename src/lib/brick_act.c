@@ -1946,6 +1946,10 @@ void *op_if(t_brick *brick)
 	t_brick *brick_true = block_brick_get(block,"true");
 	t_brick *brick_false = block_brick_get(block,"false");
 
+	// Flow
+	t_plug *plug = &brick->plug_intern;
+	plug->cls->flow(plug);
+
 	if(drf_int(brick->plug_intern.data) == 1)
 	{
 		brick_copy_data(brick_result,brick_true);
