@@ -45,8 +45,8 @@ void mem_free(void);
 
 char *chunk_type_get(t_chunk_type type);
 
-char *chunk_name_null;
-char *chunk_name_node;
-char *chunk_name_data;
+extern char chunk_name_null[];
+extern char chunk_name_node[];
+extern char chunk_name_data[];
 
 #endif

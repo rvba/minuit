@@ -8,16 +8,18 @@
  */
 
 #include "context.h"
+
 #define DEBUG 1
 
 t_lst *MEMORY;
 
 int indice;
+
 t_node *node=NULL;
 
-char *chunk_name_null="chunk_null";
-char *chunk_name_node="chunk_node";
-char *chunk_name_data="chunk_data";
+char chunk_name_null[] = "chunk_null";
+char chunk_name_node[] = "chunk_node";
+char chunk_name_data[] = "chunk_data";
 
 char *chunk_type_get(t_chunk_type type)
 {
