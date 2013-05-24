@@ -9,28 +9,26 @@
 
 #include "op.h"
 
-
-char *name_null = "null";
-char *name_int = "int";
-char *name_default = "default";
-
-char *name_float = "float";
-char *name_string = "string";
-char *name_char = "char";
-char *name_vertex = "vertex";
-char *name_face = "face";
-char *name_lst = "lst";
-char *name_vlst = "vlst";
-char *name_pointer = "pointer";
-char *name_mesh = "mesh";
-char *name_object = "object";
-char *name_selector = "selector";
-char *name_uint = "uint";
-char *name_camera = "camera";
-char *name_trigger = "trigger";
-char *name_operator = "operator";
-char *name_vector = "vector";
-char *name_vewport = "viewport";
+char name_null[] = "null";
+char name_int[] = "int";
+char name_default[] = "default";
+char name_float[] = "float";
+char name_string[] = "string";
+char name_char[] = "char";
+char name_vertex[] = "vertex";
+char name_face[] = "face";
+char name_lst[] = "lst";
+char name_vlst[] = "vlst";
+char name_pointer[] = "pointer";
+char name_mesh[] = "mesh";
+char name_object[] = "object";
+char name_selector[] = "selector";
+char name_uint[] = "uint";
+char name_camera[] = "camera";
+char name_trigger[] = "trigger";
+char name_operator[] = "operator";
+char name_vector[] = "vector";
+char name_viewport[] = "viewport";
 
 
 void cls_data_init(t_data *data)
@@ -65,6 +63,7 @@ char *data_name_get(t_data_type type)
 		case dt_trigger: return name_trigger; break;
 		case dt_operator: return name_operator; break;
 		case dt_vector: return name_vector; break;
+		case dt_viewport: return name_viewport; break;
 		default: return name_default; break;
 	}
 }
