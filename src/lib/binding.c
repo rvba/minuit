@@ -15,9 +15,12 @@ void binding_update(t_binding *binding, void *ptr)
 {
 	switch(binding->type)
 	{
-
 		case(dt_int):
 			set_int(binding->data,drf_int(ptr));
+			break;
+
+		case(dt_uint):
+			set_uint(binding->data,drf_uint(ptr));
 			break;
 		default:
 			printf("[binding update] %s Not Implemented\n",data_name_get(binding->type));

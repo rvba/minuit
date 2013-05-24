@@ -1407,10 +1407,8 @@ t_node *add_if(t_context *C)
 
 	// result
 	t_node *node_result = add_part_slider_int(C,block,"result",NULL);
-	t_brick *brick_result = node_false->data;
+	t_brick *brick_result = node_result->data;
 	t_plug *plug_result = &brick_result->plug_intern;
-
-	//brick_limit->state.use_loops = 0;
 
 	brick_if->action = op_if;
 

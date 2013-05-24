@@ -32,10 +32,11 @@ void *mesh_get_ref(t_mesh *mesh, const char *ref)
 {
 	void *p;
 
-	if(is(ref,"vertex"))  			p=&mesh->vertex; 
+	if(is(ref,"vertex"))  				p=&mesh->vertex; 
 	else if(is(ref,"colors"))  			p=&mesh->colors; 
 	else if(is(ref,"faces"))  			p=&mesh->quads; 
 	else if(is(ref,"tot vertex"))  			p=&mesh->var.tot_vertex; 
+	else if(is(ref,"tot quad face"))  		p=&mesh->var.tot_quad_face; 
 	else
 	{
 		printf("[ERROR mesh_get_ref] Unknown ref [%s] \n",ref);
@@ -108,6 +109,8 @@ void mesh_add_brick_vertex(t_context *C,t_mesh *mesh)
 
 	// Bind
 	brick_binding_add(brick_count, dt_int, &mesh->var.tot_vertex);
+
+	// Ref
 	scene_add_ref(C->scene,"struct_ref","mesh","tot vertex",&mesh->var.tot_vertex,mesh);
 
 	// add to global list
@@ -126,6 +129,13 @@ void mesh_add_brick_faces(t_mesh *mesh)
 
 	scene_add_ref(C->scene,"struct_ref","mesh","faces",&mesh->quads,mesh);
 	add_part_vlst(C,_block,dt_vlst,"quads",mesh->quads);
+	t_brick *brick_count = block_brick_get(_block,"count:");
+
+	// Bind
+	brick_binding_add(brick_count, dt_uint, &mesh->var.tot_quad_face);
+
+	// Ref
+	scene_add_ref(C->scene,"struct_ref","mesh","tot quad face",&mesh->var.tot_quad_face,mesh);
 
 	// add to global list
 	op_add_global(C,_block);
