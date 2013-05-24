@@ -15,30 +15,30 @@
 
 // NODE.C
 
-char *node_name_null;
-char *node_name_generic;
-char *node_name_brick;
-char *node_name_mesh;
-char *node_name_block;
-char *node_name_light;
-char *node_name_object;
-char *node_name_screen;
-char *node_name_file;
-char *node_name_image;
-char *node_name_material;
-char *node_name_list;
-char *node_name_link;
-char *node_name_data;
-char *node_name_texture;
-char *node_name_var;
-char *node_name_option;
-char *node_name_vlst;
-char *node_name_camera;
-char *node_name_dict;
-char *node_name_symbol;
-char *node_name_vector;
-char *node_name_set;
-char *node_name_binding;
+extern char node_name_null[];
+extern char node_name_generic[];
+extern char node_name_brick[];
+extern char node_name_mesh[];
+extern char node_name_block[];
+extern char node_name_light[];
+extern char node_name_object[];
+extern char node_name_screen[];
+extern char node_name_file[];
+extern char node_name_image[];
+extern char node_name_material[];
+extern char node_name_list[];
+extern char node_name_link[];
+extern char node_name_data[];
+extern char node_name_texture[];
+extern char node_name_var[];
+extern char node_name_option[];
+extern char node_name_vlst[];
+extern char node_name_camera[];
+extern char node_name_dict[];
+extern char node_name_symbol[];
+extern char node_name_vector[];
+extern char node_name_set[];
+extern char node_name_binding[];
 
 t_node*		node_load(void *ptr,const char *type);
 void		node_init(t_node *node,t_node_type type);
