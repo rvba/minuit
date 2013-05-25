@@ -184,7 +184,7 @@ void block_branch_get(t_lst *lst, t_block *block)
 		lst_add(lst,block_brick,"brick");
 
 		// if connected && follow in 
-		if(plug_in->is_connected && plug_in->follow_in)
+		if(plug_in->state.is_connected && plug_in->state.follow_in)
 		{
 			plug_src = plug_in->src;
 			brick_source = plug_src->brick;
@@ -216,7 +216,7 @@ t_lst *block_branch_src_get(t_context *C,t_block *block)
 		p=&b->plug_in;
 
 		// if is connected
-		if(p->is_connected)
+		if(p->state.is_connected)
 		{
 			s=p->src;
 			t_brick *t=s->brick;
@@ -241,13 +241,13 @@ void ctx_links_store_roots(t_lst *lst, t_brick *brick)
 	t_plug *plug_target_out = plug_in->src;
 	t_plug *plug_target = plug_target_out->src;
 
-	if(!plug_intern->is_in_loop)
+	if(!plug_intern->state.is_in_loop)
 	{
 		// if follow in
-		if(plug_in->follow_in)
+		if(plug_in->state.follow_in)
 		{
 			// and target is updated
-			if(plug_target->is_updated)
+			if(plug_target->state.is_updated)
 			{
 				// this plug is root
 				brick->state.is_root = 1;
@@ -282,13 +282,13 @@ int ctx_links_check_parents(t_brick *brick)
 		{
 			plug_parent = link->data;
 
-			if(plug_parent->is_in_loop)
+			if(plug_parent->state.is_in_loop)
 			{
 				state = 1;
 			}
 			else
 			{
-				if(!plug_parent->is_updated)
+				if(!plug_parent->state.is_updated)
 				{
 					state = 0;
 					break;
@@ -337,10 +337,10 @@ void ctx_links_remove_loop(t_context *C)
 			plug = &brick->plug_intern;
 
 			// discard is_in_loop
-			if(plug->is_in_loop)
+			if(plug->state.is_in_loop)
 			{
 				// set updated 
-				plug->is_updated = 1;
+				plug->state.is_updated = 1;
 			}
 			else
 			{
@@ -561,7 +561,7 @@ void ctx_links_get_roots(t_context *C)
 
 		int go = 1;
 
-		if(plug_intern->is_a_loop)
+		if(plug_intern->state.is_a_loop)
 		{
 			t_block *block = b->block;
 			// get branch (all bricks)
@@ -575,7 +575,7 @@ void ctx_links_get_roots(t_context *C)
 			{
 				b=l->data;
 				p=&b->plug_intern;
-				if(!p->is_updated)
+				if(!p->state.is_updated)
 				{
 					go = 0;
 					break;
@@ -588,7 +588,7 @@ void ctx_links_get_roots(t_context *C)
 
 
 		// if plug_in is connected
-		if(plug_in->is_connected && go)
+		if(plug_in->state.is_connected && go)
 		{
 			int all_updated = ctx_links_check_parents(b);
 
@@ -608,7 +608,7 @@ void ctx_links_get_roots(t_context *C)
 			if(all_updated)
 			{
 				t_plug *plug_intern = &b->plug_intern;
-				if(!plug_intern->is_in_loop)
+				if(!plug_intern->state.is_in_loop)
 				{
 					// this plug is root
 					b->state.is_root = 1;
@@ -791,13 +791,13 @@ void ctx_links_reset_loop(t_context *C, t_lst *lst)
 		p_intern=&b->plug_intern;
 
 		// is a loop
-		if(p_intern->is_a_loop)
+		if(p_intern->state.is_a_loop)
 		{
 			t_block *block = b->block;
 			set_for_loop(block,1);
 
 			b->counter = 0;
-			p_intern->is_init = 0;
+			p_intern->state.is_init = 0;
 		}
 	}
 }
@@ -823,9 +823,9 @@ void ctx_links_reset(t_context *C,t_lst *lst)
 		p_intern=&b->plug_intern;
 		p_out = &b->plug_out;
 
-		p_in->is_updated = 0;
-		p_intern->is_updated = 0;
-		p_out->is_updated = 0;
+		p_in->state.is_updated = 0;
+		p_intern->state.is_updated = 0;
+		p_out->state.is_updated = 0;
 
 		b->state.is_root = 0;
 		b->state.is_current = 0;

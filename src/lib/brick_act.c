@@ -27,9 +27,9 @@ void brick_set_updated(t_brick *brick)
 	}
 
 	// Set Updated
-	brick->plug_in.is_updated = 1;
-	brick->plug_intern.is_updated = 1;
-	brick->plug_out.is_updated = 1;
+	brick->plug_in.state.is_updated = 1;
+	brick->plug_intern.state.is_updated = 1;
+	brick->plug_out.state.is_updated = 1;
 }
 
 // BRICK ADD
@@ -657,7 +657,7 @@ void *op_plusplus(t_brick *brick)
 	int *intern = plug_intern->data;
 	int *data;
 
-	if(plug_out->is_connected && (*intern == 1))
+	if(plug_out->state.is_connected && (*intern == 1))
 	{
 		t_plug *plug_dst = plug_get_dst(plug_intern);
 
@@ -734,7 +734,7 @@ void exe_add_brick_parent_child(t_dict *args)
 	t_plug *p_in = &b->plug_in;
 	
 	plug_add_parent(p_intern,plug_intern);
-	p_in->follow_in=0;
+	p_in->state.follow_in=0;
 
 	C->scene->store=0;
 
@@ -763,7 +763,7 @@ void exe_add_brick_child_parent(t_dict *args)
 	t_plug *plug_target = &brick_target->plug_intern;
 	plug_add_parent(plug_brick,p_intern);
 	plug_add_parent(plug_target,plug_brick);
-	p_in->follow_in=1;
+	p_in->state.follow_in=1;
 
 	C->scene->store=0;
 
@@ -883,7 +883,7 @@ void *op_pipe(t_brick *brick)
 				t_plug *plug_in_clone = &b->plug_in;
 				t_plug *plug_out_clone = &b->plug_out;
 
-				if(plug_in_clone->is_connected)
+				if(plug_in_clone->state.is_connected)
 				{
 					t_plug *plug_src = plug_get_src(plug_clone);
 
@@ -895,7 +895,7 @@ void *op_pipe(t_brick *brick)
 					}
 				}
 
-				plug_out_clone->open_out = *state;
+				plug_out_clone->state.open_out = *state;
 
 			}
 		}
@@ -924,12 +924,12 @@ void *op_clone(t_brick *brick)
 	if(tot_bricks>0)
 	{
 		// connected in
-		if(plug_in->is_connected)
+		if(plug_in->state.is_connected)
 		{
 			plug_src = plug_get_src(plug_intern);
 			plug_target = plug_src->dst;
 		}
-		else if(plug_out->is_connected)
+		else if(plug_out->state.is_connected)
 		{
 			plug_src = plug_get_dst(plug_intern);
 			plug_target = plug_src->dst;
@@ -962,30 +962,30 @@ void *op_clone(t_brick *brick)
 
 				if(plug_target)
 				{
-					plug_in_clone->is_connected=1;
+					plug_in_clone->state.is_connected=1;
 
 					t_brick *brick_target = plug_target->brick;
 				
-					if(plug_in->is_connected)
+					if(plug_in->state.is_connected)
 					{
-						if(brick_target->plug_out.open_out)
-							plug_out_clone->open_out = 1;
+						if(brick_target->plug_out.state.open_out)
+							plug_out_clone->state.open_out = 1;
 						else
-							plug_out_clone->open_out = 0;
+							plug_out_clone->state.open_out = 0;
 					}
-					else if(plug_out->is_connected)
+					else if(plug_out->state.is_connected)
 					{
-						if(brick_target->plug_in.open_in)
-							plug_out_clone->open_out = 1;
+						if(brick_target->plug_in.state.open_in)
+							plug_out_clone->state.open_out = 1;
 						else
-							plug_out_clone->open_out = 0;
+							plug_out_clone->state.open_out = 0;
 
 					}
 				}
 				else
 				{
-					plug_in_clone->is_connected=0;
-					plug_out_clone->open_out = 0;
+					plug_in_clone->state.is_connected=0;
+					plug_out_clone->state.open_out = 0;
 				}
 			}
 		}
@@ -1007,7 +1007,7 @@ void *op_sin(t_brick *brick)
 
 	// compute
 	t_plug *plug_in=&brick->plug_in;
-	if(plug_in->is_connected) *data=sin(*data);
+	if(plug_in->state.is_connected) *data=sin(*data);
 
 	// release
 	if(brick->mode==bm_triggering) brick_release(brick);
@@ -1027,7 +1027,7 @@ void *op_cos(t_brick *brick)
 
 	// compute
 	t_plug *plug_in=&brick->plug_in;
-	if(plug_in->is_connected) *data=cos(*data);
+	if(plug_in->state.is_connected) *data=cos(*data);
 
 	// release
 	if(brick->mode==bm_triggering) brick_release(brick);
@@ -1256,7 +1256,7 @@ void op_maths_plug(t_operation operation,t_plug *dst,t_plug *src)
 			{
 				for(j=0;j<length;j++)
 				{
-					if(plug_src->is_connected)
+					if(plug_src->state.is_connected)
 					{
 
 						C->event->update_connections=1;
@@ -1628,7 +1628,7 @@ void *op_not(t_brick *brick)
 	{
 		case(dt_int):
 
-			if(plug_in->is_connected)
+			if(plug_in->state.is_connected)
 			{
 				if(*data == 0) *data = 1;
 				else *data =0;
@@ -1715,7 +1715,7 @@ void *op_neg(t_brick *brick)
 	plug_intern->cls->flow(plug_intern);
 
 	// negate
-	if(plug_in->is_connected)
+	if(plug_in->state.is_connected)
 		plug_data_negate(plug_intern);
 
 	return NULL;
@@ -1808,18 +1808,17 @@ void *op_bang(t_brick *brick)
 	plug_intern->cls->flow(plug_intern);
 
 	int *state = plug_intern->data;
-	int *bang = &plug_intern->bang;
 
 	// [TRUE] : IN (true) + BANG (false) = BANG (true)
 	// let true pass throw
-	if(*state == 1 && !(*bang))
+	if(*state == 1 && !(plug_intern->state.bang))
 	{
-		*bang = 1;
+		plug_intern->state.bang = 1;
 	}
 	// [FALSE] IN (false) && BANG (true) = BANG (flase)
-	else if(*state == 0 && *bang)
+	else if(*state == 0 && plug_intern->state.bang)
 	{
-		*bang=0;
+		plug_intern->state.bang=0;
 	}
 	// ELSE [FALSE]
 	else
@@ -1882,9 +1881,9 @@ void *op_const(t_brick *brick)
 	// flow
 	plug_const->cls->flow(plug_const);
 
-	if(!plug_const->is_eval)
+	if(!plug_const->state.is_eval)
 	{
-		plug_const->is_eval = 1;
+		plug_const->state.is_eval = 1;
 
 		*_const = *_i;
 	}

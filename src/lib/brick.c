@@ -255,9 +255,9 @@ int brick_delete(t_brick *brick,int remove_connected)
 	t_plug *plug_out=&brick->plug_out;
 
 	if(
-		(remove_connected && !plug_out->is_connected)
+		(remove_connected && !plug_out->state.is_connected)
 		||
-		(!plug_in->is_connected && !plug_out->is_connected)
+		(!plug_in->state.is_connected && !plug_out->state.is_connected)
 		)
 	{
 		// remove users
@@ -407,35 +407,34 @@ void plug_reset(t_plug *plug,const char *name)
 	plug->data=NULL;
 	plug->data_memory = NULL;
 	plug->brick=NULL;
-	plug->is_connected=0;
-	plug->is_updated=0;
-	plug->is_versatil=0;
-	plug->store_data = 1;
-	plug->bang = 0;
-	plug->last_bang = 0;
-	plug->is_init=0;
-	plug->is_state_volatil = 1;
-	plug->is_a_loop = 0;
-	plug->is_in_loop = 0;
-	plug->close_flow_in = 0;
-	plug->use_flow = 1;
-	plug->is_parent = 0;
-
-	plug->flow_in = 1;
-	plug->flow_out = 0;
-	plug->follow_in=1;
-	plug->follow_out=1;
-	plug->open_in = 0;
-	plug->open_out = 1;
-
-	plug->is_eval = 0;
-	plug->is_volatil = 0;
-
 	plug->data_type=dt_null;
 	plug->operator_type = ot_null;
 	vseti(plug->idcol,0,0,0);
-
 	plug->bindings = NULL;
+
+	plug->state.is_connected=0;
+	plug->state.is_updated=0;
+	plug->state.is_versatil=0;
+	plug->state.store_data = 1;
+	plug->state.bang = 0;
+	plug->state.last_bang = 0;
+	plug->state.is_init=0;
+	plug->state.is_state_volatil = 1;
+	plug->state.is_a_loop = 0;
+	plug->state.is_in_loop = 0;
+	plug->state.close_flow_in = 0;
+	plug->state.use_flow = 1;
+	plug->state.is_parent = 0;
+	plug->state.flow_in = 1;
+	plug->state.flow_out = 0;
+	plug->state.follow_in=1;
+	plug->state.follow_out=1;
+	plug->state.open_in = 0;
+	plug->state.open_out = 1;
+	plug->state.is_eval = 0;
+	plug->state.is_volatil = 0;
+	plug->state.bang = 0;
+	plug->state.is_init = 0;
 }
 
 // REF
@@ -468,7 +467,7 @@ t_brick *brick_rebind(t_scene *sc,void *ptr)
 	rebind(sc,"brick","block",(void **)&brick->block);
 	rebind(sc,"brick","plug_in_src",(void **)&brick->plug_in.src);
 
-	if(brick->plug_intern.store_data) 
+	if(brick->plug_intern.state.store_data) 
 		rebind(sc,"brick",brick->name,(void **)&brick->plug_intern.data);
 	else 	
 		brick->plug_intern.data = NULL;
@@ -541,8 +540,10 @@ void brick_init(t_scene *sc,t_brick *brick)
 	plug_intern->dst = plug_out;
 	plug_out->src = plug_intern;
 
+	/*
 	plug_intern->bang = 0;
 	plug_intern->is_init = 0;
+	*/
 }
 
 

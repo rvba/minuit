@@ -1080,18 +1080,18 @@ t_node *add_clone(t_context *C)
 	plug_init(&brick_clone->plug_in,dt_float,brick_clone,NULL,0);
 
 	brick_clone->action=op_clone;
-	brick_clone->plug_out.flow_out=0;
-	brick_clone->plug_in.flow_in=0;
-	brick_clone->plug_out.open_out=0;
+	brick_clone->plug_out.state.flow_out=0;
+	brick_clone->plug_in.state.flow_in=0;
+	brick_clone->plug_out.state.open_out=0;
 	brick_clone->state.use_dragging = 0;
 	brick_clone->state.remove_connected = 1;
 
-	brick_clone->plug_out.use_flow = 0;
-	brick_clone->plug_in.use_flow = 0;
-	brick_clone->plug_intern.use_flow = 0;
+	brick_clone->plug_out.state.use_flow = 0;
+	brick_clone->plug_in.state.use_flow = 0;
+	brick_clone->plug_intern.state.use_flow = 0;
 
 	t_plug *plug_clone = &brick_clone->plug_intern;
-	plug_clone->close_flow_in = 1;
+	plug_clone->state.close_flow_in = 1;
 
 	return node_block;
 }
@@ -1116,9 +1116,9 @@ t_node *add_pipe(t_context *C)
 	plug_init(&brick_clone->plug_in,dt_float,brick_clone,NULL,0);
 
 	brick_clone->action=op_pipe;
-	brick_clone->plug_out.flow_out=0;
-	brick_clone->plug_in.flow_in=0;
-	brick_clone->plug_out.open_out=0;
+	brick_clone->plug_out.state.flow_out=0;
+	brick_clone->plug_in.state.flow_in=0;
+	brick_clone->plug_out.state.open_out=0;
 
 	return node_block;
 }
@@ -1139,8 +1139,8 @@ t_node *add_maths(t_context *C,const char *name)
 	// Brick Result
 	add_part_slider_int(C,block,"result",NULL);
 
-	brick_clone->plug_out.flow_out=0;
-	brick_clone->plug_out.open_out=0;
+	brick_clone->plug_out.state.flow_out=0;
+	brick_clone->plug_out.state.open_out=0;
 	brick_clone->state.use_dragging = 0;
 
 	if(is(name,"+"))
@@ -1177,7 +1177,7 @@ t_node *add_get(t_context *C)
 
 	brick_result->state.is_versatil = 1;
 	t_plug *plug_result = &brick_result->plug_intern;
-	plug_result->is_volatil = 1;
+	plug_result->state.is_volatil = 1;
 
 	// indice
 	t_node *node_indice = add_part_slider_int_positive(C,block,"indice",NULL);
@@ -1205,26 +1205,26 @@ t_node *add_for(t_context *C)
 	brick_for->state.always_trigger = 1;
 	t_plug *plug_for = &brick_for->plug_intern;
 	brick_for->plug_intern.operator_type = ot_for;
-	plug_for->is_a_loop = 1;
+	plug_for->state.is_a_loop = 1;
 
 	// indice
 	t_node *node_indice = add_part_int(C,block,"indice",NULL);
 	t_brick *brick_indice = node_indice->data;
 	t_plug *plug_indice = &brick_indice->plug_intern;
-	plug_indice->is_a_loop = 1;
-	brick_indice->plug_in.flow_in = 0;
+	plug_indice->state.is_a_loop = 1;
+	brick_indice->plug_in.state.flow_in = 0;
 
 	// vector
 	t_node *node_vector = add_part_vector(C,block,"vector");
 	t_brick *brick_vector = node_vector->data;
 	t_plug *plug_vector = &brick_vector->plug_intern;
-	plug_vector->is_volatil = 1;
-	plug_vector->is_a_loop = 1;
-	plug_vector->is_parent = 1;
+	plug_vector->state.is_volatil = 1;
+	plug_vector->state.is_a_loop = 1;
+	plug_vector->state.is_parent = 1;
 	brick_vector->state.draw_value = 0;
-	brick_vector->plug_in.flow_in = 0;
-	brick_vector->plug_in.open_in = 1;
-	brick_vector->plug_intern.is_state_volatil = 0;
+	brick_vector->plug_in.state.flow_in = 0;
+	brick_vector->plug_in.state.open_in = 1;
+	brick_vector->plug_intern.state.is_state_volatil = 0;
 
 	// Parent
 	plug_add_parent(plug_for,plug_vector);
@@ -1240,7 +1240,7 @@ t_node *parent_brick_vector(t_plug *plug_vector, t_node *node, int order)
 	brick->block_order = order;
 	brick->state.draw = 0;
 	t_plug *plug_intern = &brick->plug_intern;
-	plug_intern->store_data = 0;
+	plug_intern->state.store_data = 0;
 	plug_add_parent(plug_vector,plug_intern);
 
 	return node;
@@ -1375,8 +1375,8 @@ t_node *add_plusplus(t_context *C)
 	t_node *node_block = add_slider_int_special(C,"++",op_plusplus); 
 	t_block *block = node_block->data;
 	t_brick *brick = block_brick_get(block,"++");
-	brick->plug_out.open_out = 0;
-	brick->plug_out.open_in = 0;
+	brick->plug_out.state.open_out = 0;
+	brick->plug_out.state.open_in = 0;
 
 	return node_block;
 }

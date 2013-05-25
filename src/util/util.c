@@ -34,6 +34,12 @@ size_t get_memory_usage(void)
     return (size_t)rss * (size_t)sysconf( _SC_PAGESIZE);
 }
 
+int switch_int(int i)
+{
+	if(i) return 0;
+	else return 1;
+}
+
 inline void negate_int(void *_dst)
 {
 	int *dst = _dst;

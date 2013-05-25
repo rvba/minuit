@@ -155,12 +155,12 @@ void brick_draw_link(t_brick *brick)
 			// draw plug state
 			if(C->ui->draw_plug_state)
 			{
-				if(plug_out->flow_out)
+				if(plug_out->state.flow_out)
 				{
 					skt_point(v1,7,C->ui->front_color);
 				}
 
-				if(plug_target->flow_in)
+				if(plug_target->state.flow_in)
 				{
 					skt_point(v2,7,C->ui->front_color);
 				}
@@ -200,13 +200,13 @@ void brick_draw_plug_state(t_brick *brick,t_plug *plug,float pos)
 	float *color_open_out = red;
 	float *color_follow_out = red;
 
-	if(plug->flow_in) color_flow_in = green;
-	if(plug->open_in) color_open_in = green;
-	if(plug->follow_in) color_follow_in = green;
+	if(plug->state.flow_in) color_flow_in = green;
+	if(plug->state.open_in) color_open_in = green;
+	if(plug->state.follow_in) color_follow_in = green;
 
-	if(plug->flow_out) color_flow_out = green;
-	if(plug->open_out) color_open_out = green;
-	if(plug->follow_out) color_follow_out = green;
+	if(plug->state.flow_out) color_flow_out = green;
+	if(plug->state.open_out) color_open_out = green;
+	if(plug->state.follow_out) color_follow_out = green;
 
 	skt_point(pos_flow_in,width,color_flow_in); 
 	skt_point(pos_open_in,width,color_open_in); 
@@ -248,7 +248,7 @@ void brick_draw_plug(t_brick *brick,int is_out)
 	}
 	else if(C->ui->show_states)
 	{
-		if(plug->is_connected) vset3f(c,0,1,0);
+		if(plug->state.is_connected) vset3f(c,0,1,0);
 		else vset3f(c,1,0,0);
 
 		pos[1] += brick->geom.height / 2;
@@ -349,7 +349,7 @@ void brick_draw_outline(t_brick *brick)
 			}
 			else
 			{
-				if(brick->plug_intern.is_updated) color = green;
+				if(brick->plug_intern.state.is_updated) color = green;
 				else color = red;
 			}
 			
@@ -525,7 +525,7 @@ void brick_draw(t_brick *brick)
 
 	brick_draw_check_context(brick);
 
-	if(brick->plug_intern.is_in_loop)
+	if(brick->plug_intern.state.is_in_loop)
 	{
 		C->event->ui.draw_in_loop = 1;
 	}

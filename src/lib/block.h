@@ -29,6 +29,7 @@ typedef enum Brick_Mode t_brick_mode;
 typedef enum Brick_Type t_brick_type;
 
 typedef struct Plug t_plug;
+typedef struct Plug_State t_plug_state;
 typedef struct Plug_Class t_plug_class;
 
 typedef enum Plug_Mode
@@ -123,6 +124,33 @@ struct Plug_Class
 	void (* disconnect)(t_plug_mode mode, t_plug *plug);
 };
 
+struct Plug_State
+{
+	int is_connected:1;
+	int is_updated:1;
+	int is_init:1;
+	int is_versatil:1;		// change plug type if connected
+	int store_data:1;		// for rebind
+	int is_eval:1;
+	int is_volatil:1;		// stored data is volatil
+	int is_state_volatil:1;		// plug ports can change state when connected
+	int is_a_loop:1;
+	int is_in_loop:1;
+	int close_flow_in:1;		// will close target's flow in
+	int use_flow:1;
+	int is_parent:1;
+
+	int flow_in:1;
+	int flow_out:1;
+	int follow_in:1;
+	int follow_out:1;
+	int open_in:1;
+	int open_out:1;
+
+	int bang:1;
+	int last_bang:1;
+};
+
 // PLUG
 
 struct Plug
@@ -135,40 +163,20 @@ struct Plug
 
 	int idcol[3];
 
+	t_data_type data_type;
+	t_operator operator_type;
+	t_plug_state state;
+
+	t_brick *brick;			
+
 	int pos; 			// height (for drawing line)
-	int is_connected;
-	int is_updated;
-	int is_init;
-	int is_versatil;		// change plug type if connected
-	int store_data;			// for rebind
-	int is_eval;
-	int is_volatil;			// stored data is volatil
-	int is_state_volatil;		// plug ports can change state when connected
-	int is_a_loop;
-	int is_in_loop;
-	int close_flow_in;		// will close target's flow in
-	int use_flow;
-	int is_parent;
-
-	int flow_in;
-	int flow_out;
-	int follow_in;
-	int follow_out;
-	int open_in;
-	int open_out;
-
-	int bang;
-	int last_bang;
 
 	t_plug *src;
 	t_plug *dst;
-
-	t_lst *bindings;
-	t_lst *parents;
 	t_plug *child;
-	t_brick *brick;			// self
-	t_data_type data_type;
-	t_operator operator_type;
+
+	t_lst *parents;
+	t_lst *bindings;
 
 	void *data;
 	void *data_memory;

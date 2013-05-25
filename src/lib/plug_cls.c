@@ -264,7 +264,7 @@ void set_in_loop(t_brick *brick, int state)
 			i++;
 			brick = link->data;
 			plug = &brick->plug_intern;
-			plug->is_in_loop = state;
+			plug->state.is_in_loop = state;
 		}
 	}
 
@@ -297,7 +297,7 @@ void cls_plug_connect_general(t_plug_mode mode, t_plug *self, t_plug *dst)
 	{
 		// Connect Plugs
 		plug_in->src = plug_dst_out;
-		plug_in->is_connected = 1;
+		plug_in->state.is_connected = 1;
 
 		// If Versatil
 		if(brick->state.is_versatil)
@@ -314,20 +314,20 @@ void cls_plug_connect_general(t_plug_mode mode, t_plug *self, t_plug *dst)
 	{
 		// Connect Plugs
 		plug_out->dst = plug_dst_in;
-		plug_out->is_connected = 1;
+		plug_out->state.is_connected = 1;
 	}
 
 	// Close flow in (Clone)
-	if(dst->close_flow_in && self->use_flow)
+	if(dst->state.close_flow_in && self->state.use_flow)
 	{
 		t_plug *plug_in = &brick->plug_in;
-		plug_in->flow_in = 0;
+		plug_in->state.flow_in = 0;
 	}
 
 	// Set in Loop
-	if(!self->is_a_loop)
+	if(!self->state.is_a_loop)
 	{
-		if(dst->is_a_loop || dst->is_in_loop)
+		if(dst->state.is_a_loop || dst->state.is_in_loop)
 		{
 			set_in_loop(brick,1);
 		}
@@ -343,8 +343,8 @@ void cls_plug_disconnect_general(t_plug_mode mode, t_plug *self)
 	t_plug *plug_out = &brick->plug_out;
 
 	// Restore Flow In
-	if(self->use_flow)
-		plug_in->flow_in = 1;
+	if(self->state.use_flow)
+		plug_in->state.flow_in = 1;
 
 
 	// Mode In
@@ -352,7 +352,7 @@ void cls_plug_disconnect_general(t_plug_mode mode, t_plug *self)
 	{
 		// Disconnect
 		plug_in->src = NULL;
-		plug_in->is_connected = 0;
+		plug_in->state.is_connected = 0;
 	}
 	// Mode Out
 	else
@@ -362,7 +362,7 @@ void cls_plug_disconnect_general(t_plug_mode mode, t_plug *self)
 
 		// Disconnect
 		plug_out->dst = NULL;
-		plug_out->is_connected = 0;
+		plug_out->state.is_connected = 0;
 	}
 }
 
@@ -379,19 +379,19 @@ void cls_plug_connect_vector(t_plug_mode mode, t_plug *self, t_plug *dst)
 	cls_plug_connect_general(mode,self,dst);
 
 	// If Dst Volatil && Mode Out (For/Get  Vector)
-	if(dst->is_volatil && mode == mode_out)
+	if(dst->state.is_volatil && mode == mode_out)
 	{
 		// Open & Close Plugs
-		if(self->is_state_volatil) // For Vector
+		if(self->state.is_state_volatil) // For Vector
 		{
 			// Close Flow In
-			plug_in->flow_in = 0;
-			plug_in->open_in = 1;
+			plug_in->state.flow_in = 0;
+			plug_in->state.open_in = 1;
 
 			// Open Dst Flow In
-			plug_out->open_out = 0;
-			plug_out->flow_out = 1;
-			plug_out->open_in = 1;
+			plug_out->state.open_out = 0;
+			plug_out->state.flow_out = 1;
+			plug_out->state.open_in = 1;
 		}
 			
 		// Don't Store Pointers
@@ -409,9 +409,9 @@ void cls_plug_connect_vector(t_plug_mode mode, t_plug *self, t_plug *dst)
 				plug_in_component = &brick_component->plug_in;
 				plug_intern_component = &brick_component->plug_intern;
 
-				plug_in_component->flow_in = 0;
+				plug_in_component->state.flow_in = 0;
 				plug_intern_component->data = NULL;
-				plug_intern_component->store_data = 0;
+				plug_intern_component->state.store_data = 0;
 			}
 		}
 	}
@@ -422,7 +422,7 @@ void cls_plug_connect_vector(t_plug_mode mode, t_plug *self, t_plug *dst)
 		&&
 		(
 			// Mode Out : For Vector
-			dst->is_parent 
+			dst->state.is_parent 
 		||
 			// Mode In : Vector
 			(
@@ -517,19 +517,19 @@ void cls_plug_disconnect_vector(t_plug_mode mode, t_plug *plug)
 	cls_plug_disconnect_general(mode,plug);
 
 	// change plug state
-	if(plug->is_state_volatil)
+	if(plug->state.is_state_volatil)
 	{
-		plug_in->flow_in = 1;
-		plug_in->open_in = 0;
-		plug_out->open_out = 1;
-		plug_out->flow_out = 0;
-		plug_out->open_in = 0;
+		plug_in->state.flow_in = 1;
+		plug_in->state.open_in = 0;
+		plug_out->state.open_out = 1;
+		plug_out->state.flow_out = 0;
+		plug_out->state.open_in = 0;
 	}
 	// For Vector
 	else
 	{
-		plug_in->flow_in = 0;
-		plug_in->open_in = 1;
+		plug_in->state.flow_in = 0;
+		plug_in->state.open_in = 1;
 	}
 
 	if(brick->state.has_components)
@@ -560,7 +560,7 @@ void cls_plug_disconnect_vector(t_plug_mode mode, t_plug *plug)
 	}
 
 	// If Dst Volatil, Reset Pointer
-	if(plug_dst->is_volatil)
+	if(plug_dst->state.is_volatil)
 	{
 		vector->pointer = NULL;
 	}
@@ -687,15 +687,15 @@ void _cls_flow_(t_plug *plug,void (* f)(t_plug_mode mode,t_plug *p1,t_plug *p2))
 
 	// IN
 
-	if(plug_in->is_connected)
+	if(plug_in->state.is_connected)
 	{
 		t_plug *plug_origin = plug_in->src;
 
-		if(plug_origin->open_out)
+		if(plug_origin->state.open_out)
 		{
 			t_plug *src_plug=plug_get_src(plug);
 
-			if(plug_in->flow_in)
+			if(plug_in->state.flow_in)
 			{
 				f(mode_in,plug,src_plug);
 			}
@@ -708,15 +708,15 @@ void _cls_flow_(t_plug *plug,void (* f)(t_plug_mode mode,t_plug *p1,t_plug *p2))
 
 	// OUT
 
-	if(plug_out->is_connected)
+	if(plug_out->state.is_connected)
 	{
 		t_plug *plug_origin = plug_out->dst;
 
-		if(plug_origin->open_in)
+		if(plug_origin->state.open_in)
 		{
 			t_plug *src_plug=plug_get_dst(plug);
 
-			if(plug_out->flow_out)
+			if(plug_out->state.flow_out)
 			{
 				f(mode_out,plug,src_plug);
 			}
@@ -1025,7 +1025,7 @@ void __cls_plug_flow_object(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 
 				if(is(object->type,"camera"))
 				{
-					if(src_plug->open_out)
+					if(src_plug->state.open_out)
 					{
 						camera_src=src_plug->data;
 						camera_dst=object->data;
@@ -1098,7 +1098,7 @@ void set_for_loop(t_block *block ,int state)
 	{
 		b=l->data;
 		p=&b->plug_intern;
-		p->is_in_loop = state;
+		p->state.is_in_loop = state;
 	}
 
 	lst_free(lst);
@@ -1157,7 +1157,7 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 		vector->pointer = NULL;
 
 		// if for connected
-		if(plug_in->is_connected)
+		if(plug_in->state.is_connected)
 		{
 			// get src
 			t_plug *src_plug = plug_get_src(plug);
@@ -1189,11 +1189,11 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 			}
 
 			// set vector
-			if(plug_vector_in->is_connected)
+			if(plug_vector_in->state.is_connected)
 			{
 				if(vlst)
 				{
-					plug_indice_in->open_in = 1;
+					plug_indice_in->state.open_in = 1;
 
 					if(brick->counter < vlst->count)
 					{
@@ -1226,7 +1226,7 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 						brick->counter = 0;
 
 						// reset init
-						plug->is_init = 0;
+						plug->state.is_init = 0;
 
 						// reset indice
 						*data_indice = 0;
@@ -1241,7 +1241,7 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 					// set loop
 					set_for_loop(block,0);
 					//
-					plug_indice_in->open_in = 0;
+					plug_indice_in->state.open_in = 0;
 				}
 			}
 			// plug vector in not connected
@@ -1258,7 +1258,7 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 			// set loop
 			set_for_loop(block,0);
 			//
-			plug_indice_in->open_in = 0;
+			plug_indice_in->state.open_in = 0;
 		}
 	}
 }
@@ -1473,7 +1473,7 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 							plug_intern_component->data = vector_get_pointer(vector_self,i);
 
 							// Open Flow In
-							plug_in_component->flow_in = 1;
+							plug_in_component->state.flow_in = 1;
 						}
 					}
 
@@ -1502,7 +1502,7 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 							plug_intern_component->data = vlst_get_pointer(vlst_dst,i);
 
 							// Don't Store Pointer 
-							plug_intern_component->store_data  = 0;
+							plug_intern_component->state.store_data  = 0;
 						}
 					}
 				}
@@ -1586,7 +1586,7 @@ void cls_plug_flow_generic(t_plug *plug)
 {
 	t_plug *plug_in=plug->src;
 
-	if(plug_in->is_connected)
+	if(plug_in->state.is_connected)
 	{
 		t_plug *src_plug=plug_get_src(plug);
 		t_data_type src_type=src_plug->data_type;

@@ -68,15 +68,15 @@ int block_is_connected(const char *gate, t_block *block)
 			if(plug_in)
 			{
 				plug = &brick->plug_in;
-				follow = plug->follow_in;
+				follow = plug->state.follow_in;
 			}
 			else
 			{
 				plug = &brick->plug_out;
-				follow = plug->follow_out;
+				follow = plug->state.follow_out;
 			}
 
-			if(plug->is_connected && follow)
+			if(plug->state.is_connected && follow)
 			{
 				return 1;
 			}
@@ -116,15 +116,15 @@ t_lst *block_get_connections(const char *gate,t_block *block)
 			if(plug_in)
 			{
 				plug = &brick->plug_in;
-				follow = plug->follow_in;
+				follow = plug->state.follow_in;
 			}
 			else
 			{
 				plug = &brick->plug_out;
-				follow = plug->follow_out;
+				follow = plug->state.follow_out;
 			}
 
-			if(plug->is_connected && follow)
+			if(plug->state.is_connected && follow)
 			{
 				if(!lst) lst = lst_new("connections");
 
