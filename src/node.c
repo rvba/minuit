@@ -8,6 +8,7 @@
  */
 
 #include "op.h"
+#include "option.h"
 
 int node_make_mesh(t_node *node);
 int node_make_block(t_node *node);

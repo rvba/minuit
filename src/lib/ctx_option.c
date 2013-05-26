@@ -8,6 +8,7 @@
  */
 
 #include "op.h"
+#include "option.h"
 
 #define PRINT_FILE 0
 #define PRINT_CHUNK 0

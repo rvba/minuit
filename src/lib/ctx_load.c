@@ -22,6 +22,7 @@
 */
 
 #include "op.h"
+#include "option.h"
 
 // LISTS
 
