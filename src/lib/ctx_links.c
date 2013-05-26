@@ -9,6 +9,7 @@
 
 #include "context.h"
 #include "ctx.h"
+#include "app.h"
 
 #define db_main 0
 

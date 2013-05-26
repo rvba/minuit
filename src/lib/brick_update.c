@@ -10,6 +10,7 @@
 #include "op.h"
 #include "action.h"
 #include "ctx.h"
+#include "app.h"
 
 int is_vec_stored=0;
 float v[3];

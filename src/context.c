@@ -8,6 +8,7 @@
 
 #include "op.h"
 #include "ctx.h"
+#include "app.h"
 
 t_context *CONTEXT;
 

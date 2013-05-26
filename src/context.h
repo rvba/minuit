@@ -10,7 +10,6 @@
 #ifndef __CONTEXT_H
 #define __CONTEXT_H
 
-#include "app.h"
 #include "sketch.h"
 #include "term.h"
 #include "draw.h"
@@ -61,7 +60,7 @@ typedef struct Context t_context;
 
 struct Context
 {
-	t_app *app;
+	struct App *app;
 	t_mode *mode;
 	t_engine *engine;
 	t_scene *scene;

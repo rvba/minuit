@@ -9,6 +9,7 @@
 
 #include "op.h"
 #include "ctx.h"
+#include "app.h"
 
 t_node *BROWSER_BUTTONS;
 t_file *path;

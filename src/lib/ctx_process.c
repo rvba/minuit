@@ -9,6 +9,7 @@
 
 #include "op.h"
 #include "ctx.h"
+#include "app.h"
 
 void *ctx_compute(void *data)
 {

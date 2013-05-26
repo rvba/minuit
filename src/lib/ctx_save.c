@@ -9,6 +9,7 @@
 
 #include "op.h"
 #include "ctx.h"
+#include "app.h"
 
 void load_last(t_context *C)
 {

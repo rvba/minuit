@@ -8,6 +8,7 @@
  */
 
 #include "op.h"
+#include "app.h"
 
 #define OP_CAM_SPEED 50
 #define OP_CAM_ORTHO_ZOOM_FAC 10

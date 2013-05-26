@@ -24,6 +24,7 @@
 #include "op.h"
 #include "option.h"
 #include "ctx.h"
+#include "app.h"
 
 // LISTS
 

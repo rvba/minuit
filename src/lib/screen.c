@@ -8,6 +8,7 @@
  */
 
 #include "op.h"
+#include "app.h"
 
 void screen_switch_by_name(char *name)
 {

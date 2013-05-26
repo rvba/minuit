@@ -8,6 +8,7 @@
  */
 
 #include "op.h"
+#include "app.h"
 
 t_txt *txt_intro;
 

@@ -10,6 +10,7 @@
 #include "context.h"
 #include "action.h"
 #include "ctx.h"
+#include "app.h"
 
 void ctx_ui_freeze(t_context *C)
 {

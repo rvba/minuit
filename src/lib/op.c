@@ -8,6 +8,7 @@
  */
 
 #include "op.h"
+#include "app.h"
 #include "obj.h"
 
 // store menu

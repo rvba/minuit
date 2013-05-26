@@ -8,6 +8,7 @@
  */
 
 #include "context.h"
+#include "app.h"
 
 // Selections and updates
 
