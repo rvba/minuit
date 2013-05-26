@@ -8,6 +8,7 @@
  */
 
 #include "context.h"
+#include "ctx.h"
 
 void block_store(t_block *block,t_brick *brick)
 {

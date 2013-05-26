@@ -8,6 +8,7 @@
  */
 
 #include "op.h"
+#include "ctx.h"
 
 void symbol_show(t_symbol *symbol)
 {
@@ -109,11 +110,7 @@ t_symbol *symbol_rebind(t_scene *sc,void *ptr)
 {
 	t_symbol *symbol=(t_symbol *)ptr;
 
-	check_init("SYMBOL",symbol->name);
-
 	rebind(sc,"symbol","data",(void **)&symbol->data);
-
-	check_check("SYMBOL",symbol->name);
 
 	return symbol;
 }
@@ -123,11 +120,7 @@ t_dict *dict_rebind(t_scene *sc,void *ptr)
 {
 	t_dict *dict=(t_dict *)ptr;
 
-	check_init("DICT",dict->name);
-
 	rebind(sc,"dict","symbols",(void **)&dict->symbols);
-
-	check_check("DICT",dict->name);
 
 	return dict;
 }

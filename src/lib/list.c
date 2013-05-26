@@ -8,6 +8,7 @@
  */
 
 #include "op.h"
+#include "ctx.h"
 
 // REMOVE DOUBLE
 
@@ -359,13 +360,9 @@ t_lst *lst_rebind(t_scene *sc,void *ptr)
 {
 	t_lst *lst=(t_lst *)ptr;
 
-	check_init("LIST",lst->name);
-
 	rebind(sc,"list","first",(void **)&lst->first);
 	rebind(sc,"list","last",(void **)&lst->last);
 	rebind(sc,"list","current",(void **)&lst->current);
-
-	check_check("LIST",lst->name);
 
 	return lst;
 }
@@ -374,16 +371,12 @@ t_link *link_rebind(t_scene *sc,void *ptr)
 {
 	t_link *link=(t_link *)ptr;
 
-	check_init("LINK",link->name);
-
 	rebind(sc,"link","next",(void **)&link->next);
 	rebind(sc,"link","prev",(void **)&link->prev);
 	rebind(sc,"link",link->name,(void **)&link->data);
 
 	link->parent=NULL;
 	link->child=NULL;
-
-	check_check("LINK",link->name);
 
 	return link;
 }

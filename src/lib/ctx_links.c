@@ -8,6 +8,7 @@
  */
 
 #include "context.h"
+#include "ctx.h"
 
 #define db_main 0
 

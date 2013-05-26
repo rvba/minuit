@@ -8,6 +8,7 @@
  */
 
 #include "op.h"
+#include "ctx.h"
 
 void object_default(t_node *node){}
 void cls_object_link(t_object *self,t_node *target);

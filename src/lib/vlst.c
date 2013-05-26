@@ -9,6 +9,7 @@
 
 #include "op.h"
 #include "action.h"
+#include "ctx.h"
 
 void __vlst_update_data(t_vlst *vlst,t_vlst *caller);
 
@@ -721,14 +722,10 @@ t_vlst *vlst_rebind(t_scene *sc,void *ptr)
 {
 	t_vlst *vlst=(t_vlst *)ptr;
 
-	check_init("VLST",vlst->name);
-
 	// REBIND
 
 	rebind(sc,"vlst","data",(void **)&vlst->data);
 	rebind(sc,"vlst","link",(void **)&vlst->link);
-
-	check_check("VLST",vlst->name);
 
 	return vlst;
 }

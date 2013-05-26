@@ -9,14 +9,13 @@
 
 
 #include "op.h"
+#include "ctx.h"
 
 t_set *set_rebind(t_scene *sc, void **ptr)
 {
 	t_set *set=(t_set *)ptr;
 
-	check_init("SET",set->name);
 	rebind(sc,"set","lst",(void **)&set->lst);
-	check_check("SET",set->name);
 
 	return set;
 }

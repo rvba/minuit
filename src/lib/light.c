@@ -13,8 +13,6 @@
 t_light *light_rebind(t_scene *sc,void *ptr)
 {
 	t_light *light=(t_light *)ptr;
-	check_init("LIGHT","light");
-	check_check("LIGHT","light");
 	return light;
 }
 

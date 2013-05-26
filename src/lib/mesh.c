@@ -8,6 +8,7 @@
  */
 
 #include "op.h"
+#include "ctx.h"
 
 void mesh_init(t_scene *sc,t_mesh *mesh)
 {
@@ -53,8 +54,6 @@ t_mesh *mesh_rebind(t_scene *sc,void *ptr)
 {
 	t_mesh *mesh=(t_mesh *)ptr;
 	
-	check_init("MESH",mesh->name);
-
 	// REBIND
 
 	rebind(sc,"mesh","texture",(void **)&mesh->texture);
@@ -85,8 +84,6 @@ t_mesh *mesh_rebind(t_scene *sc,void *ptr)
 	mesh->state.is_selected=0;
 	mesh->state.buffer_type=buffer_empty;
 	mesh->state.is_buffer_built=0;
-
-	check_check("MESH",mesh->name);
 
 	return mesh;
 }

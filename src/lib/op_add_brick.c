@@ -8,6 +8,7 @@
  */
 
 #include "op.h"
+#include "ctx.h"
 
 int set_draw_plug=1;
 

@@ -8,6 +8,7 @@
  */
 
 #include "op.h"
+#include "ctx.h"
 
 // DRAW
 
@@ -27,11 +28,7 @@ t_viewport *viewport_rebind(t_scene *sc, void **ptr)
 {
 	t_viewport *viewport=(t_viewport *)ptr;
 
-	check_init("VIEWPORT",viewport->name);
-
 	rebind(sc,"viewport","camera",(void **)&viewport->camera);
-
-	check_check("OBJECT",viewport->name);
 
 	return viewport;
 }

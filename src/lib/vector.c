@@ -8,6 +8,7 @@
  */
 
 #include "op.h"
+#include "ctx.h"
 
 void cls_vector_init(t_vector *vector)
 {
@@ -172,8 +173,6 @@ t_node *vector_add(const char *name)
 t_vector *vector_rebind(t_scene *sc,void *ptr)
 {
 	t_vector *vector = (t_vector *)ptr;
-
-	check_init("VECTOR",vector->name);
 
 	rebind(sc,"vector","vlst",(void **)&vector->vector);
 

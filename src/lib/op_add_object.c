@@ -8,6 +8,7 @@
  */
 
 #include "op.h"
+#include "ctx.h"
 #define LOGOUT 1
 
 // new mesh cube

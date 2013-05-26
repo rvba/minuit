@@ -33,8 +33,6 @@ void *material_get_ref(t_material *material, const char *ref)
 t_material *material_rebind(t_scene *sc,void *ptr)
 {
 	t_material *material=(t_material *)ptr;
-	check_init("MATERIAL",material->name);
-	check_check("MATERIAL",material->name);
 	return material;
 }
 

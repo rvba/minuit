@@ -8,6 +8,7 @@
  */
 
 #include "op.h"
+#include "ctx.h"
 
 // UPDATE
 
@@ -41,11 +42,7 @@ t_binding *binding_rebind(t_scene *sc, void *ptr)
 {
 	t_binding *binding = (t_binding *) ptr;
 
-	check_init("BINDING", binding->name);
-
 	rebind(sc, "binding", "data", (void **) &binding->data);
-
-	check_check("BINDING", binding->name);
 
 	return binding;
 }

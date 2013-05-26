@@ -8,6 +8,7 @@
  */
 
 #include "op.h"
+#include "ctx.h"
 
 int brick_is_different(t_brick *dst, t_brick *src)
 {
@@ -460,8 +461,6 @@ void *brick_get_ref(t_brick *brick, const char *ref)
 t_brick *brick_rebind(t_scene *sc,void *ptr)
 {
 	t_brick *brick=(t_brick *)ptr;
-
-	check_init("BUTTON",brick->name);
 
 	rebind(sc,"brick","menu",(void **)&brick->menu);
 	rebind(sc,"brick","block",(void **)&brick->block);

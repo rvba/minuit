@@ -8,6 +8,7 @@
  */
 
 #include "op.h"
+#include "ctx.h"
 
 void block_set_graph_order(t_block *block, int order)
 {
@@ -368,8 +369,6 @@ t_block *block_rebind(t_scene *sc,void *ptr)
 {
 	t_block *block=(t_block *)ptr;
 
-	check_init("BLOCK",block->name);
-	
 	rebind(sc,"block","bricks",(void **)&block->bricks);
 
 	// reset
@@ -378,8 +377,6 @@ t_block *block_rebind(t_scene *sc,void *ptr)
 
 	t_context *C=ctx_get();
 	block_init(C->scene,block);
-
-	check_check("BLOCK",block->name);
 
 	return block;
 }

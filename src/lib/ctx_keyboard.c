@@ -8,6 +8,7 @@
  */
 
 #include "op.h"
+#include "ctx.h"
 
 int switch_init=0;
 int switch_frame=0;

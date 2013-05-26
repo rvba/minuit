@@ -16,6 +16,8 @@
 #include "minuit.h"
 #include "txt.h"
 
+struct Dict;
+
 typedef struct Block t_block;
 typedef struct Block_Class t_block_class;
 typedef struct Block_State t_block_state;
@@ -392,6 +394,8 @@ void		block_unstore(t_block *block);
 
 
 // BRICK
+
+void brick_remove(struct Dict *args);
 
 int 		brick_is_different(t_brick *dst, t_brick *src);
 void 		brick_copy_data(t_brick *dst, t_brick *src);

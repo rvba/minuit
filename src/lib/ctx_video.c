@@ -8,6 +8,7 @@
  */
 
 #include "op.h"
+#include "ctx.h"
 
 void ctx_switch_record_video(t_context *C)
 {
