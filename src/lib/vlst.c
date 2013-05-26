@@ -8,6 +8,7 @@
  */
 
 #include "op.h"
+#include "action.h"
 
 void __vlst_update_data(t_vlst *vlst,t_vlst *caller);
 

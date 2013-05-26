@@ -5,6 +5,7 @@
 all:liblib.a
 
 obj:=\
+	action.o\
 	app_keyboard.o\
 	app_mouse.o\
 	app_window.o\
@@ -81,6 +82,8 @@ liblib.a:$(obj)
 	ar -cr liblib.a $(obj)
 
 
+action.o:action.h action.c
+	gcc -c action.c $(FLAG) $(INC)
 app_mouse.o:../app.h app_mouse.c
 	gcc -c app_mouse.c $(FLAG) $(INC)
 app_keyboard.o:../app.h app_keyboard.c

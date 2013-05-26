@@ -42,8 +42,6 @@
 #define SKETCH_WITH_SCALE 1
 
 typedef struct Context t_context;
-//typedef struct Option t_option;
-typedef struct Action t_action;
 
 // CONTEXT
 
@@ -62,21 +60,6 @@ struct Context
 	t_server *server;
 };
 
-struct Action
-{
-	char name[_NAME_];
-
-	void (* act)(t_dict *args);
-	t_dict *args;
-};
-
-
-
-// ACTION
-
-void action_free(t_action *action);
-t_action *action_new(const char *name);
-void exe_add_action(t_action *action);
 
 
 // CTX_LOAD

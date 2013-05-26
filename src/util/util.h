@@ -42,12 +42,7 @@
 #define PROCESS_LIMIT 0.01
 #define SOCKET_BUFFER 2024
 
-#define _NAME_ 64
-#define _NAME_LONG_ 128
-#define _PATH_ 150
-#define _EXT_ 10
-#define _STATE_ 20
-#define _LIST_ 10
+#include "common.h"
 
 #define BIN_MAX 10000
 

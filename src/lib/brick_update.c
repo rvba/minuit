@@ -8,6 +8,7 @@
  */
 
 #include "op.h"
+#include "action.h"
 
 int is_vec_stored=0;
 float v[3];

@@ -8,6 +8,7 @@
  */
 
 #include "context.h"
+#include "action.h"
 
 void ctx_ui_freeze(t_context *C)
 {

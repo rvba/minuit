@@ -8,6 +8,7 @@
  */
 
 #include "op.h"
+#include "action.h"
 
 // SET UPDATED
 
@@ -770,23 +771,6 @@ void exe_add_brick_child_parent(t_dict *args)
 	block->state.update_geometry=1;
 }
 
-void action_free(t_action *action)
-{
-	t_context *C = ctx_get();
-	t_scene *sc = C->scene;
-	if(action->args) scene_struct_delete(sc,action->args);
-	free(action);
-}
-
-t_action *action_new(const char *name)
-{
-	t_action *action = (t_action *)malloc(sizeof(t_action));
-	
-	action->act = NULL;
-	action->args = NULL;
-
-	return action;
-}
 
 void add_exe_add_brick(t_brick *brick,t_brick *brick_target,void (* f)(t_dict *))
 {
