@@ -32,6 +32,8 @@ struct Mode
 t_module *mode_module_get(t_mode *mode,char *name);
 t_module *mode_module_add(t_mode *mode,char *name,void *data);
 
+t_module *ctx_module_get(t_context *C,char *name);
+void ctx_module_add(t_context *C,char *name,void *data);
 t_mode *mode_new(void);
 void mode_init(t_mode *mode);
 

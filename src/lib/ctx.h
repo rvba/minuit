@@ -100,8 +100,6 @@ void context_store_action(t_context *C,t_node *node);
 void context_read_buffer(t_context *C); 
 void context_update_background(t_context *C); 
 
-t_module *ctx_module_get(t_context *C,char *name);
-void ctx_module_add(t_context *C,char *name,void *data);
 
 void exe_init(void);
 

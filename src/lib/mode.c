@@ -8,6 +8,7 @@
  */
 
 #include "op.h"
+#include "mode.h"
 
 t_module *module_new(char *name,void *data)
 {

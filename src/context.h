@@ -16,7 +16,6 @@
 #include "engine.h"
 #include "event.h"
 #include "camera.h"
-#include "mode.h"
 #include "server.h"
 #include "dict.h"
 
@@ -61,7 +60,7 @@ typedef struct Context t_context;
 struct Context
 {
 	struct App *app;
-	t_mode *mode;
+	struct Mode *mode;
 	t_engine *engine;
 	t_scene *scene;
 	t_event *event;
@@ -72,23 +71,6 @@ struct Context
 	t_lst *terms;
 	t_server *server;
 };
-
-/*
-typedef struct Context
-{
-	struct App *app;
-	struct Mode *mode;
-	struct Engine *engine;
-	struct Scene *scene;
-	struct Event *event;
-	struct Ui *ui;
-	struct Draw *draw;
-	struct Skt *skt;
-	struct Term *term;
-	struct Lst *terms;
-	struct Server *server;
-}t_context;
-*/
 
 t_context *ctx_get(void);
 t_context *ctx_init(int argc,char **argv);

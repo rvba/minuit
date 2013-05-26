@@ -9,6 +9,7 @@
 #include "op.h"
 #include "ctx.h"
 #include "app.h"
+#include "mode.h"
 
 t_context *CONTEXT;
 
