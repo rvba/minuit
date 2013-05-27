@@ -11,6 +11,10 @@
 #ifndef _DICT_H
 #define _DICT_H
 
+#include "data.h"
+
+struct Scene;
+
 typedef struct Symbol t_symbol;
 typedef struct Dict t_dict;
 
@@ -44,11 +48,11 @@ void *dict_pop_data(t_dict *dict,const char *name);
 t_node *dict_add(const char *name);
 
 void			symbol_free(t_symbol *symbol);
-t_symbol *		symbol_rebind(t_scene *sc,void *ptr);
+t_symbol *		symbol_rebind(struct Scene *sc,void *ptr);
 t_symbol *		symbol_new(const char *name);
 
 void 			dict_free(t_dict *dict);
-t_dict *		dict_rebind(t_scene *sc,void *ptr);
+t_dict *		dict_rebind(struct Scene *sc,void *ptr);
 t_dict *		dict_new(const char *name);
 void 			dict_show(t_dict *dict);
 

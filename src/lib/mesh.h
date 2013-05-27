@@ -7,13 +7,15 @@
  *
  */
 
-#include "minuit.h"
 
 #ifndef __MESH_H_
 #define __MESH_H_
 
 #include "texture.h"
 #include "material.h"
+#include "list.h"
+#include "scene.h"
+#include "node.h"
 
 #define MESH_LENGTH_TYPE 20
 

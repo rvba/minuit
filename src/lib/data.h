@@ -14,8 +14,36 @@
 
 #define DATA_NAME 64
 
+struct Scene;
+
 typedef struct Data t_data;
 typedef struct Data_Class t_data_cls;
+
+typedef enum Data_Type t_data_type;
+
+enum Data_Type
+{
+	dt_null,
+	dt_int,
+	dt_uint,
+	dt_float,
+	dt_char,
+	dt_string,
+	dt_pointer,
+	dt_vertex,
+	dt_face,
+	dt_mesh,
+	dt_lst,
+	dt_vlst,
+	dt_camera,
+	dt_object,
+	dt_selector,
+	dt_trigger,
+	dt_operator,
+	dt_vector,
+	dt_viewport,
+	dt_binding,
+};
 
 struct Data_Class
 {
@@ -68,7 +96,7 @@ void		print_type(t_data_type type);
 void		 data_init(t_data_type type,void *data_dst, void *data_src);
 void *		data_add(t_data_type type,void *data);
 void *		data_copy(t_data_type type,void *data);
-t_data *	data_rebind(t_scene *sc,void *ptr);
+t_data *	data_rebind(struct Scene *sc,void *ptr);
 t_data *	data_new(const char *name);
 void		data_free(t_data *data);
 

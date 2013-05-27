@@ -10,8 +10,6 @@
 #ifndef __CONTEXT_H
 #define __CONTEXT_H
 
-#include "scene.h"
-
 #define ZOOM 1
 #define PAN_X 0
 #define PAN_Y 0
@@ -32,38 +30,21 @@
 
 #define SKETCH_WITH_SCALE 1
 
-/*
-struct App;
-struct Mode;
-struct Engine;
-struct Scene;
-struct Event;
-struct Ui;
-struct Draw;
-struct Skt;
-struct Term;
-struct Lst;
-struct Server;
-*/
-
-typedef struct Context t_context;
-
-// CONTEXT
-
-struct Context
+typedef struct Context
 {
 	struct App *app;
 	struct Mode *mode;
 	struct Engine *engine;
 	struct MNserver *server;
-	t_scene *scene;
+	struct Scene *scene;
 	struct Event *event;
 	struct Ui *ui;
 	struct Draw *draw;
 	struct Sketch *skt;
 	struct Term *term;
 	struct Lst *terms;
-};
+
+}t_context;
 
 t_context *ctx_get(void);
 t_context *ctx_init(int argc,char **argv);

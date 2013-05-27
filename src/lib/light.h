@@ -7,11 +7,14 @@
  *
  */
 
-#include "minuit.h"
-#include "block.h"
-
 #ifndef __LIGHT_H_
 #define __LIGHT_H_
+
+#include "common.h"
+
+struct Block;
+struct Scene;
+struct Node;
 
 typedef struct Light t_light;
 
@@ -31,14 +34,14 @@ struct Light
 	float diffuse[4];
 	float specular[4];
 
-	t_block *menu;
+	struct Block *menu;
 };
 
 void 		light_show(t_light *light);
 void 		light_free(t_light *light);
 t_light*	light_new(const char *name);
-t_light*	light_rebind(t_scene *sc,void *ptr);
-t_node*		light_make(const char *name);
+t_light*	light_rebind(struct Scene *sc,void *ptr);
+struct Node*		light_make(const char *name);
 
 
 #endif

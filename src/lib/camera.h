@@ -10,7 +10,6 @@
 #ifndef _CAMERA_H
 #define _CAMERA_H
 
-#include "minuit.h"
 
 #define CAM_SPEED 50
 #define CAM_ORTHO_NEAR -1
@@ -25,6 +24,8 @@
 #define CAM_IS_MOVING 0
 
 struct Context;
+struct Node;
+struct Scene;
 
 typedef struct Camera t_camera;
 typedef struct Camera_Class t_camera_cls;
@@ -104,10 +105,10 @@ void 		camera_show(t_camera *camera);
 t_camera *	camera_clone(t_camera *source);
 void 		camera_copy(t_camera *target,t_camera *source);
 void 		camera_free(t_camera *camera);
-t_node *	camera_add(const char *name);
-t_camera *	camera_rebind(t_scene *scene, void *ptr);
+struct Node *	camera_add(const char *name);
+t_camera *	camera_rebind(struct Scene *scene, void *ptr);
 t_camera *	camera_new(const char *name);
-t_node *	camera_make(const char *name);
+struct Node *	camera_make(const char *name);
 
 
 

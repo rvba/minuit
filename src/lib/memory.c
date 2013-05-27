@@ -8,6 +8,8 @@
  */
 
 #include "context.h"
+#include "scene.h"
+#include "node.h"
 #include "app.h"
 #include "memory.h"
 #include "log.h"

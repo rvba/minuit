@@ -8,7 +8,9 @@
  */
 
 
+#include "util.h"
 #include "material.h"
+#include "scene.h"
 
 void *material_get_ref(t_material *material, const char *ref)
 {

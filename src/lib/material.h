@@ -7,10 +7,11 @@
  *
  */
 
-#include "minuit.h"
 
 #ifndef __MATERIAL_H
 #define __MATERIAL_H
+
+struct Scene;
 
 typedef struct Material t_material;
 
@@ -33,6 +34,6 @@ struct Material
 void *material_get_ref(t_material *material, const char *ref);
 void material_free(t_material *material);
 t_material*	material_new(const char *name);
-t_material*	material_rebind(t_scene *sc,void *ptr);
+t_material*	material_rebind(struct Scene *sc,void *ptr);
 
 #endif

@@ -7,10 +7,17 @@
  *
  */
 
-#include "minuit.h"
-
 #ifndef _LIST_H
 #define _LIST_H
+
+//#include "util.h"
+#include "data.h"
+
+struct Scene;
+struct Node;
+
+typedef struct VLst t_vlst;
+typedef enum VLst_Type t_vlst_type;
 
 struct VLst
 {
@@ -52,7 +59,7 @@ void *		vlst_get_ref(t_vlst *vlst, const char *ref);
 void *		vlst_get_pointer(t_vlst *vlst, int indice);
 void 		vlst_set_data(t_vlst *vlst, void *data, int indice);
 
-t_vlst *	vlst_rebind(t_scene *sc,void *ptr);
+t_vlst *	vlst_rebind(struct Scene *sc,void *ptr);
 void 		vlst_normal_3f(t_vlst *dst,t_vlst *vertex,t_vlst *face);
 void 		vlst_normal_4f(t_vlst *dst,t_vlst *vertex,t_vlst *face);
 void		 vlst_normal_4f_direct(t_vlst *dst,t_vlst *vertex,t_vlst *face);
@@ -77,15 +84,14 @@ void 		vlst_set(t_vlst *vlst,int i);
  
 t_link * 	list_add(t_lst *lst,void *data);
 t_link * 	list_add_global(t_lst *lst,void *data);
-t_lst *		lst_rebind(t_scene *sc,void *ptr);
-t_link *	link_rebind(t_scene *sc,void *ptr);
+t_lst *		lst_rebind(struct Scene *sc,void *ptr);
+t_link *	link_rebind(struct Scene *sc,void *ptr);
 
-t_node *	lst_get_node(t_lst *lst,int id);
-int 		lst_remove_node(t_lst *lst,t_node *node);
+int 		lst_remove_node(t_lst *lst,struct Node *node);
 void 		lst_remove_all(t_lst *lst);
 void *		lst_get(t_lst *lst,char *name);
 
-t_node *	lst_find_node_by_name(t_lst *lst,const char *name);
+struct Node *	lst_find_node_by_name(t_lst *lst,const char *name);
 int 		lst_remove_by_id(t_lst *lst,int id);
 
 void 		list_remove_by_ptr(t_lst *lst,void *ptr);
@@ -98,5 +104,7 @@ void 		lst_show_generic(t_lst *lst);
 
 void 		list_cleanup(t_lst *lst);
 void 		list_show(t_lst *lst);
+
+struct Node *lst_get_node(t_lst *lst,int id);
 
 #endif

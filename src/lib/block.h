@@ -13,10 +13,13 @@
 
 #define BRICK_MIN_WIDTH 130
 
-#include "minuit.h"
+#include "common.h"
 #include "txt.h"
+#include "data.h"
+#include "node.h"
 
 struct Dict;
+struct Scene;
 
 typedef struct Block t_block;
 typedef struct Block_Class t_block_class;
@@ -365,7 +368,7 @@ t_node*		block_create(const char *name);
 t_node*		block_make(const char *name,const char *type);
 void 		block_free(t_block *block);
 t_block *	block_new(const char *name);
-t_block *	block_rebind(t_scene *sc,void *ptr);
+t_block *	block_rebind(struct Scene *sc,void *ptr);
 
 
 // BLOCK DRAW
@@ -414,12 +417,12 @@ void 		brick_type_change(t_brick *brick,t_plug *plug);
 void 		brick_type_reset(t_brick *brick);
 void 		brick_change_type_by_name(t_brick *brick,t_data_type type);
 
-void 		brick_init(t_scene *sc,t_brick *brick);
+void 		brick_init(struct Scene *sc,t_brick *brick);
 void 		_brick_init(t_brick *brick);
 
 t_brick *	brick_new(const char *name);
 void *		brick_get_ref(t_brick *brick, const char *ref);
-t_brick *	brick_rebind(t_scene *sc,void *ptr);
+t_brick *	brick_rebind(struct Scene *sc,void *ptr);
 t_node 		*brick_make(t_block *block,const char *name,t_brick_type brick_type,t_data_type data_type,void *data_target);
 
 // BRICK_CLS

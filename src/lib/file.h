@@ -10,7 +10,11 @@
 #ifndef __FILE_H
 #define __FILE_H
 
-#include "minuit.h"
+#include "util.h"
+#include "common.h"
+
+struct Scene;
+struct Lst;
 
 typedef struct Line t_line;
 typedef struct File t_file;
@@ -30,7 +34,7 @@ struct Line
 {
 	int size;
 	char *data;
-	t_lst *words;
+	struct Lst *words;
 };
 
 // FILE
@@ -59,7 +63,7 @@ struct File
 	FILE *file; // stream
 	char *data; // content of file
 
-	t_lst *lines;
+	struct Lst *lines;
 };
 
 // FILE
@@ -75,7 +79,7 @@ void word_show(t_word *word);
 void line_read_words(t_line *line);
 void line_show(t_line *line);
 t_line *line_new(void);
-t_file *file_rebind(t_scene *scene, void *ptr);
+t_file *file_rebind(struct Scene *scene, void *ptr);
 t_file *file_new(const char *path);
 void file_free(t_file *file);
 void file_show(t_file *file);

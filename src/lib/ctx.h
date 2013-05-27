@@ -10,6 +10,9 @@
 #ifndef __CTX_H
 #define __CTX_H
 
+#include "scene.h"
+#include "node.h"
+
 struct Brick;
 struct Block;
 struct Plug;

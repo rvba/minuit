@@ -10,6 +10,10 @@
 #ifndef __VECTOR_H
 #define __VECTOR_H
 
+#include "list.h"
+
+typedef struct Vector t_vector;
+typedef struct Vector_Class t_vector_cls;
 
 struct Vector
 {

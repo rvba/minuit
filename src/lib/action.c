@@ -7,8 +7,10 @@
  *
  */
 
+#include "util.h"
 #include "action.h"
 #include "context.h"
+#include "scene.h"
 
 void action_free(t_action *action)
 {

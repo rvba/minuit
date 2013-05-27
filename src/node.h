@@ -10,8 +10,107 @@
 #ifndef __NODE_H
 #define __NODE_H
 
+#include "common.h"
 #include "util.h"
-#include "minuit.h"
+
+struct Scene;
+
+typedef struct Node t_node;
+typedef struct NodeClass t_node_class;
+typedef enum  Node_Type t_node_type;
+
+typedef struct Generic t_generic;
+typedef struct Generir_Class t_generic_cls;
+
+
+enum Node_Type
+{
+	nt_null,
+	nt_mesh,
+	nt_block,
+	nt_brick,
+	nt_light,
+	nt_object,
+	nt_screen,
+	nt_file,
+	nt_image,
+	nt_material,
+	nt_list,
+	nt_link,
+	nt_data,
+	nt_texture,
+	nt_var,
+	nt_option,
+	nt_vlst,
+	nt_camera,
+	nt_dict,
+	nt_symbol,
+	nt_vector,
+	nt_viewport,
+	nt_set,
+	nt_binding,
+};
+
+
+// GENERIC
+
+/*
+block plug camera data engine light vlst texture
+object screen txt image link lst
+*/
+
+struct Generic_Class
+{
+	char cls_type[_NAME_];
+};
+
+struct Generic
+{
+	int id;
+	int id_chunk;
+	short users;
+	char name[_NAME_];
+	t_generic_cls *cls;
+};
+
+// NODE CLASS
+
+struct NodeClass
+{
+	t_node_type type;
+	size_t size;
+	t_lst *lst;
+
+	int  (* make)(t_node *node);
+	void (* build)(t_node *node,const char *name);
+	void (* link)(t_node *node);
+	void (* del)(t_node *node);
+	void (* init)(t_node *node);
+	void (* free)(struct Scene *sc,t_node *node);
+
+	void (* set_state_selected)(t_node *node,int state);
+	int (* is_mouse_over)(t_node *node);
+	void *(* get_ref)(t_node *node, const char *ref);
+};
+
+// NODE
+
+struct Node
+{
+	int id;
+	int id_old;
+	int id_chunk;
+	int id_chunk_self;
+	void *id_ptr;
+	void *id_ptr_old;
+	int users;
+
+	t_node_type type;
+	t_node_class *cls;
+
+	void *data;  
+};
+
 
 // NODE.C
 
@@ -48,6 +147,8 @@ void 		lst_node_delete_all(t_lst *lst);
 t_node *	node_clone(t_node *src);
 
 int 		dlink(const char *type,void *ptr);
+
+char *node_name_get(t_node_type type);
 
 #endif
 

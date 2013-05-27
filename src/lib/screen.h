@@ -10,6 +10,8 @@
 #ifndef __SCREEN_H_
 #define __SCREEN_H_
 
+#include "common.h"
+
 typedef struct MINscreen t_screen;
 
 struct MINscreen
@@ -40,7 +42,7 @@ void screen_browser_make(void);
 
 // SCREEN_INIT.C
 
-t_node *screen_new_generic(char *name);
+struct Node *screen_new_generic(char *name);
 void screen_main_make(void);
 void screen_sets_make(void);
 

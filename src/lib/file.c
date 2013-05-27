@@ -7,6 +7,8 @@
  *
  */
 
+#include "util.h"
+#include "scene.h"
 #include "file.h"
 
 #define PATH_LIMIT 1024

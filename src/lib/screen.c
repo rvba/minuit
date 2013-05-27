@@ -9,6 +9,7 @@
 
 #include "context.h"
 #include "scene.h"
+#include "node.h"
 #include "app.h"
 #include "screen.h"
 #include "camera.h"

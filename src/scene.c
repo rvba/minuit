@@ -7,14 +7,14 @@
  *
  */
 
+#include "minuit.h"
+#include "node.h"
 #include "scene.h"
 #include "log.h"
 #include "data.h"
 #include "list.h"
 #include "util.h"
 #include "memory.h"
-#include "minuit.h"
-#include "node.h"
 
 // STATIC
 t_scene *SCENE=NULL;

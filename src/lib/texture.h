@@ -7,10 +7,12 @@
  *
  */
 
-#include "minuit.h"
-
 #ifndef __TEXTURE_H
 #define __TEXTURE_H
+
+#include "util.h"
+
+struct Scene;
 
 typedef struct Texture t_texture;
 
@@ -34,7 +36,7 @@ struct Texture
 };
 
 
-t_texture* 	texture_rebind(t_scene *scene, void *ptr);
+t_texture* 	texture_rebind(struct Scene *scene, void *ptr);
 t_texture*	texture_new(const char *name);
 void 		texture_free(t_texture *texture);
 void 		texture_image_bind(t_texture *texture,t_image *image);

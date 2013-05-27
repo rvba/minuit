@@ -11,6 +11,9 @@
 #define __VIEWPORT_H
 
 
+#include "node.h"
+#include "scene.h"
+
 typedef struct Viewport t_viewport;
 
 struct Viewport

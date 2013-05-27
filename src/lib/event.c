@@ -9,6 +9,7 @@
 
 #include "context.h"
 #include "event.h"
+#include "util.h"
 
 t_event *event_new(void)
 {
