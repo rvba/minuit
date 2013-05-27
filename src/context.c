@@ -11,6 +11,7 @@
 #include "app.h"
 #include "mode.h"
 #include "engine.h"
+#include "server.h"
 
 t_context *CONTEXT;
 

@@ -12,6 +12,8 @@
 #include "app.h"
 #include "process.h"
 #include "engine.h"
+#include "server.h"
+#include "util.h"
 
 int server_init=0;
 

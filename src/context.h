@@ -15,7 +15,6 @@
 #include "draw.h"
 #include "event.h"
 #include "camera.h"
-#include "server.h"
 #include "dict.h"
 
 #define ZOOM 1
@@ -61,6 +60,7 @@ struct Context
 	struct App *app;
 	struct Mode *mode;
 	struct Engine *engine;
+	struct MNserver *server;
 	t_scene *scene;
 	t_event *event;
 	t_ui *ui;
@@ -68,7 +68,6 @@ struct Context
 	t_skt *skt;
 	t_term *term;
 	t_lst *terms;
-	t_server *server;
 };
 
 t_context *ctx_get(void);

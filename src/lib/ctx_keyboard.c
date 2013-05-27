@@ -10,6 +10,7 @@
 #include "op.h"
 #include "ctx.h"
 #include "app.h"
+#include "server.h"
 
 int switch_init=0;
 int switch_frame=0;
