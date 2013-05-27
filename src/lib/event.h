@@ -22,6 +22,8 @@
 //#define GLFONT 1
 #define FREE_SCENE 0
 
+#include "common.h"
+
 typedef struct Event t_event;
 typedef enum EventState t_event_state;
 

@@ -12,6 +12,9 @@
 
 #include "common.h"
 
+#include <jpeglib.h>
+#include <png.h>
+
 #include <GL/gl.h>
 
 typedef struct Image

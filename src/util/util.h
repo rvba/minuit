@@ -10,80 +10,6 @@
 #ifndef __UTIL_H
 #define __UTIL_H
 
-#include "common.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-
-#include <stdarg.h>
-#include <assert.h>
-#include <math.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-
-#include <netdb.h> 
-
-#include <GL/gl.h>
-#include <GL/glx.h>
-#include <GL/glext.h>
-#include <GL/glu.h>
-#include <GL/glut.h>
-
-#include <GL/osmesa.h>
-
-#include <unistd.h>
-
-#include <jpeglib.h>
-#include <png.h>
-
-#include <sys/stat.h>
-#include <sys/resource.h>
-
-#include <ctype.h>
-
-#define SOCKET_BUFFER 2024
-
-#ifdef WITH_LIBLO
-#include "liblo.h"
-#endif
-
-
-typedef struct MN_Socket t_socket;
-typedef struct Nameval Nameval;
-
-// SOCKET
-
-struct MN_Socket
-{
-	int socket;
-	int sockfd;
-	int newsockfd;
-	int portno;
-	char buffer[SOCKET_BUFFER];
-
-	struct sockaddr_in serv_addr;
-	struct sockaddr_in cli_addr;
-	struct hostent *server;
-	socklen_t clilen;
-
-	void (* connect)(t_socket *socket,int port);
-	void (* print)(char *msg);
-};
-
-
-
-
-// NAMEVAL
-
-struct Nameval
-{
-	char *name;
-	int value;
-};
-
 // UTIL
 
 void set_name(char *dst,const char *src);
@@ -91,12 +17,35 @@ void set_name_long(char *dst,const char *src);
 void set_path(char *dst,const char *src);
 inline int is(const char a[],const char b[]);
 
+inline int switch_int(int i);
 
-// SOCKET
+inline void set_float(void *_ptr,float i);
+inline void set_int(void *_ptr,int i);
+inline void set_uint(void *_ptr,int i);
 
-int socket_listen(t_socket *sock);
-void socket_connect(t_socket *socket,int port);
-t_socket *socket_new(void);
+inline void flow_int_int(void *_dst, void *_src);
+inline void flow_int_float(void *_dst, void *_src);
+inline void flow_float_float(void *_dst, void *_src);
+inline void flow_float_int(void *_dst, void *_src);
+
+inline void negate_int(void *_dst);
+inline void negate_float(void *_dst);
+
+inline void srf_float(void *ptr, void *data, int indice);
+inline void srf_uint(void *ptr, void *data, int indice);
+
+inline void *grf_float(void *ptr, int indice);
+inline void *grf_int(void *ptr, int indice);
+inline void *grf_uint(void *ptr, int indice);
+
+inline int drf_int(void *ptr);
+inline int drf_uint(void *ptr);
+inline float drf_float(void *ptr);
+inline char drf_char(void *ptr);
+inline char *drf_string(void *ptr);
+
+void sys_git_get(void);
+
 
 // SYSTEM
 
@@ -107,8 +56,6 @@ int sys_get_hostname(char* data);
 
 void slave(void);
 int tcp_client(void);
-
-
 
 // STRING
 
@@ -188,38 +135,7 @@ int u_randrange(int start,int end);
 int u_lookup(char *word,char *array[]);
 
 
-// UTIL
-
-inline int switch_int(int i);
-
-inline void set_float(void *_ptr,float i);
-inline void set_int(void *_ptr,int i);
-inline void set_uint(void *_ptr,int i);
-
-inline void flow_int_int(void *_dst, void *_src);
-inline void flow_int_float(void *_dst, void *_src);
-inline void flow_float_float(void *_dst, void *_src);
-inline void flow_float_int(void *_dst, void *_src);
-
-inline void negate_int(void *_dst);
-inline void negate_float(void *_dst);
-
-inline void srf_float(void *ptr, void *data, int indice);
-inline void srf_uint(void *ptr, void *data, int indice);
-
-inline void *grf_float(void *ptr, int indice);
-inline void *grf_int(void *ptr, int indice);
-inline void *grf_uint(void *ptr, int indice);
-
-inline int drf_int(void *ptr);
-inline int drf_uint(void *ptr);
-inline float drf_float(void *ptr);
-inline char drf_char(void *ptr);
-inline char *drf_string(void *ptr);
-
-void sys_git_get(void);
-
-
-size_t get_memory_usage(void);
 
 #endif
+
+

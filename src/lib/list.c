@@ -352,7 +352,7 @@ t_node *lst_get_node(t_lst *lst,int id)
 {
 	t_link *l;
 	t_node *node;
-	assert(lst);
+//	assert(lst);
 
 	for(l=lst->first;l;l=l->next)
 	{

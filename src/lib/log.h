@@ -10,6 +10,8 @@
 #ifndef __LOG_H
 #define __LOG_H
 
+#include <stdarg.h>
+
 char *LOG;
 
 #ifdef WITH_DEBUG

@@ -15,6 +15,7 @@
 #include "term.h"
 #include "object.h"
 #include "clock.h"
+#include "system.h"
 
 void *ctx_compute(void *data)
 {

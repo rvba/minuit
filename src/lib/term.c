@@ -7,6 +7,7 @@
  *
  */
 
+#include "opengl.h"
 #include "op.h"
 #include "app.h"
 #include "term.h"

@@ -7,6 +7,7 @@
  *
  */
 
+#include "opengl.h"
 #include "app.h"
 #include "util.h"
 

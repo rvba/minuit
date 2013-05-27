@@ -10,6 +10,7 @@
 #ifndef __UI_H
 #define __UI_H
 
+#include "opengl.h"
 
 #define PRECISION "%-.2f"
 #define UI_ALPHABET 0

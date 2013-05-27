@@ -14,11 +14,13 @@
 #define APP_WITH_GLUT 1
 #define APP_VIDEO_LIMIT 20
 
+#include "opengl.h"
 #include "util.h"
 #include "app.h"
 #include "list.h"
 #include "clock.h"
 #include "file.h"
+#include "system.h"
 
 // used for GL calls without args
 t_app *APP;

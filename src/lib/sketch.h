@@ -10,6 +10,8 @@
 #ifndef __SKETCH_H
 #define __SKETCH_H
 
+#include "opengl.h"
+
 #define SKT_WITH_SCALE 1  //see EVENT
 #define SKT_SCALE 1
 #define SKT_COLOR_FRONT 0

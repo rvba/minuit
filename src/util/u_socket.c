@@ -7,7 +7,10 @@
  *
  */
  
+#include "common.h"
 #include "util.h"
+#include "network.h"
+#include "system.h"
 
 void socket_print(char *msg)
 {

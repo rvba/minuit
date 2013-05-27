@@ -7,6 +7,9 @@
  *
  */
 
+#include <sys/stat.h>
+#include <sys/resource.h>
+
 #include "util.h"
 #include "scene.h"
 #include "file.h"
@@ -14,6 +17,7 @@
 
 #define PATH_LIMIT 1024
 #define S_DEBUG 0
+
 
 
 int file_exists(t_file *file)

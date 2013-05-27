@@ -7,9 +7,9 @@
  *
  */
 
+#include "common.h"
 #include "util.h"
 
-#include <ctype.h>
 
 void sys_get_cd(const char *cmd)
 {

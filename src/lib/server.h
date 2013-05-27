@@ -10,7 +10,7 @@
 #ifndef __SERVER_H_
 #define __SERVER_H_
 
-#include "util.h"
+#include "network.h"
 
 typedef struct MNserver t_server;
 
@@ -22,6 +22,5 @@ struct MNserver
 void server_connect(t_server *server,int port);
 t_server *server_new(void);
 
-//void slave(void);
 
 #endif

@@ -11,6 +11,8 @@
 #ifndef __MATERIAL_H
 #define __MATERIAL_H
 
+#include "common.h"
+
 struct Scene;
 
 typedef struct Material t_material;

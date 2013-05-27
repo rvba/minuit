@@ -10,6 +10,8 @@
 #ifndef __TERM_H
 #define __TERM_H
 
+#include <stdarg.h>
+
 #include "txt.h"
 #include "util.h"
 

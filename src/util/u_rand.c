@@ -7,6 +7,7 @@
  *
  */
 
+#include "common.h"
 #include "util.h"
 
 int u_randn(int density)

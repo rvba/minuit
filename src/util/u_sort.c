@@ -7,7 +7,20 @@
  *
  */
 
+#include "common.h"
 #include "util.h"
+
+typedef struct Nameval Nameval;
+
+
+// NAMEVAL
+
+struct Nameval
+{
+	char *name;
+	int value;
+};
+
 
 /*recherche linéaire*/
 /*recherche séquentielle de mots dans un tableau (p34)*/
