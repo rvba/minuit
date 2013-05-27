@@ -9,6 +9,7 @@
 
 #include "op.h"
 #include "app.h"
+#include "term.h"
 
 #define CTX_TERM_TOT_LINE 50
 #define CTX_TERM_LINE_LENGTH 30

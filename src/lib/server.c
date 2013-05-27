@@ -14,6 +14,7 @@
 #include "engine.h"
 #include "server.h"
 #include "util.h"
+#include "term.h"
 
 int server_init=0;
 

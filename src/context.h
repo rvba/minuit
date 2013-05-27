@@ -10,10 +10,7 @@
 #ifndef __CONTEXT_H
 #define __CONTEXT_H
 
-#include "term.h"
 #include "draw.h"
-#include "camera.h"
-#include "dict.h"
 
 #define ZOOM 1
 #define PAN_X 0
@@ -64,8 +61,8 @@ struct Context
 	t_ui *ui;
 	t_draw *draw;
 	struct Sketch *skt;
-	t_term *term;
-	t_lst *terms;
+	struct Term *term;
+	struct Lst *terms;
 };
 
 t_context *ctx_get(void);

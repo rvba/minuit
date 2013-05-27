@@ -11,6 +11,7 @@
 #include "ctx.h"
 #include "app.h"
 #include "event.h"
+#include "term.h"
 
 #define db_main 0
 

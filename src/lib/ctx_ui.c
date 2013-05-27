@@ -14,6 +14,7 @@
 #include "process.h"
 #include "engine.h"
 #include "event.h"
+#include "term.h"
 
 void ctx_ui_freeze(t_context *C)
 {

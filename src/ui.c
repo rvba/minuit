@@ -11,6 +11,7 @@
 #include "app.h"
 #include "event.h"
 #include "sketch.h"
+#include "term.h"
 
 t_txt *txt_intro;
 

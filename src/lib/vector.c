@@ -10,6 +10,7 @@
 #include "op.h"
 #include "ctx.h"
 #include "event.h"
+#include "term.h"
 
 void cls_vector_init(t_vector *vector)
 {

@@ -12,6 +12,7 @@
 #include "app.h"
 #include "server.h"
 #include "event.h"
+#include "term.h"
 
 int switch_init=0;
 int switch_frame=0;

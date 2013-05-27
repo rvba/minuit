@@ -14,6 +14,7 @@
 #include "server.h"
 #include "event.h"
 #include "sketch.h"
+#include "term.h"
 
 t_context *CONTEXT;
 

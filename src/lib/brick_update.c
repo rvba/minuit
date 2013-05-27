@@ -12,6 +12,7 @@
 #include "ctx.h"
 #include "app.h"
 #include "event.h"
+#include "term.h"
 
 int is_vec_stored=0;
 float v[3];
