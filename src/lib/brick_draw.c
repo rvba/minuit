@@ -11,6 +11,7 @@
 #include "txt.h"
 #include "context.h"
 #include "event.h"
+#include "sketch.h"
 
 #define _PRECISION "%-.4f"
 

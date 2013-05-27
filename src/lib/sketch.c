@@ -9,6 +9,7 @@
 
 #include "op.h"
 #include "event.h"
+#include "sketch.h"
 
 // LOCAL
 t_skt *SKT=NULL;

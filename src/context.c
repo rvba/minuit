@@ -13,6 +13,7 @@
 #include "engine.h"
 #include "server.h"
 #include "event.h"
+#include "sketch.h"
 
 t_context *CONTEXT;
 

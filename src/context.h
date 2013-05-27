@@ -10,7 +10,6 @@
 #ifndef __CONTEXT_H
 #define __CONTEXT_H
 
-#include "sketch.h"
 #include "term.h"
 #include "draw.h"
 #include "camera.h"
@@ -64,7 +63,7 @@ struct Context
 	struct Event *event;
 	t_ui *ui;
 	t_draw *draw;
-	t_skt *skt;
+	struct Sketch *skt;
 	t_term *term;
 	t_lst *terms;
 };

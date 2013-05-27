@@ -10,6 +10,7 @@
 #include "op.h"
 #include "app.h"
 #include "event.h"
+#include "sketch.h"
 
 t_txt *txt_intro;
 

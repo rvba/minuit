@@ -13,6 +13,7 @@
 #include "process.h"
 #include "engine.h"
 #include "event.h"
+#include "sketch.h"
 
 // store menu
 
