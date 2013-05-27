@@ -30,6 +30,7 @@
 #include "light.h"
 #include "set.h"
 #include "image.h"
+#include "file.h"
 
 #include "ctx.h"
 

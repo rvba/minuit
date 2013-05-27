@@ -8,6 +8,7 @@
  */
 
 #include "app.h"
+#include "util.h"
 
 // KEYBOARD
 

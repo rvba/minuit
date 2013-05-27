@@ -10,8 +10,7 @@
 #ifndef _APP_H
 #define _APP_H
 
-#include "util.h"
-#include "file.h"
+#include "common.h"
 
 #define APP_KEY_ESC  27
 #define APP_KEY_ENTER 13
@@ -25,6 +24,8 @@
 #define GIT 128
 
 struct Lst;
+struct Clock;
+struct File;
 
 typedef struct App t_app;
 typedef struct Mouse t_mouse;
@@ -86,8 +87,8 @@ struct Mouse
 	int is_moving;
 	int button_left_is_ready;
 
-	t_clock *clic_clock;
-	t_clock *release_clock;
+	struct Clock *clic_clock;
+	struct Clock *release_clock;
 };
 
 // WINDOW
@@ -145,13 +146,13 @@ struct App
 	t_mouse  *mouse;
 	t_window *window;
 	t_keyboard *keyboard;
-	t_clock *clock;
+	struct Clock *clock;
 
 	int load_file;
 	int loaded_file;
 	char *file_path;
 
-	t_file *file;
+	struct File *file;
 	struct Lst *video_frames;
 	struct Lst *video_frames_swap;
 

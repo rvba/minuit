@@ -7,7 +7,9 @@
  *
  */
 
+#include "util.h"
 #include "app.h"
+#include "clock.h"
 
 void set_mouse_delta(t_app *app,int x,int y)
 {

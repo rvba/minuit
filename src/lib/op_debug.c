@@ -11,6 +11,8 @@
 #include "app.h"
 #include "process.h"
 #include "engine.h"
+#include "util.h"
+#include "clock.h"
 
 #define DEBUG_LINE_HEIGHT 20
 #define DEBUG_OFFSET 600

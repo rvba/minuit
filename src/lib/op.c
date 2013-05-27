@@ -18,6 +18,7 @@
 #include "draw.h"
 #include "dict.h"
 #include "list.h"
+#include "clock.h"
 
 // store menu
 

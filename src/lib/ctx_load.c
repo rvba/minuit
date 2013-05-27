@@ -43,6 +43,7 @@
 #include "log.h"
 #include "memory.h"
 #include "term.h"
+#include "file.h"
 
 #include "ctx.h"
 #include "op.h"

@@ -13,6 +13,8 @@
 #include "event.h"
 #include "screen.h"
 #include "memory.h"
+#include "file.h"
+#include "util.h"
 
 void load_last(t_context *C)
 {

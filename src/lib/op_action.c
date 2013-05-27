@@ -14,6 +14,7 @@
 #include "event.h"
 #include "draw.h"
 #include "ui.h"
+#include "file.h"
 
 void op_set_color(t_context *C,int color)
 {

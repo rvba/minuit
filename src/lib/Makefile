@@ -20,6 +20,7 @@ obj:=\
 	brick_update.o\
 	brick_cls.o\
 	camera.o\
+	clock.o\
 	ctx_camera.o\
 	ctx_keyboard.o\
 	ctx_links.o\
@@ -115,6 +116,8 @@ brick_update.o:block.h brick_update.c
 	gcc -c brick_update.c $(FLAG) $(INC)
 camera.o:camera.h
 	gcc -c camera.c $(FLAG) $(INC)
+clock.o:clock.h
+	gcc -c clock.c $(FLAG) $(INC)
 ctx_camera.o:../context.h ctx_camera.c 
 	gcc -c ctx_camera.c $(FLAG) $(INC)
 ctx_links.o:../context.h ctx_links.c

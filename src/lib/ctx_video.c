@@ -15,6 +15,7 @@
 #include "event.h"
 #include "term.h"
 #include "ui.h"
+#include "image.h"
 
 void ctx_switch_record_video(t_context *C)
 {

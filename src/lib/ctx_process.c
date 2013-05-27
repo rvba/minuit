@@ -14,6 +14,7 @@
 #include "engine.h"
 #include "term.h"
 #include "object.h"
+#include "clock.h"
 
 void *ctx_compute(void *data)
 {

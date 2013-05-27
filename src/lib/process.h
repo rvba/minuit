@@ -10,9 +10,11 @@
 #ifndef _PROCESS_H
 #define _PROCESS_H
 
-typedef struct Process t_process;
+#include <pthread.h>
 
-struct Process
+struct Clock;
+
+typedef struct Process
 {
 	int id;
 	int id_chunk;
@@ -20,7 +22,7 @@ struct Process
 	char name[_NAME_];
 
 	pthread_t thread;
-	t_clock *clock;
+	struct Clock *clock;
 
 	void *(* func)(void *ptr);
 	void *(* loop)(void *ptr);
@@ -32,7 +34,8 @@ struct Process
 	int cycle;
 	int done;
 	int busy;
-};
+
+}t_process;
 
 void *ctx_compute(void *data);
 void *ctx_thread_main(void *data);

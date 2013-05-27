@@ -13,6 +13,7 @@
 #include "draw.h"
 #include "camera.h"
 #include "viewport.h"
+#include "util.h"
 
 #define OP_CAM_SPEED 50
 #define OP_CAM_ORTHO_ZOOM_FAC 10

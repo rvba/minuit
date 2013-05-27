@@ -16,9 +16,6 @@
 #include <assert.h>
 #include <math.h>
 #include <string.h>
-#include <ctype.h>
-#include <time.h>
-#include <sys/time.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -30,11 +27,12 @@
 #include <GL/glut.h>
 #include <GL/osmesa.h>
 #include <unistd.h>
-#include <pthread.h>
 #include <jpeglib.h>
 #include <png.h>
 #include <sys/stat.h>
 #include <sys/resource.h>
+
+#include <ctype.h>
 
 #define TIME_LIMIT 0.05
 #define PROCESS_LIMIT 0.01
@@ -48,24 +46,8 @@
 #endif
 
 
-typedef struct Clock t_clock;
 typedef struct MN_Socket t_socket;
 typedef struct Nameval Nameval;
-typedef struct Buffer t_buffer;
-
-// BUFFER
-
-struct Buffer
-{
-	char name[_NAME_];
-	char type[_NAME_];
-	int size_buffer;
-	int size_chunk;
-
-	void *data;
-};
-
-
 
 // SOCKET
 
@@ -87,28 +69,6 @@ struct MN_Socket
 };
 
 
-// CLOCK
-
-struct Clock
-{
-	float freq;
-	int factor;
-	double delta;
-	float limit; 
-	struct timeval before; 
-	struct timeval now;
-
-	int framerate;
-	struct timeval frame_before; 
-	struct timeval frame_now;
-
-	struct timeval start;
-	unsigned long start_time; //milliseconds
-
-	unsigned int msec;
-	int sec;
-	int min;
-};
 
 
 // NAMEVAL
@@ -125,9 +85,6 @@ void set_name(char *dst,const char *src);
 void set_name_long(char *dst,const char *src);
 void set_path(char *dst,const char *src);
 inline int is(const char a[],const char b[]);
-void clock_init(t_clock *clock);
-void clock_free(t_clock *clock);
-t_clock *clock_new(void);
 
 
 // SOCKET

@@ -15,6 +15,7 @@
 #include "server.h"
 #include "util.h"
 #include "term.h"
+#include "clock.h"
 
 int server_init=0;
 

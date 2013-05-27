@@ -7,6 +7,7 @@
  *
  */
 
+#include "util.h"
 #include "app.h"
 
 // SCREEN -- glViewport
