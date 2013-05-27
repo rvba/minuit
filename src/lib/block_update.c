@@ -11,6 +11,7 @@
 #include "ctx.h"
 #include "event.h"
 #include "block.h"
+#include "brick.h"
 #include "ui.h"
 
 void block_store(t_block *block,t_brick *brick)

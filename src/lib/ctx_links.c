@@ -13,6 +13,7 @@
 #include "event.h"
 #include "term.h"
 #include "block.h"
+#include "brick.h"
 #include "ui.h"
 #include "memory.h"
 #include "list.h"

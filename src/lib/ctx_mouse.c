@@ -11,6 +11,8 @@
 #include "app.h"
 #include "event.h"
 #include "block.h"
+#include "brick.h"
+#include "plug.h"
 #include "ui.h"
 #include "draw.h"
 

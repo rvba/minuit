@@ -14,6 +14,7 @@
 #include "event.h"
 #include "sketch.h"
 #include "block.h"
+#include "brick.h"
 #include "data.h"
 #include "object.h"
 

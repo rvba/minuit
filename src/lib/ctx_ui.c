@@ -18,6 +18,8 @@
 #include "draw.h"
 #include "ui.h"
 #include "block.h"
+#include "brick.h"
+#include "plug.h"
 #include "set.h"
 
 void ctx_ui_freeze(t_context *C)

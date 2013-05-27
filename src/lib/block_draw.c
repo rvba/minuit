@@ -12,6 +12,7 @@
 #include "event.h"
 #include "sketch.h"
 #include "block.h"
+#include "brick.h"
 
 // update txt && mouse over
 void block_update_data(t_block *block)

@@ -7,10 +7,10 @@
  *
  */
 
-#include "minuit.h"
-
 #ifndef __BINDING_H
 #define __BINDING_H
+
+#include "common.h"
 
 typedef struct Binding t_binding;
 

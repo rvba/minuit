@@ -10,7 +10,7 @@
 #ifndef __SET_H
 #define __SET_H
 
-#include "minuit.h"
+#include "common.h"
 
 typedef struct Set t_set;
 

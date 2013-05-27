@@ -14,6 +14,7 @@
 #include "scene.h"
 #include "node.h"
 #include "block.h"
+#include "brick.h"
 
 int set_draw_plug;
 

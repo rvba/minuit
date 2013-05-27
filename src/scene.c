@@ -7,7 +7,6 @@
  *
  */
 
-#include "minuit.h"
 #include "node.h"
 #include "scene.h"
 #include "log.h"

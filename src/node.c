@@ -21,6 +21,8 @@
 #include "list.h"
 #include "ui.h"
 #include "block.h"
+#include "brick.h"
+#include "plug.h"
 #include "object.h"
 #include "screen.h"
 #include "vector.h"
