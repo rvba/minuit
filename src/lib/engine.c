@@ -8,6 +8,8 @@
  */
 
 #include "op.h"
+#include "engine.h"
+#include "process.h"
 
 t_engine_cls cls_engine=
 {

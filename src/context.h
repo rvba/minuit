@@ -13,7 +13,6 @@
 #include "sketch.h"
 #include "term.h"
 #include "draw.h"
-#include "engine.h"
 #include "event.h"
 #include "camera.h"
 #include "server.h"
@@ -61,7 +60,7 @@ struct Context
 {
 	struct App *app;
 	struct Mode *mode;
-	t_engine *engine;
+	struct Engine *engine;
 	t_scene *scene;
 	t_event *event;
 	t_ui *ui;

@@ -10,6 +10,8 @@
 #include "op.h"
 #include "ctx.h"
 #include "app.h"
+#include "process.h"
+#include "engine.h"
 
 void *ctx_compute(void *data)
 {

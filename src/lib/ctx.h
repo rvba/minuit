@@ -65,14 +65,6 @@ void ctx_scene_clear_selections(t_context *C);
 void ctx_scene_set_selected(t_context *C,void *data);
 void ctx_scene(t_context *C);
 
-// CTX_PROCESS
-
-void *ctx_compute(void *data);
-void *ctx_thread_main(void *data);
-void ctx_thread_init(t_context *C);
-t_process *process_new(char *name,void*(* func)(void *data));
-t_process *process_add(t_context *C,char *name,void*(* func)(void *ptr));
-void process_launch(t_process *process);
 
 // CTX_RENDER
 

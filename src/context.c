@@ -10,6 +10,7 @@
 #include "ctx.h"
 #include "app.h"
 #include "mode.h"
+#include "engine.h"
 
 t_context *CONTEXT;
 

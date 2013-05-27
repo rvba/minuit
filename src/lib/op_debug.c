@@ -9,6 +9,8 @@
 
 #include "op.h"
 #include "app.h"
+#include "process.h"
+#include "engine.h"
 
 #define DEBUG_LINE_HEIGHT 20
 #define DEBUG_OFFSET 600

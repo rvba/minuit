@@ -34,6 +34,13 @@ struct Process
 	int busy;
 };
 
+void *ctx_compute(void *data);
+void *ctx_thread_main(void *data);
+void ctx_thread_init(t_context *C);
+t_process *process_new(char *name,void*(* func)(void *data));
+t_process *process_add(t_context *C,char *name,void*(* func)(void *ptr));
+void process_launch(t_process *process);
+
 void process_free(t_process *process);
 
 #endif

@@ -11,6 +11,8 @@
 #include "action.h"
 #include "ctx.h"
 #include "app.h"
+#include "process.h"
+#include "engine.h"
 
 void ctx_ui_freeze(t_context *C)
 {
