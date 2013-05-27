@@ -10,9 +10,13 @@
 #ifndef __CLOCK_H
 #define __CLOCK_H
 
+#include "common.h"
+
 #include <ctype.h>
 #include <time.h>
 #include <sys/time.h>
+
+
 
 typedef struct Clock
 {

@@ -27,12 +27,14 @@ char *s_allocate(const char *data)
 }
 
 /** format time in yy/mm/hh/ss with a char[30] **/
+/*
 void s_write_time(char *string)
 {
 	time_t tim=time(NULL);
 	struct tm *now=localtime(&tim);
 	snprintf(string,30,"./%d%02d%02d%02d%02d%02d.png",now->tm_year+1900, now->tm_mon+1,now->tm_mday,now->tm_hour,now->tm_min,now->tm_sec);
 }
+*/
 
 // work with cursor
 

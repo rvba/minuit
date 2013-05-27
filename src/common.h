@@ -11,6 +11,10 @@
 #ifndef __COMMON_H
 #define __COMMON_H
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #define _NAME_ 64
 #define _NAME_LONG_ 128
 #define _PATH_ 150
@@ -28,5 +32,7 @@
 #define PI 3.14159655f
 
 #define BIN_MAX 10000
+
+#define PROCESS_LIMIT 0.01
 
 #endif

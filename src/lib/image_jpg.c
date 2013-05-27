@@ -7,8 +7,8 @@
  *
  */
 
-#include "image.h"
 #include "util.h"
+#include "image.h"
 
 t_image  *img_read_jpg(char* name)
 {

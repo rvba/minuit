@@ -7,6 +7,7 @@
  *
  */
 
+#include "util.h"
 #include "ui.h"
 #include "context.h"
 #include "event.h"

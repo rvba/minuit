@@ -9,6 +9,8 @@
 
 #include "util.h"
 
+#define _PI 3.14159655f
+
 float calc_normalize(int n,int range)
 {
 	return (float)((float)n/(float)range);
@@ -56,7 +58,7 @@ float *calc_circle(float center[3],double radius,int divisions)
 	int i;
 	int j=0;
 
-	double delta = (double)((double)(PI * 2) / divisions);
+	double delta = (double)((double)(_PI * 2) / divisions);
 
 	for (i=0;i<divisions;i++)
 	{

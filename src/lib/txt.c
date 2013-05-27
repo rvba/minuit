@@ -7,6 +7,7 @@
  *
  */
 
+#include "util.h"
 #include "txt.h"
 #include "sketch.h"
 #include "context.h"

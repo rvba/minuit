@@ -7,6 +7,7 @@
  *
  */
 
+#include "util.h"
 #include "op.h"
 #include "data.h"
 #include "list.h"

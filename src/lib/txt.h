@@ -7,7 +7,7 @@
  *
  */
 
-#include "util.h"
+#include "common.h"
 
 #ifndef __TXT_H
 #define __TXT_H

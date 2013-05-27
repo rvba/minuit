@@ -10,36 +10,41 @@
 #ifndef __UTIL_H
 #define __UTIL_H
 
+#include "common.h"
+
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
+
 #include <stdarg.h>
 #include <assert.h>
 #include <math.h>
-#include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+
 #include <netdb.h> 
+
 #include <GL/gl.h>
 #include <GL/glx.h>
 #include <GL/glext.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
+
 #include <GL/osmesa.h>
+
 #include <unistd.h>
+
 #include <jpeglib.h>
 #include <png.h>
+
 #include <sys/stat.h>
 #include <sys/resource.h>
 
 #include <ctype.h>
 
-#define TIME_LIMIT 0.05
-#define PROCESS_LIMIT 0.01
 #define SOCKET_BUFFER 2024
-
-#include "common.h"
-
 
 #ifdef WITH_LIBLO
 #include "liblo.h"

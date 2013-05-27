@@ -8,6 +8,7 @@
  */
 
 
+#include "util.h"
 #include "op.h"
 #include "ctx.h"
 #include "set.h"
