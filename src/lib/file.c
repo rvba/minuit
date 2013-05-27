@@ -10,6 +10,7 @@
 #include "util.h"
 #include "scene.h"
 #include "file.h"
+#include "list.h"
 
 #define PATH_LIMIT 1024
 #define S_DEBUG 0

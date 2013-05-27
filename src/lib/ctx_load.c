@@ -60,12 +60,12 @@ int check(t_node *node,const char *name_data,const char *name_ptr)
 {
 	if(node)
 	{
-		log((LOG_CHECK,"OK %s:%s\n",name_data,name_ptr));
+		ulog((LOG_CHECK,"OK %s:%s\n",name_data,name_ptr));
 		return 1;
 	}
 	else 
 	{
-		log((LOG_CHECK,"[ERROR] Loading %s:%s\n",name_data,name_ptr));
+		ulog((LOG_CHECK,"[ERROR] Loading %s:%s\n",name_data,name_ptr));
 		check_ok=0;
 		return 0;
 	}
@@ -73,7 +73,7 @@ int check(t_node *node,const char *name_data,const char *name_ptr)
 
 void check_init(const char *type,const char *name)
 {
-	log((LOG_CHECK,"  [LOAD STRUCT][%s][%s]\n",type,name));
+	ulog((LOG_CHECK,"  [LOAD STRUCT][%s][%s]\n",type,name));
 	check_ok=1;
 }
 
@@ -81,11 +81,11 @@ void check_check(const char *type,const char *name)
 {
 	if(check_ok)
 	{
-		log((LOG_CHECK,"OK[LOAD STRUCT][%s][%s]\n",type,name));
+		ulog((LOG_CHECK,"OK[LOAD STRUCT][%s][%s]\n",type,name));
 	}
 	else 
 	{
-		log((LOG_CHECK,"[ERROR][LOAD STRUCT][%s][%s]\n",type,name));
+		ulog((LOG_CHECK,"[ERROR][LOAD STRUCT][%s][%s]\n",type,name));
 	}
 }
 
@@ -259,7 +259,7 @@ void *find_struct(const char *target,const char *name)
 	{
 		load_error = 1;
 		printf("[ERROR app_get] Unknown target %s\n",name);
-		log((LOG_REBIND,"[ERROR app_get] Unknown target %s\n",name));
+		ulog((LOG_REBIND,"[ERROR app_get] Unknown target %s\n",name));
 	}
 
 	return NULL;
@@ -711,8 +711,8 @@ void load_read(t_scene *sc,const char *path)
 	// NEW CHUNK
 	c=chunk_new(ct_node,nt_null,0,0,NULL);
 
-	log((LOG_READ,"File size:%d\n",file_size));
-	log((LOG_READ,"[0]\n",file_size));
+	ulog((LOG_READ,"File size:%d\n",file_size));
+	ulog((LOG_READ,"[0]\n",file_size));
 
 	char version[GIT];
 
@@ -729,7 +729,7 @@ void load_read(t_scene *sc,const char *path)
 		// MAGIC
 		fread(&magic,sizeof(char),1,file);
 
-		log((LOG_READ,"[%d][%d]\t(+%d)\tmagic {%c}\n",limit,(int)ftell(file),(int)sizeof(char),magic));
+		ulog((LOG_READ,"[%d][%d]\t(+%d)\tmagic {%c}\n",limit,(int)ftell(file),(int)sizeof(char),magic));
 
 		// BREAK EOF
 		if(magic=='&') break;
@@ -751,8 +751,8 @@ void load_read(t_scene *sc,const char *path)
 		{
 			// READ CHUNK
 			fread(c,sizeof(t_chunk),1,file);
-			log((LOG_READ,"[%d]\t(+%d)\tchunk",(int)ftell(file),(int)sizeof(t_chunk)));
-			log((LOG_READ," %s:%s:%d:%d\n",chunk_type_get(c->chunk_type),node_name_get(c->type),c->size,c->tot));
+			ulog((LOG_READ,"[%d]\t(+%d)\tchunk",(int)ftell(file),(int)sizeof(t_chunk)));
+			ulog((LOG_READ," %s:%s:%d:%d\n",chunk_type_get(c->chunk_type),node_name_get(c->type),c->size,c->tot));
 
 			// READ DATA
 
@@ -762,7 +762,7 @@ void load_read(t_scene *sc,const char *path)
 			// READ
 			fread(data,c->size,c->tot,file);
 
-			log((LOG_READ,"[%d]\t(+%d)\tstruct %s:%s\n",(int)ftell(file),c->size,chunk_type_get(c->chunk_type),c->type));
+			ulog((LOG_READ,"[%d]\t(+%d)\tstruct %s:%s\n",(int)ftell(file),c->size,chunk_type_get(c->chunk_type),c->type));
 
 			// STORE  Nodes + Structs
 			id_store(sc,c,data);

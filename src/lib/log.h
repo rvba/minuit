@@ -13,9 +13,9 @@
 char *LOG;
 
 #ifdef WITH_DEBUG
-#define log(msg) __log__ msg 
+#define ulog(msg) __log__ msg 
 #else
-#define log(msg) (void)0
+#define ulog(msg) (void)0
 #endif
 
 #define LOG_ALWAYS 1

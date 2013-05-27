@@ -15,6 +15,7 @@
 #define APP_VIDEO_LIMIT 20
 
 #include "app.h"
+#include "list.h"
 
 // used for GL calls without args
 t_app *APP;

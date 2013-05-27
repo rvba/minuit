@@ -8,10 +8,12 @@
  */
 
 
+#include "util.h"
 #include "light.h"
 #include "context.h"
 #include "scene.h"
 #include "node.h"
+#include "list.h"
 
 t_light *light_rebind(t_scene *sc,void *ptr)
 {

@@ -11,9 +11,9 @@
 #define __NODE_H
 
 #include "common.h"
-#include "util.h"
 
 struct Scene;
+struct Lst;
 
 typedef struct Node t_node;
 typedef struct NodeClass t_node_class;
@@ -78,8 +78,8 @@ struct Generic
 struct NodeClass
 {
 	t_node_type type;
-	size_t size;
-	t_lst *lst;
+	int size;
+	struct Lst *lst;
 
 	int  (* make)(t_node *node);
 	void (* build)(t_node *node,const char *name);
@@ -142,8 +142,6 @@ extern char node_name_binding[];
 t_node*		node_load(void *ptr,const char *type);
 void		node_init(t_node *node,t_node_type type);
 t_node *	node_new(t_node_type type);
-t_node *	lst_find_node(t_lst *lst,const char *name);
-void 		lst_node_delete_all(t_lst *lst);
 t_node *	node_clone(t_node *src);
 
 int 		dlink(const char *type,void *ptr);

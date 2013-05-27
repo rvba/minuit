@@ -13,6 +13,7 @@
 #include "app.h"
 #include "memory.h"
 #include "log.h"
+#include "list.h"
 
 #define DEBUG 1
 
@@ -88,7 +89,7 @@ void mem_write(const char *path)
 
 	int check_size=0;
 
-	log((LOG_SAVE,"[0]\n"));
+	ulog((LOG_SAVE,"[0]\n"));
 
 	t_context *C=ctx_get();
 	fwrite(":",sizeof(char),1,file);
@@ -104,14 +105,14 @@ void mem_write(const char *path)
 		fwrite("-",sizeof(char),1,file);
 
 		check_size+=1;
-		log((LOG_SAVE,"[%d]\t(+%d)\tmagic\n",(int)ftell(file),(int)sizeof(char)));
+		ulog((LOG_SAVE,"[%d]\t(+%d)\tmagic\n",(int)ftell(file),(int)sizeof(char)));
 
 		// write chunk
 		fwrite(c,sizeof(t_chunk),1,file);
 		check_size+=(int)sizeof(t_chunk);
 
-		log((LOG_SAVE,"[%d]\t(+%d)\tchunk\t",(int)ftell(file),(int)sizeof(t_chunk)));
-		log((LOG_SAVE,"%s:%s:%d:%d:%p \n",chunk_type_get(c->chunk_type),node_name_get(c->type),c->size,c->tot,c->pointer));
+		ulog((LOG_SAVE,"[%d]\t(+%d)\tchunk\t",(int)ftell(file),(int)sizeof(t_chunk)));
+		ulog((LOG_SAVE,"%s:%s:%d:%d:%p \n",chunk_type_get(c->chunk_type),node_name_get(c->type),c->size,c->tot,c->pointer));
 
 		if(DEBUG)
 		{
@@ -154,7 +155,7 @@ void mem_write(const char *path)
 		fwrite(c->pointer,c->size,c->tot,file);
 		check_size+=c->size*c->tot;
 
-		log((LOG_SAVE,"[%d]\t(+%d)\t%s\n",(int)ftell(file),c->size,node_name_get(c->type)));
+		ulog((LOG_SAVE,"[%d]\t(+%d)\t%s\n",(int)ftell(file),c->size,node_name_get(c->type)));
 
 		// check for memory offset
 		if(check_size!=ftell(file)) printf("[ERROR mem_write] Memory offset\n");
@@ -163,7 +164,7 @@ void mem_write(const char *path)
 	// write last character
 	fwrite("&",sizeof(char),1,file);
 
-	log((LOG_SAVE,"[%d]\t(+%d)\tmagic &\n",(int)ftell(file),(int)sizeof(char)));
+	ulog((LOG_SAVE,"[%d]\t(+%d)\tmagic &\n",(int)ftell(file),(int)sizeof(char)));
 
 	// close file
 	fclose(file);
@@ -177,7 +178,7 @@ int mem_store(t_chunk_type chunk_type,t_node_type type,size_t size,int tot,void 
 	t_chunk *chunk=chunk_new(chunk_type,type,size,tot,pointer);
 	lst_add(MEMORY,chunk,"chunk");
 
-	log((LOG_MEMORY,"mem_store %d %s %s\n",chunk->id,chunk_type_get(chunk_type),node_name_get(type)));
+	ulog((LOG_MEMORY,"mem_store %d %s %s\n",chunk->id,chunk_type_get(chunk_type),node_name_get(type)));
 	//printf("mem_store %d %s %s\n",chunk->id,chunk_type_get(chunk_type),node_name_get(type));
 
 	return chunk->id;

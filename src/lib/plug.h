@@ -14,6 +14,7 @@
 #include "data.h"
 
 struct Brick;
+struct Lst;
 
 typedef struct Plug t_plug;
 typedef struct Plug_State t_plug_state;
@@ -88,8 +89,8 @@ struct Plug
 	t_plug *dst;
 	t_plug *child;
 
-	t_lst *parents;
-	t_lst *bindings;
+	struct Lst *parents;
+	struct Lst *bindings;
 
 	void *data;
 	void *data_memory;

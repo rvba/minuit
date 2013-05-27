@@ -12,7 +12,9 @@
 
 #include "scene.h"
 #include "node.h"
+#include "list.h"
 
+struct Context;
 struct Brick;
 struct Block;
 struct Plug;

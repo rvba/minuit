@@ -37,11 +37,11 @@ void scene_log_loop_var(t_lst *lst)
 	t_link *l;
 	t_node *n;
 
-	log((LOG_SCENE_NODES,"lst:%s\n",lst->name));
+	ulog((LOG_SCENE_NODES,"lst:%s\n",lst->name));
 	for(l=lst->first;l;l=l->next)
 	{
 		n=l->data;
-		log((LOG_SCENE_NODES,"node id:%d cls:%s\n",n->id,node_name_get(n->type)));
+		ulog((LOG_SCENE_NODES,"node id:%d cls:%s\n",n->id,node_name_get(n->type)));
 	}
 }
 
@@ -51,12 +51,12 @@ void scene_log_loop(t_lst *lst)
 	t_node *n;
 	t_generic *g;
 
-	log((LOG_SCENE_NODES,"lst:%s\n",lst->name));
+	ulog((LOG_SCENE_NODES,"lst:%s\n",lst->name));
 	for(l=lst->first;l;l=l->next)
 	{
 		n=l->data;
 		g=(t_generic *)n->data;
-		log((LOG_SCENE_NODES,"node id:%d\tcls:%s\tname:%s\n",n->id,node_name_get(n->type),g->name));
+		ulog((LOG_SCENE_NODES,"node id:%d\tcls:%s\tname:%s\n",n->id,node_name_get(n->type),g->name));
 	}
 }
 
@@ -495,7 +495,7 @@ void scene_data_load(t_scene *sc)
 
 void scene_node_load(t_scene *sc,t_node *node)
 {
-	log((LOG_SCENE,"scene_node_load\n"));
+	ulog((LOG_SCENE,"scene_node_load\n"));
 
 	// INIT NODE && DATA
 	node->cls->init(node);
@@ -570,7 +570,7 @@ t_node *scene_add_node(t_scene *sc,t_node_type type,const char *name)
 
 t_node *scene_add(t_scene *sc,t_node_type type,const char *name)
 {
-	log((LOG_SCENE,"scene_add %s %s \n",node_name_get(type),name));
+	ulog((LOG_SCENE,"scene_add %s %s \n",node_name_get(type),name));
 
 	t_node *node=scene_add_node(sc,type,name);
 
@@ -581,7 +581,7 @@ t_node *scene_add(t_scene *sc,t_node_type type,const char *name)
 
 t_node *scene_add_data(t_scene *sc,const char *type,const char *target,const char *name,void *ptr)
 {
-	log((LOG_SCENE,"scene_add_data %s %s %s\n",type,target,name));
+	ulog((LOG_SCENE,"scene_add_data %s %s %s\n",type,target,name));
 
 	t_node *node=scene_add_node(sc,nt_data,name);
 	t_data *data=node->data;
@@ -599,7 +599,7 @@ t_node *scene_add_data(t_scene *sc,const char *type,const char *target,const cha
 
 t_node *scene_add_data_node(t_scene *sc,const char *type,const char *target,const char *name,void *ptr)
 {
-	log((LOG_SCENE,"scene_add_node %s %s %s\n",type,target,name));
+	ulog((LOG_SCENE,"scene_add_node %s %s %s\n",type,target,name));
 
 	t_node *node=scene_add_node(sc,nt_data,name);
 	t_data *data=node->data;
@@ -649,7 +649,7 @@ void scene_remove_data_node(t_scene *sc,void *ptr)
 
 t_node *scene_add_ref(t_scene *sc,const char *type,const char *target,const char *name,void *ptr,void *ref)
 {
-	log((LOG_SCENE,"scene_add_ref %s %s %s\n",type,target,name));
+	ulog((LOG_SCENE,"scene_add_ref %s %s %s\n",type,target,name));
 
 	t_node *node=scene_add_node(sc,nt_data,name);
 	t_data *data=node->data;
@@ -672,7 +672,7 @@ void scene_remove_ref(t_scene *sc,void *ptr)
 
 void scene_add_data_var(t_scene *sc,const char *name,const char *name_var,int size,void *ptr)
 {
-	log((LOG_SCENE,"scene_add_data_var %s %s %d\n",name,name_var,size));
+	ulog((LOG_SCENE,"scene_add_data_var %s %s %d\n",name,name_var,size));
 
 	// data 
 	t_node *node_data=scene_add_data(sc,"dynamic","void",name,ptr);

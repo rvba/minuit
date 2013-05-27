@@ -10,8 +10,6 @@
 #ifndef __DATA_H
 #define __DATA_H
 
-#include "util.h"
-
 #define DATA_NAME 64
 
 struct Scene;

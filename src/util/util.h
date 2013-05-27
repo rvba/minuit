@@ -53,8 +53,6 @@
 
 typedef struct Clock t_clock;
 typedef struct MN_Socket t_socket;
-typedef struct Link t_link;
-typedef struct Lst t_lst;
 typedef struct Nameval Nameval;
 typedef struct Image t_image;
 typedef struct Buffer t_buffer;
@@ -88,38 +86,6 @@ struct Image
 	unsigned char *data;
 };
 
-// LINK
-
-struct Link
-{
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
-
-	t_link *next;
-	t_link *prev;
-	t_link *parent;
-	t_link *child;
-
-	void *data;
-};
-
-// LST
-
-struct Lst
-{
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
-
-	t_link *first;
-	t_link *last;
-	t_link *current;
-
-	int tot;
-};
 
 // SOCKET
 
@@ -210,28 +176,6 @@ int sys_get_hostname(char* data);
 void slave(void);
 int tcp_client(void);
 
-// LST
-
-t_link *lst_link_find_by_name(t_lst *lst, const char *name);
-void lst_link_delete_by_name(t_lst *lst, const char *name);
-
-void 		lst_show(t_lst *lst);
-t_link *	lst_add(t_lst *lst,void *data,const char *name);
-void 		lst_add_lst(t_lst *dst, t_lst *src);
-void		lst_link_remove(t_lst *lst,t_link *link);
-void 		lst_delete_all(t_lst *lst);
-void 		lst_link_delete(t_lst *lst,t_link *link);
-t_lst *		lst_copy(t_lst *lst);
-t_lst *		lst_new(const char *name);
-void 		lst_free(t_lst *lst);
-void 		lst_cleanup(t_lst *lst);
-void 		lst_push_back(t_lst *lst,t_link *link);
-
-void lst_remove_by_ptr(t_lst *lst,void *ptr);
-void 		link_free(t_link *link);
-
-t_link *link_new(const char *name);
-void link_free(t_link *link);
 
 
 // STRING

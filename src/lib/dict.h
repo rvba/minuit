@@ -14,6 +14,7 @@
 #include "data.h"
 
 struct Scene;
+struct Lst;
 
 typedef struct Symbol t_symbol;
 typedef struct Dict t_dict;
@@ -36,7 +37,7 @@ struct Dict
 	short users;
 	char name[_NAME_];
 
-	t_lst *symbols;
+	struct Lst *symbols;
 };
 
 

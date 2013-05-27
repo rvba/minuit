@@ -10,7 +10,6 @@
 #ifndef _LIST_H
 #define _LIST_H
 
-//#include "util.h"
 #include "data.h"
 
 struct Scene;
@@ -18,6 +17,42 @@ struct Node;
 
 typedef struct VLst t_vlst;
 typedef enum VLst_Type t_vlst_type;
+
+typedef struct Link t_link;
+typedef struct Lst t_lst;
+
+// LINK
+
+struct Link
+{
+	int id;
+	int id_chunk;
+	short users;
+	char name[_NAME_];
+
+	t_link *next;
+	t_link *prev;
+	t_link *parent;
+	t_link *child;
+
+	void *data;
+};
+
+// LST
+
+struct Lst
+{
+	int id;
+	int id_chunk;
+	short users;
+	char name[_NAME_];
+
+	t_link *first;
+	t_link *last;
+	t_link *current;
+
+	int tot;
+};
 
 struct VLst
 {
@@ -30,7 +65,7 @@ struct VLst
 
 	int count;	// number of block
 	int length;	// number of element in block 
-	size_t size;	// size of element (int,float,...)
+	int size;	// size of element (int,float,...)
 
 	int count_new;
 	int need_update;
@@ -106,5 +141,30 @@ void 		list_cleanup(t_lst *lst);
 void 		list_show(t_lst *lst);
 
 struct Node *lst_get_node(t_lst *lst,int id);
+
+struct Node *	lst_find_node(t_lst *lst,const char *name);
+
+// LST
+
+t_link *lst_link_find_by_name(t_lst *lst, const char *name);
+void lst_link_delete_by_name(t_lst *lst, const char *name);
+
+void 		lst_show(t_lst *lst);
+t_link *	lst_add(t_lst *lst,void *data,const char *name);
+void 		lst_add_lst(t_lst *dst, t_lst *src);
+void		lst_link_remove(t_lst *lst,t_link *link);
+void 		lst_delete_all(t_lst *lst);
+void 		lst_link_delete(t_lst *lst,t_link *link);
+t_lst *		lst_copy(t_lst *lst);
+t_lst *		lst_new(const char *name);
+void 		lst_free(t_lst *lst);
+void 		lst_cleanup(t_lst *lst);
+void 		lst_push_back(t_lst *lst,t_link *link);
+
+void lst_remove_by_ptr(t_lst *lst,void *ptr);
+void 		link_free(t_link *link);
+
+t_link *link_new(const char *name);
+void link_free(t_link *link);
 
 #endif

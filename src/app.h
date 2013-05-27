@@ -24,6 +24,8 @@
 
 #define GIT 128
 
+struct Lst;
+
 typedef struct App t_app;
 typedef struct Mouse t_mouse;
 typedef struct Window t_window;
@@ -150,8 +152,8 @@ struct App
 	char *file_path;
 
 	t_file *file;
-	t_lst *video_frames;
-	t_lst *video_frames_swap;
+	struct Lst *video_frames;
+	struct Lst *video_frames_swap;
 
 	int video_offset;
 	int video_build;

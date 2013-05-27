@@ -15,6 +15,7 @@
 #include "node.h"
 #include "block.h"
 #include "brick.h"
+#include "list.h"
 
 int set_draw_plug;
 
