@@ -27,4 +27,6 @@
 
 #define PI 3.14159655f
 
+#define BIN_MAX 10000
+
 #endif

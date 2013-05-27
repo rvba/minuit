@@ -36,15 +36,12 @@
 #include <sys/stat.h>
 #include <sys/resource.h>
 
-//#define PI 3.14159655f
-
 #define TIME_LIMIT 0.05
 #define PROCESS_LIMIT 0.01
 #define SOCKET_BUFFER 2024
 
 #include "common.h"
 
-#define BIN_MAX 10000
 
 #ifdef WITH_LIBLO
 #include "liblo.h"
@@ -260,7 +257,6 @@ inline char *drf_string(void *ptr);
 
 void sys_git_get(void);
 
-void img_save_video(int width, int height, const char *name,unsigned char *image);
 
 size_t get_memory_usage(void);
 

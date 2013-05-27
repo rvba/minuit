@@ -24,22 +24,10 @@ obj=\
 	util.o\
 	u_client.o\
 	u_system.o\
-	u_lst.o\
 	u_socket.o\
-	u_img.o\
-	u_img_jpg.o\
-	u_img_png.o
 
-u_img.o:util.h u_img.c
-	gcc -c u_img.c $(FLAG) $(INC)
-u_img_jpg.o:util.h u_img_jpg.c
-	gcc -c u_img_jpg.c $(FLAG) $(INC)
-u_img_png.o:util.h u_img_png.c
-	gcc -c u_img_png.c $(FLAG) $(INC)
 u_socket.o:util.h u_socket.c
 	gcc -c u_socket.c $(FLAG) $(INC)
-u_lst.o:util.h u_lst.c
-	gcc -c u_lst.c $(FLAG) $(INC)
 u_system.o:util.h u_system.c
 	gcc -c u_system.c $(FLAG) $(INC)
 u_client.o:util.h u_client.c
