@@ -8,10 +8,14 @@
  */
 
 #include "ui.h"
+#include "draw.h"
 #include "txt.h"
 #include "context.h"
 #include "event.h"
 #include "sketch.h"
+#include "block.h"
+#include "data.h"
+#include "object.h"
 
 #define _PRECISION "%-.4f"
 

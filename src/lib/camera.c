@@ -8,6 +8,7 @@
  */
 
 #include "op.h"
+#include "camera.h"
 
 void cls_camera_init(t_camera *camera)
 {

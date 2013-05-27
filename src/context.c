@@ -15,6 +15,11 @@
 #include "event.h"
 #include "sketch.h"
 #include "term.h"
+#include "draw.h"
+#include "ui.h"
+#include "memory.h"
+#include "log.h"
+#include "screen.h"
 
 t_context *CONTEXT;
 

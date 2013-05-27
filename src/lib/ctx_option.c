@@ -12,6 +12,7 @@
 #include "app.h"
 #include "event.h"
 #include "sketch.h"
+#include "draw.h"
 
 #define PRINT_FILE 0
 #define PRINT_CHUNK 0

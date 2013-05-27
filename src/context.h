@@ -10,7 +10,7 @@
 #ifndef __CONTEXT_H
 #define __CONTEXT_H
 
-#include "draw.h"
+#include "scene.h"
 
 #define ZOOM 1
 #define PAN_X 0
@@ -58,8 +58,8 @@ struct Context
 	struct MNserver *server;
 	t_scene *scene;
 	struct Event *event;
-	t_ui *ui;
-	t_draw *draw;
+	struct Ui *ui;
+	struct Draw *draw;
 	struct Sketch *skt;
 	struct Term *term;
 	struct Lst *terms;

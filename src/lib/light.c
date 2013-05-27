@@ -7,8 +7,9 @@
  *
  */
 
-#include "op.h"
 
+#include "light.h"
+#include "context.h"
 
 t_light *light_rebind(t_scene *sc,void *ptr)
 {

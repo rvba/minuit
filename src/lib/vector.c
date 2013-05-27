@@ -11,6 +11,10 @@
 #include "ctx.h"
 #include "event.h"
 #include "term.h"
+#include "vector.h"
+#include "list.h"
+#include "ui.h"
+#include "data.h"
 
 void cls_vector_init(t_vector *vector)
 {

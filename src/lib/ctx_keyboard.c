@@ -13,6 +13,11 @@
 #include "server.h"
 #include "event.h"
 #include "term.h"
+#include "viewport.h"
+#include "camera.h"
+#include "ui.h"
+#include "screen.h"
+#include "draw.h"
 
 int switch_init=0;
 int switch_frame=0;

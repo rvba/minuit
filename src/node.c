@@ -7,8 +7,27 @@
  *
  */
 
-#include "op.h"
+
 #include "option.h"
+#include "context.h"
+#include "action.h"
+#include "app.h"
+#include "event.h"
+#include "viewport.h"
+#include "camera.h"
+#include "dict.h"
+#include "data.h"
+#include "binding.h"
+#include "list.h"
+#include "ui.h"
+#include "block.h"
+#include "object.h"
+#include "screen.h"
+#include "vector.h"
+#include "util.h"
+#include "light.h"
+#include "set.h"
+
 #include "ctx.h"
 
 int node_make_mesh(t_node *node);

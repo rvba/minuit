@@ -11,6 +11,7 @@
 #define __OPS_H
 
 #include "context.h"
+#include "block.h"
 
 int set_draw_plug;
 

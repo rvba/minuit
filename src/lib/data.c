@@ -8,6 +8,9 @@
  */
 
 #include "op.h"
+#include "data.h"
+#include "list.h"
+#include "vector.h"
 
 char name_null[] = "null";
 char name_int[] = "int";

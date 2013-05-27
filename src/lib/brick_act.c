@@ -12,6 +12,15 @@
 #include "ctx.h"
 #include "app.h"
 #include "event.h"
+#include "viewport.h"
+#include "camera.h"
+#include "dict.h"
+#include "data.h"
+#include "binding.h"
+#include "list.h"
+#include "ui.h"
+#include "block.h"
+#include "vector.h"
 
 // SET UPDATED
 

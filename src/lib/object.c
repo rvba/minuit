@@ -9,6 +9,10 @@
 
 #include "op.h"
 #include "ctx.h"
+#include "mesh.h"
+#include "object.h"
+#include "camera.h"
+#include "list.h"
 
 void object_default(t_node *node){}
 void cls_object_link(t_object *self,t_node *target);

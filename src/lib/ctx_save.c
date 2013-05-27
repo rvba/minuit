@@ -11,6 +11,8 @@
 #include "ctx.h"
 #include "app.h"
 #include "event.h"
+#include "screen.h"
+#include "memory.h"
 
 void load_last(t_context *C)
 {

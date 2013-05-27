@@ -8,6 +8,7 @@
  */
 
 #include "op.h"
+#include "texture.h"
 
 /***		TEXTURE		***/
 

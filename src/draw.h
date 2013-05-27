@@ -47,6 +47,9 @@
 #define DRAW_WITH_UI 1
 #define DRAW_WITH_BLEND 1
 
+struct Scene;
+struct Mesh;
+
 typedef struct Draw t_draw;
 typedef enum Draw_Mode t_draw_mode;
 typedef enum Color_Mode t_color_mode;
@@ -106,10 +109,10 @@ struct Draw
 void draw_clear(float r,float g,float b,float a);
 t_draw *draw_new(void);
 void draw_init(t_draw *draw);
-void draw_scene(t_draw *draw, t_scene *scene);
+void draw_scene(t_draw *draw, struct Scene *scene);
 void draw_switch_axis_world(t_draw *draw);
-void draw_mesh_direct(t_draw *draw,t_scene *scene,t_mesh *mesh);
-void draw_mesh(t_draw *draw, t_scene *scene, t_mesh *mesh);
+void draw_mesh_direct(t_draw *draw,struct Scene *scene,struct Mesh *mesh);
+void draw_mesh(t_draw *draw, struct Scene *scene, struct Mesh *mesh);
 void type_font_3d(char* string,float pos[3]);
 
 #endif

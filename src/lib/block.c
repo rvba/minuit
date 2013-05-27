@@ -9,6 +9,7 @@
 
 #include "op.h"
 #include "ctx.h"
+#include "list.h"
 
 void block_set_graph_order(t_block *block, int order)
 {

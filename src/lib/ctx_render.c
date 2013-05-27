@@ -11,6 +11,9 @@
 #include "ctx.h"
 #include "app.h"
 #include "event.h"
+#include "draw.h"
+#include "ui.h"
+#include "viewport.h"
 
 // RENDER PASS
 

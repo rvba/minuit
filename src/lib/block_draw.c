@@ -11,6 +11,7 @@
 #include "context.h"
 #include "event.h"
 #include "sketch.h"
+#include "block.h"
 
 // update txt && mouse over
 void block_update_data(t_block *block)

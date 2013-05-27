@@ -9,6 +9,10 @@
 
 #include "op.h"
 #include "ctx.h"
+#include "viewport.h"
+#include "camera.h"
+#include "object.h"
+#include "draw.h"
 
 // DRAW
 

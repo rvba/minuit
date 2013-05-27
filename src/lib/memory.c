@@ -9,6 +9,8 @@
 
 #include "context.h"
 #include "app.h"
+#include "memory.h"
+#include "log.h"
 
 #define DEBUG 1
 

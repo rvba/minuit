@@ -11,6 +11,10 @@
 #include "ctx.h"
 #include "app.h"
 #include "event.h"
+#include "screen.h"
+#include "memory.h"
+#include "camera.h"
+#include "ui.h"
 
 t_node *BROWSER_BUTTONS;
 t_file *path;

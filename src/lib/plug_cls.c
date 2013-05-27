@@ -11,6 +11,12 @@
 #include "ctx.h"
 #include "event.h"
 #include "term.h"
+#include "camera.h"
+#include "object.h"
+#include "list.h"
+#include "vector.h"
+#include "data.h"
+#include "ui.h"
 
 #define db_main 0
 

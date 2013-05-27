@@ -11,21 +11,6 @@
 #define __SCENE_H
 
 #include "minuit.h"
-#include "light.h"
-#include "object.h"
-#include "screen.h"
-#include "list.h"
-#include "data.h"
-#include "memory.h"
-#include "obj.h"
-#include "camera.h"
-#include "dict.h"
-#include "vector.h"
-#include "viewport.h"
-#include "set.h"
-#include "file.h"
-#include "log.h"
-#include "binding.h"
 
 t_node *	scene_get_data(t_scene *sc,void *ptr);
 t_node *	scene_get_var(t_scene *sc,void *ptr);

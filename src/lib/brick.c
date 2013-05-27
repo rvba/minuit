@@ -9,6 +9,10 @@
 
 #include "op.h"
 #include "ctx.h"
+#include "data.h"
+#include "list.h"
+#include "block.h"
+#include "binding.h"
 
 int brick_is_different(t_brick *dst, t_brick *src)
 {
@@ -262,7 +266,7 @@ int brick_delete(t_brick *brick,int remove_connected)
 		)
 	{
 		// remove users
-		dlink("block",brick->block);
+		//dlink("block",brick->block);
 
 		t_plug *plug = &brick->plug_intern;
 

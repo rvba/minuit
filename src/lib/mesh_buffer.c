@@ -7,8 +7,12 @@
  *
  */
 
-#include "op.h"
 
+#include "mesh.h"
+#include "list.h"
+#include "context.h"
+#include "block.h"
+#include "ctx.h"
 
 // ADD GEOMETRY
 

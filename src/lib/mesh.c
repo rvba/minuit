@@ -7,8 +7,13 @@
  *
  */
 
-#include "op.h"
+#include "mesh.h"
+#include "context.h"
+#include "scene.h"
+#include "list.h"
+#include "block.h"
 #include "ctx.h"
+#include "op.h"
 
 void mesh_init(t_scene *sc,t_mesh *mesh)
 {

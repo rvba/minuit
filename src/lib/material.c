@@ -7,8 +7,8 @@
  *
  */
 
-#include "op.h"
 
+#include "material.h"
 
 void *material_get_ref(t_material *material, const char *ref)
 {

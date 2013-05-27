@@ -7,8 +7,14 @@
  *
  */
 
-#include "op.h"
+#include "context.h"
+#include "scene.h"
 #include "app.h"
+#include "screen.h"
+#include "camera.h"
+#include "ui.h"
+#include "list.h"
+#include "txt.h"
 
 void screen_switch_by_name(char *name)
 {

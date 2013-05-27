@@ -10,8 +10,6 @@
 #ifndef __MEMORY_H_
 #define __MEMORY_H_
 
-#include "scene.h"
-
 typedef struct Chunk t_chunk;
 typedef enum Chunk_Type t_chunk_type;
 

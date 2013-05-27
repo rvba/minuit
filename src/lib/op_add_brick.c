@@ -9,6 +9,15 @@
 
 #include "op.h"
 #include "ctx.h"
+#include "set.h"
+#include "camera.h"
+#include "object.h"
+#include "light.h"
+#include "data.h"
+#include "list.h"
+#include "viewport.h"
+#include "ctx.h"
+#include "mesh.h"
 
 int set_draw_plug=1;
 

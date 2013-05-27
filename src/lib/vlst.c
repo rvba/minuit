@@ -12,6 +12,9 @@
 #include "ctx.h"
 #include "event.h"
 #include "term.h"
+#include "list.h"
+#include "data.h"
+#include "dict.h"
 
 void __vlst_update_data(t_vlst *vlst,t_vlst *caller);
 

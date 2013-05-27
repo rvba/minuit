@@ -9,6 +9,12 @@
 
 #include "draw.h"
 #include "sketch.h"
+#include "mesh.h"
+#include "scene.h"
+#include "minuit.h"
+#include "light.h"
+#include "list.h"
+#include "object.h"
 
 t_draw *DRAW;
 

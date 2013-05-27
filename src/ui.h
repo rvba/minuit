@@ -10,7 +10,6 @@
 #ifndef __UI_H
 #define __UI_H
 
-#include "scene.h"
 
 #define PRECISION "%-.2f"
 #define UI_ALPHABET 0
@@ -24,6 +23,8 @@
 #define UI_SHOW_INTRO 1
 #define UI_SHOW_MOUSE 0
 #define UI_SHOW_TERM 1
+
+
 
 
 // UI
@@ -94,30 +95,30 @@ struct Ui
 	int debug;
 
 	// selections
-	t_brick *brick_selected;
-	t_node *link;
-	t_node *link_node;
+	struct Brick *brick_selected;
+	struct Node *link;
+	struct Node *link_node;
 
 	// selected plugs
 
-	t_brick *brick_in;
-	t_brick *brick_out;
+	struct Brick *brick_in;
+	struct Brick *brick_out;
 
 	// screens
-	t_lst *screens;
-	t_link *screen_link_active;
+	struct Lst *screens;
+	struct Link *screen_link_active;
 	int screen_direction;
 
 	int mouse_size;
 
-	t_camera *camera;
+	struct Camera *camera;
 };
 
 // UI.C
 
 void ui_switch(void);
 void ui_switch_axis(void);
-void ui_color_set(t_node *node);
+void ui_color_set(struct Node *node);
 void ui_draw(void);
 void ui_init(void);
 void ui_reboot(void);
@@ -133,7 +134,7 @@ void ui_draw_grid(void);
 
 t_ui *ui_new(void);
 
-int op_ui_alphabet_switch(t_node *node);
+int op_ui_alphabet_switch(struct Node *node);
 
 
 void op_screen_switch();

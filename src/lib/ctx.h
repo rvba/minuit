@@ -10,6 +10,10 @@
 #ifndef __CTX_H
 #define __CTX_H
 
+struct Brick;
+struct Block;
+struct Plug;
+
 // CTX_LOAD
 
 int check_ok;
@@ -37,13 +41,13 @@ void ctx_keyboard(t_context *C);
 
 // CTX_MOUSE
 
-int is_mouse_over_brick(t_context *C,t_brick *brick);
+int is_mouse_over_brick(t_context *C,struct Brick *brick);
 
 int is_mouse_over_background(t_context *C);
-int is_mouse_over_link_out(t_context *C,t_brick *brick);
-int is_mouse_over_link_in(t_context *C,t_brick *brick);
+int is_mouse_over_link_out(t_context *C,struct Brick *brick);
+int is_mouse_over_link_in(t_context *C,struct Brick *brick);
 
-int is_mouse_over_plug(t_context *C,t_plug *plug);
+int is_mouse_over_plug(t_context *C,struct Plug *plug);
 int is_mouse_over(t_context *C,int *c);
 void ctx_set_mouse_over(t_context *C);
 void ctx_get_mouse_pos(t_context *C,float *r);
@@ -73,9 +77,9 @@ void ctx_render_scene(t_context *C);
 
 // CTX_LINKS.C
 
-t_lst *block_branch_src_get(t_context *C,t_block *block);
+t_lst *block_branch_src_get(t_context *C,struct Block *block);
 void ctx_links_term_cleanup(t_context *C);
-void block_branch_get(t_lst *lst,t_block *block);
+void block_branch_get(t_lst *lst,struct Block *block);
 void ctx_links_loop(t_context *C);
 void ctx_links_update(t_context *C);
 void ctx_links_reset(t_context *C,t_lst *lst);

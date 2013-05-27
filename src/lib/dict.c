@@ -9,6 +9,8 @@
 
 #include "op.h"
 #include "ctx.h"
+#include "dict.h"
+#include "list.h"
 
 void symbol_show(t_symbol *symbol)
 {

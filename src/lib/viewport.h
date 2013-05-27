@@ -10,7 +10,6 @@
 #ifndef __VIEWPORT_H
 #define __VIEWPORT_H
 
-#include "minuit.h"
 
 typedef struct Viewport t_viewport;
 
@@ -28,7 +27,7 @@ struct Viewport
 	int x;
 	int y;
 
-	t_camera *camera;
+	struct Camera *camera;
 };
 
 void viewport_draw(t_viewport *viewport);

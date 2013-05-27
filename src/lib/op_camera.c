@@ -7,8 +7,12 @@
  *
  */
 
-#include "op.h"
+#include "context.h"
+#include "scene.h"
 #include "app.h"
+#include "draw.h"
+#include "camera.h"
+#include "viewport.h"
 
 #define OP_CAM_SPEED 50
 #define OP_CAM_ORTHO_ZOOM_FAC 10

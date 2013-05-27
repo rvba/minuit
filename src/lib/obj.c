@@ -11,6 +11,11 @@
 #include "obj.h"
 #include "event.h"
 #include "term.h"
+#include "file.h"
+#include "mesh.h"
+#include "ctx.h"
+#include "object.h"
+#include "screen.h"
 
 t_lst *OBJECTS;
 

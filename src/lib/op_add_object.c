@@ -11,6 +11,14 @@
 #include "ctx.h"
 #include "event.h"
 #include "term.h"
+#include "mesh.h"
+#include "viewport.h"
+#include "camera.h"
+#include "light.h"
+#include "set.h"
+#include "object.h"
+#include "file.h"
+#include "screen.h"
 
 
 

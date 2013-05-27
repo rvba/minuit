@@ -13,6 +13,9 @@
 #include "app.h"
 #include "event.h"
 #include "term.h"
+#include "ui.h"
+#include "dict.h"
+#include "list.h"
 
 int is_vec_stored=0;
 float v[3];

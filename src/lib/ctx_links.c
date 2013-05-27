@@ -12,6 +12,11 @@
 #include "app.h"
 #include "event.h"
 #include "term.h"
+#include "block.h"
+#include "ui.h"
+#include "memory.h"
+#include "list.h"
+#include "set.h"
 
 #define db_main 0
 

@@ -7,7 +7,9 @@
  *
  */
 
-#include "op.h"
+#include "context.h"
+#include "texture.h"
+#include "file.h"
 
 int op_texture_store(t_texture *texture)
 {

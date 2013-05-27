@@ -10,6 +10,8 @@
 #include "op.h"
 #include "ctx.h"
 #include "app.h"
+#include "screen.h"
+#include "ui.h"
 
 // NEW
 

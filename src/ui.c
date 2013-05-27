@@ -12,6 +12,12 @@
 #include "event.h"
 #include "sketch.h"
 #include "term.h"
+#include "block.h"
+#include "ui.h"
+#include "draw.h"
+#include "set.h"
+#include "screen.h"
+#include "camera.h"
 
 t_txt *txt_intro;
 

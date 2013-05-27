@@ -14,6 +14,10 @@
 #include "engine.h"
 #include "event.h"
 #include "sketch.h"
+#include "ui.h"
+#include "draw.h"
+#include "dict.h"
+#include "list.h"
 
 // store menu
 

@@ -15,6 +15,10 @@
 #include "engine.h"
 #include "event.h"
 #include "term.h"
+#include "draw.h"
+#include "ui.h"
+#include "block.h"
+#include "set.h"
 
 void ctx_ui_freeze(t_context *C)
 {

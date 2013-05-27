@@ -13,6 +13,7 @@
 #include "process.h"
 #include "engine.h"
 #include "term.h"
+#include "object.h"
 
 void *ctx_compute(void *data)
 {

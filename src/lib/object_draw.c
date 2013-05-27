@@ -7,7 +7,10 @@
  *
  */
 
-#include "op.h"
+#include "object.h"
+#include "context.h"
+#include "scene.h"
+#include "draw.h"
 
 void cls_object_draw_light(t_object *object)
 {

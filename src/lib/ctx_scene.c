@@ -10,6 +10,9 @@
 #include "context.h"
 #include "app.h"
 #include "event.h"
+#include "list.h"
+#include "minuit.h"
+#include "ui.h"
 
 // Selections and updates
 

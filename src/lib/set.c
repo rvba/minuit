@@ -10,6 +10,7 @@
 
 #include "op.h"
 #include "ctx.h"
+#include "set.h"
 
 t_set *set_rebind(t_scene *sc, void **ptr)
 {

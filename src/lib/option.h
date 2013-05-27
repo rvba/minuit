@@ -10,6 +10,8 @@
 #ifndef __OPTION_H
 #define __OPTION_H
 
+#include "common.h"
+
 struct Scene;
 
 typedef struct Option
