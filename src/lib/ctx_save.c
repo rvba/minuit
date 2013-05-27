@@ -10,6 +10,7 @@
 #include "op.h"
 #include "ctx.h"
 #include "app.h"
+#include "event.h"
 
 void load_last(t_context *C)
 {

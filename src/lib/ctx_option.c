@@ -10,6 +10,7 @@
 #include "op.h"
 #include "option.h"
 #include "app.h"
+#include "event.h"
 
 #define PRINT_FILE 0
 #define PRINT_CHUNK 0

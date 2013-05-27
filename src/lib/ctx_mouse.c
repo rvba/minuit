@@ -9,6 +9,7 @@
 
 #include "context.h"
 #include "app.h"
+#include "event.h"
 
 int is_mouse_over_background(t_context *C)
 {

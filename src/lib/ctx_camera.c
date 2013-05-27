@@ -9,6 +9,7 @@
 
 #include "op.h"
 #include "app.h"
+#include "event.h"
 
 void ctx_camera_movment(t_context *C, t_camera *camera)
 {

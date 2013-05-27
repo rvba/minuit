@@ -10,6 +10,7 @@
 #include "ui.h"
 #include "txt.h"
 #include "context.h"
+#include "event.h"
 
 #define _PRECISION "%-.4f"
 

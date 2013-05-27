@@ -9,6 +9,7 @@
 
 #include "op.h"
 #include "app.h"
+#include "event.h"
 
 t_txt *txt_intro;
 

@@ -10,6 +10,7 @@
 #include "context.h"
 #include "ctx.h"
 #include "app.h"
+#include "event.h"
 
 #define db_main 0
 

@@ -9,6 +9,7 @@
 
 #include "op.h"
 #include "ctx.h"
+#include "event.h"
 
 void cls_vector_init(t_vector *vector)
 {

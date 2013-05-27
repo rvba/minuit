@@ -13,6 +13,7 @@
 #include "app.h"
 #include "process.h"
 #include "engine.h"
+#include "event.h"
 
 void ctx_ui_freeze(t_context *C)
 {

@@ -12,6 +12,7 @@
 #include "obj.h"
 #include "process.h"
 #include "engine.h"
+#include "event.h"
 
 // store menu
 

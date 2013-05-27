@@ -9,6 +9,7 @@
 
 #include "op.h"
 #include "obj.h"
+#include "event.h"
 
 t_lst *OBJECTS;
 

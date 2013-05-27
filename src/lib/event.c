@@ -8,6 +8,7 @@
  */
 
 #include "context.h"
+#include "event.h"
 
 t_event *event_new(void)
 {

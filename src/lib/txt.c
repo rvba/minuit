@@ -10,6 +10,7 @@
 #include "txt.h"
 #include "sketch.h"
 #include "context.h"
+#include "event.h"
 
 #define _gLS GL_LINE_STRIP
 #define _gL GL_LINES

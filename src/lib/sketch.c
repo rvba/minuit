@@ -8,6 +8,7 @@
  */
 
 #include "op.h"
+#include "event.h"
 
 // LOCAL
 t_skt *SKT=NULL;

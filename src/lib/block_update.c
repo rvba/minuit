@@ -9,6 +9,7 @@
 
 #include "context.h"
 #include "ctx.h"
+#include "event.h"
 
 void block_store(t_block *block,t_brick *brick)
 {

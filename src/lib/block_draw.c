@@ -9,6 +9,7 @@
 
 #include "ui.h"
 #include "context.h"
+#include "event.h"
 
 // update txt && mouse over
 void block_update_data(t_block *block)

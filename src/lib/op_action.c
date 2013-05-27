@@ -11,6 +11,7 @@
 #include "app.h"
 #include "process.h"
 #include "engine.h"
+#include "event.h"
 
 void op_set_color(t_context *C,int color)
 {

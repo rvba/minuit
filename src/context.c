@@ -12,6 +12,7 @@
 #include "mode.h"
 #include "engine.h"
 #include "server.h"
+#include "event.h"
 
 t_context *CONTEXT;
 

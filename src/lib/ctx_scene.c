@@ -9,6 +9,7 @@
 
 #include "context.h"
 #include "app.h"
+#include "event.h"
 
 // Selections and updates
 

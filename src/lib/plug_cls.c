@@ -9,6 +9,7 @@
 
 #include "op.h"
 #include "ctx.h"
+#include "event.h"
 
 #define db_main 0
 
