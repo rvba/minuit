@@ -10,10 +10,6 @@
 #ifndef __DRAW_H
 #define __DRAW_H
 
-#include "ui.h"
-
-
-#define PI 3.14159655f
 #define SEL_LINE_WIDTH 200
 
 #define DRAW_SELECTION_PASS 1
@@ -50,23 +46,21 @@
 struct Scene;
 struct Mesh;
 
-typedef struct Draw t_draw;
-typedef enum Draw_Mode t_draw_mode;
-typedef enum Color_Mode t_color_mode;
-
-enum Draw_Mode
+typedef enum Draw_Mode
 {
 	mode_selection,
 	mode_draw
-};
 
-enum Color_Mode 
+}t_draw_mode;
+
+typedef enum Color_Mode 
 {
 	color_white,
 	color_black
-};
 
-struct Draw 
+}t_color_mode;
+
+typedef struct Draw 
 {
 	int background_color[4];
 	float front_color[4];
@@ -104,7 +98,7 @@ struct Draw
 
 	int show_axis_world;
 	int draw_lights;
-};
+}t_draw;
 
 void draw_clear(float r,float g,float b,float a);
 t_draw *draw_new(void);

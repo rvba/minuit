@@ -7,6 +7,7 @@
  *
  */
 
+#include "util.h"
 #include "draw.h"
 #include "sketch.h"
 #include "mesh.h"

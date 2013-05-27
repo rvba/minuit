@@ -12,6 +12,7 @@
 #include "node.h"
 #include "texture.h"
 #include "file.h"
+#include "image.h"
 
 int op_texture_store(t_texture *texture)
 {

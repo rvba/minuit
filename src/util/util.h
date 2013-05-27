@@ -36,7 +36,7 @@
 #include <sys/stat.h>
 #include <sys/resource.h>
 
-#define PI 3.14159655f
+//#define PI 3.14159655f
 
 #define TIME_LIMIT 0.05
 #define PROCESS_LIMIT 0.01
@@ -54,7 +54,6 @@
 typedef struct Clock t_clock;
 typedef struct MN_Socket t_socket;
 typedef struct Nameval Nameval;
-typedef struct Image t_image;
 typedef struct Buffer t_buffer;
 
 // BUFFER
@@ -69,22 +68,6 @@ struct Buffer
 	void *data;
 };
 
-// IMAGE
-
-struct Image
-{
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
-
-	int width;
-	int height;
-	int bpp; //byte per pixel
-	GLenum format;
-
-	unsigned char *data;
-};
 
 
 // SOCKET
@@ -149,16 +132,6 @@ void clock_init(t_clock *clock);
 void clock_free(t_clock *clock);
 t_clock *clock_new(void);
 
-// IMG
-
-void image_free(t_image *image);
-t_image *image_new(const char *name);
-t_image *img_read_jpg(char* Name);
-void img_save_jpg(int width,int height,const char name[]);
-void img_save_jpg_highres(int width,int height,const char name[],unsigned char *image);
-t_image *img_read_png(char *filename);
-int img_save_png(int alpha,int width,int height,unsigned char *bitmap, const char name[]);
-int img_save_png_hd(int alpha,int width,int height, const char name[],unsigned char *bitmap);
 
 // SOCKET
 

@@ -37,6 +37,9 @@ obj:=\
 	engine.o\
 	event.o\
 	file.o\
+	image.o\
+	image_jpg.o\
+	image_png.o\
 	light.o\
 	list.o\
 	log.o\
@@ -146,6 +149,12 @@ event.o:event.h
 	gcc -c event.c $(FLAG) $(INC)
 file.o:file.h
 	gcc -c file.c $(FLAG) $(INC)
+image.o:image.h image.c
+	gcc -c image.c $(FLAG) $(INC)
+image_jpg.o:image.h image_jpg.c
+	gcc -c image_jpg.c $(FLAG) $(INC)
+image_png.o:image.h image_png.c
+	gcc -c image_png.c $(FLAG) $(INC)
 light.o:light.h light.c
 	gcc -c light.c $(FLAG) $(INC)
 list.o:list.h list.c

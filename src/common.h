@@ -25,4 +25,6 @@
 #define DEBUG_TERMINAL 0
 #define DEBUG_LOOP 0
 
+#define PI 3.14159655f
+
 #endif

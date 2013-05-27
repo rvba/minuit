@@ -29,6 +29,7 @@
 #include "util.h"
 #include "light.h"
 #include "set.h"
+#include "image.h"
 
 #include "ctx.h"
 

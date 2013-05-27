@@ -25,13 +25,7 @@
 #define UI_SHOW_TERM 1
 
 
-
-
-// UI
-
-typedef struct Ui t_ui;
-
-struct Ui
+typedef struct Ui
 {
 	int draw; // draw the ui
 	int update_links;
@@ -112,7 +106,7 @@ struct Ui
 	int mouse_size;
 
 	struct Camera *camera;
-};
+}t_ui;
 
 // UI.C
 
@@ -133,14 +127,9 @@ void ui_draw_term(void);
 void ui_draw_grid(void);
 
 t_ui *ui_new(void);
-
 int op_ui_alphabet_switch(struct Node *node);
-
-
 void op_screen_switch();
-
 void ui_draw_sets(void);
-
 void ui_draw_mouse(void);
 
 

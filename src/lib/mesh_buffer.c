@@ -8,6 +8,7 @@
  */
 
 
+#include "util.h"
 #include "mesh.h"
 #include "list.h"
 #include "context.h"

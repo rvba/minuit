@@ -9,6 +9,7 @@
 
 #include "op.h"
 #include "texture.h"
+#include "image.h"
 
 /***		TEXTURE		***/
 
