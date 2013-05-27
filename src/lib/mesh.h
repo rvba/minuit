@@ -141,4 +141,23 @@ void mesh_add_brick_color(t_mesh *mesh);
 void mesh_add_default_color(t_mesh *mesh);
 void mesh_add_brick_faces(t_mesh *mesh);
 
+// OP_MESH
+
+void 		mesh_object_add(t_node *node,t_node *object);
+void 		mesh_line_add(t_mesh *mesh,int *lines,int totline);
+void 		mesh_line_cube_add(t_mesh *mesh);
+void 		mesh_calc_vertex_array(t_mesh *mesh);
+void 		mesh_build_vertex_array(t_mesh *mesh);
+void 		mesh_do_quad_colors(t_mesh *mesh,int *col);
+void 		mesh_do_tri_colors(t_mesh *mesh,int *col);
+void 		mesh_do_quad_normals(t_mesh *mesh);
+void 		mesh_do_tri_normals(t_mesh *mesh);
+void 		mesh_recalc_normals(t_mesh *mesh);
+void 		mesh_show_normals(t_mesh *mesh);
+void 		mesh_show_vertices(t_mesh *mesh);
+void 		mesh_show_colors(t_mesh *mesh);
+void 		mesh_show_faces(t_mesh *mesh);
+void 		mesh_show_uv(t_mesh *mesh);
+void 		mesh_show(t_mesh *mesh);
+
 #endif

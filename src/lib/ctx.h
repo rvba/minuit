@@ -104,5 +104,10 @@ void ctx_get_selection(t_context *C);
 
 void ctx_render_video(t_context *C);
 
+// CTX_OPTION
+
+void 		option_save(t_context *C);
+void 		load_option(t_context *C,t_scene *sc);
+
 
 #endif 

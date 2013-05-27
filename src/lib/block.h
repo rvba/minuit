@@ -436,6 +436,33 @@ void 		cls_brick_build_txt(t_brick *brick);
 
 // BRICK_ACT
 
+// OP_ADD_OBJECT
+
+void *		op_add_set(t_brick *brick);
+void *		op_new_set(const char *name);
+void *		op_new_camera(const char *name);
+t_node *	op_new_cube(const char *name);
+t_node *	op_add_new_wire_cube(t_node *node);
+void 		add_mn(void);
+void *		op_add_mn(t_brick *brick);
+void *		op_add_camera(t_brick *brick);
+void *	 	op_add_camera_main(void);
+void *		op_add_default(t_brick *brick);
+void *		op_add_light(t_brick *brick);
+void *		op_add_cube(t_brick *brick);
+void *		op_add_wire_cube(t_brick *brick);
+void *		op_add_uv_cube(t_brick *brick);
+void *		op_add_uv_plane(t_brick *brick);
+void *		op_add_triangle(t_brick *brick);
+void *		op_add_quad(t_brick *brick);
+
+
+void *		op_camera_rotate_xy(t_brick *brick);
+void *		op_camera_rotate_z(t_brick *brick);
+
+
+
+void *		op_brick_add(t_brick *brick);
 void *		op_limit(t_brick *brick);
 void *		op_selector(t_brick *brick);
 void *		op_brick_node_action(t_brick *brick);
@@ -477,6 +504,10 @@ void *		op_operator(t_brick *brick);
 void *		op_vector(t_brick *brick);
 void *		op_bang(t_brick *brick);
 void *		op_do_quit(t_brick *brick);
+void *		op_const(t_brick *brick);
+void *		op_mod(t_brick *brick);
+void *		op_float(t_brick *brick);
+void *		op_int(t_brick *brick);
 
 // BRICK_UPDATE
 
