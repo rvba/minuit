@@ -10,6 +10,17 @@
 #ifndef __EVENT_H
 #define __EVENT_H
 
+#define EVENT_WITH_POLYGON_OFFSET 0
+#define SKETCH_WITH_SCALE 1
+
+#define CTX_SHOW_TERM 1
+#define CTX_FIXED_BUTTON 0
+#define CTX_DEBUG_MOUSE 0
+#define CTX_DEBUG_SELECT 0
+
+#define WITH_HIGHLIGHT 0
+//#define GLFONT 1
+#define FREE_SCENE 0
 
 typedef struct Event t_event;
 typedef enum EventState t_event_state;

@@ -26,7 +26,6 @@ char *LOG;
 #define LOG_SCENE_NODES 0
 #define LOG_CHECK 0
 #define LOG_REBIND 0
-#define MINUIT_VERSION 0.4
 
 void __log__(int status,char *fmt, ...);
 void log_init(void);

@@ -14,16 +14,9 @@
 
 struct Scene;
 struct Lst;
+struct Node;
 
-typedef struct Node t_node;
-typedef struct NodeClass t_node_class;
-typedef enum  Node_Type t_node_type;
-
-typedef struct Generic t_generic;
-typedef struct Generir_Class t_generic_cls;
-
-
-enum Node_Type
+typedef enum Node_Type
 {
 	nt_null,
 	nt_mesh,
@@ -49,7 +42,8 @@ enum Node_Type
 	nt_viewport,
 	nt_set,
 	nt_binding,
-};
+
+}t_node_type;
 
 
 // GENERIC
@@ -59,43 +53,46 @@ block plug camera data engine light vlst texture
 object screen txt image link lst
 */
 
-struct Generic_Class
+typedef struct Generic_Class
 {
 	char cls_type[_NAME_];
-};
 
-struct Generic
+}t_generic_cls;
+
+typedef struct Generic
 {
 	int id;
 	int id_chunk;
 	short users;
 	char name[_NAME_];
 	t_generic_cls *cls;
-};
+
+}t_generic;
 
 // NODE CLASS
 
-struct NodeClass
+typedef struct NodeClass
 {
 	t_node_type type;
 	int size;
 	struct Lst *lst;
 
-	int  (* make)(t_node *node);
-	void (* build)(t_node *node,const char *name);
-	void (* link)(t_node *node);
-	void (* del)(t_node *node);
-	void (* init)(t_node *node);
-	void (* free)(struct Scene *sc,t_node *node);
+	int  (* make)(struct Node *node);
+	void (* build)(struct Node *node,const char *name);
+	void (* link)(struct Node *node);
+	void (* del)(struct Node *node);
+	void (* init)(struct Node *node);
+	void (* free)(struct Scene *sc,struct Node *node);
 
-	void (* set_state_selected)(t_node *node,int state);
-	int (* is_mouse_over)(t_node *node);
-	void *(* get_ref)(t_node *node, const char *ref);
-};
+	void (* set_state_selected)(struct Node *node,int state);
+	int (* is_mouse_over)(struct Node *node);
+	void *(* get_ref)(struct Node *node, const char *ref);
+
+}t_node_class;
 
 // NODE
 
-struct Node
+typedef struct Node
 {
 	int id;
 	int id_old;
@@ -106,10 +103,10 @@ struct Node
 	int users;
 
 	t_node_type type;
-	t_node_class *cls;
+	struct NodeClass *cls;
 
 	void *data;  
-};
+}t_node;
 
 
 // NODE.C

@@ -20,10 +20,8 @@
 #define SKT_LINE_WIDTH_BACK 20
 #define SKT_INTENSITY 1
 
-//#include "util.h"
 
 typedef struct Sketch t_skt;
-//typedef enum t_skt_buffer skt_buffer;
 
 struct Sketch
 {

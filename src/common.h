@@ -18,4 +18,11 @@
 #define _STATE_ 20
 #define _LIST_ 10
 
+#define MINUIT_VERSION 0.4
+
+#define DEBUG_PROCESS 0
+#define DEBUG_CONSOLE 1
+#define DEBUG_TERMINAL 0
+#define DEBUG_LOOP 0
+
 #endif
