@@ -7,10 +7,15 @@
  *
  */
 
+#include "context.h"
+#include "scene.h"
+#include "node.h"
 #include "util.h"
 #include "op.h"
 #include "ctx.h"
 #include "list.h"
+#include "block.h"
+#include "brick.h"
 
 void block_set_graph_order(t_block *block, int order)
 {

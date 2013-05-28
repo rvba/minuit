@@ -7,6 +7,10 @@
  *
  */
 
+#include "context.h"
+#include "node.h"
+#include "scene.h"
+
 #include "op.h"
 #include "ctx.h"
 #include "app.h"
@@ -17,6 +21,11 @@
 #include "ui.h"
 #include "file.h"
 #include "system.h"
+
+#include "list.h"
+
+#include "block.h"
+#include "brick.h"
 
 t_node *BROWSER_BUTTONS;
 t_file *path;

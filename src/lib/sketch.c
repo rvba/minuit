@@ -7,6 +7,11 @@
  *
  */
 
+
+#include "context.h"
+#include "node.h"
+#include "scene.h"
+
 #include "util.h"
 #include "op.h"
 #include "event.h"

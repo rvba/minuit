@@ -16,9 +16,20 @@
 struct Brick;
 struct Lst;
 
+enum Type_Operator;
+
 typedef struct Plug t_plug;
 typedef struct Plug_State t_plug_state;
 typedef struct Plug_Class t_plug_class;
+
+typedef enum Type_Operator
+{
+	ot_null,
+	ot_for,
+	ot_get,
+	ot_const,
+
+}t_operator;
 
 typedef enum Plug_Mode
 {
@@ -78,7 +89,8 @@ struct Plug
 	int idcol[3];
 
 	t_data_type data_type;
-	t_operator operator_type;
+	//t_operator operator_type;
+	enum Type_Operator operator_type;
 	t_plug_state state;
 
 	struct Brick *brick;			

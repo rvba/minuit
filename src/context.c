@@ -7,6 +7,8 @@
  */
 
 #include "op.h"
+#include "context.h"
+#include "scene.h"
 #include "ctx.h"
 #include "app.h"
 #include "mode.h"
@@ -20,6 +22,9 @@
 #include "memory.h"
 #include "log.h"
 #include "screen.h"
+#include "process.h"
+#include "list.h"
+#include "brick.h"
 
 t_context *CONTEXT;
 

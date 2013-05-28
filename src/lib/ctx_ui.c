@@ -8,6 +8,7 @@
  */
 
 #include "context.h"
+#include "scene.h"
 #include "action.h"
 #include "ctx.h"
 #include "app.h"
@@ -19,6 +20,8 @@
 #include "ui.h"
 #include "block.h"
 #include "brick.h"
+#include "list.h"
+#include "data.h"
 #include "plug.h"
 #include "set.h"
 

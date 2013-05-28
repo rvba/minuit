@@ -12,23 +12,24 @@
 
 #include "common.h"
 
-typedef struct Set t_set;
+struct Scene;
+struct Lst;
 
-struct Set
+typedef struct Set
 {
 	int id;
 	int id_chunk;
 	short users;
 	char name[_NAME_];
 
-	t_lst *lst;
-};
+	struct Lst *lst;
+}t_set;
 
-t_set *set_rebind(t_scene *sc, void **ptr);
-t_node *set_add(const char *name);
-void set_free(t_set *set);
-t_node *set_make(const char *name);
-t_set *set_new(const char *name);
+t_set *		set_rebind(struct Scene *sc, void **ptr);
+t_node *	set_add(const char *name);
+void 		set_free(t_set *set);
+t_node *	set_make(const char *name);
+t_set *		set_new(const char *name);
 
 
 #endif

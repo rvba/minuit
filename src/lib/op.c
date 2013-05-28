@@ -9,6 +9,10 @@
 
 #include "op.h"
 #include "app.h"
+
+#include "context.h"
+#include "node.h"
+#include "scene.h"
 #include "obj.h"
 #include "process.h"
 #include "engine.h"
@@ -19,6 +23,9 @@
 #include "dict.h"
 #include "list.h"
 #include "clock.h"
+#include "block.h"
+#include "brick.h"
+#include "obj.h"
 
 // store menu
 

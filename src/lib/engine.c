@@ -7,6 +7,7 @@
  *
  */
 
+#include "util.h"
 #include "op.h"
 #include "engine.h"
 #include "process.h"

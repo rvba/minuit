@@ -7,6 +7,10 @@
  *
  */
 
+#include "context.h"
+#include "node.h"
+#include "scene.h"
+
 #include "op.h"
 #include "action.h"
 #include "ctx.h"
@@ -16,6 +20,9 @@
 #include "ui.h"
 #include "dict.h"
 #include "list.h"
+#include "event.h"
+#include "brick.h"
+#include "block.h"
 
 int is_vec_stored=0;
 float v[3];

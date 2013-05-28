@@ -8,6 +8,11 @@
  */
 
 #include "op.h"
+
+#include "context.h"
+#include "node.h"
+#include "scene.h"
+
 #include "ctx.h"
 #include "event.h"
 #include "term.h"
@@ -19,6 +24,9 @@
 #include "object.h"
 #include "file.h"
 #include "screen.h"
+
+#include "block.h"
+#include "brick.h"
 
 
 

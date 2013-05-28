@@ -8,12 +8,16 @@
  */
 
 #include "util.h"
+#include "context.h"
+#include "scene.h"
+#include "node.h"
 #include "op.h"
 #include "option.h"
 #include "app.h"
 #include "event.h"
 #include "sketch.h"
 #include "draw.h"
+#include "list.h"
 
 #define PRINT_FILE 0
 #define PRINT_CHUNK 0

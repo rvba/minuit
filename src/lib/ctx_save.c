@@ -8,6 +8,7 @@
  */
 
 #include "op.h"
+#include "context.h"
 #include "ctx.h"
 #include "app.h"
 #include "event.h"
@@ -15,6 +16,8 @@
 #include "memory.h"
 #include "file.h"
 #include "util.h"
+#include "list.h"
+#include "brick.h"
 
 void load_last(t_context *C)
 {

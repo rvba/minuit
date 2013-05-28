@@ -12,14 +12,12 @@
 
 #define DATA_NAME 64
 
+#include "common.h"
+
 struct Scene;
+struct Data;
 
-typedef struct Data t_data;
-typedef struct Data_Class t_data_cls;
-
-typedef enum Data_Type t_data_type;
-
-enum Data_Type
+typedef enum Data_Type
 {
 	dt_null,
 	dt_int,
@@ -41,15 +39,17 @@ enum Data_Type
 	dt_vector,
 	dt_viewport,
 	dt_binding,
-};
 
-struct Data_Class
+}t_data_type;
+
+typedef struct Data_Class
 {
 	char cls_type[_NAME_];
-	void (* init)(t_data *data);
-};
+	void (* init)(struct Data *data);
 
-struct Data
+}t_data_cls;
+
+typedef struct Data
 {
 	int id; 
 	int id_chunk;
@@ -66,7 +66,7 @@ struct Data
 	void *ref;
 
 	int id_node;
-};
+}t_data;
 
 extern char name_null[];
 extern char name_int[];

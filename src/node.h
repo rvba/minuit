@@ -16,34 +16,6 @@ struct Scene;
 struct Lst;
 struct Node;
 
-typedef enum Node_Type
-{
-	nt_null,
-	nt_mesh,
-	nt_block,
-	nt_brick,
-	nt_light,
-	nt_object,
-	nt_screen,
-	nt_file,
-	nt_image,
-	nt_material,
-	nt_list,
-	nt_link,
-	nt_data,
-	nt_texture,
-	nt_var,
-	nt_option,
-	nt_vlst,
-	nt_camera,
-	nt_dict,
-	nt_symbol,
-	nt_vector,
-	nt_viewport,
-	nt_set,
-	nt_binding,
-
-}t_node_type;
 
 
 // GENERIC
@@ -140,10 +112,7 @@ t_node*		node_load(void *ptr,const char *type);
 void		node_init(t_node *node,t_node_type type);
 t_node *	node_new(t_node_type type);
 t_node *	node_clone(t_node *src);
-
-int 		dlink(const char *type,void *ptr);
-
-char *node_name_get(t_node_type type);
+char *		node_name_get(t_node_type type);
 
 #endif
 

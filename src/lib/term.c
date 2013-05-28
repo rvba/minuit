@@ -7,10 +7,26 @@
  *
  */
 
-#include "opengl.h"
-#include "op.h"
+
+#include "context.h"
+#include "node.h"
+#include "scene.h"
+
 #include "app.h"
+
+#include "op.h"
+#include "ctx.h"
+#include "event.h"
 #include "term.h"
+#include "camera.h"
+#include "object.h"
+#include "list.h"
+#include "vector.h"
+#include "data.h"
+#include "ui.h"
+
+#include "block.h"
+#include "brick.h"
 
 #define CTX_TERM_TOT_LINE 50
 #define CTX_TERM_LINE_LENGTH 30

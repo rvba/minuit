@@ -11,6 +11,8 @@
 #define __MEMORY_H_
 
 #include "util.h"
+#include "common.h"
+
 
 typedef struct Chunk t_chunk;
 typedef enum Chunk_Type t_chunk_type;
@@ -24,7 +26,7 @@ enum Chunk_Type
 struct Chunk
 {
 	t_chunk_type chunk_type;
-	t_node_type type;
+	enum Node_Type type;
 	int id;			// chunk id (order in Static MEMORY)
 
 	int size;		// block size

@@ -7,11 +7,26 @@
  *
  */
 
+#include "context.h"
+#include "node.h"
+#include "scene.h"
 
-#include "util.h"
 #include "op.h"
 #include "ctx.h"
+#include "app.h"
+#include "event.h"
+#include "ui.h"
+#include "file.h"
+
+#include "term.h"
+
+#include "list.h"
+
+#include "block.h"
+#include "brick.h"
+
 #include "set.h"
+
 
 t_set *set_rebind(t_scene *sc, void **ptr)
 {

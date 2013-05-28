@@ -7,6 +7,10 @@
  *
  */
 
+#include "context.h"
+#include "node.h"
+#include "scene.h"
+
 #include "util.h"
 #include "op.h"
 #include "ctx.h"
@@ -14,6 +18,8 @@
 #include "camera.h"
 #include "object.h"
 #include "draw.h"
+
+#include "brick.h"
 
 // DRAW
 

@@ -7,6 +7,10 @@
  *
  */
 
+#include "context.h"
+#include "node.h"
+#include "scene.h"
+
 #include "op.h"
 #include "ctx.h"
 #include "event.h"
@@ -17,6 +21,9 @@
 #include "vector.h"
 #include "data.h"
 #include "ui.h"
+
+#include "block.h"
+#include "brick.h"
 
 #define db_main 0
 

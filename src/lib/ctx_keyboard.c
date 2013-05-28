@@ -8,6 +8,8 @@
  */
 
 #include "op.h"
+#include "context.h"
+#include "scene.h"
 #include "ctx.h"
 #include "app.h"
 #include "server.h"
@@ -18,6 +20,7 @@
 #include "ui.h"
 #include "screen.h"
 #include "draw.h"
+#include "list.h"
 
 int switch_init=0;
 int switch_frame=0;

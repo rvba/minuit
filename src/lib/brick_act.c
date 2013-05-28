@@ -8,6 +8,7 @@
  */
 
 #include "util.h"
+#include "context.h"
 #include "op.h"
 #include "action.h"
 #include "ctx.h"
@@ -21,6 +22,7 @@
 #include "list.h"
 #include "ui.h"
 #include "block.h"
+#include "brick.h"
 #include "vector.h"
 #include "clock.h"
 

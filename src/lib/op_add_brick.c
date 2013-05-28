@@ -9,6 +9,10 @@
 
 #include "util.h"
 #include "op.h"
+
+#include "context.h"
+#include "node.h"
+#include "scene.h"
 #include "ctx.h"
 #include "set.h"
 #include "camera.h"
@@ -19,6 +23,8 @@
 #include "viewport.h"
 #include "ctx.h"
 #include "mesh.h"
+#include "block.h"
+#include "brick.h"
 
 int set_draw_plug=1;
 

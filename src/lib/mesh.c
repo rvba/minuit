@@ -13,6 +13,7 @@
 #include "scene.h"
 #include "list.h"
 #include "block.h"
+#include "brick.h"
 #include "ctx.h"
 #include "op.h"
 

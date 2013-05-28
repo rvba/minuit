@@ -8,6 +8,7 @@
  */
 
 #include "op.h"
+#include "context.h"
 #include "ctx.h"
 #include "app.h"
 #include "process.h"

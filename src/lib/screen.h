@@ -12,9 +12,10 @@
 
 #include "common.h"
 
-typedef struct MINscreen t_screen;
+struct Scene;
+struct MINscreen;
 
-struct MINscreen
+typedef struct MINscreen
 {
 	int id;
 	int id_chunk;
@@ -31,10 +32,10 @@ struct MINscreen
 	int pan_x;
 	int pan_y;
 
-	void (* draw) (t_screen *screen);
+	void (* draw) (struct MINscreen *screen);
 	void (* keymap) (unsigned char key);
 
-};
+}t_screen;
 
 // SCREEN BROWSER.C
 
@@ -55,7 +56,7 @@ void screen_switch_to_main(void);
 void screen_generic(t_screen *screen);
 void screen_main(t_screen *screen);
 void screen_free(t_screen *screen);
-t_screen *screen_rebind(t_scene *scene, void *ptr);
+t_screen *screen_rebind(struct Scene *scene, void *ptr);
 t_screen *screen_new(const char *name);
 void screen_init(void);
 

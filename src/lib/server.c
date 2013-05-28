@@ -7,14 +7,33 @@
  *
  */
 
+
+#include "context.h"
+#include "node.h"
+#include "scene.h"
+
 #include "op.h"
 #include "ctx.h"
 #include "app.h"
-#include "process.h"
-#include "engine.h"
+#include "event.h"
+#include "screen.h"
+#include "memory.h"
+#include "camera.h"
+#include "ui.h"
+#include "file.h"
+
+#include "system.h"
+#include "network.h"
 #include "server.h"
-#include "util.h"
+
 #include "term.h"
+#include "process.h"
+
+#include "list.h"
+
+#include "block.h"
+#include "brick.h"
+
 #include "clock.h"
 
 int server_init=0;

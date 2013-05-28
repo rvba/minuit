@@ -15,32 +15,26 @@
 struct Scene;
 struct Node;
 
-typedef struct VLst t_vlst;
-typedef enum VLst_Type t_vlst_type;
-
-typedef struct Link t_link;
-typedef struct Lst t_lst;
-
 // LINK
 
-struct Link
+typedef struct Link
 {
 	int id;
 	int id_chunk;
 	short users;
 	char name[_NAME_];
 
-	t_link *next;
-	t_link *prev;
-	t_link *parent;
-	t_link *child;
+	struct Link *next;
+	struct Link *prev;
+	struct Link *parent;
+	struct Link *child;
 
 	void *data;
-};
+}t_link;
 
 // LST
 
-struct Lst
+typedef struct Lst
 {
 	int id;
 	int id_chunk;
@@ -52,9 +46,9 @@ struct Lst
 	t_link *current;
 
 	int tot;
-};
+}t_lst;
 
-struct VLst
+typedef struct VLst
 {
 	int id;
 	int id_chunk;
@@ -75,12 +69,12 @@ struct VLst
 	int limit_high;
 	int limit_low;
 
-	t_vlst *link;
+	struct VLst *link;
 
 	t_data_type type;
 
 	void *data;
-};
+}t_vlst;
 
 void 		lst_remove_doubles(t_lst *lst);
 
@@ -140,14 +134,14 @@ void 		lst_show_generic(t_lst *lst);
 void 		list_cleanup(t_lst *lst);
 void 		list_show(t_lst *lst);
 
-struct Node *lst_get_node(t_lst *lst,int id);
+struct Node *	lst_get_node(t_lst *lst,int id);
 
 struct Node *	lst_find_node(t_lst *lst,const char *name);
 
 // LST
 
-t_link *lst_link_find_by_name(t_lst *lst, const char *name);
-void lst_link_delete_by_name(t_lst *lst, const char *name);
+t_link *	lst_link_find_by_name(t_lst *lst, const char *name);
+void 		lst_link_delete_by_name(t_lst *lst, const char *name);
 
 void 		lst_show(t_lst *lst);
 t_link *	lst_add(t_lst *lst,void *data,const char *name);
@@ -161,10 +155,10 @@ void 		lst_free(t_lst *lst);
 void 		lst_cleanup(t_lst *lst);
 void 		lst_push_back(t_lst *lst,t_link *link);
 
-void lst_remove_by_ptr(t_lst *lst,void *ptr);
+void 		lst_remove_by_ptr(t_lst *lst,void *ptr);
 void 		link_free(t_link *link);
 
-t_link *link_new(const char *name);
-void link_free(t_link *link);
+t_link *	link_new(const char *name);
+void 		link_free(t_link *link);
 
 #endif

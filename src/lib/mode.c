@@ -7,8 +7,10 @@
  *
  */
 
+#include "util.h"
 #include "op.h"
 #include "mode.h"
+#include "list.h"
 
 t_module *module_new(char *name,void *data)
 {

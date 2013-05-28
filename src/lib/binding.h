@@ -11,23 +11,25 @@
 #define __BINDING_H
 
 #include "common.h"
+#include "data.h"
 
-typedef struct Binding t_binding;
+struct Scene;
 
-struct Binding
+
+typedef struct Binding
 {
 	int id;
 	int id_chunk;
 	short users;
 	char name[_NAME_];
 
-	t_data_type type;
+	enum Data_Type type;
 
 	void *data;
-};
+}t_binding;
 
 void binding_update(t_binding *binding, void *ptr);
-t_binding *binding_rebind(t_scene *sc, void *ptr);
+t_binding *binding_rebind(struct Scene *sc, void *ptr);
 t_binding *binding_new(const char *name);
 void binding_free(t_binding *binding);
 

@@ -10,84 +10,94 @@
 #ifndef __OPS_H
 #define __OPS_H
 
+/*
 #include "context.h"
 #include "scene.h"
 #include "node.h"
 #include "block.h"
 #include "brick.h"
 #include "list.h"
+*/
+
+struct Context;
+struct Node;
+struct Block;
+struct Brick;
+struct Lst;
+enum Node_Type;
+enum Data_Type;
 
 int set_draw_plug;
 
 // OP_ACTION
 
-void 		op_switch_color(t_context *C);
-void		op_set_color(t_context *C,int color);
+void 		op_switch_color(struct Context *C);
+void		op_set_color(struct Context *C,int color);
 int 		op_exit(void);
-int 		op_quit(t_node *node);
-void 		op_export(t_node *node);
+int 		op_quit(struct Node *node);
+void 		op_export(struct Node *node);
 
 // OP_C
 
-void 		op_add_global(t_context *C,t_block *block);
-void 		op_init(t_context *C);
+void 		op_add_global(struct Context *C,struct Block *block);
+void 		op_init(struct Context *C);
 void *		find_register(const char *target,const char *name);
 
 // OP_ADD_BRICK
 
-t_lst *		get_target_list(t_context *C);
+struct Lst *		get_target_list(struct Context *C);
 
-t_node *	add_brick_submenu(t_context *C,t_node *menu,t_node *submenu,const char *name);
-t_node *	add_brick_submenu_contextual(t_context *C,t_node *menu,t_node *submenu,const char *name,t_node_type context);
-t_node *	add_brick_selector(t_context *C,t_block *block,const char *name,void *data_target,int length);
-t_node *	add_brick(t_context *C,t_block *block,const char *name,const char *type,const char *data_type,void *data_target);
-t_node *	add_brick_slider_int(t_context *C,t_block *block,const char *name,void *data_target);
-t_node *	add_brick_slider_float(t_context *C,t_block *block,const char *name,void *data_target);
-t_node *	add_brick_slider_float_custom(t_context *C,t_block *block,const char *name,void *data_target,void *(*f)(t_brick *b));
-t_node *	add_brick_slider_int_custom(t_context *C,t_block *block,const char *name,void *data_target,void *(*f)(t_brick *b));
-t_node *	add_brick_label(t_context *C,t_block *block,const char *name);
-t_node *	add_brick_switch(t_context *C,t_block *block,const char *name,void *data_target);
-t_node *	add_brick_trigger(t_context *C,t_block *block,const char *name,void *(*f)(t_brick *b));
-t_node *	add_trigger(t_context *C,const char *name,void*(* f)(t_brick *brick));
-t_node *	add_trigger_always(t_context *C,const char *name,void*(* f)(t_brick *brick));
-t_node *	add_clone(t_context *C);
-t_node *	add_maths(t_context *C,const char *name);
-t_node *	add_loop(t_context *C);
-t_node *	add_switch(t_context *C,const char *name,void *data);
-t_node *	add_switch_custom(t_context *C,const char *name,void *data,void *(* f)(t_brick *brick));
-t_node *	add_label(t_context *C,const char *name);
-t_node *	add_slider_float(t_context *C,const char *name,void *target_data);
-t_node *	add_slider_int(t_context *C,const char *name,void *target_data);
-t_node *	add_slider_int_custom(t_context *C,const char *name,void *target_data,void*(* f)(t_brick *b));
-t_node *	add_slider_int_positive(t_context *C,const char *name,void *target_data);
-t_node *	add_operator_double(t_context *C,const char *type);
-t_node *	add_operator_single(t_context *C,const char *type,void *(*f)(t_brick *brick));
-t_node *	add_multiplier(t_context *C,const char *type);
-t_node *	add_slider_float_custom(t_context *C,const char *name,void *(*f)(t_brick *brick));
-t_node *	add_slider_float_special(t_context *C,const char *name,void *(*f)(t_brick *brick));
-t_node *	add_slider_int_special(t_context *C,const char *name,void *f(t_brick *brick));
-t_node *	add_slider_char(t_context *C,const char *name,void *target_data);
-t_node *	add_slider_object(t_context *C,const char *name);
-t_node *	add_pointer_object(t_context *C,const char *name);
-t_node *	add_slider_camera(t_context *C,const char *name);
-t_node *	add_part_label(t_context *C,t_block *block,const char *name);
-t_node *	add_part_slider_float(t_context *C,t_block *block,const char *name,void *data_target);
-t_node *	add_part_trigger(t_context *C,t_block *block,const char *name,void *(*f)(t_brick *b));
-t_node *	add_part_selector(t_context *C,t_block *block,const char *name,t_node *node);
-t_node *	add_part_lst(t_context *C,t_block *block,t_data_type type,const char *name,void *ptr);
-t_node *	add_part_vlst(t_context *C,t_block *block,t_data_type type,const char *name,void *ptr);
-t_node *	add_part_pointer(t_context *C,t_block *block,t_data_type type,const char *name,void *ptr);
-t_node *	add_loop_get(t_context *C);
-t_node *	add_get(t_context *C);
-t_node *	add_for(t_context *C);
-t_node *	add_vector(t_context *C);
-t_node *	add_vector_3d(t_context *C);
-t_node *	add_vector_2d(t_context *C);
-t_node *	add_stack(t_context *C);
-t_node * 	add_if(t_context *C);
-t_node *	add_plusplus(t_context *C);
-t_node *	add_const(t_context *C);
-t_node *	add_pipe(t_context *C);
+struct Node *	add_brick_submenu(struct Context *C,struct Node *menu,struct Node *submenu,const char *name);
+struct Node *	add_brick_submenu_contextual(struct Context *C,struct Node *menu,struct Node *submenu,const char *name,enum Node_Type context);
+struct Node *	add_brick_selector(struct Context *C,struct Block *block,const char *name,void *data_target,int length);
+struct Node *	add_brick(struct Context *C,struct Block *block,const char *name,const char *type,const char *data_type,void *data_target);
+struct Node *	add_brick_slider_int(struct Context *C,struct Block *block,const char *name,void *data_target);
+struct Node *	add_brick_slider_float(struct Context *C,struct Block *block,const char *name,void *data_target);
+struct Node *	add_brick_slider_float_custom(struct Context *C,struct Block *block,const char *name,void *data_target,void *(*f)(struct Brick *b));
+struct Node *	add_brick_slider_int_custom(struct Context *C,struct Block *block,const char *name,void *data_target,void *(*f)(struct Brick *b));
+struct Node *	add_brick_label(struct Context *C,struct Block *block,const char *name);
+struct Node *	add_brick_switch(struct Context *C,struct Block *block,const char *name,void *data_target);
+struct Node *	add_brick_trigger(struct Context *C,struct Block *block,const char *name,void *(*f)(struct Brick *b));
+struct Node *	add_trigger(struct Context *C,const char *name,void*(* f)(struct Brick *brick));
+struct Node *	add_trigger_always(struct Context *C,const char *name,void*(* f)(struct Brick *brick));
+struct Node *	add_clone(struct Context *C);
+struct Node *	add_maths(struct Context *C,const char *name);
+struct Node *	add_loop(struct Context *C);
+struct Node *	add_switch(struct Context *C,const char *name,void *data);
+struct Node *	add_switch_custom(struct Context *C,const char *name,void *data,void *(* f)(struct Brick *brick));
+struct Node *	add_label(struct Context *C,const char *name);
+struct Node *	add_slider_float(struct Context *C,const char *name,void *target_data);
+struct Node *	add_slider_int(struct Context *C,const char *name,void *target_data);
+struct Node *	add_slider_int_custom(struct Context *C,const char *name,void *target_data,void*(* f)(struct Brick *b));
+struct Node *	add_slider_int_positive(struct Context *C,const char *name,void *target_data);
+struct Node *	add_operator_double(struct Context *C,const char *type);
+struct Node *	add_operator_single(struct Context *C,const char *type,void *(*f)(struct Brick *brick));
+struct Node *	add_multiplier(struct Context *C,const char *type);
+struct Node *	add_slider_float_custom(struct Context *C,const char *name,void *(*f)(struct Brick *brick));
+struct Node *	add_slider_float_special(struct Context *C,const char *name,void *(*f)(struct Brick *brick));
+struct Node *	add_slider_int_special(struct Context *C,const char *name,void *f(struct Brick *brick));
+struct Node *	add_slider_char(struct Context *C,const char *name,void *target_data);
+struct Node *	add_slider_object(struct Context *C,const char *name);
+struct Node *	add_pointer_object(struct Context *C,const char *name);
+struct Node *	add_slider_camera(struct Context *C,const char *name);
+struct Node *	add_part_label(struct Context *C,struct Block *block,const char *name);
+struct Node *	add_part_slider_float(struct Context *C,struct Block *block,const char *name,void *data_target);
+struct Node *	add_part_trigger(struct Context *C,struct Block *block,const char *name,void *(*f)(struct Brick *b));
+struct Node *	add_part_selector(struct Context *C,struct Block *block,const char *name,struct Node *node);
+struct Node *	add_part_lst(struct Context *C,struct Block *block,enum Data_Type type,const char *name,void *ptr);
+struct Node *	add_part_vlst(struct Context *C,struct Block *block,enum Data_Type type,const char *name,void *ptr);
+struct Node *	add_part_pointer(struct Context *C,struct Block *block,enum Data_Type type,const char *name,void *ptr);
+struct Node *	add_loop_get(struct Context *C);
+struct Node *	add_get(struct Context *C);
+struct Node *	add_for(struct Context *C);
+struct Node *	add_vector(struct Context *C);
+struct Node *	add_vector_3d(struct Context *C);
+struct Node *	add_vector_2d(struct Context *C);
+struct Node *	add_stack(struct Context *C);
+struct Node * 	add_if(struct Context *C);
+struct Node *	add_plusplus(struct Context *C);
+struct Node *	add_const(struct Context *C);
+struct Node *	add_pipe(struct Context *C);
 
 
 #endif

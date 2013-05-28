@@ -26,14 +26,6 @@ typedef struct Block_Class t_block_class;
 typedef struct Block_State t_block_state;
 
 
-typedef enum Type_Operator
-{
-	ot_null,
-	ot_for,
-	ot_get,
-	ot_const,
-
-}t_operator;
 
 typedef enum Type_Parent
 {

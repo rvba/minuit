@@ -8,10 +8,14 @@
  */
 
 #include "op.h"
+#include "context.h"
+#include "scene.h"
+#include "node.h"
 #include "app.h"
 #include "event.h"
 #include "camera.h"
 #include "ui.h"
+#include "list.h"
 
 void ctx_camera_movment(t_context *C, t_camera *camera)
 {

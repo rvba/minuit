@@ -17,9 +17,10 @@
 
 #define TERM_LIMIT 30
 
-typedef struct Term t_term;
+struct Lst;
+struct Link;
 
-struct Term
+typedef struct Term
 {
 	int id;
 	int id_chunk;
@@ -31,16 +32,16 @@ struct Term
 	int line_length;
 	int offset;
 
-	t_lst *lines;
-	t_link *cursor;
+	struct Lst *lines;
+	struct Link *cursor;
 
 	int is_init;
 	float loc_x;
 	float loc_y;
 
-	void (* draw)(t_term *term);
-	void (* init)(t_term *term);
-};
+	void (* draw)(struct Term *term);
+	void (* init)(struct Term *term);
+}t_term;
 
 void term_reset(t_term *term);
 void term_free(t_term *term);

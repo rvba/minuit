@@ -8,6 +8,7 @@
  */
 
 #include "util.h"
+#include "context.h"
 #include "op.h"
 #include "ctx.h"
 #include "app.h"
@@ -15,6 +16,7 @@
 #include "draw.h"
 #include "ui.h"
 #include "viewport.h"
+#include "list.h"
 
 // RENDER PASS
 

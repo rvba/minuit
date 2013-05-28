@@ -10,10 +10,13 @@
 #ifndef __MODE_H_
 #define __MODE_H_
 
-#include "util.h"
+#include "common.h"
 
 typedef struct Mode t_mode;
 typedef struct Module t_module;
+
+struct Context;
+struct Lst;
 
 struct Module
 {
@@ -24,7 +27,7 @@ struct Module
 
 struct Mode
 {
-	t_lst *modules;
+	struct Lst *modules;
 	void (* init)(t_mode *mode);
 	void (* update)(t_mode *mode);
 };
@@ -32,8 +35,8 @@ struct Mode
 t_module *mode_module_get(t_mode *mode,char *name);
 t_module *mode_module_add(t_mode *mode,char *name,void *data);
 
-t_module *ctx_module_get(t_context *C,char *name);
-void ctx_module_add(t_context *C,char *name,void *data);
+t_module *ctx_module_get(struct Context *C,char *name);
+void ctx_module_add(struct Context *C,char *name,void *data);
 t_mode *mode_new(void);
 void mode_init(t_mode *mode);
 

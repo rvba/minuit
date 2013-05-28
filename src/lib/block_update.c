@@ -14,6 +14,7 @@
 #include "block.h"
 #include "brick.h"
 #include "ui.h"
+#include "list.h"
 
 void block_store(t_block *block,t_brick *brick)
 {

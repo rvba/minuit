@@ -9,6 +9,8 @@
 
 #include "op.h"
 
+#include "node.h"
+
 //static int debug=0;
 
 /*

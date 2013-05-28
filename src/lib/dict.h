@@ -15,22 +15,21 @@
 
 struct Scene;
 struct Lst;
+struct Node;
 
-typedef struct Symbol t_symbol;
-typedef struct Dict t_dict;
-
-struct Symbol
+typedef struct Symbol
 {
 	int id;
 	int id_chunk;
 	short users;
 	char name[_NAME_];
 
-	t_data_type data_type;
+	enum Data_Type data_type;
 	void *data;
-};
 
-struct Dict
+}t_symbol;
+
+typedef struct Dict
 {
 	int id;
 	int id_chunk;
@@ -38,7 +37,8 @@ struct Dict
 	char name[_NAME_];
 
 	struct Lst *symbols;
-};
+
+}t_dict;
 
 
 void dict_symbol_add(t_dict *dict,const char *name,t_data_type type,void *data);
@@ -46,7 +46,7 @@ t_symbol *dict_pop(t_dict *dict,const char *name);
 void *dict_pop_data(t_dict *dict,const char *name);
 
 
-t_node *dict_add(const char *name);
+struct Node *dict_add(const char *name);
 
 void			symbol_free(t_symbol *symbol);
 t_symbol *		symbol_rebind(struct Scene *sc,void *ptr);

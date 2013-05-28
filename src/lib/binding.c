@@ -8,6 +8,7 @@
  */
 
 #include "util.h"
+#include "scene.h"
 #include "op.h"
 #include "ctx.h"
 #include "binding.h"

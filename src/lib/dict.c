@@ -9,6 +9,9 @@
 
 #include "util.h"
 #include "op.h"
+#include "context.h"
+#include "node.h"
+#include "scene.h"
 #include "ctx.h"
 #include "dict.h"
 #include "list.h"

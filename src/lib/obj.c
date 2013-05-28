@@ -8,6 +8,9 @@
  */
 
 #include "op.h"
+#include "node.h"
+#include "context.h"
+#include "brick.h"
 #include "obj.h"
 #include "event.h"
 #include "term.h"

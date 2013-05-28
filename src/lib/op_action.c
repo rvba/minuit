@@ -9,6 +9,10 @@
 
 #include "op.h"
 #include "app.h"
+
+#include "context.h"
+#include "node.h"
+#include "scene.h"
 #include "process.h"
 #include "engine.h"
 #include "event.h"

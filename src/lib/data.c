@@ -8,6 +8,9 @@
  */
 
 #include "util.h"
+#include "context.h"
+#include "node.h"
+#include "scene.h"
 #include "op.h"
 #include "data.h"
 #include "list.h"

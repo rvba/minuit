@@ -8,6 +8,7 @@
  */
 
 #include "op.h"
+#include "context.h"
 #include "ctx.h"
 #include "app.h"
 #include "process.h"
@@ -16,6 +17,7 @@
 #include "term.h"
 #include "ui.h"
 #include "image.h"
+#include "list.h"
 
 void ctx_switch_record_video(t_context *C)
 {

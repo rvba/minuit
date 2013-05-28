@@ -7,7 +7,10 @@
  *
  */
 
-#include "op.h"
+#include "context.h"
+#include "node.h"
+#include "brick.h"
+#include "camera.h"
 
 // DECLARATIONS
 

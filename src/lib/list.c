@@ -9,13 +9,12 @@
 
 #include "op.h"
 #include "ctx.h"
+#include "context.h"
+#include "node.h"
+#include "scene.h"
 #include "event.h"
 #include "term.h"
-
-
-
-
-
+#include "list.h"
 
 // add a new link to the end of the list
 void lst_push_back(t_lst *lst,t_link *link)

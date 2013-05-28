@@ -115,16 +115,6 @@ char *node_name_get(t_node_type type)
 	}
 }
 
-int dlink(const char *type,void *ptr)
-{
-	t_generic *g=(t_generic *)ptr;
-	g->users--;
-	if(g->users<=0) 
-	{
-	}
-	return 0;
-}
-
 // GET REF
 
 void *cls_node_get_ref_object(t_node *node, const char *ref)
@@ -255,6 +245,7 @@ void cls_node_build(t_node *node,const char *name)
 
 	node->data=p;
 	node->id_ptr=node->data;
+
 	if(node->type != nt_var)
 	{
 		cls_node_id_add(node);

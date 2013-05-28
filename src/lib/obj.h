@@ -10,11 +10,12 @@
 #ifndef _OBJ_H
 #define _OBJ_H
 
-#include "scene.h"
+struct Node;
+struct Brick;
 
-int obj_export(t_node *node);
-void op_export(t_node *node);
-void *op_obj_import(t_brick *brick);
+int obj_export(struct Node *node);
+void op_export(struct Node *node);
+void *op_obj_import(struct Brick *brick);
 
 
 #endif
