@@ -55,41 +55,6 @@ t_lst *DATA;
 
 int load_error;
 
-// DEBUG
-
-int check(t_node *node,const char *name_data,const char *name_ptr)
-{
-	if(node)
-	{
-		ulog((LOG_CHECK,"OK %s:%s\n",name_data,name_ptr));
-		return 1;
-	}
-	else 
-	{
-		ulog((LOG_CHECK,"[ERROR] Loading %s:%s\n",name_data,name_ptr));
-		check_ok=0;
-		return 0;
-	}
-}
-
-void check_init(const char *type,const char *name)
-{
-	ulog((LOG_CHECK,"  [LOAD STRUCT][%s][%s]\n",type,name));
-	check_ok=1;
-}
-
-void check_check(const char *type,const char *name)
-{
-	if(check_ok)
-	{
-		ulog((LOG_CHECK,"OK[LOAD STRUCT][%s][%s]\n",type,name));
-	}
-	else 
-	{
-		ulog((LOG_CHECK,"[ERROR][LOAD STRUCT][%s][%s]\n",type,name));
-	}
-}
-
 // ID STORE
 
 t_node *tmp_node;
@@ -511,7 +476,6 @@ void rebind(t_scene *sc,const char *type,const char *name,void **ptr)
 		else
 		{
 			printf("[ERROR rebind] Can't find data %s %s\n",type,name);
-			check_ok=0;
 			load_error = 1;
 		}
 	}

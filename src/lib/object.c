@@ -198,8 +198,6 @@ t_object *object_rebind(t_scene *sc,void *ptr)
 
 	object_build(object,object->type);
 	
-	check_init("OBJECT",object->name);
-
 	rebind(sc,"object","mesh",(void **)&object->mesh);
 	rebind(sc,"object","blocks",(void **)&object->blocks);
 	rebind(sc,"object","ref",(void **)&object->ref);
@@ -208,11 +206,8 @@ t_object *object_rebind(t_scene *sc,void *ptr)
 	object->action=NULL;
 	object->update=NULL;
 
-	check_check("OBJECT",object->name);
-
 	return object;
 }
-
 
 // ADD
 

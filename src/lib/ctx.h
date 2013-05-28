@@ -21,11 +21,6 @@ struct Plug;
 
 // CTX_LOAD
 
-int check_ok;
-int check_op_ok;
-void check_init(const char *type,const char *name);
-void check_check(const char *type,const char *name);
-int check(t_node *node,const char *name_data,const char *name_ptr);
 void load_file(t_context *C,const char *path);
 void *ctx_get_pointer(void *ptr);
 void rebind(t_scene *sc,const char *type,const char *name,void **ptr);
@@ -103,9 +98,7 @@ void context_update_background(t_context *C);
 
 
 void exe_init(void);
-
 void ctx_switch_record_video(t_context *C);
-
 void ctx_get_selection(t_context *C);
 
 

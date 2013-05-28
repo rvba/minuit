@@ -499,8 +499,6 @@ t_brick *brick_rebind(t_scene *sc,void *ptr)
 		brick_build_width(brick);
 	}
 
-	rebind(sc,"brick", "bindings", (void **) &brick->plug_intern.bindings);
-
 	return brick;
 }
 
