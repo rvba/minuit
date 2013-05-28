@@ -19,6 +19,7 @@
 #include "txt.h"
 #include "block.h"
 #include "sketch.h"
+#include "event.h"
 
 void screen_on(t_screen *screen)
 {
@@ -184,6 +185,8 @@ void screen_bricks(t_screen *screen)
 	glLoadIdentity();
 
 
+	C->event->ui.use_scale = 0;
+
 	screen_bricks_draw(C,"menu_scalar");
 	screen_bricks_draw(C,"menu_time");
 	screen_bricks_draw(C,"menu_operator");
@@ -191,6 +194,8 @@ void screen_bricks(t_screen *screen)
 	screen_bricks_draw(C,"menu_logic");
 	screen_bricks_draw(C,"menu_maths");
 	screen_bricks_draw(C,"menu_lst");
+
+	C->event->ui.use_scale = 1;
 
 	float height = (float) C->app->window->height;
 
