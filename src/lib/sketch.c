@@ -16,6 +16,7 @@
 #include "op.h"
 #include "event.h"
 #include "sketch.h"
+#include "ui.h"
 
 // LOCAL
 t_skt *SKT=NULL;
@@ -145,6 +146,26 @@ void skt_line_rectangle(float *p,float w,float h,int line_width,float *color)
 	vadd(d,a,vh);
 
 	skt_line_quad(a,b,c,d,line_width,color);
+}
+
+
+void skt_rectangle(float p1_x, float p1_y, float p2_x, float p2_y, float p3_x, float p3_y, float p4_x, float p4_y)
+{
+	//t_context *C =ctx_get();
+	//float *color = C->ui->front_color;
+
+	float color[3]={1,0,0};
+	glColor3f(color[0],color[1],color[2]);
+
+	float z=0;
+
+	//glBegin(GL_QUADS);
+	glBegin(GL_POLYGON);
+		glVertex3f(p1_x,p1_y,z);
+		glVertex3f(p2_x,p2_y,z);
+		glVertex3f(p3_x,p3_y,z);
+		glVertex3f(p4_x,p4_y,z);
+	glEnd();
 }
 
 void skt_msh_square(float *pos,float width,float *color)

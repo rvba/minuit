@@ -18,6 +18,7 @@
 #include "list.h"
 #include "txt.h"
 #include "block.h"
+#include "sketch.h"
 
 void screen_on(t_screen *screen)
 {
@@ -190,6 +191,11 @@ void screen_bricks(t_screen *screen)
 	screen_bricks_draw(C,"menu_logic");
 	screen_bricks_draw(C,"menu_maths");
 	screen_bricks_draw(C,"menu_lst");
+
+	float height = (float) C->app->window->height;
+
+	skt_rectangle(0,0,200,0,200,height,0,height);
+
 
 
 	glPopMatrix();
