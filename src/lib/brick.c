@@ -492,6 +492,7 @@ t_brick *brick_rebind(t_scene *sc,void *ptr)
 
 	rebind(sc,"brick","plug_parents",(void **)&brick->plug_intern.parents);
 	rebind(sc,"brick","plug child",(void **)&brick->plug_intern.child);
+	rebind(sc,"brick","plug binding",(void **)&brick->plug_intern.bindings);
 
 	txt_init(&brick->txt_name,brick->name);
 	txt_init(&brick->txt_data,NULL);
