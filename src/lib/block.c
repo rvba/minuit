@@ -425,7 +425,6 @@ t_block *block_new(const char *name)
 	block->pos[2]=0;
 	block->pos[3]=1;
 	block->height=0;
-	block->cursor=0;
 
 	block->bricks=NULL;
 

@@ -91,12 +91,11 @@ void block_update_geometry(t_block *block)
 
 }
 
-int block_draw_bricks(t_block *block)
+void block_draw_bricks(t_block *block)
 {
 	t_link *link;
 	t_brick *brick;
 
-	int pos = block->cursor;
 	int offset=2;
 
 	glPushMatrix();
@@ -109,22 +108,20 @@ int block_draw_bricks(t_block *block)
 	{
 		brick = link->data;
 
-		// pos++
-		pos++;
-
 		// Draw brick
 		brick->cls->draw(brick);
 
-		// Sub-menu
+		// If Sub-menu
 		if(brick->cls->type==bt_menu)
 		{
 			if(brick->state.show_menu)
 			{
 				glPushMatrix();
 
-					// translate left
+					// Translate Right
 					glTranslatef(((block->width)+offset),0,0);
-					// draw sub-block
+
+					// Draw Sub Block
 					t_block *menu = brick->menu;
 					menu->cls->draw(menu);
 
@@ -132,13 +129,12 @@ int block_draw_bricks(t_block *block)
 			}
 		}
 
-		// Translate y
+		// Translate Up
 		if(brick->state.draw) glTranslatef(0,brick->geom.height,0);
 	}
 
 	glPopMatrix();
 
-	return pos;
 }
 
 void block_draw_outline(t_block *block)

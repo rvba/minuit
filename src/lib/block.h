@@ -75,7 +75,6 @@ struct Block
 	char type[_NAME_];
 
 	float pos[3];				// block position in space
-	int cursor; 				// for second menu
 
 	float width;				// block width
 	float height;				// block height
