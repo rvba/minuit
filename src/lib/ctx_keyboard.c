@@ -62,6 +62,26 @@ void switch_sets(t_context *C)
 	}
 }
 
+void switch_bricks(t_context *C)
+{
+	t_node *node = scene_node_get(C->scene,"screen","screen_bricks");
+	t_screen *screen = node->data;
+
+	if(C->app->mouse->button_left == button_released)
+	{
+		if(C->ui->show_bricks)
+		{
+			C->ui->show_bricks = 0;
+			screen_off(screen);
+		}
+		else
+		{
+			C->ui->show_bricks = 1;
+			screen_on(screen);
+		}
+	}
+}
+
 void keymap_typing(unsigned char key)
 {
 	t_context *C=ctx_get();
@@ -123,7 +143,9 @@ void keymap_command(unsigned char key)
 		case 'F': event->switch_plug_out_open_out = 1; break;
 		case 'V': event->switch_plug_out_follow_out = 1; break;
 
-		case 'b': event->switch_brick_debug = 1; break;
+		//case 'b': event->switch_brick_debug = 1; break;
+		case 'b': switch_bricks(C); break;
+		case 'e': event->switch_brick_debug = 1; break;
 
 		case '*': draw_switch_axis_world(C->draw);break;
 

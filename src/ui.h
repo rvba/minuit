@@ -49,6 +49,7 @@ typedef struct Ui
 	int draw_plug_state;
 
 	// show
+	int show_bricks;
 	int show_menu;
 	int show_nodes;
 	int show_meshes;

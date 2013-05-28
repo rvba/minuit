@@ -129,6 +129,8 @@ void		block_unstore(t_block *block);
 
 void 		set_for_loop(t_block *block ,int state);
 
+void cls_block_generic_update(t_block *block);
+
 #endif
 
 

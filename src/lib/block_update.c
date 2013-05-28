@@ -186,6 +186,33 @@ void cls_block_menu_update(t_block *block)
 }
 
 
+void cls_block_generic_update(t_block *block)
+{
+	t_context *C = ctx_get();
+
+	t_brick *brick;
+	t_link *link;
+
+	int is_mouse_over=0;
+
+	// loop over all bricks
+	for(link=block->bricks->first;link;link=link->next)
+	{
+		brick=link->data;
+		if(is_mouse_over_brick(C,brick))
+		{
+			 brick->state.is_mouse_over=1;
+			is_mouse_over=1;
+		}
+		else 
+		{
+			brick->state.is_mouse_over=0;
+		}
+
+		// UPDATE BRICK 
+		brick->cls->update(brick);
+	}
+}
 
 
 

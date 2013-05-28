@@ -17,6 +17,20 @@
 #include "ui.h"
 #include "list.h"
 #include "txt.h"
+#include "block.h"
+
+void screen_on(t_screen *screen)
+{
+	screen->is_visible=1;
+	screen->is_active=1;
+}
+
+void screen_off(t_screen *screen)
+{
+	screen->is_visible=0;
+	screen->is_active=0;
+}
+
 
 void screen_switch_by_name(char *name)
 {
@@ -141,6 +155,49 @@ void screen_sets(t_screen *screen)
 	op_camera_switch_3d(C, camera);
 }
 
+void screen_bricks_draw(t_context *C,const char *name)
+{
+	t_node *node = scene_node_get(C->scene,"block",name);
+	t_block *block = node->data;
+	block->cls->draw(block);
+	glTranslatef(0,block->height,0);
+}
+
+
+void screen_bricks(t_screen *screen)
+{
+	t_context *C=ctx_get();
+	t_camera *camera = C->ui->camera;
+
+	op_camera_switch_2d(C,camera);
+
+	glPushMatrix();
+	glLoadIdentity();
+
+	glTranslatef(C->ui->pan_x,C->ui->pan_y,0);
+	float zoom = C->ui->zoom;
+	glScalef(zoom,zoom,zoom);
+
+
+	glPushMatrix();
+	glLoadIdentity();
+
+
+	screen_bricks_draw(C,"menu_scalar");
+	screen_bricks_draw(C,"menu_time");
+	screen_bricks_draw(C,"menu_operator");
+	screen_bricks_draw(C,"menu_vector");
+	screen_bricks_draw(C,"menu_logic");
+	screen_bricks_draw(C,"menu_maths");
+	screen_bricks_draw(C,"menu_lst");
+
+
+	glPopMatrix();
+
+	glPopMatrix();
+	op_camera_switch_3d(C, camera);
+}
+
 // FREE
 
 void screen_free(t_screen *screen)
@@ -183,6 +240,7 @@ void screen_init(void)
 	screen_main_make();
 	screen_browser_make();
 	screen_sets_make();
+	screen_bricks_make();
 }
 
 

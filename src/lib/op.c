@@ -268,10 +268,10 @@ t_node *make_menu_mesh(void)
 
 // number 
 
-t_node *make_menu_num(void)
+t_node *make_menu_scalar(void)
 {
 	t_context *C=ctx_get();
-	t_node *menu=block_make("menu_num","menu");
+	t_node *menu=block_make("menu_scalar","menu");
 	t_block *block=menu->data;
 
 	add_brick_trigger(C,block,"int",op_brick_add);
@@ -326,7 +326,7 @@ t_node *make_menu_logic(void)
 t_node *make_menu_maths(void)
 {
 	t_context *C=ctx_get();
-	t_node *menu=block_make("menu_logic","menu");
+	t_node *menu=block_make("menu_maths","menu");
 	t_block *block=menu->data;
 
 	add_brick_trigger(C,block,"cos",op_brick_add);
@@ -345,7 +345,7 @@ t_node *make_menu_maths(void)
 t_node *make_menu_ops(void)
 {
 	t_context *C=ctx_get();
-	t_node *menu=block_make("menu_logic","menu");
+	t_node *menu=block_make("menu_operator","menu");
 	t_block *block=menu->data;
 
 	add_brick_trigger(C,block,"get",op_brick_add);
@@ -433,8 +433,8 @@ t_node *make_menu_brick_add(void)
 	t_context *C=ctx_get();
 	t_node *menu=block_make("menu_brick_add","menu");
 
-	t_node *menu_num=make_menu_num();
-	add_brick_submenu(C,menu,menu_num,"scalar");
+	t_node *menu_scalar=make_menu_scalar();
+	add_brick_submenu(C,menu,menu_scalar,"scalar");
 
 	t_node *menu_vector=make_menu_vector();
 	add_brick_submenu(C,menu,menu_vector,"vector");

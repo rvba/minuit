@@ -24,6 +24,7 @@
 #include "data.h"
 #include "plug.h"
 #include "set.h"
+#include "screen.h"
 
 void ctx_ui_freeze(t_context *C)
 {
@@ -260,6 +261,48 @@ void ctx_ui_linking(t_context *C)
 	C->event->end_y=(C->app->mouse->y-C->ui->pan_y)/C->ui->zoom;
 }
 
+
+
+void ctx_blocks_update(t_context *C)
+{
+	/*
+	t_link *l=C->ui->screens->first;
+	t_node *n;
+	t_screen *s;
+
+	if(l)
+	{
+		for(;l;l=l->next)
+		{
+			n=l->data;
+			s=n->data;
+			if(s->is_visible) //active
+			{
+				s->update(s);
+			}
+		}
+	}
+	*/
+
+	t_link *l=C->scene->blocks->first;
+	t_node *n;
+	t_block *b;
+
+	if(l)
+	{
+		for(;l;l=l->next)
+		{
+			n=l->data;
+			b=n->data;
+			cls_block_generic_update(b);
+		}
+	}
+
+}
+
+
+
+
 // UPDATE MOUSE MENU
 
 void ctx_block_mouse_update(t_context *C)
@@ -399,11 +442,20 @@ void ctx_ui(t_context *C)
 	// test background 
 	ctx_ui_background(C);
 
+	/*
 	// update mouse menu
 	ctx_block_mouse_update(C); 
 
+	ctx_screen_update(C);
+
 	// update desk 
 	ctx_sets_update(C); 
+	*/
+
+	// update mouse menu
+	ctx_block_mouse_update(C); 
+
+	ctx_blocks_update(C);
 	
 	// update linking 
 	ctx_ui_linking(C);

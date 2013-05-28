@@ -342,6 +342,7 @@ t_ui *ui_new(void)
 	ui->draw_plug_state = 1;
 
 	ui->show_intro=UI_SHOW_INTRO;
+	ui->show_bricks = 0;
 	ui->show_menu = 0;
 	ui->show_nodes = 0;
 	ui->show_meshes = 0;

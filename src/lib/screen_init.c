@@ -84,6 +84,23 @@ void screen_sets_make(void)
 	C->ui->screen_link_active=link;
 };
 
+void screen_bricks_make(void)
+{
+	t_context *C=ctx_get();
+	t_node *node=scene_add(C->scene,nt_screen,"screen_bricks");
+	t_screen *screen=node->data;
+
+	screen->keymap=keymap_generic;
+	screen->draw=screen_bricks;
+
+	screen->is_active=0;
+	screen->is_visible=0;
+
+	lst_add(C->ui->screens,node,"screen_bricks");
+	//t_link *link=lst_add(C->ui->screens,node,"screen_bricks");
+	//C->ui->screen_link_active=link;
+};
+
 // SCREEN SWITCH
 
 void op_screen_switch()
