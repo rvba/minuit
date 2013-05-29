@@ -316,6 +316,32 @@ void ui_draw(void)
 
 	ui_navigation(C);
 	if(C->ui->draw) ui_draw_screens(C);
+	if(!C->ui->update_links)
+	{
+		float a[]={500,10,0};
+		float b[]={800,10,0};
+		float *color = C->ui->front_color;
+		int width = 1;
+
+		op_camera_switch_2d(C,C->ui->camera);
+
+
+		glPushMatrix();
+		glLoadIdentity();
+
+			float o[]={0,0,0};
+			float w=200;
+			float h=200;
+			float size = .2;
+
+			glTranslatef((float)C->app->window->width - 200,50,0);
+			glRotatef(45,0,0,1);
+			glScalef(size,size,size);
+
+			skt_line_rectangle(o,w,h,width,color);
+
+		glPopMatrix();
+	}
 }
 
 // INIT

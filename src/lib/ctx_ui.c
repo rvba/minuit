@@ -442,19 +442,9 @@ void ctx_ui(t_context *C)
 	// test background 
 	ctx_ui_background(C);
 
-	/*
-	// update mouse menu
+	// update blocks
 	ctx_block_mouse_update(C); 
-
-	ctx_screen_update(C);
-
-	// update desk 
-	ctx_sets_update(C); 
-	*/
-
-	// update mouse menu
-	ctx_block_mouse_update(C); 
-
+	// all
 	ctx_blocks_update(C);
 	
 	// update linking 

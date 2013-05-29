@@ -176,20 +176,6 @@ void ctx_render(t_context *C)
 		if(C->draw->with_selection_pass)
 		{
 
-			/*
-			ctx_render_set_selection_pass(C);
-
-			draw_init(C->draw);
-
-			// Draw Screens
-			for(link = C->scene->viewports->first; link; link = link->next)
-			{
-				node = link->data;
-				viewport = node->data;
-				viewport_draw(viewport);
-			}
-			*/
-
 			ctx_render_scene_selection_pass(C);
 
 			ui_draw();
@@ -201,19 +187,6 @@ void ctx_render(t_context *C)
 		// Render Pass
 		if(C->draw->with_draw_pass)
 		{
-			/*
-			ctx_render_set_full_pass(C);
-			draw_init(C->draw);
-
-			// Draw Screens
-			for(link = scene->viewports->first; link; link = link->next)
-			{
-				node = link->data;
-				viewport = node->data;
-				viewport_draw(viewport);
-			}
-			*/
-
 			ctx_render_scene_full_pass(C);
 
 
