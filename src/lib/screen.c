@@ -135,6 +135,7 @@ void screen_main(t_screen *screen)
 
 	ui_draw_mouse();
 	ui_draw_intro();
+	op_camera_switch_2d(C,camera);
 	ui_draw_lines();
 	ui_draw_status_bar();
 	ui_draw_term();
@@ -151,10 +152,14 @@ void screen_sets(t_screen *screen)
 	t_context *C=ctx_get();
 	t_camera *camera = C->ui->camera;
 
+	intro_intensity=.2;
+
 	op_camera_switch_2d(C,camera);
 
 	glPushMatrix();
 	glLoadIdentity();
+
+	ui_draw_intro();
 
 	glTranslatef(C->ui->pan_x,C->ui->pan_y,0);
 	float zoom = C->ui->zoom;
@@ -162,7 +167,7 @@ void screen_sets(t_screen *screen)
 
 
 	ui_draw_mouse();
-	ui_draw_intro();
+	op_camera_switch_2d(C,camera);
 	ui_draw_lines();
 	ui_draw_status_bar();
 	ui_draw_term();

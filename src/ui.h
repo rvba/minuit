@@ -25,6 +25,7 @@
 #define UI_SHOW_MOUSE 0
 #define UI_SHOW_TERM 0
 
+float intro_intensity;
 
 typedef struct Ui
 {
@@ -55,6 +56,7 @@ typedef struct Ui
 	int show_meshes;
 	int show_objects;
 	int show_intro;
+	int always_show_intro;
 	int show_mouse;
 	int show_term;
 	int show_grid;

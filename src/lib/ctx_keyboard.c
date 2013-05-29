@@ -26,6 +26,14 @@ int switch_init=0;
 int switch_frame=0;
 int switch_done=0;
 
+void ctx_switch_intro(t_context *C)
+{
+	if(C->ui->always_show_intro)
+		C->ui->always_show_intro = 0;
+	else
+		C->ui->always_show_intro = 1;
+}
+
 void keymap_generic(unsigned char key)
 {
 	t_context *C=ctx_get();
@@ -174,6 +182,7 @@ void keymap_command(unsigned char key)
 		case 'k': ctx_ui_switch_show_step(C); break;
 		case 'j': ctx_ui_switch_show_states(C); break;
 		case 'f': ctx_ui_freeze(C); break;
+		case 'w': ctx_switch_intro(C);
 
 		case APP_KEY_ESC: 	
 

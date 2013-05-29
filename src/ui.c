@@ -31,12 +31,13 @@ t_txt *txt_intro;
 t_txt *txt_version;
 
 int frame_offset=0;
-float *stars;
-float *stars_color;
+float *stars=NULL;
+float *stars_color=NULL;
 int star_init=0;
-int star_count=1000;
-int *stars_chance;
-float *stars_velocity;
+int star_count=10000;
+int *stars_chance=NULL;
+float *stars_velocity=NULL;
+float intro_intensity=1;
 
 void ui_draw_mouse(void)
 {
@@ -104,17 +105,6 @@ int get_chance(void)
 		return 0;
 }
 
-int get_low_chance(void)
-{
-	int tot = 500;
-	int range = 450;
-	int i = u_randrange(0,tot);
-	if(i>=range)
-		return 1;
-	else
-		return 0;
-}
-
 void star_intensity(int i)
 {
 	int sign = get_sign();
@@ -128,24 +118,45 @@ void star_intensity(int i)
 void star_mvt(int i)
 {
 	t_context *C = ctx_get();
+	int DIST = 200;
 	if(stars_chance[i] && i > 1)
 	{
 		float *s = stars + (i*3);
-		float *s_next = s -1; 
+		float velocity = stars_velocity[i];
 
-		float v[3];
+		if((s[0] > DIST)&&(s[1] > DIST)&&(s[2]>DIST))
+		{
+			if(i > DIST)
+			{
+				float origin[]={0,0,0};
+				float vv[3];
+				float rot[3]={cos(C->app->frame),sin(C->app->frame),0};
 
-		int pos = C->app->mouse->x;
-		float acc = 1;
+				vsub(vv,s,origin);
+				vadd(vv,vv,rot);
+				vmul(rot,velocity*20);
+				vadd(s,s,rot);
+			}
+			else
+			{
 
-		if(i > pos)
-			acc = 4;
-		if(i == pos)
-			acc = 50;
+			float *s_next = s -1; 
 
-		vsub(v,s_next,s);
-		vmul(v,stars_velocity[i]*.001*acc);
-		vadd(s,s,v);
+			float v[3];
+
+			int pos = C->app->mouse->x;
+			float acc = 1;
+
+			if(i > pos)
+				acc = 4;
+			if(i == pos)
+				acc = 50;
+
+			vsub(v,s_next,s);
+			vmul(v,stars_velocity[i]*.001*acc);
+			vadd(s,s,v);
+			}
+		}
 	}
 }
 
@@ -153,7 +164,7 @@ void ui_draw_intro(void)
 {
 	t_context *C=ctx_get();
 
-	if(C->ui->show_intro)
+	if(C->ui->show_intro || C->ui->always_show_intro)
 	{
 		int time_limit = 25;
 
@@ -175,14 +186,18 @@ void ui_draw_intro(void)
 
 		glPushMatrix();
 
-		// Minuit
-		txt_intro->draw(txt_intro);
+		if(C->ui->show_intro)
+		{
+			// Minuit
+			txt_intro->draw(txt_intro);
 
-		// Version
+			// Version
+			C->ui->zoom = z;
+			glTranslatef(35,0,0);
+			glScalef(scv,scv,scv);
+			txt_version->draw(txt_version);
+		}
 		C->ui->zoom = z;
-		glTranslatef(35,0,0);
-		glScalef(scv,scv,scv);
-		txt_version->draw(txt_version);
 
 		// Camera
 		t_camera *camera = C->ui->camera;
@@ -205,7 +220,7 @@ void ui_draw_intro(void)
 		//glLoadIdentity();
 
 		int frame = C->app->frame;
-		float rot = (float)frame*.05;
+		float rot = (float)frame*.05*intro_intensity;
 
 		glRotatef(rot,0,0,1);
 		glRotatef(rot,0,1,0);
@@ -245,8 +260,9 @@ void ui_draw_intro(void)
 			float iii = (float) C->app->frame / 500;
 			for(i=0;i<star_count;i++)
 			{
+				if(iii > .9) iii= .9;
 				vcp(col_var,col);
-				vmul(col_var,iii);
+				vmul(col_var,iii*intro_intensity);
 
 				star_intensity(i);
 				skt_point(s,1,col_var);
@@ -265,11 +281,17 @@ void ui_draw_intro(void)
 	}
 	else
 	{
+		/*
 		if(stars) free(stars);
 		if(stars_color) free(stars_color);
 		if(stars_velocity) free(stars_velocity);
 
+		stars=NULL;
+		stars_color=NULL;
+		stars_velocity=NULL;
+
 		star_init = 0;
+		*/
 	}
 }
 
@@ -553,6 +575,7 @@ t_ui *ui_new(void)
 	ui->draw_plug_state = 1;
 
 	ui->show_intro=UI_SHOW_INTRO;
+	ui->always_show_intro=0;
 	ui->show_bricks = 0;
 	ui->show_menu = 0;
 	ui->show_nodes = 0;
