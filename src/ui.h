@@ -23,7 +23,7 @@
 #define UI_DRAW 1
 #define UI_SHOW_INTRO 1
 #define UI_SHOW_MOUSE 0
-#define UI_SHOW_TERM 1
+#define UI_SHOW_TERM 0
 
 
 typedef struct Ui

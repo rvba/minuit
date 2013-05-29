@@ -26,6 +26,7 @@
 #include "data.h"
 
 t_txt *txt_intro;
+t_txt *txt_version;
 
 void ui_draw_mouse(void)
 {
@@ -78,12 +79,20 @@ void ui_draw_intro(void)
 
 	if(C->ui->show_intro)
 	{
-		float scale=4;
+		float scale=6;
+		float scv = .25;
 		float p[3]={(C->app->window->width)/4,(C->app->window->height)/2,0};
 		glPushMatrix();
 		glTranslatef(p[0],p[1],p[2]);
 		glScalef(scale,scale,scale);
+		float z = C->ui->zoom;
+		C->ui->zoom = 5;
 		txt_intro->draw(txt_intro);
+		C->ui->zoom = z;
+		glTranslatef(32,-1,0);
+		//glTranslatef(0,-3,0);
+		glScalef(scv,scv,scv);
+		txt_version->draw(txt_version);
 		glPopMatrix();
 	}
 }
@@ -349,6 +358,9 @@ void ui_init(void)
 	txt_layout_init();
 	txt_intro=txt_new("minuit");
 	txt_intro->use_bitmap_font=0;
+
+	txt_version=txt_new("0.4");
+	txt_version->use_bitmap_font=0;
 
 	t_context *C=ctx_get();
 	op_set_color(C,C->draw->color);
