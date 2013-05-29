@@ -13,6 +13,7 @@
 #include "common.h"
 
 struct Scene;
+struct Block;
 struct MINscreen;
 
 typedef struct MINscreen
@@ -31,6 +32,8 @@ typedef struct MINscreen
 	int zoom;
 	int pan_x;
 	int pan_y;
+
+	struct Lst *blocks;
 
 	void (* draw) (struct MINscreen *screen);
 	void (* keymap) (unsigned char key);
@@ -51,8 +54,11 @@ void screen_bricks_make(void);
 void screen_sets(t_screen *screen);
 
 // SCREEN.C
+
 void screen_on(t_screen *screen);
 void screen_off(t_screen *screen);
+
+void screen_block_add(t_screen *screen, struct Block *block);
 
 void screen_switch_by_name(char *name);
 void screen_switch_to_main(void);

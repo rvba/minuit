@@ -318,13 +318,10 @@ void ui_draw(void)
 	if(C->ui->draw) ui_draw_screens(C);
 	if(!C->ui->update_links)
 	{
-		float a[]={500,10,0};
-		float b[]={800,10,0};
 		float *color = C->ui->front_color;
 		int width = 1;
 
 		op_camera_switch_2d(C,C->ui->camera);
-
 
 		glPushMatrix();
 		glLoadIdentity();

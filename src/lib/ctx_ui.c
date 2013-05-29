@@ -265,25 +265,6 @@ void ctx_ui_linking(t_context *C)
 
 void ctx_blocks_update(t_context *C)
 {
-	/*
-	t_link *l=C->ui->screens->first;
-	t_node *n;
-	t_screen *s;
-
-	if(l)
-	{
-		for(;l;l=l->next)
-		{
-			n=l->data;
-			s=n->data;
-			if(s->is_visible) //active
-			{
-				s->update(s);
-			}
-		}
-	}
-	*/
-
 	t_link *l=C->scene->blocks->first;
 	t_node *n;
 	t_block *b;
@@ -297,9 +278,36 @@ void ctx_blocks_update(t_context *C)
 			cls_block_generic_update(b);
 		}
 	}
-
 }
 
+void ctx_screen_update(t_context *C)
+{
+	t_link *l=C->ui->screens->first;
+	t_node *n;
+	t_screen *s;
+	t_block *block;
+
+	if(l)
+	{
+		for(;l;l=l->next)
+		{
+			n=l->data;
+			s=n->data;
+			if(s->is_visible) //active
+			{
+				if(s->blocks)
+				{
+					t_link *link;
+					for(link=s->blocks->first;link;link=link->next)
+					{
+						block = link->data;
+						cls_block_generic_update(block);
+					}
+				}
+			}
+		}
+	}
+}
 
 
 
@@ -445,7 +453,9 @@ void ctx_ui(t_context *C)
 	// update blocks
 	ctx_block_mouse_update(C); 
 	// all
-	ctx_blocks_update(C);
+	//ctx_blocks_update(C);
+	ctx_screen_update(C);
+	ctx_sets_update(C);
 	
 	// update linking 
 	ctx_ui_linking(C);

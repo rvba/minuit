@@ -193,8 +193,6 @@ void cls_block_generic_update(t_block *block)
 	t_brick *brick;
 	t_link *link;
 
-	int is_mouse_over=0;
-
 	// loop over all bricks
 	for(link=block->bricks->first;link;link=link->next)
 	{
@@ -202,7 +200,6 @@ void cls_block_generic_update(t_block *block)
 		if(is_mouse_over_brick(C,brick))
 		{
 			 brick->state.is_mouse_over=1;
-			is_mouse_over=1;
 		}
 		else 
 		{

@@ -20,6 +20,7 @@
 #include "block.h"
 #include "sketch.h"
 #include "event.h"
+#include "ctx.h"
 
 void screen_on(t_screen *screen)
 {
@@ -31,6 +32,27 @@ void screen_off(t_screen *screen)
 {
 	screen->is_visible=0;
 	screen->is_active=0;
+}
+
+void screen_block_add(t_screen *screen, t_block *block)
+{
+	t_context *C = ctx_get();
+//	C->scene->store = 1;
+
+	if(screen->blocks)
+	{
+		list_add(screen->blocks, block);
+	}
+	else
+	{
+		t_node *node = scene_add(C->scene, dt_lst, "lst");
+		t_lst *lst = node->data;
+		screen->blocks = lst;
+
+		screen_block_add(screen, block);
+	}
+
+	//C->scene->store = 0;
 }
 
 
@@ -187,6 +209,7 @@ void screen_bricks(t_screen *screen)
 
 	C->event->ui.use_scale = 0;
 
+	/*
 	screen_bricks_draw(C,"menu_scalar");
 	screen_bricks_draw(C,"menu_time");
 	screen_bricks_draw(C,"menu_operator");
@@ -194,14 +217,24 @@ void screen_bricks(t_screen *screen)
 	screen_bricks_draw(C,"menu_logic");
 	screen_bricks_draw(C,"menu_maths");
 	screen_bricks_draw(C,"menu_lst");
+	*/
+
+	t_link *link;
+	t_block *block;
+
+	for(link = screen->blocks->first; link; link = link->next)
+	{
+		block = link->data;
+		block->cls->draw(block);
+		glTranslatef(0,block->height,0);
+	}
 
 	C->event->ui.use_scale = 1;
 
+	/*
 	float height = (float) C->app->window->height;
-
 	skt_rectangle(0,0,200,0,200,height,0,height);
-
-
+	*/
 
 	glPopMatrix();
 
@@ -219,6 +252,10 @@ void screen_free(t_screen *screen)
 
 t_screen *screen_rebind(t_scene *scene, void *ptr)
 {
+	t_screen *screen = (t_screen *) ptr;
+
+	rebind(scene,"screen","blocks",(void **)&screen->blocks);
+
 	return ptr;
 }
 
@@ -240,6 +277,8 @@ t_screen *screen_new(const char *name)
 	screen->pan_y=0;
 	screen->draw=NULL;
 	screen->keymap=NULL;
+
+	screen->blocks = NULL;
 	
 	return screen;
 }

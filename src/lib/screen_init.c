@@ -66,7 +66,7 @@ void screen_main_make(void)
 	C->ui->screen_link_active=link;
 };
 
-// MAKE DESK
+// SCREEN DESK
 
 void screen_sets_make(void)
 {
@@ -84,6 +84,15 @@ void screen_sets_make(void)
 	C->ui->screen_link_active=link;
 };
 
+// SCREEN BRICKS
+
+void screen_block_add_by_name(t_context *C, t_screen *screen, const char *name)
+{
+	t_node *node = scene_node_get(C->scene,"block",name);
+	t_block *block = node->data;
+	screen_block_add(screen, block);
+}
+
 void screen_bricks_make(void)
 {
 	t_context *C=ctx_get();
@@ -97,8 +106,14 @@ void screen_bricks_make(void)
 	screen->is_visible=0;
 
 	lst_add(C->ui->screens,node,"screen_bricks");
-	//t_link *link=lst_add(C->ui->screens,node,"screen_bricks");
-	//C->ui->screen_link_active=link;
+
+	screen_block_add_by_name(C, screen, "menu_scalar");
+	screen_block_add_by_name(C, screen, "menu_time");
+	screen_block_add_by_name(C, screen, "menu_operator");
+	screen_block_add_by_name(C, screen, "menu_vector");
+	screen_block_add_by_name(C, screen, "menu_logic");
+	screen_block_add_by_name(C, screen, "menu_maths");
+	screen_block_add_by_name(C, screen, "menu_lst");
 };
 
 // SCREEN SWITCH
