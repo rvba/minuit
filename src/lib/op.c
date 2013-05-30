@@ -219,6 +219,7 @@ t_node *make_menu_node_add(void)
 	add_brick_trigger(C,block,"obj",op_obj_import);
 	add_brick_trigger(C,block,"mn",op_add_mn);
 	add_brick_trigger(C,block,"camera",op_add_camera);
+	add_brick_trigger(C,block,"viewport",op_add_viewport);
 
 	return menu;
 }

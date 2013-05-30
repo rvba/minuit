@@ -236,6 +236,7 @@ void 		cls_brick_build_txt(struct Brick *brick);
 
 // OP_ADD_OBJECT
 
+void *		op_add_viewport(t_brick *brick);
 void *		op_add_set(struct Brick *brick);
 void *		op_new_set(const char *name);
 void *		op_new_camera(const char *name);
