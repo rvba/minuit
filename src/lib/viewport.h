@@ -31,8 +31,10 @@ struct Viewport
 	int y;
 
 	struct Camera *camera;
+	void (* draw)(struct Viewport *viewport);
 };
 
+void viewport_draw_scene(t_viewport *viewport);
 void viewport_draw(t_viewport *viewport);
 t_viewport *viewport_rebind(t_scene *scene, void **ptr);
 t_node *viewport_add(const char *name);

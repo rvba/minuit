@@ -707,6 +707,7 @@ t_scene *scene_new(void)
 	sc->use_tmp_colors=0;
 	sc->selected=NULL;
 	sc->is_ready=1;
+	sc->has_generic_viewport = 0;
 
 	// build lists
 	sc->nodes=lst_new("nodes");

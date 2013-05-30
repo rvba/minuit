@@ -120,15 +120,18 @@ void keymap_command(unsigned char key)
 	t_context *C=ctx_get();
 	t_event *event = C->event;
 
-	// Get default Viewport
-	t_node *node_viewport = scene_node_get(C->scene,"viewport","viewport");
-	t_viewport *viewport = NULL;
 	t_camera *camera = NULL;
-
-	if(node_viewport)
+	if(C->scene->has_generic_viewport)
 	{
-		viewport = node_viewport->data;
-		camera = viewport->camera;
+		// Get default Viewport
+		t_node *node_viewport = scene_node_get(C->scene,"viewport","viewport");
+		t_viewport *viewport = NULL;
+
+		if(node_viewport)
+		{
+			viewport = node_viewport->data;
+			camera = viewport->camera;
+		}
 	}
 
 	switch(key)

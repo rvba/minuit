@@ -73,8 +73,12 @@ void *op_add_viewport(t_brick *brick)
 	term_print(C->term,"+ viewport");
 
 	C->scene->store=1;
+	C->scene->has_generic_viewport = 1;
 
 	t_node *node = viewport_add("viewport");
+	t_viewport *viewport = node->data;
+
+	viewport->draw = viewport_draw_scene;
 
 	C->scene->store=0;
 

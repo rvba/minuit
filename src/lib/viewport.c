@@ -23,6 +23,16 @@
 
 // DRAW
 
+void viewport_draw_scene(t_viewport *viewport)
+{
+	t_context *C = ctx_get();
+
+	t_camera *camera = viewport->camera;
+	op_camera_update(C, camera);
+	op_3d_orientation(); 
+	draw_scene(C->draw,C->scene);
+}
+
 void viewport_draw(t_viewport *viewport)
 {
 	t_context *C = ctx_get();
@@ -40,36 +50,14 @@ t_viewport *viewport_rebind(t_scene *sc, void **ptr)
 	t_viewport *viewport=(t_viewport *)ptr;
 
 	rebind(sc,"viewport","camera",(void **)&viewport->camera);
+	rebind(sc,"viewport","draw",(void **)&viewport->draw);
 
 	return viewport;
 }
 
 t_node *viewport_add(const char *name)
 {
-	// make object
 	t_node *node=viewport_make(name);
-
-
-	/*
-	t_object *object=node->data;
-	// add data node
-	scene_add_data_node(C->scene,"app_node","object",name,node);
-
-	// add global reference
-	t_node *node_block=block_make(name,"block");
-	t_block *block=node_block->data;
-	object->ref=block;
-
-	// add selector
-	add_part_selector(C,block,name,node);
-
-	// add to global list
-	op_add_global(C,block);
-
-	// outline
-	block->state.draw_outline=1;
-	*/
-
 	return node;
 }
 
@@ -119,6 +107,7 @@ t_viewport *viewport_new(const char *name)
 	viewport->x = 0;
 	viewport->y = 0;
 	viewport->camera = NULL;
+	viewport->draw = NULL;
 
 	return viewport;
 }

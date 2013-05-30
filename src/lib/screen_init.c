@@ -28,12 +28,13 @@
 #include "block.h"
 #include "brick.h"
 
+#include "viewport.h"
+
 // NEW
 
 t_node *screen_new_generic(char *name)
 {
 	t_context *C=ctx_get();
-	//t_node *node=scene_add(C->scene,"screen",name);
 	t_node *node=scene_add(C->scene,nt_screen,name);
 	t_screen *screen=node->data;
 
@@ -116,6 +117,43 @@ void screen_bricks_make(void)
 	screen_block_add_by_name(C, screen, "menu_lst");
 };
 
+void screen_intro_make(void)
+{
+	t_context *C=ctx_get();
+
+	t_node *node=scene_add(C->scene,nt_screen,"screen_intro");
+	t_screen *screen=node->data;
+
+	screen->keymap=keymap_generic;
+	screen->draw=screen_intro;
+
+	screen->is_active=1;
+	screen->is_visible=1;
+	screen->always_active=1;
+	screen->always_visible=1;
+
+	lst_add(C->ui->screens,node,"screen_intro");
+
+	// Lst
+	t_node *node_lst = scene_add( C->scene, nt_list, "lst");
+	t_lst *lst = node_lst->data;
+
+	screen->viewports = lst;
+
+	// Viewport
+	t_node *node_viewport = scene_add( C->scene, nt_viewport, "viewport_intro");
+	t_viewport *viewport = node_viewport->data;
+
+	// Camera
+	t_node *node_camera = scene_add( C->scene, nt_camera, "viewport_camera");
+	t_camera *camera = node_camera->data;
+
+	viewport->camera = camera;
+
+	lst_add(screen->viewports, viewport, "viewport");
+
+};
+
 // SCREEN SWITCH
 
 void op_screen_switch()
@@ -170,13 +208,6 @@ void op_screen_switch()
 		}
 	}	
 }
-
-
-
-
-
-
-
 
 
 

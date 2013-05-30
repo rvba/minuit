@@ -18,6 +18,7 @@
 #define OP_CAM_SPEED 50
 #define OP_CAM_ORTHO_ZOOM_FAC 10
 
+/*
 t_camera *op_camera_get_current(void)
 {
 	t_context *C = ctx_get();
@@ -35,6 +36,7 @@ t_camera *op_camera_get_current(void)
 
 	return camera;
 }
+*/
 
 void op_3d_orientation(void)
 {

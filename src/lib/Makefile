@@ -64,6 +64,7 @@ obj:=\
 	screen.o\
 	screen_browser.o\
 	screen_init.o\
+	screen_intro.o\
 	server.o\
 	set.o\
 	sketch.o\
@@ -208,6 +209,8 @@ screen_browser.o:op.h screen_browser.c
 	gcc -c screen_browser.c $(FLAG) $(INC)
 screen_init.o:op.h screen_init.c 
 	gcc -c screen_init.c $(FLAG) $(INC)
+screen_intro.o:op.h screen_intro.c 
+	gcc -c screen_intro.c $(FLAG) $(INC)
 sketch.o: sketch.h sketch.c
 	gcc -c sketch.c $(FLAG) $(INC)   
 texture.o:texture.h texture.c

@@ -34,10 +34,11 @@ void screen_off(t_screen *screen)
 	screen->is_active=0;
 }
 
+// BLOCK ADD
+
 void screen_block_add(t_screen *screen, t_block *block)
 {
 	t_context *C = ctx_get();
-//	C->scene->store = 1;
 
 	if(screen->blocks)
 	{
@@ -51,10 +52,9 @@ void screen_block_add(t_screen *screen, t_block *block)
 
 		screen_block_add(screen, block);
 	}
-
-	//C->scene->store = 0;
 }
 
+// SWITCH BY NAME
 
 void screen_switch_by_name(char *name)
 {
@@ -66,7 +66,7 @@ void screen_switch_by_name(char *name)
 	{
 		t_link *l;
 
-		for(l=C->scene->screens->first;l;l=l->next) //XXX scene->screens ? ui->screens ?
+		for(l=C->scene->screens->first;l;l=l->next) 
 		{
 			t_node *this_node=l->data;
 			t_screen *this_screen=this_node->data;
@@ -81,12 +81,14 @@ void screen_switch_by_name(char *name)
 			// disable screen
 			else
 			{
-				this_screen->is_visible=0;
-				this_screen->is_active=0;
+				if(!this_screen->always_visible) this_screen->is_visible=0;
+				if(!this_screen->always_active) this_screen->is_active=0;
 			}
 		}
 	}	
 }
+
+// SWITCH TO MAIN
 
 void screen_switch_to_main(void)
 {
@@ -121,7 +123,7 @@ void screen_generic(t_screen *screen)
 	op_camera_switch_3d(C, camera);
 }
 
-// MAIN SCREEN
+// SCREEN MAIN
 
 void screen_main(t_screen *screen)
 {
@@ -134,7 +136,6 @@ void screen_main(t_screen *screen)
 	glLoadIdentity();
 
 	ui_draw_mouse();
-	ui_draw_intro();
 	op_camera_switch_2d(C,camera);
 	ui_draw_lines();
 	ui_draw_status_bar();
@@ -147,19 +148,17 @@ void screen_main(t_screen *screen)
 	op_camera_switch_3d(C, camera);
 }
 
+// SCREEN SETS
+
 void screen_sets(t_screen *screen)
 {
 	t_context *C=ctx_get();
 	t_camera *camera = C->ui->camera;
 
-	intro_intensity=.2;
-
 	op_camera_switch_2d(C,camera);
 
 	glPushMatrix();
 	glLoadIdentity();
-
-	ui_draw_intro();
 
 	glTranslatef(C->ui->pan_x,C->ui->pan_y,0);
 	float zoom = C->ui->zoom;
@@ -184,14 +183,7 @@ void screen_sets(t_screen *screen)
 	op_camera_switch_3d(C, camera);
 }
 
-void screen_bricks_draw(t_context *C,const char *name)
-{
-	t_node *node = scene_node_get(C->scene,"block",name);
-	t_block *block = node->data;
-	block->cls->draw(block);
-	glTranslatef(0,block->height,0);
-}
-
+// SCREEN BRICKS
 
 void screen_bricks(t_screen *screen)
 {
@@ -214,16 +206,6 @@ void screen_bricks(t_screen *screen)
 
 	C->event->ui.use_scale = 0;
 
-	/*
-	screen_bricks_draw(C,"menu_scalar");
-	screen_bricks_draw(C,"menu_time");
-	screen_bricks_draw(C,"menu_operator");
-	screen_bricks_draw(C,"menu_vector");
-	screen_bricks_draw(C,"menu_logic");
-	screen_bricks_draw(C,"menu_maths");
-	screen_bricks_draw(C,"menu_lst");
-	*/
-
 	t_link *link;
 	t_block *block;
 
@@ -235,11 +217,6 @@ void screen_bricks(t_screen *screen)
 	}
 
 	C->event->ui.use_scale = 1;
-
-	/*
-	float height = (float) C->app->window->height;
-	skt_rectangle(0,0,200,0,200,height,0,height);
-	*/
 
 	glPopMatrix();
 
@@ -260,6 +237,7 @@ t_screen *screen_rebind(t_scene *scene, void *ptr)
 	t_screen *screen = (t_screen *) ptr;
 
 	rebind(scene,"screen","blocks",(void **)&screen->blocks);
+	rebind(scene,"screen","viewports",(void **)&screen->viewports);
 
 	return ptr;
 }
@@ -277,6 +255,8 @@ t_screen *screen_new(const char *name)
 
 	screen->is_visible=0;
 	screen->is_active=0;
+	screen->always_active=0;
+	screen->always_visible=0;
 	screen->zoom=1;
 	screen->pan_x=0;
 	screen->pan_y=0;
@@ -284,6 +264,7 @@ t_screen *screen_new(const char *name)
 	screen->keymap=NULL;
 
 	screen->blocks = NULL;
+	screen->viewports = NULL;
 	
 	return screen;
 }
@@ -296,6 +277,7 @@ void screen_init(void)
 	screen_browser_make();
 	screen_sets_make();
 	screen_bricks_make();
+	screen_intro_make();
 }
 
 

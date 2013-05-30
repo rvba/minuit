@@ -19,6 +19,7 @@ typedef struct Scene
 	// state
 	int is_ready;
 	int store;
+	int has_generic_viewport;
 
 	// id
 	int id; 

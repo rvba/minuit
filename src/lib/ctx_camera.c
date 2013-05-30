@@ -71,9 +71,6 @@ void ctx_camera_movment(t_context *C, t_camera *camera)
 					C->ui->zoom-=.1;
 				else
 					op_camera_zoom(C, camera, -1);
-
-				// XXX
-				app->mouse->wheel=wheel_idle;
 			}
 
 			if (app->mouse->wheel == wheel_down)
@@ -82,9 +79,6 @@ void ctx_camera_movment(t_context *C, t_camera *camera)
 					C->ui->zoom+=.1;
 				else
 					op_camera_zoom(C, camera,1);
-
-				// XXX
-				app->mouse->wheel=wheel_idle;
 			}
 		}
 		// ortho
@@ -93,13 +87,11 @@ void ctx_camera_movment(t_context *C, t_camera *camera)
 			if (app->mouse->wheel == wheel_up)
 			{
 				op_camera_set_ortho_zoom(C, camera,-1);
-				app->mouse->wheel=wheel_idle;
 			}
 
 			if (app->mouse->wheel == wheel_down)
 			{
 				op_camera_set_ortho_zoom(C,camera,1);
-				app->mouse->wheel=wheel_idle;
 			}
 			if (app->mouse->button_left == button_pressed && app->keyboard->shift)
 			{
@@ -132,5 +124,8 @@ void ctx_camera(t_context *C)
 		op_camera_change_speed(camera);
 		ctx_camera_movment(C, camera);
 	}
+
+	// Reset 
+	C->app->mouse->wheel=wheel_idle;
 }
 	

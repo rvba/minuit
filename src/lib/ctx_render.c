@@ -121,7 +121,8 @@ void ctx_render_scene(t_context *C)
 	{
 		node = link->data;
 		viewport = node->data;
-		viewport_draw(viewport);
+		//viewport_draw(viewport);
+		if(viewport->draw) viewport->draw(viewport);
 	}
 }
 

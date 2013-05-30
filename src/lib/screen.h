@@ -27,6 +27,8 @@ typedef struct MINscreen
 
 	int is_active;
 	int is_visible;
+	int always_active;
+	int always_visible;
 	int width;
 	int height;
 	int zoom;
@@ -34,6 +36,7 @@ typedef struct MINscreen
 	int pan_y;
 
 	struct Lst *blocks;
+	struct Lst *viewports;
 
 	void (* draw) (struct MINscreen *screen);
 	void (* keymap) (unsigned char key);
@@ -50,6 +53,7 @@ struct Node *screen_new_generic(char *name);
 void screen_main_make(void);
 void screen_sets_make(void);
 void screen_bricks_make(void);
+void screen_intro_make(void);
 
 void screen_sets(t_screen *screen);
 
@@ -64,6 +68,7 @@ void screen_switch_by_name(char *name);
 void screen_switch_to_main(void);
 
 
+void screen_intro(t_screen *screen);
 void screen_bricks(t_screen *screen);
 void screen_generic(t_screen *screen);
 void screen_main(t_screen *screen);
