@@ -16,6 +16,10 @@
 #include "list.h"
 #include "object.h"
 
+#include "context.h"
+#include "op.h"
+#include "camera.h"
+
 t_draw *DRAW;
 
 GLenum LightList[] = {
@@ -168,14 +172,136 @@ void draw_points(t_draw *draw,t_mesh *mesh)
 	}
 }
 
+void draw_mesh_direct_faces(t_draw *draw, t_mesh *mesh)
+{
+	t_vlst *vertex=mesh->vertex;
+	GLfloat *v=vertex->data;	// vertices 
+	t_vlst *quads=mesh->quads;
+	int *q=quads->data;		// quad indices
+	int i,j,n;
+	// quads
+	if(q)
+	{
+		t_vlst *vlst_quad=mesh->quad_normal;
+		float *normals=vlst_quad->data;
+
+		float outline[4*3];
+
+		j=0;
+		for(i=0;i<quads->count;i++)
+		{
+			glBegin(GL_QUADS);
+			for(n=0;n<4;n++)
+			{
+				// normal
+				if(draw->with_normal)
+					glNormal3f(normals[(i*3)+0],normals[(i*3)+1],normals[(i*3)+2]);
+
+				if(draw->mode == mode_selection)
+				{
+					float c[3];
+					c[0] = (float)mesh->idcol[0]/255;
+					c[1] = (float)mesh->idcol[1]/255;
+					c[2] = (float)mesh->idcol[2]/255;
+					glColor3f(c[0],c[1],c[2]);
+				}
+
+				// vertex
+				if(draw->with_face)
+					glVertex3f(v[(q[j]*3)],v[(q[j]*3)+1],v[(q[j]*3)+2]);
+
+				outline[(n*3)+0] = v[(q[j]*3)+0]; 
+				outline[(n*3)+1] = v[(q[j]*3)+1]; 
+				outline[(n*3)+2] = v[(q[j]*3)+2]; 
+
+				j++;
+			}
+			glEnd();
+
+			if(draw->with_face_outline)
+			{
+				glDisable(GL_LIGHTING);
+				if(draw->with_face)
+					skt_closedline(outline,4,draw->back_color,1);
+				else
+					skt_closedline(outline,4,draw->front_color,1);
+				glEnable(GL_LIGHTING);
+			}
+		}
+	}
+}
+
+void draw_mesh_direct_selection(t_draw *draw, t_mesh *mesh)
+{
+	float *color=draw->front_color;
+	if(mesh->state.has_face)
+	{
+		glDisable(GL_LIGHTING);
+		glPushAttrib( GL_ALL_ATTRIB_BITS );
+		glEnable( GL_POLYGON_OFFSET_FILL );
+		glPolygonOffset( -2.5f, -2.5f );
+		glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+		glLineWidth( 1.0f );
+		glColor3f(color[0],color[1],color[2]);
+
+		if(mesh->state.has_quad) draw_mesh_direct_faces(draw, mesh); 
+
+		glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+		glColor3f( 0.0f, 0.0f, 0.0f );
+
+		if(mesh->state.has_quad) draw_mesh_direct_faces(draw, mesh); 
+
+		glDisable( GL_POLYGON_OFFSET_FILL );
+		glEnable( GL_LIGHTING );
+		glPopAttrib();
+
+	}
+}
+
+void draw_mesh_direct_selection_stencil(t_draw *draw, t_mesh *mesh)
+{
+	t_context *C = ctx_get();
+	float *color=draw->front_color;
+	if(mesh->state.has_face)
+	{
+		C->draw->with_normal = 0;
+		glPushAttrib( GL_ALL_ATTRIB_BITS );
+		glDisable(GL_LIGHTING);
+		glClearStencil(0);
+		glClear(GL_STENCIL_BUFFER_BIT);
+		glEnable(GL_STENCIL_TEST);
+		glStencilFunc(GL_ALWAYS, 1, 0xFFFF);
+		glStencilOp( GL_KEEP, GL_KEEP, GL_REPLACE);
+
+		glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);
+		glColor3f(0,0,0);
+
+		if(mesh->state.has_quad) draw_mesh_direct_faces(draw, mesh); 
+
+		glDisable( GL_LIGHTING);
+
+		glStencilFunc( GL_NOTEQUAL, 1, 0xFFFF);
+		glStencilOp( GL_KEEP, GL_KEEP, GL_REPLACE);
+		glLineWidth( 2);
+		glPolygonMode( GL_FRONT_AND_BACK, GL_LINE);
+		//glColor3f(1,1,1);
+		glColor3f(color[0], color[1], color[2]);
+
+		if(mesh->state.has_quad) draw_mesh_direct_faces(draw, mesh); 
+
+		glPopAttrib();
+
+		C->draw->with_normal = 1;
+
+	}
+}
+
 void draw_mesh_direct(t_draw *draw,t_scene *scene,t_mesh *mesh)
 {
 	t_vlst *vertex=mesh->vertex;
-	t_vlst *quads=mesh->quads;
 	GLfloat *v=vertex->data;	// vertices 
-	int *q=quads->data;		// quad indices
 
-	int i,j,n;
+	int i,j;
 
 	t_skt *skt=skt_get();
 
@@ -255,59 +381,19 @@ void draw_mesh_direct(t_draw *draw,t_scene *scene,t_mesh *mesh)
 		glLightModelfv(GL_LIGHT_MODEL_AMBIENT,model_ambient);
 	}
 
-	
-	// quads
-	//if(q && draw->with_face)
-	if(q)
+	// Faces
+	draw_mesh_direct_faces(draw, mesh);
+
+	// Outline
+	if(
+		mesh->state.is_selected
+		&& draw->mode == mode_draw
+		&& draw->with_face)
 	{
+		draw_mesh_direct_selection_stencil(draw, mesh);
 
-		t_vlst *vlst_quad=mesh->quad_normal;
-		float *normals=vlst_quad->data;
-
-		float outline[4*3];
-
-		j=0;
-		for(i=0;i<quads->count;i++)
-		{
-			glBegin(GL_QUADS);
-			for(n=0;n<4;n++)
-			{
-				// normal
-				if(draw->with_normal)
-					glNormal3f(normals[(i*3)+0],normals[(i*3)+1],normals[(i*3)+2]);
-
-				if(draw->mode == mode_selection)
-				{
-					float c[3];
-					c[0] = (float)mesh->idcol[0]/255;
-					c[1] = (float)mesh->idcol[1]/255;
-					c[2] = (float)mesh->idcol[2]/255;
-					glColor3f(c[0],c[1],c[2]);
-				}
-
-				// vertex
-				if(draw->with_face)
-					glVertex3f(v[(q[j]*3)],v[(q[j]*3)+1],v[(q[j]*3)+2]);
-
-				outline[(n*3)+0] = v[(q[j]*3)+0]; 
-				outline[(n*3)+1] = v[(q[j]*3)+1]; 
-				outline[(n*3)+2] = v[(q[j]*3)+2]; 
-
-				j++;
-			}
-			glEnd();
-
-			if(draw->with_face_outline)
-			{
-				glDisable(GL_LIGHTING);
-				if(draw->with_face)
-					skt_closedline(outline,4,draw->back_color,1);
-				else
-					skt_closedline(outline,4,draw->front_color,1);
-				glEnable(GL_LIGHTING);
-			}
-		}
 	}
+
 
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_LIGHTING);

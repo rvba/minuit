@@ -60,7 +60,6 @@ int is_mouse_over(t_context *C,int *c)
 
 int is_mouse_over_brick(t_context *C,t_brick *brick)
 {
-
 	if(
 		C->event->color[0] == brick->idcol_left[0] &&
 		C->event->color[1] == brick->idcol_left[1] &&

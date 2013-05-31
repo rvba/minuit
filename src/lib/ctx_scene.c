@@ -15,6 +15,9 @@
 #include "list.h"
 #include "ui.h"
 
+
+#include "object.h"
+
 // Selections and updates
 
 void ctx_scene_set_selected(t_context *C,void *data)
