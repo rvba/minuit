@@ -334,11 +334,13 @@ void cls_plug_connect_general(t_plug_mode mode, t_plug *self, t_plug *dst)
 	}
 
 	// Close flow in (Clone)
+	/*
 	if(dst->state.close_flow_in && self->state.use_flow)
 	{
 		t_plug *plug_in = &brick->plug_in;
 		plug_in->state.flow_in = 0;
 	}
+	*/
 
 	// Set in Loop
 	if(!self->state.is_a_loop)
