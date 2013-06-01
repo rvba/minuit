@@ -777,6 +777,8 @@ t_lst *ctx_links_build(t_context *C)
 			for(link=block->bricks->first;link;link=link->next)
 			{
 				t_brick *brick = link->data;
+				// Reset Const
+				brick->plug_intern.state.is_eval = 0;
 				lst_add(lst,brick,brick->name);
 			}
 		}
