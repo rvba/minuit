@@ -113,7 +113,6 @@ struct Node *	camera_make(const char *name);
 
 
 void 		op_3d_orientation(void);
-t_camera *	op_camera_get_current(void);
 void 		op_camera_view_top(t_camera *camera);
 void 		op_camera_view_axo(t_camera *camera);
 void 		op_camera_view_front(t_camera *camera);

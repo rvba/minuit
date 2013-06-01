@@ -18,26 +18,6 @@
 #define OP_CAM_SPEED 50
 #define OP_CAM_ORTHO_ZOOM_FAC 10
 
-/*
-t_camera *op_camera_get_current(void)
-{
-	t_context *C = ctx_get();
-	t_camera *camera = NULL;
-
-	// Get default Viewport
-	t_node *node_viewport = scene_node_get(C->scene,"viewport","viewport");
-	t_viewport *viewport = NULL;
-
-	if(node_viewport)
-	{
-		viewport = node_viewport->data;
-		camera = viewport->camera;
-	}
-
-	return camera;
-}
-*/
-
 void op_3d_orientation(void)
 {
 	glRotatef(-90,1,0,0);
