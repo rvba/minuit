@@ -125,6 +125,7 @@ struct App
 	char name[_NAME_];
 
 	char git[GIT];
+	char app_name[_NAME_];
 	
 	void (*main_func)(void);
 
@@ -209,7 +210,7 @@ void app_set_main_func(t_app *app,void(*func)(void));
 int app_free(t_app *app);
 void app_launch(t_app *app);
 t_app *app_new(int argc,char **argv);
-void app_init(t_app *app);
+void app_init(t_app *app, const char *name);
 
 void app_clock(t_app *app);
 t_app *app_get(void);

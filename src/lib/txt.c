@@ -48,6 +48,8 @@
 #define TXT_LETTER_SCALE_Y 4
 #define TXT_LETTER_SPACING 2.8
 
+float __zoom = 0.7;
+
 int **LAYOUT; 
 
 char _alphabet[]="abcdefghijklmnopqrstuvwxyz0123456789.*+/-= ";
@@ -117,8 +119,8 @@ int _parent_right[]={17,13,13,7,_BK};
 
 
 //int _b[]={20,10,10,6,6,9,9,14,14,18,18,15,_BK};
-int _b[]={20,10,10,6,6,9,9,19,19,15,_BK};
-int _d[]={24,14,14,8,8,5,5,15,15,19,_BK};
+int _b[]={20,5,5,6,6,9,9,19,19,15,_BK};
+int _d[]={24,14,9,9,8,5,5,15,15,19,_BK};
 int _p[]={5,7,8,18,18,15,15,0,_BK};
 //int _n[]={15,16,6,16,15,19,19,9,_BK};
 int _j[]={15,17,17,2,2,0,_BK};
@@ -689,7 +691,7 @@ float txt_get_width(t_txt *txt)
 	}
 	else
 	{
-		txt->width=(float)strlen(txt->name)*txt->letter_width;
+		txt->width=(float)strlen(txt->name)*txt->letter_width*__zoom;
 	}
 	return txt->width;
 }

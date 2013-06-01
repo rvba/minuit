@@ -48,6 +48,7 @@ struct Txt
 
 // TXT.C
 
+float txt_get_width(t_txt *txt);
 void txt_alphabet_make(void);
 void txt_layout_init(void);
 

@@ -209,7 +209,7 @@ int app_free(t_app *app)
 
 // INIT
 
-void app_init(t_app *app)
+void app_init(t_app *app, const char *name)
 {
 	// Store Localy
 	APP = app;
@@ -241,6 +241,8 @@ void app_init(t_app *app)
 
 	// Set Fullscreen
 	if(SET_FULLSCREEN && !app->off_screen) app_screen_set_fullscreen(app,1);
+
+	set_name(app->app_name,name);
 }
 
 // NEW

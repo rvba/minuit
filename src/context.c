@@ -64,7 +64,7 @@ t_context *ctx_init(int argc,char **argv)
 
 	// Init
 	scene_init(C->scene);
-	app_init(C->app);
+	app_init(C->app,"minuit");
 	log_init();
 	mem_init();
 	ui_init();

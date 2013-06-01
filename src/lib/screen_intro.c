@@ -148,8 +148,10 @@ void screen_intro(t_screen *screen)
 			stars_velocity[i] = (float)u_randrange(0,1000)/1000;
 		}
 
-		txt_intro=txt_new("minuit");
+		//txt_intro=txt_new("minuit");
+		txt_intro=txt_new(C->app->app_name);
 		txt_intro->use_bitmap_font=0;
+		//txt_intro->letter_width=30;
 
 		txt_version=txt_new("0.4");
 		txt_version->use_bitmap_font=0;
@@ -192,9 +194,12 @@ void screen_intro(t_screen *screen)
 			// Minuit
 			txt_intro->draw(txt_intro);
 
+			glTranslatef(txt_get_width(txt_intro)+1,0,0);
 			// Version
 			C->ui->zoom = z;
-			glTranslatef(35,0,0);
+			//glTranslatef(35,0,0);
+			//glTranslatef(txt_get_width(txt_intro),0,0);
+			//glTranslatef(35,0,0);
 			glScalef(scv,scv,scv);
 			txt_version->draw(txt_version);
 		}
