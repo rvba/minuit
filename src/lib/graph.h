@@ -23,6 +23,8 @@ typedef struct Graph
 
 }t_graph;
 
+void graph_show(t_graph *graph);
+void graph_block_add(t_graph *graph, t_block *block);
 void graph_free(t_graph *graph);
 t_graph *graph_new(const char *name);
 

@@ -315,6 +315,11 @@ void cls_plug_connect_general(t_plug_mode mode, t_plug *self, t_plug *dst)
 		plug_in->src = plug_dst_out;
 		plug_in->state.is_connected = 1;
 
+		// Add To Graph
+		t_block *block_self = brick->block;
+		t_block *block_dst = brick_dst->block;
+		block_graph_add(block_self,block_dst);
+
 		// If Versatil
 		if(brick->state.is_versatil)
 		{

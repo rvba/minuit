@@ -88,6 +88,8 @@ struct Block
 	struct Lst *bricks;
 	struct Brick *submenu;
 	struct Brick *selected;			// submenu
+
+	struct Graph *graph;
 };
 
 
@@ -131,6 +133,8 @@ void		block_unstore(t_block *block);
 void 		set_for_loop(t_block *block ,int state);
 
 void cls_block_generic_update(t_block *block);
+
+void block_graph_add(t_block *self, t_block *dst);
 
 #endif
 

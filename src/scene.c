@@ -107,6 +107,7 @@ t_lst *scene_lst_get(t_scene *sc,const char *type)
 	else if(is(type,"symbols"))  lst=sc->symbols; 
 	else if(is(type,"viewport"))  lst=sc->viewports; 
 	else if(is(type,"set"))  lst=sc->sets; 
+	else if(is(type,"graph"))  lst=sc->graphs; 
 
 	if(lst)
 	{

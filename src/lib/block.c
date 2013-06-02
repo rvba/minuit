@@ -16,6 +16,36 @@
 #include "list.h"
 #include "block.h"
 #include "brick.h"
+#include "graph.h"
+
+void block_graph_add(t_block *self, t_block *dst)
+{
+	t_context *C = ctx_get();
+	t_graph *graph=NULL;
+
+	if(self->graph) graph = self->graph;
+	else if(dst->graph) graph = dst->graph;
+
+	if(graph)
+	{
+		graph_block_add(graph, self);
+		graph_block_add(graph, dst);
+	}
+	else
+	{
+		C->scene->store = 1;
+
+		t_node *node_graph = scene_add(C->scene,nt_graph,"graph");
+		t_graph *graph = node_graph->data;
+
+		self->graph = graph;
+		dst->graph = graph;
+
+		C->scene->store = 0;
+
+		block_graph_add(self, dst);
+	}
+}
 
 void block_set_graph_order(t_block *block, int order)
 {
@@ -377,6 +407,7 @@ t_block *block_rebind(t_scene *sc,void *ptr)
 	t_block *block=(t_block *)ptr;
 
 	rebind(sc,"block","bricks",(void **)&block->bricks);
+	rebind(sc,"block","graph",(void **)&block->graph);
 
 	// reset
 	block->selected=NULL;
@@ -442,6 +473,8 @@ t_block *block_new(const char *name)
 	block->tot_bricks=0;
 	block->width=0;
 	block->graph_order = -1;
+
+	block->graph = NULL;
 
 	return block;
 }
