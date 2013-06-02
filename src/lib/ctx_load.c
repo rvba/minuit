@@ -804,8 +804,10 @@ void load_file(t_context *C,const char *path)
 	file_set_location(C->app->file,path);
 	file_init(C->app->file);
 
+	// Load Error
 	if(load_error)
 	{
+		C->ui->show_term = 1;
 		term_log("WARNING: Load Error");
 	}
 }
