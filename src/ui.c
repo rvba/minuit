@@ -26,6 +26,25 @@
 #include "list.h"
 #include "data.h"
 #include "camera.h"
+#include "graph.h"
+
+void ui_draw_graphs(void)
+{
+	t_context *C = ctx_get();
+	t_node *node;
+	t_graph *graph;
+	t_lst *lst = C->scene->graphs;
+	if(lst)
+	{
+		t_link *l;
+		for(l=lst->first;l;l=l->next)
+		{
+			node = l->data;
+			graph = node->data;
+			graph_draw_bounding_box(graph);
+		}
+	}
+}
 
 void ui_draw_mouse(void)
 {

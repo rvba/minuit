@@ -160,7 +160,7 @@ void block_draw_outline(t_block *block)
 			t_link *link=block->bricks->first;
 			t_brick *brick=link->data;
 			float h=brick->geom.height;
-			width+=(h*2);
+		//	width+=(h*2);
 		}
 
 		float a[3]={pos[0], pos[1], 0};

@@ -124,6 +124,7 @@ typedef struct Brick_State
 typedef struct Brick_Geometry
 {
 	float width;
+	float width_txt;
 	float height;
 	float min_width;
 	float min_height;

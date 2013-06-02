@@ -423,28 +423,10 @@ void ctx_ui_threading(t_context *C)
 	}
 }
 
-void ctx_show_graphs(t_context *C)
-{
-	t_node *node;
-	t_graph *graph;
-	t_lst *lst = C->scene->graphs;
-	if(lst)
-	{
-		t_link *l;
-		for(l=lst->first;l;l=l->next)
-		{
-			node = l->data;
-			graph = node->data;
-			graph_show(graph);
-		}
-	}
-}
-
 // CTX UI 
 
 void ctx_ui(t_context *C)
 {
-	ctx_show_graphs(C);
 	// Threading
 	ctx_ui_threading(C);
 

@@ -646,7 +646,7 @@ void cls_brick_update(t_brick *brick)
 							t_block *block=brick->block;
 
 							float width = brick_get_width(brick);
-							width+=brick->geom.height*2;
+							//width+=brick->geom.height*2;
 
 							float x=block->pos[0];
 							float y=block->pos[1];

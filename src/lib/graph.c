@@ -14,7 +14,65 @@
 #include "block.h"
 #include "list.h"
 
+#include "sketch.h"
+#include "ui.h"
+
 #include "graph.h"
+
+void graph_draw_bounding_box(t_graph *graph)
+{
+	t_context *C = ctx_get();
+	t_link *l;
+	t_block *block;
+
+	float up=0;
+	float down=0;
+	float left=0;
+	float right=0;
+
+	float margin = 10;
+
+	int first_run = 1;
+
+	if(graph->blocks)
+	{
+		for(l=graph->blocks->first;l;l=l->next)
+		{
+			block = l->data;
+			float x = block->pos[0];
+			float y = block->pos[1];
+
+			if(first_run)
+			{
+				first_run = 0;
+
+				left = x;
+				right = x+block->width;
+				up = y+block->height;
+				down = y;
+			}
+			else
+			{
+				if(x <= left) left = x;
+				if(x+block->width >= right) right = x+block->width;
+				if(y+block->height >= up) up = y+block->height;
+				if(y <= down) down = y;
+			}
+		}
+
+		float p[3]={left - margin,down - margin,0};
+
+		float w = right - left + margin*2;
+		float h = up - down + margin*2;
+
+		glLineStipple(2, 0xAAAA);
+		glEnable(GL_LINE_STIPPLE);
+
+		skt_line_rectangle(p,w,h,1,C->ui->front_color);
+
+		glDisable(GL_LINE_STIPPLE);
+	}
+}
 
 void graph_show(t_graph *graph)
 {
