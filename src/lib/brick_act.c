@@ -721,6 +721,7 @@ void exe_remove_brick(t_dict *args)
 			lst_link_remove(bricks,last);
 			scene_struct_delete(C->scene,last);
 			block->tot_bricks--;
+			block->state.update_geometry=1;
 		}
 		else
 		{
