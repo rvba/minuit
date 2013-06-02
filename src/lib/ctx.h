@@ -33,7 +33,7 @@ void save_file_increment(struct Context *C);
 
 // CTX_KEYBOARD
 
-void show_sets(t_context *C);
+void show_sets(struct Context *C);
 void switch_sets(struct Context *C);
 void keymap_main(unsigned char key);
 void keymap_generic(unsigned char key);

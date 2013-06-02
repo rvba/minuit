@@ -128,6 +128,6 @@ t_event *event_new(void)
 
 	event->loop_step = 0;
 	event->load_error = 0;
-
+	
 	return event;
 }

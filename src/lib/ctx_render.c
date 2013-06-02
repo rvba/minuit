@@ -140,36 +140,8 @@ void ctx_render_scene_full_pass(t_context *C)
 	ctx_render_scene(C);
 }
 
-/*
-void ctx_render_scene(void)
-{
-	t_context *C = ctx_get();
-	t_scene *scene = C->scene;
-	t_link *link;
-	t_node *node;
-	t_viewport *viewport;
-
-	ctx_render_set_full_pass(C);
-	draw_init(C->draw);
-
-	// Draw Screens
-	for(link = scene->viewports->first; link; link = link->next)
-	{
-		node = link->data;
-		viewport = node->data;
-		viewport_draw(viewport);
-	}
-}
-*/
-
-
 void ctx_render(t_context *C)
 {
-	//t_link *link;
-	//t_node *node;
-	//t_viewport *viewport;
-	//t_scene *scene = C->scene;
-
 	// Check Not Off Screen
 	if(!C->app->off_screen)
 	{
@@ -189,7 +161,6 @@ void ctx_render(t_context *C)
 		if(C->draw->with_draw_pass)
 		{
 			ctx_render_scene_full_pass(C);
-
 
 			ui_draw();
 		}

@@ -196,6 +196,7 @@ struct Event
 
 	int loop_step;
 	int load_error;
+
 };
 
 t_event *event_new(void);

@@ -137,7 +137,6 @@ void screen_main(t_screen *screen)
 
 	ui_draw_mouse();
 	op_camera_switch_2d(C,camera);
-	ui_draw_lines();
 	ui_draw_status_bar();
 	ui_draw_term();
 	ui_draw_grid();
