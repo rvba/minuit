@@ -307,22 +307,6 @@ void cls_brick_update(t_brick *brick)
 
 	if(mouse_over)
 	{
-		     /*
-		     if(event->switch_plug_in_flow_in)		brick_plug_change_state(&plug_in->state.flow_in);
-		else if(event->switch_plug_in_open_in)		brick_plug_change_state(&plug_in->open_in);
-		else if(event->switch_plug_in_follow_in)	brick_plug_change_state(&plug_in->follow_in);
-		else if(event->switch_plug_in_flow_out)		brick_plug_change_state(&plug_in->flow_out);
-		else if(event->switch_plug_in_open_out)		brick_plug_change_state(&plug_in->open_out);
-		else if(event->switch_plug_in_follow_out)	brick_plug_change_state(&plug_in->follow_out);
-
-		else if(event->switch_plug_out_flow_in)		brick_plug_change_state(&plug_out->flow_in);
-		else if(event->switch_plug_out_open_in)		brick_plug_change_state(&plug_out->open_in);
-		else if(event->switch_plug_out_follow_in)	brick_plug_change_state(&plug_out->follow_in);
-		else if(event->switch_plug_out_flow_out)	brick_plug_change_state(&plug_out->flow_out);
-		else if(event->switch_plug_out_open_out)	brick_plug_change_state(&plug_out->open_out);
-		else if(event->switch_plug_out_follow_out)	brick_plug_change_state(&plug_out->follow_out);
-		*/
-
 		     if(event->switch_plug_in_flow_in)		plug_in->state.flow_in = switch_int(plug_in->state.flow_in);
 		else if(event->switch_plug_in_open_in)		plug_in->state.open_in = switch_int(plug_in->state.open_in);
 		else if(event->switch_plug_in_follow_in)	plug_in->state.follow_in  = switch_int(plug_in->state.follow_in);

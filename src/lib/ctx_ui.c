@@ -261,26 +261,9 @@ void ctx_ui_linking(t_context *C)
 	C->event->end_y=(C->app->mouse->y-C->ui->pan_y)/C->ui->zoom;
 }
 
+// SCREENS
 
-
-void ctx_blocks_update(t_context *C)
-{
-	t_link *l=C->scene->blocks->first;
-	t_node *n;
-	t_block *b;
-
-	if(l)
-	{
-		for(;l;l=l->next)
-		{
-			n=l->data;
-			b=n->data;
-			cls_block_generic_update(b);
-		}
-	}
-}
-
-void ctx_screen_update(t_context *C)
+void ctx_block_screen_update(t_context *C)
 {
 	t_link *l=C->ui->screens->first;
 	t_node *n;
@@ -309,9 +292,7 @@ void ctx_screen_update(t_context *C)
 	}
 }
 
-
-
-// UPDATE MOUSE MENU
+// MOUSE 
 
 void ctx_block_mouse_update(t_context *C)
 {
@@ -325,9 +306,9 @@ void ctx_block_mouse_update(t_context *C)
 	menu->cls->update(menu);
 }
 
-// DESK
+// SETS
 
-void ctx_sets_update(t_context *C)
+void ctx_block_set_update(t_context *C)
 {
 	t_link *link;
 
@@ -362,6 +343,8 @@ void ctx_ui_intro(t_context *C)
 		C->ui->show_intro=0;
 }
 
+// EXE
+
 t_lst *EXE=NULL;
 
 void ctx_exe(t_context *C)
@@ -388,6 +371,8 @@ void exe_add_action(t_action *action)
 {
 	lst_add(EXE,action,"action");
 }
+
+// THREADING
 
 void *ctx_ui_process(void *ptr)
 {
@@ -452,10 +437,8 @@ void ctx_ui(t_context *C)
 
 	// update blocks
 	ctx_block_mouse_update(C); 
-	// all
-	//ctx_blocks_update(C);
-	ctx_screen_update(C);
-	ctx_sets_update(C);
+	ctx_block_screen_update(C);
+	ctx_block_set_update(C);
 	
 	// update linking 
 	ctx_ui_linking(C);

@@ -83,7 +83,6 @@ void cls_block_block_update(t_block *block)
 	else block->state.is_mouse_over=0;
 }
 
-
 void cls_block_menu_update(t_block *block)
 {
 	t_context *C = ctx_get();
