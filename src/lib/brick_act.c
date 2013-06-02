@@ -135,7 +135,7 @@ void *op_brick_add(t_brick *brick)
 	C->scene->store=0;
 
 	// Switch Desk
-	if(!C->ui->show_sets) switch_sets(C);
+	if(!C->ui->show_sets) show_sets(C);
 
 	// Limit
 

@@ -75,7 +75,7 @@ void screen_sets_make(void)
 	t_node *node=scene_add(C->scene,nt_screen,"screen_sets");
 	t_screen *screen=node->data;
 
-	screen->keymap=keymap_main;
+	screen->keymap=keymap_generic;
 	screen->draw=screen_sets;
 
 	screen->is_active=0;

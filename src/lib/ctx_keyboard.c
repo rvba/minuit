@@ -58,16 +58,28 @@ void switch_txt(t_context *C)
 
 void switch_sets(t_context *C)
 {
+	t_node *node_screen_sets = scene_node_get(C->scene,"screen","screen_sets");
+	t_screen *screen_set = node_screen_sets->data;
+
 	if(C->ui->show_sets)
 	{
 		C->ui->show_sets = 0;
-		screen_switch_by_name("screen_main");
+		screen_off(screen_set);
 	}
 	else
 	{
 		C->ui->show_sets = 1;
-		screen_switch_by_name("screen_sets");
+		screen_on(screen_set);
 	}
+}
+
+void show_sets(t_context *C)
+{
+	t_node *node_screen_sets = scene_node_get(C->scene,"screen","screen_sets");
+	t_screen *screen_set = node_screen_sets->data;
+
+	screen_set->is_active = 1;
+	screen_set->is_visible = 1;
 }
 
 void switch_bricks(t_context *C)
@@ -75,18 +87,15 @@ void switch_bricks(t_context *C)
 	t_node *node = scene_node_get(C->scene,"screen","screen_bricks");
 	t_screen *screen = node->data;
 
-	if(C->app->mouse->button_left == button_released)
+	if(C->ui->show_bricks)
 	{
-		if(C->ui->show_bricks)
-		{
-			C->ui->show_bricks = 0;
-			screen_off(screen);
-		}
-		else
-		{
-			C->ui->show_bricks = 1;
-			screen_on(screen);
-		}
+		C->ui->show_bricks = 0;
+		screen_off(screen);
+	}
+	else
+	{
+		C->ui->show_bricks = 1;
+		screen_on(screen);
 	}
 }
 
