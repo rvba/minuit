@@ -11,6 +11,7 @@
 #include "util.h"
 
 
+/*
 void calc_normals(float *v1,float *v2,float *v3,float *result)
 {
 
@@ -44,6 +45,7 @@ void calc_normals(float *v1,float *v2,float *v3,float *result)
 	result[1] = y;
 	result[2] = z;
 }
+*/
 
 void vprint3i(int *v,char end)
 {
