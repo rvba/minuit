@@ -16,8 +16,11 @@
 
 #include "sketch.h"
 #include "ui.h"
+#include "ctx.h"
 
 #include "graph.h"
+
+// DRAW BOUNDING BOX
 
 void graph_draw_bounding_box(t_graph *graph)
 {
@@ -74,17 +77,7 @@ void graph_draw_bounding_box(t_graph *graph)
 	}
 }
 
-void graph_show(t_graph *graph)
-{
-	if(graph->blocks)
-	{
-		lst_show(graph->blocks);
-	}
-	else
-	{
-		printf("no blocks!\n");
-	}
-}
+// BLOCK ADD
 
 void graph_block_add(t_graph *graph, t_block *block)
 {
@@ -134,6 +127,19 @@ void graph_block_add(t_graph *graph, t_block *block)
 	}
 }
 
+// REBIND
+
+t_graph *graph_rebind(t_scene *sc,void *ptr)
+{
+	t_graph *graph=(t_graph *)ptr;
+
+	rebind(sc,"graph","blocks",(void **)&graph->blocks);
+
+	return graph;
+}
+
+// FREE
+
 void graph_free(t_graph *graph)
 {
 	t_context *C = ctx_get();
@@ -142,6 +148,8 @@ void graph_free(t_graph *graph)
 		scene_struct_delete(C->scene,graph->blocks);
 	}
 }
+
+// NEW
 
 t_graph *graph_new(const char *name)
 {

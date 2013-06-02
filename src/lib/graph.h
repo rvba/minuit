@@ -12,6 +12,8 @@
 
 #include "common.h"
 
+struct Scene;
+
 typedef struct Graph
 {
 	int id;
@@ -24,8 +26,8 @@ typedef struct Graph
 }t_graph;
 
 void graph_draw_bounding_box(t_graph *graph);
-void graph_show(t_graph *graph);
 void graph_block_add(t_graph *graph, t_block *block);
+t_graph *graph_rebind(struct Scene *sc,void *ptr);
 void graph_free(t_graph *graph);
 t_graph *graph_new(const char *name);
 
