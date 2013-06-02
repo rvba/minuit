@@ -61,6 +61,7 @@ struct Block_State
 	int draw_plugs:1;
 	int is_mouse_over:1;
 	int update_geometry:1;
+	int is_moveable:1;
 };
 
 struct Block

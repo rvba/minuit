@@ -544,20 +544,24 @@ void cls_brick_update(t_brick *brick)
 					else
 					{
 						t_block *block=brick->block;
-						float *block_pos=block->pos;
-						ctx_get_mouse_pos(C,mouse_pos);
 
-						if(!is_vec_stored)
+						if(block->state.is_moveable)
 						{
-							is_vec_stored=1;
-							ctx_ui_menu_hide(C);
-							vsub(vec,block_pos,mouse_pos);
-						}
-						else
-						{
-							ctx_ui_menu_hide(C);
-							vadd(v,mouse_pos,vec);
-							vcp(block_pos,v);
+							float *block_pos=block->pos;
+							ctx_get_mouse_pos(C,mouse_pos);
+
+							if(!is_vec_stored)
+							{
+								is_vec_stored=1;
+								ctx_ui_menu_hide(C);
+								vsub(vec,block_pos,mouse_pos);
+							}
+							else
+							{
+								ctx_ui_menu_hide(C);
+								vadd(v,mouse_pos,vec);
+								vcp(block_pos,v);
+							}
 						}
 					}
 				}

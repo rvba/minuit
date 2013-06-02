@@ -437,6 +437,7 @@ t_block *block_new(const char *name)
 	block->state.draw_plugs=0;
 	block->state.is_mouse_over=0;
 	block->state.update_geometry=1;
+	block->state.is_moveable = 1;
 
 	block->tot_bricks=0;
 	block->width=0;

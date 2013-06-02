@@ -59,6 +59,7 @@ t_node *add_menu_process(void)
 	t_node *menu_main=scene_node_get(C->scene,"block","menu_set");
 	t_node *menu=block_make("menu_process","menu");
 	t_block *block=menu->data;
+	block->state.is_moveable = 0;
 
 	add_brick_switch(C,block,"debug process",&C->event->debug_process);
 	add_brick_slider_float(C,block,"limit",&C->engine->global_limit);
@@ -77,6 +78,7 @@ t_node *make_menu_debug(void)
 	t_context *C=ctx_get();
 	t_node *menu=block_make("menu_debug","menu");
 	t_block *block=menu->data;
+	block->state.is_moveable = 0;
 
 	add_brick_switch(C,block,"show terminal",&C->ui->show_term);
 	add_brick_switch(C,block,"debug keyboard",&C->app->debug_keyboard);
@@ -95,6 +97,7 @@ t_node *make_menu_view(void)
 	t_context *C=ctx_get();
 	t_node *menu=block_make("menu_view","menu");
 	t_block *block=menu->data;
+	block->state.is_moveable = 0;
 
 	add_brick_slider_int_custom(C,block,"win width",&C->app->window->width,op_window);
 	add_brick_slider_int_custom(C,block,"win height",&C->app->window->height,op_window);
@@ -110,6 +113,7 @@ t_node *make_menu_ui(void)
 	t_context *C=ctx_get();
 	t_node *menu=block_make("menu_ui","menu");
 	t_block *block=menu->data;
+	block->state.is_moveable = 0;
 
 	add_brick_switch(C,block,"update links",&C->ui->update_links);
 	add_brick_switch(C,block,"fixed menu",&C->ui->fixed_menu);
@@ -172,6 +176,7 @@ t_node *make_menu_skt(void)
 	t_context *C=ctx_get();
 	t_node *menu=block_make("menu_sketch","menu");
 	t_block *block=menu->data;
+	block->state.is_moveable = 0;
 
 	add_brick_slider_int(C,block,"line width",&C->skt->line_width);
 	add_brick_slider_float(C,block,"point size",&C->skt->point_size);
@@ -188,6 +193,7 @@ t_node *make_menu_draw(void)
 	t_context *C=ctx_get();
 	t_node *menu=block_make("menu_draw","menu");
 	t_block *block=menu->data;
+	block->state.is_moveable = 0;
 
 	add_brick_switch(C,block,"face",&C->event->with_face);
 	add_brick_switch(C,block,"face outline",&C->event->with_face_outline);
@@ -211,6 +217,7 @@ t_node *make_menu_node_add(void)
 	t_context *C=ctx_get();
 	t_node *menu=block_make("menu_node_add","menu");
 	t_block *block=menu->data;
+	block->state.is_moveable = 0;
 
 	add_brick_trigger(C,block,"default",op_add_default);
 	add_brick_trigger(C,block,"cube",op_add_cube);
@@ -231,6 +238,7 @@ t_node *make_menu_object(void)
 	t_context *C=ctx_get();
 	t_node *menu=block_make("menu_brick_node","menu");
 	t_block *block=menu->data;
+	block->state.is_moveable = 0;
 
 	add_brick_trigger(C,block,"pos x",op_brick_add);
 	add_brick_trigger(C,block,"pos y",op_brick_add);
@@ -261,6 +269,7 @@ t_node *make_menu_mesh(void)
 	t_context *C=ctx_get();
 	t_node *menu=block_make("menu_brick_mesh","menu");
 	t_block *block=menu->data;
+	block->state.is_moveable = 0;
 
 	add_brick_trigger(C,block,"color",op_brick_add);
 	add_brick_trigger(C,block,"faces",op_brick_add);
@@ -275,6 +284,7 @@ t_node *make_menu_scalar(void)
 	t_context *C=ctx_get();
 	t_node *menu=block_make("menu_scalar","menu");
 	t_block *block=menu->data;
+	block->state.is_moveable = 0;
 
 	add_brick_trigger(C,block,"int",op_brick_add);
 	add_brick_trigger(C,block,"float",op_brick_add);
@@ -298,6 +308,7 @@ t_node *make_menu_lst(void)
 	t_context *C=ctx_get();
 	t_node *menu=block_make("menu_lst","menu");
 	t_block *block=menu->data;
+	block->state.is_moveable = 0;
 
 	add_brick_trigger(C,block,"last?",op_brick_add);
 	add_brick_trigger(C,block,"rewind",op_brick_add);
@@ -312,6 +323,7 @@ t_node *make_menu_logic(void)
 	t_context *C=ctx_get();
 	t_node *menu=block_make("menu_logic","menu");
 	t_block *block=menu->data;
+	block->state.is_moveable = 0;
 
 	add_brick_trigger(C,block,">",op_brick_add);
 	add_brick_trigger(C,block,"<",op_brick_add);
@@ -330,6 +342,7 @@ t_node *make_menu_maths(void)
 	t_context *C=ctx_get();
 	t_node *menu=block_make("menu_maths","menu");
 	t_block *block=menu->data;
+	block->state.is_moveable = 0;
 
 	add_brick_trigger(C,block,"cos",op_brick_add);
 	add_brick_trigger(C,block,"sin",op_brick_add);
@@ -349,6 +362,7 @@ t_node *make_menu_ops(void)
 	t_context *C=ctx_get();
 	t_node *menu=block_make("menu_operator","menu");
 	t_block *block=menu->data;
+	block->state.is_moveable = 0;
 
 	add_brick_trigger(C,block,"get",op_brick_add);
 	add_brick_trigger(C,block,"clone",op_brick_add);
@@ -368,6 +382,7 @@ t_node *make_menu_vector(void)
 	t_context *C=ctx_get();
 	t_node *menu=block_make("menu_vector","menu");
 	t_block *block=menu->data;
+	block->state.is_moveable = 0;
 
 	add_brick_trigger(C,block,"vector 3d",op_brick_add);
 	add_brick_trigger(C,block,"vector 2d",op_brick_add);
@@ -383,6 +398,7 @@ t_node *make_menu_time(void)
 	t_context *C=ctx_get();
 	t_node *menu=block_make("menu_time","menu");
 	t_block *block=menu->data;
+	block->state.is_moveable = 0;
 
 	add_brick_trigger(C,block,"sec",op_brick_add);
 	add_brick_trigger(C,block,"msec",op_brick_add);
@@ -400,6 +416,7 @@ t_node *make_menu_cam(void)
 	t_context *C=ctx_get();
 	t_node *menu=block_make("menu_cam","menu");
 	t_block *block=menu->data;
+	block->state.is_moveable = 0;
 
 	add_brick_trigger(C,block,"cam_pos_x",op_brick_add);
 	add_brick_trigger(C,block,"cam_pos_y",op_brick_add);
@@ -420,6 +437,7 @@ t_node *make_submenu_mouse(void)
 	t_context *C=ctx_get();
 	t_node *menu=block_make("menu_mouse","menu");
 	t_block *block=menu->data;
+	block->state.is_moveable = 0;
 
 	add_brick_trigger(C,block,"mouse_x",op_brick_add);
 	add_brick_trigger(C,block,"mouse_y",op_brick_add);
