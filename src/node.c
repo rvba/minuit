@@ -31,6 +31,7 @@
 #include "set.h"
 #include "image.h"
 #include "file.h"
+#include "graph.h"
 
 #include "ctx.h"
 
@@ -57,6 +58,7 @@ int node_make_vector(t_node *node);
 int node_make_viewport(t_node *node);
 int node_make_set(t_node *node);
 int node_make_binding(t_node *node);
+int node_make_graph(t_node *node);
 
 char node_name_null[]="node_null";
 char node_name_brick[]="node_brick";
@@ -82,6 +84,7 @@ char node_name_vector[]="node_vector";
 char node_name_viewport[]="node_viewport";
 char node_name_set[]="node_set";
 char node_name_binding[]="node_binding";
+char node_name_graph[]="node_graph";
 
 char *node_name_get(t_node_type type)
 {
@@ -111,6 +114,7 @@ char *node_name_get(t_node_type type)
 		case(nt_viewport):return node_name_viewport;break;
 		case(nt_set):return node_name_set;break;
 		case(nt_binding):return node_name_binding;break;
+		case(nt_graph):return node_name_graph;break;
 		default:printf("[ERROR node_name_get] Unknown type %d\n",type);return node_name_null;break;
 	}
 }
@@ -229,6 +233,8 @@ void cls_node_build(t_node *node,const char *name)
 		case nt_set:	 	p = set_new(name);
 			break;
 		case nt_binding:	 p = binding_new(name);
+			break;
+		case nt_graph: 		p = graph_new(name);
 			break;
 
 		case nt_null: 
@@ -446,6 +452,11 @@ void cls_node_binding_free(t_scene *sc,t_node *node)
 	binding_free(node->data);
 }
 
+void cls_node_graph_free(t_scene *sc,t_node *node)
+{
+	graph_free(node->data);
+}
+
 // INIT
 
 // get Scene ID
@@ -535,6 +546,11 @@ void cls_node_init_set(t_node *node)
 }
 
 void cls_node_init_binding(t_node *node)
+{
+	cls_node_init_generic(node);
+}
+
+void cls_node_init_graph(t_node *node)
 {
 	cls_node_init_generic(node);
 }
@@ -885,6 +901,21 @@ t_node_class binding = {
 	.get_ref = cls_node_get_ref,
 };
 
+t_node_class graph = {
+	.type=nt_graph,
+	.size=0,
+	.lst=NULL,
+	.make=node_make_graph,
+	.build=cls_node_build,
+	.link=cls_node_link,
+	.del=cls_node_del,
+	.init=cls_node_init_graph,
+	.set_state_selected=cls_node_set_state_selected,
+	.is_mouse_over=cls_node_is_mouse_over,
+	.free=cls_node_graph_free,
+	.get_ref = cls_node_get_ref,
+};
+
 
 // MAKE
 
@@ -1112,6 +1143,16 @@ int node_make_binding(t_node *node)
 	return 1;
 }
 
+int node_make_graph(t_node *node)
+{
+	t_context *C=ctx_get();
+	node->cls=&graph;
+	node->cls->size=sizeof(t_graph);
+	node->cls->lst=C->scene->graphs;
+	node->type = nt_graph;
+	return 1;
+}
+
 // TYPES
 
 t_node_class *nodes[] = {
@@ -1138,6 +1179,7 @@ t_node_class *nodes[] = {
 				&viewport,
 				&set,
 				&binding,
+				&graph,
 			};
 
 

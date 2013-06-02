@@ -63,6 +63,7 @@ typedef enum Node_Type
 	nt_viewport,
 	nt_set,
 	nt_binding,
+	nt_graph,
 
 }t_node_type;
 

@@ -38,6 +38,7 @@ obj:=\
 	engine.o\
 	event.o\
 	file.o\
+	graph.o\
 	image.o\
 	image_jpg.o\
 	image_png.o\
@@ -153,6 +154,8 @@ event.o:event.h
 	gcc -c event.c $(FLAG) $(INC)
 file.o:file.h
 	gcc -c file.c $(FLAG) $(INC)
+graph.o:graph.h
+	gcc -c graph.c $(FLAG) $(INC)
 image.o:image.h image.c
 	gcc -c image.c $(FLAG) $(INC)
 image_jpg.o:image.h image_jpg.c

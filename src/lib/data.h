@@ -88,6 +88,7 @@ extern char name_trigger[];
 extern char name_operator[];
 extern char name_vector[];
 extern char name_viewport[];
+extern char name_graph[];
 
 char *		data_name_get(t_data_type);
 void		print_type(t_data_type type);

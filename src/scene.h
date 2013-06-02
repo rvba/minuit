@@ -52,6 +52,7 @@ typedef struct Scene
 	struct Lst *viewports;
 	struct Lst *sets;
 	struct Lst *bindings;
+	struct Lst *graphs;
 
 	struct Lst *vars;
 
