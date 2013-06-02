@@ -45,6 +45,7 @@
 #include "term.h"
 #include "file.h"
 #include "brick.h"
+#include "graph.h"
 
 #include "ctx.h"
 #include "op.h"
