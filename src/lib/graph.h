@@ -25,6 +25,7 @@ typedef struct Graph
 
 }t_graph;
 
+void graph_merge(t_graph *src, t_graph *dst);
 void graph_draw_bounding_box(t_graph *graph);
 void graph_block_add(t_graph *graph, t_block *block);
 t_graph *graph_rebind(struct Scene *sc,void *ptr);

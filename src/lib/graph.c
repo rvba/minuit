@@ -22,6 +22,45 @@
 
 // DRAW BOUNDING BOX
 
+void graph_swap(t_graph *src, t_graph *dst)
+{
+	t_link *l;
+	t_block *block;
+
+	for(l=src->blocks->first;l;l=l->next)
+	{
+		block = l->data;
+		block->graph = dst;
+		graph_block_add(dst, block);
+	}
+}
+
+void graph_merge(t_graph *src, t_graph *dst)
+{
+	t_context *C = ctx_get();
+	if(src->id == dst->id)
+	{
+		// nothing to do 
+	}
+	else
+	{
+		// New Graph
+		C->scene->store = 1;
+		t_node *node_graph = scene_add(C->scene, nt_graph, "graph");
+		t_graph *graph = node_graph->data;
+		C->scene->store = 0;
+
+		// Merge Graphs
+		graph_swap(src,graph);
+		graph_swap(dst,graph);
+
+		// Remove Old Graphs
+		scene_struct_delete(C->scene,src);
+		scene_struct_delete(C->scene,dst);
+	}
+}
+
+
 void graph_draw_bounding_box(t_graph *graph)
 {
 	t_context *C = ctx_get();
@@ -105,6 +144,7 @@ void graph_block_add(t_graph *graph, t_block *block)
 			{
 				C->scene->store = 1;
 				list_add(graph->blocks, block);
+				block->graph = graph;
 				C->scene->store = 0;
 			}
 		}
@@ -112,6 +152,7 @@ void graph_block_add(t_graph *graph, t_block *block)
 		{
 			C->scene->store = 1;
 			list_add(graph->blocks, block);
+			block->graph = graph;
 			C->scene->store = 0;
 		}
 	}

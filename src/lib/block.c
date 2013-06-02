@@ -21,15 +21,18 @@
 void block_graph_add(t_block *self, t_block *dst)
 {
 	t_context *C = ctx_get();
-	t_graph *graph=NULL;
 
-	if(self->graph) graph = self->graph;
-	else if(dst->graph) graph = dst->graph;
-
-	if(graph)
+	if(self->graph && dst->graph)
 	{
-		graph_block_add(graph, self);
-		graph_block_add(graph, dst);
+		graph_merge(self->graph,dst->graph);
+	}
+	else if(self->graph)
+	{
+		graph_block_add(self->graph, dst);
+	}
+	else if(dst->graph)
+	{
+		graph_block_add(dst->graph, self);
 	}
 	else
 	{
@@ -38,12 +41,10 @@ void block_graph_add(t_block *self, t_block *dst)
 		t_node *node_graph = scene_add(C->scene,nt_graph,"graph");
 		t_graph *graph = node_graph->data;
 
-		self->graph = graph;
-		dst->graph = graph;
-
 		C->scene->store = 0;
 
-		block_graph_add(self, dst);
+		graph_block_add(graph, self);
+		graph_block_add(graph, dst);
 	}
 }
 
