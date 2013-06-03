@@ -966,27 +966,6 @@ void *op_clone(t_brick *brick)
 					plug_in_clone->state.is_connected=1;
 
 					t_brick *brick_target = plug_target->brick;
-				
-					if(plug_in->state.is_connected)
-					{
-						if(brick_target->plug_out.state.open_out)
-							plug_out_clone->state.open_out = 1;
-						else
-							plug_out_clone->state.open_out = 0;
-					}
-					else if(plug_out->state.is_connected)
-					{
-						if(brick_target->plug_in.state.open_in)
-							plug_out_clone->state.open_out = 1;
-						else
-							plug_out_clone->state.open_out = 0;
-
-					}
-				}
-				else
-				{
-					plug_in_clone->state.is_connected=0;
-					plug_out_clone->state.open_out = 0;
 				}
 			}
 		}
