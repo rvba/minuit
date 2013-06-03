@@ -25,9 +25,6 @@
 #include "block.h"
 #include "brick.h"
 
-#define db_main 0
-
-
 void cls_plug_make_float(t_plug *plug);
 void cls_plug_make_int(t_plug *plug);
 void cls_plug_make_uint(t_plug *plug);
@@ -253,10 +250,66 @@ void cls_plug_connect_operator(t_plug_mode mode, t_plug *self, t_plug *dst)
 	cls_plug_connect_general(mode,self,dst);
 }
 
+// DISCONNECT FOR
+
 void cls_plug_disconnect_operator(t_plug_mode mode, t_plug *plug)
 {
+	t_brick *brick = plug->brick;
+	t_block *block = brick->block;
+
 	// General
 	cls_plug_disconnect_general(mode,plug);
+
+	// FOR 
+	if(brick->plug_intern.operator_type == ot_for)
+	{
+		t_brick *brick_vector = block_brick_get(block,"vector");
+		t_plug *plug_vector = &brick_vector->plug_intern;
+		t_plug *plug_in_vector = &brick_vector->plug_in;
+		t_vector *vector = plug_vector->data;
+		vector->pointer = NULL;
+
+		if(plug_in_vector->state.is_connected)
+		{
+			t_plug *plug_dst = plug_in_vector->src;
+			if(plug_dst->data_type == dt_vector)
+			{
+				t_brick *brick_dst = plug_dst->brick;
+				t_plug *plug_dst_vector = &brick_dst->plug_intern;
+				t_vector *vector = plug_dst_vector->data;
+				t_block *block_vector = brick_dst->block;
+				t_vlst *vlst_dst = vector->vector;
+
+				if(brick_dst->state.has_components)
+				{
+					// For Vector Length
+					int i;
+					t_brick *brick_component;
+					t_plug *plug_intern_component;
+					t_plug *plug_in_component;
+					for(i=0; i < vector->length; i++)
+					{
+						// Get Brick Component
+						brick_component = block_brick_get_by_order(block_vector,i);
+
+						// Get Plugs
+						plug_intern_component = &brick_component->plug_intern;
+						plug_in_component = &brick_component->plug_in;
+
+
+						// Set Component Pointer
+						plug_intern_component->data = vlst_get_pointer(vlst_dst,i);
+
+						// Don't Store Pointer 
+						plug_intern_component->state.store_data  = 0;
+
+						// Open Flow In
+						plug_in_component->state.flow_in = 0;
+					}
+				}
+			}
+		}
+	}
 }
 
 // Set all Branch In Loop
@@ -379,61 +432,84 @@ void cls_plug_disconnect_general(t_plug_mode mode, t_plug *self)
 
 void cls_plug_connect_vector(t_plug_mode mode, t_plug *self, t_plug *dst)
 {
+	t_context *C = ctx_get();
+
 	t_brick *brick = self->brick;
 	t_block *block = brick->block;
 	t_plug *plug_in = &brick->plug_in;
 	t_plug *plug_out = &brick->plug_out;
 
-	// General
+	// Connect General
 	cls_plug_connect_general(mode,self,dst);
 
-	// If Dst Volatil && Mode Out (For/Get  Vector)
+	// **********************************************
+	// Connect To **For Pointer**
+	// **********************************************
+
+	// If Dst Is Volatil [OUT] 
 	if(dst->state.is_volatil && mode == mode_out)
 	{
-		// Open & Close Plugs
-		if(self->state.is_state_volatil) // For Vector
+		// If Is State Volatil (=> For Vector is Not)
+		if(self->state.is_state_volatil) 
 		{
-			// Close Flow In
+			// *****************
+			// {A} Reverse Flow 
+			// ****************
+			// Close Vector Flow In 
 			plug_in->state.flow_in = 0;
 			plug_in->state.open_in = 1;
 
-			// Open Dst Flow In
+			// Open Dst Flow In (For Vector)
 			plug_out->state.open_out = 0;
 			plug_out->state.flow_out = 1;
 			plug_out->state.open_in = 1;
 		}
 			
-		// Don't Store Pointers
-		// CLOSE
+		// IF Vector Has Components
 		if(brick->state.has_components)
 		{
 			t_brick *brick_component;
 			t_plug *plug_in_component;
 			t_plug *plug_intern_component;
-			int i;
 
+			// For 4 (xyzw) XX
+			int i;
 			for(i = 0; i < 4; i++)
 			{
+				// Get Component
 				brick_component = block_brick_get_by_order(block, i); 
 				plug_in_component = &brick_component->plug_in;
 				plug_intern_component = &brick_component->plug_intern;
 
+				// **********************
+				// {B] Wait for For Loop
+				// **********************
+
+				// Close Flow In
 				plug_in_component->state.flow_in = 0;
+				// Reset Internal Pointer
 				plug_intern_component->data = NULL;
+				// Don't Store Pointer
 				plug_intern_component->state.store_data = 0;
 			}
 		}
 	}
 
-	// Vector Target
+	// ***************************
+	// Reverse Parenting
+	// ***************************
+
+	// Normal: Vector is Child Of XYZ Components
+	// Pointer: XYZ are childs of Vector
 	if(
+		// If Vector Has Components
 		brick->state.has_components
 		&&
 		(
-			// Mode Out : For Vector
+		// And Dst is For Pointer [OUT] 
 			dst->state.is_parent 
 		||
-			// Mode In : Vector
+		// Or Dst is Vector [IN] 
 			(
 				(dst->data_type == dt_vector)
 				&&
@@ -442,35 +518,41 @@ void cls_plug_connect_vector(t_plug_mode mode, t_plug *self, t_plug *dst)
 		)
 	)
 	{
+		// **************************
 		// Remove Vectors' XYZ Parents 
+		// *************************
 		plug_child_remove_all_parents(self);
 
-		t_context *C = ctx_get();
-		t_vector *vector_dst = dst->data;
-
+		// Store
 		C->scene->store = 1;
 
-		if(brick->state.has_components)
+		t_brick *brick_component;
+		t_plug *plug_intern_component;
+		t_vector *vector_dst = dst->data;
+		int i;
+
+		// For All Components 
+		for(i = 0; i < 4; i++)
 		{
-			t_brick *brick_component;
-			t_plug *plug_intern_component;
-			int i;
+			brick_component = block_brick_get_by_order(block, i); 
+			plug_intern_component = &brick_component->plug_intern;
 
-			for(i = 0; i < 4; i++)
-			{
-				brick_component = block_brick_get_by_order(block, i); 
-				plug_intern_component = &brick_component->plug_intern;
+			// If i < Vector Length
+			if(i < vector_dst->length)
 
-				if(i < vector_dst->length)
-					plug_add_parent(plug_intern_component,self);
+				// **************************
+				// Parent Component To Vector
+				// **************************
+				plug_add_parent(plug_intern_component,self);
 
-			}
 		}
 
 		C->scene->store = 0;
 	}
 
+	// ***********************
 	// Show Vector components
+	// **********************
 
 	if(brick->state.has_components)
 	{
@@ -492,6 +574,10 @@ void cls_plug_connect_vector(t_plug_mode mode, t_plug *self, t_plug *dst)
 					{
 						brick_component->state.draw = 1;
 						if(vector_src->type != vector_dst->type)
+
+							// *********************
+							// Change Component Type
+							// *********************
 							brick_change_type_by_name(brick_component,vector_dst->type);
 					}
 					else
@@ -503,13 +589,14 @@ void cls_plug_connect_vector(t_plug_mode mode, t_plug *self, t_plug *dst)
 		}
 
 		// Update Geometry
-
 		block->state.update_geometry = 1;
 	}
 }
 
 void cls_plug_disconnect_vector(t_plug_mode mode, t_plug *plug)
 {
+	t_context *C = ctx_get();
+
 	t_brick *brick = plug->brick;
 	t_block *block = brick->block;
 	t_plug *plug_in = &brick->plug_in;
@@ -517,15 +604,20 @@ void cls_plug_disconnect_vector(t_plug_mode mode, t_plug *plug)
 	t_plug *plug_dst;
 	t_vector *vector = plug->data;
 
+	// Disconnect General
+	cls_plug_disconnect_general(mode,plug);
+
+	// Get Dst Plug
 	if(mode == mode_in)
 		plug_dst = plug_in->src;
 	else
 		plug_dst = plug_out->dst;
 
-	// General
-	cls_plug_disconnect_general(mode,plug);
+	// **************
+	// Reverse Flow
+	// *************
 
-	// change plug state
+	// Regular Vector
 	if(plug->state.is_state_volatil)
 	{
 		plug_in->state.flow_in = 1;
@@ -534,6 +626,7 @@ void cls_plug_disconnect_vector(t_plug_mode mode, t_plug *plug)
 		plug_out->state.flow_out = 0;
 		plug_out->state.open_in = 0;
 	}
+
 	// For Vector
 	else
 	{
@@ -541,34 +634,49 @@ void cls_plug_disconnect_vector(t_plug_mode mode, t_plug *plug)
 		plug_in->state.open_in = 1;
 	}
 
+	// ******************
+	// Reverse Parenting
+	// ******************
+
 	if(brick->state.has_components)
 	{
-		t_context *C = ctx_get();
 
 		t_brick *brick_component;
 		t_plug *plug_intern_component;
 
 		int i;
 
+		// For All Components
 		for(i = 0; i < 4; i++)
 		{
 			brick_component = block_brick_get_by_order(block, i);
 			plug_intern_component = &brick_component->plug_intern;
 
 			plug_intern_component->data = plug_intern_component->data_memory;
+			
+			// Show Value
 			brick_component->state.draw_value = 1;
+
+			// Remove Parenting
 			plug_child_remove_all_parents(plug_intern_component);
 
+			// Store
 			C->scene->store = 1;
+
+			// If i < Length
 			if(i < vector->length)
 			{
+				// Reverse Parenting
 				plug_add_parent(plug, plug_intern_component);
 			}
+
 			C->scene->store = 0;
 		}
 	}
 
+	// ****************************
 	// If Dst Volatil, Reset Pointer
+	// ****************************
 	if(plug_dst->state.is_volatil)
 	{
 		vector->pointer = NULL;
@@ -1208,7 +1316,7 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 
 					if(brick->counter < vlst->count)
 					{
-						if(C->ui->show_step) term_log("[FOR][%d]",brick->counter);
+						if(C->ui->show_step) term_log("[for][%d]",brick->counter);
 
 						// Unlock Loop 
 						set_for_loop(block,0);
@@ -1228,7 +1336,7 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 					// Last Loop : counter > vlst
 					else
 					{
-						if(C->ui->show_step)  term_log("[FOR][%d] END LOOP",brick->counter); 
+						if(C->ui->show_step)  term_log("[for][%d] END LOOP",brick->counter); 
 
 						// reset vector
 						vector->pointer = NULL;
@@ -1448,7 +1556,9 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 				// Get Vector Src
 				vector_src = src_plug->data;
 
-				// {A} If Vector Pointer (Components points to Distant Pointer)
+				// ************************************************
+				// {A} 	If Vector With Pointer [IN/OUT]
+				//	Components points to Distant Pointer
 				if(vector_src->pointer)
 				{
 					// Copy Pointer
@@ -1496,7 +1606,9 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 					if(C->ui->show_step) term_log("[VECTOR] set pointer %p",vector_self->pointer);
 				}
 
-				// {B} If No Vector Pointer && Vector connected IN (Components points to Internal List)
+				// ***********************************************
+				// {B}	If Vector Without Pointer [IN] 
+				// 	Components Poinst To Internal List
 				else if(mode == mode_in)
 				{
 					// Get Internal Vector List
@@ -1528,6 +1640,35 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 						}
 					}
 				}
+				/*
+				else
+				{
+					if(brick->state.has_components)
+					{
+						// For Vector Length
+						int i;
+						t_brick *brick_component;
+						//t_plug *plug_intern_component;
+						t_plug *plug_in_component;
+						for(i=0; i < vector_self->length; i++)
+						{
+							// Get Brick Component
+							brick_component = block_brick_get_by_order(block,i);
+
+							// Get Plugs
+							//plug_intern_component = &brick_component->plug_intern;
+							plug_in_component = &brick_component->plug_in;
+
+							// Set Component Pointer
+							//plug_intern_component->data = vector_get_pointer(vector_self,i);
+
+							// Open Flow In
+							plug_in_component->state.flow_in = 1;
+						}
+					}
+
+				}
+					*/
 
 
 				break;
@@ -1538,21 +1679,32 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 	}
 	else
 	{
+		// *************************************************
+		// {C} No Vector IN
+		// Internal List points to Components
 		if(mode == mode_in)
 		{
+			// If Vector Has Components
 			if(brick->state.has_components)
 			{
 				int i;
 				t_brick *brick_component;
 				t_plug *plug_intern_component;
+
+				// Get Vector Internal List
 				t_vlst *vlst = vector_self->vector;
 
+				// For Vector Lenght
 				for(i=0; i < vector_self->length; i++)
 				{
+					// Get Componenent
 					brick_component = block_brick_get_by_order(block,i);
 					plug_intern_component = &brick_component->plug_intern;
 
-					if(plug_intern_component->data) // crash with vector for ...
+					// If Componenent Has Data (Scalar)
+					if(plug_intern_component->data) 
+
+						// Set vector Internal
 						vlst_set_data(vlst,plug_intern_component->data,i);
 				}
 			}
