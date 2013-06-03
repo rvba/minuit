@@ -1093,7 +1093,22 @@ t_node *add_clone(t_context *C)
 	t_brick *brick_clone=node_brick_clone->data;
 	brick_clone->state.use_loops = 0;
 
+	// re-init to float (old int data used by plug_out)
+	plug_init(&brick_clone->plug_in,dt_float,brick_clone,NULL,0);
+
 	brick_clone->action=op_clone;
+	brick_clone->plug_out.state.flow_out=0;
+	brick_clone->plug_in.state.flow_in=0;
+	brick_clone->plug_out.state.open_out=0;
+	brick_clone->state.use_dragging = 0;
+	brick_clone->state.remove_connected = 1;
+
+	brick_clone->plug_out.state.use_flow = 0;
+	brick_clone->plug_in.state.use_flow = 0;
+	brick_clone->plug_intern.state.use_flow = 0;
+
+	t_plug *plug_clone = &brick_clone->plug_intern;
+	plug_clone->state.close_flow_in = 1;
 
 	return node_block;
 }
