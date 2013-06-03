@@ -1448,12 +1448,13 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 				// Get Vector Src
 				vector_src = src_plug->data;
 
-				// If Vector Pointer
+				// {A} If Vector Pointer (Components points to Distant Pointer)
 				if(vector_src->pointer)
 				{
 					// Copy Pointer
 					vector_copy_pointer(vector_self, vector_src);
 
+					// If Brick Vector Has Components
 					if(brick->state.has_components)
 					{
 						int i;
@@ -1461,8 +1462,10 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 						t_plug *plug_intern_component;
 						t_plug *plug_in_component;
 
+						// For Vector Length
 						for(i=0; i < vector_self->length; i++)
 						{
+							// Get Brick Component
 							brick_component = block_brick_get_by_order(block,i);
 
 							// Set Brick Limit
@@ -1478,10 +1481,11 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 								brick_component->var.limit_int_low = vector_self->limit_int_low;
 							}
 
+							// Get Plugs
 							plug_intern_component = &brick_component->plug_intern;
 							plug_in_component = &brick_component->plug_in;
 
-							// Get Pointer
+							// Set Component Pointer
 							plug_intern_component->data = vector_get_pointer(vector_self,i);
 
 							// Open Flow In
@@ -1491,26 +1495,32 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 
 					if(C->ui->show_step) term_log("[VECTOR] set pointer %p",vector_self->pointer);
 				}
-				// Else if Mode In
+
+				// {B} If No Vector Pointer && Vector connected IN (Components points to Internal List)
 				else if(mode == mode_in)
 				{
+					// Get Internal Vector List
 					t_vlst *vlst_src = vector_src->vector;
 					t_vlst *vlst_dst = vector_self->vector;
 
+					// Copy Vector List Datas
 					vlst_copy(vlst_dst, vlst_src);
 
+					// If Vector Has Components
 					if(brick->state.has_components)
 					{
 						int i;
 						t_brick *brick_component;
 						t_plug *plug_intern_component;
 
+						// For Vector Length
 						for(i=0; i < vector_self->length; i++)
 						{
+							// Get Component
 							brick_component = block_brick_get_by_order(block,i);
 							plug_intern_component = &brick_component->plug_intern;
 
-							// Get Pointer
+							// Set Component Pointer
 							plug_intern_component->data = vlst_get_pointer(vlst_dst,i);
 
 							// Don't Store Pointer 
