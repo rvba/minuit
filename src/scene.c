@@ -535,6 +535,8 @@ t_node *scene_add_node(t_scene *sc,t_node_type type,const char *name)
 
 	// build data (allocate struct data (!var), add node->id=g->id (!var))
 	node->cls->build(node,name);
+	//[TODO]
+	//node->cls->init(node);
 
 	// add to local list
 	if(node->cls->lst) lst_add(node->cls->lst,node,name); 

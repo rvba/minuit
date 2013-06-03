@@ -20,7 +20,7 @@
 
 #include "graph.h"
 
-// DRAW BOUNDING BOX
+// SWAP
 
 void graph_swap(t_graph *src, t_graph *dst)
 {
@@ -34,6 +34,8 @@ void graph_swap(t_graph *src, t_graph *dst)
 		graph_block_add(dst, block);
 	}
 }
+
+// MERGE
 
 void graph_merge(t_graph *src, t_graph *dst)
 {
@@ -60,6 +62,28 @@ void graph_merge(t_graph *src, t_graph *dst)
 	}
 }
 
+// BUILD FROM LIST
+
+void graph_build_from_list(t_lst *lst)
+{
+	t_context *C = ctx_get();
+	t_link *l;
+	t_block *block;
+
+	// New Graph
+	C->scene->store = 1;
+	t_node *node_graph = scene_add(C->scene, nt_graph, "graph");
+	t_graph *new_graph = node_graph->data;
+	C->scene->store = 0;
+
+	for(l=lst->first;l;l=l->next)
+	{
+		block = l->data;
+		graph_block_add(new_graph, block);
+	}
+}
+
+// DRAW BOUNDING BOX
 
 void graph_draw_bounding_box(t_graph *graph)
 {
@@ -186,6 +210,7 @@ void graph_free(t_graph *graph)
 	t_context *C = ctx_get();
 	if(graph->blocks)
 	{
+
 		scene_struct_delete(C->scene,graph->blocks);
 	}
 }

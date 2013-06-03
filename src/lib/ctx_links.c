@@ -243,6 +243,7 @@ t_lst *block_branch_src_get(t_context *C,t_block *block)
 	return lst;
 }
 
+
 // STORE ROOTS
 
 void ctx_links_store_roots(t_lst *lst, t_brick *brick)

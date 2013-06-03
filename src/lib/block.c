@@ -18,6 +18,127 @@
 #include "brick.h"
 #include "graph.h"
 
+int block_in_lst(t_block *block, t_lst *lst)
+{
+	t_link *l;
+	t_block *b;
+	for(l=lst->first;l;l=l->next)
+	{
+		b = l->data;
+		if(b->id == block->id) return 1;
+	}
+	return 0;
+}
+
+t_lst *block_graph_get(t_context *C, t_plug *plug, t_lst *lst)
+{
+	t_link *l;
+	t_plug *p;
+	t_plug *d;
+	t_brick *brick;
+	t_block *block;
+
+	brick = plug->brick;
+	block = brick->block;
+
+	// Process Block If Not In List
+	if(!block_in_lst(block,lst))
+	{
+		list_add(lst,block);
+
+		for(l=block->bricks->first;l;l=l->next)
+		{
+			brick=l->data;
+
+			// In
+			p=&brick->plug_in;
+
+			if(p->state.is_connected) 
+			{
+				d = p->src;
+				if((d->id != plug->id) && (p->id != plug->id))
+				{
+					block_graph_get(C,d,lst);
+				}
+			}
+
+			// Out
+			p=&brick->plug_out;
+
+			if(p->state.is_connected)
+			{
+				d = p->dst;
+				if((d->id != plug->id) && (p->id != plug->id))
+				{
+					block_graph_get(C,d,lst);
+				}
+			}
+		}
+	}
+
+	return lst;
+}
+
+void block_graph_split(t_block *block_self, t_plug *plug_self, t_block *block_dst, t_plug *plug_dst)
+{
+	t_context *C = ctx_get();
+
+	t_lst *lst_self = lst_new("lst");
+	t_lst *lst_dst = lst_new("lst");
+
+	block_graph_get(C,plug_self,lst_self);
+	block_graph_get(C,plug_dst,lst_dst);
+
+	if(lst_self->first && lst_dst->first)
+	{
+		if(!block_in_lst(block_self,lst_dst))
+		{
+			t_graph *old_graph = block_self->graph;
+
+			if(lst_self->tot > 1)
+			{
+				graph_build_from_list(lst_self);
+			}
+			else
+			{
+				block_self->graph=NULL;
+			}
+
+			if(lst_dst->tot > 1)
+			{
+				graph_build_from_list(lst_dst);
+			}
+			else
+			{
+				block_dst->graph=NULL;
+			}
+
+			scene_struct_delete(C->scene,old_graph);
+		}
+	}
+	else if(lst_self->first)
+	{
+			graph_build_from_list(lst_self);
+			scene_struct_delete(C->scene,block_dst->graph);
+			block_dst->graph=NULL;
+	}
+	else if(lst_dst->first)
+	{
+			graph_build_from_list(lst_dst);
+			scene_struct_delete(C->scene,block_self->graph);
+			block_dst->graph=NULL;
+	}
+	else
+	{
+			scene_struct_delete(C->scene,block_self->graph);
+			block_self->graph=NULL;
+			block_dst->graph=NULL;
+	}
+
+	free(lst_self);
+	free(lst_dst);
+}
+
 void block_graph_add(t_block *self, t_block *dst)
 {
 	t_context *C = ctx_get();

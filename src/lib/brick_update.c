@@ -24,6 +24,8 @@
 #include "brick.h"
 #include "block.h"
 
+#include "graph.h"
+
 int is_vec_stored=0;
 float v[3];
 float vec[3];
@@ -58,6 +60,12 @@ void cls_brick_disconnect(t_brick *self)
 
 	plug_intern_in->cls->disconnect(mode_in , plug_intern_in);
 	plug_intern_out->cls->disconnect(mode_out ,plug_intern_out);
+
+	t_block *block_self = brick_in->block;
+	t_block *block_target = brick_out->block;
+
+	// Split Graph
+	block_graph_split(block_self,plug_in,block_target,plug_target);
 
 	// change modes
 	self->mode=bm_idle;

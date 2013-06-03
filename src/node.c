@@ -159,6 +159,9 @@ void *cls_node_get_ref(t_node *node, const char *ref)
 
 // BUILD
 
+
+void cls_node_init_brick_ids(t_node *node);
+
 void cls_node_id_add(t_node *node)
 {
 	t_context *C=ctx_get();
@@ -167,6 +170,10 @@ void cls_node_id_add(t_node *node)
 	int id=scene_id_get(C->scene);
 	node->id=id;
 	g->id=id;
+
+	if(node->cls->type == nt_brick)
+		cls_node_init_brick_ids(node);
+
 }
 
 void cls_node_user_add(t_node *node)
@@ -473,6 +480,22 @@ void cls_node_init_generic(t_node *node)
 	g->id=id;
 }
 
+void cls_node_init_brick_ids(t_node *node)
+{
+	t_context *C=ctx_get();
+
+	int id=scene_id_get(C->scene);
+	t_brick *brick=node->data;
+
+	// node
+	node->id=id;
+	// data
+	brick->id=id;
+
+	brick->plug_in.id = scene_id_get(C->scene);
+	brick->plug_out.id = scene_id_get(C->scene);
+}
+
 void cls_node_init_block(t_node *node)
 {
 	cls_node_init_generic(node);
@@ -482,7 +505,7 @@ void cls_node_init_block(t_node *node)
 
 void cls_node_init_brick(t_node *node)
 {
-	cls_node_init_generic(node);
+	cls_node_init_brick_ids(node);
 	t_brick *brick=node->data;
 	brick->cls->init(brick);
 }

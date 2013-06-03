@@ -17,6 +17,7 @@ struct Brick;
 struct Block;
 struct Plug;
 struct Lst;
+struct Plug;
 
 // CTX_LOAD
 
