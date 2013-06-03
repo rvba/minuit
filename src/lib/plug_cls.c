@@ -338,15 +338,6 @@ void cls_plug_connect_general(t_plug_mode mode, t_plug *self, t_plug *dst)
 		plug_out->state.is_connected = 1;
 	}
 
-	// Close flow in (Clone)
-	/*
-	if(dst->state.close_flow_in && self->state.use_flow)
-	{
-		t_plug *plug_in = &brick->plug_in;
-		plug_in->state.flow_in = 0;
-	}
-	*/
-
 	// Set in Loop
 	if(!self->state.is_a_loop)
 	{
@@ -364,11 +355,6 @@ void cls_plug_disconnect_general(t_plug_mode mode, t_plug *self)
 	t_brick *brick = self->brick;
 	t_plug *plug_in = &brick->plug_in;
 	t_plug *plug_out = &brick->plug_out;
-
-	// Restore Flow In
-	if(self->state.use_flow)
-		plug_in->state.flow_in = 1;
-
 
 	// Mode In
 	if(mode == mode_in)
@@ -1211,11 +1197,13 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 					break;
 			}
 
-			// set vector
+			// If Vector is Connected
 			if(plug_vector_in->state.is_connected)
 			{
+				// And Vlst is Connected
 				if(vlst)
 				{
+					// Open Indice
 					plug_indice_in->state.open_in = 1;
 
 					if(brick->counter < vlst->count)
@@ -1263,7 +1251,8 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 				{
 					// set loop
 					set_for_loop(block,0);
-					//
+
+					// Close Indice
 					plug_indice_in->state.open_in = 0;
 				}
 			}
@@ -1275,12 +1264,12 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 				set_for_loop(block,0);
 			}
 		}
-		// for not connected
+		// IF For not connected
 		else
 		{
 			// set loop
 			set_for_loop(block,0);
-			//
+			// Close Indice
 			plug_indice_in->state.open_in = 0;
 		}
 	}

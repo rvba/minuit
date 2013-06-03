@@ -924,12 +924,13 @@ void *op_clone(t_brick *brick)
 	// Update Clones
 	if(tot_bricks>0)
 	{
-		// connected in
+		// connected In
 		if(plug_in->state.is_connected)
 		{
 			plug_src = plug_get_src(plug_intern);
 			plug_target = plug_src->dst;
 		}
+		// Connect Out
 		else if(plug_out->state.is_connected)
 		{
 			plug_src = plug_get_dst(plug_intern);
@@ -958,7 +959,7 @@ void *op_clone(t_brick *brick)
 					}
 				}
 
-				// Connect Clone
+				// Connect Clone to Target
 				plug_in_clone->src=plug_target;
 
 				if(plug_target)
@@ -967,9 +968,12 @@ void *op_clone(t_brick *brick)
 
 					t_brick *brick_target = plug_target->brick;
 				
+					// If Clone Brick is Connected 
 					if(plug_in->state.is_connected)
 					{
+						// And Target is Open
 						if(brick_target->plug_out.state.open_out)
+							// Open Clones
 							plug_out_clone->state.open_out = 1;
 						else
 							plug_out_clone->state.open_out = 0;
