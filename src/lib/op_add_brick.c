@@ -1080,41 +1080,6 @@ t_node *add_slider_camera(t_context *C,const char *name)
 
 // CLONE
 
-/*
-t_node *add_clone(t_context *C)
-{
-	// NEW BLOCK
-	t_node *node_block = add_block(C,"clone");
-	t_block *block=node_block->data;
-	block->state.draw_outline=1;
-
-	// CLONE
-	t_node *node_brick_clone=add_part_slider_int(C,block,"clone",NULL);
-	t_brick *brick_clone=node_brick_clone->data;
-
-	// Action
-	brick_clone->action=op_clone;
-
-	// One action per frame (no duplicate action while in loop)
-	brick_clone->state.use_loops = 0;
-
-	// Close Flow (if not add bricks ...)
-	brick_clone->plug_out.state.flow_out=0;
-	brick_clone->plug_in.state.flow_in=0;
-
-	// Close Open Out
-	brick_clone->plug_out.state.open_out=0;
-
-	// Special case of removing connected brick 
-	brick_clone->state.remove_connected = 1;
-
-	// Step by step slider (no dragging)  
-	brick_clone->state.use_dragging = 0;
-
-	return node_block;
-}
-*/
-
 t_node *add_clone(t_context *C)
 {
 	// NEW BLOCK
@@ -1127,12 +1092,6 @@ t_node *add_clone(t_context *C)
 	t_brick *brick_clone=node_brick_clone->data;
 	brick_clone->state.use_loops = 0;
 
-	/*
-	brick_clone->plug_out.state.use_flow = 0;
-	brick_clone->plug_in.state.use_flow = 0;
-	brick_clone->plug_intern.state.use_flow = 0;
-	*/
-
 	brick_clone->action=op_clone;
 
 	// Add Brick
@@ -1141,12 +1100,10 @@ t_node *add_clone(t_context *C)
 	brick_brick->state.is_versatil = 1;
 	t_plug *plug_brick = &brick_brick->plug_intern;
 
-	//plug_brick->state.close_flow_in = 1;
 	plug_brick->state.swap_flow = 1;
 
 	t_plug *plug_clone = &brick_clone->plug_intern;
 	plug_add_parent(plug_clone,plug_brick);
-
 
 	return node_block;
 }

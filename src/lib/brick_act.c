@@ -1020,6 +1020,7 @@ void *op_clone(t_brick *brick)
 
 				// Connect Clone
 				plug_in_clone->src=plug_out_brick;
+
 				if(plug_out_brick->dst || plug_in_brick->dst)
 				plug_in_clone->state.is_connected = 1;
 				else

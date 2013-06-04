@@ -85,6 +85,7 @@ struct Block
 
 	int tot_bricks; 			// drawing plugs
 	int graph_order;			// unset > -1
+	int graph_pos;
 
 	struct Lst *bricks;
 	struct Brick *submenu;
@@ -138,6 +139,7 @@ void cls_block_generic_update(t_block *block);
 
 void block_graph_split(struct Block *block_self, struct Plug *plug_self, struct Block *block_dst, struct Plug *plug_dst);
 void block_graph_add(t_block *self, t_block *dst);
+
 
 #endif
 

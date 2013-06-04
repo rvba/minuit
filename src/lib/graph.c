@@ -13,6 +13,7 @@
 #include "node.h"
 #include "block.h"
 #include "brick.h"
+#include "plug.h"
 #include "list.h"
 
 #include "sketch.h"
@@ -54,7 +55,8 @@ void graph_get_roots(t_graph *graph)
 			brick=link->data;
 			plug_in = &brick->plug_in;
 
-			if(plug_in->state.is_connected)
+			//if(plug_in->state.is_connected)
+			if(plug_in->src)
 			{
 				add_to_roots = 0;
 			}
@@ -71,6 +73,64 @@ void graph_get_roots(t_graph *graph)
 		}
 	}
 }
+
+void graph_set_block_pos(t_block *block, int pos)
+{
+	if(block->graph_pos < pos)
+	{
+		block->graph_pos = pos;
+		t_link *link;
+
+		for(link=block->bricks->first;link;link=link->next)
+		{
+			t_brick *brick = link->data;
+			if(brick->plug_out.state.is_connected)
+			{
+				t_plug *plug_dst = brick->plug_out.dst;
+				t_brick *brick_dst = plug_dst->brick;
+				t_block *block_dst = brick_dst->block;
+
+				graph_set_block_pos(block_dst,pos+1);
+			}
+		}
+	}
+}
+
+void graph_sort(t_graph *graph)
+{
+	t_link *l;
+	t_block *block;
+	int pos;
+
+	// Reset
+	for(l=graph->blocks->first;l;l=l->next)
+	{
+		block = l->data;
+		block->graph_pos = 0;
+	}
+
+	for(l=graph->roots->first;l;l=l->next)
+	{
+		t_link *link;
+		block = l->data;
+		pos = 1;
+
+		for(link=block->bricks->first;link;link=link->next)
+		{
+			t_brick *brick = link->data;
+			if(brick->plug_out.state.is_connected)
+			{
+				t_plug *plug_dst = brick->plug_out.dst;
+				t_brick *brick_dst = plug_dst->brick;
+				t_block *block_dst = brick_dst->block;
+
+				graph_set_block_pos(block_dst,pos);
+			}
+		}
+	}
+}
+
+
 
 
 // SWAP

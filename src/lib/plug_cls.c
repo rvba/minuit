@@ -1416,7 +1416,7 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 						if(C->ui->show_step)  term_log("[for][%d] END LOOP",brick->counter); 
 
 						// reset vector
-						vector->pointer = NULL;
+						//vector->pointer = NULL;
 
 						// reset counter
 						brick->counter = 0;
@@ -1425,7 +1425,7 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 						plug->state.is_init = 0;
 
 						// reset indice
-						*data_indice = 0;
+						//*data_indice = 0;
 
 						// reset is_in_loop
 						set_for_loop(block,1);
@@ -1444,7 +1444,7 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 			// plug vector in not connected
 			else
 			{
-				*data_indice = 0;
+				//*data_indice = 0;
 				// set loop
 				set_for_loop(block,0);
 			}

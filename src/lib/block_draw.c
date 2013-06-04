@@ -179,7 +179,7 @@ void block_draw_outline(t_block *block)
 		if(C->event->ui.draw_in_loop)
 		{
 			glLineStipple(2, 0xAAAA);
-			glEnable(GL_LINE_STIPPLE);
+			//glEnable(GL_LINE_STIPPLE);
 		}
 
 		if(block->state.is_root)
@@ -202,6 +202,24 @@ void block_draw_outline(t_block *block)
 				txt->draw(txt);
 			glPopMatrix();
 			txt_free(txt);
+		}
+
+		if(block->graph)
+		{
+
+		char order[3];
+		float p[3] = {0,0,0};
+		float vv[3] = {-10,-10,0};
+		vadd(p,a,vv);
+		sprintf(order,"%d",block->graph_pos);
+
+		t_txt *txt = txt_new(order);
+		txt_init(txt,order);
+		glPushMatrix();
+			glTranslatef(p[0],p[1],p[2]);
+			txt->draw(txt);
+		glPopMatrix();
+		txt_free(txt);
 		}
 
 		if(C->event->ui.draw_in_loop)

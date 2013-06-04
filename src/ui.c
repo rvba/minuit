@@ -43,6 +43,7 @@ void ui_draw_graphs(void)
 			graph = node->data;
 			graph_draw_bounding_box(graph);
 			graph_get_roots(graph);
+			graph_sort(graph);
 		}
 	}
 }

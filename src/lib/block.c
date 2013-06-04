@@ -116,6 +116,7 @@ t_lst *block_left_branch_get(t_context *C, t_plug *plug, t_lst *lst)
 	return lst;
 }
 
+
 void block_graph_split(t_block *block_self, t_plug *plug_self, t_block *block_dst, t_plug *plug_dst)
 {
 	t_context *C = ctx_get();
@@ -635,6 +636,7 @@ t_block *block_new(const char *name)
 	block->tot_bricks=0;
 	block->width=0;
 	block->graph_order = -1;
+	block->graph_pos = 0;
 
 	block->graph = NULL;
 
