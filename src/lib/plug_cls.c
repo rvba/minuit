@@ -67,6 +67,173 @@ void plug_debug(t_plug *plug)
 	}
 }
 
+
+void plug_data_reset(t_plug *plug)
+{
+	int *zero;
+	zero=0;
+
+	switch (plug->data_type)
+	{
+		case (dt_int): flow_int_int(plug->data,zero); break;
+		case (dt_float): flow_float_int(plug->data,zero); break;
+		default: break;
+	}
+}
+
+void plug_data_set(t_plug *plug,t_data_type type,void *data)
+{
+	switch (plug->data_type)
+	{
+		case (dt_int):
+
+			switch(type)
+			{
+				case(dt_int): flow_int_int(plug->data,data); break;
+				case(dt_float): flow_int_float(plug->data,data); break;
+				default: break;
+			}
+
+			break;
+
+		case (dt_float):
+
+			switch(type)
+			{
+				case(dt_int): flow_float_int(plug->data,data); break;
+				case(dt_float): flow_float_float(plug->data,data); break;
+				default: break;
+			}
+
+			break;
+
+		default:
+			break;
+	}
+}
+
+void plug_data_negate(t_plug *plug)
+{
+	switch (plug->data_type)
+	{
+		case (dt_int): negate_int(plug->data); break;
+		case (dt_float): negate_float(plug->data); break;
+		default: break;
+	}
+}
+
+// input: 	plug_intern 
+// return: 	plug_intern
+t_plug *plug_get_src(t_plug *plug)
+{
+	// get plug_in
+	t_plug *plug_src=plug->src;
+	// get plug_out
+	t_plug *plug_src_out=plug_src->src;
+
+	if(plug_src_out)
+	{
+		//get plug_intern of out
+		t_plug *plug_source=plug_src_out->src;
+
+		// return target's plug intern
+		return plug_source;
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
+t_plug *plug_get_dst(t_plug *plug)
+{
+	// get plug_out
+	t_plug *plug_dst = plug->dst;
+	// get dst
+	t_plug *plug_dst_out = plug_dst->dst;
+
+	if(plug_dst_out)
+	{
+		// get plug_intern
+		t_plug *plug_distant = plug_dst_out->dst;
+
+		return plug_distant;
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
+void plug_warning(t_plug *dst_plug,t_plug *src_plug)
+{
+	/*
+	t_context *C=ctx_get();
+	char msg[40];
+	char *src_plug_type=data_name_get(src_plug->data_type);
+	char *dst_plug_type=data_name_get(dst_plug->data_type);
+
+	sprintf(msg,"%d(%s)(%s)-(%s)(%s)",C->app->frame,src_plug->name,src_plug_type,dst_plug->name,dst_plug_type);
+	term_print(C->term,msg);
+	*/
+}
+
+// FLOW
+
+void _cls_flow_(t_plug *plug,void (* f)(t_plug_mode mode,t_plug *p1,t_plug *p2))
+{
+	t_brick *brick=plug->brick;
+
+	t_plug *plug_in=&brick->plug_in;
+	t_plug *plug_out=&brick->plug_out;
+
+	// IN
+
+	if(plug_in->state.is_connected)
+	{
+		t_plug *plug_origin = plug_in->src;
+
+		if(plug_origin->state.open_out)
+		{
+			t_plug *src_plug=plug_get_src(plug);
+
+			if(plug_in->state.flow_in)
+			{
+				f(mode_in,plug,src_plug);
+			}
+		}
+	}
+	else
+	{
+		f(mode_in,plug,NULL);
+	}
+
+	// OUT
+
+	if(plug_out->state.is_connected)
+	{
+		t_plug *plug_origin = plug_out->dst;
+
+		if(plug_origin->state.open_in)
+		{
+			t_plug *src_plug=plug_get_dst(plug);
+
+			if(plug_out->state.flow_out)
+			{
+				f(mode_out,plug,src_plug);
+			}
+		}
+	}
+	else
+	{
+		f(mode_out,plug,NULL);
+	}
+}
+
+
+
+
+
 void cls_plug_connect_int(t_plug_mode mode, t_plug *self,t_plug *dst)
 {
 	// General
@@ -705,521 +872,7 @@ void cls_plug_disconnect_vector(t_plug_mode mode, t_plug *plug)
 	}
 }
 
-void plug_data_reset(t_plug *plug)
-{
-	int *zero;
-	zero=0;
 
-	switch (plug->data_type)
-	{
-		case (dt_int): flow_int_int(plug->data,zero); break;
-		case (dt_float): flow_float_int(plug->data,zero); break;
-		default: break;
-	}
-}
-
-void plug_data_set(t_plug *plug,t_data_type type,void *data)
-{
-	switch (plug->data_type)
-	{
-		case (dt_int):
-
-			switch(type)
-			{
-				case(dt_int): flow_int_int(plug->data,data); break;
-				case(dt_float): flow_int_float(plug->data,data); break;
-				default: break;
-			}
-
-			break;
-
-		case (dt_float):
-
-			switch(type)
-			{
-				case(dt_int): flow_float_int(plug->data,data); break;
-				case(dt_float): flow_float_float(plug->data,data); break;
-				default: break;
-			}
-
-			break;
-
-		default:
-			break;
-	}
-}
-
-void plug_data_negate(t_plug *plug)
-{
-	switch (plug->data_type)
-	{
-		case (dt_int): negate_int(plug->data); break;
-		case (dt_float): negate_float(plug->data); break;
-		default: break;
-	}
-}
-
-// input: 	plug_intern 
-// return: 	plug_intern
-t_plug *plug_get_src(t_plug *plug)
-{
-	// get plug_in
-	t_plug *plug_src=plug->src;
-	// get plug_out
-	t_plug *plug_src_out=plug_src->src;
-
-	if(plug_src_out)
-	{
-		//get plug_intern of out
-		t_plug *plug_source=plug_src_out->src;
-
-		// return target's plug intern
-		return plug_source;
-	}
-	else
-	{
-		return NULL;
-	}
-}
-
-t_plug *plug_get_dst(t_plug *plug)
-{
-	// get plug_out
-	t_plug *plug_dst = plug->dst;
-	// get dst
-	t_plug *plug_dst_out = plug_dst->dst;
-
-	if(plug_dst_out)
-	{
-		// get plug_intern
-		t_plug *plug_distant = plug_dst_out->dst;
-
-		return plug_distant;
-	}
-	else
-	{
-		return NULL;
-	}
-}
-
-void plug_warning(t_plug *dst_plug,t_plug *src_plug)
-{
-	/*
-	t_context *C=ctx_get();
-	char msg[40];
-	char *src_plug_type=data_name_get(src_plug->data_type);
-	char *dst_plug_type=data_name_get(dst_plug->data_type);
-
-	sprintf(msg,"%d(%s)(%s)-(%s)(%s)",C->app->frame,src_plug->name,src_plug_type,dst_plug->name,dst_plug_type);
-	term_print(C->term,msg);
-	*/
-}
-
-// FLOW
-
-void _cls_flow_(t_plug *plug,void (* f)(t_plug_mode mode,t_plug *p1,t_plug *p2))
-{
-	t_brick *brick=plug->brick;
-
-	t_plug *plug_in=&brick->plug_in;
-	t_plug *plug_out=&brick->plug_out;
-
-	// IN
-
-	if(plug_in->state.is_connected)
-	{
-		t_plug *plug_origin = plug_in->src;
-
-		if(plug_origin->state.open_out)
-		{
-			t_plug *src_plug=plug_get_src(plug);
-
-			if(plug_in->state.flow_in)
-			{
-				f(mode_in,plug,src_plug);
-			}
-		}
-	}
-	else
-	{
-		f(mode_in,plug,NULL);
-	}
-
-	// OUT
-
-	if(plug_out->state.is_connected)
-	{
-		t_plug *plug_origin = plug_out->dst;
-
-		if(plug_origin->state.open_in)
-		{
-			t_plug *src_plug=plug_get_dst(plug);
-
-			if(plug_out->state.flow_out)
-			{
-				f(mode_out,plug,src_plug);
-			}
-		}
-	}
-	else
-	{
-		f(mode_out,plug,NULL);
-	}
-}
-
-// FLOAT
-
-void __cls_plug_flow_float(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
-{
-	if(src_plug)
-	{
-		t_data_type src_type=src_plug->data_type;
-
-		float *data=plug->data;
-
-		float increment=plug->brick->var.increment;
-
-		if(data)
-		{
-			switch(src_type)
-			{
-				case dt_int:
-
-					*data=(float)drf_int(src_plug->data);
-					break;
-
-				case dt_float:
-
-					*data=drf_float(src_plug->data);
-					break;
-				default:
-					plug_warning(plug,src_plug);
-					break;
-			}
-
-			if(increment) *data=*data * increment;  
-		}
-	}
-
-}
-
-void cls_plug_flow_float(t_plug *plug)
-{
-	_cls_flow_(plug,__cls_plug_flow_float);
-}
-
-// INT
-
-void __cls_plug_flow_int(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
-{
-	if(src_plug)
-	{
-		t_data_type src_type=src_plug->data_type;
-
-		int *data=plug->data;
-
-		float increment=plug->brick->var.increment;
-
-		switch(src_type)
-		{
-			case dt_int:
-
-				*data=drf_int(src_plug->data);
-				break;
-
-			case dt_uint:
-
-				*data=(int)drf_uint(src_plug->data);
-				break;
-
-			case dt_float:
-
-				*data=(int)drf_float(src_plug->data);
-				break;
-			case dt_lst:
-				break;
-
-			default:
-				plug_warning(plug,src_plug);
-				break;
-		}
-
-		if(increment) *data=*data * increment;  
-	}
-}
-
-
-void cls_plug_flow_int(t_plug *plug)
-{
-	_cls_flow_(plug,__cls_plug_flow_int);
-}
-
-// UNSIGNED INT
-
-void __cls_plug_flow_uint(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
-{
-	if(src_plug)
-	{
-		t_data_type src_type=src_plug->data_type;
-
-		unsigned int *data=plug->data;
-
-		float increment=plug->brick->var.increment;
-
-		switch(src_type)
-		{
-			case dt_int:
-				*data=(unsigned int) drf_int(src_plug->data);
-				break;
-
-			case dt_uint:
-				*data= drf_uint(src_plug->data);
-				break;
-
-			case dt_float:
-
-				*data=(unsigned int) drf_float(src_plug->data);
-				break;
-			case dt_lst:
-				break;
-
-			default:
-				plug_warning(plug,src_plug);
-				break;
-		}
-
-		if(increment) *data=*data * increment;  
-	}
-}
-
-
-void cls_plug_flow_uint(t_plug *plug)
-{
-	_cls_flow_(plug,__cls_plug_flow_int);
-}
-
-// LST
-
-void __cls_plug_flow_lst(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
-{
-	if(src_plug)
-	{
-		t_data_type src_type=src_plug->data_type;
-
-		t_brick *src_brick=src_plug->brick;
-
-		switch(src_type)
-		{
-			// + LST
-			case dt_lst:
-				//copy pointer
-				plug->data=src_plug->data;
-				break;
-
-			// +INT (REWIND)
-			case dt_int:
-
-				if(is(src_brick->name,"rewind"))
-				{
-					int *state = src_plug->data;
-
-					if(*state == 1)
-					{
-						t_lst *lst=(t_lst *)plug->data;
-						lst->current=lst->first;
-					}
-				}
-
-				break;
-				
-			default:
-				plug_warning(plug,src_plug);
-				break;
-		}
-	}
-}
-
-void cls_plug_flow_lst(t_plug *plug)
-{
-	_cls_flow_(plug,__cls_plug_flow_lst);
-}
-
-// VLST
-
-void __cls_plug_flow_vlst(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
-{
-	if(src_plug)
-	{
-		t_data_type src_type=src_plug->data_type;
-
-		switch(src_type)
-		{
-			// + LST
-			case dt_vlst:
-				//copy pointer
-				plug->data=src_plug->data;
-				break;
-				
-			default:
-				plug_warning(plug,src_plug);
-				break;
-		}
-	}
-}
-
-void cls_plug_flow_vlst(t_plug *plug)
-{
-	_cls_flow_(plug,__cls_plug_flow_vlst);
-}
-
-// VERTEX
-
-void __cls_plug_flow_vertex(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
-{
-	if(src_plug)
-	{
-		t_data_type src_type=src_plug->data_type;
-
-		t_mesh *mesh;
-
-		switch(src_type)
-		{
-			// + VLST
-			case dt_vlst:
-
-				mesh=plug->data;
-
-				mesh->vertex=src_plug->data;
-				mesh->state.need_update=1;
-
-				break;
-				
-			default:
-				plug_warning(plug,src_plug);
-				break;
-		}
-	}
-}
-
-void cls_plug_flow_vertex(t_plug *plug)
-{
-	_cls_flow_(plug,__cls_plug_flow_vertex);
-}
-
-// MESH
-
-void __cls_plug_flow_mesh(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
-{
-	if(src_plug)
-	{
-		t_data_type src_type=src_plug->data_type;
-
-		switch(src_type)
-		{
-			default:
-				plug_warning(plug,src_plug);
-				break;
-		}
-	}
-}
-
-void cls_plug_flow_mesh(t_plug *plug)
-{
-	_cls_flow_(plug,__cls_plug_flow_mesh);
-}
-
-// OBJECT
-
-void __cls_plug_flow_object(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
-{
-	if(src_plug)
-	{
-		t_data_type src_type=src_plug->data_type;
-
-		// node (pointer)
-		t_node *node=plug->data;
-		// object
-		t_object *object=node->data;
-
-		t_mesh *mesh;
-
-		t_camera *camera_src;
-		t_camera *camera_dst;
-
-		switch(src_type)
-		{
-			// + MESH
-			case dt_mesh:
-
-				if(is(object->type,"mesh"))
-				{
-					mesh=src_plug->data;
-					object->mesh=mesh;
-				}
-
-				break;
-
-			// + CAMERA
-			case dt_camera:
-
-				if(is(object->type,"camera"))
-				{
-					if(src_plug->state.open_out)
-					{
-						camera_src=src_plug->data;
-						camera_dst=object->data;
-						camera_copy(camera_dst,camera_src);
-					}
-				}
-
-				break;
-
-			case dt_lst:
-				break;
-				
-			default:
-				plug_warning(plug,src_plug);
-				break;
-		}
-	}
-}
-
-void cls_plug_flow_object(t_plug *plug)
-{
-	_cls_flow_(plug,__cls_plug_flow_object);
-}
-
-// POINTER
-
-void __cls_plug_flow_pointer(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
-{
-	if(src_plug)
-	{
-		t_data_type src_type=src_plug->data_type;
-
-		t_object *object;
-
-		switch(src_type)
-		{
-			// + MESH
-			case dt_mesh:
-
-				object=plug->data;
-				object->mesh=src_plug->data;
-
-				break;
-				
-			default:
-				plug_warning(plug,src_plug);
-				break;
-		}
-	}
-}
-
-void cls_plug_flow_pointer(t_plug *plug)
-{
-	_cls_flow_(plug,__cls_plug_flow_pointer);
-}
 
 // Set in Loop
 
@@ -1852,6 +1505,360 @@ void __cls_plug_flow_camera(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 void cls_plug_flow_camera(t_plug *plug)
 {
 	_cls_flow_(plug,__cls_plug_flow_camera);
+}
+
+// FLOAT
+
+void __cls_plug_flow_float(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
+{
+	if(src_plug)
+	{
+		t_data_type src_type=src_plug->data_type;
+
+		float *data=plug->data;
+
+		float increment=plug->brick->var.increment;
+
+		if(data)
+		{
+			switch(src_type)
+			{
+				case dt_int:
+
+					*data=(float)drf_int(src_plug->data);
+					break;
+
+				case dt_float:
+
+					*data=drf_float(src_plug->data);
+					break;
+				default:
+					plug_warning(plug,src_plug);
+					break;
+			}
+
+			if(increment) *data=*data * increment;  
+		}
+	}
+
+}
+
+void cls_plug_flow_float(t_plug *plug)
+{
+	_cls_flow_(plug,__cls_plug_flow_float);
+}
+
+// INT
+
+void __cls_plug_flow_int(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
+{
+	if(src_plug)
+	{
+		t_data_type src_type=src_plug->data_type;
+
+		int *data=plug->data;
+
+		float increment=plug->brick->var.increment;
+
+		switch(src_type)
+		{
+			case dt_int:
+
+				*data=drf_int(src_plug->data);
+				break;
+
+			case dt_uint:
+
+				*data=(int)drf_uint(src_plug->data);
+				break;
+
+			case dt_float:
+
+				*data=(int)drf_float(src_plug->data);
+				break;
+			case dt_lst:
+				break;
+
+			default:
+				plug_warning(plug,src_plug);
+				break;
+		}
+
+		if(increment) *data=*data * increment;  
+	}
+}
+
+
+void cls_plug_flow_int(t_plug *plug)
+{
+	_cls_flow_(plug,__cls_plug_flow_int);
+}
+
+// UNSIGNED INT
+
+void __cls_plug_flow_uint(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
+{
+	if(src_plug)
+	{
+		t_data_type src_type=src_plug->data_type;
+
+		unsigned int *data=plug->data;
+
+		float increment=plug->brick->var.increment;
+
+		switch(src_type)
+		{
+			case dt_int:
+				*data=(unsigned int) drf_int(src_plug->data);
+				break;
+
+			case dt_uint:
+				*data= drf_uint(src_plug->data);
+				break;
+
+			case dt_float:
+
+				*data=(unsigned int) drf_float(src_plug->data);
+				break;
+			case dt_lst:
+				break;
+
+			default:
+				plug_warning(plug,src_plug);
+				break;
+		}
+
+		if(increment) *data=*data * increment;  
+	}
+}
+
+
+void cls_plug_flow_uint(t_plug *plug)
+{
+	_cls_flow_(plug,__cls_plug_flow_int);
+}
+
+// LST
+
+void __cls_plug_flow_lst(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
+{
+	if(src_plug)
+	{
+		t_data_type src_type=src_plug->data_type;
+
+		t_brick *src_brick=src_plug->brick;
+
+		switch(src_type)
+		{
+			// + LST
+			case dt_lst:
+				//copy pointer
+				plug->data=src_plug->data;
+				break;
+
+			// +INT (REWIND)
+			case dt_int:
+
+				if(is(src_brick->name,"rewind"))
+				{
+					int *state = src_plug->data;
+
+					if(*state == 1)
+					{
+						t_lst *lst=(t_lst *)plug->data;
+						lst->current=lst->first;
+					}
+				}
+
+				break;
+				
+			default:
+				plug_warning(plug,src_plug);
+				break;
+		}
+	}
+}
+
+void cls_plug_flow_lst(t_plug *plug)
+{
+	_cls_flow_(plug,__cls_plug_flow_lst);
+}
+
+// VLST
+
+void __cls_plug_flow_vlst(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
+{
+	if(src_plug)
+	{
+		t_data_type src_type=src_plug->data_type;
+
+		switch(src_type)
+		{
+			// + LST
+			case dt_vlst:
+				//copy pointer
+				plug->data=src_plug->data;
+				break;
+				
+			default:
+				plug_warning(plug,src_plug);
+				break;
+		}
+	}
+}
+
+void cls_plug_flow_vlst(t_plug *plug)
+{
+	_cls_flow_(plug,__cls_plug_flow_vlst);
+}
+
+// VERTEX
+
+void __cls_plug_flow_vertex(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
+{
+	if(src_plug)
+	{
+		t_data_type src_type=src_plug->data_type;
+
+		t_mesh *mesh;
+
+		switch(src_type)
+		{
+			// + VLST
+			case dt_vlst:
+
+				mesh=plug->data;
+
+				mesh->vertex=src_plug->data;
+				mesh->state.need_update=1;
+
+				break;
+				
+			default:
+				plug_warning(plug,src_plug);
+				break;
+		}
+	}
+}
+
+void cls_plug_flow_vertex(t_plug *plug)
+{
+	_cls_flow_(plug,__cls_plug_flow_vertex);
+}
+
+// MESH
+
+void __cls_plug_flow_mesh(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
+{
+	if(src_plug)
+	{
+		t_data_type src_type=src_plug->data_type;
+
+		switch(src_type)
+		{
+			default:
+				plug_warning(plug,src_plug);
+				break;
+		}
+	}
+}
+
+void cls_plug_flow_mesh(t_plug *plug)
+{
+	_cls_flow_(plug,__cls_plug_flow_mesh);
+}
+
+// OBJECT
+
+void __cls_plug_flow_object(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
+{
+	if(src_plug)
+	{
+		t_data_type src_type=src_plug->data_type;
+
+		// node (pointer)
+		t_node *node=plug->data;
+		// object
+		t_object *object=node->data;
+
+		t_mesh *mesh;
+
+		t_camera *camera_src;
+		t_camera *camera_dst;
+
+		switch(src_type)
+		{
+			// + MESH
+			case dt_mesh:
+
+				if(is(object->type,"mesh"))
+				{
+					mesh=src_plug->data;
+					object->mesh=mesh;
+				}
+
+				break;
+
+			// + CAMERA
+			case dt_camera:
+
+				if(is(object->type,"camera"))
+				{
+					if(src_plug->state.open_out)
+					{
+						camera_src=src_plug->data;
+						camera_dst=object->data;
+						camera_copy(camera_dst,camera_src);
+					}
+				}
+
+				break;
+
+			case dt_lst:
+				break;
+				
+			default:
+				plug_warning(plug,src_plug);
+				break;
+		}
+	}
+}
+
+void cls_plug_flow_object(t_plug *plug)
+{
+	_cls_flow_(plug,__cls_plug_flow_object);
+}
+
+// POINTER
+
+void __cls_plug_flow_pointer(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
+{
+	if(src_plug)
+	{
+		t_data_type src_type=src_plug->data_type;
+
+		t_object *object;
+
+		switch(src_type)
+		{
+			// + MESH
+			case dt_mesh:
+
+				object=plug->data;
+				object->mesh=src_plug->data;
+
+				break;
+				
+			default:
+				plug_warning(plug,src_plug);
+				break;
+		}
+	}
+}
+
+void cls_plug_flow_pointer(t_plug *plug)
+{
+	_cls_flow_(plug,__cls_plug_flow_pointer);
 }
 
 // CLS
