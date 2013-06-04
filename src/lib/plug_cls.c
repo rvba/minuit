@@ -412,12 +412,12 @@ void cls_plug_connect_general(t_plug_mode mode, t_plug *self, t_plug *dst)
 			plug_dst_in->state.open_in = 1;
 
 			// If Versatil
-			if(brick_dst->state.is_versatil)
+			if(brick->state.is_versatil)
 			{
 				if(self->data_type != dst->data_type)
 				{
 					// Change Type
-					brick_type_change(brick_dst,self);
+					brick_type_change(brick,dst);
 				}
 			}
 		}
