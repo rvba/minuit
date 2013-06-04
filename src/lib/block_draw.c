@@ -155,16 +155,6 @@ void block_draw_outline(t_block *block)
 
 		float width=block->width;
 
-		/*
-		if(block->state.draw_plugs)
-		{
-			t_link *link=block->bricks->first;
-			t_brick *brick=link->data;
-			float h=brick->geom.height;
-		//	width+=(h*2);
-		}
-		*/
-
 		float a[3]={pos[0], pos[1], 0};
 		float b[3]={a[0],a[1] + block->height ,0};
 		float c[3]={b[0] + width, b[1], 0};
@@ -191,6 +181,9 @@ void block_draw_outline(t_block *block)
 			glLineStipple(2, 0xAAAA);
 			glEnable(GL_LINE_STIPPLE);
 		}
+
+		if(block->state.is_root)
+			line_width = 2;
 
 		skt_closedline(points,tot,color,line_width);
 

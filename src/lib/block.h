@@ -114,6 +114,7 @@ t_block *	block_rebind(struct Scene *sc,void *ptr);
 
 // BLOCK DRAW
 
+void block_draw_outline(t_block *block);
 void 		block_draw(t_block *block);
 void		cls_block_draw_generic(t_block *self);
 void		cls_block_draw_menu(t_block *self);

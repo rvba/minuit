@@ -12,6 +12,7 @@
 #include "scene.h"
 #include "node.h"
 #include "block.h"
+#include "brick.h"
 #include "list.h"
 
 #include "sketch.h"
@@ -19,6 +20,58 @@
 #include "ctx.h"
 
 #include "graph.h"
+
+
+// GET ROOTS
+
+void graph_get_roots(t_graph *graph)
+{
+	t_context *C = ctx_get();
+
+	t_link *l;
+	t_block *block;
+	t_brick *brick;
+	t_plug *plug_in;
+
+	if(!graph->roots)
+	{
+		t_node *node_list = scene_add(C->scene,nt_list,"roots");
+		graph->roots = node_list->data;
+	}
+
+	t_lst *lst = graph->blocks;
+	t_lst *roots = graph->roots;
+
+	lst_cleanup(roots);
+
+	for(l=lst->first;l;l=l->next)
+	{
+		t_link *link;
+		block = l->data;
+		int add_to_roots = 1;
+		for(link=block->bricks->first;link;link=link->next)
+		{
+			brick=link->data;
+			plug_in = &brick->plug_in;
+
+			if(plug_in->state.is_connected)
+			{
+				add_to_roots = 0;
+			}
+		}
+
+		if(add_to_roots)
+		{
+			block->state.is_root = 1;
+			list_add(roots,block);
+		}
+		else
+		{
+			block->state.is_root = 0;
+		}
+	}
+}
+
 
 // SWAP
 
@@ -80,6 +133,29 @@ void graph_build_from_list(t_lst *lst)
 	{
 		block = l->data;
 		graph_block_add(new_graph, block);
+	}
+}
+
+// DRAW ROOTS
+
+void graph_draw_roots(t_graph *graph)
+{
+	graph_get_roots(graph);
+	if(graph->roots)
+	{
+		t_link *l = graph->roots->first;
+		if(l)
+		{
+			for(;l;l=l->next)
+			{
+				t_block *block = l->data;
+				glPushMatrix();
+				glLoadIdentity();
+				glScalef(1.1,1.1,1.1);
+				block_draw_outline(block);
+				glPopMatrix();
+			}
+		}
 	}
 }
 
@@ -227,6 +303,7 @@ t_graph *graph_new(const char *name)
 	set_name(graph->name, name);
 
 	graph->blocks = NULL;
+	graph->roots = NULL;
 
 	return graph;
 }

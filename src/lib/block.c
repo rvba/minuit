@@ -79,9 +79,49 @@ t_lst *block_graph_get(t_context *C, t_plug *plug, t_lst *lst)
 	return lst;
 }
 
+t_lst *block_left_branch_get(t_context *C, t_plug *plug, t_lst *lst)
+{
+	t_link *l;
+	t_plug *p;
+	t_plug *d;
+	t_brick *brick;
+	t_block *block;
+
+	brick = plug->brick;
+	block = brick->block;
+
+	// Process Block If Not In List
+	if(!block_in_lst(block,lst))
+	{
+		list_add(lst,block);
+
+		for(l=block->bricks->first;l;l=l->next)
+		{
+			brick=l->data;
+
+			// In
+			p=&brick->plug_in;
+
+			if(p->state.is_connected) 
+			{
+				d = p->src;
+				if((d->id != plug->id) && (p->id != plug->id))
+				{
+					block_left_branch_get(C,d,lst);
+				}
+			}
+		}
+	}
+
+	return lst;
+}
+
 void block_graph_split(t_block *block_self, t_plug *plug_self, t_block *block_dst, t_plug *plug_dst)
 {
 	t_context *C = ctx_get();
+
+	block_self->state.is_root = 0;
+	block_dst->state.is_root = 0;
 
 	t_lst *lst_self = lst_new("lst");
 	t_lst *lst_dst = lst_new("lst");
@@ -584,7 +624,7 @@ t_block *block_new(const char *name)
 	block->submenu=NULL;
 	block->selected=NULL;
 
-	block->state.is_root=1;
+	block->state.is_root=0;
 	block->state.is_show=0;
 	block->state.draw_outline=0;
 	block->state.draw_plugs=0;

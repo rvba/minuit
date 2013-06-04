@@ -42,6 +42,7 @@ void ui_draw_graphs(void)
 			node = l->data;
 			graph = node->data;
 			graph_draw_bounding_box(graph);
+			graph_get_roots(graph);
 		}
 	}
 }
