@@ -26,6 +26,39 @@
 #include "vector.h"
 #include "clock.h"
 
+int brick_check_loop(t_brick *brick)
+{
+	t_context *C = ctx_get();
+
+	int frame = C->app->frame;
+
+	if(brick->state.frame_loop != frame)
+	{
+		brick->state.frame_loop = frame;
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+int brick_pre_check_loop(t_brick *brick)
+{
+	t_context *C = ctx_get();
+
+	int frame = C->app->frame;
+
+	if(brick->state.frame_loop != frame)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
 // SET UPDATED
 
 void brick_set_updated(t_brick *brick)
@@ -226,7 +259,7 @@ void *op_slider(t_brick *brick)
 	plug_intern->cls->flow(plug_intern);
 
 	// trigger
-	if(brick->mode==bm_triggering) // (see:plug_update)
+	if(brick_check_loop(brick) && brick->mode==bm_triggering) // (see:plug_update)
 	{
 		// dragging
 		if(brick->state.is_draging)
@@ -920,7 +953,10 @@ void *op_clone(t_brick *brick)
 	t_plug *plug_in_brick = &brick_brick->plug_in;
 
 	// Add New Bricks
-	op_add_bricks(brick,brick_brick,2,t_parent_child);
+	if(brick_pre_check_loop(brick)) 
+	{
+		op_add_bricks(brick,brick_brick,2,t_parent_child);
+	}
 
 	// Update Clones
 	if(tot_bricks>0)
@@ -954,10 +990,8 @@ void *op_clone(t_brick *brick)
 				plug_clone->cls->flow(plug_clone);
 
 				// Disconnect Clone
-				/*
 				plug_in_clone->src=NULL;
 				plug_in_clone->state.is_connected = 0;
-				*/
 			}
 		}
 	}

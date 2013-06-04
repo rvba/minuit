@@ -575,6 +575,8 @@ void cls_node_init_binding(t_node *node)
 
 void cls_node_init_graph(t_node *node)
 {
+	t_graph *graph = node->data;
+	graph->roots = NULL;
 	cls_node_init_generic(node);
 }
 

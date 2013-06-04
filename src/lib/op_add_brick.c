@@ -1090,9 +1090,9 @@ t_node *add_clone(t_context *C)
 	// Add Clone
 	t_node *node_brick_clone=add_part_slider_int(C,block,"clone",NULL);
 	t_brick *brick_clone=node_brick_clone->data;
-	brick_clone->state.use_loops = 0;
 
 	brick_clone->action=op_clone;
+	brick_clone->state.use_dragging = 0;
 
 	// Add Brick
 	t_node *node_brick = add_part_slider_float(C,block,"brick",NULL);
