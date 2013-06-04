@@ -908,6 +908,7 @@ void *op_pipe(t_brick *brick)
 
 // CLONE
 
+/*
 void *op_clone(t_brick *brick)
 {
 	t_block *block = brick->block;
@@ -975,6 +976,63 @@ void *op_clone(t_brick *brick)
 					plug_in_clone->state.is_connected=0;
 					plug_out_clone->state.open_out = 0;
 				}
+			}
+		}
+	}
+
+	return NULL;
+}
+*/
+
+void *op_clone(t_brick *brick)
+{
+	t_block *block = brick->block;
+	int tot_bricks = block->tot_bricks;
+
+	// Get Brick
+	t_brick *brick_brick = block_brick_get(block,"brick");
+	t_plug *plug_brick = &brick_brick->plug_intern;
+	t_plug *plug_out_brick = &brick_brick->plug_out;
+	t_plug *plug_in_brick = &brick_brick->plug_in;
+
+	// Add New Bricks
+	op_add_bricks(brick,brick_brick,2,t_parent_child);
+
+	// Update Clones
+	if(tot_bricks>0)
+	{
+		t_link *l;
+		t_brick *b;
+
+		for(l = block->bricks->first;l;l = l->next)
+		{
+			b = l->data;
+			if(!is(b->name,"brick") && !is(b->name,"clone"))
+			{
+				t_plug *plug_clone = &b->plug_intern;
+				t_plug *plug_in_clone = &b->plug_in;
+
+				// Change Type 
+				if(plug_brick->data_type != plug_clone->data_type)
+				{
+					brick_type_change(b,plug_brick);
+				}
+
+				// Connect Clone
+				plug_in_clone->src=plug_out_brick;
+				if(plug_out_brick->dst || plug_in_brick->dst)
+				plug_in_clone->state.is_connected = 1;
+				else
+				plug_in_clone->state.is_connected = 0;
+
+				// Flow
+				plug_clone->cls->flow(plug_clone);
+
+				// Disconnect Clone
+				/*
+				plug_in_clone->src=NULL;
+				plug_in_clone->state.is_connected = 0;
+				*/
 			}
 		}
 	}

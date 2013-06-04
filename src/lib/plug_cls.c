@@ -401,6 +401,27 @@ void cls_plug_connect_general(t_plug_mode mode, t_plug *self, t_plug *dst)
 			set_in_loop(brick,1);
 		}
 	}
+
+ 	// Swap Flow
+ 	if(self->state.swap_flow && dst)
+ 	{
+		if(mode == mode_out)
+		{
+			plug_out->state.flow_out = 1;
+			plug_dst_in->state.flow_in = 0;
+			plug_dst_in->state.open_in = 1;
+
+			// If Versatil
+			if(brick_dst->state.is_versatil)
+			{
+				if(self->data_type != dst->data_type)
+				{
+					// Change Type
+					brick_type_change(brick_dst,self);
+				}
+			}
+		}
+ 	}
 }
 
 // DISCONNECT GENERAL
@@ -410,6 +431,18 @@ void cls_plug_disconnect_general(t_plug_mode mode, t_plug *self)
 	t_brick *brick = self->brick;
 	t_plug *plug_in = &brick->plug_in;
 	t_plug *plug_out = &brick->plug_out;
+
+ 	// Swap Flow
+ 	if(self->state.swap_flow && (mode==mode_out))
+ 	{
+		t_plug *dst = plug_out->dst;
+		t_brick *brick_dst = dst->brick;
+		t_plug *plug_dst_in = &brick_dst->plug_in;
+
+		plug_out->state.flow_out = 0;
+		plug_dst_in->state.flow_in = 1;
+		plug_dst_in->state.open_in = 0;
+ 	}
 
 	// Mode In
 	if(mode == mode_in)
@@ -428,6 +461,8 @@ void cls_plug_disconnect_general(t_plug_mode mode, t_plug *self)
 		plug_out->dst = NULL;
 		plug_out->state.is_connected = 0;
 	}
+
+
 }
 
 // CONNECT VECTOR
@@ -603,17 +638,10 @@ void cls_plug_disconnect_vector(t_plug_mode mode, t_plug *plug)
 	t_block *block = brick->block;
 	t_plug *plug_in = &brick->plug_in;
 	t_plug *plug_out = &brick->plug_out;
-	t_plug *plug_dst;
 	t_vector *vector = plug->data;
 
 	// Disconnect General
 	cls_plug_disconnect_general(mode,plug);
-
-	// Get Dst Plug
-	if(mode == mode_in)
-		plug_dst = plug_in->src;
-	else
-		plug_dst = plug_out->dst;
 
 	// **************
 	// Reverse Flow
@@ -675,33 +703,6 @@ void cls_plug_disconnect_vector(t_plug_mode mode, t_plug *plug)
 			C->scene->store = 0;
 		}
 	}
-
-	if(plug_dst)
-	{
-		/*
-		// ****************************
-		// If Dst Volatil, Reset Pointer
-		// ****************************
-		if(plug_dst->state.is_volatil)
-		{
-			vector->pointer = NULL;
-		}
-
-		// **********************************
-		// If is For Vector: Close Dst Vector
-		// **********************************
-		if(!plug->state.is_state_volatil)
-		{
-			if(plug_dst->data_type==dt_vector)
-			{
-				t_brick *brick_vector = plug_dst->data;
-				printf("close vector !!\n");
-				close_vector(brick_vector,0);
-			}
-		}
-		*/
-	}
-
 }
 
 void plug_data_reset(t_plug *plug)
@@ -1381,13 +1382,16 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 			// If Vector is Connected
 			if(plug_vector_in->state.is_connected)
 			{
+				// Open Vector
+				close_vector(brick_vector,1);
+
 				// And Vlst is Connected
 				if(vlst)
 				{
 					if(brick->counter < vlst->count)
 					{
 						// Open Vector
-						close_vector(brick_vector,1);
+						//close_vector(brick_vector,1);
 
 						if(C->ui->show_step) term_log("[for][%d]",brick->counter);
 
@@ -1578,7 +1582,7 @@ void __cls_plug_flow_operator_get(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 				
 
 			default:
-				printf(">> %s\n",data_name_get(plug_src->data_type));
+				//printf(">> %s\n",data_name_get(plug_src->data_type));
 				break;
 		}
 	}

@@ -64,6 +64,7 @@ struct Plug_State
 	int close_flow_in:1;		// will close target's flow in
 	int use_flow:1;
 	int is_parent:1;
+	int swap_flow:1;
 
 	int flow_in:1;
 	int flow_out:1;

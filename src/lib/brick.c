@@ -444,6 +444,8 @@ void plug_reset(t_plug *plug,const char *name)
 	plug->state.is_volatil = 0;
 	plug->state.bang = 0;
 	plug->state.is_init = 0;
+
+	plug->state.swap_flow = 0;
 }
 
 // REF
