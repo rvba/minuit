@@ -47,6 +47,9 @@ void cls_plug_connect_general(t_plug_mode mode, t_plug *self, t_plug *dst);
 void cls_plug_disconnect_general(t_plug_mode mode, t_plug *self);
 
 
+void close_vector(t_brick *brick, int open);
+
+
 void plug_debug(t_plug *plug)
 {
 	t_data_type type = plug->data_type;
@@ -260,7 +263,7 @@ void cls_plug_disconnect_operator(t_plug_mode mode, t_plug *plug)
 	// General
 	cls_plug_disconnect_general(mode,plug);
 
-	// FOR 
+	// Operator For 
 	if(brick->plug_intern.operator_type == ot_for)
 	{
 		t_brick *brick_vector = block_brick_get(block,"vector");
@@ -295,7 +298,6 @@ void cls_plug_disconnect_operator(t_plug_mode mode, t_plug *plug)
 						// Get Plugs
 						plug_intern_component = &brick_component->plug_intern;
 						plug_in_component = &brick_component->plug_in;
-
 
 						// Set Component Pointer
 						plug_intern_component->data = vlst_get_pointer(vlst_dst,i);
@@ -674,13 +676,32 @@ void cls_plug_disconnect_vector(t_plug_mode mode, t_plug *plug)
 		}
 	}
 
-	// ****************************
-	// If Dst Volatil, Reset Pointer
-	// ****************************
-	if(plug_dst->state.is_volatil)
+	if(plug_dst)
 	{
-		vector->pointer = NULL;
+		/*
+		// ****************************
+		// If Dst Volatil, Reset Pointer
+		// ****************************
+		if(plug_dst->state.is_volatil)
+		{
+			vector->pointer = NULL;
+		}
+
+		// **********************************
+		// If is For Vector: Close Dst Vector
+		// **********************************
+		if(!plug->state.is_state_volatil)
+		{
+			if(plug_dst->data_type==dt_vector)
+			{
+				t_brick *brick_vector = plug_dst->data;
+				printf("close vector !!\n");
+				close_vector(brick_vector,0);
+			}
+		}
+		*/
 	}
+
 }
 
 void plug_data_reset(t_plug *plug)
@@ -1199,7 +1220,7 @@ void cls_plug_flow_pointer(t_plug *plug)
 	_cls_flow_(plug,__cls_plug_flow_pointer);
 }
 
-// FOR 
+// Set in Loop
 
 void set_for_loop(t_block *block ,int state)
 {
@@ -1245,6 +1266,59 @@ void __cls_plug_for_add_bricks(t_context *C, t_block *block)
 	lst_free(lst);
 }
 
+void close_vector(t_brick *brick, int open)
+{
+	t_block *block = brick->block;
+	t_plug *plug_intern = &brick->plug_intern;
+
+	t_vector *vector = plug_intern->data;
+
+	t_brick *brick_component;
+	t_plug *plug_in_component;
+
+	// Open
+	if(open)
+	{
+		if(brick->state.has_components)
+		{
+			// For Vector Length
+			int i;
+			for(i=0; i < vector->length; i++)
+			{
+				// Get Brick Component
+				brick_component = block_brick_get_by_order(block,i);
+
+				// Get Plugs
+				plug_in_component = &brick_component->plug_in;
+
+				// Open Flow In
+				plug_in_component->state.flow_in = 1;
+			}
+		}
+	}
+	// Close
+	else
+	{
+		if(brick->state.has_components)
+		{
+			// For Vector Length
+			int i;
+			for(i=0; i < vector->length; i++)
+			{
+				// Get Brick Component
+				brick_component = block_brick_get_by_order(block,i);
+
+				// Get Plugs
+				plug_in_component = &brick_component->plug_in;
+
+				// Close Flow In
+				plug_in_component->state.flow_in = 0;
+			}
+		}
+	}
+}
+
+
 // FOR
 
 void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src)
@@ -1260,7 +1334,6 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 	t_brick *brick_vector = block_brick_get(block,"vector");
 
 	t_plug *plug_indice = &brick_indice->plug_intern;
-	t_plug *plug_indice_in = &brick_indice->plug_in;
 	t_plug *plug_vector = &brick_vector->plug_intern;
 	t_plug *plug_vector_in = &brick_vector->plug_in;
 
@@ -1311,11 +1384,11 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 				// And Vlst is Connected
 				if(vlst)
 				{
-					// Open Indice
-					plug_indice_in->state.open_in = 1;
-
 					if(brick->counter < vlst->count)
 					{
+						// Open Vector
+						close_vector(brick_vector,1);
+
 						if(C->ui->show_step) term_log("[for][%d]",brick->counter);
 
 						// Unlock Loop 
@@ -1360,8 +1433,8 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 					// set loop
 					set_for_loop(block,0);
 
-					// Close Indice
-					plug_indice_in->state.open_in = 0;
+					// Close Vector
+					close_vector(brick_vector,0);
 				}
 			}
 			// plug vector in not connected
@@ -1377,8 +1450,9 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 		{
 			// set loop
 			set_for_loop(block,0);
-			// Close Indice
-			plug_indice_in->state.open_in = 0;
+
+			// Close Vector
+			close_vector(brick_vector,0);
 		}
 	}
 }
@@ -1640,35 +1714,6 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 						}
 					}
 				}
-				/*
-				else
-				{
-					if(brick->state.has_components)
-					{
-						// For Vector Length
-						int i;
-						t_brick *brick_component;
-						//t_plug *plug_intern_component;
-						t_plug *plug_in_component;
-						for(i=0; i < vector_self->length; i++)
-						{
-							// Get Brick Component
-							brick_component = block_brick_get_by_order(block,i);
-
-							// Get Plugs
-							//plug_intern_component = &brick_component->plug_intern;
-							plug_in_component = &brick_component->plug_in;
-
-							// Set Component Pointer
-							//plug_intern_component->data = vector_get_pointer(vector_self,i);
-
-							// Open Flow In
-							plug_in_component->state.flow_in = 1;
-						}
-					}
-
-				}
-					*/
 
 
 				break;
