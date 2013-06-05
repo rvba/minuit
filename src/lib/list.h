@@ -116,10 +116,10 @@ void 		vlst_set(t_vlst *vlst,int i);
 // LST
 
 
-int lst_sort_bubble(t_lst *lst);
-int lst_sort_quick(t_lst *lst);
+int 		lst_sort_bubble(t_lst *lst);
+int 		lst_sort_quick(t_lst *lst);
 
-void lst_link_insert(t_lst *lst, t_link *link, t_link *prev);
+void 		lst_link_insert(t_lst *lst, t_link *link, t_link *prev);
 
  
 t_link * 	list_add(t_lst *lst,void *data);

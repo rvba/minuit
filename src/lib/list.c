@@ -183,7 +183,7 @@ void link_show(const char *name,t_link *link)
 }
 	
 
-void lst_simple_swap(t_lst *lst, t_link *link)
+void lst_swap_simple(t_lst *lst, t_link *link)
 {
 	t_link *prev = link->prev;
 	t_link *next = link->next;
@@ -233,7 +233,7 @@ int lst_sort_bubble(t_lst *lst)
 
 				if(order_link < order_prev)
 				{
-					lst_simple_swap(lst,link);
+					lst_swap_simple(lst,link);
 					swap = 1;
 					break;
 				}
