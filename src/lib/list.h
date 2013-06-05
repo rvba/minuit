@@ -24,6 +24,8 @@ typedef struct Link
 	short users;
 	char name[_NAME_];
 
+	int order;
+
 	struct Link *next;
 	struct Link *prev;
 	struct Link *parent;
@@ -109,6 +111,15 @@ void 		vlst_add_number(t_vlst *vlst,t_data_type type,void *data);
 
 t_vlst *	vlst_duplicate(t_vlst *vlst);
 void 		vlst_set(t_vlst *vlst,int i);
+
+
+// LST
+
+
+int lst_sort_bubble(t_lst *lst);
+int lst_sort_quick(t_lst *lst);
+
+void lst_link_insert(t_lst *lst, t_link *link, t_link *prev);
 
  
 t_link * 	list_add(t_lst *lst,void *data);

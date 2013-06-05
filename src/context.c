@@ -30,6 +30,10 @@ t_context *CONTEXT;
 
 void ctx_handler(void);
 
+void ctx_test(void)
+{
+}
+
 t_context *ctx_get(void)
 {
 	return CONTEXT;

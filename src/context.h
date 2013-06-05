@@ -26,6 +26,7 @@ typedef struct Context
 
 }t_context;
 
+void ctx_test(void);
 t_context *ctx_get(void);
 t_context *ctx_init(int argc,char **argv);
 

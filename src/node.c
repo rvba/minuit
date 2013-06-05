@@ -86,6 +86,30 @@ char node_name_set[]="node_set";
 char node_name_binding[]="node_binding";
 char node_name_graph[]="node_graph";
 
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 char *node_name_get(t_node_type type)
 {
 	switch(type)

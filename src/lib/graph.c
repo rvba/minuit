@@ -95,6 +95,7 @@ void graph_set_block_pos(t_block *block, int pos)
 		}
 	}
 }
+int test = 0;
 
 void graph_sort(t_graph *graph)
 {
@@ -109,6 +110,7 @@ void graph_sort(t_graph *graph)
 		block->graph_pos = 0;
 	}
 
+	// Set Pos
 	for(l=graph->roots->first;l;l=l->next)
 	{
 		t_link *link;
@@ -128,7 +130,19 @@ void graph_sort(t_graph *graph)
 			}
 		}
 	}
+
+	// Set Link order
+	for(l=graph->blocks->first;l;l=l->next)
+	{
+		block=l->data;
+		l->order = block->graph_pos;
+	}
+	
+	// Sort List
+	lst_sort_bubble(graph->blocks);
 }
+
+
 
 
 
