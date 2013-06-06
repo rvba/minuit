@@ -26,6 +26,7 @@ typedef struct Graph
 
 }t_graph;
 
+void 		graph_exec(t_graph *graph);
 void 		graph_sort(t_graph *graph);
 void 		graph_get_roots(t_graph *graph);
 void 		graph_build_from_list(t_lst *lst);

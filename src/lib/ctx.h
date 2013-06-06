@@ -112,5 +112,9 @@ void ctx_render_video(struct Context *C);
 void 		option_save(struct Context *C);
 void 		load_option(struct Context *C,struct Scene *sc);
 
+// CTX_GRAPH
+
+void ctx_graph_update(struct Context *C);
+
 
 #endif 

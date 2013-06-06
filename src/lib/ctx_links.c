@@ -1054,28 +1054,36 @@ void ctx_links_continuous(t_context *C)
 		ROOTS=NULL;
 }
 
+
 // MAIN
 
 void ctx_links_update(t_context *C)
 {
-	C->ui->graph_updated = 0;
-
-	// Freeze 
-	if(C->ui->update_links)
+	if(C->ui->use_graphs)
 	{
-		// Step 
-		if(C->ui->show_step)
-		{
-			ctx_links_step(C);
-		}
-		// Continuous
-		else
-		{
-			ctx_links_continuous(C);
-		}
+		ctx_graph_update(C);
 	}
+	else
+	{
+		C->ui->graph_updated = 0;
 
-	C->ui->graph_updated = 1;
+		// Freeze 
+		if(C->ui->update_links)
+		{
+			// Step 
+			if(C->ui->show_step)
+			{
+				ctx_links_step(C);
+			}
+			// Continuous
+			else
+			{
+				ctx_links_continuous(C);
+			}
+		}
+
+		C->ui->graph_updated = 1;
+	}
 }
 
 

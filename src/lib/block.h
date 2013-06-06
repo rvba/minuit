@@ -135,11 +135,12 @@ void		block_unstore(t_block *block);
 
 void 		set_for_loop(t_block *block ,int state);
 
-void cls_block_generic_update(t_block *block);
+void 		cls_block_generic_update(t_block *block);
 
-void block_graph_split(struct Block *block_self, struct Plug *plug_self, struct Block *block_dst, struct Plug *plug_dst);
-void block_graph_add(t_block *self, t_block *dst);
+void 		block_graph_split(struct Block *block_self, struct Plug *plug_self, struct Block *block_dst, struct Plug *plug_dst);
+void 		block_graph_add(t_block *self, t_block *dst);
 
+void 		block_exec(t_block *block);
 
 #endif
 

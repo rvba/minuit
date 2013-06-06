@@ -69,6 +69,7 @@ typedef struct Ui
 	int step_reset;
 
 	int use_threading;
+	int use_graphs;
 	int threading_on;
 	int graph_updated;
 

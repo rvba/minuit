@@ -18,6 +18,51 @@
 #include "brick.h"
 #include "graph.h"
 
+void block_reset(t_block *block)
+{
+	t_link *link;
+	t_brick *brick;
+	t_plug *plug;
+
+	for(link=block->bricks->first;link;link=link->next)
+	{
+		brick = link->data;
+		plug = &brick->plug_intern;
+		plug->state.is_updated = 0;
+	}
+}
+
+void block_exec(t_block *block)
+{
+	t_link *link;
+	t_brick *brick;
+	t_plug *plug;
+
+	block_reset(block);
+
+	for(link=block->bricks->first;link;link=link->next)
+	{
+		brick = link->data;
+		plug = &brick->plug_intern;
+		if(plug->parents)
+		{
+			t_link *l;
+			for(l=plug->parents->first;l;l=l->next)
+			{
+				t_plug *p = l->data;
+				t_brick *b = p->brick;
+				if(!p->state.is_updated)
+					b->cls->trigger(b);
+			}
+		}
+		else
+		{
+			if(!plug->state.is_updated)
+				brick->cls->trigger(brick);
+		}
+	}
+}
+
 int block_in_lst(t_block *block, t_lst *lst)
 {
 	t_link *l;

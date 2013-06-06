@@ -22,6 +22,19 @@
 
 #include "graph.h"
 
+// EXEC
+
+void graph_exec(t_graph *graph)
+{
+	t_link *link;
+	t_block *block;
+	for(link=graph->blocks->first;link;link=link->next)
+	{
+		block = link->data;
+		block_exec(block);
+	}
+}
+
 
 // GET ROOTS
 
