@@ -313,20 +313,40 @@ void ctx_block_set_update(t_context *C)
 {
 	t_link *link;
 
+	// For All Sets
 	for(link = C->scene->sets->first; link; link = link->next)
 	{
 		t_node *node = link->data;
 		t_set *set = node->data;
-		t_lst *lst = set->lst;
+		t_lst *lst = set->blocks;
 		t_link *l = lst->first;
 
 		if(l)
 		{
+			// For All Blocks
 			for(;l;l=l->next)
 			{
 				t_block *b;
 				b=l->data;
+				// Block Update
 				b->cls->update(b);
+			}
+		}
+
+		l = set->graphs->first;
+
+		for(;l;l=l->next)
+		{
+			t_graph *graph = l->data;
+			t_block *block;  
+			t_link *l_block = graph->blocks->first;
+
+			// For All Graphs
+			for(;l_block;l_block = l_block->next)
+			{
+				block = l_block->data;
+				// Block Update
+				block->cls->update(block);
 			}
 		}
 	}
@@ -444,9 +464,8 @@ void ctx_ui(t_context *C)
 	// update linking 
 	ctx_ui_linking(C);
 
-	// graph update
-	if(!C->ui->use_threading && C->ui->graph_updated)
-	ctx_links_update(C);
+	// sets exec
+	ctx_set_exec(C);
 
 	// post exe
 	ctx_exe(C);

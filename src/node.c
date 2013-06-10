@@ -579,6 +579,7 @@ void cls_node_init_graph(t_node *node)
 	t_graph *graph = node->data;
 	graph->roots = NULL;
 	cls_node_init_generic(node);
+	graph_init(graph);
 }
 
 // CLASSES

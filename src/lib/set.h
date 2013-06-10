@@ -14,6 +14,7 @@
 
 struct Scene;
 struct Lst;
+struct Block;
 
 typedef struct Set
 {
@@ -22,9 +23,13 @@ typedef struct Set
 	short users;
 	char name[_NAME_];
 
-	struct Lst *lst;
+	struct Lst *blocks;
+	struct Lst *graphs;
+
 }t_set;
 
+void 		set_block_pop(t_set *set, struct Block *block);
+void 		set_block_push(t_set *set, struct Block *block);
 t_set *		set_rebind(struct Scene *sc, void **ptr);
 t_node *	set_add(const char *name);
 void 		set_free(t_set *set);

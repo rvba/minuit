@@ -63,6 +63,8 @@ struct Block_State
 	int is_mouse_over:1;
 	int update_geometry:1;
 	int is_moveable:1;
+	int is_a_loop:1;
+	int is_in_graph:1;
 };
 
 struct Block
@@ -92,6 +94,7 @@ struct Block
 	struct Brick *selected;			// submenu
 
 	struct Graph *graph;
+	struct Set *set;
 };
 
 
@@ -140,7 +143,10 @@ void 		cls_block_generic_update(t_block *block);
 void 		block_graph_split(struct Block *block_self, struct Plug *plug_self, struct Block *block_dst, struct Plug *plug_dst);
 void 		block_graph_add(t_block *self, t_block *dst);
 
+void block_set_loop_state(t_block *block, int state);
 void 		block_exec(t_block *block);
+
+void block_brick_trigger(struct Plug *plug);
 
 #endif
 

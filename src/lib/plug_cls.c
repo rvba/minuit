@@ -1044,12 +1044,12 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 					if(brick->counter < vlst->count)
 					{
 						// Open Vector
-						//close_vector(brick_vector,1);
+						close_vector(brick_vector,1);
 
 						if(C->ui->show_step) term_log("[for][%d]",brick->counter);
 
 						// Unlock Loop 
-						set_for_loop(block,0);
+						//set_for_loop(block,0);
 
 						// Set Vector Pointer
 						vector->pointer = vlst_get_pointer(vlst, vlst->length * brick->counter);
@@ -1057,8 +1057,8 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 						// Set Indice
 						*data_indice=brick->counter;
 
-						// Add Loop
-						__cls_plug_for_add_bricks(C,block);
+						// Star Loop
+						block_set_loop_state(block,1);
 
 						// Counter ++
 						brick->counter++;
@@ -1071,6 +1071,9 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 						// reset vector
 						//vector->pointer = NULL;
 
+						// Close Vector
+						close_vector(brick_vector,0);
+
 						// reset counter
 						brick->counter = 0;
 
@@ -1078,18 +1081,15 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 						plug->state.is_init = 0;
 
 						// reset indice
-						//*data_indice = 0;
+						*data_indice = 0;
 
-						// reset is_in_loop
-						set_for_loop(block,1);
+						// Set Loop State On
+						block_set_loop_state(block,0);
 					}
 				}
 				// no vlst
 				else
 				{
-					// set loop
-					set_for_loop(block,0);
-
 					// Close Vector
 					close_vector(brick_vector,0);
 				}
@@ -1097,17 +1097,13 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 			// plug vector in not connected
 			else
 			{
-				//*data_indice = 0;
-				// set loop
-				set_for_loop(block,0);
+				// Close Vector
+				close_vector(brick_vector,0);
 			}
 		}
 		// IF For not connected
 		else
 		{
-			// set loop
-			set_for_loop(block,0);
-
 			// Close Vector
 			close_vector(brick_vector,0);
 		}

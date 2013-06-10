@@ -15,6 +15,7 @@
 #include "object.h"
 #include "camera.h"
 #include "list.h"
+#include "set.h"
 
 void object_default(t_node *node){}
 void cls_object_link(t_object *self,t_node *target);
@@ -150,7 +151,10 @@ void object_free(t_object *object)
 	if(object->ref)
 	{
 		// remove from global list
-		t_lst *lst = get_target_list(C);
+		//t_lst *lst = get_target_list(C);
+		t_set *set = object->ref->set;
+		t_lst *lst = set->blocks;
+
 		list_remove_by_ptr(lst,object->ref);
 		// free block
 		scene_struct_delete(sc,object->ref);
@@ -223,19 +227,17 @@ t_node *object_add(const char *type,const char *name)
 	// add data node
 	scene_add_data_node(C->scene,"app_node","object",name,node);
 
-	// add global reference
-	t_node *node_block=block_make(name,"block");
+	// New Block
+	t_node *node_block=add_block(C,name);
 	t_block *block=node_block->data;
+
 	object->ref=block;
 
 	// add selector
 	add_part_selector(C,block,name,node);
 
-	// add to global list
-	op_add_global(C,block);
-
-	// outline
-	block->state.draw_outline=1;
+	// Add Offset
+	add_block_offset(C,block);
 
 	return node;
 }

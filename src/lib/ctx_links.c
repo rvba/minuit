@@ -54,7 +54,7 @@ t_lst *ctx_links_get_set_lst(t_context *C)
 	{
 		t_node *node = link->data;
 		t_set *set = node->data;
-		t_lst *lst = set->lst;
+		t_lst *lst = set->blocks;
 
 		return lst;
 	}
@@ -1061,7 +1061,7 @@ void ctx_links_update(t_context *C)
 {
 	if(C->ui->use_graphs)
 	{
-		ctx_graph_update(C);
+//		ctx_graph_update(C);
 	}
 	else
 	{

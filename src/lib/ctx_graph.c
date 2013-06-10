@@ -22,6 +22,49 @@
 
 #include "graph.h"
 
+void ctx_set_exec(struct Context *C)
+{
+	// Freeze
+	if(C->ui->update_links)
+	{
+		t_link *link;
+
+		// For All Sets
+		for(link = C->scene->sets->first; link; link = link->next)
+		{
+			t_node *node = link->data;
+			t_set *set = node->data;
+			t_lst *lst = set->blocks;
+			t_link *l = lst->first;
+
+			if(l)
+			{
+				// For All Blocks
+				for(;l;l=l->next)
+				{
+					t_block *b;
+					b=l->data;
+
+					// Block Exec
+					block_exec(b);
+				}
+			}
+
+			l = set->graphs->first;
+
+			for(;l;l=l->next)
+			{
+				t_graph *graph = l->data;
+
+				// Graph Exec
+				graph_exec(graph);
+
+			}
+		}
+
+	}
+}
+
 
 void ctx_graph_update(struct Context *C)
 {

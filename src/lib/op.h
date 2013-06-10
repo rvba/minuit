@@ -45,7 +45,7 @@ void *		find_register(const char *target,const char *name);
 
 // OP_ADD_BRICK
 
-struct Lst *		get_target_list(struct Context *C);
+struct Set *get_current_set(struct Context *C);
 
 struct Node *	add_brick_submenu(struct Context *C,struct Node *menu,struct Node *submenu,const char *name);
 struct Node *	add_brick_submenu_contextual(struct Context *C,struct Node *menu,struct Node *submenu,const char *name,enum Node_Type context);
@@ -99,5 +99,8 @@ struct Node *	add_plusplus(struct Context *C);
 struct Node *	add_const(struct Context *C);
 struct Node *	add_pipe(struct Context *C);
 
+struct Node *add_block(struct Context *C,const char *name);
+
+void add_block_offset(struct Context *C, struct Block *block);
 
 #endif

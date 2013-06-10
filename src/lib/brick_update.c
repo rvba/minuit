@@ -25,6 +25,7 @@
 #include "block.h"
 
 #include "graph.h"
+#include "set.h"
 
 int is_vec_stored=0;
 float v[3];
@@ -162,9 +163,22 @@ void cls_brick_trigger_lst(t_brick *brick)
 	brick_set_updated(brick);
 }
 
+
 void cls_brick_trigger_generic(t_brick *brick)
 {
 	t_context *C = ctx_get();
+
+	/*
+	if(brick->state.use_loops == 0)
+	{
+		int frame = C->app->frame;
+
+		if(brick->state.frame_loop != frame)
+		{
+			brick->state.frame_loop = frame;
+		}
+	}
+	*/
 
 	t_plug *plug_in=&brick->plug_in;
 	t_plug *plug_out = &brick->plug_out;
@@ -246,7 +260,9 @@ void brick_remove(t_dict *args)
 
 	if(!block_is_connected("in",block) && !block_is_connected("out",block))
 	{
-		t_lst *lst = get_target_list(C);
+		//t_lst *lst = get_target_list(C);
+		t_set *set = get_current_set(C);
+		t_lst *lst = set->blocks;
 
 		list_remove_by_ptr(lst,block);
 		scene_struct_delete(C->scene,block);

@@ -99,8 +99,8 @@ t_mesh *mesh_rebind(t_scene *sc,void *ptr)
 
 void mesh_add_brick_vertex(t_context *C,t_mesh *mesh)
 {
-	// block
-	t_node *_node_block=block_make("vertex","block");
+	// New Block
+	t_node *_node_block=add_block(C,"vertex");
 	t_block *_block=_node_block->data;
 
 	// outline
@@ -117,8 +117,8 @@ void mesh_add_brick_vertex(t_context *C,t_mesh *mesh)
 	// Ref
 	scene_add_ref(C->scene,"struct_ref","mesh","tot vertex",&mesh->var.tot_vertex,mesh);
 
-	// add to global list
-	op_add_global(C,_block);
+	// Add Global offset
+	add_block_offset(C,_block);
 }
 
 void mesh_add_brick_faces(t_mesh *mesh)
@@ -283,7 +283,7 @@ t_node *mesh_make(
 	mesh_add_brick_vertex(C,mesh);
 
 	// add brick mesh
-	mesh_add_brick_mesh(C,mesh);
+	//mesh_add_brick_mesh(C,mesh);
 
 	return node_mesh;
 }

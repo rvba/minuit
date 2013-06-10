@@ -27,12 +27,27 @@
 
 #include "set.h"
 
+void set_block_pop(t_set *set, t_block *block)
+{
+	t_lst *lst = set->blocks;
+	list_remove_by_id(lst, block->id);
+}
+
+void set_block_push(t_set *set, t_block *block)
+{
+	t_context *C = ctx_get();
+	t_lst *lst = set->blocks;
+	C->scene->store = 1;
+	list_add(lst, block);
+	C->scene->store = 0;
+}
 
 t_set *set_rebind(t_scene *sc, void **ptr)
 {
 	t_set *set=(t_set *)ptr;
 
-	rebind(sc,"set","lst",(void **)&set->lst);
+	rebind(sc,"set","blocks",(void **)&set->blocks);
+	rebind(sc,"set","graphs",(void **)&set->graphs);
 
 	return set;
 }
@@ -46,18 +61,29 @@ t_node *set_add(const char *name)
 t_node *set_make(const char *name)
 {
 	t_context *C = ctx_get();
+
+	// New Set
 	t_node *node_set = scene_add(C->scene,nt_set,name);
 	t_set *set = node_set->data;
-	t_node *node_lst = scene_add(C->scene,nt_list,name);
-	t_lst *lst = node_lst->data;
-	set->lst = lst;
+
+	// Add Blocks List
+	t_node *node_blocks = scene_add(C->scene,nt_list,name);
+	t_lst *lst_blocks = node_blocks->data;
+	set->blocks = lst_blocks;
+
+	// Add Graphs List
+	t_node *node_graphs = scene_add(C->scene,nt_list,name);
+	t_lst *lst_graphs = node_graphs->data;
+	set->graphs = lst_graphs;
+
 	return node_set;
 };
 
 void set_free(t_set *set)
 {
 	t_context *C = ctx_get();
-	if(set->lst) scene_struct_delete(C->scene,set->lst);
+	if(set->blocks) scene_struct_delete(C->scene,set->blocks);
+	if(set->graphs) scene_struct_delete(C->scene,set->graphs);
 }
 	
 t_set *set_new(const char *name)
@@ -69,7 +95,8 @@ t_set *set_new(const char *name)
 	set_name(set->name,name);
 	set->users = 0;
 
-	set->lst = NULL;
+	set->blocks = NULL;
+	set->graphs = NULL;
 
 	return set;
 }

@@ -41,6 +41,7 @@ void ui_draw_graphs(void)
 		{
 			node = l->data;
 			graph = node->data;
+			graph_draw_blocks(graph);
 			graph_draw_bounding_box(graph);
 			graph_get_roots(graph);
 			graph_sort(graph);
@@ -242,7 +243,7 @@ void ui_draw_sets(void)
 	{
 		t_node *node = link->data;
 		t_set *set = node->data;
-		t_lst *lst = set->lst;
+		t_lst *lst = set->blocks;
 		t_link *l = lst->first;
 
 		if(l)
@@ -389,7 +390,7 @@ t_ui *ui_new(void)
 
 	ui->update_links = 1;
 	ui->use_threading = 0;
-	ui->use_graphs = 0;
+	ui->use_graphs = 1;
 	ui->threading_on = 0;
 	ui->graph_updated = 1;
 

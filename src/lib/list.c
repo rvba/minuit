@@ -810,6 +810,7 @@ void list_remove_by_name(t_lst *lst, const char *name)
 	}
 }
 
+
 void _link_free(t_link *link)
 {
 	free(link);
@@ -860,6 +861,35 @@ void list_remove_by_ptr(t_lst *lst,void *ptr)
 		if(l->data==ptr)
 		{
 			link=l;
+			break;
+		}
+	}
+
+	if(link)
+	{
+		lst_link_remove(lst,link);
+		scene_struct_delete(sc,link);
+	}
+	else
+	{
+		printf("[ERROR lst_remove_by_ptr] Can't find link\n");
+	}
+}
+
+void list_remove_by_id(t_lst *lst, int id)
+{
+	t_context *C = ctx_get();
+	t_scene *sc = C->scene;
+	t_link *link;
+	t_link *l;
+	t_generic *g;
+
+	for(l= lst->first; l; l = l->next)
+	{
+		g = (t_generic *) l->data;
+		if(g->id == id)
+		{
+			link = l;
 			break;
 		}
 	}

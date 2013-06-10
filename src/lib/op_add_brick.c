@@ -11,6 +11,7 @@
 #include "op.h"
 
 #include "context.h"
+#include "app.h"
 #include "node.h"
 #include "scene.h"
 #include "ctx.h"
@@ -27,28 +28,26 @@
 #include "brick.h"
 
 int set_draw_plug=1;
+int current_frame = 0;
+int block_pos_offset = 0;
 
 // GET LIST
-t_lst *get_target_list(t_context *C)
+
+t_set *get_current_set(t_context *C)
 {
 	if(C->scene->sets->first)
 	{
 		t_node *node  = C->scene->sets->first->data;
 		t_set  *set = node->data;
-		t_lst *lst = set->lst;
-
-		return lst;
+		return set;
 	}
 	else
 	{
 		op_new_set("set");
 
-		t_link *link = C->scene->sets->first;
-		t_node *node = link->data;
-		t_set *set = node->data;
-		t_lst *lst = set->lst;
-
-		return lst;
+		t_node *node  = C->scene->sets->first->data;
+		t_set  *set = node->data;
+		return set;
 	}
 }
 
@@ -90,26 +89,48 @@ void *add_brick_data(t_data_type type,void *data)
 
 // NEW BLOCK 
 
+void add_block_offset(t_context *C, t_block *block)
+{
+
+	t_link *link=block->bricks->first;
+	t_brick *brick=link->data;
+
+	int brick_height=brick->geom.height;
+	int tot_brick=block->tot_bricks;
+
+	block_pos_offset+=(brick_height*tot_brick);
+}
 
 t_node *add_block(t_context *C,const char *name)
 {
-	// get list
-	t_lst *list=get_target_list(C);
+	// Get Set
+	t_set *set = get_current_set(C);
+	t_lst *list=set->blocks;
 
+	// New Block
 	t_node *node_block=block_make(name,"block");
 	t_block *block=node_block->data;
 
 	// Draw Outline
 	block->state.draw_outline = 1;
 
-	// add to main list
+	// Add to Set
 	list_add(list,block);
+
+	// Store Set
+	block->set = set;
+
+	// Set Block Pos
+
+	if(current_frame != C->app->frame)
+	{
+		current_frame = C->app->frame;
+		block_pos_offset = 0;
+	}
 
 	float p[2];
 	ctx_get_mouse_pos(C,p);
-
-	// set block pos
-	vset3f(block->pos,p[0],p[1],0);
+	vset3f(block->pos,p[0],p[1]+block_pos_offset,0);
 
 	return node_block;
 }
@@ -1241,6 +1262,8 @@ t_node *add_for(t_context *C)
 
 	// Parent
 	plug_add_parent(plug_for,plug_vector);
+
+	block->state.is_a_loop = 1;
 
 	return node_block;
 }

@@ -27,6 +27,7 @@
 #include "brick.h"
 #include "obj.h"
 #include "viewport.h"
+#include "set.h"
 
 // store menu
 
@@ -46,7 +47,8 @@ void op_add_global(t_context *C,t_block *block)
 
 	global_pos+=(brick_height*tot_brick);
 
-	t_lst *set_lst = get_target_list(C);
+	t_set *set = get_current_set(C);
+	t_lst *set_lst = set->blocks;
 
 	list_add_global(set_lst,block);
 }

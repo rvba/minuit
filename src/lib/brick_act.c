@@ -34,7 +34,7 @@ int brick_check_loop(t_brick *brick)
 
 	if(brick->state.frame_loop != frame)
 	{
-		brick->state.frame_loop = frame;
+	//	brick->state.frame_loop = frame;
 		return 1;
 	}
 	else
@@ -259,7 +259,8 @@ void *op_slider(t_brick *brick)
 	plug_intern->cls->flow(plug_intern);
 
 	// trigger
-	if(brick_check_loop(brick) && brick->mode==bm_triggering) // (see:plug_update)
+	//if(brick_check_loop(brick) && brick->mode==bm_triggering) // (see:plug_update)
+	if(brick->mode==bm_triggering) // (see:plug_update)
 	{
 		// dragging
 		if(brick->state.is_draging)
@@ -378,6 +379,9 @@ void *op_slider_positive_non_zero(t_brick *brick)
 {
 	// slide
 	op_slider(brick);
+
+	//t_context *C = ctx_get();
+	//printf("%d slider positive %d\n",C->app->frame,drf_int(brick->plug_intern.data));
 
 	// set positive
 	int *val = brick->plug_intern.data;
@@ -1682,7 +1686,7 @@ void *op_set_vlst(t_brick *brick)
 		_pressed=0;
 		_released=1;
 	}
-
+	
 	if(C->app->mouse->button_left==button_released)
 	{
 		if(vlst->count != vlst->count_new) 

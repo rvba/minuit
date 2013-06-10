@@ -17,7 +17,9 @@
 #include "block.h"
 #include "brick.h"
 #include "graph.h"
+#include "set.h"
 
+// Reset Update State
 void block_reset(t_block *block)
 {
 	t_link *link;
@@ -32,37 +34,71 @@ void block_reset(t_block *block)
 	}
 }
 
+// Trigger Brick
+void block_brick_trigger(t_plug *plug)
+{
+	t_brick *brick = plug->brick;
+
+	if(!plug->state.is_updated)
+	{
+		brick->cls->trigger(brick);
+	}
+}
+
+// Open | Close Loop
+void block_set_loop_state(t_block *block, int state)
+{
+	t_graph *graph = block->graph;
+	if(graph)
+	{
+		// Set Loop On
+		if(state)
+		{
+			graph->start_loop = 1;
+			graph->end_loop = 0;
+		}
+		// Set Loop Off
+		else
+		{
+			graph->start_loop = 0;
+			graph->end_loop = 1;
+		}
+	}
+}
+
+// Trigger All Bricks
 void block_exec(t_block *block)
 {
 	t_link *link;
 	t_brick *brick;
 	t_plug *plug;
 
+	// Reset State
 	block_reset(block);
 
+	// Trigger
 	for(link=block->bricks->first;link;link=link->next)
 	{
 		brick = link->data;
 		plug = &brick->plug_intern;
+
+		// First: Parents
 		if(plug->parents)
 		{
 			t_link *l;
 			for(l=plug->parents->first;l;l=l->next)
 			{
 				t_plug *p = l->data;
-				t_brick *b = p->brick;
-				if(!p->state.is_updated)
-					b->cls->trigger(b);
+				block_brick_trigger(p);
 			}
 		}
-		else
-		{
-			if(!plug->state.is_updated)
-				brick->cls->trigger(brick);
-		}
+
+		// Then: this brick
+		block_brick_trigger(plug);
 	}
 }
 
+// Check If Block Is in List
 int block_in_lst(t_block *block, t_lst *lst)
 {
 	t_link *l;
@@ -74,6 +110,8 @@ int block_in_lst(t_block *block, t_lst *lst)
 	}
 	return 0;
 }
+
+// GET GRAPH
 
 t_lst *block_graph_get(t_context *C, t_plug *plug, t_lst *lst)
 {
@@ -87,34 +125,43 @@ t_lst *block_graph_get(t_context *C, t_plug *plug, t_lst *lst)
 	block = brick->block;
 
 	// Process Block If Not In List
+	// Prevent from Looping
 	if(!block_in_lst(block,lst))
 	{
+		// Add To List
 		list_add(lst,block);
 
+		// Check All Bricks in Block
 		for(l=block->bricks->first;l;l=l->next)
 		{
 			brick=l->data;
 
-			// In
+			// Plug In
 			p=&brick->plug_in;
 
+			// If Connected
 			if(p->state.is_connected) 
 			{
 				d = p->src;
+				// And Caller is Not the Same (Plug)
 				if((d->id != plug->id) && (p->id != plug->id))
 				{
+					// Get Graph
 					block_graph_get(C,d,lst);
 				}
 			}
 
-			// Out
+			// Plug Out
 			p=&brick->plug_out;
 
+			// If Connected
 			if(p->state.is_connected)
 			{
 				d = p->dst;
+				// And Caller is Not the Same (Plug)
 				if((d->id != plug->id) && (p->id != plug->id))
 				{
+					// Get Graph
 					block_graph_get(C,d,lst);
 				}
 			}
@@ -124,43 +171,7 @@ t_lst *block_graph_get(t_context *C, t_plug *plug, t_lst *lst)
 	return lst;
 }
 
-t_lst *block_left_branch_get(t_context *C, t_plug *plug, t_lst *lst)
-{
-	t_link *l;
-	t_plug *p;
-	t_plug *d;
-	t_brick *brick;
-	t_block *block;
-
-	brick = plug->brick;
-	block = brick->block;
-
-	// Process Block If Not In List
-	if(!block_in_lst(block,lst))
-	{
-		list_add(lst,block);
-
-		for(l=block->bricks->first;l;l=l->next)
-		{
-			brick=l->data;
-
-			// In
-			p=&brick->plug_in;
-
-			if(p->state.is_connected) 
-			{
-				d = p->src;
-				if((d->id != plug->id) && (p->id != plug->id))
-				{
-					block_left_branch_get(C,d,lst);
-				}
-			}
-		}
-	}
-
-	return lst;
-}
-
+// SPLIT
 
 void block_graph_split(t_block *block_self, t_plug *plug_self, t_block *block_dst, t_plug *plug_dst)
 {
@@ -172,84 +183,75 @@ void block_graph_split(t_block *block_self, t_plug *plug_self, t_block *block_ds
 	t_lst *lst_self = lst_new("lst");
 	t_lst *lst_dst = lst_new("lst");
 
+	// Get Graph For Both BLocks
 	block_graph_get(C,plug_self,lst_self);
 	block_graph_get(C,plug_dst,lst_dst);
 
-	if(lst_self->first && lst_dst->first)
+	// IF Graphs Are Not Equal (means One Block is not in Both Graphs)
+	if(!block_in_lst(block_self,lst_dst))
 	{
-		if(!block_in_lst(block_self,lst_dst))
+		t_graph *old_graph = block_self->graph;
+
+		// Buil New Graph
+		if(lst_self->tot > 1)
 		{
-			t_graph *old_graph = block_self->graph;
-
-			if(lst_self->tot > 1)
-			{
-				graph_build_from_list(lst_self);
-			}
-			else
-			{
-				block_self->graph=NULL;
-			}
-
-			if(lst_dst->tot > 1)
-			{
-				graph_build_from_list(lst_dst);
-			}
-			else
-			{
-				block_dst->graph=NULL;
-			}
-
-			scene_struct_delete(C->scene,old_graph);
-		}
-	}
-	else if(lst_self->first)
-	{
 			graph_build_from_list(lst_self);
-			scene_struct_delete(C->scene,block_dst->graph);
-			block_dst->graph=NULL;
-	}
-	else if(lst_dst->first)
-	{
+		}
+		// Or Not
+		else
+		{
+			graph_block_remove(block_self->graph, block_self);
+			block_self->set = get_current_set(C); 
+
+		}
+
+		if(lst_dst->tot > 1)
+		{
 			graph_build_from_list(lst_dst);
-			scene_struct_delete(C->scene,block_self->graph);
-			block_dst->graph=NULL;
-	}
-	else
-	{
-			scene_struct_delete(C->scene,block_self->graph);
-			block_self->graph=NULL;
-			block_dst->graph=NULL;
+		}
+		else
+		{
+			graph_block_remove(block_dst->graph, block_dst);
+			block_dst->set = get_current_set(C); 
+		}
+
+		// Delete Old Graph
+		graph_delete(old_graph);
 	}
 
 	free(lst_self);
 	free(lst_dst);
 }
 
+// Add Block To Graph
 void block_graph_add(t_block *self, t_block *dst)
 {
 	t_context *C = ctx_get();
 
+	// Each Block Have A Graph
 	if(self->graph && dst->graph)
 	{
 		graph_merge(self->graph,dst->graph);
 	}
+	// Only One Graph
 	else if(self->graph)
 	{
 		graph_block_add(self->graph, dst);
 	}
+	// Only One Graph
 	else if(dst->graph)
 	{
 		graph_block_add(dst->graph, self);
 	}
+	// No Graph
 	else
 	{
+		// Build New Graph
 		C->scene->store = 1;
-
-		t_node *node_graph = scene_add(C->scene,nt_graph,"graph");
-		t_graph *graph = node_graph->data;
-
+		t_graph *graph = graph_add("graph");
 		C->scene->store = 0;
 
+		// Add Blocks
 		graph_block_add(graph, self);
 		graph_block_add(graph, dst);
 	}
@@ -396,7 +398,8 @@ t_lst *block_get_connections(const char *gate,t_block *block)
 void _add_block(t_context *C,t_block *block)
 {
 	// get list
-	t_lst *list=get_target_list(C);
+	t_set *set = get_current_set(C);
+	t_lst *list = set->blocks;
 
 	// add to main list
 	list_add_global(list,block);
@@ -538,6 +541,7 @@ void block_cls_init(t_block *block)
 		}
 	}
 
+
 	if(!found)printf("[ERROR:cls_block_init] Unknown block type %s\n",block->type);
 }
 
@@ -616,6 +620,7 @@ t_block *block_rebind(t_scene *sc,void *ptr)
 
 	rebind(sc,"block","bricks",(void **)&block->bricks);
 	rebind(sc,"block","graph",(void **)&block->graph);
+	rebind(sc,"block","set",(void **)&block->set);
 
 	// reset
 	block->selected=NULL;
@@ -677,6 +682,8 @@ t_block *block_new(const char *name)
 	block->state.is_mouse_over=0;
 	block->state.update_geometry=1;
 	block->state.is_moveable = 1;
+	block->state.is_a_loop = 0;
+	block->state.is_in_graph = 0;
 
 	block->tot_bricks=0;
 	block->width=0;
@@ -684,6 +691,7 @@ t_block *block_new(const char *name)
 	block->graph_pos = 0;
 
 	block->graph = NULL;
+	block->set = NULL;
 
 	return block;
 }
