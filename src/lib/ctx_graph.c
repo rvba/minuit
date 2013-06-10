@@ -28,6 +28,7 @@ void ctx_set_exec(struct Context *C)
 	if(C->ui->update_links)
 	{
 		t_link *link;
+		C->event->loop_step = 0;
 
 		// For All Sets
 		for(link = C->scene->sets->first; link; link = link->next)

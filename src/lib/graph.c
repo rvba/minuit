@@ -25,6 +25,8 @@
 #include "app.h"
 #include "op.h"
 
+#include "event.h"
+
 void graph_delete(t_graph *graph)
 {
 	t_context *C = ctx_get();
@@ -86,6 +88,8 @@ void graph_exec_blocks(t_graph *graph)
 // Exec Graph
 void graph_exec(t_graph *graph)
 {
+	t_context *C = ctx_get();
+
 	if(graph->has_loop)
 	{
 		// Find Block Loop
@@ -96,6 +100,7 @@ void graph_exec(t_graph *graph)
 			// Do Loop
 			if(graph->start_loop)
 			{
+				C->event->loop_step++;
 				// Exec Blocks
 				graph_exec_blocks(graph);
 
