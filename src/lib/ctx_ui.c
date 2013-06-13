@@ -465,7 +465,7 @@ void ctx_ui(t_context *C)
 	ctx_ui_linking(C);
 
 	// sets exec
-	ctx_set_exec(C);
+	//ctx_set_exec(C);
 
 	// post exe
 	ctx_exe(C);

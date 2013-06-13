@@ -17,6 +17,22 @@
 #include "object.h"
 #include "clock.h"
 #include "system.h"
+#include "event.h"
+
+void *ctx_compute_graph(void *data)
+{
+	t_context *C=ctx_get();
+	t_process *process=(t_process *)data;
+
+	if(C->event->graph_computing)
+	{
+		process->busy=1;
+		ctx_set_exec(C);
+		process->busy=0;
+	}
+
+	return NULL;
+}
 
 void *ctx_compute(void *data)
 {
@@ -136,11 +152,21 @@ t_process *process_add(t_context *C,char *name,void*(* func)(void *ptr))
 
 void ctx_thread_init(t_context *C)
 {
+	// COMPUTE OBJECTS PROCESS
+	/*
 	t_process *process = process_new("main",ctx_compute);
 	
 	process->clock->limit=.1;
 	process_launch(process);
 	lst_add(C->engine->processes,process,"process_main");
+	*/
+
+	// GRAPH PROCESS
+	t_process *process_graph = process_new("graph",ctx_compute_graph);
+	
+	process_graph->clock->limit=.1;
+	process_launch(process_graph);
+	lst_add(C->engine->processes,process_graph,"graph");
 }
 
 void process_free(t_process *process)

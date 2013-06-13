@@ -18,6 +18,8 @@
 #include "viewport.h"
 #include "list.h"
 #include "object.h"
+#include "engine.h"
+#include "process.h"
 
 
 // RENDER PASS
@@ -144,14 +146,59 @@ void ctx_render_scene_full_pass(t_context *C)
 
 void ctx_render_start(t_context *C)
 {
-	draw_render_start(C);
-	ui_draw_start(C);
+	if(!C->event->graph_computing)
+	{
+		if(C->event->graph_updated)
+		{
+			draw_render_start(C);
+			ui_draw_start(C);
+		}
+	}
 }
 
 void ctx_render_stop(t_context *C)
 {
-	draw_render_stop(C);
-	ui_draw_stop(C);
+	if(!C->event->graph_computing)
+	{
+		if(C->event->graph_updated)
+		{
+			draw_render_stop(C);
+			ui_draw_stop(C);
+		}
+	}
+}
+
+void ctx_render_check_thread(t_context *C)
+{
+	// Get Process
+	t_process *graph_process = engine_process_get(C->engine,"graph");
+
+	// If Thread Being Computed
+	if(C->event->graph_computing)
+	{
+		// If Is Done
+		if(!graph_process->busy)
+		{
+			// Set Updated
+			C->event->graph_updated = 1;
+			C->event->graph_computing = 0;
+
+			ctx_render_stop(C);
+			ctx_render_start(C);
+		}
+	}
+	// Else Start Computing
+	else
+	{
+		if(!C->event->graph_init)
+		{
+			C->event->graph_init = 1;
+			ctx_render_start(C);
+		}
+
+		C->event->graph_computing = 1;
+		C->event->graph_updated = 0;
+	}
 }
 
 void ctx_render(t_context *C)
@@ -178,8 +225,11 @@ void ctx_render(t_context *C)
 
 		C->event->use_threading = t;
 
+		// Check Thread
+		ctx_render_check_thread(C);
+
 		// Start
-		if(C->event->use_threading) ctx_render_start(C);
+		//if(C->event->use_threading) ctx_render_start(C);
 
 		// Render Pass
 		if(C->draw->with_draw_pass)
@@ -196,6 +246,6 @@ void ctx_render(t_context *C)
 		if(C->event->video_record) ctx_render_video(C);
 
 		// Stop
-		if(C->event->use_threading) ctx_render_stop(C);
+		//if(C->event->use_threading) ctx_render_stop(C);
 	}
 }

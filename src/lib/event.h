@@ -198,6 +198,9 @@ struct Event
 	int load_error;
 
 	int use_threading;
+	int graph_computing;
+	int graph_updated;
+	int graph_init;
 
 };
 

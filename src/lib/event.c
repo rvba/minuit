@@ -130,6 +130,9 @@ t_event *event_new(void)
 	event->load_error = 0;
 
 	event->use_threading = 1;
+	event->graph_computing = 0;
+	event->graph_updated = 1;
+	event->graph_init = 0;
 	
 	return event;
 }

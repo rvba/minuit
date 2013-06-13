@@ -61,7 +61,6 @@ void exe_vlst(t_dict *args)
 
 void vlst_update_data(t_vlst *vlst,t_vlst *caller)
 {
-	printf("vlst update data\n");
 	t_action *action = action_new("action");
 
 	action->act = exe_vlst;

@@ -471,7 +471,6 @@ void ui_draw(void)
 	}
 }
 
-
 // INIT
 
 void ui_init(void)
