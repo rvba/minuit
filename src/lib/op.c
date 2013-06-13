@@ -146,6 +146,7 @@ t_node *make_menu_app(void)
 
 	add_brick_switch(C,block,"loop",&C->app->loop);
 	add_brick_switch(C,block,"rec save",&C->event->rec_save);
+	add_brick_switch(C,block,"use threading",&C->event->use_threading);
 
 	return menu;
 }

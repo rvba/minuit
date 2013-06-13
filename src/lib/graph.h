@@ -33,6 +33,7 @@ typedef struct Graph
 
 }t_graph;
 
+void 		graph_draw(t_graph *graph);
 void 		graph_delete(t_graph *graph);
 void 		graph_exec(t_graph *graph);
 void 		graph_sort(t_graph *graph);
@@ -47,6 +48,9 @@ void 		graph_block_remove(t_graph *graph, struct Block *block);
 t_graph *	graph_add(const char *name);
 void 		graph_init(t_graph *graph);
 t_graph *	graph_rebind(struct Scene *sc,void *ptr);
+
+t_graph *	graph_clone(t_graph *graph);
+void 		_graph_free(t_graph *graph);
 void 		graph_free(t_graph *graph);
 t_graph *	graph_new(const char *name);
 

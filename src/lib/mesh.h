@@ -118,6 +118,8 @@ struct Mesh
 
 void		mesh_uv_add(t_mesh *mesh,int *uvs,int totuv);
 t_mesh*		mesh_new(const char *name);
+
+void		 _mesh_free(t_mesh *mesh);
 void 		mesh_free(t_mesh *mesh);
 void 		mesh_update(t_mesh *mesh);
 
@@ -131,9 +133,12 @@ t_node*		mesh_make(
 			int *quads,
 			int *tris);
 
-void *mesh_get_ref(t_mesh *mesh, const char *ref);
+t_mesh *	mesh_clone(t_mesh *mesh);
+void *		mesh_get_ref(t_mesh *mesh, const char *ref);
 t_mesh*		mesh_rebind(t_scene *sc,void *ptr);
 void 		mesh_init(t_scene *sc,t_mesh *mesh);
+
+t_mesh *	mesh_clone(t_mesh *mesh);
 
 
 // MESH_BUFFER

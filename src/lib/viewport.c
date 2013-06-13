@@ -61,6 +61,30 @@ t_node *viewport_add(const char *name)
 	return node;
 }
 
+// CLONE
+
+t_viewport *viewport_clone(t_viewport *viewport)
+{
+	if(viewport)
+	{
+		t_viewport *clone = viewport_new(viewport->name);
+
+		clone->width = viewport->width;
+		clone->height = viewport->height;
+		
+		clone->x = viewport->x;
+		clone->y = viewport->y;
+		clone->camera = camera_clone(viewport->camera);
+		clone->draw = viewport->draw;
+
+		return clone;
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
 
 // MAKE
 
@@ -83,6 +107,13 @@ t_node *viewport_make(const char *name)
 
 	return node_viewport;
 }
+
+void _viewport_free(t_viewport *viewport)
+{
+	if(viewport->camera) _camera_free(viewport->camera);
+	free(viewport);
+}
+
 
 void viewport_free(t_viewport *viewport)
 {

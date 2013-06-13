@@ -15,6 +15,10 @@
 #include "event.h"
 #include "term.h"
 #include "list.h"
+#include "brick.h"
+#include "block.h"
+#include "viewport.h"
+#include "graph.h"
 
 
 t_link *lst_link_get(t_lst *lst, int pos)
@@ -338,11 +342,12 @@ void lst_show(t_lst *lst)
 	printf("~\n");
 	t_link *l;
 	int i=0;
-	if(lst->first) printf("first: %d\n",lst->first->order);
-	if(lst->last) printf("last: %d\n",lst->last->order);
+	//if(lst->first) printf("first: %d\n",lst->first->order);
+	//if(lst->last) printf("last: %d\n",lst->last->order);
 	for(l=lst->first;l;l=l->next)
 	{
-		printf("%d %d %s\n",i,l->order,l->name);
+		//printf("%d %d %s\n",i,l->order,l->name);
+		printf("%d %s\n",l->order,l->name);
 		i++;
 	}
 	printf("~\n");
@@ -816,6 +821,46 @@ void _link_free(t_link *link)
 	free(link);
 }
 
+// CLONE
+
+t_lst *lst_clone(t_lst *lst, t_data_type type)
+{
+	if(lst)
+	{
+		t_lst *clone = lst_new("clone");
+		t_link *link;
+		for(link=lst->first;link;link=link->next)
+		{
+			switch(type)
+			{
+				case(dt_block):
+					lst_add(clone,block_clone(link->data),"block");
+					break;
+				case(dt_brick):
+					lst_add(clone,brick_clone(link->data),"brick");
+					break;
+				case(dt_viewport):
+					lst_add(clone,viewport_clone(link->data),"viewport");
+					break;
+				case(dt_graph):
+					lst_add(clone,graph_clone(link->data),"graph");
+					break;
+				default:
+					printf("[lst_clone WARNING] Unknown type %s\n",data_name_get(type));
+					break;
+			}
+		}
+		//lst_show(clone);
+
+		return clone;
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
+
 
 // free links && list 
 // but not the data it points to
@@ -831,6 +876,36 @@ void list_free(t_lst *lst)
 		scene_struct_delete(sc,l);
 	}
 
+	free(lst);
+}
+
+void _list_free(t_lst *lst, t_data_type type)
+{
+	t_link *link;
+
+	for(link=lst->first;link;link=link->next)
+	{
+		switch(type)
+		{
+			case(dt_block):
+				_block_free(link->data);
+				break;
+			case(dt_brick):
+				_brick_free(link->data);
+				break;
+			case(dt_viewport):
+				_viewport_free(link->data);
+				break;
+			case(dt_graph):
+				_graph_free(link->data);
+				break;
+			default:
+				printf("[WARNING _list_free] Unknown type %s\n",data_name_get(type));
+				break;
+		}
+	}
+
+	lst_cleanup(lst);
 	free(lst);
 }
 

@@ -170,7 +170,7 @@ void screen_sets(t_screen *screen)
 	ui_draw_status_bar();
 	ui_draw_term();
 	ui_draw_grid();
-	ui_draw_graphs();
+	//ui_draw_graphs();
 
 	glPushMatrix();
 	glLoadIdentity();
@@ -224,7 +224,47 @@ void screen_bricks(t_screen *screen)
 	op_camera_switch_3d(C, camera);
 }
 
+// CLONE
+
+t_screen *screen_clone(t_screen *screen)
+{
+	if(screen)
+	{
+		t_screen *clone = screen_new(screen->name);
+
+		clone->is_active = screen->is_active;
+		clone->is_visible = screen->is_visible;
+		clone->always_active = screen->always_active;
+		clone->always_visible = screen->always_visible;
+		clone->width = screen->width;
+		clone->height = screen->height;
+		clone->zoom = screen->zoom;
+		clone->pan_x = screen->pan_x;
+		clone->pan_y = screen->pan_y;
+
+		clone->blocks = lst_clone(screen->blocks, dt_block);
+		clone->viewports = lst_clone(screen->viewports, dt_viewport);
+
+		clone->draw = screen->draw;
+		clone->keymap = screen->keymap;
+
+		return clone;
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
 // FREE
+
+void _screen_free(t_screen *screen)
+{
+	if(screen->blocks) _list_free(screen->blocks, dt_block);
+	if(screen->viewports) _list_free(screen->viewports,dt_viewport);
+
+	free(screen);
+}
 
 void screen_free(t_screen *screen)
 {

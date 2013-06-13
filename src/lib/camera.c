@@ -24,6 +24,7 @@ t_camera_cls cls_camera=
 	.init=cls_camera_init,
 };
 
+/*
 t_camera *camera_clone(t_camera *source)
 {
 	t_node *node_target = camera_make("clone");
@@ -32,6 +33,7 @@ t_camera *camera_clone(t_camera *source)
 
 	return target;
 }
+*/
 
 void camera_show(t_camera *camera)
 {
@@ -80,6 +82,11 @@ void camera_copy(t_camera *target,t_camera *source)
 	target->frame=source->frame;
 }
 
+void _camera_free(t_camera *camera)
+{
+	free(camera);
+}
+
 void camera_free(t_camera *camera)
 {
 	free(camera);
@@ -121,6 +128,48 @@ void *camera_get_ref(t_camera *camera, const char *ref)
 
 	return p;
 }
+
+t_camera *camera_clone(t_camera *camera)
+{
+	t_camera *clone = camera_new(camera->name);
+
+	clone->cls = camera->cls;
+	clone->is_moving = camera->is_moving;
+	clone->type = camera->type;
+	clone->frame = camera->frame;
+	clone->restrict_matrix = camera->restrict_matrix;
+	clone->speed = camera->speed;
+
+	vcp3f(clone->eye,camera->eye);
+	vcp3f(clone->target,camera->target);
+	vcp3f(clone->up,camera->up);
+	vcp3f(clone->pos,camera->pos);
+	vcp3f(clone->cross,camera->cross);
+
+	clone->zenith = camera->zenith;
+
+	clone->ortho_view = camera->ortho_view;
+	clone->ortho_zoom = camera->ortho_zoom;
+	clone->angle = camera->angle;
+	clone->ortho_near = camera->ortho_near;
+	clone->ortho_far = camera->ortho_far;
+
+	vcp3f(clone->ortho_location,camera->ortho_location);
+	vcp3f(clone->ortho_rotation,camera->ortho_rotation);
+
+	clone->left = camera->left;
+	clone->right = camera->right;
+	clone->bottom = camera->bottom;
+	clone->top = camera->top;
+
+	clone->aspect = camera->aspect;
+	clone->fovy = camera->fovy;
+	clone->near = camera->near;
+	clone->far = camera->far;
+
+	return clone;
+
+};
 
 t_camera *camera_rebind(t_scene *scene, void *ptr)
 {

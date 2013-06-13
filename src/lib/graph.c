@@ -27,6 +27,15 @@
 
 #include "event.h"
 
+
+void graph_draw(t_graph *graph)
+{
+	graph_draw_blocks(graph);
+	graph_draw_bounding_box(graph);
+	graph_get_roots(graph);
+	graph_sort(graph);
+}
+
 void graph_delete(t_graph *graph)
 {
 	t_context *C = ctx_get();
@@ -492,6 +501,33 @@ void graph_init(t_graph *graph)
 	graph->end_loop = 0;
 }
 
+// CLONE
+
+t_graph *graph_clone(t_graph *graph)
+{
+	if(graph)
+	{
+		t_graph *clone = graph_new(graph->name);
+
+		clone->blocks = lst_clone(graph->blocks, dt_block);
+		// XXX
+		clone->set = NULL;
+
+		/*
+		clone->has_loop = graph->has_loop ;
+		clone->start_loop = graph->start_loop;
+		clone->end_loop = graph->end_loop;
+		*/
+
+		return clone;
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
+
 // REBIND
 
 t_graph *graph_rebind(t_scene *sc,void *ptr)
@@ -506,12 +542,17 @@ t_graph *graph_rebind(t_scene *sc,void *ptr)
 
 // FREE
 
+void _graph_free(t_graph *graph)
+{
+	if(graph->blocks) _list_free(graph->blocks, dt_block);
+	free(graph);
+}
+
 void graph_free(t_graph *graph)
 {
 	t_context *C = ctx_get();
 	if(graph->blocks)
 	{
-
 		scene_struct_delete(C->scene,graph->blocks);
 	}
 }

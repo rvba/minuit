@@ -33,8 +33,10 @@ struct Material
 	float s_color[4];
 };
 
-void *material_get_ref(t_material *material, const char *ref);
-void material_free(t_material *material);
+t_material *	material_clone(t_material *material);
+void *		material_get_ref(t_material *material, const char *ref);
+void 		material_free(t_material *material);
+void		 _material_free(t_material *material);
 t_material*	material_new(const char *name);
 t_material*	material_rebind(struct Scene *sc,void *ptr);
 

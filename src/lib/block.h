@@ -107,6 +107,7 @@ int 		block_is_connected(const char *gate, t_block *block);
 struct Lst 		*block_get_connections(const char *gate,t_block *block);
 t_block *	block_copy(t_block *block);
 t_block *	block_clone(t_block *block);
+t_block *	block_dupli(t_block *block);
 struct Brick*	block_brick_get(t_block *block,const char *name);
 void 		block_brick_add(t_block *block,struct Node *node_brick);
 struct Node*		block_create(const char *name);
@@ -147,6 +148,8 @@ void block_set_loop_state(t_block *block, int state);
 void 		block_exec(t_block *block);
 
 void block_brick_trigger(struct Plug *plug);
+
+void _block_free(t_block *block);
 
 #endif
 

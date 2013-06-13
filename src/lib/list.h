@@ -111,6 +111,7 @@ void 		vlst_add_number(t_vlst *vlst,t_data_type type,void *data);
 
 t_vlst *	vlst_duplicate(t_vlst *vlst);
 void 		vlst_set(t_vlst *vlst,int i);
+t_vlst *vlst_clone(t_vlst *vlst);
 
 
 // LST
@@ -172,5 +173,8 @@ void 		link_free(t_link *link);
 
 t_link *	link_new(const char *name);
 void 		link_free(t_link *link);
+
+void _list_free(t_lst *lst, t_data_type type);
+t_lst *lst_clone(t_lst *lst, t_data_type type);
 
 #endif

@@ -599,7 +599,7 @@ void cls_brick_update(t_brick *brick)
 					t_block *clone_block;
 
 					if(C->event->brick_cloning)
-						clone_block = block_clone(brick->block);
+						clone_block = block_dupli(brick->block);
 					else
 						clone_block = block_copy(brick->block);
 

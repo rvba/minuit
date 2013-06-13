@@ -199,7 +199,7 @@ void 		brick_copy_data(struct Brick *dst, struct Brick *src);
 void 		brick_binding_add(struct Brick *brick, enum Data_Type type, void *data);
 void 		plug_child_remove_all_parents(struct Plug *child);
 struct Brick *	brick_copy(struct Block *block,struct Brick *brick);
-struct Brick *	brick_clone(struct Block *block,struct Brick *brick);
+struct Brick *	brick_dupli(struct Block *block,struct Brick *brick);
 void 		plug_color_init(struct Plug *plug);
 
 void 		plug_init( struct Plug *plug, enum Data_Type type, struct Brick *brick, void *data_target, int duplicate);
@@ -214,6 +214,7 @@ void 		brick_change_type_by_name(struct Brick *brick,enum Data_Type type);
 void 		brick_init(struct Scene *sc,struct Brick *brick);
 void 		_brick_init(struct Brick *brick);
 
+t_brick *	brick_clone(t_brick *brick);
 struct Brick *	brick_new(const char *name);
 void *		brick_get_ref(struct Brick *brick, const char *ref);
 struct Brick *	brick_rebind(struct Scene *sc,void *ptr);
@@ -336,5 +337,6 @@ void 		brick_build_txt(struct Brick *brick);
 struct Plug *	brick_get_src(struct Brick *brick);
 
 int 		brick_get_width(struct Brick *brick);
+void _brick_free(t_brick *brick);
 
 #endif

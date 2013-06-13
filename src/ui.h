@@ -27,6 +27,8 @@
 
 float intro_intensity;
 
+struct Context;
+
 typedef struct Ui
 {
 	int draw; // draw the ui
@@ -131,6 +133,9 @@ void ui_draw_status_bar(void);
 void ui_draw_debug(void);
 void ui_draw_term(void);
 void ui_draw_grid(void);
+
+void ui_draw_start(struct Context *C);
+void ui_draw_stop(struct Context *C);
 
 t_ui *ui_new(void);
 int op_ui_alphabet_switch(struct Node *node);

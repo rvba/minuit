@@ -164,8 +164,8 @@ void ctx_update(t_context *C)
 
 void ctx_handler(void)
 {
-	ctx_render(CONTEXT);
 	ctx_update(CONTEXT);
+	ctx_render(CONTEXT);
 	ctx_reset(CONTEXT);
 }
 

@@ -136,6 +136,40 @@ void object_data_add(t_node *node,void *ptr)
 	object->data=ptr;
 }
 
+// REF
+
+void *object_get_ref(t_object *object, const char *ref)
+{
+	void *p;
+
+	if(is(ref,"loc_x"))  p=&object->loc[0]; 
+	else if(is(ref,"loc_y"))  	p=&object->loc[1]; 
+	else if(is(ref,"loc_z"))  	p=&object->loc[2]; 
+	else if(is(ref,"rot_x"))  	p=&object->rot[0]; 
+	else if(is(ref,"rot_y"))  	p=&object->rot[1]; 
+	else if(is(ref,"rot_z"))  	p=&object->rot[2]; 
+	else if(is(ref,"scl_x"))  	p=&object->size[0]; 
+	else if(is(ref,"scl_y"))  	p=&object->size[1]; 
+	else if(is(ref,"scl_z"))  	p=&object->size[2]; 
+	else
+	{
+		printf("[ERROR object_get_ref] Unknown ref %s \n",ref);
+		return NULL;
+	}
+
+	return p;
+}
+
+// REMOVE
+
+void _object_free(t_object *object)
+{
+	if(object->mesh) _mesh_free(object->mesh);
+	// object->data is NULL 
+	// object->ref is NULL
+	// object->blocks is NULL
+}
+
 // FREE
 
 void object_free(t_object *object)
@@ -171,28 +205,39 @@ void object_free(t_object *object)
 	free(object);
 }
 
-// REF
 
-void *object_get_ref(t_object *object, const char *ref)
+// CLONE
+
+t_object *object_clone(t_object *object)
 {
-	void *p;
+	if(object)
+	{
+		t_object *clone = object_new(object->name);
 
-	if(is(ref,"loc_x"))  p=&object->loc[0]; 
-	else if(is(ref,"loc_y"))  	p=&object->loc[1]; 
-	else if(is(ref,"loc_z"))  	p=&object->loc[2]; 
-	else if(is(ref,"rot_x"))  	p=&object->rot[0]; 
-	else if(is(ref,"rot_y"))  	p=&object->rot[1]; 
-	else if(is(ref,"rot_z"))  	p=&object->rot[2]; 
-	else if(is(ref,"scl_x"))  	p=&object->size[0]; 
-	else if(is(ref,"scl_y"))  	p=&object->size[1]; 
-	else if(is(ref,"scl_z"))  	p=&object->size[2]; 
+		vcp3f(clone->loc,object->loc);
+		vcp3f(clone->rot,object->rot);
+		vcp3f(clone->size,object->size);
+		vcp3i(clone->idcol,object->idcol);
+		
+		clone->mesh = mesh_clone(object->mesh);
+		clone->data = NULL;
+		clone->blocks = NULL;
+		clone->ref = NULL;
+
+		clone->is_selected = object->is_selected;
+
+		clone->update = object->update;
+		clone->action = object->action;
+		clone->draw = object->draw;
+
+		clone->cls = object->cls;
+
+		return clone;
+	}
 	else
 	{
-		printf("[ERROR object_get_ref] Unknown ref %s \n",ref);
 		return NULL;
 	}
-
-	return p;
 }
 
 // REBIND

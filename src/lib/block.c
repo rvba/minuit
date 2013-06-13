@@ -405,7 +405,7 @@ void _add_block(t_context *C,t_block *block)
 	list_add_global(list,block);
 }
 
-t_block *block_clone(t_block *block)
+t_block *block_dupli(t_block *block)
 {
 	t_context *C=ctx_get();
 	C->scene->store=1;
@@ -425,7 +425,7 @@ t_block *block_clone(t_block *block)
 	for(l=block->bricks->first;l;l=l->next)
 	{
 		b=l->data;
-		brick_clone(clone_block,b);
+		brick_dupli(clone_block,b);
 	}
 
 	C->scene->store=0;
@@ -605,6 +605,41 @@ void block_operator_brick_init(t_node *node_brick)
 	brick->state.draw_name=0;
 }
 
+// CLONE
+
+t_block *block_clone(t_block *block)
+{
+	if(block)
+	{
+		t_block *clone = block_new(block->name);
+
+		vcp3i(clone->idcol,block->idcol);
+		set_name(clone->type,block->type);
+		vcp3f(clone->pos,block->pos);
+		clone->width = block->width;
+		clone->height = block->height;
+		clone->state = block->state;
+		clone->tot_bricks = block->tot_bricks;
+		clone->graph_order = block->graph_order;
+		clone->graph_pos = block->graph_pos;
+		clone->bricks = lst_clone(block->bricks,dt_brick);
+
+		clone->submenu = NULL;
+		clone->selected = NULL; 
+		clone->graph = NULL; 
+		
+		//XXX init cls ???
+		clone->cls = block->cls;
+		
+		return clone;
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
+
 // INIT
 
 void block_init(t_scene *sc,t_block *block)
@@ -652,6 +687,44 @@ t_node *block_make(const char *name,const char *type)
 	return n_block;
 }
 
+void _block_free(t_block *block)
+{
+	if(block->bricks) _list_free(block->bricks, dt_brick);
+	free(block);
+}
+
+// FREE BRICKS
+
+void block_bricks_free(t_block *block)
+{
+	t_context *C=ctx_get();
+
+	t_scene *sc=C->scene;
+
+	t_link *l;
+	t_brick *b;
+
+	for(l=block->bricks->first;l;l=l->next)
+	{
+		b=l->data;
+		scene_struct_delete(sc,b);
+	}
+}
+
+// FREE BLOCK
+
+void block_free(t_block *block)
+{
+	t_context *C=ctx_get();
+	t_scene *sc=C->scene;
+
+	// free bricks
+	block_bricks_free(block);
+
+	// free lst
+	scene_struct_delete(sc,block->bricks);
+}
+
 // NEW
 
 t_block *block_new(const char *name)
@@ -696,34 +769,3 @@ t_block *block_new(const char *name)
 	return block;
 }
 
-// FREE BRICKS
-
-void block_bricks_free(t_block *block)
-{
-	t_context *C=ctx_get();
-
-	t_scene *sc=C->scene;
-
-	t_link *l;
-	t_brick *b;
-
-	for(l=block->bricks->first;l;l=l->next)
-	{
-		b=l->data;
-		scene_struct_delete(sc,b);
-	}
-}
-
-// FREE BLOCK
-
-void block_free(t_block *block)
-{
-	t_context *C=ctx_get();
-	t_scene *sc=C->scene;
-
-	// free bricks
-	block_bricks_free(block);
-
-	// free lst
-	scene_struct_delete(sc,block->bricks);
-}

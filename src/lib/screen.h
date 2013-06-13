@@ -72,9 +72,13 @@ void screen_intro(t_screen *screen);
 void screen_bricks(t_screen *screen);
 void screen_generic(t_screen *screen);
 void screen_main(t_screen *screen);
-void screen_free(t_screen *screen);
-t_screen *screen_rebind(struct Scene *scene, void *ptr);
-t_screen *screen_new(const char *name);
-void screen_init(void);
+
+
+t_screen *	screen_clone(t_screen *screen);
+t_screen *	screen_rebind(struct Scene *scene, void *ptr);
+void 		_screen_free(t_screen *screen);
+void 		screen_free(t_screen *screen);
+t_screen *	screen_new(const char *name);
+void 		screen_init(void);
 
 #endif

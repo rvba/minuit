@@ -86,6 +86,7 @@ inline void vcp3f(float t[3],float s[3]);
 inline void vcpi(int t[3],int s[3]);
 inline void vset3i(int v[3],int a,int b,int c);
 inline void vcp3i(int t[3],int s[3]);
+inline void vcp4i(int t[4],int s[4]);
 inline void vset4i(int *v,int a,int b,int c,int d);
 inline void vset3f(float *v,float a,float b,float c);
 inline void vset4f(float *v,float a,float b,float c,float d);

@@ -62,7 +62,7 @@ struct Object
 };
 
 // METHODS
-void *object_get_ref(t_object *object, const char *ref);
+void *		object_get_ref(t_object *object, const char *ref);
 
 void 		object_mesh_add(t_node *node,t_node *mesh);
 void 		object_draw_add(t_node *node,void (* func)(t_node *node));
@@ -75,11 +75,14 @@ void 		cls_object_draw_camera(t_object *object);
 void 		cls_object_draw_mesh(t_object *object);
 void 		cls_object_draw_light(t_object *object);
 
+t_object *	object_clone(t_object *object);
 t_object *	object_rebind(t_scene *sc,void *ptr);
 void 		object_build(t_object *object,const char *type);
 t_node *	object_make(const char *type,const char *name);
 t_node *	object_add(const char *type,const char *name);
 t_object*	object_new(const char *name);
+
+void _object_free(t_object *object);
 void 		object_free(t_object *object);
 
 

@@ -58,6 +58,8 @@ t_node *set_add(const char *name)
 	return node_set;
 }
 
+// MAKE
+
 t_node *set_make(const char *name)
 {
 	t_context *C = ctx_get();
@@ -79,12 +81,42 @@ t_node *set_make(const char *name)
 	return node_set;
 };
 
+// CLONE
+
+t_set *set_clone(t_set *set)
+{
+	if(set)
+	{
+		t_set *clone = set_new(set->name);
+		clone->blocks = lst_clone(set->blocks, dt_block);
+		clone->graphs = lst_clone(set->graphs, dt_graph);
+
+		return clone;
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
+void _set_free(t_set *set)
+{
+	if(set->blocks) _list_free(set->blocks, dt_block);
+	if(set->graphs) _list_free(set->graphs, dt_graph);
+
+	free(set);
+}
+
+// FREE
+
 void set_free(t_set *set)
 {
 	t_context *C = ctx_get();
 	if(set->blocks) scene_struct_delete(C->scene,set->blocks);
 	if(set->graphs) scene_struct_delete(C->scene,set->graphs);
 }
+
+// NEW
 	
 t_set *set_new(const char *name)
 {

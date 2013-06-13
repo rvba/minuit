@@ -18,12 +18,42 @@
 
 /***		TEXTURE		***/
 
+// CLONE 
+
+t_texture *texture_clone(t_texture *texture)
+{
+	if(texture)
+	{
+		t_texture *clone = texture_new(texture->name);
+
+		vcp3i(clone->idcol,texture->idcol);
+		clone->width = texture->width;
+		clone->height = texture->height;
+		clone->format = texture->format;
+		clone->internal_format = texture->internal_format;
+		clone->id_gl = texture->id_gl;
+		clone->texels = NULL;//XXX
+
+		return clone;
+	}
+	else
+	{
+		return NULL;
+	}
+} 
+
 // FREE
 
 void texture_free(t_texture *texture)
 {
 	if(texture->name) free(texture->name);
 	if(texture->texels) free(texture->texels);
+}
+
+void _texture_free(t_texture *texture)
+{
+	if(texture->texels) free(texture->texels);
+	free(texture);
 }
 
 // REBIND

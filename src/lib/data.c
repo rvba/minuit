@@ -37,6 +37,10 @@ char name_operator[] = "operator";
 char name_vector[] = "vector";
 char name_viewport[] = "viewport";
 
+char name_brick[] = "brick";
+char name_block[] = "block";
+char name_graph[] = "graph";
+char name_set[] = "set";
 
 void cls_data_init(t_data *data)
 {
@@ -71,6 +75,10 @@ char *data_name_get(t_data_type type)
 		case dt_operator: return name_operator; break;
 		case dt_vector: return name_vector; break;
 		case dt_viewport: return name_viewport; break;
+		case dt_brick: return name_brick; break;
+		case dt_block: return name_block; break;
+		case dt_set: return name_set; break;
+		case dt_graph: return name_graph; break;
 		default: return name_default; break;
 	}
 }
@@ -251,6 +259,7 @@ void *data_copy(t_data_type type,void *data)
 	t_vlst *vlst_old;
 
 	int *_int_new;
+	unsigned int *_uint_new;
 
 	switch(type)
 	{
@@ -267,6 +276,14 @@ void *data_copy(t_data_type type,void *data)
 			_int_new = (int *)data_new;
 
 			return _int_new;
+
+			break;
+
+		case dt_uint:
+
+			_uint_new = (unsigned int *)data_new;
+
+			return _uint_new;
 
 			break;
 

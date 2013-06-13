@@ -317,6 +317,62 @@ void mesh_var_init(t_mesh_var *var)
 	var->offset=0;
 }
 
+// CLONE
+
+t_mesh *mesh_clone(t_mesh *mesh)
+{
+	if(mesh)
+	{
+		t_mesh *clone = mesh_new(mesh->name);
+
+		clone->state.has_face = mesh->state.has_face;
+		clone->state.has_tri = mesh->state.has_tri;
+		clone->state.has_quad = mesh->state.has_quad;
+		clone->state.has_color = mesh->state.has_color;
+		clone->state.with_texture = mesh->state.with_texture;
+		clone->state.with_line = mesh->state.with_line;
+		clone->state.with_point = mesh->state.with_point;
+		clone->state.is_selected = mesh->state.is_selected;
+		clone->state.need_update = mesh->state.need_update;
+		clone->state.buffer_type = mesh->state.buffer_type;
+		clone->state.is_buffer_built = mesh->state.is_buffer_built;
+
+		clone->var.tot_vertex = mesh->var.tot_vertex;
+		clone->var.tot_face = mesh->var.tot_face;
+		clone->var.tot_quad_face = mesh->var.tot_quad_face;
+		clone->var.tot_tri_face = mesh->var.tot_tri_face;
+		clone->var.totline = mesh->var.totline;
+		clone->var.offset = mesh->var.offset;
+
+		clone->texture = texture_clone(mesh->texture);
+		clone->material = material_clone(mesh->material);
+		//clone->lines = 
+		clone->texture_id = mesh->texture_id;
+		clone->vertex = vlst_clone(mesh->vertex);
+		clone->quads = vlst_clone(mesh->quads);
+		clone->tris = vlst_clone(mesh->tris);
+		clone->uvs = vlst_clone(mesh->uvs);
+		clone->colors = vlst_clone(mesh->colors);
+		clone->quad_vertex = vlst_clone(mesh->quad_vertex);
+		clone->quad_face = vlst_clone(mesh->quad_face);
+		clone->quad_normal = vlst_clone(mesh->quad_normal);
+		clone->quad_color = vlst_clone(mesh->quad_color);
+		clone->quad_uv = vlst_clone(mesh->quad_uv);
+		clone->tri_vertex = vlst_clone(mesh->tri_vertex);
+		clone->tri_face = vlst_clone(mesh->tri_face);
+		clone->tri_normal = vlst_clone(mesh->tri_normal);
+		clone->tri_color = vlst_clone(mesh->tri_color);
+		clone->tri_uv = vlst_clone(mesh->tri_uv);
+
+		return clone;
+	}
+	else
+	{
+		// Light Object
+		return NULL;
+	}
+}
+
 // NEW
 
 t_mesh *mesh_new(const char *name)
@@ -335,8 +391,6 @@ t_mesh *mesh_new(const char *name)
 	mesh->material=NULL;
 	mesh->lines=NULL;
 	mesh->texture_id=0;
-	mesh->texture=NULL;
-	mesh->material=NULL;
 
 	mesh->vertex=NULL;
 	mesh->quads=NULL;
@@ -360,6 +414,31 @@ t_mesh *mesh_new(const char *name)
 }
 
 // FREE
+
+void _mesh_free(t_mesh *mesh)
+{
+	if (mesh->vertex) vlst_free(mesh->vertex); 
+	if (mesh->quads) vlst_free(mesh->quads);
+	if (mesh->tris) vlst_free(mesh->tris);
+	if (mesh->uvs) vlst_free(mesh->uvs);
+
+	if (mesh->quad_vertex) vlst_free(mesh->quad_vertex);
+	if (mesh->quad_face) vlst_free(mesh->quad_face);
+	if (mesh->quad_normal) vlst_free(mesh->quad_normal);
+	if (mesh->quad_color) vlst_free(mesh->quad_color); 
+	if (mesh->quad_uv) vlst_free(mesh->quad_uv);
+
+	if (mesh->tri_vertex) vlst_free(mesh->tri_vertex);
+	if (mesh->tri_face) vlst_free(mesh->tri_face);
+	if (mesh->tri_normal) vlst_free(mesh->tri_normal);
+	if (mesh->tri_color) vlst_free(mesh->tri_color);
+	if (mesh->tri_uv) vlst_free(mesh->tri_uv);
+
+	if(mesh->material) _material_free(mesh->material);
+	if(mesh->texture) _texture_free(mesh->texture);
+
+	free(mesh);
+}
 
 void mesh_free(t_mesh *mesh)
 {

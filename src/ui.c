@@ -28,26 +28,35 @@
 #include "camera.h"
 #include "graph.h"
 
-void ui_draw_graphs(void)
+t_lst *sets = NULL;
+
+// FREEZE ICON
+
+void ui_draw_icon_freeze(t_context *C)
 {
-	t_context *C = ctx_get();
-	t_node *node;
-	t_graph *graph;
-	t_lst *lst = C->scene->graphs;
-	if(lst)
-	{
-		t_link *l;
-		for(l=lst->first;l;l=l->next)
-		{
-			node = l->data;
-			graph = node->data;
-			graph_draw_blocks(graph);
-			graph_draw_bounding_box(graph);
-			graph_get_roots(graph);
-			graph_sort(graph);
-		}
-	}
+		float *color = C->ui->front_color;
+		int width = 1;
+
+		op_camera_switch_2d(C,C->ui->camera);
+
+		glPushMatrix();
+		glLoadIdentity();
+
+			float o[]={0,0,0};
+			float w=200;
+			float h=200;
+			float size = .2;
+
+			glTranslatef((float)C->app->window->width - 200,50,0);
+			glRotatef(45,0,0,1);
+			glScalef(size,size,size);
+
+			skt_line_rectangle(o,w,h,width,color);
+
+		glPopMatrix();
 }
+
+// MOUSE
 
 void ui_draw_mouse(void)
 {
@@ -72,6 +81,8 @@ void ui_draw_mouse(void)
 	}
 }
 
+// LINES
+
 void ui_draw_lines(void)
 {
 	t_context *C=ctx_get();
@@ -93,6 +104,8 @@ void ui_draw_lines(void)
 		skt_line(start,end,1,color);
 	}
 }
+
+// GRID
 
 void ui_draw_grid(void)
 {
@@ -169,6 +182,8 @@ void ui_draw_grid(void)
 	}
 }
 
+// STATUS BAR
+
 void ui_draw_status_bar(void)
 {
 	t_context *C=ctx_get();
@@ -190,6 +205,8 @@ void ui_draw_status_bar(void)
 	txt_draw_direct_2d(C->ui->status_top,txt,color,scale);
 	glPopMatrix();
 }
+
+// TERM
 
 void ui_draw_term(void)
 {
@@ -231,7 +248,30 @@ void ui_draw_menu(void)
 	}
 }
 
-// DRAW DESK
+// GRAPHS
+
+void ui_draw_graphs(void)
+{
+	t_context *C = ctx_get();
+	t_node *node;
+	t_graph *graph;
+	t_lst *lst = C->scene->graphs;
+	if(lst)
+	{
+		t_link *l;
+		for(l=lst->first;l;l=l->next)
+		{
+			node = l->data;
+			graph = node->data;
+			graph_draw_blocks(graph);
+			graph_draw_bounding_box(graph);
+			graph_get_roots(graph);
+			graph_sort(graph);
+		}
+	}
+}
+
+// DRAW SETS
 
 void ui_draw_sets(void)
 {
@@ -239,20 +279,67 @@ void ui_draw_sets(void)
 
 	t_link *link;
 
-	for(link = C->scene->sets->first; link; link = link->next)
+	if(C->event->use_threading)
 	{
-		t_node *node = link->data;
-		t_set *set = node->data;
-		t_lst *lst = set->blocks;
-		t_link *l = lst->first;
-
-		if(l)
+		for(link = sets->first; link; link = link->next)
 		{
-			for(;l;l=l->next)
+			t_set *set = link->data;
+			//printf("set :%s\n",set->name);
+			t_lst *lst = set->blocks;
+			t_link *l = lst->first;
+
+			if(l)
 			{
-				t_block *b;
-				b=l->data;
-				b->cls->draw(b);
+				for(;l;l=l->next)
+				{
+					t_block *b;
+					b=l->data;
+					b->cls->draw(b);
+				}
+			}
+
+			l = set->graphs->first;
+
+			if(l)
+			{
+				for(;l;l=l->next)
+				{
+					t_graph *g;
+					g=l->data;
+					graph_draw(g);
+				}
+			}
+		}
+	}
+	else
+	{
+		for(link = C->scene->sets->first; link; link = link->next)
+		{
+			t_node *node = link->data;
+			t_set *set = node->data;
+			t_lst *lst = set->blocks;
+			t_link *l = lst->first;
+
+			if(l)
+			{
+				for(;l;l=l->next)
+				{
+					t_block *b;
+					b=l->data;
+					b->cls->draw(b);
+				}
+			}
+
+			l = set->graphs->first;
+
+			if(l)
+			{
+				for(;l;l=l->next)
+				{
+					t_graph *g;
+					g=l->data;
+					graph_draw(g);
+				}
 			}
 		}
 	}
@@ -279,6 +366,8 @@ void ui_draw_screens(t_context *C)
 		}
 	}
 }
+
+// NAVIGATION
 
 void ui_navigation(t_context *C)
 {
@@ -314,41 +403,74 @@ void ui_navigation(t_context *C)
 	}
 }
 
+// CLONE
+
+void ui_clone_make(t_context *C)
+{
+	t_node *node;
+	t_set *set;
+	t_set *clone;
+
+	// Init : Build List
+	if(!sets) sets = lst_new("lst");
+
+	// Clone Sets
+	t_link *link;
+	for(link = C->scene->sets->first; link; link = link->next)
+	{
+		node = link->data;
+		set = node->data;
+		clone = set_clone(set);
+		lst_add(sets, clone, "set");
+	}
+}
+
+void ui_clone_free(t_context *C)
+{
+	t_link *link;
+	t_set *set;
+
+	// Free Sets
+	for(link = sets->first;link;link=link->next)
+	{
+		set = link->data;
+		_set_free(set);
+	}
+
+	lst_cleanup(sets);
+}
+
+// START/STOP
+
+void ui_draw_start(t_context *C)
+{
+	ui_clone_make(C);
+}
+
+void ui_draw_stop(t_context *C)
+{
+	ui_clone_free(C);
+}
+
 // DRAW
 
 void ui_draw(void)
 {
 	t_context *C = ctx_get();
 
+	// Navigation
 	ui_navigation(C);
 
+	// Draw Screens
 	if(C->ui->draw) ui_draw_screens(C);
 
 	// Freeze Icon
 	if(!C->ui->update_links)
 	{
-		float *color = C->ui->front_color;
-		int width = 1;
-
-		op_camera_switch_2d(C,C->ui->camera);
-
-		glPushMatrix();
-		glLoadIdentity();
-
-			float o[]={0,0,0};
-			float w=200;
-			float h=200;
-			float size = .2;
-
-			glTranslatef((float)C->app->window->width - 200,50,0);
-			glRotatef(45,0,0,1);
-			glScalef(size,size,size);
-
-			skt_line_rectangle(o,w,h,width,color);
-
-		glPopMatrix();
+		ui_draw_icon_freeze(C);
 	}
 }
+
 
 // INIT
 

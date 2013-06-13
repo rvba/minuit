@@ -197,6 +197,8 @@ struct Event
 	int loop_step;
 	int load_error;
 
+	int use_threading;
+
 };
 
 t_event *event_new(void);

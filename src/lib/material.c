@@ -12,6 +12,31 @@
 #include "material.h"
 #include "scene.h"
 
+// CLONE
+
+t_material *material_clone(t_material *material)
+{
+	if(material)
+	{
+		t_material *clone = material_new(material->name);
+		vcp3i(clone->idcol,material->idcol);
+		clone->id_node = material->id_node;
+
+		vcp3f(clone->color,material->color);
+		vcp3f(clone->specular,material->specular);
+		vcp3f(clone->shininess,material->shininess);
+		vcp3f(clone->s_color,material->s_color);
+
+		return clone;
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
+// REF
+
 void *material_get_ref(t_material *material, const char *ref)
 {
 	void *p;
@@ -40,8 +65,14 @@ t_material *material_rebind(t_scene *sc,void *ptr)
 
 // FREE
 
+void _material_free(t_material *material)
+{
+	free(material);
+}
+
 void material_free(t_material *material)
 {
+	free(material);
 }
 
 // NEW

@@ -173,7 +173,7 @@ void brick_clone_change_name(t_brick *brick)
 	s_append(name,s,n);
 }
 
-t_brick *brick_clone(t_block *block,t_brick *brick)
+t_brick *brick_dupli(t_block *block,t_brick *brick)
 {
 	t_context *C=ctx_get();
 
@@ -594,6 +594,56 @@ t_node *brick_make(t_block *block,const char *name,t_brick_type brick_type,t_dat
 	return node_brick;
 }
 
+// CLONE
+
+t_brick *brick_clone(t_brick *brick)
+{
+	if(brick)
+	{
+		t_brick *clone = (t_brick *) malloc(sizeof(t_brick));
+		memcpy(clone,brick,sizeof(t_brick));
+		return clone;
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
+void _brick_free(t_brick *brick)
+{
+	// that simple !
+	free(brick);
+}
+
+
+// FREE
+
+void brick_free(t_brick *brick)
+{
+	t_context *C=ctx_get();
+	t_scene *sc=C->scene;
+
+	t_plug *plug_intern = &brick->plug_intern;
+
+	if(plug_intern->parents)
+	{
+		scene_struct_delete(C->scene,plug_intern->parents);
+	}
+
+	if(plug_intern->bindings)
+	{
+		scene_struct_delete(C->scene, plug_intern->bindings);
+	}
+
+	if(brick->state.has_ref)
+	{
+		scene_remove_ref(sc,&brick->plug_in);
+		scene_remove_ref(sc,&brick->plug_out);
+		scene_remove_ref(sc,&brick->plug_intern);
+	}
+}
+
 // NEW
 
 t_brick *brick_new(const char *name)
@@ -668,32 +718,5 @@ t_brick *brick_new(const char *name)
 	brick->counter = 0;
 
 	return brick;
-}
-
-// FREE
-
-void brick_free(t_brick *brick)
-{
-	t_context *C=ctx_get();
-	t_scene *sc=C->scene;
-
-	t_plug *plug_intern = &brick->plug_intern;
-
-	if(plug_intern->parents)
-	{
-		scene_struct_delete(C->scene,plug_intern->parents);
-	}
-
-	if(plug_intern->bindings)
-	{
-		scene_struct_delete(C->scene, plug_intern->bindings);
-	}
-
-	if(brick->state.has_ref)
-	{
-		scene_remove_ref(sc,&brick->plug_in);
-		scene_remove_ref(sc,&brick->plug_out);
-		scene_remove_ref(sc,&brick->plug_intern);
-	}
 }
 

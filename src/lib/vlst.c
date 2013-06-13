@@ -711,6 +711,42 @@ void vlst_init(t_vlst *vlst)
 	bzero(vlst->data,size);
 }
 
+// CLONE
+
+t_vlst *vlst_clone(t_vlst *vlst)
+{
+	if(vlst)
+	{
+		t_vlst *clone = vlst_new(vlst->name);
+
+		clone->count = vlst->count;
+		clone->length = vlst->length;
+		clone->size = vlst->size;
+		clone->count_new = vlst->count_new;
+		clone->need_update = vlst->need_update;
+		clone->is_linked = vlst->is_linked;
+		clone->has_limit_high = vlst->has_limit_high;
+		clone->has_limit_low = vlst->has_limit_low;
+		clone->limit_high = vlst->limit_high;
+		clone->limit_low = vlst->limit_low;
+
+		clone->link = NULL; //XXX
+		clone->type = vlst->type;
+
+		size_t size = sizeof(vlst->type)*vlst->length*vlst->count;
+		clone->data = malloc(size);
+		memcpy(clone->data,vlst->data,size);
+
+		return clone;
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
+// REF
+
 void *vlst_get_ref(t_vlst *vlst, const char *ref)
 {
 	void *p;
@@ -768,5 +804,6 @@ t_vlst *vlst_new(const char *name)
 void vlst_free(t_vlst *vlst)
 {
 	if(vlst->data) free(vlst->data);
+	free(vlst);
 }
 

@@ -19,6 +19,7 @@
 #include "context.h"
 #include "op.h"
 #include "camera.h"
+#include "event.h"
 
 t_draw *DRAW;
 
@@ -28,6 +29,59 @@ GLenum LightList[] = {
 	GL_LIGHT2,
 	GL_LIGHT3,
 };
+
+t_lst *objects = NULL;
+
+
+void draw_clone_objects(t_context *C)
+{
+	t_node *node;
+	t_object *object;
+	t_object *clone;
+
+	// Init : Build List
+	if(!objects) objects = lst_new("lst");
+
+	// Clone Objects
+	t_link *link;
+	for(link = C->scene->objects->first; link; link = link->next)
+	{
+		node = link->data;
+		object = node->data;
+		clone = object_clone(object);
+		lst_add(objects, clone, "object");
+	}
+}
+
+void draw_clone_make(t_context *C)
+{
+	draw_clone_objects(C);
+}
+
+void draw_clone_free(t_context *C)
+{
+	t_link *link;
+	t_object *object;
+
+	for(link=objects->first;link;link=link->next)
+	{
+		object = link->data;
+		_object_free(object);
+	}
+
+	lst_cleanup(objects);
+}
+
+void draw_render_start(t_context *C)
+{
+	draw_clone_make(C);
+}
+
+void draw_render_stop(t_context *C)
+{
+	draw_clone_free(C);
+}
+
 
 void draw_switch_axis_world(t_draw *draw)
 {
@@ -604,22 +658,48 @@ void type_font_3d(char* string,float pos[3])
 
 void draw_objects(t_draw *draw, t_scene *scene)
 {
-	t_node *node;
 	t_link *link;
+	t_node *node;
 
-	for(link=scene->objects->first;link;link=link->next)
+	t_context *C = ctx_get();
+	if(C->event->use_threading)
 	{
-		node=link->data;
-		t_object *object = node->data;
+		link=objects->first;
 
-		if(!object)
+		for(;link;link=link->next)
 		{
-			printf("[ERROR draw_objects] No data\n");
-			break;
+			t_object *object = link->data;
+
+			if(!object)
+			{
+				printf("[ERROR draw_objects] No data\n");
+				break;
+			}
+			else
+			{
+				if(!object->cls) printf("err !!!!!!\n");
+				object->cls->draw(object);
+			}
 		}
-		else
+	}
+	else
+	{
+		link=scene->objects->first;
+
+		for(link=scene->objects->first;link;link=link->next)
 		{
-			object->cls->draw(object);
+			node=link->data;
+			t_object *object = node->data;
+
+			if(!object)
+			{
+				printf("[ERROR draw_objects] No data\n");
+				break;
+			}
+			else
+			{
+				object->cls->draw(object);
+			}
 		}
 	}
 }

@@ -45,6 +45,7 @@
 #define DRAW_WITH_UI 1
 #define DRAW_WITH_BLEND 1
 
+struct Context;
 struct Scene;
 struct Mesh;
 
@@ -102,6 +103,8 @@ typedef struct Draw
 	int draw_lights;
 }t_draw;
 
+void draw_render_start(struct Context *C);
+void draw_render_stop(struct Context *C);
 void draw_clear(float r,float g,float b,float a);
 t_draw *draw_new(void);
 void draw_init(t_draw *draw);

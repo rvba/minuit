@@ -17,6 +17,8 @@
 #include "ui.h"
 #include "viewport.h"
 #include "list.h"
+#include "object.h"
+
 
 // RENDER PASS
 
@@ -140,11 +142,28 @@ void ctx_render_scene_full_pass(t_context *C)
 	ctx_render_scene(C);
 }
 
+void ctx_render_start(t_context *C)
+{
+	draw_render_start(C);
+	ui_draw_start(C);
+}
+
+void ctx_render_stop(t_context *C)
+{
+	draw_render_stop(C);
+	ui_draw_stop(C);
+}
+
 void ctx_render(t_context *C)
 {
 	// Check Not Off Screen
 	if(!C->app->off_screen)
 	{
+		int t = C->event->use_threading;
+
+		C->event->use_threading = 0;
+
+
 		// Selection Pass
 		if(C->draw->with_selection_pass)
 		{
@@ -156,6 +175,11 @@ void ctx_render(t_context *C)
 			// Get Color
 			ctx_get_selection(C);
 		}
+
+		C->event->use_threading = t;
+
+		// Start
+		if(C->event->use_threading) ctx_render_start(C);
 
 		// Render Pass
 		if(C->draw->with_draw_pass)
@@ -170,5 +194,8 @@ void ctx_render(t_context *C)
 
 		// Video Record
 		if(C->event->video_record) ctx_render_video(C);
+
+		// Stop
+		if(C->event->use_threading) ctx_render_stop(C);
 	}
 }

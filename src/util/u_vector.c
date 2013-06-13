@@ -100,6 +100,14 @@ inline void vcp3i(int t[3],int s[3])
 	t[2]=s[2];
 }
 
+inline void vcp4i(int t[4],int s[4])
+{
+	t[0]=s[0];
+	t[1]=s[1];
+	t[2]=s[2];
+	t[3]=s[3];
+}
+
 inline void vset(float v[3],float a,float b,float c)
 {
 	v[0]=a;
