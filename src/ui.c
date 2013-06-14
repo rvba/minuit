@@ -371,7 +371,7 @@ void ui_draw_screens(t_context *C)
 
 void ui_navigation(t_context *C)
 {
-	// PAN
+	// Pan
 	if(C->app->mouse->button_right == button_pressed && C->app->keyboard->ctrl)
 	{
 
@@ -381,6 +381,18 @@ void ui_navigation(t_context *C)
 		C->event->ui.pan = 1;
 	}
 
+	// Zoom
+	if(C->app->mouse->button_right == button_pressed && C->app->keyboard->alt)
+	{
+		C->event->ui.zoom = 1;
+		float zoom = C->ui->zoom;
+		zoom += C->app->mouse->sign_y * C->app->mouse->dy * 0.01;
+
+		if(zoom  > 0.1)
+			C->ui->zoom+=(C->app->mouse->sign_y * C->app->mouse->dy * 0.01);
+	}
+
+	// Release
 	if(
 		(C->event->ui.pan || C->event->ui.zoom)
 		&& C->app->mouse->button_right == button_released)
@@ -390,16 +402,6 @@ void ui_navigation(t_context *C)
 
 		C->event->ui.pan_x = C->ui->pan_x;
 		C->event->ui.pan_y = C->ui->pan_y;
-	}
-
-	if(C->app->mouse->button_right == button_pressed && C->app->keyboard->alt)
-	{
-		C->event->ui.zoom = 1;
-		float zoom = C->ui->zoom;
-		zoom += C->app->mouse->sign_y * C->app->mouse->dy * 0.01;
-
-		if(zoom  > 0.1)
-			C->ui->zoom+=(C->app->mouse->sign_y * C->app->mouse->dy * 0.01);
 	}
 }
 

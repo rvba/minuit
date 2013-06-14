@@ -142,14 +142,18 @@ void ctx_ui_show_hide_menu(t_context *C)
 			!C->event->camera_rotation
 			&& !C->event->ui.pan
 			&& !C->event->ui.zoom
+			&& !C->app->keyboard->alt
+			&& !C->app->keyboard->ctrl
 			
 			)
 		{
+			// Set Pressed
 			if(C->app->mouse->button_right==button_pressed)	
 			{
 				C->event->ui.is_menu_pressed=1;
 			}
 
+			// Set Released
 			if(C->app->mouse->button_right==button_released)	
 			{
 				if(C->event->ui.is_menu_pressed)
