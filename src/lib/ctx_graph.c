@@ -40,7 +40,7 @@ void ctx_set_exec(struct Context *C)
 
 			if(l)
 			{
-				// For All Blocks
+				// For All Single Blocks
 				for(;l;l=l->next)
 				{
 					t_block *b;
@@ -53,6 +53,7 @@ void ctx_set_exec(struct Context *C)
 
 			l = set->graphs->first;
 
+			// For All Graphs
 			for(;l;l=l->next)
 			{
 				t_graph *graph = l->data;

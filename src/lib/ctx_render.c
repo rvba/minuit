@@ -117,15 +117,11 @@ void ctx_render_scene(t_context *C)
 	t_node *node;
 	t_viewport *viewport;
 
-	//ctx_render_set_full_pass(C);
-	//draw_init(C->draw);
-
-	// Draw Screens
+	// Draw Viewports
 	for(link = scene->viewports->first; link; link = link->next)
 	{
 		node = link->data;
 		viewport = node->data;
-		//viewport_draw(viewport);
 		if(viewport->draw) viewport->draw(viewport);
 	}
 }
@@ -183,6 +179,7 @@ void ctx_render_check_thread(t_context *C)
 			C->event->graph_updated = 1;
 			C->event->graph_computing = 0;
 
+			// Update Render Data
 			ctx_render_stop(C);
 			ctx_render_start(C);
 		}
@@ -190,6 +187,7 @@ void ctx_render_check_thread(t_context *C)
 	// Else Start Computing
 	else
 	{
+		// Init
 		if(!C->event->graph_init)
 		{
 			C->event->graph_init = 1;
@@ -207,14 +205,11 @@ void ctx_render(t_context *C)
 	if(!C->app->off_screen)
 	{
 		int t = C->event->use_threading;
-
 		C->event->use_threading = 0;
-
 
 		// Selection Pass
 		if(C->draw->with_selection_pass)
 		{
-
 			ctx_render_scene_selection_pass(C);
 
 			ui_draw();
@@ -227,9 +222,6 @@ void ctx_render(t_context *C)
 
 		// Check Thread
 		ctx_render_check_thread(C);
-
-		// Start
-		//if(C->event->use_threading) ctx_render_start(C);
 
 		// Render Pass
 		if(C->draw->with_draw_pass)
@@ -244,8 +236,5 @@ void ctx_render(t_context *C)
 
 		// Video Record
 		if(C->event->video_record) ctx_render_video(C);
-
-		// Stop
-		//if(C->event->use_threading) ctx_render_stop(C);
 	}
 }

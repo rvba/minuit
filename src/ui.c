@@ -248,29 +248,6 @@ void ui_draw_menu(void)
 	}
 }
 
-// GRAPHS
-
-void ui_draw_graphs(void)
-{
-	t_context *C = ctx_get();
-	t_node *node;
-	t_graph *graph;
-	t_lst *lst = C->scene->graphs;
-	if(lst)
-	{
-		t_link *l;
-		for(l=lst->first;l;l=l->next)
-		{
-			node = l->data;
-			graph = node->data;
-			graph_draw_blocks(graph);
-			graph_draw_bounding_box(graph);
-			graph_get_roots(graph);
-			graph_sort(graph);
-		}
-	}
-}
-
 // DRAW SETS
 
 void ui_draw_sets(void)
@@ -284,7 +261,6 @@ void ui_draw_sets(void)
 		for(link = sets->first; link; link = link->next)
 		{
 			t_set *set = link->data;
-			//printf("set :%s\n",set->name);
 			t_lst *lst = set->blocks;
 			t_link *l = lst->first;
 

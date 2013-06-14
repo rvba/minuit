@@ -397,63 +397,10 @@ void exe_add_action(t_action *action)
 	lst_add(EXE,action,"action");
 }
 
-// THREADING
-
-void *ctx_ui_process(void *ptr)
-{
-	t_context *C = ctx_get();
-	t_process *process = (t_process *) ptr;
-
-	process->busy = 1;
-
-	if(C->ui->use_threading)
-	{
-		ctx_links_update(C);
-	}
-
-	if(C->ui->graph_updated)
-		process->busy = 0;
-
-	return NULL;
-}
-
-void ctx_ui_threading(t_context *C)
-{
-	if(C->ui->use_threading)
-	{
-		// Start Threading
-		if(!C->ui->threading_on)
-		{
-			t_process *process = process_add(C,"ui",ctx_ui_process);
-			process_launch(process);
-
-			C->ui->threading_on = 1;
-		}
-	}
-	else
-	{
-		// Stop Threading
-		if(C->ui->threading_on)
-		{
-			t_process *process = engine_process_get(C->engine, "ui");
-
-			if(!process->busy)
-			{
-				engine_process_remove(C->engine,"ui");
-
-				C->ui->threading_on = 0;
-			}
-		}
-	}
-}
-
 // CTX UI 
 
 void ctx_ui(t_context *C)
 {
-	// Threading
-	ctx_ui_threading(C);
-
 	// intro test stop 
 	ctx_ui_intro(C);
 
@@ -467,9 +414,6 @@ void ctx_ui(t_context *C)
 	
 	// update linking 
 	ctx_ui_linking(C);
-
-	// sets exec
-	//ctx_set_exec(C);
 
 	// post exe
 	ctx_exe(C);
