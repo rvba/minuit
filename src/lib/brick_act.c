@@ -1890,10 +1890,20 @@ void *op_const(t_brick *brick)
 	// flow
 	plug_const->cls->flow(plug_const);
 
+	/*
 	if(!plug_const->state.is_eval)
 	{
 		plug_const->state.is_eval = 1;
 
+		*_const = *_i;
+	}
+	*/
+	
+	t_context *C = ctx_get();
+
+	if(brick->state.frame_loop != C->app->frame)
+	{
+		brick->state.frame_loop = C->app->frame;
 		*_const = *_i;
 	}
 
