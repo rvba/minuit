@@ -95,41 +95,14 @@ t_mesh *mesh_rebind(t_scene *sc,void *ptr)
 	return mesh;
 }
 
-// ADD BRICK VERTEX
-
-void mesh_add_brick_vertex(t_context *C,t_mesh *mesh)
-{
-	// New Block
-	t_node *_node_block=add_block(C,"vertex");
-	t_block *_block=_node_block->data;
-
-	// outline
-	_block->state.draw_outline=1;
-
-	// add vertex
-	scene_add_ref(C->scene,"struct_ref","mesh","vertex",&mesh->vertex,mesh);
-	add_part_vlst(C,_block,dt_vlst,"vertex",mesh->vertex);
-	t_brick *brick_count = block_brick_get(_block,"count:");
-
-	// Bind
-	brick_binding_add(brick_count, dt_int, &mesh->var.tot_vertex);
-
-	// Ref
-	scene_add_ref(C->scene,"struct_ref","mesh","tot vertex",&mesh->var.tot_vertex,mesh);
-
-	// Add Global offset
-	add_block_offset(C,_block);
-}
+// FACES
 
 void mesh_add_brick_faces(t_mesh *mesh)
 {
 	t_context *C = ctx_get();
-	// block
-	t_node *_node_block=block_make("faces","block");
-	t_block *_block=_node_block->data;
 
-	// outline
-	_block->state.draw_outline=1;
+	t_node *_node_block=add_block(C,"faces");
+	t_block *_block=_node_block->data;
 
 	scene_add_ref(C->scene,"struct_ref","mesh","faces",&mesh->quads,mesh);
 	add_part_vlst(C,_block,dt_vlst,"quads",mesh->quads);
@@ -141,21 +114,16 @@ void mesh_add_brick_faces(t_mesh *mesh)
 	// Ref
 	scene_add_ref(C->scene,"struct_ref","mesh","tot quad face",&mesh->var.tot_quad_face,mesh);
 
-	// add to global list
-	op_add_global(C,_block);
+	// Add Global offset
+	add_block_offset(C,_block);
 }
 
 // ADD BRICK MESH
 
 void mesh_add_brick_mesh(t_context *C,t_mesh *mesh)
 {
-	// block
-
-	t_node *node_block=block_make("mesh","block");
+	t_node *node_block=add_block(C,"mesh");
 	t_block *block=node_block->data;
-
-	// outline
-	block->state.draw_outline=1;
 
 	// add pointers
 	add_part_pointer(C,block,dt_mesh,mesh->name,mesh);
@@ -165,28 +133,24 @@ void mesh_add_brick_mesh(t_context *C,t_mesh *mesh)
 	// init
 	mesh_init(C->scene,mesh);
 
-	// add to global list
-	op_add_global(C,block);
+	// Add Global offset
+	add_block_offset(C,block);
 }
+
+// COLOR
 
 void mesh_add_brick_color(t_mesh *mesh)
 {
 	t_context *C = ctx_get();
 
-	// block
-	t_node *_node_block = block_make("color","block");
+	// New Block
+	t_node *_node_block=add_block(C,"color");
 	t_block *_block = _node_block->data;
-
-	// outline
-	_block->state.draw_outline = 1;
 
 	// add vertex
 
 	scene_add_ref(C->scene,"struct_ref","mesh","colors",&mesh->colors,mesh);
 	add_part_vlst(C,_block,dt_vlst,"colors",mesh->colors);
-
-	// add to global list
-	op_add_global(C,_block);
 
 	// link
 	if(mesh->vertex)
@@ -200,7 +164,11 @@ void mesh_add_brick_color(t_mesh *mesh)
 		vertex->is_linked = 1 ;
 		vertex->link = colors ;
 	}
+
+	// Add Global offset
+	add_block_offset(C,_block);
 }
+
 
 void mesh_add_default_color(t_mesh *mesh)
 {
@@ -220,6 +188,29 @@ void mesh_add_default_color(t_mesh *mesh)
 	}
 
 	mesh_add_brick_color(mesh);
+}
+
+// ADD BRICK VERTEX
+
+void mesh_add_brick_vertex(t_context *C,t_mesh *mesh)
+{
+	// New Block
+	t_node *_node_block=add_block(C,"vertex");
+	t_block *_block=_node_block->data;
+
+	// add vertex
+	scene_add_ref(C->scene,"struct_ref","mesh","vertex",&mesh->vertex,mesh);
+	add_part_vlst(C,_block,dt_vlst,"vertex",mesh->vertex);
+	t_brick *brick_count = block_brick_get(_block,"count:");
+
+	// Bind
+	brick_binding_add(brick_count, dt_int, &mesh->var.tot_vertex);
+
+	// Ref
+	scene_add_ref(C->scene,"struct_ref","mesh","tot vertex",&mesh->var.tot_vertex,mesh);
+
+	// Add Global offset
+	add_block_offset(C,_block);
 }
 
 // MAKE
@@ -281,9 +272,6 @@ t_node *mesh_make(
 
 	// add brick vertex
 	mesh_add_brick_vertex(C,mesh);
-
-	// add brick mesh
-	//mesh_add_brick_mesh(C,mesh);
 
 	return node_mesh;
 }
