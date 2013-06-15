@@ -127,9 +127,6 @@ void brick_draw_link(t_brick *brick)
 {
 	t_context *C=ctx_get();
 
-	//float width=brick_get_width(brick);
-	//width+=brick->geom.height*2;
-
 	float width = brick->geom.width;
 
 	if(brick->state.draw_plugs)
@@ -239,7 +236,6 @@ void brick_draw_plug(t_brick *brick,int is_out)
 	float pos[3]={0,0,0};
 	float c[3];
 
-//	float width=brick_get_width(brick);
 	float width = brick->geom.width_txt;
 
 	// plug left : translate width
@@ -272,7 +268,6 @@ void brick_draw_plug(t_brick *brick,int is_out)
 
 		skt_point(pos,3,c);
 
-		//if(is_out) brick_draw_plug_state(brick,&brick->plug_out,brick->geom.width+brick->geom.height+brick->geom.height/4);
 		if(is_out) brick_draw_plug_state(brick,&brick->plug_out,brick->geom.width_txt+brick->geom.height+brick->geom.height/4);
 		else brick_draw_plug_state(brick,&brick->plug_in,0);
 	}
@@ -305,7 +300,6 @@ void brick_draw_outline(t_brick *brick)
 	{
 		float pos[3]={0,0,0};
 		int tot=4;
-		//float width = brick_get_width(brick);
 		float width = brick->geom.width;
 		float height = brick->geom.height;
 		int line_width=1;
@@ -400,7 +394,6 @@ void brick_draw_body(t_brick *brick)
 		cconv(lcol,brick->idcol_left);
 		cconv(rcol,brick->idcol_right);
 
-		//float width = brick_get_width(brick);
 		float width = brick->geom.width_txt;
 		float height = brick->geom.height;
 
@@ -539,14 +532,7 @@ void brick_draw_check_context(t_brick *brick)
 
 void brick_draw(t_brick *brick)
 {
-	t_context *C=ctx_get();
-
 	brick_draw_check_context(brick);
-
-	if(brick->plug_intern.state.is_in_loop)
-	{
-		C->event->ui.draw_in_loop = 1;
-	}
 
 	if(brick->state.draw)
 	{

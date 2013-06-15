@@ -7,6 +7,7 @@
  *
  */
 
+/*
 #include "context.h"
 #include "scene.h"
 #include "ctx.h"
@@ -1085,5 +1086,6 @@ void ctx_links_update(t_context *C)
 		C->ui->graph_updated = 1;
 	}
 }
+*/
 
 

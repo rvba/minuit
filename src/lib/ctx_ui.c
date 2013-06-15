@@ -35,20 +35,6 @@ void ctx_ui_freeze(t_context *C)
 
 void ctx_ui_switch_show_step(t_context *C)
 {
-	if(C->ui->show_step)
-	{
-		term_log("step OFF");
-		C->ui->show_step = 0;
-		C->ui->show_brick_step = 0;
-		ctx_links_term_cleanup(C);
-	}
-	else 
-	{
-		term_log("step ON");
-		C->ui->show_step = 1;
-		C->ui->show_brick_step = 1;
-		C->ui->step = 1;
-	}
 }
 
 void ctx_ui_switch_show_states(t_context *C)

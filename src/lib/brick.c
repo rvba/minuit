@@ -430,7 +430,6 @@ void plug_reset(t_plug *plug,const char *name)
 	plug->state.is_init=0;
 	plug->state.is_state_volatil = 1;
 	plug->state.is_a_loop = 0;
-	plug->state.is_in_loop = 0;
 	plug->state.close_flow_in = 0;
 	plug->state.use_flow = 1;
 	plug->state.is_parent = 0;

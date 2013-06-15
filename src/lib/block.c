@@ -410,13 +410,8 @@ t_block *block_dupli(t_block *block)
 	t_context *C=ctx_get();
 	C->scene->store=1;
 
-	//t_node *clone_node=block_make(block->name,block->type);
 	t_node *clone_node=add_block(C,block->name);
 	t_block *clone_block=clone_node->data;
-
-	//clone_block->state.draw_outline = block->state.draw_outline;
-
-	//_add_block(C,clone_block);
 
 	vcp(clone_block->pos,block->pos);
 

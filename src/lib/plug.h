@@ -60,7 +60,6 @@ struct Plug_State
 	int is_volatil:1;		// stored data is volatil
 	int is_state_volatil:1;		// plug ports can change state when connected
 	int is_a_loop:1;
-	int is_in_loop:1;
 	int close_flow_in:1;		// will close target's flow in
 	int use_flow:1;
 	int is_parent:1;
