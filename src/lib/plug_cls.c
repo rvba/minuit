@@ -481,45 +481,6 @@ void cls_plug_disconnect_operator(t_plug_mode mode, t_plug *plug)
 	}
 }
 
-// Set all Branch In Loop
-/*
-void set_in_loop(t_brick *brick, int state)
-{
-	t_block *block = brick->block;
-
-	t_lst *lst = lst_new("lst");
-	block_branch_get(lst,block);
-
-	if(lst->first)
-	{
-		t_link *link;
-		t_brick *brick;
-		t_plug *plug;
-
-		for(link = lst->first; link; link = link->next)
-		{
-			int i;
-			i=0;
-			i++;
-			brick = link->data;
-			plug = &brick->plug_intern;
-			plug->state.is_in_loop = state;
-		}
-	}
-
-
-	t_context *C = ctx_get();
-	if(C->event->debug_loop)
-	{
-		term_log("set in loop %s",brick->name);
-		list_show(lst);
-	}
-
-	lst_free(lst);
-
-}
-*/
-
 // CONNECT GENERAL
 
 void cls_plug_connect_general(t_plug_mode mode, t_plug *self, t_plug *dst)
@@ -561,17 +522,6 @@ void cls_plug_connect_general(t_plug_mode mode, t_plug *self, t_plug *dst)
 		plug_out->dst = plug_dst_in;
 		plug_out->state.is_connected = 1;
 	}
-
-	// Set in Loop
-	/*
-	if(!self->state.is_a_loop)
-	{
-		if(dst->state.is_a_loop || dst->state.is_in_loop)
-		{
-			set_in_loop(brick,1);
-		}
-	}
-	*/
 
  	// Swap Flow
  	if(self->state.swap_flow && dst)
