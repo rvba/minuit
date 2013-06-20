@@ -130,6 +130,7 @@ float *calc_circle(float center[3],double radius,int divisions);
 
 int u_randn(int n);
 int u_randrange(int start,int end);
+int u_randrange_relative(int start,int end);
 
 // SORT
 

@@ -25,5 +25,12 @@ int u_randrange(int start,int end)
 	return n;
 }
 
+int u_randrange_relative(int start,int end)
+{
+	int n;
+	if (start != end)  n = rand()%(end-start) -((end-start)/2);
+	else n =start;
+	return n;
+}
 
 
