@@ -140,73 +140,11 @@ void ctx_render_scene_full_pass(t_context *C)
 	ctx_render_scene(C);
 }
 
-void ctx_render_start(t_context *C)
-{
-	if(!C->event->graph_computing)
-	{
-		if(C->event->graph_updated)
-		{
-			draw_render_start(C);
-			ui_draw_start(C);
-		}
-	}
-}
-
-void ctx_render_stop(t_context *C)
-{
-	if(!C->event->graph_computing)
-	{
-		if(C->event->graph_updated)
-		{
-			draw_render_stop(C);
-			ui_draw_stop(C);
-		}
-	}
-}
-
-void ctx_render_check_thread(t_context *C)
-{
-	// Get Process
-	t_process *graph_process = engine_process_get(C->engine,"graph");
-
-	// If Thread Being Computed
-	if(C->event->graph_computing)
-	{
-		// If Is Done
-		if(!graph_process->busy)
-		{
-			// Set Updated
-			C->event->graph_updated = 1;
-			C->event->graph_computing = 0;
-
-			// Update Render Data
-			ctx_render_stop(C);
-			ctx_render_start(C);
-		}
-	}
-	// Else Start Computing
-	else
-	{
-		// Init
-		if(!C->event->graph_init)
-		{
-			C->event->graph_init = 1;
-			ctx_render_start(C);
-		}
-
-		C->event->graph_computing = 1;
-		C->event->graph_updated = 0;
-	}
-}
-
 void ctx_render(t_context *C)
 {
 	// Check Not Off Screen
 	if(!C->app->off_screen)
 	{
-		int t = C->event->use_threading;
-		C->event->use_threading = 0;
-
 		// Selection Pass
 		if(C->draw->with_selection_pass)
 		{
@@ -217,11 +155,6 @@ void ctx_render(t_context *C)
 			// Get Color
 			ctx_get_selection(C);
 		}
-
-		C->event->use_threading = t;
-
-		// Check Thread
-		ctx_render_check_thread(C);
 
 		// Render Pass
 		if(C->draw->with_draw_pass)

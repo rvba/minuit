@@ -27,6 +27,26 @@
 
 #include "event.h"
 
+void graph_setup(t_graph *graph)
+{
+	t_link *link;
+	t_block *block;
+	int has_loop = 0;
+	int frame_based = 0;
+
+	for(link=graph->blocks->first;link;link=link->next)
+	{
+		block = link->data;
+		if(block->state.is_a_loop) has_loop = 1;
+		if(block->state.frame_based) frame_based = 1;
+	}
+
+	graph->has_loop = has_loop;
+	graph->frame_based = frame_based;
+
+	// Update Set
+	set_setup(graph->set);
+}
 
 void graph_draw(t_graph *graph)
 {
@@ -40,7 +60,9 @@ void graph_delete(t_graph *graph)
 {
 	t_context *C = ctx_get();
 	t_set *set = graph->set;
+	// Remove From Set
 	list_remove_by_id(set->graphs,graph->id);
+	// Struct Delete
 	scene_struct_delete(C->scene,graph);
 }
 
@@ -99,6 +121,9 @@ void graph_exec(t_graph *graph)
 {
 	t_context *C = ctx_get();
 
+	// Setup
+	graph_setup(graph);
+
 	if(graph->has_loop)
 	{
 		// Find Block Loop
@@ -122,12 +147,26 @@ void graph_exec(t_graph *graph)
 				// Reset States
 				graph->start_loop = 0;
 				graph->end_loop = 0;
+				graph->done = 1;
 			}
 			// Start Loop
 			else
 			{
-				// Exec Block Loop Only
-				graph_exec_block_loop(graph);
+				// Loop
+				if(graph->done)
+				{
+					// Exit
+					graph->done=0;
+				}
+				else
+				{
+					// Exec Block Loop Only
+					graph_exec_block_loop(graph);
+
+					// Loop Recursive
+					if(graph->start_loop)
+						graph_exec(graph);
+				}
 			}
 		}
 		else
@@ -292,13 +331,16 @@ void graph_merge(t_graph *src, t_graph *dst)
 	else
 	{
 		// New Graph
-		C->scene->store = 1;
+		scene_store(C->scene,1);
 		t_graph *graph = graph_add("graph");
-		C->scene->store = 0;
+		scene_store(C->scene,0);
 
 		// Merge Graphs
 		graph_swap(src,graph);
 		graph_swap(dst,graph);
+
+		// Update New Graph
+		graph_setup(graph);
 
 		// Remove Old Graphs
 		graph_delete(src);
@@ -315,9 +357,9 @@ void graph_build_from_list(t_lst *lst)
 	t_block *block;
 
 	// New Graph
-	C->scene->store = 1;
+	scene_store(C->scene,1);
 	t_graph *new_graph = graph_add("graph");
-	C->scene->store = 0;
+	scene_store(C->scene,0);
 
 	// Fill Graph
 	for(l=lst->first;l;l=l->next)
@@ -401,7 +443,7 @@ void graph_block_add(t_graph *graph, t_block *block)
 {
 	t_context *C = ctx_get();
 
-	// Block Have A Graph
+	// If Graph has Blocks Lst
 	if(graph->blocks)		
 	{
 		int is_in_graph = 0;
@@ -409,9 +451,10 @@ void graph_block_add(t_graph *graph, t_block *block)
 		t_link *l;
 		t_block *b;
 
-		// Check Block Not Yet in Graph (?)
+		// If Graph Has Blocks
 		if(graph->blocks->first)
 		{
+			// Check Block Not In Graph yet (?)
 			for(l=graph->blocks->first;l;l=l->next)
 			{
 				b = l->data;
@@ -422,56 +465,52 @@ void graph_block_add(t_graph *graph, t_block *block)
 				}
 			}
 
-			// Add to Graph
-			if(!is_in_graph)
-			{
-				C->scene->store = 1;
-				list_add(graph->blocks, block);
-				block->graph = graph;
-				C->scene->store = 0;
-			}
 		}
-		else
+
+		// Add to Graph
+		if(!is_in_graph)
 		{
-			C->scene->store = 1;
+			// Add to Graph List
+			scene_store(C->scene,1);
 			list_add(graph->blocks, block);
 			block->graph = graph;
-			C->scene->store = 0;
+			scene_store(C->scene,0);
+
+			// Pop from Set Blocks
+			if(!block->state.is_in_graph) set_block_pop(block->set,block);
+
+			// Set In Graph
+			block->state.is_in_graph = 1;
+
+			// Setup Graph
+			graph_setup(graph);
 		}
 	}
+	// Else Add Blocks Lst
 	else
 	{
-		C->scene->store = 1;
+		scene_store(C->scene,1);
 		t_node *node_lst = scene_add(C->scene, nt_list, "lst");
 		t_lst *lst = node_lst->data;
 		graph->blocks = lst;
-		C->scene->store = 0;
+		scene_store(C->scene,0);
 
+		// Add Block
 		graph_block_add(graph, block);
 	}
-
-	// Pop from Set Blocks
-	if(!block->state.is_in_graph) set_block_pop(block->set,block);
-
-	// Set In Graph
-	block->state.is_in_graph = 1;
-
-	// Set Loop State
-	if(block->state.is_a_loop) graph->has_loop = 1;
-
 }
 
 void graph_block_remove(t_graph *graph, t_block *block)
 {
-	// Unset Loop State
-	if(block->state.is_a_loop) graph->has_loop = 0;
-
 	// Reset Block State
 	block->graph=NULL;
 	block->state.is_in_graph = 0;
 
 	// Add To Set
 	set_block_push(block->set, block);
+
+	// Setup
+	graph_setup(graph);
 }
 
 // ADD
@@ -510,14 +549,7 @@ t_graph *graph_clone(t_graph *graph)
 		t_graph *clone = graph_new(graph->name);
 
 		clone->blocks = lst_clone(graph->blocks, dt_block);
-		// XXX
 		clone->set = NULL;
-
-		/*
-		clone->has_loop = graph->has_loop ;
-		clone->start_loop = graph->start_loop;
-		clone->end_loop = graph->end_loop;
-		*/
 
 		return clone;
 	}
@@ -551,10 +583,13 @@ void _graph_free(t_graph *graph)
 void graph_free(t_graph *graph)
 {
 	t_context *C = ctx_get();
+
 	if(graph->blocks)
 	{
 		scene_struct_delete(C->scene,graph->blocks);
 	}
+
+	free(graph);
 }
 
 // NEW
@@ -576,6 +611,9 @@ t_graph *graph_new(const char *name)
 	graph->has_loop = 0;
 	graph->start_loop = 0;
 	graph->end_loop = 0;
+	graph->frame_based = 0;
+
+	graph->done=0;
 
 	return graph;
 }

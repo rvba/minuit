@@ -575,9 +575,6 @@ void cls_plug_disconnect_general(t_plug_mode mode, t_plug *self)
 	// Mode Out
 	else
 	{
-		// Set Out of Loop
-		//set_in_loop(brick,0);
-
 		// Disconnect
 		plug_out->dst = NULL;
 		plug_out->state.is_connected = 0;
@@ -682,7 +679,7 @@ void cls_plug_connect_vector(t_plug_mode mode, t_plug *self, t_plug *dst)
 		plug_child_remove_all_parents(self);
 
 		// Store
-		C->scene->store = 1;
+		scene_store(C->scene,1);
 
 		t_brick *brick_component;
 		t_plug *plug_intern_component;
@@ -705,7 +702,7 @@ void cls_plug_connect_vector(t_plug_mode mode, t_plug *self, t_plug *dst)
 
 		}
 
-		C->scene->store = 0;
+		scene_store(C->scene,0);
 	}
 
 	// ***********************
@@ -812,7 +809,7 @@ void cls_plug_disconnect_vector(t_plug_mode mode, t_plug *plug)
 			plug_child_remove_all_parents(plug_intern_component);
 
 			// Store
-			C->scene->store = 1;
+			scene_store(C->scene,1);
 
 			// If i < Length
 			if(i < vector->length)
@@ -821,7 +818,7 @@ void cls_plug_disconnect_vector(t_plug_mode mode, t_plug *plug)
 				plug_add_parent(plug, plug_intern_component);
 			}
 
-			C->scene->store = 0;
+			scene_store(C->scene,0);
 		}
 	}
 }
@@ -953,9 +950,7 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 						close_vector(brick_vector,1);
 
 						if(C->ui->show_step) term_log("[for][%d]",brick->counter);
-
-						// Unlock Loop 
-						//set_for_loop(block,0);
+						//printf("[for][%d]\n",brick->counter);
 
 						// Set Vector Pointer
 						vector->pointer = vlst_get_pointer(vlst, vlst->length * brick->counter);
@@ -972,10 +967,8 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 					// Last Loop : counter > vlst
 					else
 					{
-						if(C->ui->show_step)  term_log("[for][%d] END LOOP",brick->counter); 
-
-						// reset vector
-						//vector->pointer = NULL;
+						if(C->ui->show_step)  term_log("[for][%d] END LOOP\n",brick->counter); 
+						//printf("[for][end loop %d]\n",brick->counter);
 
 						// Close Vector
 						close_vector(brick_vector,0);
@@ -990,7 +983,7 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 						*data_indice = 0;
 
 						// Set Loop State On
-						block_set_loop_state(block,0);
+						block_set_loop_state(block,2);
 					}
 				}
 				// no vlst
@@ -998,6 +991,7 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 				{
 					// Close Vector
 					close_vector(brick_vector,0);
+					block_set_loop_state(block,3);
 				}
 			}
 			// plug vector in not connected
@@ -1005,6 +999,7 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 			{
 				// Close Vector
 				close_vector(brick_vector,0);
+				block_set_loop_state(block,3);
 			}
 		}
 		// IF For not connected
@@ -1012,6 +1007,7 @@ void __cls_plug_flow_operator_for(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 		{
 			// Close Vector
 			close_vector(brick_vector,0);
+			block_set_loop_state(block,3);
 		}
 	}
 }

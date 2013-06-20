@@ -26,8 +26,6 @@ typedef struct Block t_block;
 typedef struct Block_Class t_block_class;
 typedef struct Block_State t_block_state;
 
-
-
 typedef enum Type_Parent
 {
 	t_parent_child,
@@ -65,6 +63,7 @@ struct Block_State
 	int is_moveable:1;
 	int is_a_loop:1;
 	int is_in_graph:1;
+	int frame_based:1;
 };
 
 struct Block

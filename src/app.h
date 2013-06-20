@@ -160,6 +160,8 @@ struct App
 	int video_offset;
 	int video_build;
 	int video_limit;
+
+	int quit;
 };
 
 int app_get_frame(void);

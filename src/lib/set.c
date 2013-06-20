@@ -26,20 +26,132 @@
 #include "brick.h"
 
 #include "set.h"
+#include "graph.h"
+
+
+void set_setup(t_set *set)
+{
+	t_link *link;
+	t_graph *graph;
+	t_block *block;
+
+	int frame_based = 0;
+
+	if(set->blocks)
+	{
+		for(link=set->blocks->first;link;link=link->next)
+		{
+			block = link->data;
+			if(block->state.frame_based) frame_based = 1;
+		}
+	}
+
+	if(set->graphs)
+	{
+		for(link=set->graphs->first;link;link=link->next)
+		{
+			graph = link->data;
+			if(graph->frame_based) frame_based = 1;
+		}
+	}
+
+	set->frame_based = frame_based;
+
+	// Do Process
+	set->process = 1;
+	set->processing = 0;
+}
+
+void set_exec(t_set *set)
+{
+	t_link *l;
+
+	if(set->blocks)
+	{
+		l = set->blocks->first;
+
+		for(;l;l=l->next)
+		{
+			t_block *b;
+			b=l->data;
+
+			// Exec Single Blocks
+			block_exec(b);
+		}
+	}
+
+	if(set->graphs)
+	{
+		l = set->graphs->first;
+
+		for(;l;l=l->next)
+		{
+			t_graph *g;
+			g=l->data;
+
+			// Exec Graphs
+			graph_exec(g);
+		}
+	}
+
+	set->process = 0;
+//	set->processing = 0;
+}
+
+void set_draw(t_set *set)
+{
+	t_link *l;
+
+	if(set->blocks)
+	{
+		l = set->blocks->first;
+
+		for(;l;l=l->next)
+		{
+			t_block *b;
+			b=l->data;
+
+			// Draw Single Blocks
+			b->cls->draw(b);
+		}
+	}
+
+	if(set->graphs)
+	{
+		l = set->graphs->first;
+
+		for(;l;l=l->next)
+		{
+			t_graph *g;
+			g=l->data;
+
+			// Draw Graphs
+			graph_draw(g);
+		}
+	}
+}
+	
 
 void set_block_pop(t_set *set, t_block *block)
 {
 	t_lst *lst = set->blocks;
 	list_remove_by_id(lst, block->id);
+
+	set_setup(set);
 }
 
 void set_block_push(t_set *set, t_block *block)
 {
 	t_context *C = ctx_get();
 	t_lst *lst = set->blocks;
-	C->scene->store = 1;
+	scene_store(C->scene,1);
 	list_add(lst, block);
-	C->scene->store = 0;
+	scene_store(C->scene,0);
+
+	block->set = set;
+
+	// Setup
+	set_setup(set);
 }
 
 t_set *set_rebind(t_scene *sc, void **ptr)
@@ -129,6 +241,11 @@ t_set *set_new(const char *name)
 
 	set->blocks = NULL;
 	set->graphs = NULL;
+
+	set->frame_based = 0;
+	set->process = 0;
+	set->process_id = 0;
+	set->processing = 0;
 
 	return set;
 }

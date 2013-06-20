@@ -114,8 +114,12 @@ void 		load_option(struct Context *C,struct Scene *sc);
 
 // CTX_GRAPH
 
-//void ctx_graph_update(struct Context *C);
 void ctx_set_exec(struct Context *C);
 
+// CTX_COMPUTE
+
+void ctx_compute(struct Context *C);
+
+void *ctx_set_compute(void *data);
 
 #endif 

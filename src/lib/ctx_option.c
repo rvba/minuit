@@ -108,11 +108,9 @@ void option_load(t_context *C,t_node *node)
 
 void option_save(t_context *C)
 {
-	C->scene->store=1;
-
-	//t_node *node=scene_add(C->scene,"option","option");
+	scene_store(C->scene,1);
 	t_node *node=scene_add(C->scene,nt_option,"option");
-	C->scene->store=0;
+	scene_store(C->scene,0);
 
 	t_option *option=node->data;
 

@@ -30,6 +30,21 @@ t_scene *scene_get(void)
 	return SCENE;
 }
 
+void scene_store(t_scene *scene, int val)
+{
+	if(val)
+	{
+		scene->store_stack++;
+		scene->store = 1;
+	}
+	else
+	{
+		scene->store_stack--;
+		if(scene->store_stack ==  0)
+			scene->store = 0;
+	}
+}
+
 // LOG
 
 void scene_log_loop_var(t_lst *lst)
@@ -711,6 +726,7 @@ t_scene *scene_new(void)
 	sc->selected=NULL;
 	sc->is_ready=1;
 	sc->has_generic_viewport = 0;
+	sc->store_stack = 0;
 
 	// build lists
 	sc->nodes=lst_new("nodes");

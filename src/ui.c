@@ -256,68 +256,11 @@ void ui_draw_sets(void)
 
 	t_link *link;
 
-	if(C->event->use_threading)
+	for(link = C->scene->sets->first; link; link = link->next)
 	{
-		for(link = sets->first; link; link = link->next)
-		{
-			t_set *set = link->data;
-			t_lst *lst = set->blocks;
-			t_link *l = lst->first;
-
-			if(l)
-			{
-				for(;l;l=l->next)
-				{
-					t_block *b;
-					b=l->data;
-					b->cls->draw(b);
-				}
-			}
-
-			l = set->graphs->first;
-
-			if(l)
-			{
-				for(;l;l=l->next)
-				{
-					t_graph *g;
-					g=l->data;
-					graph_draw(g);
-				}
-			}
-		}
-	}
-	else
-	{
-		for(link = C->scene->sets->first; link; link = link->next)
-		{
-			t_node *node = link->data;
-			t_set *set = node->data;
-			t_lst *lst = set->blocks;
-			t_link *l = lst->first;
-
-			if(l)
-			{
-				for(;l;l=l->next)
-				{
-					t_block *b;
-					b=l->data;
-					b->cls->draw(b);
-				}
-			}
-
-			l = set->graphs->first;
-
-			if(l)
-			{
-				for(;l;l=l->next)
-				{
-					t_graph *g;
-					g=l->data;
-					graph_draw(g);
-				}
-			}
-		}
+		t_node *node = link->data;
+		t_set *set = node->data;
+		set_draw(set);
 	}
 }
 
@@ -436,6 +379,8 @@ void ui_draw(void)
 {
 	t_context *C = ctx_get();
 
+	// Threads
+
 	// Navigation
 	ui_navigation(C);
 
@@ -527,6 +472,13 @@ t_ui *ui_new(void)
 	ui->screen_direction = 1;
 	ui->mouse_size = 9;
 	ui->camera = NULL;
+
+	ui->sets = NULL;
+
+	ui->connect_brick_in = NULL;
+	ui->connect_brick_out = NULL;
+	ui->do_connect = 0;
+	ui->do_disconnect = 0;
 
 	return ui;
 }

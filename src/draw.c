@@ -30,59 +30,6 @@ GLenum LightList[] = {
 	GL_LIGHT3,
 };
 
-t_lst *objects = NULL;
-
-
-void draw_clone_objects(t_context *C)
-{
-	t_node *node;
-	t_object *object;
-	t_object *clone;
-
-	// Init : Build List
-	if(!objects) objects = lst_new("lst");
-
-	// Clone Objects
-	t_link *link;
-	for(link = C->scene->objects->first; link; link = link->next)
-	{
-		node = link->data;
-		object = node->data;
-		clone = object_clone(object);
-		lst_add(objects, clone, "object");
-	}
-}
-
-void draw_clone_make(t_context *C)
-{
-	draw_clone_objects(C);
-}
-
-void draw_clone_free(t_context *C)
-{
-	t_link *link;
-	t_object *object;
-
-	for(link=objects->first;link;link=link->next)
-	{
-		object = link->data;
-		_object_free(object);
-	}
-
-	lst_cleanup(objects);
-}
-
-void draw_render_start(t_context *C)
-{
-	draw_clone_make(C);
-}
-
-void draw_render_stop(t_context *C)
-{
-	draw_clone_free(C);
-}
-
-
 void draw_switch_axis_world(t_draw *draw)
 {
 	if (draw->show_axis_world) draw->show_axis_world=0;
@@ -661,45 +608,21 @@ void draw_objects(t_draw *draw, t_scene *scene)
 	t_link *link;
 	t_node *node;
 
-	t_context *C = ctx_get();
-	if(C->event->use_threading)
+	link=scene->objects->first;
+
+	for(link=scene->objects->first;link;link=link->next)
 	{
-		link=objects->first;
+		node=link->data;
+		t_object *object = node->data;
 
-		for(;link;link=link->next)
+		if(!object)
 		{
-			t_object *object = link->data;
-
-			if(!object)
-			{
-				printf("[ERROR draw_objects] No data\n");
-				break;
-			}
-			else
-			{
-				if(!object->cls) printf("err !!!!!!\n");
-				object->cls->draw(object);
-			}
+			printf("[ERROR draw_objects] No data\n");
+			break;
 		}
-	}
-	else
-	{
-		link=scene->objects->first;
-
-		for(link=scene->objects->first;link;link=link->next)
+		else
 		{
-			node=link->data;
-			t_object *object = node->data;
-
-			if(!object)
-			{
-				printf("[ERROR draw_objects] No data\n");
-				break;
-			}
-			else
-			{
-				object->cls->draw(object);
-			}
+			object->cls->draw(object);
 		}
 	}
 }

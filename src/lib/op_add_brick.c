@@ -105,7 +105,6 @@ t_node *add_block(t_context *C,const char *name)
 {
 	// Get Set
 	t_set *set = get_current_set(C);
-	t_lst *list=set->blocks;
 
 	// New Block
 	t_node *node_block=block_make(name,"block");
@@ -115,10 +114,7 @@ t_node *add_block(t_context *C,const char *name)
 	block->state.draw_outline = 1;
 
 	// Add to Set
-	list_add(list,block);
-
-	// Store Set
-	block->set = set;
+	set_block_push(set,block);
 
 	// Set Block Pos
 

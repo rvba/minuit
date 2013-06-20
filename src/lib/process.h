@@ -29,6 +29,8 @@ typedef struct Process
 	void *(* loop)(void *ptr);
 	void *(* exec)(void *ptr);
 
+	void *data;
+
 	int exit;
 	int limit;
 	int play;
@@ -36,17 +38,20 @@ typedef struct Process
 	int done;
 	int busy;
 
+	int engine_id;
+
 }t_process;
 
 
-void *ctx_compute_graph(void *data);
-void *ctx_compute(void *data);
-void *ctx_thread_main(void *data);
-void ctx_thread_init(struct Context *C);
-t_process *process_new(char *name,void*(* func)(void *data));
-t_process *process_add(struct Context *C,char *name,void*(* func)(void *ptr));
-void process_launch(t_process *process);
+void *		ctx_compute_graph(void *data);
+void *		ctx_compute_objects(void *data);
+void *		ctx_thread_main(void *data);
+void 		ctx_thread_init(struct Context *C);
 
-void process_free(t_process *process);
+void 		process_remove(t_process *process);
+t_process *	process_new(const char *name,void*(* func)(void *data));
+t_process *	process_add(struct Context *C, const char *name, void *(* f)(void *d));
+void 		process_launch(t_process *process);
+void 		process_free(t_process *process);
 
 #endif

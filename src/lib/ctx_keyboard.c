@@ -36,18 +36,6 @@ void ctx_switch_intro(t_context *C)
 
 void keymap_generic(unsigned char key)
 {
-	t_context *C=ctx_get();
-
-	switch(key)
-	{
-		case 'q': op_quit(NULL);break;
-		case 9  : 
-
-			op_screen_switch();
-			//reset key
-			C->app->keyboard->key_pressed=0;
-			break;
-	}
 }
 
 void switch_txt(t_context *C)

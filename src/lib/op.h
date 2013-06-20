@@ -103,4 +103,6 @@ struct Node *add_block(struct Context *C,const char *name);
 
 void add_block_offset(struct Context *C, struct Block *block);
 
+int op_post_quit(struct Node *node);
+
 #endif

@@ -25,6 +25,7 @@
 #include "brick.h"
 #include "vector.h"
 #include "clock.h"
+#include "set.h"
 
 int brick_check_loop(t_brick *brick)
 {
@@ -80,6 +81,14 @@ void brick_set_updated(t_brick *brick)
 	brick->plug_in.state.is_updated = 1;
 	brick->plug_intern.state.is_updated = 1;
 	brick->plug_out.state.is_updated = 1;
+
+	// Set Setup
+	if(brick->mode == bm_triggering)
+	{
+		t_block *block = brick->block;
+		t_set *set = block->set;
+		if(set) set_setup(set);
+	}
 }
 
 // BRICK ADD
@@ -92,7 +101,7 @@ void *op_brick_add(t_brick *brick)
 	t_brick *this_brick;
 
 	// store
-	C->scene->store=1;
+	scene_store(C->scene,1);
 
 	char *name=brick->name;
 
@@ -165,7 +174,7 @@ void *op_brick_add(t_brick *brick)
 	else if(is(name,"stack")) 		node = add_stack(C); 
 
 	// Store
-	C->scene->store=0;
+	scene_store(C->scene,0);
 
 	// Switch Desk
 	if(!C->ui->show_sets) show_sets(C);
@@ -181,6 +190,13 @@ void *op_brick_add(t_brick *brick)
 			this_brick = link->data;
 			op_limit(this_brick);
 		}
+
+		// Frame Based
+		if(is(name,"frame") || is(name,"timer") || is(name,"timer low"))
+		{
+			this_block->state.frame_based  =1;
+		}
+
 	}
 		
 	return NULL;
@@ -777,7 +793,7 @@ void exe_add_brick_parent_child(t_dict *args)
 	t_block *block=brick->block;
 	t_plug *plug_intern=&brick->plug_intern;
 
-	C->scene->store=1;
+	scene_store(C->scene,1);
 
 	//add brick
 
@@ -791,7 +807,7 @@ void exe_add_brick_parent_child(t_dict *args)
 	plug_add_parent(p_intern,plug_intern);
 	p_in->state.follow_in=0;
 
-	C->scene->store=0;
+	scene_store(C->scene,0);
 
 	block->state.update_geometry=1;
 }
@@ -806,7 +822,7 @@ void exe_add_brick_child_parent(t_dict *args)
 
 	t_block *block=brick->block;
 
-	C->scene->store=1;
+	scene_store(C->scene,1);
 
 	t_node *n=add_part_slider_float(C,block,".",NULL);
 	t_brick *b=n->data;
@@ -820,7 +836,7 @@ void exe_add_brick_child_parent(t_dict *args)
 	plug_add_parent(plug_target,plug_brick);
 	p_in->state.follow_in=1;
 
-	C->scene->store=0;
+	scene_store(C->scene,0);
 
 	block->state.update_geometry=1;
 }

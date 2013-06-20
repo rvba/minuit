@@ -26,8 +26,16 @@ typedef struct Set
 	struct Lst *blocks;
 	struct Lst *graphs;
 
+	int frame_based;
+	int process;
+	int process_id;
+	int processing;
+
 }t_set;
 
+void 		set_setup(t_set *set);
+void 		set_exec(t_set *set);
+void 		set_draw(t_set *set);
 void 		set_block_pop(t_set *set, struct Block *block);
 void 		set_block_push(t_set *set, struct Block *block);
 t_set *		set_rebind(struct Scene *sc, void **ptr);

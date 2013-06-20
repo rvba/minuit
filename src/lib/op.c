@@ -552,9 +552,9 @@ void *find_register(const char *target,const char *name)
 
 void op_add_register(t_context *C,t_dict *dict,const char *name,void *ptr)
 {
-	C->scene->store=1;
+	scene_store(C->scene,1);
 	scene_add_data(C->scene,"app_data",dict->name,name,ptr);
-	C->scene->store=0;
+	scene_store(C->scene,0);
 
 	dict_symbol_add(dict,name,dt_pointer,ptr);
 }
@@ -564,7 +564,7 @@ void op_add_register(t_context *C,t_dict *dict,const char *name,void *ptr)
 void register_set(t_context *C)
 {
 	//store
-	C->scene->store=1;
+	scene_store(C->scene,1);
 
 	// func
 	scene_add_data(C->scene,"app_data","func","op_slider",			op_slider);
@@ -620,7 +620,7 @@ void register_set(t_context *C)
 	scene_add_data(C->scene,"app_struct","block","menu_node",		menu_node);
 
 	//store
-	C->scene->store=0;
+	scene_store(C->scene,0);
 
 
 	// FUNC

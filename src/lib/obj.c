@@ -385,7 +385,7 @@ void _op_obj_import(void)
 		
 		// add objects to scene
 
-		C->scene->store=1;
+		scene_store(C->scene,1);
 
 		for(link=OBJECTS->first;link;link=link->next)
 		{
@@ -412,7 +412,7 @@ void _op_obj_import(void)
 			object->cls->link(object,node_mesh);
 		}
 
-		C->scene->store=0;
+		scene_store(C->scene,0);
 
 		// free obj
 

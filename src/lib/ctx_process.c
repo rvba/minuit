@@ -18,6 +18,7 @@
 #include "clock.h"
 #include "system.h"
 #include "event.h"
+#include "set.h"
 
 void *ctx_compute_graph(void *data)
 {
@@ -34,7 +35,19 @@ void *ctx_compute_graph(void *data)
 	return NULL;
 }
 
-void *ctx_compute(void *data)
+void *ctx_set_compute(void *data)
+{
+	t_process *process=(t_process *)data;
+	t_set *set = process->data;
+
+	process->busy=1;
+	set_exec(set);
+	process->busy=0;
+
+	return NULL;
+}
+
+void *ctx_compute_objects(void *data)
 {
 	t_context *C=ctx_get();
 	t_process *process=(t_process *)data;
@@ -142,31 +155,24 @@ void process_launch(t_process *process)
 	term_log("p %s", process->name);
 }
 
-t_process *process_add(t_context *C,char *name,void*(* func)(void *ptr))
-{
-	t_process *process = process_new(name,func);
-	lst_add(C->engine->processes,process,name);
-
-	return process;
-}
-
 void ctx_thread_init(t_context *C)
 {
-	// COMPUTE OBJECTS PROCESS
-	/*
-	t_process *process = process_new("main",ctx_compute);
+}
+
+void process_remove(t_process *process)
+{
+	t_context *C = ctx_get();
+	engine_process_remove(C->engine,process);
+}
+
+t_process *process_add(t_context *C, const char *name, void *(* f)(void *d))
+{
+	t_process *process = process_new(name,f);
 	
 	process->clock->limit=.1;
-	process_launch(process);
-	lst_add(C->engine->processes,process,"process_main");
-	*/
+	engine_process_add(C->engine,process);
 
-	// GRAPH PROCESS
-	t_process *process_graph = process_new("graph",ctx_compute_graph);
-	
-	process_graph->clock->limit=.1;
-	process_launch(process_graph);
-	lst_add(C->engine->processes,process_graph,"graph");
+	return process;
 }
 
 void process_free(t_process *process)
@@ -175,7 +181,7 @@ void process_free(t_process *process)
 	free(process);
 }
 
-t_process *process_new(char *name,void*(* func)(void *data))
+t_process *process_new(const char *name,void*(* func)(void *data))
 {
 	t_process *process = (t_process *)malloc(sizeof(t_process));
 
@@ -196,6 +202,9 @@ t_process *process_new(char *name,void*(* func)(void *data))
 	process->func=func;
 	process->loop=process_loop;
 	process->exec=func;
+
+	process->data = NULL;
+	process->engine_id = 0;
 
 	return process;
 }

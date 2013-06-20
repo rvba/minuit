@@ -299,5 +299,7 @@ t_app *app_new(int argc,char **argv)
 
 	clock_init(app->clock);
 
+	app->quit = 0;
+
 	return app;
 }

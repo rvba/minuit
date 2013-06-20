@@ -71,6 +71,14 @@ int op_exit(void)
 int op_quit(t_node *node)
 {
 	t_context *C = ctx_get();
+	C->app->quit = 1;
+
+	return 1;
+}
+
+int op_post_quit(t_node *node)
+{
+	t_context *C = ctx_get();
 
 	engine_quit(C->engine);
 

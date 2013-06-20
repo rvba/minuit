@@ -61,9 +61,6 @@ void *op_new_set(const char *name)
 
 void *op_add_set(t_brick *brick)
 {
-	t_context *C = ctx_get();
-	C->scene->store=1;
-	C->scene->store=0;
 	return NULL;
 }
 
@@ -72,7 +69,7 @@ void *op_add_viewport(t_brick *brick)
 	t_context *C = ctx_get();
 	term_print(C->term,"+ viewport");
 
-	C->scene->store=1;
+	scene_store(C->scene,1);
 	C->scene->has_generic_viewport = 1;
 
 	t_node *node = viewport_add("viewport");
@@ -80,7 +77,7 @@ void *op_add_viewport(t_brick *brick)
 
 	viewport->draw = viewport_draw_scene;
 
-	C->scene->store=0;
+	scene_store(C->scene,0);
 
 	return node;
 }
@@ -90,7 +87,7 @@ void *op_new_camera(const char *name)
 	t_context *C = ctx_get();
 	term_print(C->term,"+ camera");
 
-	C->scene->store=1;
+	scene_store(C->scene,1);
 
 	t_node *node_object=object_add("camera",name);
 	t_object *object=node_object->data;
@@ -99,7 +96,7 @@ void *op_new_camera(const char *name)
 
 	object->cls->link(object,node_camera);
 
-	C->scene->store=0;
+	scene_store(C->scene,0);
 	return node_object;
 }
 
@@ -114,7 +111,7 @@ void* op_add_camera_main(void)
 	t_context *C = ctx_get();
 	term_print(C->term,"+ camera");
 
-	C->scene->store=1;
+	scene_store(C->scene,1);
 
 	t_node *node_object=object_add("camera","main_camera");
 	t_object *object=node_object->data;
@@ -123,7 +120,7 @@ void* op_add_camera_main(void)
 
 	object->cls->link(object,node_camera);
 
-	C->scene->store=0;
+	scene_store(C->scene,0);
 	return node_object;
 }
 
@@ -133,11 +130,11 @@ void *op_add_light(t_brick *brick)
 	t_context *C = ctx_get();
 	term_print(C->term,"+ light");
 
-	C->scene->store=1;
+	scene_store(C->scene,1);
 
 		light_make("light");
 
-	C->scene->store=0;
+	scene_store(C->scene,0);
 	return NULL;
 }
 
@@ -147,7 +144,7 @@ void *op_add_cube(t_brick *brick)
 	t_context *C=ctx_get();
 	term_print(C->term,"+ cube");
 
-	C->scene->store=1;
+	scene_store(C->scene,1);
 
 		t_node *node_mesh=op_new_cube("cube");
 		t_node *node_object=object_add("mesh","cube");
@@ -155,7 +152,7 @@ void *op_add_cube(t_brick *brick)
 		t_object *object=node_object->data;
 		object->cls->link(object,node_mesh);
 
-	C->scene->store=0;
+	scene_store(C->scene,0);
 	return NULL;
 }
 
@@ -173,7 +170,7 @@ void *op_add_uv_cube(t_brick *brick)
 	t_context *C=ctx_get();
 	term_print(C->term,"+ uv cube");
 
-	C->scene->store=1;
+	scene_store(C->scene,1);
 
 		t_node *node_mesh = op_new_cube("me_uv_cube");
 		t_node *node_object=object_add("mesh","ob_uvcube");
@@ -187,7 +184,7 @@ void *op_add_uv_cube(t_brick *brick)
 		t_object *object=node_object->data;
 		object->cls->link(object,node_mesh);
 
-	C->scene->store=0;
+	scene_store(C->scene,0);
 	return NULL;
 }	
 
@@ -195,7 +192,7 @@ t_node *op_add_new_wire_cube(t_node *n)
 {
 	t_context *C=ctx_get();
 
-	C->scene->store=1;
+	scene_store(C->scene,1);
 
 		t_node *node_mesh = op_new_cube("me_wire_cube");
 		t_node *node_object=object_add("mesh","ob_wire_cube");
@@ -211,7 +208,7 @@ t_node *op_add_new_wire_cube(t_node *n)
 		t_object *object = node_object->data;
 		object->cls->link(object,node_mesh);
 
-	C->scene->store=0;
+	scene_store(C->scene,0);
 
 	return node_object;
 }

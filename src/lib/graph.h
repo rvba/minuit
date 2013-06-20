@@ -14,6 +14,7 @@
 
 struct Scene;
 struct Block;
+struct Set;
 
 typedef struct Graph
 {
@@ -28,8 +29,11 @@ typedef struct Graph
 	struct Set *set;
 
 	int has_loop;
+	int frame_based;
 	int start_loop;
 	int end_loop;
+	int done_loop;
+	int done;
 
 }t_graph;
 

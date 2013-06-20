@@ -110,7 +110,7 @@ void ctx_render_video(t_context *C)
 
 		if(!process->busy)
 		{
-			engine_process_remove(C->engine,"record");
+			engine_process_remove(C->engine,process);
 
 			if(C->app->video_build)
 			{

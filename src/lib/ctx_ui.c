@@ -383,6 +383,25 @@ void exe_add_action(t_action *action)
 	lst_add(EXE,action,"action");
 }
 
+void ctx_do_connections(t_context *C)
+{
+	if(C->ui->do_connect)
+	{
+		_cls_brick_connect(C->ui->connect_brick_in,C->ui->connect_brick_out);
+		C->ui->do_connect = 0;
+		C->ui->connect_brick_in = NULL;
+		C->ui->connect_brick_out = NULL;
+	}
+
+	if(C->ui->do_disconnect)
+	{
+		_cls_brick_disconnect(C->ui->connect_brick_in);
+		C->ui->do_disconnect = 0;
+		C->ui->connect_brick_in = NULL;
+	}
+
+}
+
 // CTX UI 
 
 void ctx_ui(t_context *C)
@@ -397,6 +416,9 @@ void ctx_ui(t_context *C)
 	ctx_block_mouse_update(C); 
 	ctx_block_screen_update(C);
 	ctx_block_set_update(C);
+
+	// update connections
+	ctx_do_connections(C);
 	
 	// update linking 
 	ctx_ui_linking(C);

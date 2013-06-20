@@ -52,16 +52,21 @@ void block_set_loop_state(t_block *block, int state)
 	if(graph)
 	{
 		// Set Loop On
-		if(state)
+		if(state == 1)
 		{
 			graph->start_loop = 1;
 			graph->end_loop = 0;
 		}
 		// Set Loop Off
-		else
+		else if(state == 2)
 		{
 			graph->start_loop = 0;
 			graph->end_loop = 1;
+		}
+		else 
+		{
+			graph->start_loop = 0;
+			graph->end_loop = 0;
 		}
 	}
 }
@@ -247,9 +252,9 @@ void block_graph_add(t_block *self, t_block *dst)
 	else
 	{
 		// Build New Graph
-		C->scene->store = 1;
+		scene_store(C->scene,1);
 		t_graph *graph = graph_add("graph");
-		C->scene->store = 0;
+		scene_store(C->scene,0);
 
 		// Add Blocks
 		graph_block_add(graph, self);
@@ -408,7 +413,7 @@ void _add_block(t_context *C,t_block *block)
 t_block *block_dupli(t_block *block)
 {
 	t_context *C=ctx_get();
-	C->scene->store=1;
+	scene_store(C->scene,1);
 
 	t_node *clone_node=add_block(C,block->name);
 	t_block *clone_block=clone_node->data;
@@ -424,7 +429,7 @@ t_block *block_dupli(t_block *block)
 		brick_dupli(clone_block,b);
 	}
 
-	C->scene->store=0;
+	scene_store(C->scene,0);
 
 	return clone_block;
 }
@@ -432,7 +437,7 @@ t_block *block_dupli(t_block *block)
 t_block *block_copy(t_block *block)
 {
 	t_context *C=ctx_get();
-	C->scene->store=1;
+	scene_store(C->scene,1);
 
 	t_node *clone_node = block_make(block->name,block->type);
 	t_block *clone_block = clone_node->data;
@@ -452,7 +457,7 @@ t_block *block_copy(t_block *block)
 		brick_copy(clone_block,b);
 	}
 
-	C->scene->store=0;
+	scene_store(C->scene,0);
 
 	return clone_block;
 }
@@ -753,6 +758,7 @@ t_block *block_new(const char *name)
 	block->state.is_moveable = 1;
 	block->state.is_a_loop = 0;
 	block->state.is_in_graph = 0;
+	block->state.frame_based = 0;
 
 	block->tot_bricks=0;
 	block->width=0;

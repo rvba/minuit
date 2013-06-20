@@ -164,9 +164,17 @@ void ctx_update(t_context *C)
 
 void ctx_handler(void)
 {
-	ctx_update(CONTEXT);
-	ctx_render(CONTEXT);
-	ctx_reset(CONTEXT);
+	if(CONTEXT->app->quit)
+	{
+		op_post_quit(NULL);
+	}
+	else
+	{
+		ctx_update(CONTEXT);
+		ctx_compute(CONTEXT);
+		ctx_render(CONTEXT);
+		ctx_reset(CONTEXT);
+	}
 }
 
 

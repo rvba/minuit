@@ -24,18 +24,20 @@
 
 #include "common.h"
 
+/*
 typedef struct Event t_event;
 typedef enum EventState t_event_state;
+typedef struct State_Event_UI t_state_event_ui;
+*/
 
-enum EventState
+typedef enum EventState
 {
 	event_idle,
 	event_linking,
 	event_unlinking,
-};
+}t_event_state;
 
-typedef struct State_Event_UI t_state_event_ui;
-struct State_Event_UI
+typedef struct State_Event_UI
 {
 	// mouse
 	int is_mouse_left_pressed:1;
@@ -77,9 +79,9 @@ struct State_Event_UI
 
 	int pan_x;
 	int pan_y;
-};
+}t_state_event_ui;
 
-struct Event
+typedef struct Event
 {
 	t_event_state state;
 
@@ -200,7 +202,7 @@ struct Event
 	int graph_updated;
 	int graph_init;
 
-};
+}t_event;
 
 t_event *event_new(void);
 

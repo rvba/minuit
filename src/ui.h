@@ -105,6 +105,12 @@ typedef struct Ui
 	struct Brick *brick_in;
 	struct Brick *brick_out;
 
+	struct Brick *connect_brick_in;
+	struct Brick *connect_brick_out;
+
+	int do_connect;
+	int do_disconnect;
+
 	// screens
 	struct Lst *screens;
 	struct Link *screen_link_active;
@@ -113,6 +119,8 @@ typedef struct Ui
 	int mouse_size;
 
 	struct Camera *camera;
+
+	struct Lst *sets;
 }t_ui;
 
 // UI.C

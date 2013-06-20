@@ -177,7 +177,7 @@ t_brick *brick_dupli(t_block *block,t_brick *brick)
 {
 	t_context *C=ctx_get();
 
-	C->scene->store=1;
+	scene_store(C->scene,1);
 
 	t_plug *plug_intern=&brick->plug_intern;
 
@@ -190,8 +190,7 @@ t_brick *brick_dupli(t_block *block,t_brick *brick)
 	clone_brick->state.draw_value=brick->state.draw_value;
 	clone_brick->state.draw_outline=brick->state.draw_outline;
 
-	C->scene->store=0;
-
+	scene_store(C->scene,0);
 
 	if(brick->state.clone)
 	{
@@ -214,7 +213,7 @@ t_brick *brick_copy(t_block *block,t_brick *brick)
 {
 	t_context *C=ctx_get();
 
-	C->scene->store=1;
+	scene_store(C->scene,1);
 
 	t_plug *plug_intern=&brick->plug_intern;
 
@@ -232,7 +231,7 @@ t_brick *brick_copy(t_block *block,t_brick *brick)
 	clone_brick->state.draw_value=brick->state.draw_value;
 	clone_brick->state.draw_outline=brick->state.draw_outline;
 
-	C->scene->store=0;
+	scene_store(C->scene,0);
 
 	return clone_node->data;
 }
@@ -293,7 +292,7 @@ void brick_type_change(t_brick *brick,t_plug *plug)
 	t_context *C=ctx_get();
 
 	// scene store
-	C->scene->store=1;
+	scene_store(C->scene,1);
 
 	t_plug *plug_in=&brick->plug_in;
 	t_plug *plug_intern=&brick->plug_intern;
@@ -320,7 +319,7 @@ void brick_type_change(t_brick *brick,t_plug *plug)
 	// brick init
 	brick_cls_init(brick);
 
-	C->scene->store=0;
+	scene_store(C->scene,0);
 }
 
 void brick_change_type_by_name(t_brick *brick,t_data_type type)
@@ -333,7 +332,7 @@ void brick_change_type_by_name(t_brick *brick,t_data_type type)
 
 	if(plug_intern->data_type!=type)
 	{
-		C->scene->store=1;
+		scene_store(C->scene,1);
 
 		// plug init
 
@@ -354,7 +353,7 @@ void brick_change_type_by_name(t_brick *brick,t_data_type type)
 
 		brick_cls_init(brick);
 
-		C->scene->store=0;
+		scene_store(C->scene,0);
 	}
 }
 

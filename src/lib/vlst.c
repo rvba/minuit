@@ -143,11 +143,9 @@ void __vlst_update_data(t_vlst *vlst,t_vlst *caller)
 		vlst_data_init(vlst,old_count);
 
 		// add new data,var
-		C->scene->store=1;
-
+		scene_store(C->scene,1);
 		scene_add_data_var(C->scene,"vlst_data","v_data",new_size,vlst->data);
-
-		C->scene->store=0;
+		scene_store(C->scene,0);
 
 		// shared vlst (vertex, color , ....)
 		if(vlst->is_linked)

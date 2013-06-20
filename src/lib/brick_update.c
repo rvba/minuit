@@ -35,6 +35,14 @@ float vec[3];
 
 void cls_brick_connect(t_brick *brick_in ,t_brick *brick_out)
 {
+	t_context *C = ctx_get();
+	C->ui->do_connect = 1;
+	C->ui->connect_brick_in = brick_in;
+	C->ui->connect_brick_out = brick_out;
+}
+
+void _cls_brick_connect(t_brick *brick_in ,t_brick *brick_out)
+{
 	t_plug *plug_brick_in = &brick_in->plug_intern;
 	t_plug *plug_brick_out = &brick_out->plug_intern;
 
@@ -44,7 +52,7 @@ void cls_brick_connect(t_brick *brick_in ,t_brick *brick_out)
 
 // DISCONNECT
 
-void cls_brick_disconnect(t_brick *self)
+void _cls_brick_disconnect(t_brick *self)
 {
 	t_context *C=ctx_get();
 
@@ -76,6 +84,13 @@ void cls_brick_disconnect(t_brick *self)
 	C->ui->brick_out=brick_out;
 	// remove in
 	C->ui->brick_in=NULL;
+}
+
+void cls_brick_disconnect(t_brick *self)
+{
+	t_context *C = ctx_get();
+	C->ui->do_disconnect = 1;
+	C->ui->connect_brick_in = self;
 }
 
 // MOUSE

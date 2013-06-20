@@ -34,7 +34,8 @@ typedef struct Engine
 	char name[_NAME_];
 	t_engine_cls *cls;
 
-	int tot_processes;
+	int process_count;
+	int process_id;
 	
 	int with_global_limit;
 	float global_limit;
@@ -55,9 +56,12 @@ void 		engine_stop(void);
 void 		engine_start_job(t_engine *engine,int id);
 void 		engine_stop_job(t_engine *engine,int id);
 
+void 		engine_process_add(t_engine *engine, struct Process *process);
 struct Process *engine_process_get(t_engine *engine,const char *name);
-void 		engine_process_remove(t_engine *engine, const char *name);
+void 		engine_process_remove(t_engine *engine, struct Process *process);
+struct Process*	engine_process_get_by_id(t_engine *engine, int id);
 
 void 		engine_cleanup(t_engine *engine);
+void		engine_show(t_engine *engine);
 
 #endif

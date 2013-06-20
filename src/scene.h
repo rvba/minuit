@@ -20,6 +20,7 @@ typedef struct Scene
 	int is_ready;
 	int store;
 	int has_generic_viewport;
+	int store_stack;
 
 	// id
 	int id; 
@@ -131,5 +132,6 @@ void scene_option_free(t_scene *sc,struct Node *node) ;
 
 struct Node *scene_struct_get(t_scene *sc,void *ptr);
 t_scene *scene_new(void);
+void scene_store(t_scene *scene, int val);
 
 #endif

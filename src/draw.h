@@ -101,6 +101,7 @@ typedef struct Draw
 
 	int show_axis_world;
 	int draw_lights;
+
 }t_draw;
 
 void draw_render_start(struct Context *C);

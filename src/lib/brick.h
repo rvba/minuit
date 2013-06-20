@@ -331,6 +331,9 @@ void 		cls_brick_trigger_action_default(struct Brick *brick);
 void 		cls_brick_connect(struct Brick *self,struct Brick *target);
 void 		cls_brick_disconnect(struct Brick *self);
 
+void 		_cls_brick_connect(struct Brick *self,struct Brick *target);
+void 		_cls_brick_disconnect(struct Brick *self);
+
 void 		brick_build_width(struct Brick *brick);
 void 		brick_build_txt(struct Brick *brick);
 
