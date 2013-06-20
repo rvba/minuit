@@ -178,11 +178,11 @@ void draw_mesh_direct_faces(t_draw *draw, t_mesh *mesh)
 	t_vlst *vertex=mesh->vertex;
 	GLfloat *v=vertex->data;	// vertices 
 	t_vlst *quads=mesh->quads;
-	int *q=quads->data;		// quad indices
 	int i,j,n;
 	// quads
-	if(q)
+	if(quads)
 	{
+		int *q=quads->data;		// quad indices
 		t_vlst *vlst_quad=mesh->quad_normal;
 		float *normals=vlst_quad->data;
 
