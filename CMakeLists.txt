@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.6) 
 
 project(Minuit)
- 
+
 file(
     GLOB_RECURSE
     source_files
@@ -10,9 +10,11 @@ file(
     src/util/*
 )
 
+add_library(MINUIT SHARED ${source_files})
+
 add_executable(
     minuit
-    ${source_files}
+    minuit.c
 )
 
 include_directories(src src/lib src/util)
@@ -22,9 +24,10 @@ find_package(GLUT REQUIRED)
 find_package(PNG REQUIRED)
 find_package(JPEG REQUIRED)
 
-include_directories( ${OPENGL_INCLUDE_DIRS}  ${GLUT_INCLUDE_DIRS} ${PNG_INCLUDE_DIR} ${JPEG_INCLUDE_DIRS})
+include_directories(${OPENGL_INCLUDE_DIRS}  ${GLUT_INCLUDE_DIRS} ${PNG_INCLUDE_DIR} ${JPEG_INCLUDE_DIRS})
 
-target_link_libraries(minuit ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${PNG_LIBRARY} ${JPEG_LIBRARY})
+target_link_libraries(MINUIT ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${PNG_LIBRARY} ${JPEG_LIBRARY})
+target_link_libraries(minuit MINUIT)
 
 LINK_DIRECTORIES(${OPENGL_LIBRARIES})
 
