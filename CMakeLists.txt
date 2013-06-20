@@ -10,7 +10,7 @@ file(
     src/util/*
 )
 
-add_library(MINUIT SHARED ${source_files})
+add_library(MINUIT STATIC ${source_files})
 
 add_executable(
     minuit
