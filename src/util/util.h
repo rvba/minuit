@@ -76,6 +76,7 @@ void print_args(int argc,char **argv);
 
 // VECTOR
 
+inline float deg_to_rad(int deg);
 void calc_normals(float *v1,float *v2,float *v3,float *result);
 inline void vprint3i(int *v,char end);
 inline void vprint3f(float *v,char end);

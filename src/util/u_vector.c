@@ -47,6 +47,11 @@ void calc_normals(float *v1,float *v2,float *v3,float *result)
 }
 */
 
+inline float deg_to_rad(int deg)
+{
+	return ((360.0f * deg) / (2.0f * PI));
+}
+
 void vprint3i(int *v,char end)
 {
 	printf("[v (%d)(%d)(%d)]%c",v[0],v[1],v[2],end);
