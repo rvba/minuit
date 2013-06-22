@@ -20,7 +20,6 @@ int u_randn(int density)
 
 int u_randrange(int start,int end)
 {
-	//srand(time(NULL));
 	int n;
 	if (start != end)  n = rand()%(end-start) + start;
 	else n =start;
@@ -31,7 +30,6 @@ int u_randrange_relative(int start,int end)
 {
 	int n;
 
-	//srand(time(NULL));
 	if (start != end)  n = rand()%(end-start) -((end-start)/2);
 	else n =start;
 	return n;

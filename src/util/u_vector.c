@@ -49,7 +49,7 @@ void calc_normals(float *v1,float *v2,float *v3,float *result)
 
 inline float deg_to_rad(int deg)
 {
-	return ((360.0f * deg) / (2.0f * PI));
+	return ((PI * deg) / 180.0f);
 }
 
 void vprint3i(int *v,char end)
