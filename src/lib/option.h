@@ -58,7 +58,6 @@ typedef struct Option
 	int draw_with_polygon_offset;
 	int draw_with_alpha;
 	int draw_with_grid;
-	int draw_img_with_alpha;
 	int draw_divx;
 	int draw_divy;
 	int draw_show_axis_world;

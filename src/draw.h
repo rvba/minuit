@@ -95,7 +95,6 @@ typedef struct Draw
 	int with_polygon_offset;
 	int with_alpha;
 	int with_grid;
-	int img_with_alpha;
 	int divx;
 	int divy;
 

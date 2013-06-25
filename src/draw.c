@@ -742,7 +742,6 @@ t_draw *draw_new(void)
 	draw->with_alpha=DRAW_WITH_ALPHA;
 	draw->with_blend=DRAW_WITH_BLEND;
 	draw->with_grid=0;
-	draw->img_with_alpha=0;
 	draw->divx=2;
 	draw->divy=2;
 
