@@ -774,7 +774,7 @@ t_node *lst_find_node_by_name(t_lst *lst,const char *name)
 			}
 		}
 
-		printf("[ERROR lst_find_node by name] Can't find node:%s\n",name);
+		//printf("[ERROR lst_find_node by name] Can't find node:%s\n",name);
 		return NULL;
 	}
 	else
