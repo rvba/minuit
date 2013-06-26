@@ -475,13 +475,10 @@ void cls_brick_update(t_brick *brick)
 					// START TYPING
 					else if(mouse_over && (button_left == button_pressed) && C->app->keyboard->alt)
 					{
-						if(!C->event->ui.is_menu_mouse_show)
-						{
-							C->event->is_brick_transformed=1;
-							C->ui->brick_selected=brick;
-							brick->mode=bm_typing;
-							C->event->ui.typing_start = 1;
-						}
+						C->event->is_brick_transformed=1;
+						C->ui->brick_selected=brick;
+						brick->mode=bm_typing;
+						C->event->ui.typing_start = 1;
 					}
 
 					// START TRIGGER 
