@@ -30,7 +30,8 @@
 #define LETTER_RESOLUTION 2.5
 
 #define _SCALE 1.5
-#define _PRECISION "%-.2f"
+//#define _PRECISION "%-.2f"
+#define _PRECISION "%.2f"
 
 #define _BK 25
 #define TXT_LAYOUT_X 255

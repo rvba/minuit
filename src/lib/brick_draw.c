@@ -92,7 +92,8 @@ void brick_build_txt(t_brick *brick)
 		switch(type)
 		{
 			case dt_float:
-				snprintf(txt,30,_PRECISION,drf_float(plug_intern->data));
+				//snprintf(txt,30,_PRECISION,drf_float(plug_intern->data));
+				snprintf(txt,30,"%.2f",drf_float(plug_intern->data));
 				txt_data->data_change(txt_data,txt);
 				break;
 
