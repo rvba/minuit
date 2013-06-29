@@ -236,8 +236,6 @@ inline void vplus4f(float *v,float i)
 	v[1] += i;
 	v[2] += i;
 	v[3] += i;
-
-	printf("%f\n",v[0]);
 }
 
 
