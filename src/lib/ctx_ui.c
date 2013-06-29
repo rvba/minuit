@@ -27,6 +27,8 @@
 #include "screen.h"
 #include "graph.h"
 
+#include "op.h"
+
 void ctx_ui_freeze(t_context *C)
 {
 	if(C->ui->update_links) C->ui->update_links = 0;
@@ -406,6 +408,10 @@ void ctx_do_connections(t_context *C)
 
 void ctx_ui(t_context *C)
 {
+	if(C->event->color_transition_use && C->event->color_transition)
+	{
+		op_set_color(C,2);
+	}
 	// intro test stop 
 	ctx_ui_intro(C);
 

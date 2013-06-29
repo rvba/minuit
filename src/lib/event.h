@@ -202,6 +202,11 @@ typedef struct Event
 	int graph_updated;
 	int graph_init;
 
+	int color_transition;
+	int color_transition_use;
+	int color_transition_set;
+	int color_transition_count;
+
 }t_event;
 
 t_event *event_new(void);

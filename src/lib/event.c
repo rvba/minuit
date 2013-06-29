@@ -132,6 +132,11 @@ t_event *event_new(void)
 	event->graph_computing = 0;
 	event->graph_updated = 1;
 	event->graph_init = 0;
+
+	event->color_transition = 0;
+	event->color_transition_use = 1;
+	event->color_transition_set = 0;
+	event->color_transition_count = 0;
 	
 	return event;
 }

@@ -115,7 +115,8 @@ float _qd[]={
 
 int _underscore[]={5,9,_BK};
 int _at[]={16,18,18,8,8,6,6,11,11,13,8,4,4,24,24,20,20,0,0,2,_BK};
-int _period[]={8,1,_BK};
+//int _period[]={8,1,_BK};
+int _period[]={13,8,8,1,_BK};
 int _parent_left[]={17,11,11,7,_BK};
 int _parent_right[]={17,13,13,7,_BK};
 

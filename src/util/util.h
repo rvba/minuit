@@ -102,6 +102,8 @@ inline float vmag(float v[3]);
 inline void vnormalize(float v[3]);
 inline void cnorm(float c[3],float o[3]);
 inline void cconv(float c[3],int o[3]);
+inline void vplus4i(int *v,int i);
+inline void vplus4f(float *v,float i);
 
 // VOLUMES
 

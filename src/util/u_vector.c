@@ -222,6 +222,25 @@ inline void cconv(float c[3],int o[3])
 	c[2]=((float)o[2])/255.0f;
 }
 
+inline void vplus4i(int *v,int i)
+{
+	v[0] += i;
+	v[1] += i;
+	v[2] += i;
+	v[3] += i;
+}
+
+inline void vplus4f(float *v,float i)
+{
+	v[0] += i;
+	v[1] += i;
+	v[2] += i;
+	v[3] += i;
+
+	printf("%f\n",v[0]);
+}
+
+
 /*
 void m3_print(float m[3][3])
 {
