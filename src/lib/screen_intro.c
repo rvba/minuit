@@ -137,7 +137,7 @@ void screen_intro(t_screen *screen)
 			stars[(i*3)+1] = u_randrange(0,dist)*get_sign();
 			stars[(i*3)+2] = u_randrange(0,dist)*get_sign();
 
-			float c = (float)u_randrange(0,color_factor)/color_factor;
+			float c = (float)u_randrange(50,color_factor)/color_factor;
 			stars_color[(i*3)+0] = c;
 			stars_color[(i*3)+1] = c;
 			stars_color[(i*3)+2] = c;
@@ -148,10 +148,8 @@ void screen_intro(t_screen *screen)
 			stars_velocity[i] = (float)u_randrange(0,1000)/1000;
 		}
 
-		//txt_intro=txt_new("minuit");
 		txt_intro=txt_new(C->app->app_name);
 		txt_intro->use_bitmap_font=0;
-		//txt_intro->letter_width=30;
 
 		txt_version=txt_new("0.4");
 		txt_version->use_bitmap_font=0;
@@ -197,9 +195,6 @@ void screen_intro(t_screen *screen)
 			glTranslatef(txt_get_width(txt_intro)+1,0,0);
 			// Version
 			C->ui->zoom = z;
-			//glTranslatef(35,0,0);
-			//glTranslatef(txt_get_width(txt_intro),0,0);
-			//glTranslatef(35,0,0);
 			glScalef(scv,scv,scv);
 			txt_version->draw(txt_version);
 		}
@@ -221,8 +216,6 @@ void screen_intro(t_screen *screen)
 		op_camera_switch_3d(C,camera);
 		glPopMatrix();
 
-		//glLoadIdentity();
-
 		int frame = C->app->frame;
 		float rot = (float)frame*.05*intro_intensity;
 
@@ -236,10 +229,10 @@ void screen_intro(t_screen *screen)
 			float *s=stars;
 			float *col=stars_color;
 			float col_var[3];
-			float iii = (float) C->app->frame / 500;
+			float iii = (float) C->app->frame / 100;
 			for(i=0;i<star_count;i++)
 			{
-				if(iii > .9) iii= .9;
+				if(iii > 1) iii= 1;
 				vcp(col_var,col);
 				vmul(col_var,iii*intro_intensity);
 
@@ -252,25 +245,10 @@ void screen_intro(t_screen *screen)
 
 		}
 
-
 		camera->type = camera_ortho;
 
 		glPopMatrix();
 
-	}
-	else
-	{
-		/*
-		if(stars) free(stars);
-		if(stars_color) free(stars_color);
-		if(stars_velocity) free(stars_velocity);
-
-		stars=NULL;
-		stars_color=NULL;
-		stars_velocity=NULL;
-
-		star_init = 0;
-		*/
 	}
 }
 
