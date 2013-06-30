@@ -88,6 +88,7 @@ t_node *make_menu_debug(void)
 	add_brick_switch(C,block,"debug console",&C->event->debug_console);
 	add_brick_switch(C,block,"debug terminal",&C->event->debug_terminal);
 	add_brick_switch(C,block,"debug loop",&C->event->debug_loop);
+	add_brick_switch(C,block,"debug key",&C->event->debug_key);
 
 	return menu;
 }

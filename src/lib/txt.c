@@ -112,6 +112,8 @@ float _qd[]={
 
 //int _v[]={15,7,7,19,_BK};
 
+int _eacute[]={10,13,13,18,18,15,15,5,5,9,16,23,_BK};
+
 
 int _underscore[]={5,9,_BK};
 int _at[]={16,18,18,8,8,6,6,11,11,13,8,4,4,24,24,20,20,0,0,2,_BK};
@@ -480,6 +482,34 @@ void txt_layout_add(char letter,int  *points)
 	LAYOUT[(int)letter][i]=_BK;//XXX
 }
 
+void txt_layout_add_special(int letter,int  *points)
+{
+	int i=0;
+	int psize=0;
+	int *p=points;
+
+	while(*p!=_BK)
+	{
+		psize++;
+		p++;
+	}
+
+	psize++;//XXX
+		
+	LAYOUT[letter]=(int *)malloc(sizeof(int)*psize);
+
+	p=points;
+
+	while(*p!=_BK)
+	{
+		LAYOUT[letter][i]=*p;
+		p++;
+		i++;
+	}
+
+	LAYOUT[letter][i]=_BK;//XXX
+}
+
 void txt_layout_init(void)
 {
 	LAYOUT=(int **)malloc(sizeof(int *)*TXT_LAYOUT_X);
@@ -570,26 +600,76 @@ void txt_layout_init(void)
 	txt_layout_add('Y',_y);
 	txt_layout_add('Z',_z);
 
+	txt_layout_add_special(233,_eacute);
+
 }
 
-void txt_letter_draw(char letter,float factor_x,float factor_y, int line_width)
+int start_special_key=0;
+int special_key_counter=0;
+char special_key[8];
+
+int get_special_key()
 {
-	int *points=LAYOUT[(int)letter];
+	if(is(special_key,"eacute")) return 233;
+	else return 0;
+}
 
-	if(points)
+int txt_letter_draw(char letter,float factor_x,float factor_y, int line_width)
+{
+	int _letter;
+
+	if(start_special_key)
 	{
-		glLineWidth(line_width);
-		glBegin(GL_LINES);
+		if(letter == ';')
+		{
+			special_key[special_key_counter]='\0';
+			_letter = get_special_key();
+			start_special_key = 0;
+			special_key_counter=0;
+			bzero(special_key,8);
+		}
+		else
+		{
+			special_key[special_key_counter] = letter;
+			special_key_counter++;
+			//special_key[special_key_counter] = '\0';
+		}
+	}
+	else if(letter == '&')
+	{
+		start_special_key = 1;
+	}
+	else
+	{
+		_letter = (int) letter;
+	}
 
-			while(*points!=_BK)
-			{
-				int p = *points;
-				p*=2;
-				glVertex2f((_qd[p])*factor_x,(_qd[p+1])*factor_y);
-				points++;
-			}
+	if(!start_special_key)
+	{
+		//int *points=LAYOUT[(int)letter];
+		int *points=LAYOUT[_letter];
 
-		glEnd();
+		if(points)
+		{
+			glLineWidth(line_width);
+			glBegin(GL_LINES);
+
+				while(*points!=_BK)
+				{
+					int p = *points;
+					p*=2;
+					glVertex2f((_qd[p])*factor_x,(_qd[p+1])*factor_y);
+					points++;
+				}
+
+			glEnd();
+		}
+
+		return 1;
+	}
+	else
+	{
+		return 0;
 	}
 }
 
@@ -678,8 +758,8 @@ void txt_draw(t_txt *txt)
 
 		while(*letter)
 		{
-			txt_letter_draw(*letter,txt->letter_scale_x*_zoom,txt->letter_scale_y*_zoom, line_width);
-			glTranslatef(txt->letter_width*_zoom,0,0);
+			int translate = txt_letter_draw(*letter,txt->letter_scale_x*_zoom,txt->letter_scale_y*_zoom, line_width);
+			if(translate) glTranslatef(txt->letter_width*_zoom,0,0);
 			letter++;
 		}
 

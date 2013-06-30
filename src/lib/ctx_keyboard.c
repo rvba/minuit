@@ -131,6 +131,8 @@ void keymap_command(unsigned char key)
 		}
 	}
 
+	if(C->event->debug_key) printf("key %c %d\n",key,(int)key);
+
 	switch(key)
 	{
 		// plugs

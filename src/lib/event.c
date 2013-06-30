@@ -77,6 +77,7 @@ t_event *event_new(void)
 	event->debug_console=DEBUG_CONSOLE;
 	event->debug_terminal=DEBUG_TERMINAL;
 	event->debug_loop = DEBUG_LOOP;
+	event->debug_key = DEBUG_KEY;
 
 	event->free_scene=FREE_SCENE;
 
