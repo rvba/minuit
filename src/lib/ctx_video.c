@@ -19,6 +19,10 @@
 #include "image.h"
 #include "list.h"
 
+#include <dirent.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+
 void ctx_switch_record_video(t_context *C)
 {
 	if(C->event->video_record)
@@ -35,6 +39,19 @@ void ctx_switch_record_video(t_context *C)
 	}
 }
 
+void ctx_check_dir(t_context *C)
+{
+	DIR* dir = opendir("video");
+	if (dir)
+	{
+ 		closedir(dir);
+	}
+	else
+	{
+		mkdir("video",S_IRWXU);
+	}
+}
+
 void ctx_render_build_frames(t_context *C, t_lst *lst)
 {
 	t_link *link;
@@ -42,6 +59,8 @@ void ctx_render_build_frames(t_context *C, t_lst *lst)
 
 	int width = C->app->window->width;
 	int height = C->app->window->height;
+
+	ctx_check_dir(C);
 
 	for(link = lst->first; link; link = link->next)
 	{
