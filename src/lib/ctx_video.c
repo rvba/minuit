@@ -136,9 +136,13 @@ void ctx_render_video(t_context *C)
 		{
 			engine_process_remove(C->engine,process);
 
+			char command[1024];
+			sprintf(command,"ffmpeg -f image2 -i video/f%%04d.jpg -r 25 -b %dk video/video.avi &",C->ui->bitrate);
+
 			if(C->app->video_build)
 			{
-				system("ffmpeg -f image2 -i video/f%04d.jpg -r 25 -b 5000k video/video.avi &");
+				//system("ffmpeg -f image2 -i video/f%04d.jpg -r 25 -b 5000k video/video.avi &");
+				system(command);
 			}
 
 			C->event->video_stop = 0;

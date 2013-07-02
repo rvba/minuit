@@ -68,6 +68,8 @@ typedef struct Ui
 	int show_brick_step;
 	int show_sets;
 
+	int bitrate;
+
 	int step;
 	int step_reset;
 
