@@ -60,6 +60,7 @@ typedef struct Ui
 	int show_intro;
 	int always_show_intro;
 	int show_mouse;
+	int visualize_mouse;
 	int show_term;
 	int show_grid;
 	int show_states;

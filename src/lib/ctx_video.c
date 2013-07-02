@@ -27,14 +27,19 @@ void ctx_switch_record_video(t_context *C)
 {
 	if(C->event->video_record)
 	{
-		C->event->video_stop_call = 1;
 		C->ui->show_mouse = 0;
+		C->event->video_stop_call = 1;
 		term_log("record stop");
+		
 	}
 	else
 	{
+		if(C->ui->visualize_mouse)
+		{
+			C->ui->show_mouse = 1;
+		}
+
 		C->event->video_record = 1;
-		C->ui->show_mouse = 1;
 		term_log("record start");
 	}
 }

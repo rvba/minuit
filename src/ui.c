@@ -423,6 +423,7 @@ t_ui *ui_new(void)
 	ui->show_meshes = 0;
 	ui->show_objects = 0;
 	ui->show_mouse = UI_SHOW_MOUSE;
+	ui->visualize_mouse = 1;
 	ui->show_term = UI_SHOW_TERM;
 	ui->show_grid = 0;
 	ui->show_states = 0;
