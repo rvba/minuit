@@ -481,7 +481,7 @@ t_ui *ui_new(void)
 	ui->do_connect = 0;
 	ui->do_disconnect = 0;
 
-	ui->bitrate = 10000;
+	ui->bitrate = 15000;
 
 	return ui;
 }

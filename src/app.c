@@ -13,6 +13,7 @@
 #define APP_PLAY 1
 #define APP_WITH_GLUT 1
 #define APP_VIDEO_LIMIT 20
+#define VERSION "0.4"
 
 #include "opengl.h"
 #include "util.h"
@@ -213,6 +214,9 @@ void app_init(t_app *app, const char *name)
 {
 	// Store Localy
 	APP = app;
+
+	// Set Version
+	set_name(app->version,VERSION);
 
 	// GL
 	if(app->off_screen)

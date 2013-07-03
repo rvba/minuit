@@ -151,7 +151,7 @@ void screen_intro(t_screen *screen)
 		txt_intro=txt_new(C->app->app_name);
 		txt_intro->use_bitmap_font=0;
 
-		txt_version=txt_new("0.4");
+		txt_version=txt_new(C->app->version);
 		txt_version->use_bitmap_font=0;
 	}
 
