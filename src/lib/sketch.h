@@ -21,6 +21,7 @@
 #define SKT_LINE_WIDTH_FRONT 1
 #define SKT_LINE_WIDTH_BACK 20
 #define SKT_INTENSITY 1
+#define SKT_POINT_RESOLUTION 8
 
 
 typedef struct Sketch t_skt;
@@ -37,6 +38,7 @@ struct Sketch
 	int point_width;
 	float point_size;
 	float intensity;
+	int point_resolution;
 
 	//scale
 	int with_scale;
@@ -67,6 +69,7 @@ void skt_closedline_filled(float *points,int tot,float *color,int width);
 
 // POINT
 
+void skt_circle(float *pos);
 void skt_point_size_set(float size) ;
 void skt_point(float *pos,int width,float *color);
 

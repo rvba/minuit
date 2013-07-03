@@ -345,7 +345,6 @@ void draw_mesh_direct(t_draw *draw,t_scene *scene,t_mesh *mesh)
 			color=draw->front_color;
 		}
 
-
 		glEnable(GL_POINT_SMOOTH);
 		glPointSize(1*skt->point_size*skt->scale);
 

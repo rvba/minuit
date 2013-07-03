@@ -18,6 +18,8 @@
 #include "sketch.h"
 #include "ui.h"
 
+#include "camera.h"
+
 // LOCAL
 t_skt *SKT=NULL;
 
@@ -98,6 +100,34 @@ void skt_line_quad(float *a,float *b,float *c,float *d,int line_width,float *col
 		glVertex3f(c[0],c[1],c[2]);
 		glVertex3f(d[0],d[1],d[2]);
 	glEnd();
+}
+
+void skt_circle(float *pos)
+{
+	float resolution = (float) SKT->point_resolution;
+	float radius = .2;
+
+	int i;
+	float division = 2 * PI / resolution;
+	float angle = division;
+
+	glPushMatrix();
+	glTranslatef(pos[0],pos[1],pos[2]);
+
+	glColor3f(1,1,1);
+
+	glBegin(GL_TRIANGLE_FAN);
+
+	glVertex3f(radius,0,0);
+
+	for(i=0;i<resolution;i++)
+	{
+		glVertex3f(cos(angle)*radius,sin(angle)*radius,0);
+		angle += division;
+	}
+
+	glEnd();
+	glPopMatrix();
 }
 
 void skt_point(float *pos,int width,float *color) 
@@ -221,6 +251,7 @@ t_skt *skt_new(void)
 	skt->scale=SKT_SCALE;
 	//skt->intensity=SKT_INTENSITY;
 	skt->intensity=1.0;
+	skt->point_resolution = SKT_POINT_RESOLUTION;
 	vset(skt->color,SKT_COLOR_FRONT,SKT_COLOR_FRONT,SKT_COLOR_FRONT);
 
 	return skt;
