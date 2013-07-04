@@ -134,7 +134,8 @@ void skt_point(float *pos,int width,float *color)
 {
 	t_context *C = ctx_get();
 
-	glEnable(GL_POINT_SMOOTH);
+	if(SKT->point_smooth) glEnable(GL_POINT_SMOOTH);
+	else glDisable(GL_POINT_SMOOTH);
 
 	float scale;
 	if(C->event->ui.use_point_global_width)
@@ -253,6 +254,7 @@ t_skt *skt_new(void)
 	skt->intensity=1.0;
 	skt->point_resolution = SKT_POINT_RESOLUTION;
 	vset(skt->color,SKT_COLOR_FRONT,SKT_COLOR_FRONT,SKT_COLOR_FRONT);
+	skt->point_smooth = SKT_POINT_SMOOTH;
 
 	return skt;
 }

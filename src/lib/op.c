@@ -190,6 +190,7 @@ t_node *make_menu_skt(void)
 	add_brick_switch(C,block,"with scale",&C->event->sketch_with_scale);
 	add_brick_slider_float(C,block,"intensity",&C->skt->intensity);
 	add_brick_slider_int(C,block,"point resolution",&C->skt->point_resolution);
+	add_brick_switch(C,block,"point smooth",&C->skt->point_smooth);
 
 	return menu;
 }

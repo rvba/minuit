@@ -22,6 +22,7 @@
 #define SKT_LINE_WIDTH_BACK 20
 #define SKT_INTENSITY 1
 #define SKT_POINT_RESOLUTION 8
+#define SKT_POINT_SMOOTH 1
 
 
 typedef struct Sketch t_skt;
@@ -39,6 +40,7 @@ struct Sketch
 	float point_size;
 	float intensity;
 	int point_resolution;
+	int point_smooth;
 
 	//scale
 	int with_scale;

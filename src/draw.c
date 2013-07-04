@@ -21,6 +21,9 @@
 #include "camera.h"
 #include "event.h"
 
+#include "sketch.h"
+#include "ui.h"
+
 t_draw *DRAW;
 
 GLenum LightList[] = {
@@ -133,44 +136,48 @@ void draw_mesh_line(t_draw *draw, t_mesh *mesh)
 	*/
 }
 
-void draw_points(t_draw *draw,t_mesh *mesh)
+void draw_points(t_draw *draw, int count, float *points, float *colors)
 {
-	int i;
+	if(colors) glEnableClientState(GL_COLOR_ARRAY);
+	glEnableClientState(GL_VERTEX_ARRAY);
 
-	float *v=mesh->vertex->data;
+	t_context *C = ctx_get();
 
-	for(i=0;i<mesh->var.tot_vertex;i++)
-	{
-		/*
-		if(draw->with_point_id && mesh->vertex)
-		{
-			glEnable(GL_LIGHTING);
+	float *c = C->ui->front_color;
 
-				char text[5];
-				sprintf(text,"%d,",i);
-				float v[3];
-				float a[3]={.1,.1,.1};
+	if(C->skt->point_smooth) glEnable(GL_POINT_SMOOTH);
+	else glDisable(GL_POINT_SMOOTH);
 
-				vcp(v,mesh->verts[i].co);
-				vadd(v,v,a);
-				type_font_3d(text,mesh->verts[i].co);
+	float scale;
+	if(C->event->ui.use_point_global_width)
+		scale = C->skt->scale * C->skt->point_size;
+	else
+		scale = 1;
 
-			glDisable(GL_LIGHTING);
-		}
-		*/
+	int width = 1;
+	glPointSize(width * scale);
 
-		float *color=draw->front_color;
-		//float *pos = mesh->verts[i].co;
-		
-		float pos[3];
-		pos[0]=v[0];
-		pos[1]=v[1];
-		pos[2]=v[2];
+	glVertexPointer(3,GL_FLOAT,0,points);
+	if(colors) glColorPointer(3,GL_FLOAT,0,colors);
+	else glColor3f(c[0],c[1],c[2]);
 
-		skt_point(pos,1,color);
+	glDrawArrays(GL_POINTS,0,count);
 
-		v+=3;
-	}
+	if(colors) glDisableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+}
+
+void draw_mesh_points(t_draw *draw, t_mesh *mesh)
+{
+	t_vlst *vlst_vertex = mesh->vertex;
+	t_vlst *vlst_colors = mesh->colors;
+	float *vertex = vlst_vertex->data;
+	float *colors = NULL;
+
+	if(vlst_colors) colors = vlst_colors->data; 
+
+	draw_points(draw,mesh->var.tot_vertex,vertex,colors);
 }
 
 void draw_mesh_direct_faces(t_draw *draw, t_mesh *mesh)
@@ -299,17 +306,13 @@ void draw_mesh_direct_selection_stencil(t_draw *draw, t_mesh *mesh)
 
 void draw_mesh_direct(t_draw *draw,t_scene *scene,t_mesh *mesh)
 {
-	t_vlst *vertex=mesh->vertex;
-	GLfloat *v=vertex->data;	// vertices 
+	// Init Buffers
+	if(mesh->state.buffer_type!=buffer_direct)
+	{
+		mesh_init_buffers(mesh,buffer_direct); 
+	}
 
-	int i,j;
-
-	t_skt *skt=skt_get();
-
-	// BUFFERS
-
-	if(mesh->state.buffer_type!=buffer_direct) mesh_init_buffers(mesh,buffer_direct); 
-
+	// Material
 	if (draw->with_material && draw->mode != mode_selection)
 	{
 		t_material *material = mesh->material;
@@ -329,51 +332,15 @@ void draw_mesh_direct(t_draw *draw,t_scene *scene,t_mesh *mesh)
 		}
 	}
 
-	//points
+	// Points
 	if(draw->with_point)
 	{
-		t_vlst *vlst_color;
-		float *color;
-
-		if(mesh->state.has_color) 
-		{
-			vlst_color=mesh->colors;
-			color=vlst_color->data;
-		}
-		else
-		{
-			color=draw->front_color;
-		}
-
-		glEnable(GL_POINT_SMOOTH);
-		glPointSize(1*skt->point_size*skt->scale);
-
-		if(!mesh->state.has_color)
-		{
-			glColor3f(color[0],color[1],color[2]);
-		}
-
-		glBegin(GL_POINTS);
-
-		j=0;
-		for(i=0;i<vertex->count;i++)
-		{
-			if(mesh->state.has_color)
-			{
-				glColor3f(color[0],color[1],color[2]);
-				//XXX
-				color+=3;
-			}
-
-			glVertex3f(v[j],v[j+1],v[j+2]);
-
-			j+=3;
-		}
-		glEnd();
+		draw_mesh_points(draw,mesh);
 	}
 
 	glShadeModel(GL_FLAT);
 
+	// Light
 	if (draw->with_light && draw->mode != mode_selection)
 	{
 		glEnable(GL_LIGHTING);
@@ -566,8 +533,11 @@ void draw_mesh(t_draw *draw, t_scene *scene, t_mesh *mesh)
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_LIGHTING);
 
-	// points
-	if(draw->with_point) draw_points(draw,mesh);
+	// Points
+	if(draw->with_point)
+	{
+		draw_mesh_points(draw,mesh);
+	}
 }
 
 void draw_lights(t_draw *draw, t_scene *scene)
