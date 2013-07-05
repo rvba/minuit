@@ -25,7 +25,7 @@
 #include "plug.h"
 #include "set.h"
 #include "screen.h"
-#include "graph.h"
+#include "rhizome.h"
 
 #include "op.h"
 
@@ -325,13 +325,13 @@ void ctx_block_set_update(t_context *C)
 			}
 		}
 
-		l = set->graphs->first;
+		l = set->rhizomes->first;
 
 		for(;l;l=l->next)
 		{
-			t_graph *graph = l->data;
+			t_rhizome *rhizome = l->data;
 			t_block *block;  
-			t_link *l_block = graph->blocks->first;
+			t_link *l_block = rhizome->blocks->first;
 
 			// For All Graphs
 			for(;l_block;l_block = l_block->next)

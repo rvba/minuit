@@ -187,7 +187,7 @@ void block_draw_outline(t_block *block)
 			float p[3] = {0,0,0};
 			float vv[3] = {-10,-10,0};
 			vadd(p,a,vv);
-			sprintf(order,"%d",block->graph_order);
+			sprintf(order,"%d",block->rhizome_order);
 
 			t_txt *txt = txt_new(order);
 			txt_init(txt,order);
@@ -198,14 +198,14 @@ void block_draw_outline(t_block *block)
 			txt_free(txt);
 		}
 
-		if(block->graph)
+		if(block->rhizome)
 		{
 
 		char order[3];
 		float p[3] = {0,0,0};
 		float vv[3] = {-10,-10,0};
 		vadd(p,a,vv);
-		sprintf(order,"%d",block->graph_pos);
+		sprintf(order,"%d",block->rhizome_pos);
 
 		t_txt *txt = txt_new(order);
 		txt_init(txt,order);

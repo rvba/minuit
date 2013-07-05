@@ -74,9 +74,9 @@ typedef struct Ui
 	int step_reset;
 
 	int use_threading;
-	int use_graphs;
+	int use_rhizomes;
 	int threading_on;
-	int graph_updated;
+	int rhizome_updated;
 
 	// brick flags
 	int fixed_menu;
@@ -135,7 +135,7 @@ void ui_draw(void);
 void ui_init(void);
 void ui_reboot(void);
 
-void ui_draw_graphs(void);
+void ui_draw_rhizomes(void);
 void ui_draw_intro(void);
 void ui_draw_lines(void);
 void ui_draw_menu(void);

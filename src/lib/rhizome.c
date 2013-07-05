@@ -20,60 +20,60 @@
 #include "ui.h"
 #include "ctx.h"
 
-#include "graph.h"
+#include "rhizome.h"
 #include "set.h"
 #include "app.h"
 #include "op.h"
 
 #include "event.h"
 
-void graph_setup(t_graph *graph)
+void rhizome_setup(t_rhizome *rhizome)
 {
 	t_link *link;
 	t_block *block;
 	int has_loop = 0;
 	int frame_based = 0;
 
-	for(link=graph->blocks->first;link;link=link->next)
+	for(link=rhizome->blocks->first;link;link=link->next)
 	{
 		block = link->data;
 		if(block->state.is_a_loop) has_loop = 1;
 		if(block->state.frame_based) frame_based = 1;
 	}
 
-	graph->has_loop = has_loop;
-	graph->frame_based = frame_based;
+	rhizome->has_loop = has_loop;
+	rhizome->frame_based = frame_based;
 
 	// Update Set
-	set_setup(graph->set);
+	set_setup(rhizome->set);
 }
 
-void graph_draw(t_graph *graph)
+void rhizome_draw(t_rhizome *rhizome)
 {
-	graph_draw_blocks(graph);
-	graph_draw_bounding_box(graph);
-	graph_get_roots(graph);
-	graph_sort(graph);
+	rhizome_draw_blocks(rhizome);
+	rhizome_draw_bounding_box(rhizome);
+	rhizome_get_roots(rhizome);
+	rhizome_sort(rhizome);
 }
 
-void graph_delete(t_graph *graph)
+void rhizome_delete(t_rhizome *rhizome)
 {
 	t_context *C = ctx_get();
-	t_set *set = graph->set;
+	t_set *set = rhizome->set;
 	// Remove From Set
-	list_remove_by_id(set->graphs,graph->id);
+	list_remove_by_id(set->rhizomes,rhizome->id);
 	// Struct Delete
-	scene_struct_delete(C->scene,graph);
+	scene_struct_delete(C->scene,rhizome);
 }
 
 // LOOP
 
 // Get Loop Block
-t_block *graph_block_loop_get(t_graph *graph)
+t_block *rhizome_block_loop_get(t_rhizome *rhizome)
 {
 	t_link *link;
 	t_block *block;
-	for(link=graph->blocks->first;link;link=link->next)
+	for(link=rhizome->blocks->first;link;link=link->next)
 	{
 		block = link->data;
 		if(block->state.is_a_loop)
@@ -83,10 +83,10 @@ t_block *graph_block_loop_get(t_graph *graph)
 }
 
 // Exec Block Loop Only
-void graph_exec_block_loop(t_graph *graph)
+void rhizome_exec_block_loop(t_rhizome *rhizome)
 {
 	// Get Loop Block
-	t_block *block = graph_block_loop_get(graph);
+	t_block *block = rhizome_block_loop_get(rhizome);
 
 	// Get For Brick
 	t_brick *brick = block_brick_get(block,"for");
@@ -104,12 +104,12 @@ void graph_exec_block_loop(t_graph *graph)
 // EXEC
 
 // Exec All Blocks
-void graph_exec_blocks(t_graph *graph)
+void rhizome_exec_blocks(t_rhizome *rhizome)
 {
 	t_link *link;
 	t_block *block;
 
-	for(link=graph->blocks->first;link;link=link->next)
+	for(link=rhizome->blocks->first;link;link=link->next)
 	{
 		block = link->data;
 		block_exec(block);
@@ -117,55 +117,55 @@ void graph_exec_blocks(t_graph *graph)
 }
 
 // Exec Graph
-void graph_exec(t_graph *graph)
+void rhizome_exec(t_rhizome *rhizome)
 {
 	t_context *C = ctx_get();
 
 	// Setup
-	graph_setup(graph);
+	rhizome_setup(rhizome);
 
-	if(graph->has_loop)
+	if(rhizome->has_loop)
 	{
 		// Find Block Loop
-		t_block *block = graph_block_loop_get(graph);
+		t_block *block = rhizome_block_loop_get(rhizome);
 
 		if(block)
 		{
 			// Do Loop
-			if(graph->start_loop)
+			if(rhizome->start_loop)
 			{
 				C->event->loop_step++;
 				// Exec Blocks
-				graph_exec_blocks(graph);
+				rhizome_exec_blocks(rhizome);
 
 				// Loop Recursive
-				graph_exec(graph);
+				rhizome_exec(rhizome);
 			}
 			// End Loop
-			else if(graph->end_loop)
+			else if(rhizome->end_loop)
 			{
 				// Reset States
-				graph->start_loop = 0;
-				graph->end_loop = 0;
-				graph->done = 1;
+				rhizome->start_loop = 0;
+				rhizome->end_loop = 0;
+				rhizome->done = 1;
 			}
 			// Start Loop
 			else
 			{
 				// Loop
-				if(graph->done)
+				if(rhizome->done)
 				{
 					// Exit
-					graph->done=0;
+					rhizome->done=0;
 				}
 				else
 				{
 					// Exec Block Loop Only
-					graph_exec_block_loop(graph);
+					rhizome_exec_block_loop(rhizome);
 
 					// Loop Recursive
-					if(graph->start_loop)
-						graph_exec(graph);
+					if(rhizome->start_loop)
+						rhizome_exec(rhizome);
 				}
 			}
 		}
@@ -177,14 +177,14 @@ void graph_exec(t_graph *graph)
 	else
 	{
 		// Exec Blocks
-		graph_exec_blocks(graph);
+		rhizome_exec_blocks(rhizome);
 	}
 }
 
 
 // GET ROOTS
 
-void graph_get_roots(t_graph *graph)
+void rhizome_get_roots(t_rhizome *rhizome)
 {
 	t_context *C = ctx_get();
 
@@ -193,14 +193,14 @@ void graph_get_roots(t_graph *graph)
 	t_brick *brick;
 	t_plug *plug_in;
 
-	if(!graph->roots)
+	if(!rhizome->roots)
 	{
 		t_node *node_list = scene_add(C->scene,nt_list,"roots");
-		graph->roots = node_list->data;
+		rhizome->roots = node_list->data;
 	}
 
-	t_lst *lst = graph->blocks;
-	t_lst *roots = graph->roots;
+	t_lst *lst = rhizome->blocks;
+	t_lst *roots = rhizome->roots;
 
 	lst_cleanup(roots);
 
@@ -235,11 +235,11 @@ void graph_get_roots(t_graph *graph)
 
 // BLOCK POS
 
-void graph_set_block_pos(t_block *block, int pos)
+void rhizome_set_block_pos(t_block *block, int pos)
 {
-	if(block->graph_pos < pos)
+	if(block->rhizome_pos < pos)
 	{
-		block->graph_pos = pos;
+		block->rhizome_pos = pos;
 		t_link *link;
 
 		for(link=block->bricks->first;link;link=link->next)
@@ -251,7 +251,7 @@ void graph_set_block_pos(t_block *block, int pos)
 				t_brick *brick_dst = plug_dst->brick;
 				t_block *block_dst = brick_dst->block;
 
-				graph_set_block_pos(block_dst,pos+1);
+				rhizome_set_block_pos(block_dst,pos+1);
 			}
 		}
 	}
@@ -259,21 +259,21 @@ void graph_set_block_pos(t_block *block, int pos)
 
 // SORT
 
-void graph_sort(t_graph *graph)
+void rhizome_sort(t_rhizome *rhizome)
 {
 	t_link *l;
 	t_block *block;
 	int pos;
 
 	// Reset
-	for(l=graph->blocks->first;l;l=l->next)
+	for(l=rhizome->blocks->first;l;l=l->next)
 	{
 		block = l->data;
-		block->graph_pos = 0;
+		block->rhizome_pos = 0;
 	}
 
 	// Set Pos
-	for(l=graph->roots->first;l;l=l->next)
+	for(l=rhizome->roots->first;l;l=l->next)
 	{
 		t_link *link;
 		block = l->data;
@@ -288,25 +288,25 @@ void graph_sort(t_graph *graph)
 				t_brick *brick_dst = plug_dst->brick;
 				t_block *block_dst = brick_dst->block;
 
-				graph_set_block_pos(block_dst,pos);
+				rhizome_set_block_pos(block_dst,pos);
 			}
 		}
 	}
 
 	// Set Link order
-	for(l=graph->blocks->first;l;l=l->next)
+	for(l=rhizome->blocks->first;l;l=l->next)
 	{
 		block=l->data;
-		l->order = block->graph_pos;
+		l->order = block->rhizome_pos;
 	}
 	
 	// Sort List
-	lst_sort_bubble(graph->blocks);
+	lst_sort_bubble(rhizome->blocks);
 }
 
 // SWAP
 
-void graph_swap(t_graph *src, t_graph *dst)
+void rhizome_swap(t_rhizome *src, t_rhizome *dst)
 {
 	t_link *l;
 	t_block *block;
@@ -314,14 +314,14 @@ void graph_swap(t_graph *src, t_graph *dst)
 	for(l=src->blocks->first;l;l=l->next)
 	{
 		block = l->data;
-		block->graph = dst;
-		graph_block_add(dst, block);
+		block->rhizome = dst;
+		rhizome_block_add(dst, block);
 	}
 }
 
 // MERGE
 
-void graph_merge(t_graph *src, t_graph *dst)
+void rhizome_merge(t_rhizome *src, t_rhizome *dst)
 {
 	t_context *C = ctx_get();
 	if(src->id == dst->id)
@@ -332,25 +332,25 @@ void graph_merge(t_graph *src, t_graph *dst)
 	{
 		// New Graph
 		scene_store(C->scene,1);
-		t_graph *graph = graph_add("graph");
+		t_rhizome *rhizome = rhizome_add("rhizome");
 		scene_store(C->scene,0);
 
 		// Merge Graphs
-		graph_swap(src,graph);
-		graph_swap(dst,graph);
+		rhizome_swap(src,rhizome);
+		rhizome_swap(dst,rhizome);
 
 		// Update New Graph
-		graph_setup(graph);
+		rhizome_setup(rhizome);
 
 		// Remove Old Graphs
-		graph_delete(src);
-		graph_delete(dst);
+		rhizome_delete(src);
+		rhizome_delete(dst);
 	}
 }
 
 // BUILD FROM LIST
 
-void graph_build_from_list(t_lst *lst)
+void rhizome_build_from_list(t_lst *lst)
 {
 	t_context *C = ctx_get();
 	t_link *l;
@@ -358,22 +358,22 @@ void graph_build_from_list(t_lst *lst)
 
 	// New Graph
 	scene_store(C->scene,1);
-	t_graph *new_graph = graph_add("graph");
+	t_rhizome *new_rhizome = rhizome_add("rhizome");
 	scene_store(C->scene,0);
 
 	// Fill Graph
 	for(l=lst->first;l;l=l->next)
 	{
 		block = l->data;
-		graph_block_add(new_graph, block);
+		rhizome_block_add(new_rhizome, block);
 	}
 }
 
-void graph_draw_blocks(t_graph *graph)
+void rhizome_draw_blocks(t_rhizome *rhizome)
 {
 	t_link *l;
 	t_block *block;
-	for(l=graph->blocks->first;l;l=l->next)
+	for(l=rhizome->blocks->first;l;l=l->next)
 	{
 		block = l->data;
 		block->cls->draw(block);
@@ -382,7 +382,7 @@ void graph_draw_blocks(t_graph *graph)
 
 // DRAW BOUNDING BOX
 
-void graph_draw_bounding_box(t_graph *graph)
+void rhizome_draw_bounding_box(t_rhizome *rhizome)
 {
 	t_context *C = ctx_get();
 	t_link *l;
@@ -397,9 +397,9 @@ void graph_draw_bounding_box(t_graph *graph)
 
 	int first_run = 1;
 
-	if(graph->blocks)
+	if(rhizome->blocks)
 	{
-		for(l=graph->blocks->first;l;l=l->next)
+		for(l=rhizome->blocks->first;l;l=l->next)
 		{
 			block = l->data;
 			float x = block->pos[0];
@@ -439,28 +439,28 @@ void graph_draw_bounding_box(t_graph *graph)
 
 // BLOCK ADD
 
-void graph_block_add(t_graph *graph, t_block *block)
+void rhizome_block_add(t_rhizome *rhizome, t_block *block)
 {
 	t_context *C = ctx_get();
 
 	// If Graph has Blocks Lst
-	if(graph->blocks)		
+	if(rhizome->blocks)		
 	{
-		int is_in_graph = 0;
+		int is_in_rhizome = 0;
 		int id = block->id;
 		t_link *l;
 		t_block *b;
 
 		// If Graph Has Blocks
-		if(graph->blocks->first)
+		if(rhizome->blocks->first)
 		{
 			// Check Block Not In Graph yet (?)
-			for(l=graph->blocks->first;l;l=l->next)
+			for(l=rhizome->blocks->first;l;l=l->next)
 			{
 				b = l->data;
 				if(b->id == id)
 				{
-					is_in_graph = 1;
+					is_in_rhizome = 1;
 					break;
 				}
 			}
@@ -468,22 +468,22 @@ void graph_block_add(t_graph *graph, t_block *block)
 		}
 
 		// Add to Graph
-		if(!is_in_graph)
+		if(!is_in_rhizome)
 		{
 			// Add to Graph List
 			scene_store(C->scene,1);
-			list_add(graph->blocks, block);
-			block->graph = graph;
+			list_add(rhizome->blocks, block);
+			block->rhizome = rhizome;
 			scene_store(C->scene,0);
 
 			// Pop from Set Blocks
-			if(!block->state.is_in_graph) set_block_pop(block->set,block);
+			if(!block->state.is_in_rhizome) set_block_pop(block->set,block);
 
 			// Set In Graph
-			block->state.is_in_graph = 1;
+			block->state.is_in_rhizome = 1;
 
 			// Setup Graph
-			graph_setup(graph);
+			rhizome_setup(rhizome);
 		}
 	}
 	// Else Add Blocks Lst
@@ -492,63 +492,63 @@ void graph_block_add(t_graph *graph, t_block *block)
 		scene_store(C->scene,1);
 		t_node *node_lst = scene_add(C->scene, nt_list, "lst");
 		t_lst *lst = node_lst->data;
-		graph->blocks = lst;
+		rhizome->blocks = lst;
 		scene_store(C->scene,0);
 
 		// Add Block
-		graph_block_add(graph, block);
+		rhizome_block_add(rhizome, block);
 	}
 }
 
-void graph_block_remove(t_graph *graph, t_block *block)
+void rhizome_block_remove(t_rhizome *rhizome, t_block *block)
 {
 	// Reset Block State
-	block->graph=NULL;
-	block->state.is_in_graph = 0;
+	block->rhizome=NULL;
+	block->state.is_in_rhizome = 0;
 
 	// Add To Set
 	set_block_push(block->set, block);
 
 	// Setup
-	graph_setup(graph);
+	rhizome_setup(rhizome);
 }
 
 // ADD
 
-t_graph *graph_add(const char *name)
+t_rhizome *rhizome_add(const char *name)
 {
 	t_context *C = ctx_get();
 
 	// New Graph
-	t_node *node_graph = scene_add(C->scene,nt_graph,"graph");
-	t_graph *graph = node_graph->data;
+	t_node *node_rhizome = scene_add(C->scene,nt_rhizome,"rhizome");
+	t_rhizome *rhizome = node_rhizome->data;
 
 	// Add To Set
 	t_set *set = get_current_set(C);
-	list_add(set->graphs,graph);
+	list_add(set->rhizomes,rhizome);
 
-	graph->set = set;
+	rhizome->set = set;
 
-	return graph;
+	return rhizome;
 }
 
 // INIT
 
-void graph_init(t_graph *graph)
+void rhizome_init(t_rhizome *rhizome)
 {
-	graph->start_loop = 0;
-	graph->end_loop = 0;
+	rhizome->start_loop = 0;
+	rhizome->end_loop = 0;
 }
 
 // CLONE
 
-t_graph *graph_clone(t_graph *graph)
+t_rhizome *rhizome_clone(t_rhizome *rhizome)
 {
-	if(graph)
+	if(rhizome)
 	{
-		t_graph *clone = graph_new(graph->name);
+		t_rhizome *clone = rhizome_new(rhizome->name);
 
-		clone->blocks = lst_clone(graph->blocks, dt_block);
+		clone->blocks = lst_clone(rhizome->blocks, dt_block);
 		clone->set = NULL;
 
 		return clone;
@@ -562,60 +562,60 @@ t_graph *graph_clone(t_graph *graph)
 
 // REBIND
 
-t_graph *graph_rebind(t_scene *sc,void *ptr)
+t_rhizome *rhizome_rebind(t_scene *sc,void *ptr)
 {
-	t_graph *graph=(t_graph *)ptr;
+	t_rhizome *rhizome=(t_rhizome *)ptr;
 
-	rebind(sc,"graph","blocks",(void **)&graph->blocks);
-	rebind(sc,"graph","set",(void **)&graph->set);
+	rebind(sc,"rhizome","blocks",(void **)&rhizome->blocks);
+	rebind(sc,"rhizome","set",(void **)&rhizome->set);
 
-	return graph;
+	return rhizome;
 }
 
 // FREE
 
-void _graph_free(t_graph *graph)
+void _rhizome_free(t_rhizome *rhizome)
 {
-	if(graph->blocks) _list_free(graph->blocks, dt_block);
-	free(graph);
+	if(rhizome->blocks) _list_free(rhizome->blocks, dt_block);
+	free(rhizome);
 }
 
-void graph_free(t_graph *graph)
+void rhizome_free(t_rhizome *rhizome)
 {
 	t_context *C = ctx_get();
 
-	if(graph->blocks)
+	if(rhizome->blocks)
 	{
-		scene_struct_delete(C->scene,graph->blocks);
+		scene_struct_delete(C->scene,rhizome->blocks);
 	}
 
-	free(graph);
+	free(rhizome);
 }
 
 // NEW
 
-t_graph *graph_new(const char *name)
+t_rhizome *rhizome_new(const char *name)
 {
-	t_graph *graph = (t_graph *)malloc(sizeof(t_graph));
+	t_rhizome *rhizome = (t_rhizome *)malloc(sizeof(t_rhizome));
 
-	graph->id = 0;
-	graph->id_chunk = 0;
-	graph->users = 0;
-	set_name(graph->name, name);
+	rhizome->id = 0;
+	rhizome->id_chunk = 0;
+	rhizome->users = 0;
+	set_name(rhizome->name, name);
 
-	graph->blocks = NULL;
-	graph->roots = NULL;
+	rhizome->blocks = NULL;
+	rhizome->roots = NULL;
 
-	graph->set = NULL;
+	rhizome->set = NULL;
 
-	graph->has_loop = 0;
-	graph->start_loop = 0;
-	graph->end_loop = 0;
-	graph->frame_based = 0;
+	rhizome->has_loop = 0;
+	rhizome->start_loop = 0;
+	rhizome->end_loop = 0;
+	rhizome->frame_based = 0;
 
-	graph->done=0;
+	rhizome->done=0;
 
-	return graph;
+	return rhizome;
 }
 
 

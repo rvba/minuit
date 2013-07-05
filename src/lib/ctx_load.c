@@ -45,7 +45,7 @@
 #include "term.h"
 #include "file.h"
 #include "brick.h"
-#include "graph.h"
+#include "rhizome.h"
 
 #include "ctx.h"
 #include "op.h"
@@ -522,7 +522,7 @@ void load_rebind(t_scene *sc)
 			case(nt_viewport) : 	viewport_rebind(sc,ptr);break; 
 			case(nt_set) : 		set_rebind(sc,ptr);break; 
 			case(nt_binding) : 	binding_rebind(sc,ptr);break; 
-			case(nt_graph) : 	graph_rebind(sc,ptr);break; 
+			case(nt_rhizome) : 	rhizome_rebind(sc,ptr);break; 
 
 			case(nt_var): break;
 			default:

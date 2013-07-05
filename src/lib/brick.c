@@ -702,7 +702,7 @@ t_brick *brick_new(const char *name)
 	brick->action=NULL;
 	brick->menu=NULL;
 
-	brick->graph_order = -1;
+	brick->rhizome_order = -1;
 	brick->block_order = -1;
 
 	brick->mode=bm_idle;

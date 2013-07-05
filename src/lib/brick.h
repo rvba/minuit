@@ -164,7 +164,7 @@ typedef struct Brick
 	int idcol_right[3];			// col
 	int idcol_left[3];
 
-	int graph_order;			// Graph 
+	int rhizome_order;			// Graph 
 	int counter;				// For Loop
 	int block_order;			// Internal Block Id
 

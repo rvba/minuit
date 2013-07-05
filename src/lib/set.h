@@ -24,7 +24,7 @@ typedef struct Set
 	char name[_NAME_];
 
 	struct Lst *blocks;
-	struct Lst *graphs;
+	struct Lst *rhizomes;
 
 	int frame_based;
 	int process;

@@ -39,7 +39,7 @@ char name_viewport[] = "viewport";
 
 char name_brick[] = "brick";
 char name_block[] = "block";
-char name_graph[] = "graph";
+char name_rhizome[] = "rhizome";
 char name_set[] = "set";
 
 void cls_data_init(t_data *data)
@@ -78,7 +78,7 @@ char *data_name_get(t_data_type type)
 		case dt_brick: return name_brick; break;
 		case dt_block: return name_block; break;
 		case dt_set: return name_set; break;
-		case dt_graph: return name_graph; break;
+		case dt_rhizome: return name_rhizome; break;
 		default: return name_default; break;
 	}
 }

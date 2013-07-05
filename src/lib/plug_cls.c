@@ -503,7 +503,7 @@ void cls_plug_connect_general(t_plug_mode mode, t_plug *self, t_plug *dst)
 		// Add To Graph
 		t_block *block_self = brick->block;
 		t_block *block_dst = brick_dst->block;
-		block_graph_add(block_self,block_dst);
+		block_rhizome_add(block_self,block_dst);
 
 		// If Versatil
 		if(brick->state.is_versatil)

@@ -122,7 +122,7 @@ t_lst *scene_lst_get(t_scene *sc,const char *type)
 	else if(is(type,"symbols"))  lst=sc->symbols; 
 	else if(is(type,"viewport"))  lst=sc->viewports; 
 	else if(is(type,"set"))  lst=sc->sets; 
-	else if(is(type,"graph"))  lst=sc->graphs; 
+	else if(is(type,"rhizome"))  lst=sc->rhizomes; 
 
 	if(lst)
 	{
@@ -754,7 +754,7 @@ t_scene *scene_new(void)
 	sc->viewports=lst_new("viewports");
 	sc->sets=lst_new("sets");
 	sc->bindings=lst_new("bindings");
-	sc->graphs=lst_new("graphs");
+	sc->rhizomes=lst_new("rhizomes");
 
 	sc->tmp_colors=lst_new("tmp_colors");
 

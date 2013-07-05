@@ -24,7 +24,7 @@
 #include "brick.h"
 #include "block.h"
 
-#include "graph.h"
+#include "rhizome.h"
 #include "set.h"
 
 int is_vec_stored=0;
@@ -74,7 +74,7 @@ void _cls_brick_disconnect(t_brick *self)
 	t_block *block_target = brick_out->block;
 
 	// Split Graph
-	block_graph_split(block_self,plug_in,block_target,plug_target);
+	block_rhizome_split(block_self,plug_in,block_target,plug_target);
 
 	// change modes
 	self->mode=bm_idle;

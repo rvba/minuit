@@ -41,7 +41,7 @@ typedef enum Data_Type
 	dt_binding,
 	dt_brick,
 	dt_block,
-	dt_graph,
+	dt_rhizome,
 	dt_set,
 
 }t_data_type;
@@ -92,10 +92,9 @@ extern char name_trigger[];
 extern char name_operator[];
 extern char name_vector[];
 extern char name_viewport[];
-extern char name_graph[];
+extern char name_rhizome[];
 extern char name_brick[];
 extern char name_block[];
-extern char name_graph[];
 extern char name_set[];
 
 char *		data_name_get(t_data_type);

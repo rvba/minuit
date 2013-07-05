@@ -26,7 +26,7 @@
 #include "list.h"
 #include "data.h"
 #include "camera.h"
-#include "graph.h"
+#include "rhizome.h"
 
 t_lst *sets = NULL;
 
@@ -435,9 +435,9 @@ t_ui *ui_new(void)
 
 	ui->update_links = 1;
 	ui->use_threading = 0;
-	ui->use_graphs = 1;
+	ui->use_rhizomes = 1;
 	ui->threading_on = 0;
-	ui->graph_updated = 1;
+	ui->rhizome_updated = 1;
 
 	ui->draw=UI_DRAW;
 	ui->font_width = 1;

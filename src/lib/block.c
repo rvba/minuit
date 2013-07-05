@@ -16,7 +16,7 @@
 #include "list.h"
 #include "block.h"
 #include "brick.h"
-#include "graph.h"
+#include "rhizome.h"
 #include "set.h"
 
 // Reset Update State
@@ -48,25 +48,25 @@ void block_brick_trigger(t_plug *plug)
 // Open | Close Loop
 void block_set_loop_state(t_block *block, int state)
 {
-	t_graph *graph = block->graph;
-	if(graph)
+	t_rhizome *rhizome = block->rhizome;
+	if(rhizome)
 	{
 		// Set Loop On
 		if(state == 1)
 		{
-			graph->start_loop = 1;
-			graph->end_loop = 0;
+			rhizome->start_loop = 1;
+			rhizome->end_loop = 0;
 		}
 		// Set Loop Off
 		else if(state == 2)
 		{
-			graph->start_loop = 0;
-			graph->end_loop = 1;
+			rhizome->start_loop = 0;
+			rhizome->end_loop = 1;
 		}
 		else 
 		{
-			graph->start_loop = 0;
-			graph->end_loop = 0;
+			rhizome->start_loop = 0;
+			rhizome->end_loop = 0;
 		}
 	}
 }
@@ -118,7 +118,7 @@ int block_in_lst(t_block *block, t_lst *lst)
 
 // GET GRAPH
 
-t_lst *block_graph_get(t_context *C, t_plug *plug, t_lst *lst)
+t_lst *block_rhizome_get(t_context *C, t_plug *plug, t_lst *lst)
 {
 	t_link *l;
 	t_plug *p;
@@ -151,8 +151,8 @@ t_lst *block_graph_get(t_context *C, t_plug *plug, t_lst *lst)
 				// And Caller is Not the Same (Plug)
 				if((d->id != plug->id) && (p->id != plug->id))
 				{
-					// Get Graph
-					block_graph_get(C,d,lst);
+					// Get Rhizome
+					block_rhizome_get(C,d,lst);
 				}
 			}
 
@@ -166,8 +166,8 @@ t_lst *block_graph_get(t_context *C, t_plug *plug, t_lst *lst)
 				// And Caller is Not the Same (Plug)
 				if((d->id != plug->id) && (p->id != plug->id))
 				{
-					// Get Graph
-					block_graph_get(C,d,lst);
+					// Get Rhizome
+					block_rhizome_get(C,d,lst);
 				}
 			}
 		}
@@ -178,7 +178,7 @@ t_lst *block_graph_get(t_context *C, t_plug *plug, t_lst *lst)
 
 // SPLIT
 
-void block_graph_split(t_block *block_self, t_plug *plug_self, t_block *block_dst, t_plug *plug_dst)
+void block_rhizome_split(t_block *block_self, t_plug *plug_self, t_block *block_dst, t_plug *plug_dst)
 {
 	t_context *C = ctx_get();
 
@@ -188,91 +188,91 @@ void block_graph_split(t_block *block_self, t_plug *plug_self, t_block *block_ds
 	t_lst *lst_self = lst_new("lst");
 	t_lst *lst_dst = lst_new("lst");
 
-	// Get Graph For Both BLocks
-	block_graph_get(C,plug_self,lst_self);
-	block_graph_get(C,plug_dst,lst_dst);
+	// Get Rhizome For Both BLocks
+	block_rhizome_get(C,plug_self,lst_self);
+	block_rhizome_get(C,plug_dst,lst_dst);
 
-	// IF Graphs Are Not Equal (means One Block is not in Both Graphs)
+	// IF Rhizomes Are Not Equal (means One Block is not in Both Rhizomes)
 	if(!block_in_lst(block_self,lst_dst))
 	{
-		t_graph *old_graph = block_self->graph;
+		t_rhizome *old_rhizome = block_self->rhizome;
 
-		// Buil New Graph
+		// Buil New Rhizome
 		if(lst_self->tot > 1)
 		{
-			graph_build_from_list(lst_self);
+			rhizome_build_from_list(lst_self);
 		}
 		// Or Not
 		else
 		{
-			graph_block_remove(block_self->graph, block_self);
+			rhizome_block_remove(block_self->rhizome, block_self);
 			block_self->set = get_current_set(C); 
 
 		}
 
 		if(lst_dst->tot > 1)
 		{
-			graph_build_from_list(lst_dst);
+			rhizome_build_from_list(lst_dst);
 		}
 		else
 		{
-			graph_block_remove(block_dst->graph, block_dst);
+			rhizome_block_remove(block_dst->rhizome, block_dst);
 			block_dst->set = get_current_set(C); 
 		}
 
-		// Delete Old Graph
-		graph_delete(old_graph);
+		// Delete Old Rhizome
+		rhizome_delete(old_rhizome);
 	}
 
 	free(lst_self);
 	free(lst_dst);
 }
 
-// Add Block To Graph
-void block_graph_add(t_block *self, t_block *dst)
+// Add Block To Rhizome
+void block_rhizome_add(t_block *self, t_block *dst)
 {
 	t_context *C = ctx_get();
 
-	// Each Block Have A Graph
-	if(self->graph && dst->graph)
+	// Each Block Have A Rhizome
+	if(self->rhizome && dst->rhizome)
 	{
-		graph_merge(self->graph,dst->graph);
+		rhizome_merge(self->rhizome,dst->rhizome);
 	}
-	// Only One Graph
-	else if(self->graph)
+	// Only One Rhizome
+	else if(self->rhizome)
 	{
-		graph_block_add(self->graph, dst);
+		rhizome_block_add(self->rhizome, dst);
 	}
-	// Only One Graph
-	else if(dst->graph)
+	// Only One Rhizome
+	else if(dst->rhizome)
 	{
-		graph_block_add(dst->graph, self);
+		rhizome_block_add(dst->rhizome, self);
 	}
-	// No Graph
+	// No Rhizome
 	else
 	{
-		// Build New Graph
+		// Build New Rhizome
 		scene_store(C->scene,1);
-		t_graph *graph = graph_add("graph");
+		t_rhizome *rhizome = rhizome_add("rhizome");
 		scene_store(C->scene,0);
 
 		// Add Blocks
-		graph_block_add(graph, self);
-		graph_block_add(graph, dst);
+		rhizome_block_add(rhizome, self);
+		rhizome_block_add(rhizome, dst);
 	}
 }
 
-void block_set_graph_order(t_block *block, int order)
+void block_set_rhizome_order(t_block *block, int order)
 {
 	t_link *link;
 	t_brick *brick;
 
-	block->graph_order = order;
+	block->rhizome_order = order;
 
 	for(link = block->bricks->first; link; link = link->next)
 	{
 		brick = link->data;
-		brick->graph_order = order;
+		brick->rhizome_order = order;
 	}
 }
 
@@ -621,13 +621,13 @@ t_block *block_clone(t_block *block)
 		clone->height = block->height;
 		clone->state = block->state;
 		clone->tot_bricks = block->tot_bricks;
-		clone->graph_order = block->graph_order;
-		clone->graph_pos = block->graph_pos;
+		clone->rhizome_order = block->rhizome_order;
+		clone->rhizome_pos = block->rhizome_pos;
 		clone->bricks = lst_clone(block->bricks,dt_brick);
 
 		clone->submenu = NULL;
 		clone->selected = NULL; 
-		clone->graph = NULL; 
+		clone->rhizome = NULL; 
 		
 		//XXX init cls ???
 		clone->cls = block->cls;
@@ -655,7 +655,7 @@ t_block *block_rebind(t_scene *sc,void *ptr)
 	t_block *block=(t_block *)ptr;
 
 	rebind(sc,"block","bricks",(void **)&block->bricks);
-	rebind(sc,"block","graph",(void **)&block->graph);
+	rebind(sc,"block","rhizome",(void **)&block->rhizome);
 	rebind(sc,"block","set",(void **)&block->set);
 
 	// reset
@@ -757,15 +757,15 @@ t_block *block_new(const char *name)
 	block->state.update_geometry=1;
 	block->state.is_moveable = 1;
 	block->state.is_a_loop = 0;
-	block->state.is_in_graph = 0;
+	block->state.is_in_rhizome = 0;
 	block->state.frame_based = 0;
 
 	block->tot_bricks=0;
 	block->width=0;
-	block->graph_order = -1;
-	block->graph_pos = 0;
+	block->rhizome_order = -1;
+	block->rhizome_pos = 0;
 
-	block->graph = NULL;
+	block->rhizome = NULL;
 	block->set = NULL;
 
 	return block;

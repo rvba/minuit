@@ -18,7 +18,7 @@
 #include "brick.h"
 #include "block.h"
 #include "viewport.h"
-#include "graph.h"
+#include "rhizome.h"
 
 
 t_link *lst_link_get(t_lst *lst, int pos)
@@ -842,8 +842,8 @@ t_lst *lst_clone(t_lst *lst, t_data_type type)
 				case(dt_viewport):
 					lst_add(clone,viewport_clone(link->data),"viewport");
 					break;
-				case(dt_graph):
-					lst_add(clone,graph_clone(link->data),"graph");
+				case(dt_rhizome):
+					lst_add(clone,rhizome_clone(link->data),"rhizome");
 					break;
 				default:
 					printf("[lst_clone WARNING] Unknown type %s\n",data_name_get(type));
@@ -896,8 +896,8 @@ void _list_free(t_lst *lst, t_data_type type)
 			case(dt_viewport):
 				_viewport_free(link->data);
 				break;
-			case(dt_graph):
-				_graph_free(link->data);
+			case(dt_rhizome):
+				_rhizome_free(link->data);
 				break;
 			default:
 				printf("[WARNING _list_free] Unknown type %s\n",data_name_get(type));
