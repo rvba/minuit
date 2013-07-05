@@ -170,7 +170,7 @@ void screen_sets(t_screen *screen)
 	ui_draw_status_bar();
 	ui_draw_term();
 	ui_draw_grid();
-	//ui_draw_graphs();
+	//ui_draw_rhizomes();
 
 	glPushMatrix();
 	glLoadIdentity();

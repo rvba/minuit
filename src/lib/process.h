@@ -43,7 +43,7 @@ typedef struct Process
 }t_process;
 
 
-void *		ctx_compute_graph(void *data);
+void *		ctx_compute_rhizome(void *data);
 void *		ctx_compute_objects(void *data);
 void *		ctx_thread_main(void *data);
 void 		ctx_thread_init(struct Context *C);

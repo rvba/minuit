@@ -20,12 +20,12 @@
 #include "event.h"
 #include "set.h"
 
-void *ctx_compute_graph(void *data)
+void *ctx_compute_rhizome(void *data)
 {
 	t_context *C=ctx_get();
 	t_process *process=(t_process *)data;
 
-	if(C->event->graph_computing)
+	if(C->event->rhizome_computing)
 	{
 		process->busy=1;
 		ctx_set_exec(C);

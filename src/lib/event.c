@@ -130,9 +130,9 @@ t_event *event_new(void)
 	event->load_error = 0;
 
 	event->use_threading = 1;
-	event->graph_computing = 0;
-	event->graph_updated = 1;
-	event->graph_init = 0;
+	event->rhizome_computing = 0;
+	event->rhizome_updated = 1;
+	event->rhizome_init = 0;
 
 	event->color_transition = 0;
 	event->color_transition_use = 1;
