@@ -14,6 +14,21 @@
 
 struct Lst;
 
+typedef struct gvertex
+{
+	struct Lst *connections;
+	void *data;
+
+}t_gvertex;
+
+typedef struct gedge
+{
+	t_gvertex *x;
+	t_gvertex *y;
+
+}t_gedge;
+
+
 typedef struct Graph
 {
 	int id;

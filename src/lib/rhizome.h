@@ -27,6 +27,7 @@ typedef struct Rhizome
 	struct Lst *roots;
 
 	struct Set *set;
+	struct Graph *graph;
 
 	int has_loop;
 	int frame_based;

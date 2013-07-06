@@ -26,6 +26,14 @@
 #include "op.h"
 
 #include "event.h"
+#include "graph.h"
+
+void rhizome_graph_build(t_rhizome *rhizome)
+{
+	t_graph *graph = graph_new("graph");
+	graph_build(graph,rhizome->blocks);
+	rhizome->graph = graph;
+}
 
 void rhizome_setup(t_rhizome *rhizome)
 {
@@ -607,6 +615,7 @@ t_rhizome *rhizome_new(const char *name)
 	rhizome->roots = NULL;
 
 	rhizome->set = NULL;
+	rhizome->graph = NULL;
 
 	rhizome->has_loop = 0;
 	rhizome->start_loop = 0;
