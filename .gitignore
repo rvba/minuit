@@ -21,4 +21,4 @@ CMakeFiles*
 cmake_install.cmake
 Makefile
 void*
-lib*
+libM*

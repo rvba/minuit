@@ -42,6 +42,7 @@ typedef enum Data_Type
 	dt_brick,
 	dt_block,
 	dt_rhizome,
+	dt_graph,
 	dt_set,
 
 }t_data_type;

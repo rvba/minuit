@@ -54,6 +54,7 @@ typedef struct Scene
 	struct Lst *sets;
 	struct Lst *bindings;
 	struct Lst *rhizomes;
+	struct Lst *graphs;
 
 	struct Lst *vars;
 
