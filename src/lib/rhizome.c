@@ -30,9 +30,11 @@
 
 void rhizome_graph_build(t_rhizome *rhizome)
 {
+	/*
 	t_graph *graph = graph_new("graph");
 	graph_build(graph,rhizome->blocks);
 	rhizome->graph = graph;
+	*/
 }
 
 void rhizome_setup(t_rhizome *rhizome)

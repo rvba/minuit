@@ -10,28 +10,54 @@
 #include "util.h"
 #include "list.h"
 #include "graph.h"
+#include "node.h"
+#include "context.h"
+#include "scene.h"
+#include "node.h"
 
-t_gvertex *gvertex_new(void *data);
+g_node *g_node_new(void *data);
+g_arc *g_arc_new(g_node *x, g_node *y);
+
+// ADD
+
+void graph_node_add(t_graph *graph, void *data)
+{
+	t_generic *g = (t_generic *) data;
+
+	g_node *node = g_node_new(g->name);
+	lst_add(graph->nodes, node, g->name);
+}
+
+void graph_arc_add(t_graph *graph, g_node *x, g_node *y)
+{
+	g_arc *arc = g_arc_new(x,y);
+	lst_add(graph->arcs, arc, "arc");
+}
+
 
 // BUILD
 
-void graph_build(t_graph *graph, t_lst *list)
+void graph_build_from_list(t_lst *nodes, t_lst *arcs)
 {
+	t_graph *graph = graph_new("graph");
 	t_link *link;
 
-	// New List
-	graph->vertices = lst_new("vertices");
-
-	// Add Vertices
-	if(list)
+	// Add Nodes
+	if(nodes)
 	{
-		for(link=list->first;link;link=link->next)
+		for(link=nodes->first;link;link=link->next)
 		{
-			t_gvertex *gvertex = gvertex_new(link->data);
-			lst_add(graph->vertices,gvertex,"gvertex");
+			graph_node_add(graph, link->data);
 		}
 	}
 
+	// Add Arcs
+	if(arcs)
+	{
+		for(link=nodes->first;link;link=link->next)
+		{
+		}
+	}
 }
 
 // FREE
@@ -40,23 +66,45 @@ void graph_free(t_graph *graph)
 {
 }
 
-// NEW
+// MAKE
 
-t_gvertex *gvertex_new(void *data)
+t_graph *graph_make(const char *name)
 {
-	t_gvertex *gvertex = (t_gvertex *)malloc(sizeof(t_gvertex));
-	gvertex->data = data;
+	t_context *C = ctx_get();
 
-	return gvertex;
+	t_graph *graph = graph_new(name);
+
+	t_node *node = scene_add(C->scene,nt_list,"nlist");
+	t_node *arc = scene_add(C->scene,nt_list,"alist");
+
+	t_lst *n_list = node->data;
+	t_lst *a_list = arc->data;
+
+	graph->nodes = n_list;
+	graph->arcs = a_list;
+
+	return graph;
 }
 
-t_gedge *gedge_new(t_gvertex *x, t_gvertex *y)
-{
-	t_gedge *gedge = (t_gedge *)malloc(sizeof(t_gedge));
-	gedge->x = x;
-	gedge->y = y;
+// NEW
 
-	return gedge;
+g_node *g_node_new(void *data)
+{
+	g_node *node = (g_node *)malloc(sizeof(g_node));
+
+	node->data = data;
+
+	return node;
+}
+
+g_arc *g_arc_new(g_node *x, g_node *y)
+{
+	g_arc *arc = (g_arc *)malloc(sizeof(g_arc));
+
+	arc->x = x;
+	arc->y = y;
+
+	return arc;
 }
 
 t_graph *graph_new(const char *name)
@@ -68,8 +116,8 @@ t_graph *graph_new(const char *name)
 	graph->users = 0;
 	set_name(graph->name, name);
 
-	graph->vertices = NULL;
-	graph->edges = NULL;
+	graph->nodes = NULL;
+	graph->arcs = NULL;
 
 	return graph;
 }

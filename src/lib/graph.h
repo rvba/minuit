@@ -14,19 +14,18 @@
 
 struct Lst;
 
-typedef struct gvertex
+typedef struct G_node
 {
-	struct Lst *connections;
 	void *data;
 
-}t_gvertex;
+}g_node;
 
-typedef struct gedge
+typedef struct G_arc
 {
-	t_gvertex *x;
-	t_gvertex *y;
+	g_node *x;
+	g_node *y;
 
-}t_gedge;
+}g_arc;
 
 
 typedef struct Graph
@@ -36,8 +35,8 @@ typedef struct Graph
 	short users;
 	char name[_NAME_];
 
-	struct Lst *vertices;
-	struct Lst *edges;
+	struct Lst *nodes;
+	struct Lst *arcs;
 
 }t_graph;
 

@@ -198,7 +198,7 @@ void block_rhizome_split(t_block *block_self, t_plug *plug_self, t_block *block_
 		t_rhizome *old_rhizome = block_self->rhizome;
 
 		// Buil New Rhizome
-		if(lst_self->tot > 1)
+		if(lst_self->count > 1)
 		{
 			rhizome_build_from_list(lst_self);
 		}
@@ -210,7 +210,7 @@ void block_rhizome_split(t_block *block_self, t_plug *plug_self, t_block *block_
 
 		}
 
-		if(lst_dst->tot > 1)
+		if(lst_dst->count > 1)
 		{
 			rhizome_build_from_list(lst_dst);
 		}
@@ -406,8 +406,7 @@ void _add_block(t_context *C,t_block *block)
 	t_set *set = get_current_set(C);
 	t_lst *list = set->blocks;
 
-	// add to main list
-	list_add_global(list,block);
+	list_add(list, block);
 }
 
 t_block *block_dupli(t_block *block)

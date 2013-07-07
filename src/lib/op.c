@@ -33,26 +33,6 @@
 
 t_block *menu_node=NULL;
 
-float global_pos=1;
-
-void op_add_global(t_context *C,t_block *block)
-{
-	t_link *link=block->bricks->first;
-	t_brick *brick=link->data;
-
-	int brick_height=brick->geom.height;
-	int tot_brick=block->tot_bricks;
-
-	block->pos[1]=global_pos;
-
-	global_pos+=(brick_height*tot_brick);
-
-	t_set *set = get_current_set(C);
-	t_lst *set_lst = set->blocks;
-
-	list_add_global(set_lst,block);
-}
-
 // menu process
 
 t_node *add_menu_process(void)

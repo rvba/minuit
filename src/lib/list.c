@@ -21,9 +21,154 @@
 #include "rhizome.h"
 
 
+void lst_reorder(t_lst *lst)
+{
+	t_link *link;
+	int i=0;
+	for(link=lst->first;link;link=link->next)
+	{
+		link->pos = i;
+		i++;
+	}
+}
+
+// PUSH BACK 
+// add a new link at the end of the list
+void lst_push_back(t_lst *lst,t_link *link)
+{
+	// next link
+	if(lst->last)
+	{
+		link->prev=lst->last;
+		lst->last->next=link;
+		lst->last=link;
+	}	
+	// first link
+	else
+	{
+		lst->first=link;
+		lst->last=link;
+	}
+
+	link->pos = lst->count;
+	lst->count++;
+}
+
+// INSERT
+void lst_link_insert(t_lst *lst, t_link *prev, t_link *link)
+{
+	if(link)
+	{
+		if(prev)
+		{
+			// Prev is in between
+			if(prev->next)
+			{
+				link->prev = prev;
+				link->next = prev->next;
+				prev->next = link;
+				link->next->prev  = link;
+			}
+			// Prev is Last
+			else
+			{
+				prev->next = link;
+				link->prev = prev;
+				lst->last = link;
+			}
+		}
+		// No Prev insert First
+		else
+		{
+			if(lst->first)
+			{
+				link->next = lst->first;
+				lst->first->prev = link;
+				lst->first = link;
+			}
+			else
+			{
+				lst->first = link;
+				lst->last = link;
+			}
+		}
+
+		lst->count++;
+	}
+}
+
+// REMOVE
+// remove a link from the list
+void lst_link_remove(t_lst *lst,t_link *link)
+{
+	if(link)
+	{
+		// link is first
+		if(!link->prev)
+		{
+			if(link->next)
+			{
+				lst->first=link->next;
+				link->next->prev=NULL;
+			}
+			// unique link
+			else
+			{
+				lst->first=NULL;
+				lst->last=NULL;
+			}
+		}	
+		// link is last 
+		else if(!link->next)
+		{
+			// set new last
+			link->prev->next=NULL;
+			lst->last=link->prev;
+		}
+		// link is in between 
+		else
+		{
+			// cut from the list
+			link->next->prev=link->prev;
+			link->prev->next=link->next;
+		}
+
+		// decrease count
+		lst->count--;
+	}
+
+	link->next = NULL;
+	link->prev = NULL;
+
+}
+
+// SWAP
+void lst_link_swap(t_lst *lst, t_link *n1, t_link *n2)
+{
+	t_link *tmp = n1->prev;
+	lst_link_remove(lst, n1);
+	lst_link_insert(lst, n2->prev, n1);
+
+	if(tmp != n2)
+	{
+		lst_link_remove(lst, n2);
+		lst_link_insert(lst, tmp, n2);
+	}
+}
+
+// ADD
+t_link *lst_add(t_lst *lst,void *data,const char *name)
+{
+	t_link *link=link_new(name);
+	link->data=data;
+	lst_push_back(lst,link);
+	return link;
+}
+
+
 t_link *lst_link_get(t_lst *lst, int pos)
 {
-	if(lst->tot == 0)
+	if(lst->count == 0)
 		return NULL;
 
 	int i = 0;
@@ -42,18 +187,8 @@ t_link *lst_link_get(t_lst *lst, int pos)
 	return NULL;
 }
 
-void lst_link_swap(t_lst *lst, t_link *n1, t_link *n2)
-{
-	t_link *tmp = n1->prev;
-	lst_link_remove(lst, n1);
-	lst_link_insert(lst, n2->prev, n1);
+// SORT
 
-	if(tmp != n2)
-	{
-		lst_link_remove(lst, n2);
-		lst_link_insert(lst, tmp, n2);
-	}
-}
  
 int get_pivot(int i,int j )
 {
@@ -164,27 +299,6 @@ int lst_sort(t_lst *lst,int m,int n)
     return 1;
 }
 
-void link_show(const char *name,t_link *link)
-{
-	printf("%s\n",name);
-	if(link)
-	{
-		printf("link %d\n",link->order);
-		if(link->prev)
-			printf("prev:%d\n",link->prev->order);
-		else
-			printf("prev:NULL\n");
-
-		if(link->next)
-			printf("next:%d\n",link->next->order);
-		else
-			printf("next:NULL\n");
-	}
-	else
-	{
-		printf("link is NULL\n");
-	}
-}
 	
 
 void lst_swap_simple(t_lst *lst, t_link *link)
@@ -249,80 +363,10 @@ int lst_sort_bubble(t_lst *lst)
 
 int lst_sort_quick(t_lst *lst)
 {
-	lst_sort(lst,0,lst->tot-1);
+	lst_sort(lst,0,lst->count-1);
 	return 1;
 }
 
-// add a new link to the end of the list
-void lst_push_back(t_lst *lst,t_link *link)
-{
-	// next link
-	if(lst->last)
-	{
-		link->prev=lst->last;
-		lst->last->next=link;
-		lst->last=link;
-	}	
-	// first link
-	else
-	{
-		lst->first=link;
-		lst->last=link;
-	}
-
-	lst->tot++;
-}
-
-void lst_link_insert(t_lst *lst, t_link *prev, t_link *link)
-{
-	if(link)
-	{
-		if(prev)
-		{
-			// Prev is in between
-			if(prev->next)
-			{
-				link->prev = prev;
-				link->next = prev->next;
-				prev->next = link;
-				link->next->prev  = link;
-			}
-			// Prev is Last
-			else
-			{
-				prev->next = link;
-				link->prev = prev;
-				lst->last = link;
-			}
-		}
-		// No Prev insert First
-		else
-		{
-			if(lst->first)
-			{
-				link->next = lst->first;
-				lst->first->prev = link;
-				lst->first = link;
-			}
-			else
-			{
-				lst->first = link;
-				lst->last = link;
-			}
-		}
-
-		lst->tot++;
-	}
-}
-
-// add an item to the list, make a new link, push it back
-t_link *lst_add(t_lst *lst,void *data,const char *name)
-{
-	t_link *link=link_new(name);
-	link->data=data;
-	lst_push_back(lst,link);
-	return link;
-}
 
 // merge two lists
 void lst_add_lst(t_lst *dst, t_lst *src)
@@ -335,72 +379,13 @@ void lst_add_lst(t_lst *dst, t_lst *src)
 }
 	
 
-// show links in list
-void lst_show(t_lst *lst)
-{
-	printf("lst_show %s\n",lst->name);
-	printf("~\n");
-	t_link *l;
-	int i=0;
-	//if(lst->first) printf("first: %d\n",lst->first->order);
-	//if(lst->last) printf("last: %d\n",lst->last->order);
-	for(l=lst->first;l;l=l->next)
-	{
-		//printf("%d %d %s\n",i,l->order,l->name);
-		printf("%d %s\n",l->order,l->name);
-		i++;
-	}
-	printf("~\n");
-}
 
-// remove a link from the list
-void lst_link_remove(t_lst *lst,t_link *link)
-{
-	if(link)
-	{
-		// link is first
-		if(!link->prev)
-		{
-			if(link->next)
-			{
-				lst->first=link->next;
-				link->next->prev=NULL;
-			}
-			// unique link
-			else
-			{
-				lst->first=NULL;
-				lst->last=NULL;
-			}
-		}	
-		// link is last 
-		else if(!link->next)
-		{
-			// set new last
-			link->prev->next=NULL;
-			lst->last=link->prev;
-		}
-		// link is in between 
-		else
-		{
-			// cut from the list
-			link->next->prev=link->prev;
-			link->prev->next=link->next;
-		}
 
-		// decrease tot
-		lst->tot--;
-	}
 
-	link->next = NULL;
-	link->prev = NULL;
-}
 
-// free a link
-void link_free(t_link *link)
-{
-	free(link);
-}
+
+
+
 
 t_link *lst_link_find_by_name(t_lst *lst, const char *name)
 {
@@ -452,7 +437,7 @@ void lst_remove_all(t_lst *lst)
 {
 	t_link *link;
 
-	if(lst->tot>0)
+	if(lst->count>0)
 	{
 		for(link=lst->first;link;link=link->next)
 		{
@@ -475,12 +460,7 @@ void lst_cleanup(t_lst *lst)
 	}
 }
 
-// free a list
-void lst_free(t_lst *lst)
-{
-	lst_cleanup(lst);
-	free(lst);
-}
+
 
 // copy a list
 t_lst *lst_copy(t_lst *lst)
@@ -503,48 +483,6 @@ t_lst *lst_copy(t_lst *lst)
 	}
 }
 
-// link new
-t_link *link_new(const char *name)
-{
-	t_link *link = (t_link *)malloc(sizeof(t_link));
-
-	set_name(link->name,name);
-	link->users=0;
-	link->id=0;
-	link->id_chunk=0;
-
-	link->next=NULL;
-	link->prev=NULL;
-	link->parent=NULL;
-	link->child=NULL;
-	
-	link->data=NULL;
-
-	link->order = 0;
-
-	return link;
-}
-
-// lst new
-t_lst *lst_new(const char *name)
-{
-	t_lst *lst = (t_lst *)malloc(sizeof(t_lst));
-
-	if(strlen(name)==0) 
-		set_name(lst->name,"no_name");
-	else
-		set_name(lst->name,name);
-
-	lst->id=0;
-	lst->id_chunk=0;
-	lst->users=0;
-	lst->tot=0;
-	lst->first=NULL;
-	lst->last=NULL;
-	lst->current=NULL;
-	
-	return lst;
-}
 
 // REMOVE DOUBLE
 
@@ -980,17 +918,7 @@ void list_remove_by_id(t_lst *lst, int id)
 	}
 }
 
-t_link *list_add_global(t_lst *lst,void *data)
-{
-	t_context *C=ctx_get();
-
-	t_node *node=scene_add(C->scene,nt_link,"link");
-	t_link *link=node->data;
-	link->data=data;
-	lst_push_back(lst,link);
-
-	return link;
-}
+// REBIND
 
 t_lst *lst_rebind(t_scene *sc,void *ptr)
 {
@@ -1011,10 +939,100 @@ t_link *link_rebind(t_scene *sc,void *ptr)
 	rebind(sc,"link","prev",(void **)&link->prev);
 	rebind(sc,"link",link->name,(void **)&link->data);
 
-	link->parent=NULL;
-	link->child=NULL;
+	return link;
+}
+
+// SHOW
+
+void link_show(const char *name,t_link *link)
+{
+	printf("%s\n",name);
+	if(link)
+	{
+		printf("link %d\n",link->order);
+		if(link->prev)
+			printf("prev:%d\n",link->prev->order);
+		else
+			printf("prev:NULL\n");
+
+		if(link->next)
+			printf("next:%d\n",link->next->order);
+		else
+			printf("next:NULL\n");
+	}
+	else
+	{
+		printf("link is NULL\n");
+	}
+}
+
+void lst_show(t_lst *lst)
+{
+	printf("lst_show %s\n",lst->name);
+	printf("~\n");
+	t_link *l;
+	int i=0;
+	for(l=lst->first;l;l=l->next)
+	{
+		printf("%d %s\n",l->order,l->name);
+		i++;
+	}
+	printf("~\n");
+}
+
+// FREE
+
+void lst_free(t_lst *lst)
+{
+	lst_cleanup(lst);
+	free(lst);
+}
+
+void link_free(t_link *link)
+{
+	free(link);
+}
+
+// NEW
+
+t_link *link_new(const char *name)
+{
+	t_link *link = (t_link *)malloc(sizeof(t_link));
+
+	set_name(link->name,name);
+	link->users=0;
+	link->id=0;
+	link->id_chunk=0;
+
+	link->next=NULL;
+	link->prev=NULL;
+	
+	link->data=NULL;
+
+	link->order = 0;
+	link->pos = 0;
 
 	return link;
+}
+
+t_lst *lst_new(const char *name)
+{
+	t_lst *lst = (t_lst *)malloc(sizeof(t_lst));
+
+	if(strlen(name)==0) 
+		set_name(lst->name,"no_name");
+	else
+		set_name(lst->name,name);
+
+	lst->id=0;
+	lst->id_chunk=0;
+	lst->users=0;
+	lst->count=0;
+	lst->first=NULL;
+	lst->last=NULL;
+	lst->current=NULL;
+	
+	return lst;
 }
 
 

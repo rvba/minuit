@@ -31,7 +31,7 @@ t_node *light_make(const char *name)
 	vset3f(light->pos,3,3,3);
 
 	// set id 
-	light->id_gl=C->scene->lights->tot;
+	light->id_gl=C->scene->lights->count;
 
 	return node;
 }

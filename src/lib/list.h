@@ -24,14 +24,14 @@ typedef struct Link
 	short users;
 	char name[_NAME_];
 
-	int order;
+	int order;		// Used by rhizome sorting
+	int pos;		// Position && Identity of link in list
 
 	struct Link *next;
 	struct Link *prev;
-	struct Link *parent;
-	struct Link *child;
 
 	void *data;
+
 }t_link;
 
 // LST
@@ -47,7 +47,8 @@ typedef struct Lst
 	t_link *last;
 	t_link *current;
 
-	int tot;
+	int count;
+
 }t_lst;
 
 typedef struct VLst
