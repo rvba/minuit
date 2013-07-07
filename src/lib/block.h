@@ -94,11 +94,15 @@ struct Block
 
 	struct Rhizome *rhizome;
 	struct Set *set;
+	struct Dot *dot;
+	struct Lst *dashes;
 };
 
 
 
 // BLOCK
+
+void 		block_dash_add(t_block *block, struct Dot *dot_x, struct Dot *dot_y);
 
 struct Brick *	block_brick_get_by_order(t_block *block, int order);
 void 		block_set_rhizome_order(t_block *block, int order);

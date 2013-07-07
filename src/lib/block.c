@@ -18,6 +18,58 @@
 #include "brick.h"
 #include "rhizome.h"
 #include "set.h"
+#include "graph.h"
+
+int block_dash_exists(t_block *block, t_dot *dot_x, t_dot *dot_y)
+{
+	t_link *link;
+	t_dash *dash;
+	t_generic *s_x;
+	t_generic *s_y;
+	t_generic *g_x;
+	t_generic *g_y;
+
+	s_x = (t_generic *) dot_x->data;
+	s_y = (t_generic *) dot_y->data;
+
+	for(link=block->dashes->first;link;link=link->next)
+	{
+		dash = link->data;
+		g_x = (t_generic *)dash->x->data;
+		g_y = (t_generic *)dash->y->data;
+
+		if((s_x->id == g_x->id) && (s_y->id == g_y->id))
+		{
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
+void block_dash_add(t_block *block, t_dot *dot_x, t_dot *dot_y)
+{
+	t_dash *dash;
+	t_graph *graph = block->rhizome->graph;
+
+	// If Dashes
+	if(block->dashes)
+	{
+		// Check This Dash Doesn't Exists
+		if(!block_dash_exists(block,dot_x,dot_y))
+		{
+			dash = graph_dash_add(graph, dot_x, dot_y);
+			lst_add(block->dashes,dash,"dash");
+		}
+	}
+	else
+	{
+		block->dashes = lst_new("dashes");
+		dash = graph_dash_add(graph, dot_x, dot_y);
+		lst_add(block->dashes,dash,"dash");
+
+	}
+}
 
 // Reset Update State
 void block_reset(t_block *block)
@@ -766,6 +818,8 @@ t_block *block_new(const char *name)
 
 	block->rhizome = NULL;
 	block->set = NULL;
+	block->dot = NULL;
+	block->dashes = NULL;
 
 	return block;
 }

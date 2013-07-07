@@ -15,50 +15,29 @@
 #include "scene.h"
 #include "node.h"
 
-g_node *g_node_new(void *data);
-g_arc *g_arc_new(g_node *x, g_node *y);
+t_dot *dot_new(void *data);
+t_dash *dash_new(t_dot *x, t_dot *y);
 
 // ADD
 
-void graph_node_add(t_graph *graph, void *data)
+t_dot *graph_dot_add(t_graph *graph, void *data)
 {
 	t_generic *g = (t_generic *) data;
 
-	g_node *node = g_node_new(g->name);
-	lst_add(graph->nodes, node, g->name);
+	t_dot *dot = dot_new(g->name);
+	lst_add(graph->dots, dot, g->name);
+
+	return dot;
 }
 
-void graph_arc_add(t_graph *graph, g_node *x, g_node *y)
+t_dash *graph_dash_add(t_graph *graph, t_dot *x, t_dot *y)
 {
-	g_arc *arc = g_arc_new(x,y);
-	lst_add(graph->arcs, arc, "arc");
+	t_dash *dash = dash_new(x,y);
+	lst_add(graph->dashes, dash, "dash");
+
+	return dash;
 }
 
-
-// BUILD
-
-void graph_build_from_list(t_lst *nodes, t_lst *arcs)
-{
-	t_graph *graph = graph_new("graph");
-	t_link *link;
-
-	// Add Nodes
-	if(nodes)
-	{
-		for(link=nodes->first;link;link=link->next)
-		{
-			graph_node_add(graph, link->data);
-		}
-	}
-
-	// Add Arcs
-	if(arcs)
-	{
-		for(link=nodes->first;link;link=link->next)
-		{
-		}
-	}
-}
 
 // FREE
 
@@ -74,37 +53,37 @@ t_graph *graph_make(const char *name)
 
 	t_graph *graph = graph_new(name);
 
-	t_node *node = scene_add(C->scene,nt_list,"nlist");
-	t_node *arc = scene_add(C->scene,nt_list,"alist");
+	t_node *dot = scene_add(C->scene,nt_list,"dot_list");
+	t_node *dash = scene_add(C->scene,nt_list,"dash_list");
 
-	t_lst *n_list = node->data;
-	t_lst *a_list = arc->data;
+	t_lst *dot_list = dot->data;
+	t_lst *dash_list = dash->data;
 
-	graph->nodes = n_list;
-	graph->arcs = a_list;
+	graph->dots = dot_list;
+	graph->dashes = dash_list;
 
 	return graph;
 }
 
 // NEW
 
-g_node *g_node_new(void *data)
+t_dot *dot_new(void *data)
 {
-	g_node *node = (g_node *)malloc(sizeof(g_node));
+	t_dot *dot = (t_dot *)malloc(sizeof(t_dot));
 
-	node->data = data;
+	dot->data = data;
 
-	return node;
+	return dot;
 }
 
-g_arc *g_arc_new(g_node *x, g_node *y)
+t_dash *dash_new(t_dot *x, t_dot *y)
 {
-	g_arc *arc = (g_arc *)malloc(sizeof(g_arc));
+	t_dash *dash = (t_dash *)malloc(sizeof(t_dash));
 
-	arc->x = x;
-	arc->y = y;
+	dash->x = x;
+	dash->y = y;
 
-	return arc;
+	return dash;
 }
 
 t_graph *graph_new(const char *name)
@@ -116,8 +95,8 @@ t_graph *graph_new(const char *name)
 	graph->users = 0;
 	set_name(graph->name, name);
 
-	graph->nodes = NULL;
-	graph->arcs = NULL;
+	graph->dots = NULL;
+	graph->dashes = NULL;
 
 	return graph;
 }

@@ -14,18 +14,18 @@
 
 struct Lst;
 
-typedef struct G_node
+typedef struct Dot
 {
 	void *data;
 
-}g_node;
+}t_dot;
 
-typedef struct G_arc
+typedef struct Dash
 {
-	g_node *x;
-	g_node *y;
+	t_dot *x;
+	t_dot *y;
 
-}g_arc;
+}t_dash;
 
 
 typedef struct Graph
@@ -35,13 +35,16 @@ typedef struct Graph
 	short users;
 	char name[_NAME_];
 
-	struct Lst *nodes;
-	struct Lst *arcs;
+	struct Lst *dots;
+	struct Lst *dashes;
 
 }t_graph;
 
-t_graph *graph_new(const char *name);
-void graph_free(t_graph *graph);
+t_dot *	 	graph_dot_add(t_graph *graph, void *data);
+t_dash *	graph_dash_add(t_graph *graph, t_dot *x, t_dot *y);
+t_graph *	graph_make(const char *name);
+t_graph *	graph_new(const char *name);
+void 		graph_free(t_graph *graph);
 
 
 #endif

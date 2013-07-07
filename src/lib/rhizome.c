@@ -30,11 +30,57 @@
 
 void rhizome_graph_build(t_rhizome *rhizome)
 {
-	/*
-	t_graph *graph = graph_new("graph");
-	graph_build(graph,rhizome->blocks);
+	t_link *link_block;
+	t_link *link_brick;
+	t_block *block;
+	t_brick *brick;
+	t_brick *brick_target;
+	t_block *block_target;
+	t_dot *dot_x;
+	t_dot *dot_y;
+
+	// Add New Graph
+	t_graph *graph = graph_make("graph");
 	rhizome->graph = graph;
-	*/
+
+	// Add Dots
+	for(link_block=rhizome->blocks->first;link_block;link_block=link_block->next)
+	{
+		block = link_block->data;
+		block->dot = graph_dot_add(graph, block);
+	}
+
+	// Add Dashes
+	for(link_block=rhizome->blocks->first;link_block;link_block=link_block->next)
+	{
+		block = link_block->data;
+		for(link_brick=block->bricks->first;link_brick;link_brick=link_brick->next)
+		{
+			brick = link_brick->data;
+			dot_x = block->dot;
+
+			// Check Connection IN
+			if(brick->plug_in.state.is_connected)
+			{
+				brick_target = brick->plug_in.src->brick;
+				block_target = brick_target->block;
+				dot_y = block_target->dot;
+
+				block_dash_add(block, dot_x, dot_y);
+			}
+
+			// Check Connection OUT
+			if(brick->plug_out.state.is_connected)
+			{
+				brick_target = brick->plug_out.src->brick;
+				block_target = brick_target->block;
+				dot_y = block_target->dot;
+
+				block_dash_add(block, dot_x, dot_y);
+			}
+		}
+	}
+
 }
 
 void rhizome_setup(t_rhizome *rhizome)
