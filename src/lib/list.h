@@ -25,7 +25,6 @@ typedef struct Link
 	char name[_NAME_];
 
 	int order;		// Used by rhizome sorting
-	int pos;		// Position && Identity of link in list
 
 	struct Link *next;
 	struct Link *prev;

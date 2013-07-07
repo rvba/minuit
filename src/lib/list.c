@@ -21,17 +21,6 @@
 #include "rhizome.h"
 
 
-void lst_reorder(t_lst *lst)
-{
-	t_link *link;
-	int i=0;
-	for(link=lst->first;link;link=link->next)
-	{
-		link->pos = i;
-		i++;
-	}
-}
-
 // PUSH BACK 
 // add a new link at the end of the list
 void lst_push_back(t_lst *lst,t_link *link)
@@ -50,7 +39,6 @@ void lst_push_back(t_lst *lst,t_link *link)
 		lst->last=link;
 	}
 
-	link->pos = lst->count;
 	lst->count++;
 }
 
@@ -1010,7 +998,6 @@ t_link *link_new(const char *name)
 	link->data=NULL;
 
 	link->order = 0;
-	link->pos = 0;
 
 	return link;
 }
