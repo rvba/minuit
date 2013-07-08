@@ -240,6 +240,13 @@ void block_rhizome_split(t_block *block_self, t_plug *plug_self, t_block *block_
 	t_lst *lst_self = lst_new("lst");
 	t_lst *lst_dst = lst_new("lst");
 
+	t_graph *graph = block_self->rhizome->graph;
+	t_dot *dot_x = block_self->dot;
+	t_dot *dot_y = block_dst->dot;
+
+	graph_dash_remove(graph,dot_x, dot_y);
+	graph_dj_set(block_self->rhizome->graph);
+
 	// Get Rhizome For Both BLocks
 	block_rhizome_get(C,plug_self,lst_self);
 	block_rhizome_get(C,plug_dst,lst_dst);

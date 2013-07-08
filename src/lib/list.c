@@ -877,6 +877,31 @@ void list_remove_by_ptr(t_lst *lst,void *ptr)
 	}
 }
 
+void lst_remove_by_ptr(t_lst *lst, void *ptr)
+{
+	t_link *l;
+	t_link *link=NULL;
+
+	for(l=lst->first;l;l=l->next)
+	{
+		if(l->data==ptr)
+		{
+			link=l;
+			break;
+		}
+	}
+
+	if(link)
+	{
+		lst_link_remove(lst,link);
+		link_free(link);
+	}
+	else
+	{
+		printf("[ERROR lst_remove_by_ptr] Can't find link\n");
+	}
+}
+
 void list_remove_by_id(t_lst *lst, int id)
 {
 	t_context *C = ctx_get();

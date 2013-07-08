@@ -16,6 +16,10 @@ struct Lst;
 
 typedef struct Dot
 {
+	int id;
+	int root;
+	struct Dot *parent;
+
 	void *data;
 
 }t_dot;
@@ -38,9 +42,16 @@ typedef struct Graph
 	struct Lst *dots;
 	struct Lst *dashes;
 
+	int dot_count;
+	int dash_count;
+
 }t_graph;
 
+
+void 		graph_dj_set(t_graph *graph);
 void 		graph_show(t_graph *graph);
+
+void 		graph_dash_remove(t_graph *graph, t_dot *x, t_dot *y);
 t_dot *	 	graph_dot_add(t_graph *graph, void *data);
 t_dash *	graph_dash_add(t_graph *graph, t_dot *x, t_dot *y);
 t_graph *	graph_make(const char *name);

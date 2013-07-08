@@ -168,6 +168,7 @@ void 		lst_cleanup(t_lst *lst);
 void 		lst_push_back(t_lst *lst,t_link *link);
 
 void 		lst_remove_by_ptr(t_lst *lst,void *ptr);
+void 		lst_remove_by_ptr(t_lst *lst, void *ptr);
 void 		list_remove_by_id(t_lst *lst, int id);
 void 		link_free(t_link *link);
 
