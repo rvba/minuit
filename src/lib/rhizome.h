@@ -38,6 +38,8 @@ typedef struct Rhizome
 
 }t_rhizome;
 
+void 		rhizome_graph_dash_add(t_rhizome *rhizome, t_block *block_x, t_block *block_y);
+
 void 		rhizome_draw(t_rhizome *rhizome);
 void 		rhizome_delete(t_rhizome *rhizome);
 void 		rhizome_exec(t_rhizome *rhizome);

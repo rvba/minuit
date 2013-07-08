@@ -28,59 +28,20 @@
 #include "event.h"
 #include "graph.h"
 
-void rhizome_graph_build(t_rhizome *rhizome)
+
+void rhizome_graph_block_add(t_rhizome *rhizome, t_block *block)
 {
-	t_link *link_block;
-	t_link *link_brick;
-	t_block *block;
-	t_brick *brick;
-	t_brick *brick_target;
-	t_block *block_target;
-	t_dot *dot_x;
-	t_dot *dot_y;
+	block->dot = graph_dot_add(rhizome->graph, block);
+}
 
-	// Add New Graph
-	t_graph *graph = graph_make("graph");
-	rhizome->graph = graph;
+void rhizome_graph_dash_add(t_rhizome *rhizome, t_block *block_x, t_block *block_y)
+{
+	t_graph *graph = block_x->rhizome->graph;
+	t_dot *dot_x = block_x->dot;
+	t_dot *dot_y = block_y->dot;
+	graph_dash_add(graph, dot_x, dot_y);
 
-	// Add Dots
-	for(link_block=rhizome->blocks->first;link_block;link_block=link_block->next)
-	{
-		block = link_block->data;
-		block->dot = graph_dot_add(graph, block);
-	}
-
-	// Add Dashes
-	for(link_block=rhizome->blocks->first;link_block;link_block=link_block->next)
-	{
-		block = link_block->data;
-		for(link_brick=block->bricks->first;link_brick;link_brick=link_brick->next)
-		{
-			brick = link_brick->data;
-			dot_x = block->dot;
-
-			// Check Connection IN
-			if(brick->plug_in.state.is_connected)
-			{
-				brick_target = brick->plug_in.src->brick;
-				block_target = brick_target->block;
-				dot_y = block_target->dot;
-
-				block_dash_add(block, dot_x, dot_y);
-			}
-
-			// Check Connection OUT
-			if(brick->plug_out.state.is_connected)
-			{
-				brick_target = brick->plug_out.src->brick;
-				block_target = brick_target->block;
-				dot_y = block_target->dot;
-
-				block_dash_add(block, dot_x, dot_y);
-			}
-		}
-	}
-
+	graph_show(graph);
 }
 
 void rhizome_setup(t_rhizome *rhizome)
@@ -541,6 +502,9 @@ void rhizome_block_add(t_rhizome *rhizome, t_block *block)
 			// Setup Graph
 			rhizome_setup(rhizome);
 		}
+
+		// Add To Graph
+		rhizome_graph_block_add(rhizome, block);
 	}
 	// Else Add Blocks Lst
 	else
@@ -554,7 +518,10 @@ void rhizome_block_add(t_rhizome *rhizome, t_block *block)
 		// Add Block
 		rhizome_block_add(rhizome, block);
 	}
+
 }
+
+// BLOCK REMOVE
 
 void rhizome_block_remove(t_rhizome *rhizome, t_block *block)
 {
@@ -575,15 +542,20 @@ t_rhizome *rhizome_add(const char *name)
 {
 	t_context *C = ctx_get();
 
-	// New Graph
+	// New Rhizome
 	t_node *node_rhizome = scene_add(C->scene,nt_rhizome,"rhizome");
 	t_rhizome *rhizome = node_rhizome->data;
+
+	// New Graph
+	t_graph *graph = graph_make("graph");
+	rhizome->graph = graph;
 
 	// Add To Set
 	t_set *set = get_current_set(C);
 	list_add(set->rhizomes,rhizome);
 
 	rhizome->set = set;
+
 
 	return rhizome;
 }

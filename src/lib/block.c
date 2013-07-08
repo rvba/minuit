@@ -312,6 +312,9 @@ void block_rhizome_add(t_block *self, t_block *dst)
 		rhizome_block_add(rhizome, self);
 		rhizome_block_add(rhizome, dst);
 	}
+
+	// Add Dash
+	rhizome_graph_dash_add(self->rhizome, dst, self);
 }
 
 void block_set_rhizome_order(t_block *block, int order)

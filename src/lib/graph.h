@@ -40,6 +40,7 @@ typedef struct Graph
 
 }t_graph;
 
+void 		graph_show(t_graph *graph);
 t_dot *	 	graph_dot_add(t_graph *graph, void *data);
 t_dash *	graph_dash_add(t_graph *graph, t_dot *x, t_dot *y);
 t_graph *	graph_make(const char *name);

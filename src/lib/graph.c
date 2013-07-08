@@ -18,13 +18,40 @@
 t_dot *dot_new(void *data);
 t_dash *dash_new(t_dot *x, t_dot *y);
 
+// SHOW
+
+void dash_show(t_dash *dash)
+{
+	t_generic *x = (t_generic *)dash->x->data;
+	t_generic *y = (t_generic *)dash->y->data;
+
+	printf("dash (%s)->(%s)\n",x->name,y->name);
+}
+
+void graph_show(t_graph *graph)
+{
+	t_link *link;
+	t_dash *dash;
+
+	printf("graph (%s)\n",graph->name);
+	printf("DOTS\n");
+	lst_show(graph->dots);
+	printf("DASHES\n");
+	for(link=graph->dashes->first;link;link=link->next)
+	{
+		dash = link->data;
+		dash_show(dash);
+	}
+}
+
+
 // ADD
 
 t_dot *graph_dot_add(t_graph *graph, void *data)
 {
 	t_generic *g = (t_generic *) data;
 
-	t_dot *dot = dot_new(g->name);
+	t_dot *dot = dot_new(data);
 	lst_add(graph->dots, dot, g->name);
 
 	return dot;
