@@ -229,6 +229,62 @@ t_lst *block_rhizome_get(t_context *C, t_plug *plug, t_lst *lst)
 }
 
 // SPLIT
+int block_graph_id(t_lst *lst, int id)
+{
+	t_link *link;
+	t_datum *datum;
+	for(link=lst->first;link;link=link->next)
+	{
+		datum = link->data;
+		int datum_id = drf_int(datum->data);
+		if(datum_id == id)
+		{
+			return 1;
+		}
+	}
+	 return 0;
+}
+
+void block_graph_split(t_block *block_self, t_block *block_dst)
+{
+	t_graph *graph = block_self->rhizome->graph;
+	t_dot *dot_x = block_self->dot;
+	t_dot *dot_y = block_dst->dot;
+
+	// Remove Dash
+	graph_dash_remove(graph,dot_x, dot_y);
+	// Disjoin
+	graph_dj_set(block_self->rhizome->graph);
+
+	t_link *link;
+	t_dot *dot;
+	t_datum *datum;
+
+	t_lst *ids = lst_new("ids");
+
+	for(link=graph->dots->first;link;link=link->next)
+	{
+		dot = link->data;
+		if(! block_graph_id(ids, dot->root))
+		{
+			int id = dot->root;
+			datum = datum_new(dt_int,1,&id);
+			lst_add(ids, datum, "datum");
+		}
+
+	}
+
+	printf("ROOTS!\n");
+
+	for(link=ids->first;link;link=link->next)
+	{
+		t_datum *datum = link->data;
+		printf("root %d\n", drf_int(datum->data));
+		datum_free(datum);
+	}
+
+	lst_cleanup(ids);
+}
 
 void block_rhizome_split(t_block *block_self, t_plug *plug_self, t_block *block_dst, t_plug *plug_dst)
 {
@@ -240,12 +296,8 @@ void block_rhizome_split(t_block *block_self, t_plug *plug_self, t_block *block_
 	t_lst *lst_self = lst_new("lst");
 	t_lst *lst_dst = lst_new("lst");
 
-	t_graph *graph = block_self->rhizome->graph;
-	t_dot *dot_x = block_self->dot;
-	t_dot *dot_y = block_dst->dot;
-
-	graph_dash_remove(graph,dot_x, dot_y);
-	graph_dj_set(block_self->rhizome->graph);
+	// Graph
+	block_graph_split(block_self, block_dst);
 
 	// Get Rhizome For Both BLocks
 	block_rhizome_get(C,plug_self,lst_self);

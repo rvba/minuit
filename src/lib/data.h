@@ -47,6 +47,13 @@ typedef enum Data_Type
 
 }t_data_type;
 
+typedef struct Datum
+{
+	t_data_type type;
+	int count;
+	void *data;
+}t_datum;
+
 typedef struct Data_Class
 {
 	char cls_type[_NAME_];
@@ -107,5 +114,7 @@ t_data *	data_rebind(struct Scene *sc,void *ptr);
 t_data *	data_new(const char *name);
 void		data_free(t_data *data);
 
+t_datum *datum_new(t_data_type type, int count, void *data);
+void datum_free(t_datum *datum);
 
 #endif

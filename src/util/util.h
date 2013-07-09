@@ -34,6 +34,8 @@ inline void negate_float(void *_dst);
 inline void srf_float(void *ptr, void *data, int indice);
 inline void srf_uint(void *ptr, void *data, int indice);
 
+inline void cprf_int(void *ptr, void *data, int indice);
+
 inline void *grf_float(void *ptr, int indice);
 inline void *grf_int(void *ptr, int indice);
 inline void *grf_uint(void *ptr, int indice);
@@ -43,6 +45,7 @@ inline int drf_uint(void *ptr);
 inline float drf_float(void *ptr);
 inline char drf_char(void *ptr);
 inline char *drf_string(void *ptr);
+
 
 void sys_git_get(void);
 

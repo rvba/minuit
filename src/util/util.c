@@ -118,6 +118,20 @@ inline void srf_uint(void *ptr, void *data, int indice)
 	*(pointer + indice) = *d;
 }
 
+inline void srf_int(void *ptr, void *data, int indice)
+{
+	int *pointer = (int *) ptr;
+	int *d = (int *) data;
+	*(pointer + indice) = *d;
+}
+
+inline void cprf_int(void *ptr, void *data, int indice)
+{
+	int *pointer = (int *) ptr;
+	int *d = (int *) data;
+	*(pointer + indice) = *(d + indice);
+}
+
 inline void *grf_float(void *ptr, int indice)
 {
 	float *pointer = (float *)ptr;

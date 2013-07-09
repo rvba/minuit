@@ -511,3 +511,37 @@ void data_free(t_data *data)
 	free(data);
 }
 
+// DATUM
+
+void datum_free(t_datum *datum)
+{
+	free(datum->data);
+	free(datum);
+}
+
+t_datum *datum_new(t_data_type type, int count, void *data)
+{
+	t_datum *datum = (t_datum *) malloc(sizeof(t_datum));
+	datum->type = type;
+	datum->count = count;
+
+	int i;
+	switch(type)
+	{
+		case(dt_int):
+			datum->data = (int *)malloc(sizeof(int) * count);
+			for(i=0;i<count;i++)
+			{
+				cprf_int(datum->data, data, i);
+			}
+			break;
+		default:
+			printf("[ERROR datum_new] Unknown data type %s\n",data_name_get(type));
+			break;
+	}
+
+	return datum;
+}
+
+
+

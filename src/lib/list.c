@@ -448,8 +448,6 @@ void lst_cleanup(t_lst *lst)
 	}
 }
 
-
-
 // copy a list
 t_lst *lst_copy(t_lst *lst)
 {
