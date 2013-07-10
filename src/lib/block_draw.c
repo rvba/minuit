@@ -149,9 +149,7 @@ void block_draw_outline(t_block *block)
 		float *pos=block->pos;
 		int line_width;
 
-		// set line width
-		if(block->state.is_mouse_over) line_width=2; 
-		else  line_width=1; 
+		line_width = 1;
 
 		float width=block->width;
 

@@ -658,7 +658,7 @@ int txt_letter_draw(char letter,float factor_x,float factor_y, int line_width)
 				{
 					int p = *points;
 					p*=2;
-					glVertex2f((_qd[p])*factor_x,(_qd[p+1])*factor_y);
+					glVertex2f((_qd[p])*factor_x ,(_qd[p+1])*factor_y);
 					points++;
 				}
 
