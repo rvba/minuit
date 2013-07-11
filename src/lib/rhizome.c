@@ -138,6 +138,9 @@ void rhizome_exec(t_rhizome *rhizome)
 {
 	t_context *C = ctx_get();
 
+	if(C->ui->update_links)
+	{
+
 	// Setup
 	rhizome_setup(rhizome);
 
@@ -195,6 +198,7 @@ void rhizome_exec(t_rhizome *rhizome)
 	{
 		// Exec Blocks
 		rhizome_exec_blocks(rhizome);
+	}
 	}
 }
 
