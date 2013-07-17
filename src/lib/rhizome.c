@@ -28,21 +28,200 @@
 #include "event.h"
 #include "graph.h"
 
+#include "dict.h"
+
+t_rhizome *rhizome_build_from_dot_list(t_lst *lst);
+void rhizome_setup(t_rhizome *rhizome);
+
+// SPLIT
+
+t_symbol *rhizome_dict_symbol_get(t_dict *dict, int id)
+{
+	t_symbol *symbol;
+	char name[_NAME_];
+
+	snprintf(name,_NAME_,"%d",id);
+	symbol = dict_pop(dict, name);
+
+	if(!symbol)
+	{
+		t_lst *lst = lst_new(name);
+		symbol = dict_symbol_add(dict, name, dt_lst, lst);
+	}
+	
+	return symbol;
+}
+
+void rhizome_dict_free(t_dict *dict)
+{
+	t_link *link;
+	t_symbol *symbol;
+	t_lst *lst;
+
+	for(link=dict->symbols->first;link;link=link->next)
+	{
+		symbol = link->data;
+		lst = symbol->data;
+		lst_cleanup(lst);
+		lst_free(lst);
+	}
+
+	dict_free(dict);
+}
+
+void rhizome_build_from_dict(t_rhizome *rhizome, t_dict *dict)
+{
+	t_link *link;
+	t_lst *lst;
+	t_block *block;
+	t_dot *dot;
+	t_symbol *symbol;
+	t_rhizome *new_rhizome;
+
+	for(link=dict->symbols->first;link;link=link->next)
+	{
+		symbol = link->data;
+		lst = symbol->data;
+
+		if(lst->count > 1)
+		{
+			// New Rhizome
+			new_rhizome = rhizome_build_from_dot_list(lst);
+			rhizome_setup(new_rhizome);
+		}
+		else
+		{
+			// Add To Set
+			dot = lst->first->data;
+			block = dot->data;
+			rhizome_block_reset(block);
+		}
+	}
+
+	// Free Old rhizome
+	rhizome_delete(rhizome);
+
+}
+
+void rhizome_graph_split(t_rhizome *rhizome, t_block *block_x, t_block *block_y)
+{
+	t_graph *graph = rhizome->graph;
+
+	t_link *link;
+	t_dot *dot;
+	t_node *dict_node = dict_add("dict");
+	t_dict *dict = dict_node->data;
+	t_symbol *symbol;
+	t_lst *lst;
+
+	t_dot *dot_x = graph_dot_find(graph, block_x->id);
+	t_dot *dot_y = graph_dot_find(graph, block_y->id);
+
+	// Remove Dash
+	graph_dash_remove(graph,dot_x, dot_y);
+
+	// Disjoin Graphs
+	graph_dj_set(graph);
+
+	// Build Lists
+	for(link=graph->dots->first;link;link=link->next)
+	{
+		dot = link->data;
+		symbol = rhizome_dict_symbol_get(dict, dot->root);
+		lst = symbol->data;
+		lst_add(lst,dot,"dot");
+	}
+
+	// Show
+	dict_show(dict);
+
+	// Build Rhizome
+	if(dict->count > 1)
+	{
+		rhizome_build_from_dict(rhizome, dict);
+	}
+
+	// Free
+	rhizome_dict_free(dict);
+}
+
+// ADD
 
 void rhizome_graph_block_add(t_rhizome *rhizome, t_block *block)
 {
-	block->dot = graph_dot_add(rhizome->graph, block);
+	graph_dot_add(rhizome->graph, block);
 }
 
-void rhizome_graph_dash_add(t_rhizome *rhizome, t_block *block_x, t_block *block_y)
+void rhizome_graph_link_add(t_rhizome *rhizome, t_block *block_x, t_block *block_y)
 {
 	t_graph *graph = block_x->rhizome->graph;
-	t_dot *dot_x = block_x->dot;
-	t_dot *dot_y = block_y->dot;
-	graph_dash_add(graph, dot_x, dot_y);
 
-	graph_show(graph);
+	t_dot *dot_x = graph_dot_find(graph, block_x->id);
+	t_dot *dot_y = graph_dot_find(graph, block_y->id);
+
+	graph_dash_add(graph, dot_x, dot_y);
 }
+
+// BUILD
+
+void rhizome_graph_build(t_rhizome *rhizome)
+{
+	t_link *link;
+	t_link *link_block;
+	t_link *link_brick;
+	t_block *block;
+	t_block *block_target;
+	t_brick *brick;
+	t_brick *brick_target;
+	t_graph *graph = graph_make("graph");
+	rhizome->graph = graph;
+	int id_x, id_y;
+
+	// Add Dots
+	for(link=rhizome->blocks->first;link;link=link->next)
+	{
+		graph_dot_add(graph,link->data);
+	}
+
+	// Add Dashs
+	for(link_block=rhizome->blocks->first;link_block;link_block=link_block->next)
+	{
+		block = link_block->data;
+		id_x = block->id;
+		for(link_brick=block->bricks->first;link_brick;link_brick=link_brick->next)
+		{
+			brick = link_brick->data;
+
+			// Check Connection IN
+			if(brick->plug_in.state.is_connected)
+			{
+				brick_target = brick->plug_in.src->brick;
+				block_target = brick_target->block;
+				id_y = block_target->id;
+
+				if(!graph_link_exists(graph,id_x,id_y))
+				{
+					rhizome_graph_link_add(rhizome, block, block_target);
+				}
+			}
+
+			// Check Connection OUT
+			if(brick->plug_out.state.is_connected)
+			{
+				brick_target = brick->plug_out.src->brick;
+				block_target = brick_target->block;
+				id_y = block_target->id;
+
+				if(!graph_link_exists(graph,id_x,id_y))
+				{
+					rhizome_graph_link_add(rhizome, block, block_target);
+				}
+			}
+		}
+	}
+}
+
+// SETUP
 
 void rhizome_setup(t_rhizome *rhizome)
 {
@@ -60,6 +239,8 @@ void rhizome_setup(t_rhizome *rhizome)
 
 	rhizome->has_loop = has_loop;
 	rhizome->frame_based = frame_based;
+
+	if(!rhizome->graph) rhizome_graph_build(rhizome);
 
 	// Update Set
 	set_setup(rhizome->set);
@@ -133,7 +314,7 @@ void rhizome_exec_blocks(t_rhizome *rhizome)
 	}
 }
 
-// Exec Graph
+// Exec Rhizome
 void rhizome_exec(t_rhizome *rhizome)
 {
 	t_context *C = ctx_get();
@@ -351,19 +532,19 @@ void rhizome_merge(t_rhizome *src, t_rhizome *dst)
 	}
 	else
 	{
-		// New Graph
+		// New Rhizome
 		scene_store(C->scene,1);
 		t_rhizome *rhizome = rhizome_add("rhizome");
 		scene_store(C->scene,0);
 
-		// Merge Graphs
+		// Merge Rhizomes
 		rhizome_swap(src,rhizome);
 		rhizome_swap(dst,rhizome);
 
-		// Update New Graph
+		// Update New Rhizome
 		rhizome_setup(rhizome);
 
-		// Remove Old Graphs
+		// Remove Old Rhizomes
 		rhizome_delete(src);
 		rhizome_delete(dst);
 	}
@@ -371,23 +552,48 @@ void rhizome_merge(t_rhizome *src, t_rhizome *dst)
 
 // BUILD FROM LIST
 
-void rhizome_build_from_list(t_lst *lst)
+t_rhizome *rhizome_build_from_dot_list(t_lst *lst)
+{
+	t_context *C = ctx_get();
+	t_link *l;
+	t_dot *dot;
+	t_block *block;
+
+	// New Rhizome
+	scene_store(C->scene,1);
+	t_rhizome *rhizome = rhizome_add("rhizome");
+	scene_store(C->scene,0);
+
+	// Fill Rhizome
+	for(l=lst->first;l;l=l->next)
+	{
+		dot = l->data;
+		block = dot->data;
+		rhizome_block_add(rhizome, block);
+	}
+
+	return rhizome;
+}
+
+t_rhizome *rhizome_build_from_list(t_lst *lst)
 {
 	t_context *C = ctx_get();
 	t_link *l;
 	t_block *block;
 
-	// New Graph
+	// New Rhizome
 	scene_store(C->scene,1);
-	t_rhizome *new_rhizome = rhizome_add("rhizome");
+	t_rhizome *rhizome = rhizome_add("rhizome");
 	scene_store(C->scene,0);
 
-	// Fill Graph
+	// Fill Rhizome
 	for(l=lst->first;l;l=l->next)
 	{
 		block = l->data;
-		rhizome_block_add(new_rhizome, block);
+		rhizome_block_add(rhizome, block);
 	}
+
+	return rhizome;
 }
 
 void rhizome_draw_blocks(t_rhizome *rhizome)
@@ -464,7 +670,7 @@ void rhizome_block_add(t_rhizome *rhizome, t_block *block)
 {
 	t_context *C = ctx_get();
 
-	// If Graph has Blocks Lst
+	// If Rhizome has Blocks Lst
 	if(rhizome->blocks)		
 	{
 		int is_in_rhizome = 0;
@@ -472,10 +678,10 @@ void rhizome_block_add(t_rhizome *rhizome, t_block *block)
 		t_link *l;
 		t_block *b;
 
-		// If Graph Has Blocks
+		// If Rhizome Has Blocks
 		if(rhizome->blocks->first)
 		{
-			// Check Block Not In Graph yet (?)
+			// Check Block Not In Rhizome yet (?)
 			for(l=rhizome->blocks->first;l;l=l->next)
 			{
 				b = l->data;
@@ -488,10 +694,10 @@ void rhizome_block_add(t_rhizome *rhizome, t_block *block)
 
 		}
 
-		// Add to Graph
+		// Add to Rhizome
 		if(!is_in_rhizome)
 		{
-			// Add to Graph List
+			// Add to Rhizome List
 			scene_store(C->scene,1);
 			list_add(rhizome->blocks, block);
 			block->rhizome = rhizome;
@@ -500,14 +706,14 @@ void rhizome_block_add(t_rhizome *rhizome, t_block *block)
 			// Pop from Set Blocks
 			if(!block->state.is_in_rhizome) set_block_pop(block->set,block);
 
-			// Set In Graph
+			// Set In Rhizome
 			block->state.is_in_rhizome = 1;
 
-			// Setup Graph
+			// Setup Rhizome
 			rhizome_setup(rhizome);
 		}
 
-		// Add To Graph
+		// Add To Rhizome
 		rhizome_graph_block_add(rhizome, block);
 	}
 	// Else Add Blocks Lst
@@ -527,6 +733,16 @@ void rhizome_block_add(t_rhizome *rhizome, t_block *block)
 
 // BLOCK REMOVE
 
+void rhizome_block_reset(t_block *block)
+{
+	// Reset Block State
+	block->rhizome=NULL;
+	block->state.is_in_rhizome = 0;
+
+	// Add To Set
+	set_block_push(block->set, block);
+}
+
 void rhizome_block_remove(t_rhizome *rhizome, t_block *block)
 {
 	// Reset Block State
@@ -537,7 +753,7 @@ void rhizome_block_remove(t_rhizome *rhizome, t_block *block)
 	set_block_push(block->set, block);
 
 	// Setup
-	rhizome_setup(rhizome);
+	if(rhizome) rhizome_setup(rhizome);
 }
 
 // ADD
@@ -559,7 +775,6 @@ t_rhizome *rhizome_add(const char *name)
 	list_add(set->rhizomes,rhizome);
 
 	rhizome->set = set;
-
 
 	return rhizome;
 }
@@ -600,6 +815,8 @@ t_rhizome *rhizome_rebind(t_scene *sc,void *ptr)
 
 	rebind(sc,"rhizome","blocks",(void **)&rhizome->blocks);
 	rebind(sc,"rhizome","set",(void **)&rhizome->set);
+
+	rhizome->graph = NULL;
 
 	return rhizome;
 }

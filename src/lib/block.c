@@ -20,57 +20,6 @@
 #include "set.h"
 #include "graph.h"
 
-int block_dash_exists(t_block *block, t_dot *dot_x, t_dot *dot_y)
-{
-	t_link *link;
-	t_dash *dash;
-	t_generic *s_x;
-	t_generic *s_y;
-	t_generic *g_x;
-	t_generic *g_y;
-
-	s_x = (t_generic *) dot_x->data;
-	s_y = (t_generic *) dot_y->data;
-
-	for(link=block->dashes->first;link;link=link->next)
-	{
-		dash = link->data;
-		g_x = (t_generic *)dash->x->data;
-		g_y = (t_generic *)dash->y->data;
-
-		if((s_x->id == g_x->id) && (s_y->id == g_y->id))
-		{
-			return 1;
-		}
-	}
-
-	return 0;
-}
-
-void block_dash_add(t_block *block, t_dot *dot_x, t_dot *dot_y)
-{
-	t_dash *dash;
-	t_graph *graph = block->rhizome->graph;
-
-	// If Dashes
-	if(block->dashes)
-	{
-		// Check This Dash Doesn't Exists
-		if(!block_dash_exists(block,dot_x,dot_y))
-		{
-			dash = graph_dash_add(graph, dot_x, dot_y);
-			lst_add(block->dashes,dash,"dash");
-		}
-	}
-	else
-	{
-		block->dashes = lst_new("dashes");
-		dash = graph_dash_add(graph, dot_x, dot_y);
-		lst_add(block->dashes,dash,"dash");
-
-	}
-}
-
 // Reset Update State
 void block_reset(t_block *block)
 {
@@ -170,6 +119,7 @@ int block_in_lst(t_block *block, t_lst *lst)
 
 // GET GRAPH
 
+/*
 t_lst *block_rhizome_get(t_context *C, t_plug *plug, t_lst *lst)
 {
 	t_link *l;
@@ -227,116 +177,16 @@ t_lst *block_rhizome_get(t_context *C, t_plug *plug, t_lst *lst)
 
 	return lst;
 }
+*/
 
-// SPLIT
-int block_graph_id(t_lst *lst, int id)
-{
-	t_link *link;
-	t_datum *datum;
-	for(link=lst->first;link;link=link->next)
-	{
-		datum = link->data;
-		int datum_id = drf_int(datum->data);
-		if(datum_id == id)
-		{
-			return 1;
-		}
-	}
-	 return 0;
-}
 
-void block_graph_split(t_block *block_self, t_block *block_dst)
-{
-	t_graph *graph = block_self->rhizome->graph;
-	t_dot *dot_x = block_self->dot;
-	t_dot *dot_y = block_dst->dot;
-
-	// Remove Dash
-	graph_dash_remove(graph,dot_x, dot_y);
-	// Disjoin
-	graph_dj_set(block_self->rhizome->graph);
-
-	t_link *link;
-	t_dot *dot;
-	t_datum *datum;
-
-	t_lst *ids = lst_new("ids");
-
-	for(link=graph->dots->first;link;link=link->next)
-	{
-		dot = link->data;
-		if(! block_graph_id(ids, dot->root))
-		{
-			int id = dot->root;
-			datum = datum_new(dt_int,1,&id);
-			lst_add(ids, datum, "datum");
-		}
-
-	}
-
-	printf("ROOTS!\n");
-
-	for(link=ids->first;link;link=link->next)
-	{
-		t_datum *datum = link->data;
-		printf("root %d\n", drf_int(datum->data));
-		datum_free(datum);
-	}
-
-	lst_cleanup(ids);
-}
 
 void block_rhizome_split(t_block *block_self, t_plug *plug_self, t_block *block_dst, t_plug *plug_dst)
 {
-	t_context *C = ctx_get();
-
 	block_self->state.is_root = 0;
 	block_dst->state.is_root = 0;
 
-	t_lst *lst_self = lst_new("lst");
-	t_lst *lst_dst = lst_new("lst");
-
-	// Graph
-	block_graph_split(block_self, block_dst);
-
-	// Get Rhizome For Both BLocks
-	block_rhizome_get(C,plug_self,lst_self);
-	block_rhizome_get(C,plug_dst,lst_dst);
-
-	// IF Rhizomes Are Not Equal (means One Block is not in Both Rhizomes)
-	if(!block_in_lst(block_self,lst_dst))
-	{
-		t_rhizome *old_rhizome = block_self->rhizome;
-
-		// Buil New Rhizome
-		if(lst_self->count > 1)
-		{
-			rhizome_build_from_list(lst_self);
-		}
-		// Or Not
-		else
-		{
-			rhizome_block_remove(block_self->rhizome, block_self);
-			block_self->set = get_current_set(C); 
-
-		}
-
-		if(lst_dst->count > 1)
-		{
-			rhizome_build_from_list(lst_dst);
-		}
-		else
-		{
-			rhizome_block_remove(block_dst->rhizome, block_dst);
-			block_dst->set = get_current_set(C); 
-		}
-
-		// Delete Old Rhizome
-		rhizome_delete(old_rhizome);
-	}
-
-	free(lst_self);
-	free(lst_dst);
+	rhizome_graph_split(block_self->rhizome, block_self, block_dst);
 }
 
 // Add Block To Rhizome
@@ -373,7 +223,7 @@ void block_rhizome_add(t_block *self, t_block *dst)
 	}
 
 	// Add Dash
-	rhizome_graph_dash_add(self->rhizome, dst, self);
+	rhizome_graph_link_add(self->rhizome, dst, self);
 }
 
 void block_set_rhizome_order(t_block *block, int order)
@@ -880,8 +730,6 @@ t_block *block_new(const char *name)
 
 	block->rhizome = NULL;
 	block->set = NULL;
-	block->dot = NULL;
-	block->dashes = NULL;
 
 	return block;
 }

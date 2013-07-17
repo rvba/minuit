@@ -51,7 +51,10 @@ typedef struct Graph
 void 		graph_dj_set(t_graph *graph);
 void 		graph_show(t_graph *graph);
 
+t_dot *		graph_dot_find(t_graph *graph, int id);
 void 		graph_dash_remove(t_graph *graph, t_dot *x, t_dot *y);
+int 		graph_dash_exists(t_graph *graph, t_dot *dot_x, t_dot *dot_y);
+int 		graph_link_exists(t_graph *graph, int id_x, int id_y);
 t_dot *	 	graph_dot_add(t_graph *graph, void *data);
 t_dash *	graph_dash_add(t_graph *graph, t_dot *x, t_dot *y);
 t_graph *	graph_make(const char *name);

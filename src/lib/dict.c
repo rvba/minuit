@@ -26,6 +26,7 @@ void symbol_show(t_symbol *symbol)
 		case dt_float:printf("(float\t)%s:(%f)\n",name,drf_float(symbol->data));break;
 		case dt_string:printf("(string\t)%s:(%s)\n",name,drf_string(symbol->data));break;
 		case dt_pointer:printf("(pointer\t)%s:(%p)\n",name,symbol->data);break;
+		case dt_lst:printf("(lst\t)%s\n",name);lst_show(symbol->data);break;
 		default: printf("[WARNING symbol_show] Unknown type\n");
 	}
 }
@@ -37,7 +38,8 @@ void dict_show(t_dict *dict)
 	t_link *l;
 	t_symbol *symbol;
 
-	printf("(dict\t)(%s)\n",dict->name);
+	printf("DICT\t(%s)\n",dict->name);
+	printf("count:%d\n",dict->count);
 	if(lst)
 	{
 		for(l=lst->first;l;l=l->next)
@@ -60,7 +62,7 @@ t_node *symbol_add(const char *name)
 
 // DICT SYMBOL ADD
 
-void dict_symbol_add(t_dict *dict,const char *name,t_data_type type,void *data)
+t_symbol *dict_symbol_add(t_dict *dict,const char *name,t_data_type type,void *data)
 {
 	t_node *symbol_node=symbol_add(name);
 	t_symbol *symbol=symbol_node->data;
@@ -69,6 +71,10 @@ void dict_symbol_add(t_dict *dict,const char *name,t_data_type type,void *data)
 	symbol->data=data;
 
 	list_add(dict->symbols,symbol);
+
+	dict->count++;
+
+	return symbol;
 }
 
 t_symbol *dict_pop(t_dict *dict,const char *name)
@@ -80,8 +86,10 @@ t_symbol *dict_pop(t_dict *dict,const char *name)
 	for(l=lst->first;l;l=l->next)
 	{
 		symbol=l->data;
-
-		if(is(symbol->name,name)) return symbol;
+		if(is(symbol->name,name))
+		{
+			return symbol;
+		}
 	}
 	
 	return NULL;
@@ -92,7 +100,6 @@ void *dict_pop_data(t_dict *dict,const char *name)
 	t_symbol *symbol = dict_pop(dict,name);
 	return symbol->data;
 }
-	
 
 t_node *dict_add(const char *name)
 {
@@ -159,6 +166,7 @@ t_dict *dict_new(const char *name)
 	set_name(dict->name,name);
 
 	dict->symbols=NULL;
+	dict->count = 0;
 
 	return dict;
 }

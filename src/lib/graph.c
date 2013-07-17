@@ -19,7 +19,7 @@ t_dot *dot_new(void *data);
 void dash_free(t_dash *dash);
 t_dash *dash_new(t_dot *x, t_dot *y);
 
-// DISJOINT
+// DISJOIN
 
 int graph_dj_find(t_dot *dot)
 {
@@ -66,15 +66,6 @@ void graph_dj_set(t_graph *graph)
 			graph_dj_union(dash->x, dash->y);
 		}
 	}
-
-	// Show
-	for(link=graph->dots->first;link;link=link->next)
-	{
-		dot = link->data;
-		t_generic *g = (t_generic *) dot->data;
-		printf("dot (%s) id (%d)  parent (%d) root (%d)\n",g->name, dot->id, dot->parent->id, dot->root);
-	}
-
 }
 
 // SHOW
@@ -103,6 +94,59 @@ void graph_show(t_graph *graph)
 	}
 }
 
+// DASH EXISTS
+
+int graph_dash_exists(t_graph *graph, t_dot *dot_x, t_dot *dot_y)
+{
+	t_link *link;
+	t_dash *dash;
+	t_generic *s_x;
+	t_generic *s_y;
+	t_generic *g_x;
+	t_generic *g_y;
+
+	s_x = (t_generic *) dot_x->data;
+	s_y = (t_generic *) dot_y->data;
+
+	for(link=graph->dashes->first;link;link=link->next)
+	{
+		dash = link->data;
+		g_x = (t_generic *)dash->x->data;
+		g_y = (t_generic *)dash->y->data;
+
+		if((s_x->id == g_x->id) && (s_y->id == g_y->id))
+		{
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
+int graph_link_exists(t_graph *graph, int id_x, int id_y)
+{
+	t_link *link;
+	t_dash *dash;
+	t_dot *dot_x;
+	t_dot *dot_y;
+
+	for(link=graph->dashes->first;link;link=link->next)
+	{
+		dash = link->data;
+		dot_x = dash->x;
+		dot_y = dash->y;
+		int id_dot_x = dot_x->id;
+		int id_dot_y = dot_y->id;
+
+		if(((id_x == id_dot_x) && (id_y == id_dot_y)) || ((id_x == id_dot_y) && (id_y == id_dot_x)))
+		{
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
 // FIND
 
 t_dash *graph_dash_find(t_graph *graph, t_dot *x, t_dot *y)
@@ -124,6 +168,24 @@ t_dash *graph_dash_find(t_graph *graph, t_dot *x, t_dot *y)
 	return NULL;
 }
 
+t_dot *graph_dot_find(t_graph *graph, int id)
+{
+	t_link *link;
+	t_dot *dot;
+
+	for(link=graph->dots->first;link;link=link->next)
+	{
+		dot = link->data;
+		if(dot->id == id)
+		{
+			return dot;
+		}
+	}
+
+	return NULL;
+}
+
+
 // REMOVE
 
 void graph_dash_remove(t_graph *graph, t_dot *x, t_dot *y)
@@ -135,7 +197,6 @@ void graph_dash_remove(t_graph *graph, t_dot *x, t_dot *y)
 		graph->dash_count--;
 		dash_free(dash);
 	}
-	graph_show(graph);
 }
 
 // ADD
@@ -146,6 +207,7 @@ t_dot *graph_dot_add(t_graph *graph, void *data)
 
 	t_dot *dot = dot_new(data);
 	lst_add(graph->dots, dot, g->name);
+
 	graph->dot_count++;
 
 	return dot;
@@ -176,15 +238,10 @@ void graph_free(t_graph *graph)
 
 t_graph *graph_make(const char *name)
 {
-	t_context *C = ctx_get();
-
 	t_graph *graph = graph_new(name);
 
-	t_node *dot = scene_add(C->scene,nt_list,"dot_list");
-	t_node *dash = scene_add(C->scene,nt_list,"dash_list");
-
-	t_lst *dot_list = dot->data;
-	t_lst *dash_list = dash->data;
+	t_lst *dot_list = lst_new("dots");
+	t_lst *dash_list = lst_new("dashs");
 
 	graph->dots = dot_list;
 	graph->dashes = dash_list;

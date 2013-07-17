@@ -21,6 +21,7 @@ struct Brick;
 struct Node;
 struct Lst;
 struct Plug;
+struct Dot;
 
 typedef struct Block t_block;
 typedef struct Block_Class t_block_class;
@@ -94,8 +95,10 @@ struct Block
 
 	struct Rhizome *rhizome;
 	struct Set *set;
+	/*
 	struct Dot *dot;
 	struct Lst *dashes;
+	*/
 };
 
 
