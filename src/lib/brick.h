@@ -192,6 +192,8 @@ typedef struct Brick
 }t_brick;
 
 
+void brick_rhizome_split(t_brick *brick_x, t_brick *brick_y);
+void brick_rhizome_add(t_brick *brick_x, t_brick *brick_y);
 void 		brick_remove(struct Dict *args);
 
 int 		brick_is_different(struct Brick *dst, struct Brick *src);

@@ -17,6 +17,58 @@
 #include "block.h"
 #include "brick.h"
 #include "binding.h"
+#include "rhizome.h"
+
+void brick_rhizome_split(t_brick *brick_x, t_brick *brick_y)
+{
+	t_block *block_x = brick_x->block;
+	t_block *block_y = brick_y->block;
+
+	block_x->state.is_root = 0;
+	block_y->state.is_root = 0;
+
+	rhizome_graph_split(block_x->rhizome, brick_x, brick_y);
+}
+
+// Add Block To Rhizome
+void brick_rhizome_add(t_brick *brick_x, t_brick *brick_y)
+{
+	t_context *C = ctx_get();
+
+	t_block *block_x = brick_x->block;
+	t_block *block_y = brick_y->block;
+
+	// Each Block Have A Rhizome
+	if(block_x->rhizome && block_y->rhizome)
+	{
+		rhizome_merge(block_x->rhizome, block_y->rhizome);
+	}
+	// Only One Rhizome
+	else if(block_x->rhizome)
+	{
+		rhizome_block_add(block_x->rhizome, block_y);
+	}
+	// Only One Rhizome
+	else if(block_y->rhizome)
+	{
+		rhizome_block_add(block_y->rhizome, block_x);
+	}
+	// No Rhizome
+	else
+	{
+		// Build New Rhizome
+		scene_store(C->scene,1);
+		t_rhizome *rhizome = rhizome_add("rhizome");
+		scene_store(C->scene,0);
+
+		// Add Blocks
+		rhizome_block_add(rhizome, block_x);
+		rhizome_block_add(rhizome, block_y);
+	}
+
+	// Add Dash
+	rhizome_graph_link_add(block_x->rhizome, brick_x, brick_y);
+}
 
 int brick_is_different(t_brick *dst, t_brick *src)
 {

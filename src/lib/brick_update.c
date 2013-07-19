@@ -70,11 +70,8 @@ void _cls_brick_disconnect(t_brick *self)
 	plug_intern_in->cls->disconnect(mode_in , plug_intern_in);
 	plug_intern_out->cls->disconnect(mode_out ,plug_intern_out);
 
-	t_block *block_self = brick_in->block;
-	t_block *block_target = brick_out->block;
-
 	// Split Graph
-	block_rhizome_split(block_self,plug_in,block_target,plug_target);
+	brick_rhizome_split(brick_in, brick_out);
 
 	// change modes
 	self->mode=bm_idle;
