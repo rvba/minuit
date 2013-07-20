@@ -492,10 +492,7 @@ t_data *data_rebind(t_scene *sc,void *ptr)
 t_data *data_new(const char *name)
 {
 	t_data *data = (t_data *)malloc(sizeof(t_data));
-	data->id=0;
-	data->id_chunk=0;
-	set_name(data->name,name);
-	data->users=0;
+	id_init(&data->id, name);
 	bzero(data->type,_NAME_);
 	bzero(data->target,_NAME_);
 	data->size=0;

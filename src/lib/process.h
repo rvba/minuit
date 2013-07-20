@@ -17,10 +17,7 @@ struct Clock;
 
 typedef struct Process
 {
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
+	t_id id;
 
 	pthread_t thread;
 	struct Clock *clock;

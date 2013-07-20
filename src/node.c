@@ -33,6 +33,8 @@
 #include "file.h"
 #include "rhizome.h"
 #include "graph.h"
+#include "material.h"
+#include "mesh.h"
 
 #include "ctx.h"
 
@@ -502,10 +504,10 @@ void cls_node_init_brick_ids(t_node *node)
 	// node
 	node->id=id;
 	// data
-	brick->id=id;
+	brick->id.id=id;
 
-	brick->plug_in.id = scene_id_get(C->scene);
-	brick->plug_out.id = scene_id_get(C->scene);
+	brick->plug_in.id.id = scene_id_get(C->scene);
+	brick->plug_out.id.id = scene_id_get(C->scene);
 }
 
 void cls_node_init_block(t_node *node)
@@ -1297,4 +1299,13 @@ t_node *node_new(t_node_type type)
 
 	return node;
 }
+
+void id_init(t_id *id, const char *name)
+{
+	id->id = 0;
+	id->id_chunk = 0;
+	id->users = 0;
+	set_name(id->name, name);
+}
+
 

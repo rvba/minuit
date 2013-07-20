@@ -135,7 +135,7 @@ void set_draw(t_set *set)
 void set_block_pop(t_set *set, t_block *block)
 {
 	t_lst *lst = set->blocks;
-	list_remove_by_id(lst, block->id);
+	list_remove_by_id(lst, block->id.id);
 
 	set_setup(set);
 }
@@ -199,7 +199,7 @@ t_set *set_clone(t_set *set)
 {
 	if(set)
 	{
-		t_set *clone = set_new(set->name);
+		t_set *clone = set_new(set->id.name);
 		clone->blocks = lst_clone(set->blocks, dt_block);
 		clone->rhizomes = lst_clone(set->rhizomes, dt_rhizome);
 
@@ -234,10 +234,7 @@ t_set *set_new(const char *name)
 {
 	t_set *set = (t_set *)malloc(sizeof(t_set));
 
-	set->id = 0;
-	set->id_chunk = 0;
-	set_name(set->name,name);
-	set->users = 0;
+	id_init(&set->id, name);
 
 	set->blocks = NULL;
 	set->rhizomes = NULL;

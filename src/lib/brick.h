@@ -152,10 +152,7 @@ typedef struct Brick_Var
 
 typedef struct Brick
 {
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];			
+	t_id id;
 	t_brick_class *cls;			// cls
 
 	enum Brick_Type type;

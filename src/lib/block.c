@@ -112,7 +112,7 @@ int block_in_lst(t_block *block, t_lst *lst)
 	for(l=lst->first;l;l=l->next)
 	{
 		b = l->data;
-		if(b->id == block->id) return 1;
+		if(b->id.id == block->id.id) return 1;
 	}
 	return 0;
 }
@@ -141,7 +141,7 @@ int block_is_in_lst(t_lst *lst, t_block *block_dst)
 		for(link = lst->first; link; link = link->next)
 		{
 			block_src  = link->data;
-			if(block_src->id == block_dst->id)
+			if(block_src->id.id == block_dst->id.id)
 			{
 				return 1;
 			}
@@ -269,7 +269,7 @@ t_block *block_dupli(t_block *block)
 	t_context *C=ctx_get();
 	scene_store(C->scene,1);
 
-	t_node *clone_node=add_block(C,block->name);
+	t_node *clone_node=add_block(C,block->id.name);
 	t_block *clone_block=clone_node->data;
 
 	vcp(clone_block->pos,block->pos);
@@ -293,7 +293,7 @@ t_block *block_copy(t_block *block)
 	t_context *C=ctx_get();
 	scene_store(C->scene,1);
 
-	t_node *clone_node = block_make(block->name,block->type);
+	t_node *clone_node = block_make(block->id.name,block->type);
 	t_block *clone_block = clone_node->data;
 
 	clone_block->state.draw_outline = block->state.draw_outline;
@@ -418,7 +418,7 @@ t_brick *block_brick_get(t_block *block,const char *name)
 	for(l=block->bricks->first;l;l=l->next)
 	{
 		brick=l->data;
-		if(is(brick->name,name))
+		if(is(brick->id.name,name))
 		{
 			return brick;
 		}
@@ -466,7 +466,7 @@ t_block *block_clone(t_block *block)
 {
 	if(block)
 	{
-		t_block *clone = block_new(block->name);
+		t_block *clone = block_new(block->id.name);
 
 		vcp3i(clone->idcol,block->idcol);
 		set_name(clone->type,block->type);
@@ -586,10 +586,8 @@ t_block *block_new(const char *name)
 {
 	t_block *block  = (t_block *)malloc(sizeof(t_block));
 
-	block->id=0;
-	block->id_chunk=0;
-	set_name(block->name,name);
-	block->users=0;
+	id_init(&block->id, name);
+
 	bzero(block->type,_NAME_);
 
 	block->pos[0]=1;

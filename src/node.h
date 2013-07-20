@@ -114,5 +114,7 @@ t_node *	node_new(t_node_type type);
 t_node *	node_clone(t_node *src);
 char *		node_name_get(t_node_type type);
 
+void id_init(t_id *id, const char *name);
+
 #endif
 

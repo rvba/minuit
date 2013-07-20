@@ -28,10 +28,7 @@ typedef struct Engine_Class
 
 typedef struct Engine
 {
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
+	t_id id;
 	t_engine_cls *cls;
 
 	int process_count;

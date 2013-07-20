@@ -15,17 +15,12 @@
 
 struct Scene;
 
-
 typedef struct Binding
 {
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
-
+	t_id id;
 	enum Data_Type type;
-
 	void *data;
+
 }t_binding;
 
 void binding_update(t_binding *binding, void *ptr);

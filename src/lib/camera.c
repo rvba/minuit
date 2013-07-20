@@ -37,7 +37,7 @@ t_camera *camera_clone(t_camera *source)
 
 void camera_show(t_camera *camera)
 {
-	printf("Camera: %s\n",camera->name);
+	printf("Camera: %s\n",camera->id.name);
 	printf("frustum\n");
 	printf("left %f\n",camera->left);
 	printf("right %f\n",camera->right);
@@ -131,7 +131,7 @@ void *camera_get_ref(t_camera *camera, const char *ref)
 
 t_camera *camera_clone(t_camera *camera)
 {
-	t_camera *clone = camera_new(camera->name);
+	t_camera *clone = camera_new(camera->id.name);
 
 	clone->cls = camera->cls;
 	clone->is_moving = camera->is_moving;
@@ -180,10 +180,7 @@ t_camera *camera_new(const char *name)
 {
 	t_camera *camera  = (t_camera *)malloc(sizeof(t_camera));
 
-	camera->id=0;
-	camera->id_chunk=0;
-	set_name(camera->name,name);
-	camera->users=0;
+	id_init(&camera->id, name);
 
 	camera->restrict_matrix=0;
 	camera->type = camera_frustum;

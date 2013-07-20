@@ -175,7 +175,7 @@ void plug_child_remove_parent(t_plug *plug)
 			p = l->data;
 			b = p->brick;
 
-			if(b->id == brick_parent->id)
+			if(b->id.id == brick_parent->id.id)
 				break;
 		}
 
@@ -233,7 +233,7 @@ t_brick *brick_dupli(t_block *block,t_brick *brick)
 
 	t_plug *plug_intern=&brick->plug_intern;
 
-	t_node *clone_node=brick_make(block,brick->name,brick->type,plug_intern->data_type,plug_intern->data);
+	t_node *clone_node=brick_make(block,brick->id.name,brick->type,plug_intern->data_type,plug_intern->data);
 
 	t_brick *clone_brick=clone_node->data;
 
@@ -251,8 +251,8 @@ t_brick *brick_dupli(t_block *block,t_brick *brick)
 	}
 	else
 	{
-		brick->state.clone = brick->id;
-		clone_brick->state.clone = brick->id;
+		brick->state.clone = brick->id.id;
+		clone_brick->state.clone = brick->id.id;
 		brick_clone_change_name(brick);
 		brick_clone_change_name(clone_brick);
 		brick_build_width(brick);
@@ -274,7 +274,7 @@ t_brick *brick_copy(t_block *block,t_brick *brick)
 	void *data = plug_intern->data;
 	void *data_new = data_copy(data_type,data);
 
-	t_node *clone_node=brick_make(block,brick->name,brick->type,plug_intern->data_type,data_new);
+	t_node *clone_node=brick_make(block,brick->id.name,brick->type,plug_intern->data_type,data_new);
 
 	t_brick *clone_brick=clone_node->data;
 
@@ -454,10 +454,7 @@ void plug_init(
 
 void plug_reset(t_plug *plug,const char *name)
 {
-	plug->id=0;
-	plug->id_chunk=0;
-	set_name(plug->name,name);
-	plug->users=0;
+	id_init(&plug->id, name);
 
 	plug->src=NULL;
 	plug->dst=NULL;
@@ -527,7 +524,7 @@ t_brick *brick_rebind(t_scene *sc,void *ptr)
 	rebind(sc,"brick","plug_in_src",(void **)&brick->plug_in.src);
 
 	if(brick->plug_intern.state.store_data) 
-		rebind(sc,"brick",brick->name,(void **)&brick->plug_intern.data);
+		rebind(sc,"brick",brick->id.name,(void **)&brick->plug_intern.data);
 	else 	
 		brick->plug_intern.data = NULL;
 
@@ -540,13 +537,13 @@ t_brick *brick_rebind(t_scene *sc,void *ptr)
 
 
 	rebind(sc,"brick","plug_out_dst",(void **)&brick->plug_out.dst);
-	rebind(sc,"brick",brick->name,(void **)&brick->action);
+	rebind(sc,"brick",brick->id.name,(void **)&brick->action);
 
 	rebind(sc,"brick","plug_parents",(void **)&brick->plug_intern.parents);
 	rebind(sc,"brick","plug child",(void **)&brick->plug_intern.child);
 	rebind(sc,"brick","plug binding",(void **)&brick->plug_intern.bindings);
 
-	txt_init(&brick->txt_name,brick->name);
+	txt_init(&brick->txt_name,brick->id.name);
 	txt_init(&brick->txt_data,NULL);
 
 	if(brick->state.clone)
@@ -700,13 +697,12 @@ t_brick *brick_new(const char *name)
 {
 	t_brick *brick = (t_brick *)malloc(sizeof(t_brick));
 
+	id_init(&brick->id, name);
+
 	txt_init(&brick->txt_name,name);
 	txt_init(&brick->txt_data,NULL);
 
-	set_name(brick->name,name);
 	brick->context=nt_null;
-
-	brick->users=0;
 
 	bzero(&brick->state,sizeof(t_brick_state));
 

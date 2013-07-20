@@ -21,10 +21,7 @@ typedef struct Texture t_texture;
 
 struct Texture
 {
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
+	t_id id;
 
 	int idcol[3];
 

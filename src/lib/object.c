@@ -16,6 +16,8 @@
 #include "camera.h"
 #include "list.h"
 #include "set.h"
+#include "set.h"
+#include "block.h"
 
 void object_default(t_node *node){}
 void cls_object_link(t_object *self,t_node *target);
@@ -57,7 +59,7 @@ t_object_class object_camera =
 void cls_object_show(t_object *object)
 {
 	printf("[OBJECT]\n");
-	printf("name:[%s]\n",object->name);
+	printf("name:[%s]\n",object->id.name);
 	printf("idcol:");vprint3i(object->idcol,'\n');
 	printf("loc:");vprint3f(object->loc,'\n');
 	printf("rot:");vprint3f(object->rot,'\n');
@@ -178,7 +180,7 @@ void object_free(t_object *object)
 	t_scene *sc=C->scene;
 
 	// free data
-	t_node *node=scene_node_get_by_id_global(sc,object->id);
+	t_node *node=scene_node_get_by_id_global(sc,object->id.id);
 	scene_remove_data_node(sc,node);
 
 	// free ref block 
@@ -212,7 +214,7 @@ t_object *object_clone(t_object *object)
 {
 	if(object)
 	{
-		t_object *clone = object_new(object->name);
+		t_object *clone = object_new(object->id.name);
 
 		vcp3f(clone->loc,object->loc);
 		vcp3f(clone->rot,object->rot);
@@ -315,10 +317,7 @@ t_object *object_new(const char *name)
 {
 	t_object *object = (t_object *)malloc(sizeof(t_object));
 
-	object->id=0;
-	object->id_chunk=0;
-	set_name(object->name,name);
-	object->users=0;
+	id_init(&object->id, name);
 
 	vset(object->loc,0,0,0);
 	vset(object->rot,0,0,0);

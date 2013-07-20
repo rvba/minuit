@@ -30,7 +30,7 @@ void block_update_data(t_block *block)
 		// update txt
 		if(brick->state.draw_value)
 		{
-			if(is(brick->name,"camera_main")) printf("block:brick\n");
+			if(is(brick->id.name,"camera_main")) printf("block:brick\n");
 			brick_build_txt(brick);
 		}
 

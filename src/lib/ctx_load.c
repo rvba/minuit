@@ -46,6 +46,7 @@
 #include "file.h"
 #include "brick.h"
 #include "rhizome.h"
+#include "mesh.h"
 
 #include "ctx.h"
 #include "op.h"
@@ -243,7 +244,7 @@ void *find_ref(t_scene *sc,t_data *data)
 	if(node)
 	{
 		// Get Ref
-		void *ptr = node->cls->get_ref(node,data->name);
+		void *ptr = node->cls->get_ref(node,data->id.name);
 
 		if(ptr)
 		{
@@ -257,7 +258,7 @@ void *find_ref(t_scene *sc,t_data *data)
 	}
 	else
 	{
-		printf("[ERROR struct_ref_get] ref %s %s:Can't get node \n",data->target,data->name);
+		printf("[ERROR struct_ref_get] ref %s %s:Can't get node \n", data->target, data->id.name);
 		load_error = 1;
 		return NULL;
 	}
@@ -350,7 +351,7 @@ void load_store(t_scene *sc)
 				}
 				else
 				{
-					printf("[ERROR load_store] dynamic : can't find node for %s\n",d->name);
+					printf("[ERROR load_store] dynamic : can't find node for %s\n", d->id.name);
 					load_error = 1;
 				}
 			}
@@ -453,7 +454,7 @@ void rebind(t_scene *sc,const char *type,const char *name,void **ptr)
 				else if(is(data->type,"app_data"))
 				{
 					// get register
-					*ptr=find_register(data->target,data->name);
+					*ptr=find_register(data->target, data->id.name);
 				}
 				else if(is(data->type,"struct_ref"))
 				{
@@ -463,7 +464,7 @@ void rebind(t_scene *sc,const char *type,const char *name,void **ptr)
 				else if(is(data->type,"app_struct"))
 				{
 					// get internal struct by name
-					*ptr=find_struct(data->target,data->name);
+					*ptr=find_struct(data->target, data->id.name);
 				}
 				else if(is(data->type,"app_node"))
 				{
@@ -575,7 +576,7 @@ void load_var(t_scene *sc)
 				}
 				else
 				{
-					printf("[ERROR load_var] Can't find node for %s\n",d->name);
+					printf("[ERROR load_var] Can't find node for %s\n", d->id.name);
 					load_error = 1;
 				}
 			}

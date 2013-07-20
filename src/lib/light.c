@@ -45,10 +45,7 @@ t_light *light_new(const char *name)
 {
 	t_light *light = (t_light *)malloc(sizeof(t_light));
 
-	light->id=0;
-	light->id_chunk=0;
-	set_name(light->name,name);
-	light->users=0;
+	id_init(&light->id, name);
 	
 	light->diffuse[0]=1.1;
 	light->diffuse[1]=1;
@@ -60,7 +57,6 @@ t_light *light_new(const char *name)
 	light->specular[2]=1;
 	light->specular[3]=1;
 
-	light->id=0;
 	light->is_selected=0;
 
 	light->menu=NULL;

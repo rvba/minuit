@@ -9,6 +9,9 @@
 
 #include "op.h"
 #include "context.h"
+#include "scene.h"
+#include "node.h"
+#include "list.h"
 #include "ctx.h"
 #include "app.h"
 #include "process.h"
@@ -152,7 +155,7 @@ void *process_loop(void *data)
 void process_launch(t_process *process)
 {
 	pthread_create(&process->thread,NULL,process->loop,process);
-	term_log("p %s", process->name);
+	term_log("p %s", process->id.name);
 }
 
 void ctx_thread_init(t_context *C)
@@ -185,11 +188,7 @@ t_process *process_new(const char *name,void*(* func)(void *data))
 {
 	t_process *process = (t_process *)malloc(sizeof(t_process));
 
-	process->id = 0;
-	process->id_chunk = 0;
-	process->users = 0;
-	
-	set_name(process->name,name);
+	id_init(&process->id, name);
 
 	process->clock=clock_new();
 	process->limit=1;

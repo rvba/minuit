@@ -19,10 +19,7 @@ typedef struct Material t_material;
 
 struct Material
 {
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
+	t_id id;
 
 	int idcol[3];
 	int id_node;

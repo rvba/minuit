@@ -41,10 +41,7 @@ struct Line
 
 struct File
 {
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
+	t_id id;
 
 	char location[_PATH_];
 	char path[_PATH_];

@@ -25,6 +25,8 @@
 #include "block.h"
 #include "brick.h"
 
+#include "mesh.h"
+
 void cls_plug_make_float(t_plug *plug);
 void cls_plug_make_int(t_plug *plug);
 void cls_plug_make_uint(t_plug *plug);
@@ -1555,7 +1557,7 @@ void __cls_plug_flow_lst(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 			// +INT (REWIND)
 			case dt_int:
 
-				if(is(src_brick->name,"rewind"))
+				if(is(src_brick->id.name,"rewind"))
 				{
 					int *state = src_plug->data;
 

@@ -8,6 +8,8 @@
  */
 
 #include "util.h"
+#include "node.h"
+#include "scene.h"
 #include "ui.h"
 #include "draw.h"
 #include "txt.h"

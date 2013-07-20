@@ -126,7 +126,7 @@ void mesh_add_brick_mesh(t_context *C,t_mesh *mesh)
 	t_block *block=node_block->data;
 
 	// add pointers
-	add_part_pointer(C,block,dt_mesh,mesh->name,mesh);
+	add_part_pointer(C,block,dt_mesh,mesh->id.name,mesh);
 	add_part_pointer(C,block,dt_vertex,"v",mesh);
 	add_part_pointer(C,block,dt_face,"f",mesh);
 
@@ -311,7 +311,7 @@ t_mesh *mesh_clone(t_mesh *mesh)
 {
 	if(mesh)
 	{
-		t_mesh *clone = mesh_new(mesh->name);
+		t_mesh *clone = mesh_new(mesh->id.name);
 
 		clone->state.has_face = mesh->state.has_face;
 		clone->state.has_tri = mesh->state.has_tri;
@@ -367,10 +367,14 @@ t_mesh *mesh_new(const char *name)
 {
 	t_mesh *mesh = (t_mesh *)malloc(sizeof(t_mesh));
 
+	/*
 	set_name(mesh->name,name);
 	mesh->id=0;
 	mesh->id_chunk=0;
 	mesh->users=0;
+	*/
+
+	id_init(&mesh->id, name);
 
 	mesh_state_init(&mesh->state);
 	mesh_var_init(&mesh->var);

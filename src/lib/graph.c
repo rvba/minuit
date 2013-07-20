@@ -111,7 +111,7 @@ void graph_show(t_graph *graph)
 	t_dash *dash;
 	t_dot *dot;
 
-	printf("graph (%s)\n",graph->name);
+	printf("graph (%s)\n", graph->id.name);
 	printf("DOTS\n");
 	for(link=graph->dots->first;link;link=link->next)
 	{
@@ -337,10 +337,7 @@ t_graph *graph_new(const char *name)
 {
 	t_graph *graph = (t_graph *)malloc(sizeof(t_graph));
 
-	graph->id = 0;
-	graph->id_chunk = 0;
-	graph->users = 0;
-	set_name(graph->name, name);
+	id_init(&graph->id, name);
 
 	graph->dots = NULL;
 	graph->dashes = NULL;

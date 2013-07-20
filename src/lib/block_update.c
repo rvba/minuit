@@ -143,7 +143,7 @@ void cls_block_menu_update(t_block *block)
 							{
 								t_brick *brick_submenu=block->submenu;
 
-								if(!is(brick_submenu->name,brick->name))
+								if(!is(brick_submenu->id.name,brick->id.name))
 								{
 									block_unstore(block);
 									block_store(block,brick);

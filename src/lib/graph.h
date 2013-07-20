@@ -37,10 +37,7 @@ typedef struct Dash
 
 typedef struct Graph
 {
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
+	t_id id;
 
 	struct Lst *dots;
 	struct Lst *dashes;

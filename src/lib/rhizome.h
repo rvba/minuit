@@ -18,10 +18,7 @@ struct Set;
 
 typedef struct Rhizome
 {
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
+	t_id id;
 
 	struct Lst *blocks;
 	struct Lst *roots;

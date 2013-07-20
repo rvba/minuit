@@ -156,7 +156,7 @@ void __vlst_update_data(t_vlst *vlst,t_vlst *caller)
 			if(caller)
 			{
 				// prevent infinite loop
-				if(link_vlst->id != caller->id)
+				if(link_vlst->id.id != caller->id.id)
 				{
 					vlst_update_data(link_vlst,vlst);
 				}
@@ -240,9 +240,9 @@ void vlst_show(t_vlst *vlst)
 		void *dat=vlst->data;
 
 		if(C->event->debug_terminal)
-			printf("[VLST] type:%s name:%s count:%d length:%d\n",data_name_get(vlst->type), vlst->name, count, length);
+			printf("[VLST] type:%s name:%s count:%d length:%d\n", data_name_get(vlst->type), vlst->id.name, count, length);
 		if(C->event->debug_console)
-			term_log("[VLST] type:%s name:%s count:%d length:%d",data_name_get(vlst->type), vlst->name, count, length);
+			term_log("[VLST] type:%s name:%s count:%d length:%d", data_name_get(vlst->type), vlst->id.name, count, length);
 
 		if(dat)
 		{
@@ -694,7 +694,7 @@ t_vlst *vlst_make(const char *name,t_data_type type, int length, int count)
 
 t_vlst *vlst_duplicate(t_vlst *vlst)
 {
-	t_vlst *vlst_new=vlst_make(vlst->name,vlst->type,vlst->length,vlst->count);
+	t_vlst *vlst_new = vlst_make(vlst->id.name, vlst->type, vlst->length, vlst->count);
 	vlst_copy(vlst_new,vlst->data);
 
 	return vlst_new;
@@ -714,7 +714,7 @@ t_vlst *vlst_clone(t_vlst *vlst)
 {
 	if(vlst)
 	{
-		t_vlst *clone = vlst_new(vlst->name);
+		t_vlst *clone = vlst_new(vlst->id.name);
 
 		clone->count = vlst->count;
 		clone->length = vlst->length;
@@ -779,10 +779,8 @@ t_vlst *vlst_new(const char *name)
 {
 	t_vlst *vlst=(t_vlst *)malloc(sizeof(t_vlst));
 
-	vlst->id=0;
-	vlst->id_chunk=0;
-	set_name(vlst->name,name);
-	vlst->users=0;
+	id_init(&vlst->id, name);
+
 	vlst->type=dt_null;
 	vlst->count=0;
 	vlst->count_new=0;

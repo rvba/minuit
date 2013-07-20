@@ -40,7 +40,7 @@ void term_line_add(t_term *term,char *data)
 
 void term_line_cpy(t_txt *target,t_txt *source)
 {
-	char *name=source->name;
+	char *name = source->id.name;
 	target->data_change(target,name);
 }
 
@@ -71,7 +71,7 @@ void term_loop(t_term *term)
 		if(l->next)
 		{
 			t_txt *target=l->next->data;
-			char *name=target->name;
+			char *name = target->id.name;
 			t->data_change(t,name);
 		}
 	}
@@ -200,7 +200,7 @@ t_term *term_new(const char *name)
 {
 	t_term *term  = (t_term *)malloc(sizeof(t_term));
 
-	set_name(term->name,name);
+	id_init(&term->id, name);
 
 	term->tot_line=CTX_TERM_TOT_LINE;
 	term->line=0;

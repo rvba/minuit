@@ -38,8 +38,8 @@ void dict_show(t_dict *dict)
 	t_link *l;
 	t_symbol *symbol;
 
-	printf("DICT\t(%s)\n",dict->name);
-	printf("count:%d\n",dict->count);
+	printf("DICT\t(%s)\n", dict->id.name);
+	printf("count:%d\n", dict->count);
 	if(lst)
 	{
 		for(l=lst->first;l;l=l->next)
@@ -160,10 +160,8 @@ t_dict *dict_new(const char *name)
 {
 	t_dict *dict = (t_dict *)malloc(sizeof(t_dict));
 
-	dict->id=0;
-	dict->id_chunk=0;
-	dict->users=0;
-	set_name(dict->name,name);
+	id_init(&dict->id, name);
+
 
 	dict->symbols=NULL;
 	dict->count = 0;

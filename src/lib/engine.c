@@ -8,6 +8,7 @@
  */
 
 #include "util.h"
+#include "node.h"
 #include "op.h"
 #include "engine.h"
 #include "process.h"
@@ -48,7 +49,7 @@ t_process *engine_process_get(t_engine *engine,const char *name)
 	for(link = engine->processes->first; link; link = link->next)
 	{
 		process = link->data;
-		if( is(process->name, name))
+		if( is(process->id.name, name))
 		{
 			return process;
 		}
@@ -81,14 +82,14 @@ void engine_show(t_engine *engine)
 	for(link=engine->processes->first;link;link=link->next)
 	{
 		t_process *process = link->data;
-		printf("%d %s\n",process->engine_id,process->name);
+		printf("%d %s\n",process->engine_id, process->id.name);
 	}
 
 	printf("engine garbage\n");
 	for(link=engine->garbage->first;link;link=link->next)
 	{
 		t_process *process = link->data;
-		printf("%d %s\n",process->engine_id,process->name);
+		printf("%d %s\n",process->engine_id, process->id.name);
 	}
 }
 
@@ -110,7 +111,7 @@ void engine_cleanup(t_engine *engine)
 			if(process->done)
 			{
 				lst_link_delete(engine->garbage,link);
-				list_remove_by_name(engine->processes,process->name);
+				list_remove_by_name(engine->processes, process->id.name);
 				printf("[engine] process freed%d\n",process->engine_id);
 				//process_free(process);
 
@@ -128,14 +129,14 @@ void engine_process_remove(t_engine *engine, t_process *process)
 {
 	process->exit = 1;
 	engine->process_count--;
-	lst_add(engine->garbage,process,process->name);
+	lst_add(engine->garbage, process, process->id.name);
 
 	printf("[engine] remove process %d\n",process->engine_id);
 }
 
 void engine_process_add(t_engine *engine, t_process *process)
 {
-	lst_add(engine->processes,process,process->name);
+	lst_add(engine->processes, process, process->id.name);
 	engine->process_count++;
 	engine->process_id++;
 	process->engine_id = engine->process_id;
@@ -147,9 +148,8 @@ t_engine *engine_new(const char *name)
 {
 	t_engine *engine = (t_engine *)malloc(sizeof(t_engine));
 
-	engine->id=0;
-	engine->id_chunk=0;
-	set_name(engine->name,name);
+	id_init(&engine->id, name);
+
 	engine->processes=lst_new("lst");
 	engine->garbage = lst_new("lst");
 	engine->with_global_limit=ENGINE_WITH_GLOBAL_LIMIT;

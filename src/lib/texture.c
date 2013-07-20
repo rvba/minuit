@@ -24,7 +24,7 @@ t_texture *texture_clone(t_texture *texture)
 {
 	if(texture)
 	{
-		t_texture *clone = texture_new(texture->name);
+		t_texture *clone = texture_new(texture->id.name);
 
 		vcp3i(clone->idcol,texture->idcol);
 		clone->width = texture->width;
@@ -46,7 +46,6 @@ t_texture *texture_clone(t_texture *texture)
 
 void texture_free(t_texture *texture)
 {
-	if(texture->name) free(texture->name);
 	if(texture->texels) free(texture->texels);
 }
 
@@ -79,11 +78,7 @@ t_texture *texture_new(const char *name)
 {
 	t_texture *texture = (t_texture *)malloc(sizeof(t_texture));
 
-	texture->id=0;
-	texture->id_chunk=0;
-
-	set_name(texture->name,name);
-	texture->users=0;
+	id_init(&texture->id, name);
 
 	texture->width=0;
 	texture->height=0;

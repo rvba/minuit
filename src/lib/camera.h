@@ -53,10 +53,7 @@ struct Camera_Class
 
 struct Camera
 {
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
+	t_id id;
 	t_camera_cls *cls;
 
 	// Sate

@@ -67,7 +67,7 @@ void *browser_go_backward(t_brick *brick)
 
 void *browser_go_directory(t_brick *brick)
 {
-	file_go_directory(path,brick->name);
+	file_go_directory(path,brick->id.name);
 	is_built=0;
 	brick_release(brick);
 	return NULL;
@@ -120,7 +120,7 @@ void *browser_return_filename(t_brick *brick)
 
 	pos=s_append(tmp,path->location,pos);
 	pos=s_append(tmp,"/",pos);
-	pos=s_append(tmp,brick->name,pos);
+	pos=s_append(tmp,brick->id.name,pos);
 	pos=s_append(tmp,NULL,pos);
 
 	C->event->standby_string=s_allocate(tmp);

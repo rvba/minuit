@@ -11,6 +11,7 @@
 #include "context.h"
 #include "scene.h"
 #include "draw.h"
+#include "mesh.h"
 
 void cls_object_draw_light(t_object *object)
 {

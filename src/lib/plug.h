@@ -80,10 +80,7 @@ struct Plug_State
 
 struct Plug
 {
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
+	t_id id;
 	t_plug_class *cls;
 
 	int idcol[3];

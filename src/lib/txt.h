@@ -16,9 +16,8 @@ typedef struct Txt t_txt;
 
 struct Txt
 {
-	int id;
-	int id_chunk;
-	short users;
+	t_id id;
+
 	char name[_NAME_LONG_];
 
 	int icol[3];

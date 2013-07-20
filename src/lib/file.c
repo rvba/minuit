@@ -12,6 +12,7 @@
 
 #include "util.h"
 #include "scene.h"
+#include "node.h"
 #include "file.h"
 #include "list.h"
 
@@ -38,7 +39,7 @@ void file_go_backward(t_file *file)
 		file->tot_directories--;
 		free(file->directories[file->tot_directories]);
 		// change name
-		set_name(file->name,file->directories[file->tot_directories-1]);
+		set_name( file->id.name, file->directories[file->tot_directories-1]);
 		file_build_location(file); 
 	}
 	else
@@ -53,7 +54,7 @@ void file_element_add(t_file *file,char *name)
 	file->directories[file->tot_directories]=s_allocate(name);
 	file->tot_directories++;
 	// change name
-	set_name(file->name,name);
+	set_name( file->id.name, name);
 }
 
 void file_go_directory(t_file *file,char *name)
@@ -271,7 +272,7 @@ void file_show(t_file *file)
 	if(file->path) printf("path:%s",file->path);
 	if(file->is_relative) printf("(path is relative)\n");
 	else printf("(file is absolute)\n");
-	if(file->name) printf("name:%s\n",file->name);
+	if(file->id.name) printf("name:%s\n", file->id.name);
 	if(file->ext) printf("ext:%s\n",file->ext);
 	printf("tot_directories:%d\n",file->tot_directories);
 	if(file->tot_directories)
@@ -369,7 +370,7 @@ void file_build_location(t_file *file)
 
 
 	new_path[cursor]='/';
-	strcat(new_path,file->name);
+	strcat( new_path, file->id.name);
 
 	if(file->has_extention)
 	{
@@ -543,11 +544,11 @@ int file_init(t_file *file)
 
 		for(letter=filename;*letter!='.';letter++)
 		{
-			file->name[i] = *letter;
+			file->id.name[i] = *letter;
 			i++;
 		}
 
-		file->name[i] = '\0';
+		file->id.name[i] = '\0';
 
 		// set extention
 		i++;
@@ -566,7 +567,7 @@ int file_init(t_file *file)
 	}
 	else
 	{
-		set_name(file->name,file->location);
+		set_name( file->id.name, file->location);
 	}
 
 
@@ -596,7 +597,9 @@ t_file *file_new(const char *path)
 {
 	t_file *file = (t_file *)malloc(sizeof(t_file));
 
-	memset(file->name,'\0',_NAME_);
+	id_init( &file->id, path);
+
+	memset(file->id.name,'\0',_NAME_);
 	memset(file->ext,'\0',_EXT_);
 	memset(file->path,'\0',_PATH_);
 

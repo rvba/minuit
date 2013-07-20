@@ -13,6 +13,7 @@
 #include "context.h"
 #include "event.h"
 #include "ui.h"
+#include "node.h"
 
 #define _gLS GL_LINE_STRIP
 #define _gL GL_LINES
@@ -675,8 +676,7 @@ int txt_letter_draw(char letter,float factor_x,float factor_y, int line_width)
 
 void txt_data_change(t_txt *txt,const char *name)
 {
-	strncpy(txt->name,name,_NAME_LONG_);
-	//txt->width=(float)strlen(name)*txt->letter_width;
+	strncpy(txt->name, name, _NAME_LONG_);
 }
 
 void txt_draw(t_txt *txt)
@@ -813,9 +813,8 @@ void txt_init(t_txt *txt,const char *name)
 t_txt *txt_new(const char *name)
 {
 	t_txt *txt=(t_txt *)malloc(sizeof(t_txt));
-	set_name(txt->name,name);
-	txt->id=0;
-	txt->id_chunk=0;
+
+	id_init(&txt->id, name);
 
 	txt->grid_step=TXT_GRID_STEP;
 	txt->grid_size_x=TXT_GRID_SIZE_X;

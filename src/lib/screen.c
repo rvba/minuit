@@ -72,7 +72,7 @@ void screen_switch_by_name(char *name)
 			t_screen *this_screen=this_node->data;
 
 			// enable screen
-			if(is(this_screen->name,name))
+			if(is(this_screen->id.name, name))
 			{
 				this_screen->is_visible=1;
 				this_screen->is_active=1;
@@ -115,7 +115,7 @@ void screen_generic(t_screen *screen)
 	float color[]={0,0,0,0};
 	glTranslatef(p[0],p[1],p[2]);
 	glScalef(scale,scale,scale);
-	txt_draw_direct_2d(screen->name,p,color,scale);
+	txt_draw_direct_2d(screen->id.name, p, color, scale);
 	glPopMatrix();
 
 	glPopMatrix();
@@ -230,7 +230,7 @@ t_screen *screen_clone(t_screen *screen)
 {
 	if(screen)
 	{
-		t_screen *clone = screen_new(screen->name);
+		t_screen *clone = screen_new(screen->id.name);
 
 		clone->is_active = screen->is_active;
 		clone->is_visible = screen->is_visible;
@@ -288,10 +288,7 @@ t_screen *screen_new(const char *name)
 {
 	t_screen *screen=(t_screen *)malloc(sizeof(t_screen));
 
-	screen->id=0;
-	screen->id_chunk=0;
-	set_name(screen->name,name);
-	screen->users=0;
+	id_init(&screen->id, name);
 
 	screen->is_visible=0;
 	screen->is_active=0;

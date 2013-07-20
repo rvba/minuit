@@ -38,6 +38,14 @@
 
 #define PROCESS_LIMIT 0.01
 
+typedef struct ID
+{
+	int id;
+	int id_chunk;
+	short users;
+	char name[_NAME_];
+}t_id;
+
 typedef enum Node_Type
 {
 	nt_null,

@@ -103,7 +103,7 @@ void *op_brick_add(t_brick *brick)
 	// store
 	scene_store(C->scene,1);
 
-	char *name=brick->name;
+	char *name=brick->id.name;
 
 	     if(is(name,"frame")) 		node = add_slider_int(C,"frame",&C->app->frame); 
 	else if(is(name,"timer"))  		node = add_slider_float(C,"timer",&C->app->timer); 
@@ -931,7 +931,7 @@ void *op_pipe(t_brick *brick)
 		for(l = block->bricks->first;l;l = l->next)
 		{
 			b = l->data;
-			if(!is(b->name,"clone"))
+			if(!is(b->id.name,"clone"))
 			{
 				t_plug *plug_clone = &b->plug_intern;
 				t_plug *plug_in_clone = &b->plug_in;
@@ -987,7 +987,7 @@ void *op_clone(t_brick *brick)
 		for(l = block->bricks->first;l;l = l->next)
 		{
 			b = l->data;
-			if(!is(b->name,"brick") && !is(b->name,"clone"))
+			if(!is(b->id.name,"brick") && !is(b->id.name,"clone"))
 			{
 				t_plug *plug_clone = &b->plug_intern;
 				t_plug *plug_in_clone = &b->plug_in;
@@ -1681,11 +1681,11 @@ void *op_set_vlst(t_brick *brick)
 
 	t_brick *brick_vlst;
 
-	if(is(block->name,"vertex"))
+	if(is(block->id.name,"vertex"))
 		brick_vlst=block_brick_get(block,"vertex");
-	else if(is(block->name,"color"))
+	else if(is(block->id.name,"color"))
 		brick_vlst=block_brick_get(block,"colors");
-	else if(is(block->name,"faces"))
+	else if(is(block->id.name,"faces"))
 		brick_vlst=block_brick_get(block,"quads");
 	else
 		printf("err!\n");

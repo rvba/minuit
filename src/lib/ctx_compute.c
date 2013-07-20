@@ -9,6 +9,9 @@
 
 #include "op.h"
 #include "context.h"
+#include "scene.h"
+#include "node.h"
+#include "list.h"
 #include "ctx.h"
 #include "app.h"
 #include "process.h"

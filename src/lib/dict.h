@@ -31,11 +31,7 @@ typedef struct Symbol
 
 typedef struct Dict
 {
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
-
+	t_id id;
 	struct Lst *symbols;
 	int count;
 

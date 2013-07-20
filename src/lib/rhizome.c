@@ -32,7 +32,7 @@
 
 void rhizome_show(t_rhizome *rhizome)
 {
-	printf("RHIZOME %s\n",rhizome->name);
+	printf("RHIZOME %s\n", rhizome->id.name);
 	printf("BLOCKS\n");
 	lst_show(rhizome->blocks);
 	printf("GRAPH\n");
@@ -77,13 +77,13 @@ void rhizome_graph_link_add(t_rhizome *rhizome, t_brick *brick_x, t_brick *brick
 
 	t_graph *graph = block_x->rhizome->graph;
 
-	t_dot *dot_x = graph_dot_find(graph, block_x->id);
-	t_dot *dot_y = graph_dot_find(graph, block_y->id);
+	t_dot *dot_x = graph_dot_find(graph, block_x->id.id);
+	t_dot *dot_y = graph_dot_find(graph, block_y->id.id);
 
 	t_dash *dash = graph_dash_add(graph, dot_x, dot_y);
 
-	dash->id_x = brick_x->id;
-	dash->id_y = brick_y->id;
+	dash->id_x = brick_x->id.id;
+	dash->id_y = brick_y->id.id;
 }
 
 
@@ -208,13 +208,13 @@ void rhizome_graph_dashs_build(t_rhizome *rhizome)
 		for(link_brick=block->bricks->first;link_brick;link_brick=link_brick->next)
 		{
 			brick = link_brick->data;
-			id_x = brick->id;
+			id_x = brick->id.id;
 
 			// Check Connection IN
 			if(brick->plug_in.state.is_connected)
 			{
 				brick_target = brick->plug_in.src->brick;
-				id_y = brick_target->id;
+				id_y = brick_target->id.id;
 
 				if(!graph_link_exists(graph,id_x,id_y))
 				{
@@ -226,7 +226,7 @@ void rhizome_graph_dashs_build(t_rhizome *rhizome)
 			if(brick->plug_out.state.is_connected)
 			{
 				brick_target = brick->plug_out.dst->brick;
-				id_y = brick_target->id;
+				id_y = brick_target->id.id;
 
 				if(!graph_link_exists(graph,id_x,id_y))
 				{
@@ -332,7 +332,7 @@ void rhizome_graph_split(t_rhizome *rhizome, t_brick *brick_x, t_brick *brick_y)
 	t_lst *lst;
 
 	// Remove Dash
-	graph_link_remove(graph,brick_x->id, brick_y->id);
+	graph_link_remove(graph,brick_x->id.id, brick_y->id.id);
 
 	// Disjoin Graphs
 	graph_dj_set(graph);
@@ -368,7 +368,7 @@ void rhizome_delete(t_rhizome *rhizome)
 	t_context *C = ctx_get();
 	t_set *set = rhizome->set;
 	// Remove From Set
-	list_remove_by_id(set->rhizomes,rhizome->id);
+	list_remove_by_id(set->rhizomes, rhizome->id.id);
 	// Struct Delete
 	scene_struct_delete(C->scene,rhizome);
 }
@@ -635,7 +635,7 @@ void rhizome_swap(t_rhizome *src, t_rhizome *dst)
 void rhizome_merge(t_rhizome *src, t_rhizome *dst)
 {
 	t_context *C = ctx_get();
-	if(src->id == dst->id)
+	if(src->id.id == dst->id.id)
 	{
 		// nothing to do 
 	}
@@ -793,7 +793,7 @@ t_rhizome *rhizome_clone(t_rhizome *rhizome)
 {
 	if(rhizome)
 	{
-		t_rhizome *clone = rhizome_new(rhizome->name);
+		t_rhizome *clone = rhizome_new(rhizome->id.name);
 
 		clone->blocks = lst_clone(rhizome->blocks, dt_block);
 		clone->set = NULL;
@@ -846,10 +846,7 @@ t_rhizome *rhizome_new(const char *name)
 {
 	t_rhizome *rhizome = (t_rhizome *)malloc(sizeof(t_rhizome));
 
-	rhizome->id = 0;
-	rhizome->id_chunk = 0;
-	rhizome->users = 0;
-	set_name(rhizome->name, name);
+	id_init(&rhizome->id, name);
 
 	rhizome->blocks = NULL;
 	rhizome->roots = NULL;

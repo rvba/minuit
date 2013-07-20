@@ -19,10 +19,7 @@
 
 typedef struct Image
 {
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
+	t_id id;
 
 	int width;
 	int height;

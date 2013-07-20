@@ -10,40 +10,38 @@
 #ifndef __OBJECT_H
 #define __OBJECT_H
 
-#include "node.h"
-#include "mesh.h"
-#include "block.h"
+#include "common.h"
 
-typedef struct Object t_object;
-typedef struct Object_Class t_object_class;
+struct Node;
+struct Mesh;
+struct Block;
+struct Object;
+struct Lst;
+struct Scene;
 
 // OBJECT CLASS
 
-struct Object_Class
+typedef struct Object_Class
 {
 	char cls_type[_NAME_];
 	char type[_NAME_];
-	t_node *(* get_mesh)(t_node *node);
-	void (* link)(t_object *self,t_node *target);
-	void (* show)(t_object *self);
-	void (* draw)(t_object *self);
-	void (* init)(t_object *object);
-};
+	struct Node *(* get_mesh)(struct Node *node);
+	void (* link)(struct Object *self,struct Node *target);
+	void (* show)(struct Object *self);
+	void (* draw)(struct Object *self);
+	void (* init)(struct Object *object);
+
+}t_object_class;
 
 // OBJECT
 
-struct Object
+typedef struct Object
 {
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
+	t_id id;
 	t_object_class *cls;
 
 	int idcol[3];
-
 	char type[_NAME_];
-
 
 	float loc[3];
 	float rot[3];
@@ -52,23 +50,24 @@ struct Object
 	int is_selected;
 
 	void *data; 		// struct (data)
-	t_mesh *mesh;		// mesh
-	t_lst *blocks;		// buttons
-	t_block *ref;
 
-	void (* action)(t_node *node);
-	void (* update)(t_node *node);
-	void (* draw)(t_node *node);
-};
+	struct Mesh *mesh;		// mesh
+	struct Lst *blocks;		// buttons
+	struct Block *ref;
+
+	void (* action)(struct Node *node);
+	void (* update)(struct Node *node);
+	void (* draw)(struct Node *node);
+}t_object;
 
 // METHODS
 void *		object_get_ref(t_object *object, const char *ref);
 
-void 		object_mesh_add(t_node *node,t_node *mesh);
-void 		object_draw_add(t_node *node,void (* func)(t_node *node));
-void 		object_method_add(t_node *node,const char method[],void (*func)(t_node *n));
-void 		object_data_add(t_node *node,void *ptr);
-t_node*		op_object_mesh_get(t_node *node);
+void 		object_mesh_add(struct Node *node,struct Node *mesh);
+void 		object_draw_add(struct Node *node,void (* func)(struct Node *node));
+void 		object_method_add(struct Node *node,const char method[],void (*func)(struct Node *n));
+void 		object_data_add(struct Node *node,void *ptr);
+struct Node*	op_object_mesh_get(struct Node *node);
 
 
 void 		cls_object_draw_camera(t_object *object);
@@ -76,13 +75,13 @@ void 		cls_object_draw_mesh(t_object *object);
 void 		cls_object_draw_light(t_object *object);
 
 t_object *	object_clone(t_object *object);
-t_object *	object_rebind(t_scene *sc,void *ptr);
+t_object *	object_rebind(struct Scene *sc,void *ptr);
 void 		object_build(t_object *object,const char *type);
-t_node *	object_make(const char *type,const char *name);
-t_node *	object_add(const char *type,const char *name);
+struct Node *	object_make(const char *type,const char *name);
+struct Node *	object_add(const char *type,const char *name);
 t_object*	object_new(const char *name);
 
-void _object_free(t_object *object);
+void 		_object_free(t_object *object);
 void 		object_free(t_object *object);
 
 

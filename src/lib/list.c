@@ -355,25 +355,15 @@ int lst_sort_quick(t_lst *lst)
 	return 1;
 }
 
-
 // merge two lists
 void lst_add_lst(t_lst *dst, t_lst *src)
 {
 	t_link *link;
 	for(link = src->first; link; link = link->next)
 	{
-		lst_add(dst, link->data, link->name);
+		lst_add(dst, link->data, link->id.name);
 	}
 }
-	
-
-
-
-
-
-
-
-
 
 t_link *lst_link_find_by_name(t_lst *lst, const char *name)
 {
@@ -381,8 +371,10 @@ t_link *lst_link_find_by_name(t_lst *lst, const char *name)
 
 	for(link = lst->first; link; link=link->next)
 	{
-		if(is(link->name,name))
+		if(is(link->id.name, name))
+		{
 			return link;
+		}
 	}
 
 	return NULL;
@@ -453,13 +445,13 @@ t_lst *lst_copy(t_lst *lst)
 {
 	if(lst->first)
 	{
-		t_lst *copy=lst_new(lst->name);
+		t_lst *copy = lst_new(lst->id.name);
 		t_link *link;
 
 		for(link=lst->first;link;link=link->next)
 		{
 			void *data = link->data;
-			lst_add(copy,data,link->name);
+			lst_add(copy, data, link->id.name);
 		}
 		return copy;
 	}
@@ -522,7 +514,7 @@ void list_show(t_lst *lst)
 
 	if(C->event->debug_terminal)
 	{
-		printf("lst_show %s\n",lst->name);
+		printf("lst_show %s\n", lst->id.name);
 		for(l=lst->first;l;l=l->next)
 		{
 			g = (t_generic *) l->data;
@@ -532,7 +524,7 @@ void list_show(t_lst *lst)
 
 	if(C->event->debug_console)
 	{
-		term_log("lst_show %s\n",lst->name);
+		term_log("lst_show %s\n",lst->id.name);
 		for(l=lst->first;l;l=l->next)
 		{
 			g = (t_generic *) l->data;
@@ -543,7 +535,7 @@ void list_show(t_lst *lst)
 
 void lst_show_generic(t_lst *lst)
 {
-	printf("lst_show %s\n",lst->name);
+	printf("lst_show %s\n", lst->id.name);
 	printf("~\n");
 	t_link *l;
 	for(l=lst->first;l;l=l->next)
@@ -948,7 +940,7 @@ t_link *link_rebind(t_scene *sc,void *ptr)
 
 	rebind(sc,"link","next",(void **)&link->next);
 	rebind(sc,"link","prev",(void **)&link->prev);
-	rebind(sc,"link",link->name,(void **)&link->data);
+	rebind(sc,"link", link->id.name, (void **)&link->data);
 
 	return link;
 }
@@ -979,13 +971,13 @@ void link_show(const char *name,t_link *link)
 
 void lst_show(t_lst *lst)
 {
-	printf("lst_show %s\n",lst->name);
+	printf("lst_show %s\n", lst->id.name);
 	printf("~\n");
 	t_link *l;
 	int i=0;
 	for(l=lst->first;l;l=l->next)
 	{
-		printf("%d %s\n",l->order,l->name);
+		printf("%d %s\n",l->order,l->id.name);
 		i++;
 	}
 	printf("~\n");
@@ -1010,10 +1002,7 @@ t_link *link_new(const char *name)
 {
 	t_link *link = (t_link *)malloc(sizeof(t_link));
 
-	set_name(link->name,name);
-	link->users=0;
-	link->id=0;
-	link->id_chunk=0;
+	id_init(&link->id, name);
 
 	link->next=NULL;
 	link->prev=NULL;
@@ -1029,14 +1018,17 @@ t_lst *lst_new(const char *name)
 {
 	t_lst *lst = (t_lst *)malloc(sizeof(t_lst));
 
-	if(strlen(name)==0) 
-		set_name(lst->name,"no_name");
-	else
-		set_name(lst->name,name);
+	id_init(&lst->id, name);
 
-	lst->id=0;
-	lst->id_chunk=0;
-	lst->users=0;
+	if(strlen(name)==0) 
+	{
+		set_name(lst->id.name, "no_name");
+	}
+	else
+	{
+		set_name(lst->id.name, name);
+	}
+
 	lst->count=0;
 	lst->first=NULL;
 	lst->last=NULL;

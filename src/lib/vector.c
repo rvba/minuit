@@ -80,7 +80,7 @@ void vector_show(t_vector *vector)
 
 	if(C->event->debug_console)
 	{
-		term_log( "vector %s\n", vector->name);
+		term_log( "vector %s\n", vector->id.name);
 		term_log( "type %s\n", data_name_get(vector->type));
 		term_log( "length %d\n", vector->length);
 		term_log( "pointer %p\n", vector->pointer);
@@ -113,7 +113,7 @@ void vector_show(t_vector *vector)
 
 	if(C->event->debug_terminal)
 	{
-		printf( "vector %s\n", vector->name);
+		printf( "vector %s\n", vector->id.name);
 		printf( "type %s\n", data_name_get(vector->type));
 		printf( "length %d\n", vector->length);
 		printf( "pointer %p\n", vector->pointer);
@@ -193,10 +193,7 @@ t_vector *vector_new(const char *name)
 {
 	t_vector *vector = (t_vector *) malloc(sizeof(t_vector));
 
-	vector->id=0;
-	vector->id_chunk=0;
-	set_name(vector->name,name);
-	vector->users=0;
+	id_init(&vector->id, name);
 
 	vector->type=dt_null;
 	vector->length=0;

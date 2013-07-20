@@ -19,10 +19,7 @@ struct Node;
 
 typedef struct Link
 {
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
+	t_id id;
 
 	int order;		// Used by rhizome sorting
 
@@ -37,10 +34,7 @@ typedef struct Link
 
 typedef struct Lst
 {
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
+	t_id id;
 
 	t_link *first;
 	t_link *last;
@@ -52,10 +46,7 @@ typedef struct Lst
 
 typedef struct VLst
 {
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
+	t_id id;
 
 	// generic
 

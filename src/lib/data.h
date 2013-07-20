@@ -63,10 +63,7 @@ typedef struct Data_Class
 
 typedef struct Data
 {
-	int id; 
-	int id_chunk;
-	short users;
-	char name[_NAME_];
+	t_id id;
 	t_data_cls *cls;
 
 	char type[_NAME_];

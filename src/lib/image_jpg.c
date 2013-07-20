@@ -7,6 +7,7 @@
  *
  */
 
+#include "node.h"
 #include "opengl.h"
 #include "util.h"
 #include "image.h"
@@ -95,7 +96,7 @@ t_image  *img_read_jpg(char* name)
 	image->bpp=4;
 	image->data=ptr;
 
-	printf("image is done %s\n",image->name);
+	printf("image is done %s\n", image->id.name);
 
 	//return texture;
 	return image;

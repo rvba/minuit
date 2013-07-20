@@ -52,7 +52,7 @@ void scene_log_loop_var(t_lst *lst)
 	t_link *l;
 	t_node *n;
 
-	ulog((LOG_SCENE_NODES,"lst:%s\n",lst->name));
+	ulog((LOG_SCENE_NODES, "lst:%s\n", lst->id.name));
 	for(l=lst->first;l;l=l->next)
 	{
 		n=l->data;
@@ -66,7 +66,7 @@ void scene_log_loop(t_lst *lst)
 	t_node *n;
 	t_generic *g;
 
-	ulog((LOG_SCENE_NODES,"lst:%s\n",lst->name));
+	ulog((LOG_SCENE_NODES, "lst:%s\n", lst->id.name));
 	for(l=lst->first;l;l=l->next)
 	{
 		n=l->data;
@@ -492,7 +492,7 @@ void scene_data_load(t_scene *sc)
 			{
 				t_node *old=scene_node_get_by_id_old(sc,data->target,data->id_node);
 
-				printf(">> %s\n",data->name);
+				printf(">> %s\n",data->id.name);
 
 				if(old)
 				{

@@ -17,10 +17,7 @@ typedef struct Vector_Class t_vector_cls;
 
 struct Vector
 {
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
+	t_id id;
 
 	t_vector_cls *cls;
 

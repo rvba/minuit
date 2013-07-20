@@ -70,12 +70,7 @@ struct Mesh_Class
 
 struct Mesh 
 {
-	// generic
-
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
+	t_id id;
 	t_mesh_cls *cls;
 
 	int idcol[3];

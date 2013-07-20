@@ -9,7 +9,7 @@
 
 #include "image.h"
 #include "util.h"
-
+#include "node.h"
 
 void image_free(t_image *image)
 {
@@ -19,9 +19,7 @@ t_image *image_new(const char *name)
 {
 	t_image *image = (t_image *)malloc(sizeof(t_image));
 
-	set_name(image->name,name);
-	image->id=0;
-	image->id_chunk=0;
+	id_init(&image->id, name);
 
 	image->width=0;
 	image->height=0;

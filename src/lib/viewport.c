@@ -67,7 +67,7 @@ t_viewport *viewport_clone(t_viewport *viewport)
 {
 	if(viewport)
 	{
-		t_viewport *clone = viewport_new(viewport->name);
+		t_viewport *clone = viewport_new(viewport->id.name);
 
 		clone->width = viewport->width;
 		clone->height = viewport->height;
@@ -128,10 +128,7 @@ t_viewport *viewport_new(const char *name)
 {
 	t_viewport *viewport = (t_viewport *) malloc(sizeof(t_viewport));
 
-	viewport->id=0;
-	viewport->id_chunk=0;
-	set_name(viewport->name,name);
-	viewport->users=0;
+	id_init(&viewport->id, name);
 
 	viewport->width = 0;
 	viewport->height = 0;

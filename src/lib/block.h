@@ -69,10 +69,7 @@ struct Block_State
 
 struct Block
 {
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
+	t_id id;
 	t_block_class *cls;
 
 	int idcol[3];

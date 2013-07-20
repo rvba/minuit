@@ -7,6 +7,7 @@
  *
  */
 
+#include "node.h"
 #include "util.h"
 #include "scene.h"
 #include "op.h"
@@ -57,10 +58,7 @@ t_binding *binding_new(const char *name)
 {
 	t_binding *binding=(t_binding *)malloc(sizeof(t_binding));
 
-	binding->id=0;
-	binding->id_chunk=0;
-	set_name(binding->name,name);
-	binding->users=0;
+	id_init(&binding->id, name);
 	binding->type=dt_null;
 
 	binding->data = NULL;

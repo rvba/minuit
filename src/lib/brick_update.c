@@ -361,12 +361,12 @@ void cls_brick_update(t_brick *brick)
 		{
 			if(brick->state.debug)
 			{
-				term_log("%s: debug off",brick->name);
+				term_log("%s: debug off",brick->id.name);
 				brick->state.debug = 0;
 			}
 			else
 			{
-				term_log("%s: debug on",brick->name);
+				term_log("%s: debug on",brick->id.name);
 				brick->state.debug = 1;
 			}
 		}
@@ -377,7 +377,7 @@ void cls_brick_update(t_brick *brick)
 	if(brick->state.is_mouse_over && brick->state.debug)
 	{
 		t_plug *plug = &brick->plug_intern;
-		term_log("%d) brick %s",C->app->frame, brick->name);
+		term_log("%d) brick %s",C->app->frame, brick->id.name);
 		plug_debug(plug);
 	}
 

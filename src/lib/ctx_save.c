@@ -61,11 +61,11 @@ void save_file(t_context *C)
 {
 	t_file *file = C->app->file;
 
-	char *name = file->name;
+	char *name = file->id.name;
 
 	if(is(name,"void"))
 	{
-		set_name(file->name,"minuit.mn");
+		set_name(file->id.name, "minuit.mn");
 		file_build_location(file);
 	}
 
@@ -80,7 +80,7 @@ void save_file_increment(t_context *C)
 	file_path_split(file);
 
 	int i,j;
-	char *name = file->name;
+	char *name = file->id.name;
 	int length = strlen(name);
 	int last_char = length - 1; // starts from 0 !
 	int max_indice = 10;
@@ -91,8 +91,8 @@ void save_file_increment(t_context *C)
 	{
 		char number[4] = "-01";
 
-		strcat(file->name,number);
-		set_name(file->name,name);
+		strcat(file->id.name, number);
+		set_name(file->id.name, name);
 		file_build_location(file);
 
 		save_file(C);
@@ -146,7 +146,7 @@ void save_file_increment(t_context *C)
 
 			strcat(new_name,new_name_indice);
 
-			set_name(file->name,new_name);
+			set_name(file->id.name, new_name);
 			file_build_location(file);
 
 			save_file(C);

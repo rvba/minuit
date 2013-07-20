@@ -538,7 +538,7 @@ void *find_register(const char *target,const char *name)
 void op_add_register(t_context *C,t_dict *dict,const char *name,void *ptr)
 {
 	scene_store(C->scene,1);
-	scene_add_data(C->scene,"app_data",dict->name,name,ptr);
+	scene_add_data(C->scene,"app_data", dict->id.name, name, ptr);
 	scene_store(C->scene,0);
 
 	dict_symbol_add(dict,name,dt_pointer,ptr);
