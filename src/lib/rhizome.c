@@ -30,6 +30,16 @@
 
 #include "dict.h"
 
+void rhizome_show(t_rhizome *rhizome)
+{
+	printf("RHIZOME %s\n",rhizome->name);
+	printf("BLOCKS\n");
+	lst_show(rhizome->blocks);
+	printf("GRAPH\n");
+	graph_show(rhizome->graph);
+
+}
+
 // SETUP
 
 void rhizome_setup(t_rhizome *rhizome)

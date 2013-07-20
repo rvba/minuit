@@ -15,9 +15,6 @@
 #include "scene.h"
 #include "node.h"
 
-//t_dot *dot_new(void *data);
-void dash_free(t_dash *dash);
-t_dash *dash_new(t_dot *x, t_dot *y);
 
 // DISJOIN
 
@@ -80,7 +77,8 @@ void graph_dj_set(t_graph *graph)
 	for(link=graph->dots->first;link;link=link->next)
 	{
 		dot = link->data;
-		dot->root = dot->parent->root;
+		t_dot *root = graph_dj_find(dot);
+		dot->root = root->id;
 	}
 }
 
@@ -98,6 +96,13 @@ void dot_show(t_dot *dot)
 {
 	t_generic *g = (t_generic *) dot->data;
 	printf("dot data:%s id:%d root:%d\n",g->name,dot->id, dot->root);
+	if(dot->parent)
+	{
+		t_dot *parent = dot->parent;
+		t_generic *gg = (t_generic *)parent->data;
+		printf("> parent %s\n",gg->name);
+	}
+	printf("\n");
 }
 
 void graph_show(t_graph *graph)

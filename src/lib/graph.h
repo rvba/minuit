@@ -51,6 +51,11 @@ typedef struct Graph
 }t_graph;
 
 
+t_dot *		dot_new(void *data);
+void 		dash_free(t_dash *dash);
+t_dash *	dash_new(t_dot *x, t_dot *y);
+void 		dot_show(t_dot *dot);
+
 void 		graph_dj_set(t_graph *graph);
 void 		graph_show(t_graph *graph);
 void 		dash_show(t_dash *dash);

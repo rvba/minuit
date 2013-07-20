@@ -38,6 +38,7 @@ typedef struct Rhizome
 
 }t_rhizome;
 
+
 void 		rhizome_graph_split(t_rhizome *rhizome, struct Brick *brick_x, struct Brick *brick_y);
 void 		rhizome_graph_link_add(t_rhizome *rhizome, struct Brick *brick_x, struct Brick *brick_y);
 void 		rhizome_draw(t_rhizome *rhizome);
@@ -51,7 +52,7 @@ void 		rhizome_draw_roots(t_rhizome *rhizome);
 void 		rhizome_draw_blocks(t_rhizome *rhizome);
 void 		rhizome_draw_bounding_box(t_rhizome *rhizome);
 void 		rhizome_block_add(t_rhizome *rhizome, struct Block *block);
-void 		rhizome_block_reset(t_block *block);
+void 		rhizome_block_reset(struct Block *block);
 void 		rhizome_block_remove(t_rhizome *rhizome, struct Block *block);
 t_rhizome *	rhizome_add(const char *name);
 

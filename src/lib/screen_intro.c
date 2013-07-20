@@ -237,7 +237,9 @@ void screen_intro(t_screen *screen)
 				vmul(col_var,iii*intro_intensity);
 
 				star_intensity(i);
+				C->event->ui.use_point_global_width = 0;
 				skt_point(s,3,col_var);
+				C->event->ui.use_point_global_width = 1;
 				star_mvt(i);
 				s+=3;
 				col+=3;

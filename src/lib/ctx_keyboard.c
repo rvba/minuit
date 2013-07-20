@@ -22,6 +22,8 @@
 #include "draw.h"
 #include "list.h"
 
+#include "rhizome.h"
+
 int switch_init=0;
 int switch_frame=0;
 int switch_done=0;
