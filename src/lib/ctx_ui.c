@@ -208,7 +208,7 @@ void ctx_ui_background(t_context *C)
 		// desselect current node
 		if (node)
 		{
-			node->cls->set_state_selected(node,0);
+			ctx_scene_selection(C, node, 0);
 			C->scene->selected=NULL; 
 		}
 

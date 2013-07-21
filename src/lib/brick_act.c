@@ -1618,7 +1618,10 @@ void *op_set_selected(t_brick *brick)
 	{
 		if(plug->data)
 		{
-			ctx_scene_set_selected(C,plug->data);
+			t_id *id = (t_id *) plug->data;
+			t_node *node  =scene_node_get_by_id_global(C->scene, id->id);
+			
+			ctx_scene_set_selected(C,node);
 		}
 	}
 

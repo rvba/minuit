@@ -66,6 +66,7 @@ void ctx_ui(struct Context *C);
 
 // CTX_SCENE
 
+void ctx_scene_selection(struct Context *C, struct Node *node, int state);
 void ctx_scene_clear_selections(struct Context *C);
 void ctx_scene_set_selected(struct Context *C,void *data);
 void ctx_scene(struct Context *C);

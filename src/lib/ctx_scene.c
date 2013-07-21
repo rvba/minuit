@@ -14,27 +14,40 @@
 #include "event.h"
 #include "list.h"
 #include "ui.h"
+#include "mesh.h"
 
 
 #include "object.h"
 
 // Selections and updates
 
-void ctx_scene_set_selected(t_context *C,void *data)
+void ctx_scene_selection(t_context *C, t_node *node, int state)
+{
+	t_object *object;
+	switch(node->cls->type)
+	{
+		case(nt_object):
+			object = node->data;
+			object->is_selected = state;
+			break;
+		default:
+			printf("[WARINING set selected] Unknown type %s\n", node_name_get(node->type));
+			break;
+	}
+}
+
+void ctx_scene_set_selected(t_context *C, t_node *node)
 {
 	t_node *selected=C->scene->selected;
 
 	// disselect previous
 	if(selected) 
 	{
-		selected->cls->set_state_selected(selected,0);
+		ctx_scene_selection(C, selected , 0);
 		
 	}
 
-	// set selected
-	t_id *id = (t_id *) data;
-	t_node *node  =scene_node_get_by_id_global(C->scene, id->id);
-	node->cls->set_state_selected(node,1);
+	ctx_scene_selection(C, node , 1);
 	C->scene->selected=node;
 	C->ui->show_nodes=0;
 }
@@ -45,48 +58,15 @@ void ctx_scene_clear_selections(t_context *C)
 	for(link=C->scene->selections->first;link;link=link->next)
 	{
 		t_node *node=link->data;
-		node->cls->set_state_selected(node,0);
+		ctx_scene_selection(C, node, 0);
+
 	}
 	lst_delete_all(C->scene->selections);
 }
 
 
-void ctx_scene_update_node(t_context *C,t_node *node)
-{
-	if(node->cls->is_mouse_over(node))
-	{
-		if(node->type==nt_light)
-		{
-			ctx_scene_set_selected(C,node);
-		}
-		else if(node->type==nt_object)
-		{
-			if(C->app->mouse->button_left==button_pressed)
-			{
-				// multi selection
-				if(C->app->keyboard->shift)
-				{
-					if(!lst_get_node(C->scene->selections,node->id))
-					{
-						lst_add(C->scene->selections,node,"object");
-					}
-				
-				}
-				// single selection
-				else
-				{
-					ctx_scene_set_selected(C,node);
-				}
-			}
-		}
-		else
-		{
-			//printf("[WARNING ctx_scene] Unknown type:%s\n",node->cls->type);
-		}
-	}
-}
 
-void ctx_scene_update_lst(t_context *C,t_lst *lst)
+void ctx_scene_update_lst(t_context *C, t_lst *lst)
 {
 	t_link *link;
 	t_node *node;
@@ -95,8 +75,27 @@ void ctx_scene_update_lst(t_context *C,t_lst *lst)
 	{
 		for(link=lst->first;link;link=link->next)
 		{
-			node=link->data;
-			ctx_scene_update_node(C,node);
+			node = link->data;
+			if(node->cls->is_mouse_over(node))
+			{
+				if(C->app->mouse->button_left==button_pressed)
+				{
+					// multi selection
+					if(C->app->keyboard->shift)
+					{
+						if(!lst_get_node(C->scene->selections,node->id))
+						{
+							lst_add(C->scene->selections,node,"object");
+						}
+					
+					}
+					// single selection
+					else
+					{
+						ctx_scene_set_selected(C,node);
+					}
+				}
+			}
 		}
 	}
 }
@@ -122,7 +121,6 @@ void ctx_scene(t_context *C)
 				if(C->app->mouse->button_left==button_pressed)
 				{
 					C->event->is_selection=1;
-					ctx_scene_update_lst(C,C->scene->lights);
 					ctx_scene_update_lst(C,C->scene->objects);
 				}
 			}
