@@ -145,8 +145,8 @@ void mem_write(const char *path)
 				}
 				else
 				{
-					t_generic *g=(t_generic *)c->pointer;
-					printf("[ERROR mem_write] No Node for data:%s,name:%s\n",node_name_get(c->type),g->name);
+					t_id *id = (t_id *) c->pointer;
+					printf("[ERROR mem_write] No Node for data:%s,name:%s\n",node_name_get(c->type), id->name);
 				}
 			}
 		}

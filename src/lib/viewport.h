@@ -19,7 +19,6 @@ typedef struct Viewport t_viewport;
 struct Viewport
 {
 	t_id id;
-	t_generic_cls *cls;
 
 	int width;
 	int height;

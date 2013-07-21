@@ -17,29 +17,12 @@ struct Lst;
 struct Node;
 
 
-
-// GENERIC
+// ID
 
 /*
 block plug camera data engine light vlst texture
 object screen txt image link lst
 */
-
-typedef struct Generic_Class
-{
-	char cls_type[_NAME_];
-
-}t_generic_cls;
-
-typedef struct Generic
-{
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
-	t_generic_cls *cls;
-
-}t_generic;
 
 // NODE CLASS
 
@@ -84,7 +67,6 @@ typedef struct Node
 // NODE.C
 
 extern char node_name_null[];
-extern char node_name_generic[];
 extern char node_name_brick[];
 extern char node_name_mesh[];
 extern char node_name_block[];

@@ -106,8 +106,8 @@ void *find_chunk(t_lst *lst,int _id)
 	t_link *l;
 	for(l=lst->first;l;l=l->next)
 	{
-		t_generic *g=l->data;
-		if(g->id_chunk==_id)
+		t_id *id = (t_id *) l->data;
+		if(id->id_chunk == _id)
 		{
 			return l->data;
 		}
@@ -317,7 +317,7 @@ void load_store(t_scene *sc)
 	{
 		n=l->data;
 		d=n->data;
-		t_generic *g=(t_generic *)d;
+		t_id *id = (t_id *) d;
 
 		// DATA
 		if(n->type==nt_data)
@@ -338,7 +338,7 @@ void load_store(t_scene *sc)
 					n->id_chunk=mem_store(ct_data,n->type,n->cls->size,1,n->data);
 					n->id_ptr=n->data;
 
-					g->id_chunk=n->id_chunk;
+					id->id_chunk = n->id_chunk;
 
 					// store
 					var->id_chunk_self=mem_store(ct_node,nt_var,sizeof(t_node),1,var);
@@ -365,7 +365,7 @@ void load_store(t_scene *sc)
 				n->id_chunk=mem_store(ct_data,n->type,n->cls->size,1,n->data);
 				n->id_ptr=n->data;
 
-				g->id_chunk=n->id_chunk;
+				id->id_chunk = n->id_chunk;
 			}
 			else if(is(d->type,"struct_ref"))
 			{
@@ -385,7 +385,7 @@ void load_store(t_scene *sc)
 				n->id_chunk=mem_store(ct_data,n->type,n->cls->size,1,n->data);
 				n->id_ptr=n->data;
 
-				g->id_chunk=n->id_chunk;
+				id->id_chunk = n->id_chunk;
 			}
 			else if(is(d->type,"app_struct"))
 			{
@@ -421,7 +421,7 @@ void load_store(t_scene *sc)
 				n->id_chunk=mem_store(ct_data,n->type,n->cls->size,1,n->data);
 				n->id_ptr=n->data;
 
-				g->id_chunk=n->id_chunk;
+				id->id_chunk = n->id_chunk;
 			}
 		}
 	}

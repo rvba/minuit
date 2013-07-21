@@ -64,14 +64,14 @@ void scene_log_loop(t_lst *lst)
 {
 	t_link *l;
 	t_node *n;
-	t_generic *g;
+	t_id *id;
 
 	ulog((LOG_SCENE_NODES, "lst:%s\n", lst->id.name));
 	for(l=lst->first;l;l=l->next)
 	{
 		n=l->data;
-		g=(t_generic *)n->data;
-		ulog((LOG_SCENE_NODES,"node id:%d\tcls:%s\tname:%s\n",n->id,node_name_get(n->type),g->name));
+		id = (t_id *) n->data;
+		ulog((LOG_SCENE_NODES,"node id:%d\tcls:%s\tname:%s\n",n->id,node_name_get(n->type),id->name));
 	}
 }
 
@@ -401,7 +401,7 @@ int scene_node_delete(t_scene *sc,t_node *node)
 t_node *scene_struct_get(t_scene *sc,void *ptr)
 {
 	//XXX!!! var is not generic
-	t_generic *g=(t_generic *)ptr;
+	t_id *id = (t_id *) ptr;
 
 	t_link *l;
 	t_node *n;
@@ -412,7 +412,7 @@ t_node *scene_struct_get(t_scene *sc,void *ptr)
 		n=l->data;
 		if(n->type!=nt_var)
 		{
-			if(n->id==g->id)
+			if(n->id == id->id)
 			{
 				node=n;
 				break;
@@ -425,8 +425,8 @@ t_node *scene_struct_get(t_scene *sc,void *ptr)
 
 void scene_struct_delete(t_scene *sc,void *ptr)
 {
-	//XXX!!! var is not generic
-	t_generic *g=(t_generic *)ptr;
+	//XXX var has no ID
+	t_id *id = (t_id *) ptr;
 
 	t_link *l;
 	t_node *n;
@@ -437,7 +437,7 @@ void scene_struct_delete(t_scene *sc,void *ptr)
 		n=l->data;
 		if(n->type!=nt_var)
 		{
-			if(n->id==g->id)
+			if(n->id == id->id)
 			{
 				node=n;
 				break;
@@ -457,7 +457,7 @@ void scene_struct_delete(t_scene *sc,void *ptr)
 		}
 		else
 		{
-			printf("[ERROR scene_struct_delete] Can't find node of [%s]\n",g->name);
+			printf("[ERROR scene_struct_delete] Can't find node of [%s]\n", id->name);
 		}
 	}
 }
@@ -523,11 +523,13 @@ void scene_node_load(t_scene *sc,t_node *node)
 	}
 	else
 	{
-		t_generic *g = (t_generic *) node->data;
-		lst_add(sc->nodes,node,g->name);
+		t_id *id = (t_id *) node->data;
+		lst_add(sc->nodes, node, id->name);
 		// option have no lst
 		if(node->cls->lst)
+		{
 			lst_add(node->cls->lst,node,node_name_get(node->type));
+		}
 	}
 }
 
@@ -575,8 +577,8 @@ t_node *scene_add_node(t_scene *sc,t_node_type type,const char *name)
 			node->id_chunk=mem_store(ct_data,node->type,node->cls->size,1,node->data);
 
 			// copy chunk indice to generic
-			t_generic *g=(t_generic *)node->data;
-			g->id_chunk=node->id_chunk;
+			t_id *id = (t_id *) node->data;
+			id->id_chunk = node->id_chunk;
 
 		}
 	}

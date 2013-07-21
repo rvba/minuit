@@ -86,21 +86,22 @@ void graph_dj_set(t_graph *graph)
 
 void dash_show(t_dash *dash)
 {
-	t_generic *x = (t_generic *)dash->x->data;
-	t_generic *y = (t_generic *)dash->y->data;
+	t_id *x = (t_id *) dash->x->data;
+	t_id *y = (t_id *) dash->y->data;
 
 	printf("dash %d:%d (%s)->(%s)\n",dash->id_x, dash->id_y,x->name,y->name);
 }
 
 void dot_show(t_dot *dot)
 {
-	t_generic *g = (t_generic *) dot->data;
-	printf("dot data:%s id:%d root:%d\n",g->name,dot->id, dot->root);
+	t_id *id = (t_id *) dot->data;
+	printf("dot data:%s id:%d root:%d\n",id->name, dot->id, dot->root);
+
 	if(dot->parent)
 	{
 		t_dot *parent = dot->parent;
-		t_generic *gg = (t_generic *)parent->data;
-		printf("> parent %s\n",gg->name);
+		t_id *_id = (t_id *) parent->data;
+		printf("> parent %s\n",_id->name);
 	}
 	printf("\n");
 }
@@ -132,19 +133,20 @@ int graph_dash_exists(t_graph *graph, t_dot *dot_x, t_dot *dot_y)
 {
 	t_link *link;
 	t_dash *dash;
-	t_generic *s_x;
-	t_generic *s_y;
-	t_generic *g_x;
-	t_generic *g_y;
 
-	s_x = (t_generic *) dot_x->data;
-	s_y = (t_generic *) dot_y->data;
+	t_id *s_x;
+	t_id *s_y;
+	t_id *g_x;
+	t_id *g_y;
+
+	s_x = (t_id *) dot_x->data;
+	s_y = (t_id *) dot_y->data;
 
 	for(link=graph->dashes->first;link;link=link->next)
 	{
 		dash = link->data;
-		g_x = (t_generic *)dash->x->data;
-		g_y = (t_generic *)dash->y->data;
+		g_x = (t_id *)dash->x->data;
+		g_y = (t_id *)dash->y->data;
 
 		if((s_x->id == g_x->id) && (s_y->id == g_y->id))
 		{
@@ -260,10 +262,10 @@ void graph_link_remove(t_graph *graph, int id_x, int id_y)
 
 t_dot *graph_dot_add(t_graph *graph, void *data)
 {
-	t_generic *g = (t_generic *) data;
+	t_id *id = (t_id *) data;
 
 	t_dot *dot = dot_new(data);
-	lst_add(graph->dots, dot, g->name);
+	lst_add(graph->dots, dot, id->name);
 
 	graph->dot_count++;
 
@@ -312,9 +314,9 @@ t_dot *dot_new(void *data)
 {
 	t_dot *dot = (t_dot *)malloc(sizeof(t_dot));
 
-	t_generic *g = (t_generic *) data;
+	t_id *id = (t_id *) data;
 
-	dot->id = g->id;
+	dot->id = id->id;
 	dot->root = 0;
 	dot->rank = 0;
 	dot->parent = NULL;

@@ -172,21 +172,23 @@ void cls_node_init_brick_ids(t_node *node);
 void cls_node_id_add(t_node *node)
 {
 	t_context *C=ctx_get();
-	t_generic *g=(t_generic *)node->data;
+	t_id *id = (t_id *) node->data;
 
-	int id=scene_id_get(C->scene);
-	node->id=id;
-	g->id=id;
+	int scene_id = scene_id_get(C->scene);
+	node->id = scene_id;
+	id->id = scene_id;
 
 	if(node->cls->type == nt_brick)
+	{
 		cls_node_init_brick_ids(node);
+	}
 
 }
 
 void cls_node_user_add(t_node *node)
 {
-	t_generic *g = (t_generic *) node->data;
-	g->users++;
+	t_id *id = (t_id *) node->data;
+	id->users++;
 }
 
 void cls_node_build_var(t_node *node,const char *name)
@@ -481,17 +483,17 @@ void cls_node_graph_free(t_scene *sc,t_node *node)
 // INIT
 
 // get Scene ID
-void cls_node_init_generic(t_node *node)
+void cls_node_init_id(t_node *node)
 {
 	t_context *C=ctx_get();
 
-	int id=scene_id_get(C->scene);
-	t_generic *g=(t_generic *)node->data;
+	int scene_id = scene_id_get(C->scene);
+	t_id *id = (t_id *) node->data;
 
 	// node
-	node->id=id;
+	node->id = scene_id;
 	// data
-	g->id=id;
+	id->id = scene_id;
 }
 
 void cls_node_init_brick_ids(t_node *node)
@@ -512,7 +514,7 @@ void cls_node_init_brick_ids(t_node *node)
 
 void cls_node_init_block(t_node *node)
 {
-	cls_node_init_generic(node);
+	cls_node_init_id(node);
 	t_block *block=node->data;
 	block->cls->init(block);
 }
@@ -526,7 +528,7 @@ void cls_node_init_brick(t_node *node)
 
 void cls_node_init_mesh(t_node *node)
 {
-	cls_node_init_generic(node);
+	cls_node_init_id(node);
 	t_mesh *mesh=node->data;
 	t_context *C=ctx_get();
 	mesh_init(C->scene,mesh);
@@ -534,7 +536,7 @@ void cls_node_init_mesh(t_node *node)
 
 void cls_node_init_object(t_node *node)
 {
-	cls_node_init_generic(node);
+	cls_node_init_id(node);
 	t_object *object=node->data;
 	object->cls->init(object);
 }
@@ -542,7 +544,7 @@ void cls_node_init_object(t_node *node)
 void cls_node_init_var(t_node *node)
 {
 	// node var has direct data
-	// no generic id
+	// no id
 	// no init
 
 	t_context *C=ctx_get();
@@ -552,52 +554,52 @@ void cls_node_init_var(t_node *node)
 
 void cls_node_init_camera(t_node *node)
 {
-	cls_node_init_generic(node);
+	cls_node_init_id(node);
 }
 
 void cls_node_init_dict(t_node *node)
 {
-	cls_node_init_generic(node);
+	cls_node_init_id(node);
 }
 
 void cls_node_init_symbol(t_node *node)
 {
-	cls_node_init_generic(node);
+	cls_node_init_id(node);
 }
 
 void cls_node_init_vector(t_node *node)
 {
-	cls_node_init_generic(node);
+	cls_node_init_id(node);
 	t_vector *vector=node->data;
 	vector->cls->init(vector);
 }
 
 void cls_node_init_viewport(t_node *node)
 {
-	cls_node_init_generic(node);
+	cls_node_init_id(node);
 }
 
 void cls_node_init_set(t_node *node)
 {
-	cls_node_init_generic(node);
+	cls_node_init_id(node);
 }
 
 void cls_node_init_binding(t_node *node)
 {
-	cls_node_init_generic(node);
+	cls_node_init_id(node);
 }
 
 void cls_node_init_rhizome(t_node *node)
 {
 	t_rhizome *rhizome = node->data;
 	rhizome->roots = NULL;
-	cls_node_init_generic(node);
+	cls_node_init_id(node);
 	rhizome_init(rhizome);
 }
 
 void cls_node_init_graph(t_node *node)
 {
-	cls_node_init_generic(node);
+	cls_node_init_id(node);
 }
 
 // CLASSES
@@ -654,7 +656,7 @@ t_node_class light= {
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
-	.init=cls_node_init_generic,
+	.init=cls_node_init_id,
 	.set_state_selected=cls_node_light_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_light_free,
@@ -669,7 +671,7 @@ t_node_class object= {
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
-	.init=cls_node_init_generic,
+	.init=cls_node_init_id,
 	.set_state_selected=cls_node_object_set_state_selected,
 	.is_mouse_over=cls_node_object_is_mouse_over,
 	.free=cls_node_object_free,
@@ -684,7 +686,7 @@ t_node_class screen= {
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
-	.init=cls_node_init_generic,
+	.init=cls_node_init_id,
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_screen_free,
@@ -699,7 +701,7 @@ t_node_class file= {
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
-	.init=cls_node_init_generic,
+	.init=cls_node_init_id,
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_file_free,
@@ -714,7 +716,7 @@ t_node_class image= {
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
-	.init=cls_node_init_generic,
+	.init=cls_node_init_id,
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_image_free,
@@ -729,7 +731,7 @@ t_node_class material= {
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
-	.init=cls_node_init_generic,
+	.init=cls_node_init_id,
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_material_free,
@@ -744,7 +746,7 @@ t_node_class list= {
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
-	.init=cls_node_init_generic,
+	.init=cls_node_init_id,
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_list_free,
@@ -759,7 +761,7 @@ t_node_class _link_= {
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
-	.init=cls_node_init_generic,
+	.init=cls_node_init_id,
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_link_free,
@@ -774,7 +776,7 @@ t_node_class data= {
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
-	.init=cls_node_init_generic,
+	.init=cls_node_init_id,
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_data_free,
@@ -789,7 +791,7 @@ t_node_class texture= {
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
-	.init=cls_node_init_generic,
+	.init=cls_node_init_id,
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_texture_free,
@@ -819,7 +821,7 @@ t_node_class option= {
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
-	.init=cls_node_init_generic,
+	.init=cls_node_init_id,
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_option_free,
@@ -834,7 +836,7 @@ t_node_class vlst= {
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
-	.init=cls_node_init_generic,
+	.init=cls_node_init_id,
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_vlst_free,
@@ -864,7 +866,7 @@ t_node_class dict= {
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
-	.init=cls_node_init_generic,
+	.init=cls_node_init_id,
 	.set_state_selected=cls_node_set_state_selected,
 	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_dict_free,

@@ -343,8 +343,8 @@ void rhizome_graph_split(t_rhizome *rhizome, t_brick *brick_x, t_brick *brick_y)
 		dot = link->data;
 		symbol = rhizome_dict_symbol_get(dict, dot->root);
 		lst = symbol->data;
-		t_generic *g = (t_generic *) dot->data;
-		lst_add(lst,dot,g->name);
+		t_id *id = (t_id *) dot->data;
+		lst_add(lst, dot, id->name);
 	}
 
 	// Build Rhizome

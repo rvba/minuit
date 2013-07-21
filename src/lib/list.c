@@ -468,12 +468,12 @@ void lst_remove_double(t_lst *lst, t_link *current)
 {
 	t_link *link;
 	t_link *link_to_remove = NULL;
-	t_generic *generic = (t_generic *) current->data;
-	int id = generic->id;
+
+	t_id *id = (t_id *) current->data;
 
 	for(link = current->next; link; link = link->next)
 	{
-		t_generic *g = (t_generic *) link->data;
+		t_id *_id = (t_id *) link->data;
 
 		// remove previous stored link
 		if(link_to_remove)
@@ -482,7 +482,7 @@ void lst_remove_double(t_lst *lst, t_link *current)
 			link_to_remove = NULL;
 		}
 
-		if(g->id == id)
+		if(_id->id == id->id)
 		{
 			// store link to remove
 			link_to_remove = link;
@@ -493,7 +493,7 @@ void lst_remove_double(t_lst *lst, t_link *current)
 	if(link_to_remove) lst_link_delete(lst, link_to_remove);
 }
 
-// REMOVE DOUBLES (generic ID)
+// REMOVE DOUBLES 
 
 void lst_remove_doubles(t_lst *lst)
 {
@@ -510,15 +510,15 @@ void list_show(t_lst *lst)
 	t_context *C = ctx_get();
 
 	t_link *l;
-	t_generic *g;
+	t_id *id;
 
 	if(C->event->debug_terminal)
 	{
 		printf("lst_show %s\n", lst->id.name);
 		for(l=lst->first;l;l=l->next)
 		{
-			g = (t_generic *) l->data;
-			printf("%s\n",g->name);
+			id = (t_id *) l->data;
+			printf("%s\n",id->name);
 		}
 	}
 
@@ -527,12 +527,13 @@ void list_show(t_lst *lst)
 		term_log("lst_show %s\n",lst->id.name);
 		for(l=lst->first;l;l=l->next)
 		{
-			g = (t_generic *) l->data;
-			term_log("%s\n",g->name);
+			id = (t_id *) l->data;
+			term_log("%s\n",id->name);
 		}
 	}
 }
 
+/*
 void lst_show_generic(t_lst *lst)
 {
 	printf("lst_show %s\n", lst->id.name);
@@ -540,11 +541,12 @@ void lst_show_generic(t_lst *lst)
 	t_link *l;
 	for(l=lst->first;l;l=l->next)
 	{
-		t_generic *g = (t_generic *)l->data;
-		printf("~ %s\n",g->name);
+		t_id *id = (t_id *) l->data;
+		printf("~ %s\n",id->name);
 	}
 	printf("~\n");
 }
+*/
 
 t_node *lst_get_node(t_lst *lst,int id)
 {
@@ -567,14 +569,14 @@ t_node *lst_get_node(t_lst *lst,int id)
 void *lst_get(t_lst *lst,char *name)
 {
 	t_link *l;
-	t_generic *g;
+	t_id *id;
 
 	if(lst->first)
 	{
 		for(l=lst->first;l;l=l->next)
 		{
-			g=l->data;
-			if(is(g->name,name))
+			id = (t_id *) l->data;
+			if(is(id->name,name))
 			{
 				return l->data;
 			}
@@ -629,17 +631,17 @@ void lst_node_delete_all(t_lst *lst)
 
 // FIND NODE BY ID
 
-t_link *lst_get_by_id(t_lst *lst,int id)
+t_link *lst_get_by_id(t_lst *lst,int item_id)
 {
 	t_link *l;
-	t_generic *g;
+	t_id *id;
 
 	if(lst->first)
 	{
 		for(l=lst->first;l;l=l->next)
 		{
-			g=l->data;
-			if(g->id==id)
+			id = (t_id *) l->data;
+			if(id->id == item_id)
 			{
 				return l;
 			}
@@ -675,16 +677,16 @@ t_node *lst_find_node_by_name(t_lst *lst,const char *name)
 {
 	t_link *link;
 	t_node *node;
-	t_generic *generic;
+	t_id *id;
 
 	if(lst->first)
 	{
 		for(link=lst->first;link;link=link->next)
 		{
 			node=link->data;
-			generic=node->data;
+			id = (t_id *) node->data;
 
-			if(is(generic->name,name))
+			if(is(id->name,name))
 			{
 				return node;
 			}
@@ -704,9 +706,9 @@ t_link *list_add(t_lst *lst,void *data)
 {
 	t_context *C=ctx_get();
 
-	t_generic *g = (t_generic *)data;
+	t_id *id = (t_id *) data;
 
-	t_node *node=scene_add(C->scene,nt_link,g->name);
+	t_node *node=scene_add(C->scene,nt_link,id->name);
 	t_link *link=node->data;
 	link->data=data;
 	lst_push_back(lst,link);
@@ -719,12 +721,12 @@ void list_remove(t_lst *lst);
 void list_remove_by_name(t_lst *lst, const char *name)
 {
 	t_link *link;
-	t_generic *g;
+	t_id *id;
 
 	for(link = lst->first; link; link = link->next)
 	{
-		g = (t_generic *) link->data;
-		if(is (g->name, name))
+		id = (t_id *) link->data;
+		if(is (id->name, name))
 		{
 			lst_link_remove(lst,link);
 		}
@@ -892,18 +894,18 @@ void lst_remove_by_ptr(t_lst *lst, void *ptr)
 	}
 }
 
-void list_remove_by_id(t_lst *lst, int id)
+void list_remove_by_id(t_lst *lst, int item_id)
 {
 	t_context *C = ctx_get();
 	t_scene *sc = C->scene;
 	t_link *link;
 	t_link *l;
-	t_generic *g;
+	t_id *id;
 
 	for(l= lst->first; l; l = l->next)
 	{
-		g = (t_generic *) l->data;
-		if(g->id == id)
+		id = (t_id *) l->data;
+		if(id->id == item_id)
 		{
 			link = l;
 			break;
