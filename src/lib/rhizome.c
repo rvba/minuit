@@ -49,6 +49,7 @@ void rhizome_setup(t_rhizome *rhizome)
 	int has_loop = 0;
 	int frame_based = 0;
 
+	// Set Rhizome Status
 	for(link=rhizome->blocks->first;link;link=link->next)
 	{
 		block = link->data;
@@ -61,6 +62,10 @@ void rhizome_setup(t_rhizome *rhizome)
 
 	// Update Set
 	set_setup(rhizome->set);
+
+	// Set Rhizome Roots
+	rhizome_get_roots(rhizome);
+	rhizome_sort(rhizome);
 }
 
 // ADD
@@ -736,8 +741,6 @@ void rhizome_draw(t_rhizome *rhizome)
 {
 	rhizome_draw_blocks(rhizome);
 	rhizome_draw_bounding_box(rhizome);
-	rhizome_get_roots(rhizome);
-	rhizome_sort(rhizome);
 }
 
 // ADD
