@@ -289,8 +289,42 @@ void dash_free(t_dash *dash)
 	free(dash);
 }
 
+void dot_free(t_dot *dot)
+{
+	free(dot);
+}
+
+void graph_free_dots(t_lst *lst)
+{
+	t_link *l;
+	t_dot *dot;
+	for(l=lst->first;l;l=l->next)
+	{
+		dot = l->data;
+		dot_free(dot);
+	}
+}
+
+void graph_free_dashs(t_lst *lst)
+{
+	t_link *l;
+	t_dash *dash;
+	for(l=lst->first;l;l=l->next)
+	{
+		dash = l->data;
+		dash_free(dash);
+	}
+}
+
+
 void graph_free(t_graph *graph)
 {
+	if(graph->dots) graph_free_dots(graph->dots);
+	if(graph->dashes) graph_free_dashs(graph->dashes);
+	lst_free(graph->dots);
+	lst_free(graph->dashes);
+
+	free(graph);
 }
 
 // MAKE

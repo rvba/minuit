@@ -836,7 +836,15 @@ void rhizome_free(t_rhizome *rhizome)
 	{
 		scene_struct_delete(C->scene,rhizome->blocks);
 	}
-
+	if(rhizome->roots)
+	{
+		scene_struct_delete(C->scene,rhizome->roots);
+	}
+	if(rhizome->graph)
+	{
+		graph_free(rhizome->graph);
+	}
+	
 	free(rhizome);
 }
 
