@@ -33,6 +33,7 @@ int star_init=0;
 int star_count=10000;
 int *stars_chance=NULL;
 float *stars_velocity=NULL;
+int *stars_size = NULL;
 float intro_intensity=1;
 
 int get_sign(void)
@@ -131,6 +132,7 @@ void screen_intro(t_screen *screen)
 		stars_color = malloc(sizeof(float)* star_count * 3);
 		stars_chance = malloc(sizeof(int) * star_count);
 		stars_velocity = malloc(sizeof(float) * star_count);
+		stars_size = malloc(sizeof(int) * star_count);
 		for(i=0;i<star_count;i++)
 		{
 			stars[(i*3)+0] = u_randrange(0,dist)*get_sign();
@@ -146,6 +148,9 @@ void screen_intro(t_screen *screen)
 			else stars_chance[i] = 0;
 
 			stars_velocity[i] = (float)u_randrange(0,1000)/1000;
+			int size = u_randrange(0,100);
+			if(size > 90) stars_size[i] = u_randrange(2,3);
+			else stars_size[i] = 1;
 		}
 
 		txt_intro=txt_new(C->app->app_name);
@@ -230,6 +235,7 @@ void screen_intro(t_screen *screen)
 			float *col=stars_color;
 			float col_var[3];
 			float iii = (float) C->app->frame / 100;
+			int size;
 			for(i=0;i<star_count;i++)
 			{
 				if(iii > 1) iii= 1;
@@ -238,7 +244,8 @@ void screen_intro(t_screen *screen)
 
 				star_intensity(i);
 				C->event->ui.use_point_global_width = 0;
-				skt_point(s,3,col_var);
+				size = stars_size[i];
+				skt_point(s,size,col_var);
 				C->event->ui.use_point_global_width = 1;
 				star_mvt(i);
 				s+=3;

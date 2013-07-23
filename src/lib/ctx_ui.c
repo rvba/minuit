@@ -313,32 +313,35 @@ void ctx_block_set_update(t_context *C)
 		t_lst *lst = set->blocks;
 		t_link *l = lst->first;
 
-		if(l)
+		if(!set->processing)
 		{
-			// For All Blocks
+			if(l)
+			{
+				// For All Blocks
+				for(;l;l=l->next)
+				{
+					t_block *b;
+					b=l->data;
+					// Block Update
+					b->cls->update(b);
+				}
+			}
+
+			l = set->rhizomes->first;
+
 			for(;l;l=l->next)
 			{
-				t_block *b;
-				b=l->data;
-				// Block Update
-				b->cls->update(b);
-			}
-		}
+				t_rhizome *rhizome = l->data;
+				t_block *block;  
+				t_link *l_block = rhizome->blocks->first;
 
-		l = set->rhizomes->first;
-
-		for(;l;l=l->next)
-		{
-			t_rhizome *rhizome = l->data;
-			t_block *block;  
-			t_link *l_block = rhizome->blocks->first;
-
-			// For All Graphs
-			for(;l_block;l_block = l_block->next)
-			{
-				block = l_block->data;
-				// Block Update
-				block->cls->update(block);
+				// For All Graphs
+				for(;l_block;l_block = l_block->next)
+				{
+					block = l_block->data;
+					// Block Update
+					block->cls->update(block);
+				}
 			}
 		}
 	}
