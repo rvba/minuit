@@ -112,7 +112,6 @@ t_node *make_menu_ui(void)
 	add_brick_slider_int(C,block,"mouse size",&C->ui->mouse_size);
 	add_brick_switch(C,block,"show mouse",&C->ui->visualize_mouse);
 	add_brick_switch(C,block,"draw plug state",&C->ui->draw_plug_state);
-	add_brick_switch(C,block,"use threading",&C->ui->use_threading);
 	add_brick_switch(C,block,"use rhizomes",&C->ui->use_rhizomes);
 	add_brick_slider_int(C,block,"video bitrate",&C->ui->bitrate);
 

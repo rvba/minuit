@@ -22,11 +22,12 @@
 #include "system.h"
 #include "event.h"
 #include "set.h"
+#include "ui.h"
 
 
 void ctx_compute(t_context *C)
 {
-	//t_process *process;
+	t_process *process;
 	t_set *set;
 	t_node *node;
 	t_link *link;
@@ -36,43 +37,49 @@ void ctx_compute(t_context *C)
 		node = link->data; 
 		set = node->data;
 
-		set_exec(set);
-
-		// Direct Exec
-		/*
-		if(set->frame_based)
+		// Threading
+		if(C->event->use_threading)
 		{
-			printf("direct process\n");
-			set_exec(set);
-		}
-		// Check Processing
-		else if(set->processing)
-		{
-			printf("grep process\n");
-			process = engine_process_get_by_id(C->engine,set->process_id);
-
-			if(!process->busy)
+			// Direct Exec
+			if(set->frame_based)
 			{
-				printf("removing process\n");
-				process_remove(process);
-				set->processing = 0;
+				printf("direct process\n");
+				set_exec(set);
+			}
+			// Check Processing
+			else if(set->processing)
+			{
+				printf("grep process\n");
+				process = engine_process_get_by_id(C->engine,set->process_id);
+
+				if(!process->busy)
+				{
+					printf("removing process\n");
+					process_remove(process);
+					set->processing = 0;
+				}
+			}
+			// Do Processing
+			else if(set->process)
+			{
+				printf("add process\n");
+				process = process_add(C,"set",ctx_set_compute);
+				process->data = set;
+				set->process_id = process->engine_id;
+				set->processing = 1;
+				process_launch(process);
+			}
+			else
+			{
+			//	printf("VOID\n");
 			}
 		}
-		// Do Processing
-		else if(set->process)
-		{
-			printf("add process\n");
-			process = process_add(C,"set",ctx_set_compute);
-			process->data = set;
-			set->process_id = process->engine_id;
-			set->processing = 1;
-			process_launch(process);
-		}
+		// Direct Exec
 		else
 		{
-		//	printf("VOID\n");
+			set_exec(set);
 		}
-		*/
+
 	}
 }
 

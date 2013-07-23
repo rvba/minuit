@@ -434,7 +434,6 @@ t_ui *ui_new(void)
 	ui->step_reset = 0;
 
 	ui->update_links = 1;
-	ui->use_threading = 0;
 	ui->use_rhizomes = 1;
 	ui->threading_on = 0;
 	ui->rhizome_updated = 1;

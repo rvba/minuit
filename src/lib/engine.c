@@ -134,6 +134,7 @@ void engine_process_remove(t_engine *engine, t_process *process)
 	printf("[engine] remove process %d\n",process->engine_id);
 }
 
+
 void engine_process_add(t_engine *engine, t_process *process)
 {
 	lst_add(engine->processes, process, process->id.name);
@@ -143,6 +144,8 @@ void engine_process_add(t_engine *engine, t_process *process)
 
 	printf("[engine] add process %d\n",process->engine_id);
 }
+
+// NEW
 
 t_engine *engine_new(const char *name)
 {
