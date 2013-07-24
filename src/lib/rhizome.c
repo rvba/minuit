@@ -435,65 +435,63 @@ void rhizome_exec(t_rhizome *rhizome)
 
 	if(C->ui->update_links)
 	{
-
-	// Setup
-	rhizome_setup(rhizome);
-
-	if(rhizome->has_loop)
-	{
-		// Find Block Loop
-		t_block *block = rhizome_block_loop_get(rhizome);
-
-		if(block)
+		// With LOOP
+		if(rhizome->has_loop)
 		{
-			// Do Loop
-			if(rhizome->start_loop)
-			{
-				C->event->loop_step++;
-				// Exec Blocks
-				rhizome_exec_blocks(rhizome);
+			// Find Block Loop
+			t_block *block = rhizome_block_loop_get(rhizome);
 
-				// Loop Recursive
-				rhizome_exec(rhizome);
-			}
-			// End Loop
-			else if(rhizome->end_loop)
+			if(block)
 			{
-				// Reset States
-				rhizome->start_loop = 0;
-				rhizome->end_loop = 0;
-				rhizome->done = 1;
-			}
-			// Start Loop
-			else
-			{
-				// Loop
-				if(rhizome->done)
+				// Do Loop
+				if(rhizome->start_loop)
 				{
-					// Exit
-					rhizome->done=0;
-				}
-				else
-				{
-					// Exec Block Loop Only
-					rhizome_exec_block_loop(rhizome);
+					C->event->loop_step++;
+					// Exec Blocks
+					rhizome_exec_blocks(rhizome);
 
 					// Loop Recursive
-					if(rhizome->start_loop)
-						rhizome_exec(rhizome);
+					rhizome_exec(rhizome);
+				}
+				// End Loop
+				else if(rhizome->end_loop)
+				{
+					// Reset States
+					rhizome->start_loop = 0;
+					rhizome->end_loop = 0;
+					rhizome->done = 1;
+				}
+				// Start Loop
+				else
+				{
+					// Loop
+					if(rhizome->done)
+					{
+						// Exit
+						rhizome->done=0;
+					}
+					else
+					{
+						// Exec Block Loop Only
+						rhizome_exec_block_loop(rhizome);
+
+						// Loop Recursive
+						if(rhizome->start_loop)
+							rhizome_exec(rhizome);
+					}
 				}
 			}
+			else
+			{
+				printf("[ERROR garph_exec] Can't find block loop\n");
+			}
 		}
+		// NO LOOP
 		else
 		{
-			printf("[ERROR garph_exec] Can't find block loop\n");
+			// Exec Blocks
+			rhizome_exec_blocks(rhizome);
 		}
-	}
-	else
-	{
-		// Exec Blocks
-		rhizome_exec_blocks(rhizome);
-	}
 	}
 }
 

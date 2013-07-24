@@ -26,6 +26,7 @@ typedef struct Set
 
 	int frame_based;
 	int process;
+	int process_delay;
 	int process_id;
 	int processing;
 

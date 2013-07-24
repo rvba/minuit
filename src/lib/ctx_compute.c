@@ -32,52 +32,64 @@ void ctx_compute(t_context *C)
 	t_node *node;
 	t_link *link;
 
+	// For Each Process
 	for(link = C->scene->sets->first;link;link=link->next)
 	{
 		node = link->data; 
 		set = node->data;
 
-		// Threading
-		if(C->event->use_threading)
+		if(set->process_delay)
 		{
-			// Direct Exec
-			if(set->frame_based)
+			if(!set->processing)
 			{
-				printf("direct process\n");
-				set_exec(set);
-			}
-			// Check Processing
-			else if(set->processing)
-			{
-				printf("grep process\n");
-				process = engine_process_get_by_id(C->engine,set->process_id);
-
-				if(!process->busy)
-				{
-					printf("removing process\n");
-					process_remove(process);
-					set->processing = 0;
-				}
-			}
-			// Do Processing
-			else if(set->process)
-			{
-				printf("add process\n");
-				process = process_add(C,"set",ctx_set_compute);
-				process->data = set;
-				set->process_id = process->engine_id;
-				set->processing = 1;
-				process_launch(process);
-			}
-			else
-			{
-			//	printf("VOID\n");
+				set->process = 1;
+				set->process_delay = 0;
 			}
 		}
-		// Direct Exec
-		else
+
+		// If NOT Processing
+		if(set->process)
 		{
-			set_exec(set);
+			// Threading
+			if(C->event->use_threading)
+			{
+				// Direct Exec
+				if(set->frame_based)
+				{
+					set_exec(set);
+					set->process = 0;
+				}
+				// Check Processing
+				else if(set->processing)
+				{
+					process = engine_process_get_by_id(C->engine,set->process_id);
+
+					if(!process->busy)
+					{
+						process_remove(process);
+						set->processing = 0;
+						set->process = 0;
+					}
+				}
+				// Do Processing
+				else if(set->process)
+				{
+					process = process_add(C,"set",ctx_set_compute);
+					process->data = set;
+					set->process_id = process->engine_id;
+					set->processing = 1;
+					process_launch(process);
+				}
+				else
+				{
+				}
+			}
+			// Direct Exec
+			else
+			{
+				set_exec(set);
+				set->process = 0;
+			}
 		}
 
 	}

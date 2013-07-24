@@ -28,12 +28,10 @@ void *ctx_compute_rhizome(void *data)
 	t_context *C=ctx_get();
 	t_process *process=(t_process *)data;
 
-	if(C->event->rhizome_computing)
-	{
-		process->busy=1;
-		ctx_set_exec(C);
-		process->busy=0;
-	}
+	process->busy=1;
+	ctx_set_exec(C);
+	process->exit = 1;
+	process->busy=0;
 
 	return NULL;
 }

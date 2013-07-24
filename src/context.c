@@ -106,8 +106,6 @@ void ctx_app(t_context *C)
 	C->app->frame++;
 	// set timer
 	if(C->app->timer_count) C->app->timer += C->app->timer_add;
-	// engine
-	engine_cleanup(C->engine);
 }
 
 void ctx_mode(t_context *C)
@@ -174,6 +172,8 @@ void ctx_handler(void)
 		ctx_compute(CONTEXT);
 		ctx_render(CONTEXT);
 		ctx_reset(CONTEXT);
+
+		engine_cleanup(CONTEXT->engine);
 	}
 }
 

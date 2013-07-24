@@ -199,7 +199,6 @@ typedef struct Event
 	int load_error;
 
 	int use_threading;
-	int rhizome_computing;
 	int rhizome_updated;
 	int rhizome_init;
 

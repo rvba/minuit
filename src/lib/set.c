@@ -58,14 +58,15 @@ void set_setup(t_set *set)
 	set->frame_based = frame_based;
 
 	// Do Process
-	set->process = 1;
-	set->processing = 0;
+	if(!set->processing) set->process = 1;
+	else set->process_delay = 1;
 }
 
 void set_exec(t_set *set)
 {
 	t_link *l;
 
+	// Single Blocks
 	if(set->blocks)
 	{
 		l = set->blocks->first;
@@ -75,11 +76,11 @@ void set_exec(t_set *set)
 			t_block *b;
 			b=l->data;
 
-			// Exec Single Blocks
 			block_exec(b);
 		}
 	}
 
+	// Rhizomes
 	if(set->rhizomes)
 	{
 		l = set->rhizomes->first;
@@ -89,13 +90,9 @@ void set_exec(t_set *set)
 			t_rhizome *g;
 			g=l->data;
 
-			// Exec Graphs
 			rhizome_exec(g);
 		}
 	}
-
-	set->process = 0;
-//	set->processing = 0;
 }
 
 void set_draw(t_set *set)
@@ -241,6 +238,7 @@ t_set *set_new(const char *name)
 
 	set->frame_based = 0;
 	set->process = 0;
+	set->process_delay = 0;
 	set->process_id = 0;
 	set->processing = 0;
 

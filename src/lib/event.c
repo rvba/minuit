@@ -130,7 +130,6 @@ t_event *event_new(void)
 	event->load_error = 0;
 
 	event->use_threading = 1;
-	event->rhizome_computing = 0;
 	event->rhizome_updated = 1;
 	event->rhizome_init = 0;
 

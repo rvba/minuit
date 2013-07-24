@@ -63,7 +63,6 @@ void ctx_set_exec(struct Context *C)
 
 			}
 		}
-
 	}
 }
 
