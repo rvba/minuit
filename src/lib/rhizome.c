@@ -660,6 +660,11 @@ void rhizome_graph_split(t_rhizome *rhizome, t_brick *brick_x, t_brick *brick_y)
 		// Free Old rhizome
 		rhizome_delete(rhizome);
 	}
+	else
+	{
+		rhizome_setup(rhizome);
+	}
+
 
 	// Free
 	rhizome_dict_free(dict);
@@ -688,7 +693,8 @@ void rhizome_merge(t_rhizome *src, t_rhizome *dst)
 	t_context *C = ctx_get();
 	if(src->id.id == dst->id.id)
 	{
-		// nothing to do 
+		// Update Rhizome
+		rhizome_setup(src);
 	}
 	else
 	{

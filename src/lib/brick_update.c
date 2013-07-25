@@ -69,8 +69,8 @@ void _cls_brick_disconnect(t_brick *self)
 	t_plug *plug_intern_in = &brick_in->plug_intern;
 	t_plug *plug_intern_out = &brick_out->plug_intern;
 
-	plug_intern_in->cls->disconnect(mode_in , plug_intern_in);
 	plug_intern_out->cls->disconnect(mode_out ,plug_intern_out);
+	plug_intern_in->cls->disconnect(mode_in , plug_intern_in);
 
 	// Split Graph
 	brick_rhizome_split(brick_in, brick_out);

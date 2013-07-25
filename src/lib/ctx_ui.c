@@ -317,7 +317,6 @@ void ctx_block_set_update(t_context *C)
 		//{
 			if(l)
 			{
-				// For All Blocks
 				for(;l;l=l->next)
 				{
 					t_block *b;
@@ -335,7 +334,6 @@ void ctx_block_set_update(t_context *C)
 				t_block *block;  
 				t_link *l_block = rhizome->blocks->first;
 
-				// For All Graphs
 				for(;l_block;l_block = l_block->next)
 				{
 					block = l_block->data;

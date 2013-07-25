@@ -66,7 +66,6 @@ void cls_block_block_update(t_block *block)
 			// mouse over
 			if(is_mouse_over_brick(C,brick))
 			{
-				printf("mouse over %s\n",brick->id.name);
 				brick->state.is_mouse_over=1;
 				is_mouse_over=1;
 			}
@@ -80,8 +79,14 @@ void cls_block_block_update(t_block *block)
 		brick->cls->update(brick);
 	}
 
-	if(is_mouse_over) block->state.is_mouse_over=1;
-	else block->state.is_mouse_over=0;
+	if(is_mouse_over)
+	{
+		block->state.is_mouse_over=1;
+	}
+	else 
+	{
+		block->state.is_mouse_over=0;
+	}
 }
 
 void cls_block_menu_update(t_block *block)

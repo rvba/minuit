@@ -176,7 +176,10 @@ void block_draw_outline(t_block *block)
 
 		if(block->state.is_root)
 			line_width = 2;
+		if(block->state.is_mouse_over)
+			line_width = 2;
 
+		// Rectangle
 		skt_closedline(points,tot,color,line_width);
 
 		if(C->ui->show_step)
@@ -196,22 +199,32 @@ void block_draw_outline(t_block *block)
 			txt_free(txt);
 		}
 
+		// Rhizome Position
 		if(block->rhizome)
 		{
+			char order[3];
+			float p[3] = {0,0,0};
+			float vv[3] = {-10,-10,0};
+			vadd(p,a,vv);
+			sprintf(order,"%d",block->rhizome_pos);
 
-		char order[3];
-		float p[3] = {0,0,0};
-		float vv[3] = {-10,-10,0};
-		vadd(p,a,vv);
-		sprintf(order,"%d",block->rhizome_pos);
-
-		t_txt *txt = txt_new(order);
-		txt_init(txt,order);
-		glPushMatrix();
-			glTranslatef(p[0],p[1],p[2]);
-			txt->draw(txt);
-		glPopMatrix();
-		txt_free(txt);
+			glPushMatrix();
+				glTranslatef(p[0],p[1],p[2]);
+				if(block->state.is_root)
+				{
+					t_txt *root = txt_new("root");
+					txt_init(root,"root");
+					root->draw(root);
+					txt_free(root);
+				}
+				else
+				{
+					t_txt *txt = txt_new(order);
+					txt_init(txt,order);
+					txt->draw(txt);
+					txt_free(txt);
+				}
+			glPopMatrix();
 		}
 
 	}
