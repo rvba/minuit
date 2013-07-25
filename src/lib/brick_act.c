@@ -26,6 +26,7 @@
 #include "vector.h"
 #include "clock.h"
 #include "set.h"
+#include "rhizome.h"
 
 int brick_check_loop(t_brick *brick)
 {
@@ -746,6 +747,17 @@ void *op_plusplus(t_brick *brick)
 	return NULL;
 }
 
+
+void brick_rhizome_setup(t_brick *brick)
+{
+	t_block *block = brick->block;
+	t_rhizome *rhizome = block->rhizome;
+	if(block->rhizome)
+	{
+		rhizome_setup(rhizome);
+	}
+}
+
 void exe_remove_brick(t_dict *args)
 {
 	t_context *C = ctx_get();
@@ -772,6 +784,7 @@ void exe_remove_brick(t_dict *args)
 		{
 			// remove link from bricks
 			lst_link_remove(bricks,last);
+			brick_rhizome_setup(brick);
 			scene_struct_delete(C->scene,last);
 			block->tot_bricks--;
 			block->state.update_geometry=1;
@@ -801,6 +814,8 @@ void exe_add_brick_parent_child(t_dict *args)
 	t_brick *b=n->data;
 	b->state.is_versatil=1;
 
+	brick_rhizome_setup(b);
+
 	t_plug *p_intern = &b->plug_intern;
 	t_plug *p_in = &b->plug_in;
 	
@@ -827,6 +842,8 @@ void exe_add_brick_child_parent(t_dict *args)
 	t_node *n=add_part_slider_float(C,block,".",NULL);
 	t_brick *b=n->data;
 	b->state.is_versatil=1;
+
+	brick_rhizome_setup(b);
 
 	t_plug *p_intern = &b->plug_intern;
 	t_plug *p_in = &b->plug_in;

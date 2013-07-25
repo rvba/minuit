@@ -36,6 +36,7 @@ typedef struct Rhizome
 }t_rhizome;
 
 
+void 		rhizome_setup(t_rhizome *rhizome);
 void 		rhizome_graph_split(t_rhizome *rhizome, struct Brick *brick_x, struct Brick *brick_y);
 void 		rhizome_graph_link_add(t_rhizome *rhizome, struct Brick *brick_x, struct Brick *brick_y);
 void 		rhizome_draw(t_rhizome *rhizome);
