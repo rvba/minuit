@@ -40,6 +40,332 @@ void rhizome_show(t_rhizome *rhizome)
 
 }
 
+/******************	DRAW	**********************/
+
+void rhizome_draw_blocks(t_rhizome *rhizome)
+{
+	t_link *l;
+	t_block *block;
+	for(l=rhizome->blocks->first;l;l=l->next)
+	{
+		block = l->data;
+		block->cls->draw(block);
+	}
+}
+
+// DRAW BOUNDING BOX
+
+void rhizome_draw_bounding_box(t_rhizome *rhizome)
+{
+	t_context *C = ctx_get();
+	t_link *l;
+	t_block *block;
+
+	float up=0;
+	float down=0;
+	float left=0;
+	float right=0;
+
+	float margin = 10;
+
+	int first_run = 1;
+
+	if(rhizome->blocks)
+	{
+		for(l=rhizome->blocks->first;l;l=l->next)
+		{
+			block = l->data;
+			float x = block->pos[0];
+			float y = block->pos[1];
+
+			if(first_run)
+			{
+				first_run = 0;
+
+				left = x;
+				right = x+block->width;
+				up = y+block->height;
+				down = y;
+			}
+			else
+			{
+				if(x <= left) left = x;
+				if(x+block->width >= right) right = x+block->width;
+				if(y+block->height >= up) up = y+block->height;
+				if(y <= down) down = y;
+			}
+		}
+
+		float p[3]={left - margin,down - margin,0};
+
+		float w = right - left + margin*2;
+		float h = up - down + margin*2;
+
+		glLineStipple(2, 0xAAAA);
+		glEnable(GL_LINE_STIPPLE);
+
+		skt_line_rectangle(p,w,h,1,C->ui->front_color);
+
+		glDisable(GL_LINE_STIPPLE);
+	}
+}
+
+// DRAW
+
+void rhizome_draw(t_rhizome *rhizome)
+{
+	rhizome_draw_blocks(rhizome);
+	rhizome_draw_bounding_box(rhizome);
+}
+
+/******************	EXEC	**********************/
+
+
+// Get Loop Block
+t_block *rhizome_block_loop_get(t_rhizome *rhizome)
+{
+	t_link *link;
+	t_block *block;
+	for(link=rhizome->blocks->first;link;link=link->next)
+	{
+		block = link->data;
+		if(block->state.is_a_loop)
+			return block;
+	}
+	return NULL;
+}
+
+// Exec Block Loop Only
+void rhizome_exec_block_loop(t_rhizome *rhizome)
+{
+	// Get Loop Block
+	t_block *block = rhizome_block_loop_get(rhizome);
+
+	// Get For Brick
+	t_brick *brick = block_brick_get(block,"for");
+
+	if(brick)
+	{
+		t_plug *plug = &brick->plug_intern;
+		plug->state.is_updated = 0;
+
+		// Exec
+		block_brick_trigger(plug);
+	}
+}
+
+// EXEC
+
+// Exec All Blocks
+void rhizome_exec_blocks(t_rhizome *rhizome)
+{
+	t_link *link;
+	t_block *block;
+
+	for(link=rhizome->blocks->first;link;link=link->next)
+	{
+		block = link->data;
+		block_exec(block);
+	}
+}
+
+// Exec Rhizome
+void rhizome_exec(t_rhizome *rhizome)
+{
+	t_context *C = ctx_get();
+
+	if(C->ui->update_links)
+	{
+		// With LOOP
+		if(rhizome->has_loop)
+		{
+			// Find Block Loop
+			t_block *block = rhizome_block_loop_get(rhizome);
+
+			if(block)
+			{
+				// Do Loop
+				if(rhizome->start_loop)
+				{
+					C->event->loop_step++;
+					// Exec Blocks
+					rhizome_exec_blocks(rhizome);
+
+					// Loop Recursive
+					rhizome_exec(rhizome);
+				}
+				// End Loop
+				else if(rhizome->end_loop)
+				{
+					// Reset States
+					rhizome->start_loop = 0;
+					rhizome->end_loop = 0;
+					rhizome->done = 1;
+				}
+				// Start Loop
+				else
+				{
+					// Loop
+					if(rhizome->done)
+					{
+						// Exit
+						rhizome->done=0;
+					}
+					else
+					{
+						// Exec Block Loop Only
+						rhizome_exec_block_loop(rhizome);
+
+						// Loop Recursive
+						if(rhizome->start_loop)
+							rhizome_exec(rhizome);
+					}
+				}
+			}
+			else
+			{
+				printf("[ERROR garph_exec] Can't find block loop\n");
+			}
+		}
+		// NO LOOP
+		else
+		{
+			// Exec Blocks
+			rhizome_exec_blocks(rhizome);
+		}
+	}
+}
+
+/******************	SETUP	**********************/
+
+// BLOCK POS
+
+void rhizome_set_block_pos(t_block *block, int pos)
+{
+	if(block->rhizome_pos < pos)
+	{
+		block->rhizome_pos = pos;
+		t_link *link;
+
+		for(link=block->bricks->first;link;link=link->next)
+		{
+			t_brick *brick = link->data;
+			if(brick->plug_out.state.is_connected)
+			{
+				t_plug *plug_dst = brick->plug_out.dst;
+				t_brick *brick_dst = plug_dst->brick;
+				t_block *block_dst = brick_dst->block;
+
+				rhizome_set_block_pos(block_dst,pos+1);
+			}
+		}
+	}
+}
+
+// SORT
+
+void rhizome_sort(t_rhizome *rhizome)
+{
+	t_link *l;
+	t_block *block;
+	int pos;
+
+	// Reset
+	for(l=rhizome->blocks->first;l;l=l->next)
+	{
+		block = l->data;
+		block->rhizome_pos = 0;
+	}
+
+	// Set Pos
+	for(l=rhizome->roots->first;l;l=l->next)
+	{
+		t_link *link;
+		block = l->data;
+		pos = 1;
+
+		for(link=block->bricks->first;link;link=link->next)
+		{
+			t_brick *brick = link->data;
+			if(brick->plug_out.state.is_connected)
+			{
+				t_plug *plug_dst = brick->plug_out.dst;
+				t_brick *brick_dst = plug_dst->brick;
+				t_block *block_dst = brick_dst->block;
+
+				rhizome_set_block_pos(block_dst,pos);
+			}
+		}
+	}
+
+	// Set Link order
+	for(l=rhizome->blocks->first;l;l=l->next)
+	{
+		block=l->data;
+		l->order = block->rhizome_pos;
+	}
+	
+	// Sort List
+	lst_sort_bubble(rhizome->blocks);
+}
+
+// GET ROOTS
+
+void rhizome_get_roots(t_rhizome *rhizome)
+{
+	t_context *C = ctx_get();
+
+	t_link *l;
+	t_block *block;
+	t_brick *brick;
+	t_plug *plug_in;
+
+	// Add Lst
+	if(!rhizome->roots)
+	{
+		t_node *node_list = scene_add(C->scene,nt_list,"roots");
+		rhizome->roots = node_list->data;
+	}
+
+	t_lst *lst = rhizome->blocks;
+	t_lst *roots = rhizome->roots;
+
+	// Cleanup Lst
+	lst_cleanup(roots);
+
+	// For Lst
+	for(l=lst->first;l;l=l->next)
+	{
+		t_link *link;
+		block = l->data;
+		int add_to_roots = 1;
+
+		for(link=block->bricks->first;link;link=link->next)
+		{
+			brick=link->data;
+			plug_in = &brick->plug_in;
+
+			// If Block Connected
+			//if(plug_in->state.is_connected)
+			if(plug_in->src)
+			{
+				// NOT Root
+				add_to_roots = 0;
+			}
+		}
+
+		if(add_to_roots)
+		{
+			block->state.is_root = 1;
+			list_add(roots,block);
+		}
+		else
+		{
+			block->state.is_root = 0;
+		}
+	}
+}
+
 // SETUP
 
 void rhizome_setup(t_rhizome *rhizome)
@@ -91,32 +417,6 @@ void rhizome_graph_link_add(t_rhizome *rhizome, t_brick *brick_x, t_brick *brick
 	dash->id_y = brick_y->id.id;
 }
 
-
-
-// BLOCK ADD
-
-void rhizome_block_add(t_rhizome *rhizome, t_block *block)
-{
-	t_context *C = ctx_get();
-
-	// Add to Rhizome List
-	scene_store(C->scene,1);
-	list_add(rhizome->blocks, block);
-	block->rhizome = rhizome;
-	scene_store(C->scene,0);
-
-	// Pop from Set Blocks
-	if(!block->state.is_in_rhizome) set_block_pop(block->set,block);
-
-	// Set In Rhizome
-	block->state.is_in_rhizome = 1;
-
-	// Setup Rhizome
-	rhizome_setup(rhizome);
-
-	// Add To Graph
-	rhizome_graph_dot_add(rhizome, block);
-}
 
 // BLOCK REMOVE
 
@@ -366,258 +666,6 @@ void rhizome_graph_split(t_rhizome *rhizome, t_brick *brick_x, t_brick *brick_y)
 
 }
 
-// DELETE
-
-void rhizome_delete(t_rhizome *rhizome)
-{
-	t_context *C = ctx_get();
-	t_set *set = rhizome->set;
-	// Remove From Set
-	list_remove_by_id(set->rhizomes, rhizome->id.id);
-	// Struct Delete
-	scene_struct_delete(C->scene,rhizome);
-}
-
-// LOOP
-
-// Get Loop Block
-t_block *rhizome_block_loop_get(t_rhizome *rhizome)
-{
-	t_link *link;
-	t_block *block;
-	for(link=rhizome->blocks->first;link;link=link->next)
-	{
-		block = link->data;
-		if(block->state.is_a_loop)
-			return block;
-	}
-	return NULL;
-}
-
-// Exec Block Loop Only
-void rhizome_exec_block_loop(t_rhizome *rhizome)
-{
-	// Get Loop Block
-	t_block *block = rhizome_block_loop_get(rhizome);
-
-	// Get For Brick
-	t_brick *brick = block_brick_get(block,"for");
-
-	if(brick)
-	{
-		t_plug *plug = &brick->plug_intern;
-		plug->state.is_updated = 0;
-
-		// Exec
-		block_brick_trigger(plug);
-	}
-}
-
-// EXEC
-
-// Exec All Blocks
-void rhizome_exec_blocks(t_rhizome *rhizome)
-{
-	t_link *link;
-	t_block *block;
-
-	for(link=rhizome->blocks->first;link;link=link->next)
-	{
-		block = link->data;
-		block_exec(block);
-	}
-}
-
-// Exec Rhizome
-void rhizome_exec(t_rhizome *rhizome)
-{
-	t_context *C = ctx_get();
-
-	if(C->ui->update_links)
-	{
-		// With LOOP
-		if(rhizome->has_loop)
-		{
-			// Find Block Loop
-			t_block *block = rhizome_block_loop_get(rhizome);
-
-			if(block)
-			{
-				// Do Loop
-				if(rhizome->start_loop)
-				{
-					C->event->loop_step++;
-					// Exec Blocks
-					rhizome_exec_blocks(rhizome);
-
-					// Loop Recursive
-					rhizome_exec(rhizome);
-				}
-				// End Loop
-				else if(rhizome->end_loop)
-				{
-					// Reset States
-					rhizome->start_loop = 0;
-					rhizome->end_loop = 0;
-					rhizome->done = 1;
-				}
-				// Start Loop
-				else
-				{
-					// Loop
-					if(rhizome->done)
-					{
-						// Exit
-						rhizome->done=0;
-					}
-					else
-					{
-						// Exec Block Loop Only
-						rhizome_exec_block_loop(rhizome);
-
-						// Loop Recursive
-						if(rhizome->start_loop)
-							rhizome_exec(rhizome);
-					}
-				}
-			}
-			else
-			{
-				printf("[ERROR garph_exec] Can't find block loop\n");
-			}
-		}
-		// NO LOOP
-		else
-		{
-			// Exec Blocks
-			rhizome_exec_blocks(rhizome);
-		}
-	}
-}
-
-
-// GET ROOTS
-
-void rhizome_get_roots(t_rhizome *rhizome)
-{
-	t_context *C = ctx_get();
-
-	t_link *l;
-	t_block *block;
-	t_brick *brick;
-	t_plug *plug_in;
-
-	if(!rhizome->roots)
-	{
-		t_node *node_list = scene_add(C->scene,nt_list,"roots");
-		rhizome->roots = node_list->data;
-	}
-
-	t_lst *lst = rhizome->blocks;
-	t_lst *roots = rhizome->roots;
-
-	lst_cleanup(roots);
-
-	for(l=lst->first;l;l=l->next)
-	{
-		t_link *link;
-		block = l->data;
-		int add_to_roots = 1;
-		for(link=block->bricks->first;link;link=link->next)
-		{
-			brick=link->data;
-			plug_in = &brick->plug_in;
-
-			//if(plug_in->state.is_connected)
-			if(plug_in->src)
-			{
-				add_to_roots = 0;
-			}
-		}
-
-		if(add_to_roots)
-		{
-			block->state.is_root = 1;
-			list_add(roots,block);
-		}
-		else
-		{
-			block->state.is_root = 0;
-		}
-	}
-}
-
-// BLOCK POS
-
-void rhizome_set_block_pos(t_block *block, int pos)
-{
-	if(block->rhizome_pos < pos)
-	{
-		block->rhizome_pos = pos;
-		t_link *link;
-
-		for(link=block->bricks->first;link;link=link->next)
-		{
-			t_brick *brick = link->data;
-			if(brick->plug_out.state.is_connected)
-			{
-				t_plug *plug_dst = brick->plug_out.dst;
-				t_brick *brick_dst = plug_dst->brick;
-				t_block *block_dst = brick_dst->block;
-
-				rhizome_set_block_pos(block_dst,pos+1);
-			}
-		}
-	}
-}
-
-// SORT
-
-void rhizome_sort(t_rhizome *rhizome)
-{
-	t_link *l;
-	t_block *block;
-	int pos;
-
-	// Reset
-	for(l=rhizome->blocks->first;l;l=l->next)
-	{
-		block = l->data;
-		block->rhizome_pos = 0;
-	}
-
-	// Set Pos
-	for(l=rhizome->roots->first;l;l=l->next)
-	{
-		t_link *link;
-		block = l->data;
-		pos = 1;
-
-		for(link=block->bricks->first;link;link=link->next)
-		{
-			t_brick *brick = link->data;
-			if(brick->plug_out.state.is_connected)
-			{
-				t_plug *plug_dst = brick->plug_out.dst;
-				t_brick *brick_dst = plug_dst->brick;
-				t_block *block_dst = brick_dst->block;
-
-				rhizome_set_block_pos(block_dst,pos);
-			}
-		}
-	}
-
-	// Set Link order
-	for(l=rhizome->blocks->first;l;l=l->next)
-	{
-		block=l->data;
-		l->order = block->rhizome_pos;
-	}
-	
-	// Sort List
-	lst_sort_bubble(rhizome->blocks);
-}
-
 // SWAP
 
 void rhizome_swap(t_rhizome *src, t_rhizome *dst)
@@ -664,81 +712,41 @@ void rhizome_merge(t_rhizome *src, t_rhizome *dst)
 	}
 }
 
+// BLOCK ADD
 
-void rhizome_draw_blocks(t_rhizome *rhizome)
-{
-	t_link *l;
-	t_block *block;
-	for(l=rhizome->blocks->first;l;l=l->next)
-	{
-		block = l->data;
-		block->cls->draw(block);
-	}
-}
-
-// DRAW BOUNDING BOX
-
-void rhizome_draw_bounding_box(t_rhizome *rhizome)
+void rhizome_block_add(t_rhizome *rhizome, t_block *block)
 {
 	t_context *C = ctx_get();
-	t_link *l;
-	t_block *block;
 
-	float up=0;
-	float down=0;
-	float left=0;
-	float right=0;
+	// Add to Rhizome List
+	scene_store(C->scene,1);
+	list_add(rhizome->blocks, block);
+	block->rhizome = rhizome;
+	scene_store(C->scene,0);
 
-	float margin = 10;
+	// Pop from Set Blocks
+	if(!block->state.is_in_rhizome) set_block_pop(block->set,block);
 
-	int first_run = 1;
+	// Set In Rhizome
+	block->state.is_in_rhizome = 1;
 
-	if(rhizome->blocks)
-	{
-		for(l=rhizome->blocks->first;l;l=l->next)
-		{
-			block = l->data;
-			float x = block->pos[0];
-			float y = block->pos[1];
+	// Setup Rhizome
+	rhizome_setup(rhizome);
 
-			if(first_run)
-			{
-				first_run = 0;
-
-				left = x;
-				right = x+block->width;
-				up = y+block->height;
-				down = y;
-			}
-			else
-			{
-				if(x <= left) left = x;
-				if(x+block->width >= right) right = x+block->width;
-				if(y+block->height >= up) up = y+block->height;
-				if(y <= down) down = y;
-			}
-		}
-
-		float p[3]={left - margin,down - margin,0};
-
-		float w = right - left + margin*2;
-		float h = up - down + margin*2;
-
-		glLineStipple(2, 0xAAAA);
-		glEnable(GL_LINE_STIPPLE);
-
-		skt_line_rectangle(p,w,h,1,C->ui->front_color);
-
-		glDisable(GL_LINE_STIPPLE);
-	}
+	// Add To Graph
+	rhizome_graph_dot_add(rhizome, block);
 }
 
-// DRAW
+// DELETE
 
-void rhizome_draw(t_rhizome *rhizome)
+void rhizome_delete(t_rhizome *rhizome)
 {
-	rhizome_draw_blocks(rhizome);
-	rhizome_draw_bounding_box(rhizome);
+	t_context *C = ctx_get();
+	t_set *set = rhizome->set;
+	// Remove From Set
+	list_remove_by_id(set->rhizomes, rhizome->id.id);
+	// Struct Delete
+	scene_struct_delete(C->scene,rhizome);
 }
 
 // ADD
@@ -817,6 +825,7 @@ t_rhizome *rhizome_rebind(t_scene *sc,void *ptr)
 	rebind(sc,"rhizome","set",(void **)&rhizome->set);
 
 	rhizome->graph = NULL;
+	rhizome->roots = NULL;
 
 	return rhizome;
 }
