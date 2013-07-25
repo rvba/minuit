@@ -46,8 +46,10 @@ void _cls_brick_connect(t_brick *brick_in ,t_brick *brick_out)
 	t_plug *plug_brick_in = &brick_in->plug_intern;
 	t_plug *plug_brick_out = &brick_out->plug_intern;
 
-	plug_brick_in->cls->connect(mode_in, plug_brick_in, plug_brick_out);
+	// first Out
 	plug_brick_out->cls->connect(mode_out, plug_brick_out, plug_brick_in);
+	// Then In
+	plug_brick_in->cls->connect(mode_in, plug_brick_in, plug_brick_out);
 }
 
 // DISCONNECT
