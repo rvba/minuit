@@ -19,6 +19,7 @@
 #include "binding.h"
 #include "rhizome.h"
 
+// Split
 void brick_rhizome_split(t_brick *brick_x, t_brick *brick_y)
 {
 	t_block *block_x = brick_x->block;
@@ -41,17 +42,29 @@ void brick_rhizome_add(t_brick *brick_x, t_brick *brick_y)
 	// Each Block Have A Rhizome
 	if(block_x->rhizome && block_y->rhizome)
 	{
+		// Add Dash
+		rhizome_graph_link_add(block_x->rhizome, brick_x, brick_y);
+
+		// Merge
 		rhizome_merge(block_x->rhizome, block_y->rhizome);
 	}
 	// Only One Rhizome
 	else if(block_x->rhizome)
 	{
+		// Add Block
 		rhizome_block_add(block_x->rhizome, block_y);
+
+		// Add Dash
+		rhizome_graph_link_add(block_x->rhizome, brick_x, brick_y);
 	}
 	// Only One Rhizome
 	else if(block_y->rhizome)
 	{
+		// Add Block
 		rhizome_block_add(block_y->rhizome, block_x);
+
+		// Add Dash
+		rhizome_graph_link_add(block_y->rhizome, brick_x, brick_y);
 	}
 	// No Rhizome
 	else
@@ -64,10 +77,13 @@ void brick_rhizome_add(t_brick *brick_x, t_brick *brick_y)
 		// Add Blocks
 		rhizome_block_add(rhizome, block_x);
 		rhizome_block_add(rhizome, block_y);
+
+		// Add Dash
+		rhizome_graph_link_add(block_y->rhizome, brick_x, brick_y);
 	}
 
-	// Add Dash
-	rhizome_graph_link_add(block_x->rhizome, brick_x, brick_y);
+	// Setup
+	rhizome_setup(block_x->rhizome);
 }
 
 int brick_is_different(t_brick *dst, t_brick *src)

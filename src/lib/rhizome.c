@@ -610,8 +610,8 @@ void rhizome_build_from_dict(t_rhizome *rhizome, t_dict *dict)
 		{
 			// New Rhizome
 			new_rhizome = rhizome_build_from_dot_list(lst);
-			rhizome_setup(new_rhizome);
 			rhizome_graph_dashs_build(new_rhizome);
+			rhizome_setup(new_rhizome);
 		}
 		else
 		{
@@ -707,14 +707,14 @@ void rhizome_merge(t_rhizome *src, t_rhizome *dst)
 		rhizome_swap(src,rhizome);
 		rhizome_swap(dst,rhizome);
 
-		// Update New Rhizome
-		rhizome_setup(rhizome);
-
 		// Remove Old Rhizomes
 		rhizome_delete(src);
 		rhizome_delete(dst);
 
 		rhizome_graph_dashs_build(rhizome);
+
+		// Update New Rhizome
+		rhizome_setup(rhizome);
 	}
 }
 
@@ -736,11 +736,11 @@ void rhizome_block_add(t_rhizome *rhizome, t_block *block)
 	// Set In Rhizome
 	block->state.is_in_rhizome = 1;
 
-	// Setup Rhizome
-	rhizome_setup(rhizome);
-
 	// Add To Graph
 	rhizome_graph_dot_add(rhizome, block);
+
+	// Setup Rhizome
+	rhizome_setup(rhizome);
 }
 
 // DELETE
