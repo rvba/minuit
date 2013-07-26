@@ -835,5 +835,7 @@ t_txt *txt_new(const char *name)
 
 	txt->use_bitmap_font=1;
 
+	txt_init(txt, name);
+
 	return txt;
 }

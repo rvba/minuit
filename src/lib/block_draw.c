@@ -189,7 +189,6 @@ void block_draw_outline(t_block *block)
 			sprintf(order,"%d",block->rhizome_order);
 
 			t_txt *txt = txt_new(order);
-			txt_init(txt,order);
 			glPushMatrix();
 				glTranslatef(p[0],p[1],p[2]);
 				txt->draw(txt);
@@ -211,14 +210,12 @@ void block_draw_outline(t_block *block)
 				if(block->state.is_root)
 				{
 					t_txt *root = txt_new("root");
-					txt_init(root,"root");
 					root->draw(root);
 					txt_free(root);
 				}
 				else
 				{
 					t_txt *txt = txt_new(order);
-					txt_init(txt,order);
 					txt->draw(txt);
 					txt_free(txt);
 				}

@@ -178,11 +178,6 @@ void screen_intro(t_screen *screen)
 	if(C->ui->show_intro || C->ui->always_show_intro)
 	{
 		glPushMatrix();
-		glTranslatef(p[0]-offset,p[1]-offset,p[2]);
-
-		glPopMatrix();
-
-		glPushMatrix();
 		glLoadIdentity();
 		glTranslatef(p[0],p[1],p[2]);
 
@@ -191,6 +186,7 @@ void screen_intro(t_screen *screen)
 		C->ui->zoom = 5;
 
 		glPushMatrix();
+
 
 		if(C->ui->show_intro)
 		{
