@@ -174,8 +174,6 @@ void block_draw_outline(t_block *block)
 		points[10]=d[1];
 		points[11]=d[2];
 
-		if(block->state.is_root)
-			line_width = 2;
 		if(block->state.is_mouse_over)
 			line_width = 2;
 
