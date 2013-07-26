@@ -120,7 +120,6 @@ void screen_intro(t_screen *screen)
 	float scale= 5;
 	float scv = .3;
 	float p[3]={(C->app->window->width)/4,(C->app->window->height)/2,0};
-	float offset = 10;
 	int dist = 500;
 	int color_factor = 100;
 
