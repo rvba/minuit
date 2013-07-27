@@ -30,8 +30,6 @@ typedef struct Rhizome
 	int frame_based;
 	int start_loop;
 	int end_loop;
-	int done_loop;
-	int done;
 
 }t_rhizome;
 

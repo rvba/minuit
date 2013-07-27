@@ -66,18 +66,3 @@ void ctx_set_exec(struct Context *C)
 	}
 }
 
-
-void ctx_rhizome_update(struct Context *C)
-{
-	// Freeze
-	if(C->ui->update_links)
-	{
-		t_link *link;
-		for(link=C->scene->rhizomes->first;link;link=link->next)
-		{
-			t_node *node = link->data;
-			t_rhizome *rhizome = node->data;
-			rhizome_exec(rhizome);
-		}
-	}
-}

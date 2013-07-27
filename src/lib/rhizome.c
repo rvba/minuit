@@ -200,26 +200,16 @@ void rhizome_exec(t_rhizome *rhizome)
 					// Reset States
 					rhizome->start_loop = 0;
 					rhizome->end_loop = 0;
-					rhizome->done = 1;
 				}
 				// Start Loop
 				else
 				{
-					// Loop
-					if(rhizome->done)
-					{
-						// Exit
-						rhizome->done=0;
-					}
-					else
-					{
-						// Exec Block Loop Only
-						rhizome_exec_block_loop(rhizome);
+					// Exec Block Loop Only
+					rhizome_exec_block_loop(rhizome);
 
-						// Loop Recursive
-						if(rhizome->start_loop)
-							rhizome_exec(rhizome);
-					}
+					// Loop Recursive
+					if(rhizome->start_loop)
+						rhizome_exec(rhizome);
 				}
 			}
 			else
@@ -882,8 +872,6 @@ t_rhizome *rhizome_new(const char *name)
 	rhizome->start_loop = 0;
 	rhizome->end_loop = 0;
 	rhizome->frame_based = 0;
-
-	rhizome->done=0;
 
 	return rhizome;
 }
