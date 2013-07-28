@@ -38,8 +38,6 @@ typedef struct NodeClass
 	void (* del)(struct Node *node);
 	void (* init)(struct Node *node);
 	void (* free)(struct Scene *sc,struct Node *node);
-
-	int (* is_mouse_over)(struct Node *node);
 	void *(* get_ref)(struct Node *node, const char *ref);
 
 }t_node_class;

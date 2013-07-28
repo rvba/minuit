@@ -282,53 +282,6 @@ void cls_node_build(t_node *node,const char *name)
 
 void cls_node_del(t_node *node) { t_scene *scene  = scene_get(); scene_node_delete(scene,node);} 
 
-// MOUSE OVER
-
-int cls_node_is_mouse_over(t_node *node)
-{
-	return 0;
-};
-
-int cls_node_object_is_mouse_over(t_node *node)
-{
-	t_context *C=ctx_get();
-	t_object *object=node->data;
-	t_mesh *mesh=object->mesh;
-
-	if(mesh)
-	{
-		if(is_mouse_over(C,mesh->idcol))
-		{
-			return 1;
-		}
-		else
-		{
-			return 0;
-		}
-	}
-	else
-	{
-		return 0;
-	}
-}
-
-int cls_node_brick_is_mouse_over(t_node *node)
-{
-	t_context *C=ctx_get();
-	t_brick *brick=node->data;
-
-	if(is_mouse_over_brick(C,brick))
-	{
-		brick->state.is_mouse_over=1;
-		return 1;
-	}
-	else
-	{
-		brick->state.is_mouse_over=0;
-		return 0;
-	}
-}
-
 // LINK
 
 void cls_node_link(t_node *node)
@@ -596,7 +549,6 @@ t_node_class mesh= {
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_mesh,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_mesh_free,
 	.get_ref = cls_node_get_ref_mesh,
 };
@@ -610,7 +562,6 @@ t_node_class block= {
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_block,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_block_free,
 	.get_ref = cls_node_get_ref,
 };
@@ -624,7 +575,6 @@ t_node_class brick= {
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_brick,
-	.is_mouse_over=cls_node_brick_is_mouse_over,
 	.free=cls_node_brick_free,
 	.get_ref = cls_node_get_ref_brick,
 };
@@ -638,7 +588,6 @@ t_node_class light= {
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_id,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_light_free,
 	.get_ref = cls_node_get_ref,
 };
@@ -652,7 +601,6 @@ t_node_class object= {
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_id,
-	.is_mouse_over=cls_node_object_is_mouse_over,
 	.free=cls_node_object_free,
 	.get_ref = cls_node_get_ref_object,
 };
@@ -666,7 +614,6 @@ t_node_class screen= {
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_id,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_screen_free,
 	.get_ref = cls_node_get_ref,
 };
@@ -680,7 +627,6 @@ t_node_class file= {
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_id,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_file_free,
 	.get_ref = cls_node_get_ref,
 };
@@ -694,7 +640,6 @@ t_node_class image= {
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_id,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_image_free,
 	.get_ref = cls_node_get_ref,
 };
@@ -708,7 +653,6 @@ t_node_class material= {
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_id,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_material_free,
 	.get_ref = cls_node_get_ref_material,
 };
@@ -722,7 +666,6 @@ t_node_class list= {
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_id,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_list_free,
 	.get_ref = cls_node_get_ref,
 };
@@ -736,7 +679,6 @@ t_node_class _link_= {
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_id,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_link_free,
 	.get_ref = cls_node_get_ref,
 };
@@ -750,7 +692,6 @@ t_node_class data= {
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_id,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_data_free,
 	.get_ref = cls_node_get_ref,
 };
@@ -764,7 +705,6 @@ t_node_class texture= {
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_id,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_texture_free,
 	.get_ref = cls_node_get_ref,
 };
@@ -778,7 +718,6 @@ t_node_class var= {
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_var,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_var_free,
 	.get_ref = cls_node_get_ref,
 };
@@ -792,7 +731,6 @@ t_node_class option= {
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_id,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_option_free,
 	.get_ref = cls_node_get_ref,
 };
@@ -806,7 +744,6 @@ t_node_class vlst= {
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_id,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_vlst_free,
 	.get_ref = cls_node_get_ref_vlst,
 };
@@ -820,7 +757,6 @@ t_node_class camera= {
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_camera,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_camera_free,
 	.get_ref = cls_node_get_ref_camera,
 };
@@ -834,7 +770,6 @@ t_node_class dict= {
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_id,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_dict_free,
 	.get_ref = cls_node_get_ref,
 };
@@ -848,7 +783,6 @@ t_node_class symbol= {
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_symbol,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_symbol_free,
 	.get_ref = cls_node_get_ref,
 };
@@ -862,7 +796,6 @@ t_node_class vector= {
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_vector,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_vector_free,
 	.get_ref = cls_node_get_ref,
 };
@@ -876,7 +809,6 @@ t_node_class viewport= {
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_viewport,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_viewport_free,
 	.get_ref = cls_node_get_ref,
 };
@@ -890,7 +822,6 @@ t_node_class set = {
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_set,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_set_free,
 	.get_ref = cls_node_get_ref,
 };
@@ -904,7 +835,6 @@ t_node_class binding = {
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_binding,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_binding_free,
 	.get_ref = cls_node_get_ref,
 };
@@ -918,7 +848,6 @@ t_node_class rhizome = {
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_rhizome,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_rhizome_free,
 	.get_ref = cls_node_get_ref,
 };
@@ -932,7 +861,6 @@ t_node_class graph = {
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_graph,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_graph_free,
 	.get_ref = cls_node_get_ref,
 };

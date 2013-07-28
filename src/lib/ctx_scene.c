@@ -15,9 +15,11 @@
 #include "list.h"
 #include "ui.h"
 #include "mesh.h"
-
-
 #include "object.h"
+#include "ctx.h"
+#include "mesh.h"
+#include "object.h"
+#include "brick.h"
 
 // Selections and updates
 
@@ -65,6 +67,56 @@ void ctx_scene_clear_selections(t_context *C)
 }
 
 
+int node_hover_object(t_context *C, t_node *node)
+{
+	t_object *object=node->data;
+	t_mesh *mesh=object->mesh;
+
+	if(mesh)
+	{
+		if(is_mouse_over(C,mesh->idcol))
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+int node_hover_brick(t_context *C, t_node *node)
+{
+	t_brick *brick=node->data;
+
+	if(is_mouse_over_brick(C,brick))
+	{
+		brick->state.is_mouse_over=1;
+		return 1;
+	}
+	else
+	{
+		brick->state.is_mouse_over=0;
+		return 0;
+	}
+}
+
+int node_hover(t_context *C, t_node *node)
+{
+	switch(node->type)
+	{
+		case(nt_brick): return node_hover_brick(C,node); break;
+		case(nt_object): return node_hover_object(C,node); break;
+		default: break;
+	}
+
+	return 0;
+}
+
 
 void ctx_scene_update_lst(t_context *C, t_lst *lst)
 {
@@ -76,7 +128,8 @@ void ctx_scene_update_lst(t_context *C, t_lst *lst)
 		for(link=lst->first;link;link=link->next)
 		{
 			node = link->data;
-			if(node->cls->is_mouse_over(node))
+			//if(node->cls->is_mouse_over(node))
+			if(node_hover(C, node))
 			{
 				if(C->app->mouse->button_left==button_pressed)
 				{
