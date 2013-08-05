@@ -208,6 +208,13 @@ inline void vnormalize(float v[3])
 	vmul(v,1/vmag(v));
 }
 
+inline float vlength3f(float v0[3], float v1[3])
+{
+	float v[3];
+	vsub(v,v1,v0);
+	return sqrt(SQ(v[0])+SQ(v[1])+SQ(v[2]));
+}
+
 inline void cnorm(float c[3],float o[3])
 {
 	c[0]=o[0]/255;
