@@ -197,35 +197,6 @@ t_node *scene_node_get_by_id_global(t_scene *sc,int id)
 	}
 }
 
-// get node by old id
-
-t_node *scene_node_get_by_id_old(t_scene *sc,const char *type,int id)
-{
-	t_lst *lst=(t_lst *)scene_lst_get(sc,type);
-
-	if(lst)
-	{
-		t_link *l;
-		t_node *n;
-		for(l=lst->first;l;l=l->next)
-		{
-			n=l->data;
-			if(n->id_old==id)
-			{
-				return n;
-			}
-		}
-		
-		printf("[ERROR scene_node_get_by_id_OLD] Node not found\n");
-		return NULL;
-	}
-	else
-	{
-		printf("[ERROR scene_node_get] Unknown type:%s\n",type);
-		return NULL;
-	}
-}
-
 
 // get node by type/name
 
@@ -472,43 +443,6 @@ void scene_free(t_scene *sc)
 
 /***	 LOAD	***/
 
-
-
-// get new id's for app_node
-void scene_data_load(t_scene *sc)
-{
-	t_link *l;
-	t_node *node;
-
-	for(l=sc->datas->first;l;l=l->next)
-	{
-		node=l->data;
-
-		if(node->type==nt_data)
-		{	
-			t_data *data=(t_data *)node->data;
-
-			if(is(data->type,"app_node"))
-			{
-				t_node *old=scene_node_get_by_id_old(sc,data->target,data->id_node);
-
-				printf(">> %s\n",data->id.name);
-
-				if(old)
-				{
-					//set new id
-					data->id_node=old->id;
-				}
-				else
-				{
-					printf("[ERROR scene_data_load]\n");
-				}
-			}
-		}
-	}
-}
-
-
 void scene_node_load(t_scene *sc,t_node *node)
 {
 	ulog((LOG_SCENE,"scene_node_load\n"));
@@ -602,6 +536,7 @@ t_node *scene_add(t_scene *sc,t_node_type type,const char *name)
 t_node *scene_add_data(t_scene *sc,const char *type,const char *target,const char *name,void *ptr)
 {
 	ulog((LOG_SCENE,"scene_add_data %s %s %s\n",type,target,name));
+	//printf("scene_add_data %s %s %s\n",type,target,name);
 
 	t_node *node=scene_add_node(sc,nt_data,name);
 	t_data *data=node->data;
