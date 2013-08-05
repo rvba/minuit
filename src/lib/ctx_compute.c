@@ -57,8 +57,6 @@ void ctx_compute(t_context *C)
 				if(set->frame_based)
 				{
 					set_exec(set);
-					set->processing = 0;
-					set->process = 0;
 				}
 				// Check Processing
 				else if(set->processing)
