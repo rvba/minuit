@@ -378,10 +378,10 @@ void _loop_float(void *dst,void *src,int count,int size)
 
 		for(i=0;i<count;i++)
 		{
-			if(size>=1) d[p+0]+=u_randrange(0,100)*pp;
-			if(size>=2) d[p+1]+=u_randrange(0,100)*pp;
-			if(size>=3) d[p+2]+=u_randrange(0,100)*pp;
-			if(size>=4) d[p+3]+=u_randrange(0,100)*pp;
+			if(size>=1) d[p+0]+=rnd_range(0,100)*pp;
+			if(size>=2) d[p+1]+=rnd_range(0,100)*pp;
+			if(size>=3) d[p+2]+=rnd_range(0,100)*pp;
+			if(size>=4) d[p+3]+=rnd_range(0,100)*pp;
 
 			p+=size;
 		}

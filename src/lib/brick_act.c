@@ -1744,7 +1744,7 @@ void *op_rnd(t_brick *brick)
 {
 	t_plug *plug_intern=&brick->plug_intern;
 	int *data=plug_intern->data;
-	*data=u_randrange(0,100);
+	*data=rnd_range(0,100);
 
 	return NULL;
 }

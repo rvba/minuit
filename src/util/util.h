@@ -137,9 +137,17 @@ float *calc_circle(float center[3],double radius,int divisions);
 
 // RAND
 
+float rndr(void);
+float rndf(void);
+void rnd_init(void);
+int rnd(int n);
+int rnd_range(int start,int end);
+
+/*
 int u_randn(int n);
 int u_randrange(int start,int end);
 int u_randrange_relative(int start,int end);
+*/
 
 // SORT
 

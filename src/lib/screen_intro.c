@@ -38,7 +38,7 @@ float intro_intensity=1;
 
 int get_sign(void)
 {
-	int i = u_randrange(0,2);
+	int i = rnd_range(0,1);
 	if(i>=1)
 		return -1;
 	else
@@ -49,7 +49,7 @@ int get_chance(void)
 {
 	int tot = 500;
 	int range = 400;
-	int i = u_randrange(0,tot);
+	int i = rnd_range(0,tot);
 	if(i>=range)
 		return 1;
 	else
@@ -134,11 +134,11 @@ void screen_intro(t_screen *screen)
 		stars_size = malloc(sizeof(int) * star_count);
 		for(i=0;i<star_count;i++)
 		{
-			stars[(i*3)+0] = u_randrange(0,dist)*get_sign();
-			stars[(i*3)+1] = u_randrange(0,dist)*get_sign();
-			stars[(i*3)+2] = u_randrange(0,dist)*get_sign();
+			stars[(i*3)+0] = rnd_range(0,dist)*get_sign();
+			stars[(i*3)+1] = rnd_range(0,dist)*get_sign();
+			stars[(i*3)+2] = rnd_range(0,dist)*get_sign();
 
-			float c = (float)u_randrange(50,color_factor)/color_factor;
+			float c = (float)rnd_range(50,color_factor)/color_factor;
 			stars_color[(i*3)+0] = c;
 			stars_color[(i*3)+1] = c;
 			stars_color[(i*3)+2] = c;
@@ -146,9 +146,9 @@ void screen_intro(t_screen *screen)
 			if(get_chance()) stars_chance[i] = 1;
 			else stars_chance[i] = 0;
 
-			stars_velocity[i] = (float)u_randrange(0,1000)/1000;
-			int size = u_randrange(0,100);
-			if(size > 90) stars_size[i] = u_randrange(2,3);
+			stars_velocity[i] = (float)rnd_range(0,1000)/1000;
+			int size = rnd_range(0,100);
+			if(size > 90) stars_size[i] = rnd_range(2,3);
 			else stars_size[i] = 1;
 		}
 
