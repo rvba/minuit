@@ -416,6 +416,18 @@ t_node *add_brick_operator(t_context *C,t_block *block,const char *name)
 
 // BRICK SUBMENU
 
+t_block *add_default_menu(t_context *C, const char *name)
+{
+	t_node *menu_root = scene_node_get(C->scene,"block","menu_mouse");
+
+	t_node *menu = block_make(name,"menu");
+	t_block *block = menu->data;
+
+	add_brick_submenu(C, menu_root, menu, name);
+
+	return block;
+}
+
 t_node *add_brick_submenu(t_context *C,t_node *menu,t_node *submenu,const char *name)
 {
 	t_block *block=menu->data;

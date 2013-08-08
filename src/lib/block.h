@@ -113,6 +113,7 @@ t_block *	block_clone(t_block *block);
 t_block *	block_dupli(t_block *block);
 struct Brick*	block_brick_get(t_block *block,const char *name);
 void 		block_brick_add(t_block *block,struct Node *node_brick);
+
 struct Node*		block_create(const char *name);
 struct Node*		block_make(const char *name,const char *type);
 void 		block_free(t_block *block);

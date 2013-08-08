@@ -460,6 +460,7 @@ void block_operator_brick_init(t_node *node_brick)
 	brick->state.draw_name=0;
 }
 
+
 // CLONE
 
 t_block *block_clone(t_block *block)

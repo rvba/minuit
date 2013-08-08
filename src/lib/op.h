@@ -47,6 +47,7 @@ void *		find_register(const char *target,const char *name);
 
 struct Set *get_current_set(struct Context *C);
 
+struct Block *	add_default_menu(struct Context *C, const char *name);
 struct Node *	add_brick_submenu(struct Context *C,struct Node *menu,struct Node *submenu,const char *name);
 struct Node *	add_brick_submenu_contextual(struct Context *C,struct Node *menu,struct Node *submenu,const char *name,enum Node_Type context);
 struct Node *	add_brick_selector(struct Context *C,struct Block *block,const char *name,void *data_target,int length);
