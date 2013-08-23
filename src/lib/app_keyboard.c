@@ -81,6 +81,7 @@ t_keyboard *keyboard_new(void)
 	keyboard->key_pressed=0;
 	keyboard->shift=0;
 	keyboard->ctrl=0;
+	keyboard->alt=0;
 	keyboard->special=0;
 
 	return keyboard;

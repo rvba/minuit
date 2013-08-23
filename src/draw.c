@@ -630,7 +630,8 @@ void draw_init(t_draw *draw)
 	// clear
 	if(draw->with_clear)
 	{
-		draw_clear(c[0],c[1],c[2],c[3]);
+		//draw_clear(c[0],c[1],c[2],c[3]);
+		draw_clear(c[0],c[1],c[2],0);
 	}
 
 	// set depth
