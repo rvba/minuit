@@ -5,7 +5,7 @@ set(SRC
 	app_keyboard.c
 	app_mouse.c
 	app_window.c
-	app_x.c
+	#app_x.c
 	binding.c
 	binding.h
 	block.c
@@ -113,11 +113,6 @@ set(SRC
 	vlst.c
 	)
 
-include_directories(
-	${CMAKE_SOURCE_DIR}/src
-	${CMAKE_SOURCE_DIR}/src/util
-	)
 
  
 add_library(minuit-lib STATIC ${SRC})
-target_link_libraries(minuit-lib ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${PNG_LIBRARY} ${JPEG_LIBRARY} pthread minuit-util)

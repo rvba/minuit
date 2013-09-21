@@ -1,3 +1,4 @@
+# MINUIT
 cmake_minimum_required(VERSION 2.6) 
 
 message("[M]INUIT\n[I]s\n[N]ot a\n[U]ser\n[I]nterface\n[T]oolkit")
@@ -14,6 +15,12 @@ find_package(Threads)
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
 
+include_directories(
+	${CMAKE_SOURCE_DIR}/src
+	${CMAKE_SOURCE_DIR}/src/lib
+	${CMAKE_SOURCE_DIR}/src/util
+	)
+
 add_subdirectory(src)
 
 set(CMAKE_C_FLAGS "-DWITH_DEBUG -g -Wall")
@@ -23,7 +30,10 @@ add_executable(
     minuit.c
 )
 
-target_link_libraries(minuit minuit-util minuit-lib minuit-core)
+target_link_libraries(minuit minuit-core  minuit-lib minuit-util)
+target_link_libraries(minuit ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${PNG_LIBRARY} ${JPEG_LIBRARY} pthread)
+
+
 
 
 

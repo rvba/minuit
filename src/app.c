@@ -153,7 +153,7 @@ void app_launch(t_app *app)
 	}
 	else if(app->with_glut==0)
 	{
-		glx_main_loop();	
+		//glx_main_loop();	
 	}
 	else
 	{
@@ -240,7 +240,7 @@ void app_init(t_app *app, const char *name)
 			glutPassiveMotionFunc(app_gl_passive_motion);
 			glutIdleFunc(app_gl_idle);
 		}
-		else glx_win(app);
+		//else glx_win(app);
 	}
 
 	// Set Fullscreen

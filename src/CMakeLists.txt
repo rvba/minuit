@@ -21,10 +21,4 @@ set(SRC
 
 add_library(minuit-core STATIC ${SRC})
 
-include_directories(
-	${CMAKE_SOURCE_DIR}/src
-	${CMAKE_SOURCE_DIR}/src/lib
-	${CMAKE_SOURCE_DIR}/src/util
-	)
-target_link_libraries(minuit-core ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${PNG_LIBRARY} ${JPEG_LIBRARY} pthread minuit-lib minuit-util)
 
