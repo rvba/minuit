@@ -13,8 +13,6 @@ find_package(PNG REQUIRED)
 find_package(JPEG REQUIRED)
 find_package(Threads)
 
-include_directories(${CMAKE_SOURCE_DIR}/src)
-
 include_directories(
 	${CMAKE_SOURCE_DIR}/src
 	${CMAKE_SOURCE_DIR}/src/lib
@@ -30,7 +28,7 @@ add_executable(
     minuit.c
 )
 
-target_link_libraries(minuit minuit-core  minuit-lib minuit-util)
+target_link_libraries(minuit minuit-core minuit-lib minuit-util)
 target_link_libraries(minuit ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${PNG_LIBRARY} ${JPEG_LIBRARY} pthread)
 
 

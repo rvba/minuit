@@ -112,7 +112,5 @@ set(SRC
 	viewport.h
 	vlst.c
 	)
-
-
  
 add_library(minuit-lib STATIC ${SRC})
