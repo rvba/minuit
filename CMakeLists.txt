@@ -1,23 +1,10 @@
 cmake_minimum_required(VERSION 2.6) 
 
+message("[M]INUIT\n[I]s\n[N]ot a\n[U]ser\n[I]nterface\n[T]oolkit")
+message("SOURCE_DIR\t" ${CMAKE_SOURCE_DIR})
+message("BINARY_DIR\t" ${CMAKE_BINARY_DIR})
+
 project(Minuit)
-
-file(
-    GLOB_RECURSE
-    source_files
-    src/*
-    src/lib/*
-    src/util/*
-)
-
-add_library(MINUIT STATIC ${source_files})
-
-add_executable(
-    minuit
-    minuit.c
-)
-
-include_directories(src src/lib src/util)
 
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
@@ -25,12 +12,20 @@ find_package(PNG REQUIRED)
 find_package(JPEG REQUIRED)
 find_package(Threads)
 
-include_directories(${OPENGL_INCLUDE_DIRS}  ${GLUT_INCLUDE_DIRS} ${PNG_INCLUDE_DIR} ${JPEG_INCLUDE_DIRS})
+include_directories(${CMAKE_SOURCE_DIR}/src)
 
-target_link_libraries(MINUIT ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${PNG_LIBRARY} ${JPEG_LIBRARY} pthread m)
-target_link_libraries(minuit MINUIT)
-
-LINK_DIRECTORIES(${OPENGL_LIBRARIES})
+add_subdirectory(src)
 
 set(CMAKE_C_FLAGS "-DWITH_DEBUG -g -Wall")
+
+add_executable(
+    minuit
+    minuit.c
+)
+
+target_link_libraries(minuit minuit-util minuit-lib minuit-core)
+
+
+
+
  
