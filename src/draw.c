@@ -94,48 +94,6 @@ void draw_light(t_draw *draw, t_node *node)
 	}
 }
 
-void draw_mesh_line(t_draw *draw, t_mesh *mesh)
-{
-	/*
-	if(mesh->lines)
-	{
-		int i;
-		int pos=0;
-		for(i=0;i<mesh->var.totline;i+=2)
-		{
-			int id1 = mesh->lines[pos];
-			int id2 = mesh->lines[pos+1];
-
-			t_vertex *v1 = &mesh->verts[id1];
-			t_vertex *v2 = &mesh->verts[id2];
-
-			float *ve1 = v1->co;
-			float *ve2 = v2->co;
-
-			// selection pass
-			if(draw->mode==mode_selection) 
-			{
-			}
-			// render pass
-			else
-			{
-				float *color=draw->front_color;
-				if(mesh->state.is_selected)
-				{
-					skt_line(ve1,ve2,2,color);
-				}
-				else
-				{
-					skt_line(ve1,ve2,1,color);
-				}
-			}
-
-			pos+=2;
-		}
-	}
-	*/
-}
-
 void draw_points(t_draw *draw, int count, float *points, float *colors, float *color)
 {
 	t_context *C = ctx_get();
@@ -193,19 +151,14 @@ void draw_get_mesh_color(t_mesh *mesh, float *c)
 	c[2] = (float)mesh->idcol[2]/255;
 }
 
-void build_ci(float *c,int count)
+void build_color_index(float *c,int count)
 {
-	t_context *C = ctx_get();
 	int i;
 	int j=0;
-	//scene_color_tmp_reset(C->scene);
+	int cc[3]={0,0,0};
 
-	scene_color_switch_mode(C->scene);
 	for(i=0;i<count;i++)
 	{
-		int cc[3];
-		scene_color_get(C->scene,cc);
-
 		float ccc[3];
 		cconv(ccc,cc);
 
@@ -213,13 +166,9 @@ void build_ci(float *c,int count)
 		c[j+1] = ccc[1];
 		c[j+2] = ccc[2];
 
-		//printf("assign: ");
-		//vprint3f(c+j,'\n');
-
 		j+=3;
+		color_id(cc);
 	}
-
-	scene_color_switch_mode(C->scene);
 }
 
 void draw_mesh_points(t_draw *draw, t_mesh *mesh)
@@ -241,23 +190,10 @@ void draw_mesh_points(t_draw *draw, t_mesh *mesh)
 
 	if(draw->mode == mode_selection)
 	{
-		if(draw->edit_mode)
+		if(mesh->state.is_edit_mode)
 		{
-			t_context *C = ctx_get();
-			t_scene *scene = C->scene;
-			t_node *selected = scene->selected;
-
-			if(selected->type == nt_object)
-			{
-				t_object *object = selected->data;
-				t_mesh *selected_mesh = object->mesh;
-
-				if(selected_mesh->id.id == mesh->id.id)
-				{
-					build_ci(ci,count);
-					colors = ci;
-				}
-			}
+			build_color_index(ci,count);
+			colors = ci;
 		}
 		else
 		{
@@ -313,7 +249,6 @@ void draw_mesh_points(t_draw *draw, t_mesh *mesh)
 			skt_point(v+i,3,green);
 		}
 	}
-
 }
 
 void draw_mesh_direct_faces(t_draw *draw, t_mesh *mesh)

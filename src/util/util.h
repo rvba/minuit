@@ -12,6 +12,9 @@
 
 #define SQ(x) ((x) *(x))
 
+
+void color_id(int *color);
+
 // UTIL
 
 void set_name(char *dst,const char *src);

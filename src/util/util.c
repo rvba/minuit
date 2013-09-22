@@ -21,6 +21,22 @@ size_t get_memory_peak(void)
 }
 */
 
+void color_id(int *color)	
+{
+	color[0]++;
+
+	if(color[0] > 255)
+	{
+		color[0] = 0;
+		color[1]++;
+		if(color[1] > 255)
+		{
+		     color[1] = 0;
+		     color[2]++;
+		}
+	}
+}
+
 size_t get_memory_usage(void)
 {
     long rss = 0L;
