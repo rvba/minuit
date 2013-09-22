@@ -100,11 +100,23 @@ void *op_new_camera(const char *name)
 	return node_object;
 }
 
+
 void *op_add_camera(t_brick *brick)
 {
 	t_node *node = op_new_camera("default");
 	return node;
 }
+
+void *op_add_object(const char *name)
+{
+	t_context *C = ctx_get();
+	scene_store(C->scene,1);
+	t_node *node_object=object_add("point",name);
+	t_object *object=node_object->data;
+	scene_store(C->scene,0);
+	return object;
+}
+
 
 void* op_add_camera_main(void)
 {

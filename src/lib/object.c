@@ -26,6 +26,16 @@ void cls_object_init(t_object *object)
 {
 }
 
+t_object_class object_point =
+{
+	.cls_type="object",
+	.init=cls_object_init,
+	.type="point",
+	.link=cls_object_link,
+	.show=cls_object_show,
+	.draw=cls_object_draw_point
+};
+
 t_object_class object_generic =
 {
 	.cls_type="object",
@@ -103,6 +113,10 @@ void object_build(t_object *object,const char *type)
 	else if(is(type,"camera"))
 	{
 		object->cls=&object_camera;
+	}
+	else if(is(type,"point"))
+	{
+		object->cls=&object_point;
 	}
 	else
 	{
@@ -294,6 +308,7 @@ t_node *object_add(const char *type,const char *name)
 t_node *object_make(const char *type,const char *name)
 {
 	t_context *C = ctx_get();
+	t_scene *sc = C->scene;
 
 	// new object
 	t_node *node = scene_add(C->scene,nt_object,name);
@@ -307,6 +322,10 @@ t_node *object_make(const char *type,const char *name)
 
 	// bind list
 	object->cls->link(object,list);
+
+	int col[3];
+	scene_color_get(sc,col);
+	vcp3i(object->idcol,col);
 
 	return node;
 }

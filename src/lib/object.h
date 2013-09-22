@@ -48,6 +48,7 @@ typedef struct Object
 	float size[3];
 
 	int is_selected;
+	int hover;
 
 	void *data; 		// struct (data)
 
@@ -58,6 +59,7 @@ typedef struct Object
 	void (* action)(struct Node *node);
 	void (* update)(struct Node *node);
 	void (* draw)(struct Node *node);
+
 }t_object;
 
 // METHODS
@@ -73,6 +75,7 @@ struct Node*	op_object_mesh_get(struct Node *node);
 void 		cls_object_draw_camera(t_object *object);
 void 		cls_object_draw_mesh(t_object *object);
 void 		cls_object_draw_light(t_object *object);
+void 		cls_object_draw_point(t_object *object);
 
 t_object *	object_clone(t_object *object);
 t_object *	object_rebind(struct Scene *sc,void *ptr);

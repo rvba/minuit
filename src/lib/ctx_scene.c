@@ -72,7 +72,20 @@ int node_hover_object(t_context *C, t_node *node)
 	t_object *object=node->data;
 	t_mesh *mesh=object->mesh;
 
-	if(mesh)
+	if(is(object->type,"point"))
+	{
+		if(is_mouse_over(C,object->idcol))
+		{
+			object->hover=1;
+			return 1;
+		}
+		else
+		{
+			object->hover=0;
+			return 0;
+		}
+	}
+	else if(mesh)
 	{
 		if(is_mouse_over(C,mesh->idcol))
 		{
@@ -162,6 +175,7 @@ void ctx_scene(t_context *C)
 		if(C->ui->object_selection)
 		{
 			// check for release
+			/*
 			if(C->event->is_selection)
 			{
 				if(C->app->mouse->button_left==button_released)
@@ -177,6 +191,9 @@ void ctx_scene(t_context *C)
 					ctx_scene_update_lst(C,C->scene->objects);
 				}
 			}
+			*/
+
+			ctx_scene_update_lst(C,C->scene->objects);
 		}
 	}
 

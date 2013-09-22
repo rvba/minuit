@@ -591,6 +591,7 @@ void draw_objects(t_draw *draw, t_scene *scene)
 		}
 		else
 		{
+			//printf("ob:%s\n",ob->name);
 			object->cls->draw(object);
 		}
 	}
@@ -693,7 +694,7 @@ t_draw *draw_new(void)
 	draw->with_clear=DRAW_WITH_CLEAR;
 	draw->with_ui=DRAW_WITH_UI;
 
-	draw->with_restrict_matrix=1;
+	draw->with_restrict_matrix=0;
 
 	draw->mode_direct=1;
 
