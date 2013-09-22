@@ -220,6 +220,10 @@ t_node *scene_node_get(t_scene *sc,const char *type,const char *name)
 
 
 
+void scene_color_tmp_reset(t_scene *scene)
+{
+	bzero(COLOR,3);
+}
 
 // switch tmp mode
 
@@ -291,6 +295,19 @@ void scene_color_get(t_scene *sc,int *color)
 	scene_set_color(sc);
 }
 
+void scene_switch_edit_mode(t_scene *scene, int state)
+{
+	if(scene->edit_mode &&! state)
+	{
+		scene->edit_mode = 0;
+	}
+	else if(!scene->edit_mode && state)
+	{
+		scene->edit_mode = 1;
+	}
+
+	//scene_color_switch_mode(scene);
+}
 
 /***	 ID	***/
 
@@ -664,6 +681,7 @@ t_scene *scene_new(void)
 	sc->is_ready=1;
 	sc->has_generic_viewport = 0;
 	sc->store_stack = 0;
+	sc->edit_mode = 0;
 
 	// build lists
 	sc->nodes=lst_new("nodes");

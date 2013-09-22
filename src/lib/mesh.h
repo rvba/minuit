@@ -56,10 +56,14 @@ struct Mesh_State
 	int with_point:1;
 
 	int is_selected:1;
+	int is_hover:1;
+	int is_edit_mode:1;
 	int need_update:1;
 
 	t_mesh_buffer_type buffer_type;
 	int is_buffer_built;
+	int selected_vertex;
+	int hover_vertex;
 };
 
 struct Mesh_Class
@@ -111,6 +115,7 @@ struct Mesh
 
 };
 
+void 		mesh_vertex_add(t_mesh *mesh, float *v);
 void		mesh_uv_add(t_mesh *mesh,int *uvs,int totuv);
 t_mesh*		mesh_new(const char *name);
 
@@ -127,6 +132,8 @@ t_node*		mesh_make(
 			float *verts,
 			int *quads,
 			int *tris);
+
+t_node *mesh_make_empty(const char *name);
 
 t_mesh *	mesh_clone(t_mesh *mesh);
 void *		mesh_get_ref(t_mesh *mesh, const char *ref);

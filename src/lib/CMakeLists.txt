@@ -5,7 +5,6 @@ set(SRC
 	app_keyboard.c
 	app_mouse.c
 	app_window.c
-	#app_x.c
 	binding.c
 	binding.h
 	block.c
@@ -73,7 +72,6 @@ set(SRC
 	object.c
 	object_draw.c
 	object.h
-	object_make.c
 	obj.h
 	op_action.c
 	op_add_brick.c

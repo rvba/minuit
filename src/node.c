@@ -92,6 +92,12 @@ char node_name_rhizome[]="node_rhizome";
 char node_name_graph[]="node_graph";
 
 
+int node_equal(t_node *m, t_node *n)
+{
+	if(m->id == n->id) return 1;
+	else return 0;
+}
+
 char *node_name_get(t_node_type type)
 {
 	switch(type)
@@ -1107,7 +1113,7 @@ int node_make_graph(t_node *node)
 	node->cls=&graph;
 	node->cls->size=sizeof(t_graph);
 	node->cls->lst=C->scene->graphs;
-	node->type = nt_rhizome;
+	node->type = nt_graph;
 	return 1;
 }
 

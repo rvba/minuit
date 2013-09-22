@@ -1712,6 +1712,9 @@ void *op_set_vlst(t_brick *brick)
 
 	t_vlst *vlst=brick_vlst->plug_intern.data;
 
+	if(vlst)
+	{
+
 	if(C->app->mouse->button_left == button_pressed)
 	{
 		_pressed=1;
@@ -1733,6 +1736,7 @@ void *op_set_vlst(t_brick *brick)
 				vlst_update_data(vlst,NULL);
 			}
 		}
+	}
 	}
 
 	return NULL;

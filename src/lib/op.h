@@ -100,11 +100,16 @@ struct Node *	add_plusplus(struct Context *C);
 struct Node *	add_const(struct Context *C);
 struct Node *	add_pipe(struct Context *C);
 
+struct Block*	get_menu(struct Context *C, const char *name);
+
 struct Node *add_block(struct Context *C,const char *name);
 
 void add_block_offset(struct Context *C, struct Block *block);
 
 int op_post_quit(struct Node *node);
+
 void *op_add_object(const char *name);
+void *op_add_mesh(const char *name);
+
 
 #endif

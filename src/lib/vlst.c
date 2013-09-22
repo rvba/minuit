@@ -117,22 +117,29 @@ void __vlst_update_data(t_vlst *vlst,t_vlst *caller)
 	{
 		void *old_ptr=vlst->data;
 
-		// get data,var
-		t_node *node_data=scene_get_data(C->scene,old_ptr);
-		t_node *node_var=scene_get_var(C->scene,old_ptr);
-
-		// remove data,var
-		scene_node_free(C->scene,node_data);
-		scene_node_free(C->scene,node_var);
-
-		int old_count = vlst->count;
-
 		// set count
+		int old_count = vlst->count;
 		vlst->count=vlst->count_new;
-
-		// realloc
 		int new_size=(vlst->size)*(vlst->length)*(vlst->count);
-		void *new_ptr=realloc(vlst->data,new_size);
+		void *new_ptr = NULL;
+
+		if(old_ptr)
+		{
+			// get data,var
+			t_node *node_data=scene_get_data(C->scene,old_ptr);
+			t_node *node_var=scene_get_var(C->scene,old_ptr);
+
+			// remove data,var
+			scene_node_free(C->scene,node_data);
+			scene_node_free(C->scene,node_var);
+
+			// realloc
+			new_ptr=realloc(vlst->data,new_size);
+		}
+		else
+		{
+			new_ptr = malloc((vlst->size)*(vlst->length)*(vlst->count));
+		}
 
 		if(!new_ptr) printf("[ERROR vls_update_data]\n"); 
 
@@ -680,12 +687,19 @@ t_vlst *vlst_make(const char *name,t_data_type type, int length, int count)
 	else if(type == dt_float) vlst->size = sizeof(float);
 	else printf("[ERROR vlst_make] Unknown type %s\n",data_name_get(type));
 
-	vlst->data=malloc((vlst->size)*(vlst->length)*(vlst->count));
-
-	if(C->scene->store)
+	if(length && count)
 	{
-		 scene_add_data_var(C->scene,"vlst_data","v_data",((vlst->size)*(vlst->length)*(vlst->count)),vlst->data);
+		vlst->data=malloc((vlst->size)*(vlst->length)*(vlst->count));
+		if(C->scene->store)
+		{
+			 scene_add_data_var(C->scene,"vlst_data","v_data",((vlst->size)*(vlst->length)*(vlst->count)),vlst->data);
+		}
 	}
+	else
+	{
+		vlst->data = NULL;
+	}
+
 
 	return vlst;
 }

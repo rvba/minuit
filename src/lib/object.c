@@ -348,7 +348,9 @@ t_object *object_new(const char *name)
 	object->blocks=NULL;
 	object->ref=NULL;
 
-	object->is_selected=0;
+	object->is_selected = 0;
+	object->hover = 0;
+	object->is_edit_mode = 0;
 
 	object->update=object_default;
 	object->action=NULL;

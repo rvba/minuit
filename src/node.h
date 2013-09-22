@@ -87,6 +87,7 @@ extern char node_name_vector[];
 extern char node_name_set[];
 extern char node_name_binding[];
 
+int 		node_equal(t_node *m, t_node *n);
 t_node*		node_load(void *ptr,const char *type);
 void		node_init(t_node *node,t_node_type type);
 t_node *	node_new(t_node_type type);

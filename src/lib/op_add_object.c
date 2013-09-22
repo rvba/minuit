@@ -117,6 +117,22 @@ void *op_add_object(const char *name)
 	return object;
 }
 
+void *op_add_mesh(const char *name)
+{
+	t_context *C = ctx_get();
+	scene_store(C->scene,1);
+
+
+		t_node *node_mesh=mesh_make_empty("mesh");
+		t_node *node_object=object_add("mesh","cube");
+
+		t_object *object=node_object->data;
+		object->cls->link(object,node_mesh);
+
+	scene_store(C->scene,0);
+
+	return object;
+}
 
 void* op_add_camera_main(void)
 {

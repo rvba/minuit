@@ -48,6 +48,7 @@ typedef struct Object
 	float size[3];
 
 	int is_selected;
+	int is_edit_mode;
 	int hover;
 
 	void *data; 		// struct (data)

@@ -136,12 +136,12 @@ void draw_mesh_line(t_draw *draw, t_mesh *mesh)
 	*/
 }
 
-void draw_points(t_draw *draw, int count, float *points, float *colors)
+void draw_points(t_draw *draw, int count, float *points, float *colors, float *color)
 {
+	t_context *C = ctx_get();
+
 	if(colors) glEnableClientState(GL_COLOR_ARRAY);
 	glEnableClientState(GL_VERTEX_ARRAY);
-
-	t_context *C = ctx_get();
 
 	float *c = C->ui->front_color;
 
@@ -155,11 +155,29 @@ void draw_points(t_draw *draw, int count, float *points, float *colors)
 		scale = 1;
 
 	int width = 1;
-	glPointSize(width * scale);
 
+	glPointSize(width * scale);
 	glVertexPointer(3,GL_FLOAT,0,points);
-	if(colors) glColorPointer(3,GL_FLOAT,0,colors);
-	else glColor3f(c[0],c[1],c[2]);
+
+	if(draw->mode == mode_selection)
+	{
+		scale*=10;
+	}
+
+	if(colors)
+	{
+		glColorPointer(3,GL_FLOAT,0,colors);
+	}
+	else if(color)
+	{
+		glColor3f(color[0],color[1],color[2]);
+	}
+	else
+	{
+		glColor3f(c[0],c[1],c[2]);
+	}
+
+
 
 	glDrawArrays(GL_POINTS,0,count);
 
@@ -168,16 +186,134 @@ void draw_points(t_draw *draw, int count, float *points, float *colors)
 
 }
 
+void draw_get_mesh_color(t_mesh *mesh, float *c)
+{
+	c[0] = (float)mesh->idcol[0]/255;
+	c[1] = (float)mesh->idcol[1]/255;
+	c[2] = (float)mesh->idcol[2]/255;
+}
+
+void build_ci(float *c,int count)
+{
+	t_context *C = ctx_get();
+	int i;
+	int j=0;
+	//scene_color_tmp_reset(C->scene);
+
+	scene_color_switch_mode(C->scene);
+	for(i=0;i<count;i++)
+	{
+		int cc[3];
+		scene_color_get(C->scene,cc);
+
+		float ccc[3];
+		cconv(ccc,cc);
+
+		c[j+0] = ccc[0];
+		c[j+1] = ccc[1];
+		c[j+2] = ccc[2];
+
+		//printf("assign: ");
+		//vprint3f(c+j,'\n');
+
+		j+=3;
+	}
+
+	scene_color_switch_mode(C->scene);
+}
+
 void draw_mesh_points(t_draw *draw, t_mesh *mesh)
 {
 	t_vlst *vlst_vertex = mesh->vertex;
 	t_vlst *vlst_colors = mesh->colors;
 	float *vertex = vlst_vertex->data;
 	float *colors = NULL;
+	float *color = NULL;
+	float selection_color[3];
+	float selected_color[3]={1,0,0};
+	float yellow[3] = {1,1,0};
+	float green[3] = {0,1,0};
+	float red[3] = {1,0,0};
 
-	if(vlst_colors) colors = vlst_colors->data; 
+	int count = mesh->var.tot_vertex;
+	if(!count) count = 1;
+	float  ci[count*3];
 
-	draw_points(draw,mesh->var.tot_vertex,vertex,colors);
+	if(draw->mode == mode_selection)
+	{
+		if(draw->edit_mode)
+		{
+			t_context *C = ctx_get();
+			t_scene *scene = C->scene;
+			t_node *selected = scene->selected;
+
+			if(selected->type == nt_object)
+			{
+				t_object *object = selected->data;
+				t_mesh *selected_mesh = object->mesh;
+
+				if(selected_mesh->id.id == mesh->id.id)
+				{
+					build_ci(ci,count);
+					colors = ci;
+				}
+			}
+		}
+		else
+		{
+			draw_get_mesh_color(mesh,selection_color);
+			color = selection_color;
+		}
+	}
+	else
+	{
+		if(mesh->state.is_edit_mode)
+		{
+			color = yellow;
+		}
+		else if(mesh->state.is_selected)
+		{
+			color = selected_color;
+		}
+		else if(vlst_colors)
+		{
+			colors = vlst_colors->data; 
+		}
+		else
+		{
+			color = draw->front_color;
+		}
+	}
+	
+	if(color || colors)
+	{
+		draw_points(draw,mesh->var.tot_vertex,vertex,colors,color);
+	}
+
+	if(mesh->state.is_edit_mode && (mesh->state.selected_vertex >= 0))
+	{
+		int indice = mesh->state.selected_vertex;
+		if( indice >= 0 && indice < count)
+		{
+			t_vlst *vlst = mesh->vertex;
+			float *v = vlst->data;
+			int i = mesh->state.selected_vertex * 3;
+			skt_point(v+i,3,red);
+		}
+	}
+
+	if(mesh->state.is_edit_mode && (mesh->state.hover_vertex >= 0))
+	{
+		int indice = mesh->state.hover_vertex;
+		if( indice >= 0 && indice < count)
+		{
+			t_vlst *vlst = mesh->vertex;
+			float *v = vlst->data;
+			int i = mesh->state.hover_vertex * 3;
+			skt_point(v+i,3,green);
+		}
+	}
+
 }
 
 void draw_mesh_direct_faces(t_draw *draw, t_mesh *mesh)
@@ -205,6 +341,7 @@ void draw_mesh_direct_faces(t_draw *draw, t_mesh *mesh)
 				if(draw->with_normal)
 					glNormal3f(normals[(i*3)+0],normals[(i*3)+1],normals[(i*3)+2]);
 
+				// selection
 				if(draw->mode == mode_selection)
 				{
 					float c[3];
@@ -666,6 +803,9 @@ void draw_init(t_draw *draw)
 
 void draw_scene(t_draw *draw, t_scene *scene)
 {
+	if(scene->edit_mode) draw->edit_mode = 1;
+	else draw->edit_mode = 0;
+
 	draw_lights(draw,scene);
 	draw_objects(draw,scene);
 	draw_axis_world(draw);
@@ -717,6 +857,7 @@ t_draw *draw_new(void)
 	draw->divy=2;
 
 	draw->draw_lights = 1;
+	draw->edit_mode = 0;
 
 	return draw;
 }

@@ -30,7 +30,52 @@ void ctx_scene_selection(t_context *C, t_node *node, int state)
 	{
 		case(nt_object):
 			object = node->data;
-			object->is_selected = state;
+			if(state)
+			{
+				if(object->is_selected)
+				{
+					if(object->is_edit_mode)
+					{
+						t_mesh *mesh = object->mesh;
+						if(mesh)
+						{
+							int hover = mesh->state.hover_vertex;
+							if( hover >= 0)
+							{
+								mesh->state.selected_vertex = hover;
+							}
+						}
+
+					}
+					else
+					{
+						object->is_edit_mode = 1;
+						scene_switch_edit_mode(C->scene,1);
+					}
+				}
+				else
+				{
+					object->is_selected = 1;
+				}
+			}
+			else
+			{
+				if(C->scene->edit_mode)
+				{
+					scene_switch_edit_mode(C->scene,0);
+				}
+
+				object->is_selected = 0;
+				object->is_edit_mode = 0;
+
+				t_mesh *mesh = object->mesh;
+				if(mesh)
+				{
+					mesh->state.hover_vertex = -1;
+					mesh->state.selected_vertex = -1;
+				}
+
+			}
 			break;
 		default:
 			printf("[WARINING set selected] Unknown type %s\n", node_name_get(node->type));
@@ -45,8 +90,10 @@ void ctx_scene_set_selected(t_context *C, t_node *node)
 	// disselect previous
 	if(selected) 
 	{
-		ctx_scene_selection(C, selected , 0);
-		
+		if(!node_equal(node, selected))
+		{
+			ctx_scene_selection(C, selected , 0);
+		}
 	}
 
 	ctx_scene_selection(C, node , 1);
@@ -65,7 +112,6 @@ void ctx_scene_clear_selections(t_context *C)
 	}
 	lst_delete_all(C->scene->selections);
 }
-
 
 int node_hover_object(t_context *C, t_node *node)
 {
@@ -87,13 +133,30 @@ int node_hover_object(t_context *C, t_node *node)
 	}
 	else if(mesh)
 	{
-		if(is_mouse_over(C,mesh->idcol))
+		if(C->scene->edit_mode)
 		{
-			return 1;
+			t_node *selected = C->scene->selected;
+			if(node_equal(node,selected))
+			{
+				return 1;
+			}
+			else
+			{
+				return 0;
+			}
 		}
 		else
 		{
-			return 0;
+			if(is_mouse_over(C,mesh->idcol))
+			{
+				object->hover=1;
+				return 1;
+			}
+			else
+			{
+				object->hover=0;
+				return 0;
+			}
 		}
 	}
 	else
@@ -175,7 +238,6 @@ void ctx_scene(t_context *C)
 		if(C->ui->object_selection)
 		{
 			// check for release
-			/*
 			if(C->event->is_selection)
 			{
 				if(C->app->mouse->button_left==button_released)
@@ -191,9 +253,8 @@ void ctx_scene(t_context *C)
 					ctx_scene_update_lst(C,C->scene->objects);
 				}
 			}
-			*/
 
-			ctx_scene_update_lst(C,C->scene->objects);
+			//ctx_scene_update_lst(C,C->scene->objects);
 		}
 	}
 
