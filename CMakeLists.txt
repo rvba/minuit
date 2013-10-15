@@ -1,9 +1,14 @@
 # MINUIT
 cmake_minimum_required(VERSION 2.6) 
 
+if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
+		message(FATAL_ERROR "Don't build in SOURCE directory !")
+endif()
+
 message("[M]INUIT\n[I]s\n[N]ot a\n[U]ser\n[I]nterface\n[T]oolkit")
 message("SOURCE_DIR\t" ${CMAKE_SOURCE_DIR})
 message("BINARY_DIR\t" ${CMAKE_BINARY_DIR})
+
 
 project(Minuit)
 
