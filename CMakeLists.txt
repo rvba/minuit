@@ -19,9 +19,10 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/src/util
 	)
 
-add_subdirectory(src)
+set(CMAKE_BUILD_TYPE debug)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DWITH_DEBUG -Wall -O")
 
-set(CMAKE_C_FLAGS "-DWITH_DEBUG -g -Wall")
+add_subdirectory(src)
 
 add_executable(
     minuit

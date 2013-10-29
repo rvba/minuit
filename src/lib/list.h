@@ -102,7 +102,9 @@ void 		vlst_add_number(t_vlst *vlst,t_data_type type,void *data);
 
 t_vlst *	vlst_duplicate(t_vlst *vlst);
 void 		vlst_set(t_vlst *vlst,int i);
-t_vlst *vlst_clone(t_vlst *vlst);
+t_vlst *	vlst_clone(t_vlst *vlst);
+
+void __vlst_update_data(t_vlst *vlst,t_vlst *caller);
 
 
 // LST

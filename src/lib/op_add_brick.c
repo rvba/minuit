@@ -514,7 +514,7 @@ t_node *add_brick_lst(t_context *C,t_block *block,const char *name,t_data_type t
 
 t_node *add_brick_pointer(t_context *C,t_block *block,const char *name,t_data_type type,void *pointer)
 {
-	t_node *node;
+	t_node *node = NULL;
 	if(type==dt_vertex) node=brick_make(block,name,bt_trigger,dt_vertex,pointer);
 	else if(type==dt_face) node=brick_make(block,name,bt_trigger,dt_face,pointer);
 	else if(type==dt_mesh) node=brick_make(block,name,bt_trigger,dt_mesh,pointer);
@@ -1066,7 +1066,7 @@ t_node *add_slider_camera(t_context *C,const char *name)
 		camera = viewport->camera;
 	}
 
-	t_node *node;
+	t_node *node = NULL;
 
 	if(camera)
 	{

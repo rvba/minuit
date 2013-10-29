@@ -142,7 +142,8 @@ void ctx_render_video(t_context *C)
 			if(C->app->video_build)
 			{
 				//system("ffmpeg -f image2 -i video/f%04d.jpg -r 25 -b 5000k video/video.avi &");
-				system(command);
+				int r = system(command);
+				(void) r; // unused value:)
 			}
 
 			C->event->video_stop = 0;

@@ -124,7 +124,8 @@ t_image *img_read_png(char *filename)
 		printf("couldn't read %s\n",filename); return NULL;
 	}
 
-	fread(magic,1,sizeof(magic),file);
+	size_t r = fread(magic,1,sizeof(magic),file);
+	if(r != sizeof(magic)) printf("read error\n");
 
 	if (!png_check_sig(magic,sizeof(magic)))
 	{

@@ -898,7 +898,7 @@ void list_remove_by_id(t_lst *lst, int item_id)
 {
 	t_context *C = ctx_get();
 	t_scene *sc = C->scene;
-	t_link *link;
+	t_link *link = NULL;
 	t_link *l;
 	t_id *id;
 

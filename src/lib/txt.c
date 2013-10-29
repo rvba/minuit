@@ -617,7 +617,7 @@ int get_special_key()
 
 int txt_letter_draw(char letter,float factor_x,float factor_y, int line_width)
 {
-	int _letter;
+	int _letter=0;
 
 	if(start_special_key)
 	{

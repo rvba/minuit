@@ -20,6 +20,7 @@
 #include "mesh.h"
 #include "object.h"
 #include "brick.h"
+#include "util.h"
 
 // Selections and updates
 

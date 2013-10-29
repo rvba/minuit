@@ -60,7 +60,8 @@ int tcp_client(void)
         error("ERROR connecting");
     printf("Please enter the message: ");
     bzero(buffer,256);
-    fgets(buffer,255,stdin);
+    if(fgets(buffer,255,stdin) != NULL)
+    {
     n = write(sockfd,buffer,strlen(buffer));
     if (n < 0) 
          error("ERROR writing to socket");
@@ -69,6 +70,7 @@ int tcp_client(void)
     if (n < 0) 
          error("ERROR reading from socket");
     printf("%s\n",buffer);
+    }
     close(sockfd);
     return 0;
 }

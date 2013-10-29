@@ -14,6 +14,8 @@
 #include "mesh.h"
 #include "app.h"
 #include "event.h"
+#include "util.h"
+#include "sketch.h"
 
 void cls_object_draw_light(t_object *object)
 {
@@ -34,7 +36,7 @@ void cls_object_draw_point(t_object *object)
 
 	int size;
 	float p[3]={0,0,0};
-	float black[3]={0,0,0};
+	//float black[3]={0,0,0};
 	float white[3]={1,1,1};
 	float red[3]={1,0,0};
 	float green[3]={.2,1,.1};
@@ -76,8 +78,8 @@ void cls_object_draw_point(t_object *object)
 
 void find_vertex(t_context *C, t_mesh *mesh)
 {
-	int count = mesh->var.tot_vertex;
-	int i;
+	//int count = mesh->var.tot_vertex;
+	//int i;
 	int *color = C->event->color;
 	//printf("color:");
 	//vprint3i(color,'\n');

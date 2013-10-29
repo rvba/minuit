@@ -208,7 +208,7 @@ void cls_node_build_var(t_node *node,const char *name)
 
 void cls_node_build(t_node *node,const char *name)
 {
-	void *p;
+	void *p = NULL;
 
 	switch(node->type)
 	{

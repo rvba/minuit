@@ -16,6 +16,7 @@
 #include "brick.h"
 #include "ctx.h"
 #include "op.h"
+#include "list.h"
 
 
 void mesh_add_brick_vertex(t_context *C,t_mesh *mesh);

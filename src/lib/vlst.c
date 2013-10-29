@@ -20,7 +20,6 @@
 #include "data.h"
 #include "dict.h"
 
-void __vlst_update_data(t_vlst *vlst,t_vlst *caller);
 
 void *vlst_get_pointer(t_vlst *vlst, int indice)
 {

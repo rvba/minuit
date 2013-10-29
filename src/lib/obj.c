@@ -169,16 +169,16 @@ void _op_obj_import(void)
 
 		// parse tokens
 		int object_start;
-		int line_object;
+		int line_object = 0;
 		int is_face;
 		//int tot_object;
-		int tot_vert;
-		int tot_face;
-		int tot_tri;
-		int tot_quad;
-		int tot_indice;
+		int tot_vert = 0;
+		int tot_face = 0;
+		int tot_tri = 0;
+		int tot_quad = 0;
+		int tot_indice = 0;
 
-		char *object_name;
+		char *object_name = NULL;
 
 		//tot_object=0;
 		tot_face=0;
@@ -277,9 +277,9 @@ void _op_obj_import(void)
 
 		object_start=0;
 
-		t_token_type token;
+		t_token_type token = token_unknown;
 		t_link *link_object;
-		t_obj *obj;
+		t_obj *obj = NULL;
 
 		for(link=file->lines->first;link;link=link->next)
 		{
@@ -342,6 +342,7 @@ void _op_obj_import(void)
 				else
 				{
 					is_data=1;
+					token=token_unknown;
 				}
 
 				if(is_data)

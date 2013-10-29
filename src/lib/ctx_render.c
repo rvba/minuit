@@ -78,12 +78,10 @@ void ctx_render_set_full_pass(t_context *C)
 void ctx_get_selection(t_context *C)
 {
 	// PIXEL
-	unsigned char pixel[3];
-	memset(pixel,3,0);
+	unsigned char pixel[]={0,0,0};
 
 	// VIEWPORT
-	GLint viewport[4];
-	memset(viewport,4,0);
+	GLint viewport[]={0,0,0,0};
 	glGetIntegerv(GL_VIEWPORT,viewport);
 
 	int x = C->app->mouse->x;

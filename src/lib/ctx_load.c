@@ -693,6 +693,8 @@ void load_read(t_scene *sc,const char *path)
 
 	char version[GIT];
 
+	size_t rsize;
+
 	// READ FILE
 	while(1)
 	{
@@ -704,7 +706,8 @@ void load_read(t_scene *sc,const char *path)
 		}
 
 		// MAGIC
-		fread(&magic,sizeof(char),1,file);
+		rsize = fread(&magic,sizeof(char),1,file);
+		if(rsize != 1) printf("read error 1\n");
 
 		ulog((LOG_READ,"[%d][%d]\t(+%d)\tmagic {%c}\n",limit,(int)ftell(file),(int)sizeof(char),magic));
 
@@ -714,7 +717,9 @@ void load_read(t_scene *sc,const char *path)
 		// GIT VERSION
 		if(magic==':')
 		{
-			fread(version,sizeof(char)*GIT,1,file);
+			rsize = fread(version,sizeof(char)*GIT,1,file);
+			//if(rsize != (sizeof(char) * GIT)) printf("read error 2\n");
+			(void) rsize;
 			if(!is(C->app->git,version))
 			{
 				/*
@@ -727,7 +732,9 @@ void load_read(t_scene *sc,const char *path)
 		else
 		{
 			// READ CHUNK
-			fread(c,sizeof(t_chunk),1,file);
+			rsize = fread(c,sizeof(t_chunk),1,file);
+			(void) rsize;
+			//if( rsize != (sizeof(t_chunk) * 1)) printf("read error 3\n");
 			ulog((LOG_READ,"[%d]\t(+%d)\tchunk",(int)ftell(file),(int)sizeof(t_chunk)));
 			ulog((LOG_READ," %s:%s:%d:%d\n",chunk_type_get(c->chunk_type),node_name_get(c->type),c->size,c->tot));
 
@@ -737,7 +744,9 @@ void load_read(t_scene *sc,const char *path)
 			data=malloc(c->size*c->tot);
 
 			// READ
-			fread(data,c->size,c->tot,file);
+			rsize = fread(data,c->size,c->tot,file);
+			(void) rsize;
+			//if(rsize != c->size * c->tot) printf("read error 4\n");
 
 			ulog((LOG_READ,"[%d]\t(+%d)\tstruct %s:%s\n",(int)ftell(file),c->size,chunk_type_get(c->chunk_type),c->type));
 

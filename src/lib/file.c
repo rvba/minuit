@@ -331,7 +331,9 @@ void file_read(t_file *file)
 	file->data_size = ftell(f);
 	rewind(f);
 	file->data = (char *)malloc(sizeof(char)*file->data_size);
-	fread (file->data,1,file->data_size,f);
+	size_t r = fread (file->data,1,file->data_size,f);
+	if(r != file->data_size) printf("read error\n");
+
 }
 
 

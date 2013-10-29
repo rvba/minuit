@@ -265,7 +265,8 @@ void browser_init(void)
 		is_init=1;
 
 		// get current
-		getcwd(default_path,1024);
+		char *r = getcwd(default_path,1024);
+		if( !r ) printf("getcwd error\n");
 
 		BROWSER_BUTTONS=block_make("block_browser","block");
 		t_block *block = BROWSER_BUTTONS->data;

@@ -1208,7 +1208,7 @@ void op_maths_plug(t_operation operation,t_plug *dst,t_plug *src)
 	int i,j;
 
 	float *data_dst;
-	float *data;
+	float *data = NULL;
 	t_data_type type=dt_null;
 
 	t_vector *vector_src;
@@ -1699,7 +1699,7 @@ void *op_set_vlst(t_brick *brick)
 
 	t_block *block=brick->block;
 
-	t_brick *brick_vlst;
+	t_brick *brick_vlst = NULL;
 
 	if(is(block->id.name,"vertex"))
 		brick_vlst=block_brick_get(block,"vertex");
