@@ -21,6 +21,7 @@
 
 void mesh_add_brick_vertex(t_context *C,t_mesh *mesh);
 
+/*
 void mesh_vertex_add(t_mesh *mesh, float *v)
 {
 	if(mesh->vertex)
@@ -42,6 +43,7 @@ void mesh_vertex_add(t_mesh *mesh, float *v)
 	}
 
 }
+*/
 
 void mesh_init(t_scene *sc,t_mesh *mesh)
 {

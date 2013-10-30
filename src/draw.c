@@ -174,79 +174,83 @@ void build_color_index(float *c,int count)
 void draw_mesh_points(t_draw *draw, t_mesh *mesh)
 {
 	t_vlst *vlst_vertex = mesh->vertex;
-	t_vlst *vlst_colors = mesh->colors;
-	float *vertex = vlst_vertex->data;
-	float *colors = NULL;
-	float *color = NULL;
-	float selection_color[3];
-	float selected_color[3]={1,0,0};
-	float yellow[3] = {1,1,0};
-	float green[3] = {0,1,0};
-	float red[3] = {1,0,0};
 
-	int count = mesh->var.tot_vertex;
-	if(!count) count = 1;
-	float  ci[count*3];
-
-	if(draw->mode == mode_selection)
+	if( vlst_vertex)
 	{
-		if(mesh->state.is_edit_mode)
+		t_vlst *vlst_colors = mesh->colors;
+		float *vertex = vlst_vertex->data;
+		float *colors = NULL;
+		float *color = NULL;
+		float selection_color[3];
+		float selected_color[3]={1,0,0};
+		float yellow[3] = {1,1,0};
+		float green[3] = {0,1,0};
+		float red[3] = {1,0,0};
+
+		int count = mesh->var.tot_vertex;
+		if(!count) count = 1;
+		float  ci[count*3];
+
+		if(draw->mode == mode_selection)
 		{
-			build_color_index(ci,count);
-			colors = ci;
+			if(mesh->state.is_edit_mode)
+			{
+				build_color_index(ci,count);
+				colors = ci;
+			}
+			else
+			{
+				draw_get_mesh_color(mesh,selection_color);
+				color = selection_color;
+			}
 		}
 		else
 		{
-			draw_get_mesh_color(mesh,selection_color);
-			color = selection_color;
+			if(mesh->state.is_edit_mode)
+			{
+				color = yellow;
+			}
+			else if(mesh->state.is_selected)
+			{
+				color = selected_color;
+			}
+			else if(vlst_colors)
+			{
+				colors = vlst_colors->data; 
+			}
+			else
+			{
+				color = draw->front_color;
+			}
 		}
-	}
-	else
-	{
-		if(mesh->state.is_edit_mode)
+		
+		if(color || colors)
 		{
-			color = yellow;
+			draw_points(draw,mesh->var.tot_vertex,vertex,colors,color);
 		}
-		else if(mesh->state.is_selected)
-		{
-			color = selected_color;
-		}
-		else if(vlst_colors)
-		{
-			colors = vlst_colors->data; 
-		}
-		else
-		{
-			color = draw->front_color;
-		}
-	}
-	
-	if(color || colors)
-	{
-		draw_points(draw,mesh->var.tot_vertex,vertex,colors,color);
-	}
 
-	if(mesh->state.is_edit_mode && (mesh->state.selected_vertex >= 0))
-	{
-		int indice = mesh->state.selected_vertex;
-		if( indice >= 0 && indice < count)
+		if(mesh->state.is_edit_mode && (mesh->state.selected_vertex >= 0))
 		{
-			t_vlst *vlst = mesh->vertex;
-			float *v = vlst->data;
-			int i = mesh->state.selected_vertex * 3;
-			skt_point(v+i,3,red);
+			int indice = mesh->state.selected_vertex;
+			if( indice >= 0 && indice < count)
+			{
+				t_vlst *vlst = mesh->vertex;
+				float *v = vlst->data;
+				int i = mesh->state.selected_vertex * 3;
+				skt_point(v+i,3,red);
+			}
 		}
-	}
 
-	if(mesh->state.is_edit_mode && (mesh->state.hover_vertex >= 0))
-	{
-		int indice = mesh->state.hover_vertex;
-		if( indice >= 0 && indice < count)
+		if(mesh->state.is_edit_mode && (mesh->state.hover_vertex >= 0))
 		{
-			t_vlst *vlst = mesh->vertex;
-			float *v = vlst->data;
-			int i = mesh->state.hover_vertex * 3;
-			skt_point(v+i,3,green);
+			int indice = mesh->state.hover_vertex;
+			if( indice >= 0 && indice < count)
+			{
+				t_vlst *vlst = mesh->vertex;
+				float *v = vlst->data;
+				int i = mesh->state.hover_vertex * 3;
+				skt_point(v+i,3,green);
+			}
 		}
 	}
 }
@@ -254,58 +258,62 @@ void draw_mesh_points(t_draw *draw, t_mesh *mesh)
 void draw_mesh_direct_faces(t_draw *draw, t_mesh *mesh)
 {
 	t_vlst *vertex=mesh->vertex;
-	GLfloat *v=vertex->data;	// vertices 
 	t_vlst *quads=mesh->quads;
-	int i,j,n;
-	// quads
-	if(quads)
+
+	if(vertex)
 	{
-		int *q=quads->data;		// quad indices
-		t_vlst *vlst_quad=mesh->quad_normal;
-		float *normals=vlst_quad->data;
-
-		float outline[4*3];
-
-		j=0;
-		for(i=0;i<quads->count;i++)
+		GLfloat *v=vertex->data;	// vertices 
+		int i,j,n;
+		// quads
+		if(quads)
 		{
-			glBegin(GL_QUADS);
-			for(n=0;n<4;n++)
-			{
-				// normal
-				if(draw->with_normal)
-					glNormal3f(normals[(i*3)+0],normals[(i*3)+1],normals[(i*3)+2]);
+			int *q=quads->data;		// quad indices
+			t_vlst *vlst_quad=mesh->quad_normal;
+			float *normals=vlst_quad->data;
 
-				// selection
-				if(draw->mode == mode_selection)
+			float outline[4*3];
+
+			j=0;
+			for(i=0;i<quads->count;i++)
+			{
+				glBegin(GL_QUADS);
+				for(n=0;n<4;n++)
 				{
-					float c[3];
-					c[0] = (float)mesh->idcol[0]/255;
-					c[1] = (float)mesh->idcol[1]/255;
-					c[2] = (float)mesh->idcol[2]/255;
-					glColor3f(c[0],c[1],c[2]);
+					// normal
+					if(draw->with_normal)
+						glNormal3f(normals[(i*3)+0],normals[(i*3)+1],normals[(i*3)+2]);
+
+					// selection
+					if(draw->mode == mode_selection)
+					{
+						float c[3];
+						c[0] = (float)mesh->idcol[0]/255;
+						c[1] = (float)mesh->idcol[1]/255;
+						c[2] = (float)mesh->idcol[2]/255;
+						glColor3f(c[0],c[1],c[2]);
+					}
+
+					// vertex
+					if(draw->with_face)
+						glVertex3f(v[(q[j]*3)],v[(q[j]*3)+1],v[(q[j]*3)+2]);
+
+					outline[(n*3)+0] = v[(q[j]*3)+0]; 
+					outline[(n*3)+1] = v[(q[j]*3)+1]; 
+					outline[(n*3)+2] = v[(q[j]*3)+2]; 
+
+					j++;
 				}
+				glEnd();
 
-				// vertex
-				if(draw->with_face)
-					glVertex3f(v[(q[j]*3)],v[(q[j]*3)+1],v[(q[j]*3)+2]);
-
-				outline[(n*3)+0] = v[(q[j]*3)+0]; 
-				outline[(n*3)+1] = v[(q[j]*3)+1]; 
-				outline[(n*3)+2] = v[(q[j]*3)+2]; 
-
-				j++;
-			}
-			glEnd();
-
-			if(draw->with_face_outline)
-			{
-				glDisable(GL_LIGHTING);
-				if(draw->with_face)
-					skt_closedline(outline,4,draw->back_color,1);
-				else
-					skt_closedline(outline,4,draw->front_color,1);
-				glEnable(GL_LIGHTING);
+				if(draw->with_face_outline)
+				{
+					glDisable(GL_LIGHTING);
+					if(draw->with_face)
+						skt_closedline(outline,4,draw->back_color,1);
+					else
+						skt_closedline(outline,4,draw->front_color,1);
+					glEnable(GL_LIGHTING);
+				}
 			}
 		}
 	}
