@@ -93,7 +93,7 @@ t_mesh *mesh_rebind(t_scene *sc,void *ptr)
 
 	rebind(sc,"mesh","texture",(void **)&mesh->texture);
 	rebind(sc,"mesh","material",(void **)&mesh->material);
-	rebind(sc,"mesh","lines",(void **)&mesh->lines);
+	rebind(sc,"mesh","edges",(void **)&mesh->edges);
 
 	rebind(sc,"mesh","vertex",(void **)&mesh->vertex);
 	rebind(sc,"mesh","quads",(void **)&mesh->quads);
@@ -381,7 +381,7 @@ t_mesh *mesh_clone(t_mesh *mesh)
 
 		clone->texture = texture_clone(mesh->texture);
 		clone->material = material_clone(mesh->material);
-		//clone->lines = 
+		clone->edges = vlst_clone(mesh->edges);
 		clone->texture_id = mesh->texture_id;
 		clone->vertex = vlst_clone(mesh->vertex);
 		clone->quads = vlst_clone(mesh->quads);
@@ -421,7 +421,6 @@ t_mesh *mesh_new(const char *name)
 
 	mesh->texture=NULL;
 	mesh->material=NULL;
-	mesh->lines=NULL;
 	mesh->texture_id=0;
 
 	mesh->vertex=NULL;
@@ -441,6 +440,8 @@ t_mesh *mesh_new(const char *name)
 	mesh->tri_normal=NULL;
 	mesh->tri_color=NULL;
 	mesh->tri_uv=NULL;
+
+	mesh->edges = NULL;
 
 	return mesh;
 }
@@ -494,10 +495,11 @@ void mesh_free(t_mesh *mesh)
 	if (mesh->tri_color) scene_struct_delete(sc,mesh->tri_color);
 	if (mesh->tri_uv) scene_struct_delete(sc,mesh->tri_uv);
 
+
 	//XXX
 	// material
 	// texture
-	//lines
+	// edges
 }
 
 

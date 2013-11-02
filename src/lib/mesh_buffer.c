@@ -17,6 +17,7 @@
 
 // ADD GEOMETRY
 
+/*
 void mesh_line_add(t_mesh *mesh,int *lines,int totline)
 {
 	int i;
@@ -45,6 +46,7 @@ void mesh_line_cube_add(t_mesh *mesh)
 {
 	mesh_line_add(mesh,mesh_cube_lines,mesh_cube_tot_lines);
 }
+*/
 
 // INIT
 

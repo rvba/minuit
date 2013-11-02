@@ -171,6 +171,46 @@ void build_color_index(float *c,int count)
 	}
 }
 
+void draw_mesh_edges(t_draw *draw, t_mesh *mesh)
+{
+	t_vlst *edges = mesh->edges;
+	t_vlst *points = mesh->vertex;
+
+	if(edges)
+	{
+		if(draw->mode == mode_selection)
+		{
+		}
+		else
+		{
+			int count = edges->count;
+			int a,b;
+			float *x;
+			float *y;
+			int *v = edges->data;
+			float *p = points->data;
+			int l = points->length;
+			int i;
+			int j=0;
+			float color[] = {1,1,1};
+			int width = 1;
+			for(i=0; i < count; i++)
+			{
+				a = v[j];
+				b = v[j+1];
+
+				x =  p + (a * l);
+				y = p + (b * l);
+
+				skt_line(x,y,width,color);
+
+				j+=2;
+			}
+
+		}
+	}
+}
+
 void draw_mesh_points(t_draw *draw, t_mesh *mesh)
 {
 	t_vlst *vlst_vertex = mesh->vertex;
@@ -416,6 +456,12 @@ void draw_mesh_direct(t_draw *draw,t_scene *scene,t_mesh *mesh)
 	if(draw->with_point)
 	{
 		draw_mesh_points(draw,mesh);
+	}
+
+	// Edges
+	if(draw->with_edge)
+	{
+		draw_mesh_edges(draw,mesh);
 	}
 
 	glShadeModel(GL_FLAT);
@@ -789,6 +835,7 @@ t_draw *draw_new(void)
 	draw->with_point_id=DRAW_WITH_POINT_ID;
 	draw->with_face=DRAW_WITH_FACE;
 	draw->with_face_outline=DRAW_WITH_FACE_OUTLINE;
+	draw->with_edge = DRAW_WITH_EDGE;
 	draw->with_highlight=DRAW_WITH_HIGHLIGHT;
 	draw->with_light=DRAW_WITH_LIGHT;
 	draw->with_depth=DRAW_WITH_DEPTH;

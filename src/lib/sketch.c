@@ -46,7 +46,7 @@ void skt_line(float *v1,float *v2,int width,float *color)
 {
 	float i = SKT->intensity;
 	glColor3f(color[0]*i,color[1]*i,color[2]*i);
-	glLineWidth(width);
+	glLineWidth(width * SKT->line_width);
 
 	glBegin(GL_LINES);
 		glVertex3f(v1[0],v1[1],v1[2]);

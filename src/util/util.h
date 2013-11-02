@@ -38,6 +38,7 @@ inline void negate_float(void *_dst);
 
 inline void srf_float(void *ptr, void *data, int indice);
 inline void srf_uint(void *ptr, void *data, int indice);
+inline void srf_int(void *ptr, void *data, int indice);
 
 inline void cprf_int(void *ptr, void *data, int indice);
 

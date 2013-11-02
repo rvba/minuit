@@ -195,6 +195,7 @@ void *op_add_default(t_brick *brick)
 
 void *op_add_uv_cube(t_brick *brick)
 {
+	/*
 	t_context *C=ctx_get();
 	term_print(C->term,"+ uv cube");
 
@@ -213,11 +214,13 @@ void *op_add_uv_cube(t_brick *brick)
 		object->cls->link(object,node_mesh);
 
 	scene_store(C->scene,0);
+	*/
 	return NULL;
 }	
 
 t_node *op_add_new_wire_cube(t_node *n)
 {
+	/*
 	t_context *C=ctx_get();
 
 	scene_store(C->scene,1);
@@ -239,6 +242,8 @@ t_node *op_add_new_wire_cube(t_node *n)
 	scene_store(C->scene,0);
 
 	return node_object;
+	*/
+	return NULL;
 }
 
 void *op_add_wire_cube(t_brick *brick)

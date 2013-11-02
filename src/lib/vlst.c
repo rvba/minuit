@@ -44,6 +44,7 @@ void vlst_set_data(t_vlst *vlst, void *data, int indice)
 	{
 		case(dt_float): srf_float(ptr, data, indice); break;
 		case(dt_uint): srf_uint(ptr, data,  indice); break;
+		case(dt_int): srf_int(ptr, data,  indice); break;
 		default: 
 			printf("[ERR vlst_set_data] Unknown type %s\n",data_name_get(vlst->type));
 			break;
@@ -321,6 +322,19 @@ void vlst_show(t_vlst *vlst)
 							printf("[%d] %d %d %d %d\n",i,d[0],d[1],d[2],d[3]);
 						if(C->event->debug_console)
 							term_log("[%d] %d %d %d %d",i,d[0],d[1],d[2],d[3]);
+						d+=length;
+					}
+				}
+
+				else if(vlst->length == 2)
+				{
+					int *d=(int *)dat;
+					for(i=0;i<count;i++)
+					{
+						if(C->event->debug_terminal)
+							printf("[%d] %d %d \n",i,d[0],d[1]);
+						if(C->event->debug_console)
+							term_log("[%d] %d %d",i,d[0],d[1]);
 						d+=length;
 					}
 				}
