@@ -145,6 +145,7 @@ t_mesh *	mesh_clone(t_mesh *mesh);
 
 // MESH_BUFFER
 
+void mesh_init_buffer_direct(t_mesh *mesh);
 void mesh_init_buffers(t_mesh *mesh,t_mesh_buffer_type type);
 void mesh_add_brick_color(t_mesh *mesh);
 void mesh_add_default_color(t_mesh *mesh);
