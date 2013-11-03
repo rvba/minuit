@@ -442,6 +442,7 @@ t_mesh *mesh_new(const char *name)
 	mesh->tri_uv=NULL;
 
 	mesh->edges = NULL;
+	mesh->edges_color = NULL;
 
 	return mesh;
 }
@@ -454,6 +455,8 @@ void _mesh_free(t_mesh *mesh)
 	if (mesh->quads) vlst_free(mesh->quads);
 	if (mesh->tris) vlst_free(mesh->tris);
 	if (mesh->uvs) vlst_free(mesh->uvs);
+	if (mesh->edges) vlst_free(mesh->edges);
+	if (mesh->edges_color) vlst_free(mesh->edges_color);
 
 	if (mesh->quad_vertex) vlst_free(mesh->quad_vertex);
 	if (mesh->quad_face) vlst_free(mesh->quad_face);

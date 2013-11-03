@@ -192,7 +192,8 @@ void draw_mesh_edges(t_draw *draw, t_mesh *mesh)
 			int l = points->length;
 			int i;
 			int j=0;
-			float color[] = {1,1,1};
+			float white[] = {1,1,1};
+			float *color;
 			int width = 1;
 			for(i=0; i < count; i++)
 			{
@@ -201,6 +202,15 @@ void draw_mesh_edges(t_draw *draw, t_mesh *mesh)
 
 				x =  p + (a * l);
 				y = p + (b * l);
+
+				if(mesh->edges_color)
+				{
+					color = grf_float(mesh->edges_color->data,i*3);
+				}
+				else
+				{
+					color = white;
+				}
 
 				skt_line(x,y,width,color);
 

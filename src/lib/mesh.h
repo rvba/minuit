@@ -105,6 +105,7 @@ struct Mesh
 	t_vlst *tri_uv;
 
 	t_vlst *edges;
+	t_vlst *edges_color;
 
 	// materials
 
