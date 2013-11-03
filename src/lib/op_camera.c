@@ -16,7 +16,8 @@
 #include "util.h"
 
 #define OP_CAM_SPEED 50
-#define OP_CAM_ORTHO_ZOOM_FAC 10
+#define OP_CAM_ORTHO_ZOOM_FAC 100
+#define OP_CAM_ORTHO_PAN_FAC 30 
 
 void op_3d_orientation(void)
 {
@@ -364,8 +365,8 @@ void op_camera_set_ortho_pan(t_context *C, t_camera *camera)
 
 	float speed = camera->speed;
 	float d = .001;
-	float dx = app->mouse->dx * d *speed * app->mouse->sign_x;
-	float dy = app->mouse->dy * d * speed * app->mouse->sign_y;
+	float dx = app->mouse->dx * d *speed * app->mouse->sign_x * OP_CAM_ORTHO_PAN_FAC;
+	float dy = app->mouse->dy * d * speed * app->mouse->sign_y * OP_CAM_ORTHO_PAN_FAC;
 	float v[3];
 	vset(v,dx,dy,0);
 	vadd(camera->ortho_location,camera->ortho_location,v);
