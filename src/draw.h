@@ -30,6 +30,7 @@
 #define DRAW_WITH_SELECTION 1
 #define DRAW_WITH_POINT 0
 #define DRAW_WITH_EDGE 0
+#define DRAW_WITH_EDGE_COLOR 0
 #define DRAW_WITH_POINT_ID 0;
 #define DRAW_WITH_FACE 1;
 #define DRAW_WITH_FACE_OUTLINE 0;
@@ -86,6 +87,7 @@ typedef struct Draw
 	int with_point_id;
 	int with_face;
 	int with_edge;
+	int with_edge_color;
 	int with_face_outline;
 	int with_blend;
 	int with_restrict_matrix;

@@ -56,6 +56,7 @@ t_event *event_new(void)
 	event->with_face_outline=0;
 	event->with_point=0;
 	event->with_edge = 0;
+	event->with_edge_color = 0;
 	event->with_point_id=0;
 	event->with_highlight=WITH_HIGHLIGHT;
 	event->sketch_with_scale=SKETCH_WITH_SCALE;

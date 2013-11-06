@@ -71,6 +71,7 @@ void ctx_render_set_full_pass(t_context *C)
 
 	C->draw->with_point=C->event->with_point;
 	C->draw->with_edge=C->event->with_edge;
+	C->draw->with_edge_color=C->event->with_edge_color;
 	C->draw->with_point_id=C->event->with_point_id;
 	C->draw->with_face=C->event->with_face;
 	C->draw->with_face_outline=C->event->with_face_outline;

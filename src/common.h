@@ -38,6 +38,8 @@
 
 #define PROCESS_LIMIT 0.01
 
+#define N_w 99
+
 typedef struct ID
 {
 	int id;
@@ -76,5 +78,7 @@ typedef enum Node_Type
 	nt_graph,
 
 }t_node_type;
+
+
 
 #endif

@@ -192,7 +192,6 @@ void draw_mesh_edges(t_draw *draw, t_mesh *mesh)
 			int l = points->length;
 			int i;
 			int j=0;
-			float white[] = {1,1,1};
 			float *color;
 			int width = 1;
 			for(i=0; i < count; i++)
@@ -203,13 +202,14 @@ void draw_mesh_edges(t_draw *draw, t_mesh *mesh)
 				x =  p + (a * l);
 				y = p + (b * l);
 
-				if(mesh->edges_color)
+				if(draw->with_edge_color && mesh->edges_color)
 				{
 					color = grf_float(mesh->edges_color->data,i*3);
 				}
 				else
 				{
-					color = white;
+					t_context *C = ctx_get();
+					color = C->draw->front_color;
 				}
 
 				skt_line(x,y,width,color);
@@ -846,6 +846,7 @@ t_draw *draw_new(void)
 	draw->with_face=DRAW_WITH_FACE;
 	draw->with_face_outline=DRAW_WITH_FACE_OUTLINE;
 	draw->with_edge = DRAW_WITH_EDGE;
+	draw->with_edge_color = DRAW_WITH_EDGE_COLOR;
 	draw->with_highlight=DRAW_WITH_HIGHLIGHT;
 	draw->with_light=DRAW_WITH_LIGHT;
 	draw->with_depth=DRAW_WITH_DEPTH;
