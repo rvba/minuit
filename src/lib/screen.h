@@ -38,6 +38,7 @@ typedef struct MINscreen
 
 	void (* draw) (struct MINscreen *screen);
 	void (* keymap) (unsigned char key);
+	void *data;
 
 }t_screen;
 

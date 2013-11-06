@@ -10,6 +10,8 @@
 #ifndef __OPENGL_H
 #define __OPENGL_H
 
+#define GL_GLEXT_PROTOTYPES
+
 #include <GL/gl.h>
 #include <GL/glx.h>
 #include <GL/glext.h>

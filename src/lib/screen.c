@@ -355,6 +355,7 @@ t_screen *screen_new(const char *name)
 
 	screen->blocks = NULL;
 	screen->viewports = NULL;
+	screen->data = NULL;
 	
 	return screen;
 }
