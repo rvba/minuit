@@ -24,6 +24,7 @@
 #define UI_SHOW_INTRO 1
 #define UI_SHOW_MOUSE 0
 #define UI_SHOW_TERM 0
+#define UI_ADD_BRICKS 1
 
 float intro_intensity;
 
@@ -67,6 +68,7 @@ typedef struct Ui
 	int show_step;
 	int show_brick_step;
 	int show_sets;
+	int add_bricks;
 
 	int bitrate;
 

@@ -17,6 +17,7 @@
 #include "ctx.h"
 #include "op.h"
 #include "list.h"
+#include "ui.h"
 
 
 void mesh_add_brick_vertex(t_context *C,t_mesh *mesh);
@@ -280,7 +281,7 @@ t_node *mesh_make(
 		vlst_add_data(mesh->vertex,verts);
 
 		// add brick vertex
-		mesh_add_brick_vertex(C,mesh);
+		if(C->ui->add_bricks) mesh_add_brick_vertex(C,mesh);
 	
 	}
 

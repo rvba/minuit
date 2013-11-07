@@ -432,6 +432,7 @@ t_ui *ui_new(void)
 	ui->show_sets = 0;
 	ui->step = 0;
 	ui->step_reset = 0;
+	ui->add_bricks = UI_ADD_BRICKS;
 
 	ui->update_links = 1;
 	ui->use_rhizomes = 1;

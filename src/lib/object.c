@@ -18,6 +18,7 @@
 #include "set.h"
 #include "set.h"
 #include "block.h"
+#include "ui.h"
 
 void object_default(t_node *node){}
 void cls_object_link(t_object *self,t_node *target);
@@ -285,20 +286,25 @@ t_node *object_add(const char *type,const char *name)
 	t_node *node=object_make(type,name);
 	t_object *object=node->data;
 
+
+	if(C->ui->add_bricks)
+	{
+
 	// add data node
 	scene_add_data_node(C->scene,"app_node","object",name,node);
+		printf("adddddd !!!\n");
+		// New Block
+		t_node *node_block=add_block(C,name);
+		t_block *block=node_block->data;
 
-	// New Block
-	t_node *node_block=add_block(C,name);
-	t_block *block=node_block->data;
+		object->ref=block;
 
-	object->ref=block;
+		// add selector
+		add_part_selector(C,block,name,node);
 
-	// add selector
-	add_part_selector(C,block,name,node);
-
-	// Add Offset
-	add_block_offset(C,block);
+		// Add Offset
+		add_block_offset(C,block);
+	}
 
 	return node;
 }
