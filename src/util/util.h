@@ -41,6 +41,7 @@ inline void srf_uint(void *ptr, void *data, int indice);
 inline void srf_int(void *ptr, void *data, int indice);
 
 inline void cprf_int(void *ptr, void *data, int indice);
+inline void cprf_float(void *ptr, void *data, int indice);
 
 inline void *grf_float(void *ptr, int indice);
 inline void *grf_int(void *ptr, int indice);

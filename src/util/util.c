@@ -148,6 +148,13 @@ inline void cprf_int(void *ptr, void *data, int indice)
 	*(pointer + indice) = *(d + indice);
 }
 
+inline void cprf_float(void *ptr, void *data, int indice)
+{
+	float *pointer = (float *) ptr;
+	float *d = (float  *) data;
+	*(pointer + indice) = *(d + indice);
+}
+
 inline void *grf_float(void *ptr, int indice)
 {
 	float *pointer = (float *)ptr;

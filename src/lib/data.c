@@ -527,10 +527,24 @@ t_datum *datum_new(t_data_type type, int count, void *data)
 	{
 		case(dt_int):
 			datum->data = (int *)malloc(sizeof(int) * count);
-			for(i=0;i<count;i++)
+			if(data)
 			{
-				cprf_int(datum->data, data, i);
-			}
+				for(i=0;i<count;i++)
+				{
+					cprf_int(datum->data, data, i);
+				}
+			}	
+			break;
+
+		case(dt_float):
+			datum->data = (int *)malloc(sizeof(float) * count);
+			if(data)
+			{
+				for(i=0;i<count;i++)
+				{
+					cprf_int(datum->data, data, i);
+				}
+			}	
 			break;
 		default:
 			printf("[ERROR datum_new] Unknown data type %s\n",data_name_get(type));
