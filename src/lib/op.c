@@ -187,7 +187,7 @@ t_node *make_menu_draw(void)
 	add_brick_switch(C,block,"face outline",&C->event->with_face_outline);
 	add_brick_switch(C,block,"points",&C->event->with_point);
 	add_brick_switch(C,block,"edges",&C->event->with_edge);
-	add_brick_switch(C,block,"edges",&C->event->with_edge_color);
+	add_brick_switch(C,block,"edges color",&C->event->with_edge_color);
 	add_brick_switch(C,block,"texture",&C->event->with_texture);
 	add_brick_switch(C,block,"normal",&C->event->with_normal);
 	add_brick_switch(C,block,"light",&C->event->with_light);
