@@ -101,8 +101,6 @@ float *calc_arc(float center[3],double radius,int divisions, int start, int end)
 		points[j+1]=result[1];
 		points[j+2]=result[2];
 		j+=3;
-
-		vprint3f(result,'\n');
 	}
 
 	return points;
