@@ -115,6 +115,7 @@ inline void cconv(float c[3],int o[3]);
 inline void vplus4i(int *v,int i);
 inline void vplus4f(float *v,float i);
 inline float vlength3f(float v0[3], float v1[3]);
+void vrot2d3f(float *v, int angle);
 
 // VOLUMES
 
@@ -139,6 +140,7 @@ int net_connect(void);
 
 float calc_normalize(int n,int range);
 float *calc_circle(float center[3],double radius,int divisions);
+float *calc_arc(float center[3],double radius,int divisions, int start, int end);
 
 // RAND
 

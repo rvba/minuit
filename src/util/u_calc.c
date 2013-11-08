@@ -54,12 +54,39 @@ void calc_normals(float *v1,float *v2,float *v3,float *result)
 
 float *calc_circle(float center[3],double radius,int divisions)
 {
-
 	float *points = (float *)malloc(sizeof(float)*divisions*3);
 	int i;
 	int j=0;
 
 	double delta = (double)((double)(_PI * 2) / divisions);
+
+	for (i=0;i<divisions;i++)
+	{
+		float r[3];
+		float result[3];
+		vset(r,cos(i*delta),sin(i*delta),0);
+		vmul(r,(float)radius);
+		vadd(result,center,r);
+		points[j]=result[0];
+		points[j+1]=result[1];
+		points[j+2]=result[2];
+		j+=3;
+	}
+
+	return points;
+}
+
+float *calc_arc(float center[3],double radius,int divisions, int start, int end)
+{
+	float *points = (float *)malloc(sizeof(float)*divisions*3);
+	int i;
+	int j=0;
+
+	int angle = end - start;
+	float phi = deg_to_rad(angle);
+
+	//double delta = (double)((double)(_PI * 2) / divisions);
+	double delta = (double)((double)(phi ) / divisions);
 
 	for (i=0;i<divisions;i++)
 	{

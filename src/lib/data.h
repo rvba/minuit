@@ -20,6 +20,7 @@ struct Data;
 typedef enum Data_Type
 {
 	dt_null,
+	dt_bool,
 	dt_int,
 	dt_uint,
 	dt_float,

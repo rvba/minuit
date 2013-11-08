@@ -536,6 +536,17 @@ t_datum *datum_new(t_data_type type, int count, void *data)
 			}	
 			break;
 
+		case(dt_bool):
+			datum->data = (int *)malloc(sizeof(int) * count);
+			if(data)
+			{
+				for(i=0;i<count;i++)
+				{
+					cprf_int(datum->data, data, i);
+				}
+			}	
+			break;
+
 		case(dt_float):
 			datum->data = (int *)malloc(sizeof(float) * count);
 			if(data)

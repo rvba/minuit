@@ -245,6 +245,23 @@ inline void vplus4f(float *v,float i)
 	v[3] += i;
 }
 
+void vrot2d3f(float *v, int angle)
+{
+	float x0 = v[0];
+	float y0 = v[1];
+
+	float r = deg_to_rad(angle);
+
+	float c = cos(r);
+	float s = sin(r);
+
+	float x1 = (x0 * c) - (y0 * s);
+	float y1 = (x0 * s) + (y0 * c);
+
+	v[0] = x1;
+	v[1] = y1;
+}
+
 
 /*
 void m3_print(float m[3][3])
