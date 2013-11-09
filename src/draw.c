@@ -856,6 +856,8 @@ t_draw *draw_new(void)
 	draw->with_grid=0;
 	draw->divx=2;
 	draw->divy=2;
+	draw->usex=0;
+	draw->usey=0;
 
 	draw->draw_lights = 1;
 	draw->edit_mode = 0;

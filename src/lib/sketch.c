@@ -102,6 +102,23 @@ void skt_line_quad(float *a,float *b,float *c,float *d,int line_width,float *col
 	glEnd();
 }
 
+void _skt_rectangle(float *point, float *v1, float *v2, float *color, int width)
+{
+	float points[4*3];
+
+	float *a = points;
+	float *b = points + 3;
+	float *c = points + 6;
+	float *d = points + 9;
+
+	vcp(a,point);
+	vadd(b,a,v1);
+	vadd(c,b,v2);
+	vadd(d,a,v2);
+
+	skt_closedline(points,4,color,width);
+}
+
 void skt_circle(float *pos)
 {
 	float resolution = (float) SKT->point_resolution;

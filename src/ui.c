@@ -114,7 +114,7 @@ void ui_draw_grid(void)
 	{
 		glPushMatrix();
 
-		float color[]={0,0,0};
+		float *color = C->draw->front_color;
 		int w=1;
 
 		int i;
@@ -149,6 +149,18 @@ void ui_draw_grid(void)
 		float yy = (float)divy;
 		float dx = width/xx;
 		float dy = height/yy;
+
+		int usex = C->draw->usex;
+		int usey = C->draw->usey;
+
+		float ax = usex * dx;
+		float ay = usey * dy ;
+		float origin[3] = {ax,ay,0};
+		float v1[3] = {dx,0,0};
+		float v2[3] = {0,dy,0};
+		int _width = 5;
+
+		_skt_rectangle(origin,v1,v2,color,_width);
 
 		// verticals
 		for(i=0;i<divx-1;i++)

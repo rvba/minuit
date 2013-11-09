@@ -68,6 +68,7 @@ void skt_line(float *v1,float *v2,int width,float *color);
 void skt_polyline(float *points,int tot);
 void skt_closedline(float *points,int tot,float *color,int width);
 void skt_closedline_filled(float *points,int tot,float *color,int width);
+void _skt_rectangle(float *point, float *v1, float *v2, float *color, int width);
 
 // POINT
 
