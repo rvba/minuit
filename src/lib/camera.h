@@ -15,8 +15,8 @@
 #define CAM_ORTHO_NEAR -1
 #define CAM_ORTHO_FAR 1
 #define CAM_EYE 10
-#define CAM_FAR 8000
-#define CAM_NEAR .1
+#define CAM_FAR 80000
+#define CAM_NEAR .001
 #define CAM_FOVY 60 //60
 
 #define CAM_ORTHO_ZOOM 1000
