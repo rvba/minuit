@@ -123,6 +123,8 @@ int mesh_cube_lines[24];
 int mesh_cube_tot_lines;
 float cube_verts[8*3];
 int cube_quads[6*4];
+float plane_verts[4*3];
+int plane_quads[4];
 float vertices[72]; 
 unsigned int faces[24];
 float quad_vert[12]; 

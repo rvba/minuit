@@ -97,7 +97,7 @@ void brick_set_updated(t_brick *brick)
 void *op_brick_add(t_brick *brick)
 {
 	t_context *C = ctx_get();
-	t_node *node;
+	t_node *node = NULL;
 	t_block *this_block;
 	t_brick *this_brick;
 
@@ -173,6 +173,7 @@ void *op_brick_add(t_brick *brick)
 	else if(is(name,"const")) 		node = add_const(C); 
 	else if(is(name,"and")) 		node = add_maths(C,"and"); 
 	else if(is(name,"stack")) 		node = add_stack(C); 
+	else if(is(name,"mesh")) 		node = add_slider_object(C,"mesh"); 
 
 	// Store
 	scene_store(C->scene,0);
@@ -185,17 +186,20 @@ void *op_brick_add(t_brick *brick)
 	if(node)
 	{
 		this_block = node->data;
-		t_link *link;
-		for(link = this_block->bricks->first; link; link = link->next)
+		if(this_block)
 		{
-			this_brick = link->data;
-			op_limit(this_brick);
-		}
+			t_link *link;
+			for(link = this_block->bricks->first; link; link = link->next)
+			{
+				this_brick = link->data;
+				op_limit(this_brick);
+			}
 
-		// Frame Based
-		if(is(name,"frame") || is(name,"timer") || is(name,"timer low"))
-		{
-			this_block->state.frame_based  =1;
+			// Frame Based
+			if(is(name,"frame") || is(name,"timer") || is(name,"timer low"))
+			{
+				this_block->state.frame_based  =1;
+			}
 		}
 
 	}

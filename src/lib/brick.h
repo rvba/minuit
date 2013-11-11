@@ -250,11 +250,13 @@ void *	 	op_add_camera_main(void);
 void *		op_add_default(struct Brick *brick);
 void *		op_add_light(struct Brick *brick);
 void *		op_add_cube(struct Brick *brick);
+void *		op_add_plane(struct Brick *brick);
 void *		op_add_wire_cube(struct Brick *brick);
 void *		op_add_uv_cube(struct Brick *brick);
 void *		op_add_uv_plane(struct Brick *brick);
 void *		op_add_triangle(struct Brick *brick);
 void *		op_add_quad(struct Brick *brick);
+void *		op_add_empty_object(t_brick *brick);
 
 
 void *		op_camera_rotate_xy(struct Brick *brick);

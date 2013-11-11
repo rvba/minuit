@@ -95,17 +95,19 @@ void vector_show(t_vector *vector)
 					{
 						case 3:
 							data_int = vector->pointer;
-							term_log( "[v3] %f %f %f",
+							term_log( "pointer [v3] %f %f %f",
 								drf_float(data_int),
 								drf_float(data_int+1),
 								drf_float(data_int+2)
 								);
 							break;
 						default:
+							printf("[VECTOR SHOW FLOAT] Unknwon length %d\n",vector->length);
 							break;
 					}
 					break;
 				default:
+					printf("[VECTOR SHOW] Unkown type \n");
 					break;
 			}
 		}
@@ -118,6 +120,34 @@ void vector_show(t_vector *vector)
 		printf( "length %d\n", vector->length);
 		printf( "pointer %p\n", vector->pointer);
 		printf( "vector %p\n", vector->vector);
+
+		if(vector->pointer)
+		{
+			int *data_int;
+
+			switch(vector->type)
+			{
+				case dt_float:
+					switch(vector->length)
+					{
+						case 3:
+							data_int = vector->pointer;
+							printf( "pointer [v3] %f %f %f\n",
+								drf_float(data_int),
+								drf_float(data_int+1),
+								drf_float(data_int+2)
+								);
+							break;
+						default:
+							printf("[VECTOR SHOW FLOAT] Unknwon length %d\n",vector->length);
+							break;
+					}
+					break;
+				default:
+					printf("[VECTOR SHOW] Unkown type \n");
+					break;
+			}
+		}
 	}
 
 	if(vector->vector) vlst_show(vector->vector);

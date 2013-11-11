@@ -18,6 +18,8 @@
 #include "set.h"
 #include "set.h"
 #include "block.h"
+#include "brick.h"
+#include "vector.h"
 #include "ui.h"
 
 void object_default(t_node *node){}
@@ -289,10 +291,9 @@ t_node *object_add(const char *type,const char *name)
 
 	if(C->ui->add_bricks)
 	{
+		// add data node
+		scene_add_data_node(C->scene,"app_node","object",name,node);
 
-	// add data node
-	scene_add_data_node(C->scene,"app_node","object",name,node);
-		printf("adddddd !!!\n");
 		// New Block
 		t_node *node_block=add_block(C,name);
 		t_block *block=node_block->data;

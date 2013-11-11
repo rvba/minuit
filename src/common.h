@@ -28,7 +28,7 @@
 
 #define DEBUG_PROCESS 0
 #define DEBUG_CONSOLE 1
-#define DEBUG_TERMINAL 0
+#define DEBUG_TERMINAL 1
 #define DEBUG_LOOP 0
 #define DEBUG_KEY 0
 

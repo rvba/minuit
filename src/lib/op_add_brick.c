@@ -26,6 +26,7 @@
 #include "mesh.h"
 #include "block.h"
 #include "brick.h"
+#include "vector.h"
 
 int set_draw_plug=1;
 int current_frame = 0;
@@ -91,7 +92,6 @@ void *add_brick_data(t_data_type type,void *data)
 
 void add_block_offset(t_context *C, t_block *block)
 {
-
 	t_link *link=block->bricks->first;
 	t_brick *brick=link->data;
 
@@ -287,6 +287,8 @@ t_node *add_brick_label(t_context *C,t_block *block,const char *name)
 t_node *add_brick_vector(t_context *C,t_block *block,const char *name)
 {
 	void *ptr=add_brick_data(dt_vector,NULL);
+	t_vector *vector = (t_vector *) ptr;
+	set_name(vector->id.name,name);
 
 	// NEW BRICK
 	t_node *node_brick=brick_make(block,name,bt_trigger,dt_vector,ptr);
@@ -674,18 +676,18 @@ t_node *add_part_selector(t_context *C,t_block *block,const char *name,t_node *n
 // mesh 
 t_node *add_part_pointer(t_context *C,t_block *block,t_data_type type,const char *name,void *ptr)
 {
-	t_node *node=add_brick_pointer(C,block,name,type,ptr);
-	t_brick *brick=node->data;
-	brick->state.draw_outline=0;
-	if(type==dt_mesh)
+	t_node *node = add_brick_pointer(C,block,name,type,ptr);
+	t_brick *brick = node->data;
+	brick->state.draw_outline = 0;
+	if(type == dt_mesh)
 	{
-	brick->state.draw_value=0;
-	brick->state.draw_name=1;
+		brick->state.draw_value = 1;
+		brick->state.draw_name = 1;
 	}
 	else
 	{
-	brick->state.draw_value=1;
-	brick->state.draw_name=0;
+		brick->state.draw_value = 1;
+		brick->state.draw_name = 0;
 	}
 
 	return node;
@@ -997,6 +999,7 @@ void add_slider_ref(t_context *C,t_object *object,const char *name)
 	else if(is(name,"blue") && mat)		scene_add_ref(C->scene,"struct_ref","material","blue",&mat->color[2],mat);
 	else if(is(name,"alpha") && mat)	scene_add_ref(C->scene,"struct_ref","material","alpha",&mat->color[3],mat);
 	else if(is(name,"quad face") && mesh)	scene_add_ref(C->scene,"struct_ref","mesh","quad_face",&mesh->quad_face,mesh);
+	else if(is(name,"mesh") && mesh)	scene_add_ref(C->scene,"struct_ref","mesh","mesh",mesh,mesh);
 
 }
 
@@ -1029,6 +1032,7 @@ void add_slider_target(t_context *C,t_object *object,const char *name)
 	else if(is(name,"alpha") && material) 	add_part_slider_float(C,block,"alpha",&material->color[3]);
 	else if(is(name,"color") && mesh) 	mesh_add_default_color(mesh); 
 	else if(is(name,"faces") && mesh) 	mesh_add_brick_faces(mesh); 
+	else if(is(name,"mesh")) 		add_part_pointer(C,block,dt_mesh,"mesh",object->mesh); 
 
 	block->state.update_geometry = 1;
 

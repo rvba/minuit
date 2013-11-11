@@ -49,6 +49,22 @@ t_node *op_new_cube(const char *name)
 	return cube;
 }
 
+t_node *op_new_plane(const char *name)
+{
+	int tot_vertex=4;
+	int tot_face=1;
+	int tot_quad=1;
+	int tot_tri=0;
+
+	float *verts=plane_verts; 	//u_volume
+	int *quads=plane_quads;		//u_volume
+	int *tris = NULL;
+		
+	t_node *plane = mesh_make(name,tot_vertex,tot_face,tot_quad,tot_tri,verts,quads,tris);
+
+	return plane;
+}
+
 void *op_new_set(const char *name)
 {
 	t_context *C = ctx_get();
@@ -184,6 +200,23 @@ void *op_add_cube(t_brick *brick)
 	return NULL;
 }
 
+void *op_add_plane(t_brick *brick)
+{ 
+	t_context *C=ctx_get();
+	term_print(C->term,"+ plane");
+
+	scene_store(C->scene,1);
+
+		t_node *node_mesh=op_new_plane("plane");
+		t_node *node_object=object_add("mesh","plane");
+
+		t_object *object=node_object->data;
+		object->cls->link(object,node_mesh);
+
+	scene_store(C->scene,0);
+	return NULL;
+}
+
 // default 
 void *op_add_default(t_brick *brick)
 {
@@ -281,6 +314,16 @@ void *op_add_mn(t_brick *brick)
 	C->event->callback=add_mn;
 	screen_switch_by_name("screen_browser");
 
+	return NULL;
+}
+
+void *op_add_empty_object(t_brick *brick)
+{
+	t_context *C=ctx_get();
+	scene_store(C->scene,1);
+	t_node *node_object=object_add("mesh","cube");
+	(void) node_object;
+	scene_store(C->scene,0);
 	return NULL;
 }
 	

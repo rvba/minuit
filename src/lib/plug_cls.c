@@ -1648,12 +1648,19 @@ void cls_plug_flow_vertex(t_plug *plug)
 
 void __cls_plug_flow_mesh(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 {
+	t_node *node=plug->data;
+	t_mesh *mesh_src = src_plug->data;
+	t_mesh *mesh_self = plug->data;
+
 	if(src_plug)
 	{
 		t_data_type src_type=src_plug->data_type;
 
 		switch(src_type)
 		{
+			case dt_mesh:
+				mesh_self = mesh_src;
+				break;
 			default:
 				plug_warning(plug,src_plug);
 				break;
