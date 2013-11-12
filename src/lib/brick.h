@@ -258,6 +258,9 @@ void *		op_add_triangle(struct Brick *brick);
 void *		op_add_quad(struct Brick *brick);
 void *		op_add_empty_object(t_brick *brick);
 void *		op_add_empty_mesh(struct Brick *brick);
+void *		op_add_object(const char *name);
+void *		op_add_mesh(const char *name);
+void *		op_add_empty_vlst(struct Brick *brick);
 
 
 void *		op_camera_rotate_xy(struct Brick *brick);

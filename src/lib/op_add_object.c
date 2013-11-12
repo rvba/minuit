@@ -32,6 +32,13 @@
 
 #define LOGOUT 1
 
+// VLST
+t_vlst *op_new_vlst(const char *name, t_data_type type, int size)
+ {
+	 t_vlst *vlst = vlst_make("vlst", type, size, 0);
+	 return vlst;
+ }
+
 // CUBE
 t_node *op_new_cube(const char *name)
 {
@@ -343,6 +350,37 @@ void *op_add_empty_mesh(t_brick *brick)
 	t_node *node = op_new_empty_mesh("mesh");
 	(void) node;
 	scene_store(C->scene,0);
+	return NULL;
+}
+
+void op_mesh_add_brick_vertex(t_context *C,t_mesh *mesh)
+{
+	// New Block
+	t_node *_node_block=add_block(C,"vertex");
+	t_block *_block=_node_block->data;
+
+	// add vertex
+	scene_add_ref(C->scene,"struct_ref","mesh","vertex",&mesh->vertex,mesh);
+	add_part_vlst(C,_block,dt_vlst,"vertex",mesh->vertex);
+	t_brick *brick_count = block_brick_get(_block,"count:");
+
+	// Bind
+	brick_binding_add(brick_count, dt_int, &mesh->var.tot_vertex);
+
+	// Ref
+	scene_add_ref(C->scene,"struct_ref","mesh","tot vertex",&mesh->var.tot_vertex,mesh);
+
+	// Add Global offset
+	add_block_offset(C,_block);
+}
+
+void *op_add_empty_vlst(t_brick *brick)
+{
+	t_context *C = ctx_get();
+	scene_store(C->scene,1);
+	op_new_vlst("vlst", dt_float, 3);
+	scene_store(C->scene,0);
+
 	return NULL;
 }
 	

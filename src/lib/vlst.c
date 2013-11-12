@@ -19,6 +19,8 @@
 #include "list.h"
 #include "data.h"
 #include "dict.h"
+#include "ui.h"
+#include "block.h"
 
 
 void *vlst_get_pointer(t_vlst *vlst, int indice)
@@ -713,6 +715,15 @@ t_vlst *vlst_make(const char *name,t_data_type type, int length, int count)
 		vlst->data = NULL;
 	}
 
+	if(C->ui->add_bricks)
+	{
+		// New Block
+		t_node *node_block=add_block(C,"vlst");
+		t_block *block=node_block->data;
+		add_part_vlst(C,block,dt_vlst,"vlst",vlst);
+		vlst->ref = block;
+	}
+
 
 	return vlst;
 }
@@ -819,6 +830,7 @@ t_vlst *vlst_new(const char *name)
 	vlst->has_limit_low = 0;
 	vlst->limit_low = -1;
 	vlst->limit_high = -1;
+	vlst->ref = NULL;
 
 	return vlst;
 }

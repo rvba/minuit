@@ -110,8 +110,6 @@ void add_block_offset(struct Context *C, struct Block *block);
 
 int op_post_quit(struct Node *node);
 
-void *op_add_object(const char *name);
-void *op_add_mesh(const char *name);
 
 
 #endif

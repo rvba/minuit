@@ -67,6 +67,7 @@ typedef struct VLst
 	t_data_type type;
 
 	void *data;
+	struct Block *ref;
 }t_vlst;
 
 void 		lst_remove_doubles(t_lst *lst);

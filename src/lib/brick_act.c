@@ -1719,33 +1719,37 @@ void *op_set_vlst(t_brick *brick)
 	else
 		printf("err!\n");
 
-	t_vlst *vlst=brick_vlst->plug_intern.data;
-
-	if(vlst)
+	if(brick_vlst)
 	{
 
-	if(C->app->mouse->button_left == button_pressed)
-	{
-		_pressed=1;
-	}
-	
-	if(_pressed== 1 && C->app->mouse->button_left == button_released)
-	{
-		_pressed=0;
-		_released=1;
-	}
-	
-	if(C->app->mouse->button_left==button_released)
-	{
-		if(vlst->count != vlst->count_new) 
+		t_vlst *vlst=brick_vlst->plug_intern.data;
+
+		if(vlst)
 		{
-			if(_released)
+
+		if(C->app->mouse->button_left == button_pressed)
+		{
+			_pressed=1;
+		}
+		
+		if(_pressed== 1 && C->app->mouse->button_left == button_released)
+		{
+			_pressed=0;
+			_released=1;
+		}
+		
+		if(C->app->mouse->button_left==button_released)
+		{
+			if(vlst->count != vlst->count_new) 
 			{
-				_released=0;
-				vlst_update_data(vlst,NULL);
+				if(_released)
+				{
+					_released=0;
+					vlst_update_data(vlst,NULL);
+				}
 			}
 		}
-	}
+		}
 	}
 
 	return NULL;
