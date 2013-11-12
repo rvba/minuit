@@ -32,7 +32,7 @@
 
 #define LOGOUT 1
 
-// new mesh cube
+// CUBE
 t_node *op_new_cube(const char *name)
 {
 	int tot_vertex=8;
@@ -49,6 +49,7 @@ t_node *op_new_cube(const char *name)
 	return cube;
 }
 
+// PLANE
 t_node *op_new_plane(const char *name)
 {
 	int tot_vertex=4;
@@ -63,6 +64,14 @@ t_node *op_new_plane(const char *name)
 	t_node *plane = mesh_make(name,tot_vertex,tot_face,tot_quad,tot_tri,verts,quads,tris);
 
 	return plane;
+}
+
+// EMPTY MESH
+
+t_node *op_new_empty_mesh(const char *name)
+{
+	t_node *node = mesh_make(name,0,0,0,0,NULL,NULL,NULL);
+	return node;
 }
 
 void *op_new_set(const char *name)
@@ -323,6 +332,16 @@ void *op_add_empty_object(t_brick *brick)
 	scene_store(C->scene,1);
 	t_node *node_object=object_add("mesh","cube");
 	(void) node_object;
+	scene_store(C->scene,0);
+	return NULL;
+}
+
+void *op_add_empty_mesh(t_brick *brick)
+{
+	t_context *C = ctx_get();
+	scene_store(C->scene,1);
+	t_node *node = op_new_empty_mesh("mesh");
+	(void) node;
 	scene_store(C->scene,0);
 	return NULL;
 }

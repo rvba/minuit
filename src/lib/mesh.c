@@ -249,7 +249,9 @@ void mesh_add_brick_mesh(t_context *C, t_mesh *mesh)
 	// New Block
 	t_node *node_block=add_block(C,"mesh");
 	t_block *block=node_block->data;
-	add_part_pointer(C,block,dt_mesh,mesh->id.name,mesh);
+	//add_part_pointer(C,block,dt_mesh,mesh->id.name,mesh);
+	add_part_selector(C,block,dt_mesh,mesh->id.name,mesh);
+
 }
 
 // MAKE
