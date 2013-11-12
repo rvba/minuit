@@ -153,7 +153,7 @@ void *process_loop(void *data)
 void process_launch(t_process *process)
 {
 	pthread_create(&process->thread,NULL,process->loop,process);
-	term_log("p %s", process->id.name);
+	//term_log("p %s", process->id.name);
 }
 
 void ctx_thread_init(t_context *C)

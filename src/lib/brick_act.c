@@ -1175,6 +1175,9 @@ void *op_menu(t_brick *brick)
 
 void *op_void(t_brick *brick)
 {
+	t_plug *plug_intern = &brick->plug_intern;
+	// flow
+	plug_intern->cls->flow(plug_intern);
 	brick_release(brick);
 
 	return NULL;

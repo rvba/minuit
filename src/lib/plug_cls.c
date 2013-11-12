@@ -27,6 +27,8 @@
 
 #include "mesh.h"
 
+int PLUG_DEBUG;
+
 void cls_plug_make_float(t_plug *plug);
 void cls_plug_make_int(t_plug *plug);
 void cls_plug_make_uint(t_plug *plug);
@@ -52,6 +54,17 @@ void cls_plug_disconnect_general(t_plug_mode mode, t_plug *self);
 void close_vector(t_brick *brick, int open);
 
 
+void object_show(t_object *object)
+{
+	term_log("object");
+}
+
+void mesh_show(t_mesh *mesh)
+{
+	term_log("mesh");
+}
+
+
 void plug_debug(t_plug *plug)
 {
 	t_data_type type = plug->data_type;
@@ -63,6 +76,8 @@ void plug_debug(t_plug *plug)
 		case dt_float: term_log("%f", drf_float(data)); break;
 		case dt_vector: vector_show(data); break;
 		case dt_vlst: vlst_show(data); break;
+		case dt_object: object_show(data);break;
+		case dt_mesh: mesh_show(data);break;
 		default:
 			term_log("unknown type %s", data_name_get(type));
 			break;
@@ -169,15 +184,27 @@ t_plug *plug_get_dst(t_plug *plug)
 
 void plug_warning(t_plug *dst_plug,t_plug *src_plug)
 {
-	/*
 	t_context *C=ctx_get();
 	char msg[40];
 	char *src_plug_type=data_name_get(src_plug->data_type);
 	char *dst_plug_type=data_name_get(dst_plug->data_type);
 
-	sprintf(msg,"%d(%s)(%s)-(%s)(%s)",C->app->frame,src_plug->name,src_plug_type,dst_plug->name,dst_plug_type);
+	sprintf(msg,"(%s)(%s)-(%s)(%s)",src_plug->id.name,src_plug_type,dst_plug->id.name,dst_plug_type);
 	term_print(C->term,msg);
-	*/
+}
+
+void plug_debug_connect(const char *name, t_plug *dst_plug, t_plug *src_plug)
+{
+	if(PLUG_DEBUG)
+	{
+		t_context *C=ctx_get();
+		char msg[40];
+		char *src_plug_type=data_name_get(src_plug->data_type);
+		char *dst_plug_type=data_name_get(dst_plug->data_type);
+
+		sprintf(msg,"%s %s-%s",name,dst_plug_type,src_plug_type);
+		term_print(C->term,msg);
+	}
 }
 
 // FLOW
@@ -494,10 +521,14 @@ void cls_plug_connect_general(t_plug_mode mode, t_plug *self, t_plug *dst)
 	t_brick *brick_dst = dst->brick;
 	t_plug *plug_dst_in = &brick_dst->plug_in;
 	t_plug *plug_dst_out = &brick_dst->plug_out;
-	
+
+
 	// Mode In
 	if(mode == mode_in)
 	{
+
+		plug_debug_connect("connect",dst,self);
+
 		// Connect Plugs
 		plug_in->src = plug_dst_out;
 		plug_in->state.is_connected = 1;
@@ -552,6 +583,14 @@ void cls_plug_disconnect_general(t_plug_mode mode, t_plug *self)
 	t_brick *brick = self->brick;
 	t_plug *plug_in = &brick->plug_in;
 	t_plug *plug_out = &brick->plug_out;
+	t_plug *plug_src = plug_in->src;
+	t_plug *dst = NULL;
+	t_brick *brick_src;
+	if(plug_src)
+	{
+		brick_src = plug_src->brick;
+		dst = &brick_src->plug_intern;
+	}
 
  	// Swap Flow
  	if(self->state.swap_flow && (mode==mode_out))
@@ -568,6 +607,8 @@ void cls_plug_disconnect_general(t_plug_mode mode, t_plug *self)
 	// Mode In
 	if(mode == mode_in)
 	{
+		plug_debug_connect("disconnect",dst,self);
+
 		// Disconnect
 		plug_in->src = NULL;
 		plug_in->state.is_connected = 0;
@@ -1648,10 +1689,6 @@ void cls_plug_flow_vertex(t_plug *plug)
 
 void __cls_plug_flow_mesh(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 {
-	t_node *node=plug->data;
-	t_mesh *mesh_src = src_plug->data;
-	t_mesh *mesh_self = plug->data;
-
 	if(src_plug)
 	{
 		t_data_type src_type=src_plug->data_type;
@@ -1659,7 +1696,7 @@ void __cls_plug_flow_mesh(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 		switch(src_type)
 		{
 			case dt_mesh:
-				mesh_self = mesh_src;
+				plug->data = src_plug->data;
 				break;
 			default:
 				plug_warning(plug,src_plug);
@@ -1695,11 +1732,15 @@ void __cls_plug_flow_object(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 		{
 			// + MESH
 			case dt_mesh:
+				object = plug->data;
 
-				if(is(object->type,"mesh"))
+				if(object)
 				{
-					mesh=src_plug->data;
-					object->mesh=mesh;
+					if(is(object->type,"mesh"))
+					{
+						mesh=src_plug->data;
+						object->mesh=mesh;
+					}
 				}
 
 				break;

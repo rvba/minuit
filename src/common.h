@@ -31,6 +31,7 @@
 #define DEBUG_TERMINAL 1
 #define DEBUG_LOOP 0
 #define DEBUG_KEY 0
+#define DEBUG_PLUG 1 
 
 #define PI 3.14159655f
 

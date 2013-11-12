@@ -23,6 +23,7 @@
 #include "event.h"
 #include "set.h"
 #include "ui.h"
+#include "plug.h"
 
 
 void ctx_compute(t_context *C)
@@ -31,6 +32,9 @@ void ctx_compute(t_context *C)
 	t_set *set;
 	t_node *node;
 	t_link *link;
+
+	if(C->event->debug_plug) PLUG_DEBUG = 1;
+	else PLUG_DEBUG = 0;
 
 	// For Each Process
 	for(link = C->scene->sets->first;link;link=link->next)

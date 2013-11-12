@@ -154,6 +154,7 @@ typedef struct Event
 	int debug_terminal;
 	int debug_loop;
 	int debug_key;
+	int debug_plug;
 
 	int free_scene;
 	int last_frame; //last recorded camera

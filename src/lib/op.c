@@ -69,6 +69,7 @@ t_node *make_menu_debug(void)
 	add_brick_switch(C,block,"debug terminal",&C->event->debug_terminal);
 	add_brick_switch(C,block,"debug loop",&C->event->debug_loop);
 	add_brick_switch(C,block,"debug key",&C->event->debug_key);
+	add_brick_switch(C,block,"debug plug",&C->event->debug_plug);
 
 	return menu;
 }
@@ -211,7 +212,7 @@ t_node *make_menu_node_add(void)
 
 	add_brick_trigger(C,block,"default",op_add_default);
 	add_brick_trigger(C,block,"cube",op_add_cube);
-	add_brick_trigger(C,block,"cube",op_add_plane);
+	add_brick_trigger(C,block,"plane",op_add_plane);
 	add_brick_trigger(C,block,"uv cube",op_add_uv_cube);
 	add_brick_trigger(C,block,"light",op_add_light);
 	add_brick_trigger(C,block,"obj",op_obj_import);

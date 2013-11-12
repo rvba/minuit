@@ -13,6 +13,8 @@
 
 #include "data.h"
 
+extern int PLUG_DEBUG;
+
 struct Brick;
 struct Lst;
 

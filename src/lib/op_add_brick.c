@@ -357,7 +357,14 @@ t_node *add_brick_trigger(t_context *C,t_block *block,const char *name,void *f(t
 	brick->state.draw_value = 0;
 
 	// ACTION
-	brick->action=f;
+	if(f)
+	{
+		brick->action = f;
+	}
+	else
+	{
+		brick->action = op_void;
+	}
 
 	// PLUG
 	set_plug_option(brick);
@@ -374,7 +381,15 @@ t_node *add_brick_trigger_type(t_context *C,t_block *block,const char *name,void
 	t_brick *brick=node_brick->data;
 	
 	// ACTION
-	brick->action=f;
+	if(f)
+	{
+		brick->action = f;
+	}
+	else
+	{
+		brick->action = op_void;
+	}
+	
 
 	// PLUG
 	set_plug_option(brick);
@@ -478,6 +493,21 @@ t_node *add_brick_selector(t_context *C,t_block *block,const char *name,void *da
 	return node;
 }
 
+// BRICK OBJECT
+
+t_node *add_brick_object(t_context *C,t_block *block,const char *name,void *data_target, t_data_type type)
+{
+	t_node *node=brick_make(block,name,bt_trigger,type,data_target);
+	t_brick *brick=node->data;
+	
+	brick->action=op_void;
+
+	// PLUG
+	set_plug_option(brick);
+	
+	return node;
+}
+
 // BRICK VLST
 
 t_node *add_brick_vlst(t_context *C,t_block *block,const char *name,t_data_type type,void *pointer)
@@ -568,6 +598,16 @@ t_node *add_part_vector(t_context *C,t_block *block,const char *name)
 t_node *add_part_trigger_type(t_context *C,t_block *block,const char *name,void *f(t_brick *b),t_data_type type)
 {
 	t_node *node=add_brick_trigger_type(C,block,name,f,type);
+	t_brick *brick=node->data;
+	brick->state.draw_outline=0;
+	return node;
+}
+
+// PART OBJECT
+
+t_node *add_part_object(t_context *C,t_block *block,const char *name,void *data,t_data_type type)
+{
+	t_node *node=add_brick_object(C,block,name,data,type);
 	t_brick *brick=node->data;
 	brick->state.draw_outline=0;
 	return node;
@@ -1032,7 +1072,7 @@ void add_slider_target(t_context *C,t_object *object,const char *name)
 	else if(is(name,"alpha") && material) 	add_part_slider_float(C,block,"alpha",&material->color[3]);
 	else if(is(name,"color") && mesh) 	mesh_add_default_color(mesh); 
 	else if(is(name,"faces") && mesh) 	mesh_add_brick_faces(mesh); 
-	else if(is(name,"mesh")) 		add_part_pointer(C,block,dt_mesh,"mesh",object->mesh); 
+	else if(is(name,"mesh")) 		add_part_object(C,block,"mesh",object,dt_object); 
 
 	block->state.update_geometry = 1;
 
