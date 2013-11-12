@@ -78,6 +78,7 @@ void ctx_scene_selection(t_context *C, t_node *node, int state)
 
 			}
 			break;
+		case(nt_mesh): break;
 		default:
 			printf("[WARINING set selected] Unknown type %s\n", node_name_get(node->type));
 			break;

@@ -301,7 +301,7 @@ t_node *object_add(const char *type,const char *name)
 		object->ref=block;
 
 		// add selector
-		add_part_selector(C,block,name,node);
+		add_part_selector(C,block,name,node,dt_object);
 
 		// Add Offset
 		add_block_offset(C,block);

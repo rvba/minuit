@@ -697,10 +697,9 @@ t_node *add_part_lst(t_context *C,t_block *block,t_data_type type,const char *na
 
 // PART SELECTOR
 
-// object
-t_node *add_part_selector(t_context *C,t_block *block,const char *name,t_node *node)
+t_node *add_part_selector(t_context *C, t_block *block, const char *name, t_node *node, t_data_type type)
 {
-	t_node *node_brick=add_brick_trigger_type(C,block,name,op_set_selected,dt_object);
+	t_node *node_brick=add_brick_trigger_type(C,block,name,op_set_selected,type);
 	t_brick *brick=node_brick->data;
 	brick->state.draw_outline=0;
 	brick->state.draw_value=1;

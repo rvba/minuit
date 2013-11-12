@@ -514,21 +514,7 @@ void brick_draw_check_context(t_brick *brick)
 		{
 			type = node->type;
 
-			if(context == nt_object)
-			{
-				if(type == nt_object)
-					brick->state.draw = 1;
-			}
-			else
-			{
-				if(type == nt_object)
-				{
-					object = node->data;
-
-					if((context == nt_mesh) && object->mesh)
-						brick->state.draw = 1;
-				}
-			}
+			if( context == type) brick->state.draw = 1;
 		}
 	}
 }

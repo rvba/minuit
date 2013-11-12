@@ -244,13 +244,13 @@ void mesh_add_brick_vertex(t_context *C,t_mesh *mesh)
 	add_block_offset(C,_block);
 }
 
-void mesh_add_brick_mesh(t_context *C, t_mesh *mesh)
+void mesh_add_brick_mesh(t_context *C, t_node *node_mesh)
 {
 	// New Block
 	t_node *node_block=add_block(C,"mesh");
 	t_block *block=node_block->data;
-	//add_part_pointer(C,block,dt_mesh,mesh->id.name,mesh);
-	add_part_selector(C,block,dt_mesh,mesh->id.name,mesh);
+	t_mesh *mesh = node_mesh->data;
+	add_part_selector(C,block,mesh->id.name,node_mesh,dt_mesh);
 
 }
 
@@ -284,7 +284,7 @@ t_node *mesh_make(
 	mesh->var.tot_quad_face=totquad;
 	mesh->var.tot_tri_face=tottri;
 
-	if(C->ui->add_bricks) mesh_add_brick_mesh(C,mesh);
+	if(C->ui->add_bricks) mesh_add_brick_mesh(C,node_mesh);
 
 	// add vertex list
 	if(verts)

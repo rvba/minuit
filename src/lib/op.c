@@ -253,6 +253,9 @@ t_node *make_menu_object(void)
 
 	add_brick_trigger(C,block,"mesh",op_brick_add);
 
+	add_brick_trigger(C,block,"color",op_brick_add);
+	add_brick_trigger(C,block,"faces",op_brick_add);
+
 	return menu;
 }
 
