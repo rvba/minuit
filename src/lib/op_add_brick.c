@@ -27,6 +27,7 @@
 #include "block.h"
 #include "brick.h"
 #include "vector.h"
+#include "ui.h"
 
 int set_draw_plug=1;
 int current_frame = 0;
@@ -508,6 +509,21 @@ t_node *add_brick_object(t_context *C,t_block *block,const char *name,void *data
 	return node;
 }
 
+// BRICK MESH
+
+t_node *_add_brick_mesh(t_context *C,t_block *block,const char *name,void *data_target, t_data_type type)
+{
+	t_node *node=brick_make(block,name,bt_trigger,type,data_target);
+	t_brick *brick=node->data;
+	
+	brick->action=op_void;
+
+	// PLUG
+	set_plug_option(brick);
+	
+	return node;
+}
+
 // BRICK VLST
 
 t_node *add_brick_vlst(t_context *C,t_block *block,const char *name,t_data_type type,void *pointer)
@@ -610,6 +626,16 @@ t_node *add_part_object(t_context *C,t_block *block,const char *name,void *data,
 	t_node *node=add_brick_object(C,block,name,data,type);
 	t_brick *brick=node->data;
 	brick->state.draw_outline=0;
+	return node;
+}
+
+// PART OBJECT
+
+t_node *add_part_mesh(t_context *C,t_block *block,const char *name,void *data,t_data_type type)
+{
+	t_node *node = _add_brick_mesh( C, block, name, data, type);
+	t_brick *brick = node->data;
+	brick->state.draw_outline = 0;
 	return node;
 }
 
@@ -1089,6 +1115,40 @@ t_node *add_slider_object(t_context *C,const char *name)
 
 		add_slider_ref(C,object,name);
 		add_slider_target(C,object,name);
+	}
+
+	return NULL;
+}
+
+// MESH
+
+void add_target_mesh( t_context *C, t_mesh *mesh, const char *name)
+{
+	t_node *selected=C->scene->selected;
+
+	if(selected)
+	{
+		t_mesh *mesh = selected->data;
+		t_block *block = mesh->ref;
+		if( is( name, "vertex")) 	add_part_mesh( C, block, "vertex", &mesh->vertex, dt_vlst);
+		block->state.update_geometry = 1;
+	}
+}
+
+void add_mesh_ref( t_context *C, t_mesh *mesh, const char *name)
+{
+}
+
+t_node *add_brick_mesh(t_context *C,const char *name)
+{
+	t_node *selected=C->scene->selected;
+
+	if(selected)
+	{
+		t_mesh *mesh=selected->data; 
+
+		add_mesh_ref( C, mesh, name);
+		add_target_mesh( C, mesh, name);
 	}
 
 	return NULL;

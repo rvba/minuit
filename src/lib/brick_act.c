@@ -174,6 +174,7 @@ void *op_brick_add(t_brick *brick)
 	else if(is(name,"and")) 		node = add_maths(C,"and"); 
 	else if(is(name,"stack")) 		node = add_stack(C); 
 	else if(is(name,"mesh")) 		node = add_slider_object(C,"mesh"); 
+	else if(is(name,"vertex")) 		node = add_brick_mesh(C,"vertex"); 
 
 	// Store
 	scene_store(C->scene,0);
@@ -1178,6 +1179,7 @@ void *op_void(t_brick *brick)
 	t_plug *plug_intern = &brick->plug_intern;
 	// flow
 	plug_intern->cls->flow(plug_intern);
+
 	brick_release(brick);
 
 	return NULL;

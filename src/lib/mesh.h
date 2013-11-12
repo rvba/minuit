@@ -114,6 +114,8 @@ struct Mesh
 	t_texture *texture;
 	t_material *material;
 
+	struct Block *ref;
+
 };
 
 void 		mesh_vertex_add(t_mesh *mesh, float *v);

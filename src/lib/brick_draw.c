@@ -504,7 +504,6 @@ void brick_draw_check_context(t_brick *brick)
 	t_node *node = C->scene->selected;
 	t_node_type type; 
 	t_node_type context = brick->context;
-	t_object *object;
 
 	if(brick->state.is_contextual)
 	{

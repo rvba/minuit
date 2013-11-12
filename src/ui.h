@@ -105,6 +105,7 @@ typedef struct Ui
 
 	// selections
 	struct Brick *brick_selected;
+
 	struct Node *link;
 	struct Node *link_node;
 
@@ -115,6 +116,7 @@ typedef struct Ui
 
 	struct Brick *connect_brick_in;
 	struct Brick *connect_brick_out;
+
 
 	int do_connect;
 	int do_disconnect;

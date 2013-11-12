@@ -82,12 +82,13 @@ struct Node *	add_slider_camera(struct Context *C,const char *name);
 struct Node *	add_part_label(struct Context *C,struct Block *block,const char *name);
 struct Node *	add_part_slider_float(struct Context *C,struct Block *block,const char *name,void *data_target);
 struct Node *	add_part_trigger(struct Context *C,struct Block *block,const char *name,void *(*f)(struct Brick *b));
-//struct Node *	add_part_selector(struct Context *C,struct Block *block,const char *name,struct Node *node);
 struct Node *	add_part_selector(struct Context *C,struct Block *block,const char *name,struct Node *node, t_data_type type);
 struct Node *	add_part_lst(struct Context *C,struct Block *block,enum Data_Type type,const char *name,void *ptr);
 struct Node *	add_part_vlst(struct Context *C,struct Block *block,enum Data_Type type,const char *name,void *ptr);
 struct Node *	add_part_pointer(struct Context *C,struct Block *block,enum Data_Type type,const char *name,void *ptr);
 struct Node *	add_part_vector(struct Context *C,struct Block *block,const char *name);
+
+struct Node *	add_brick_mesh( struct Context *C,const char *name);
 
 struct Node *	add_loop_get(struct Context *C);
 struct Node *	add_get(struct Context *C);

@@ -268,7 +268,7 @@ t_node *make_menu_mesh(void)
 	t_block *block=menu->data;
 	block->state.is_moveable = 0;
 
-	add_brick_trigger(C,block,"color",op_brick_add);
+	add_brick_trigger(C,block,"vertex",op_brick_add);
 	add_brick_trigger(C,block,"faces",op_brick_add);
 
 	return menu;

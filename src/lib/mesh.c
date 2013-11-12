@@ -251,6 +251,7 @@ void mesh_add_brick_mesh(t_context *C, t_node *node_mesh)
 	t_block *block=node_block->data;
 	t_mesh *mesh = node_mesh->data;
 	add_part_selector(C,block,mesh->id.name,node_mesh,dt_mesh);
+	mesh->ref = block;
 
 }
 
@@ -456,6 +457,8 @@ t_mesh *mesh_new(const char *name)
 
 	mesh->edges = NULL;
 	mesh->edges_color = NULL;
+
+	mesh->ref = NULL;
 
 	return mesh;
 }
