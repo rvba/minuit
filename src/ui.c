@@ -442,6 +442,9 @@ t_ui *ui_new(void)
 	ui->show_step = 0;
 	ui->show_brick_step = 0;
 	ui->show_sets = 0;
+	ui->show_rhizome_bounding_box = UI_SHOW_RHIZOME_BOUNDING_BOX;
+	ui->show_rhizome_order = UI_SHOW_RHIZOME_ORDER;
+
 	ui->step = 0;
 	ui->step_reset = 0;
 	ui->add_bricks = UI_ADD_BRICKS;

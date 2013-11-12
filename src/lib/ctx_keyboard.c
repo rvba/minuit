@@ -199,6 +199,7 @@ void keymap_command(unsigned char key)
 			C->app->timer=0;
 
 			break;
+		case 'B': op_debug_all(C);break;
 
 		case 127:
 			printf("RESET\n");

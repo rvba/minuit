@@ -197,29 +197,32 @@ void block_draw_outline(t_block *block)
 		}
 
 		// Rhizome Position
-		if(block->rhizome)
+		if(C->ui->show_rhizome_order)
 		{
-			char order[3];
-			float p[3] = {0,0,0};
-			float vv[3] = {-10,-10,0};
-			vadd(p,a,vv);
-			sprintf(order,"%d",block->rhizome_pos);
+			if(block->rhizome)
+			{
+				char order[3];
+				float p[3] = {0,0,0};
+				float vv[3] = {-10,-10,0};
+				vadd(p,a,vv);
+				sprintf(order,"%d",block->rhizome_pos);
 
-			glPushMatrix();
-				glTranslatef(p[0],p[1],p[2]);
-				if(block->state.is_root)
-				{
-					t_txt *root = txt_new("root");
-					root->draw(root);
-					txt_free(root);
-				}
-				else
-				{
-					t_txt *txt = txt_new(order);
-					txt->draw(txt);
-					txt_free(txt);
-				}
-			glPopMatrix();
+				glPushMatrix();
+					glTranslatef(p[0],p[1],p[2]);
+					if(block->state.is_root)
+					{
+						t_txt *root = txt_new("root");
+						root->draw(root);
+						txt_free(root);
+					}
+					else
+					{
+						t_txt *txt = txt_new(order);
+						txt->draw(txt);
+						txt_free(txt);
+					}
+				glPopMatrix();
+			}
 		}
 
 	}

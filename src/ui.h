@@ -23,7 +23,9 @@
 #define UI_DRAW 1
 #define UI_SHOW_INTRO 1
 #define UI_SHOW_MOUSE 0
-#define UI_SHOW_TERM 1
+#define UI_SHOW_TERM 0
+#define UI_SHOW_RHIZOME_BOUNDING_BOX 0
+#define UI_SHOW_RHIZOME_ORDER 0
 #define UI_ADD_BRICKS 1
 
 float intro_intensity;
@@ -69,6 +71,8 @@ typedef struct Ui
 	int show_brick_step;
 	int show_sets;
 	int add_bricks;
+	int show_rhizome_bounding_box;
+	int show_rhizome_order;
 
 	int bitrate;
 

@@ -10,15 +10,6 @@
 #ifndef __OPS_H
 #define __OPS_H
 
-/*
-#include "context.h"
-#include "scene.h"
-#include "node.h"
-#include "block.h"
-#include "brick.h"
-#include "list.h"
-*/
-
 struct Context;
 struct Node;
 struct Block;
@@ -26,6 +17,11 @@ struct Brick;
 struct Lst;
 enum Node_Type;
 enum Data_Type;
+
+
+// OP_DEBUG
+
+void op_debug_all(struct Context *C);
 
 int set_draw_plug;
 
