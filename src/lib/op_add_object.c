@@ -28,9 +28,17 @@
 #include "block.h"
 #include "brick.h"
 
-
+#include "geometry.h"
 
 #define LOGOUT 1
+
+// GEO
+
+t_geo *op_new_geo(const char *name)
+{
+	t_geo *geo = geo_make("geo");
+	return geo;
+}
 
 // VLST
 t_vlst *op_new_vlst(const char *name, t_data_type type, int size)
@@ -380,6 +388,16 @@ void *op_add_empty_vlst(t_brick *brick)
 	scene_store(C->scene,1);
 	op_new_vlst("vlst", dt_float, 3);
 	scene_store(C->scene,0);
+
+	return NULL;
+}
+
+void *op_add_empty_geometry(t_brick *brick)
+{
+	//t_context *C = ctx_get();
+	//scene_store(C->scene,1);
+	op_new_geo("geo");
+	//scene_store(C->scene,0);
 
 	return NULL;
 }

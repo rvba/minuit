@@ -697,6 +697,9 @@ t_node *add_part_vlst(t_context *C,t_block *block,t_data_type type,const char *n
 
 	scene_add_ref(C->scene,"struct_ref","vlst","count",&vlst->count_new,vlst);
 
+		printf("::%d\n",vlst->count);
+		printf("::%d\n",vlst->count_new);
+
 	t_node *node_count=add_part_slider_int_positive(C,block,"count:",&vlst->count_new);
 	t_brick *brick_count=node_count->data;
 

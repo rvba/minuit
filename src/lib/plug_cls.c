@@ -46,6 +46,7 @@ void cls_plug_make_selector(t_plug *plug);
 void cls_plug_make_trigger(t_plug *plug);
 void cls_plug_make_operator(t_plug *plug);
 void cls_plug_make_vector(t_plug *plug);
+void cls_plug_make_geo(t_plug *plug);
 
 void cls_plug_connect_general(t_plug_mode mode, t_plug *self, t_plug *dst);
 void cls_plug_disconnect_general(t_plug_mode mode, t_plug *self);
@@ -448,6 +449,19 @@ void cls_plug_connect_operator(t_plug_mode mode, t_plug *self, t_plug *dst)
 	// General
 	cls_plug_connect_general(mode,self,dst);
 }
+
+void cls_plug_disconnect_geo(t_plug_mode mode, t_plug *plug)
+{
+	// General
+	cls_plug_disconnect_general(mode,plug);
+}
+
+void cls_plug_connect_geo(t_plug_mode mode, t_plug *self, t_plug *dst)
+{
+	// General
+	cls_plug_connect_general(mode,self,dst);
+}
+
 
 // DISCONNECT FOR
 
@@ -1358,6 +1372,17 @@ void cls_plug_flow_vector(t_plug *plug)
 	_cls_flow_(plug,__cls_plug_flow_vector);
 }
 
+// GEO
+
+void __cls_plug_flow_geo(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
+{
+}
+
+void cls_plug_flow_geo(t_plug *plug)
+{
+	_cls_flow_(plug,__cls_plug_flow_geo);
+}
+
 // TRIGGER
 
 void __cls_plug_flow_trigger(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
@@ -1996,6 +2021,16 @@ t_plug_class plug_vector ={
 	.disconnect = cls_plug_disconnect_vector,
 };
 
+// GEOMETRY
+
+t_plug_class plug_geo ={
+	.cls_type="geo",
+	.type=dt_geo,
+	.make=cls_plug_make_geo,
+	.flow=cls_plug_flow_geo,  
+	.connect = cls_plug_connect_geo,
+	.disconnect = cls_plug_disconnect_geo,
+};
 
 void cls_plug_make_float(t_plug *plug)
 {
@@ -2083,6 +2118,11 @@ void cls_plug_make_vector(t_plug *plug)
 	plug->cls=&plug_vector;
 }
 
+void cls_plug_make_geo(t_plug *plug)
+{
+	plug->cls=&plug_geo;
+}
+
 t_plug_class *plugs[] = {
 	&plug_float,
 	&plug_int,
@@ -2100,6 +2140,7 @@ t_plug_class *plugs[] = {
 	&plug_trigger,
 	&plug_operator,
 	&plug_vector,
+	&plug_geo,
 	};
 
 

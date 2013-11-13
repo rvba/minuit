@@ -56,6 +56,8 @@ set(SRC
 	light.h
 	list.c
 	list.h
+	geometry.c
+	geometry.h
 	log.c
 	log.h
 	material.c

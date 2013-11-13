@@ -35,6 +35,7 @@
 #include "graph.h"
 #include "material.h"
 #include "mesh.h"
+#include "geometry.h"
 
 #include "ctx.h"
 
@@ -63,6 +64,7 @@ int node_make_set(t_node *node);
 int node_make_binding(t_node *node);
 int node_make_rhizome(t_node *node);
 int node_make_graph(t_node *node);
+int node_make_geo(t_node *node);
 
 char node_name_null[]="node_null";
 char node_name_brick[]="node_brick";
@@ -90,6 +92,7 @@ char node_name_set[]="node_set";
 char node_name_binding[]="node_binding";
 char node_name_rhizome[]="node_rhizome";
 char node_name_graph[]="node_graph";
+char node_name_geo[]="node_geo";
 
 
 int node_equal(t_node *m, t_node *n)
@@ -128,6 +131,7 @@ char *node_name_get(t_node_type type)
 		case(nt_binding):return node_name_binding;break;
 		case(nt_rhizome):return node_name_rhizome;break;
 		case(nt_graph):return node_name_graph;break;
+		case(nt_geo):return node_name_geo;break;
 		default:printf("[ERROR node_name_get] Unknown type %d\n",type);return node_name_null;break;
 	}
 }
@@ -259,6 +263,8 @@ void cls_node_build(t_node *node,const char *name)
 		case nt_rhizome: 	p = rhizome_new(name);
 			break;
 		case nt_graph: 		p = graph_new(name);
+			break;
+		case nt_geo: 		p = geo_new(name);
 			break;
 
 		case nt_null: 
@@ -422,6 +428,11 @@ void cls_node_graph_free(t_scene *sc,t_node *node)
 	graph_free(node->data);
 }
 
+void cls_node_geo_free(t_scene *sc,t_node *node)
+{
+	geo_free(node->data);
+}
+
 // INIT
 
 // get Scene ID
@@ -540,6 +551,11 @@ void cls_node_init_rhizome(t_node *node)
 }
 
 void cls_node_init_graph(t_node *node)
+{
+	cls_node_init_id(node);
+}
+
+void cls_node_init_geo(t_node *node)
 {
 	cls_node_init_id(node);
 }
@@ -871,6 +887,19 @@ t_node_class graph = {
 	.get_ref = cls_node_get_ref,
 };
 
+t_node_class geo = {
+	.type=nt_geo,
+	.size=0,
+	.lst=NULL,
+	.make=node_make_geo,
+	.build=cls_node_build,
+	.link=cls_node_link,
+	.del=cls_node_del,
+	.init=cls_node_init_geo,
+	.free=cls_node_geo_free,
+	.get_ref = cls_node_get_ref,
+};
+
 // MAKE
 
 int node_make_mesh(t_node *node)
@@ -1117,6 +1146,16 @@ int node_make_graph(t_node *node)
 	return 1;
 }
 
+int node_make_geo(t_node *node)
+{
+	t_context *C=ctx_get();
+	node->cls=&geo;
+	node->cls->size=sizeof(t_geo);
+	node->cls->lst=C->scene->geos;
+	node->type = nt_geo;
+	return 1;
+}
+
 // TYPES
 
 t_node_class *nodes[] = {
@@ -1145,6 +1184,7 @@ t_node_class *nodes[] = {
 				&binding,
 				&rhizome,
 				&graph,
+				&geo,
 			};
 
 

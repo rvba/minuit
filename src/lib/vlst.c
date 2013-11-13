@@ -717,7 +717,6 @@ t_vlst *vlst_make(const char *name,t_data_type type, int length, int count)
 
 	if(C->ui->add_bricks)
 	{
-		// New Block
 		t_node *node_block=add_block(C,"vlst");
 		t_block *block=node_block->data;
 		add_part_vlst(C,block,dt_vlst,"vlst",vlst);

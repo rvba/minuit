@@ -78,6 +78,7 @@ typedef enum Node_Type
 	nt_binding,
 	nt_rhizome,
 	nt_graph,
+	nt_geo,
 
 }t_node_type;
 

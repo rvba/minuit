@@ -261,6 +261,7 @@ void *		op_add_empty_mesh(struct Brick *brick);
 void *		op_add_object(const char *name);
 void *		op_add_mesh(const char *name);
 void *		op_add_empty_vlst(struct Brick *brick);
+void *		op_add_empty_geometry(struct Brick *brick);
 
 
 void *		op_camera_rotate_xy(struct Brick *brick);

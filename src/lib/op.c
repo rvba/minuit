@@ -221,7 +221,8 @@ t_node *make_menu_node_add(void)
 	add_brick_trigger(C,block,"viewport",op_add_viewport);
 	add_brick_trigger(C,block,"object",op_add_empty_object);
 	add_brick_trigger(C,block,"mesh",op_add_empty_mesh);
-	add_brick_trigger(C,block,"vlist",op_add_empty_vlst);
+	add_brick_trigger(C,block,"list",op_add_empty_vlst);
+	add_brick_trigger(C,block,"geometry",op_add_empty_geometry);
 
 	return menu;
 }

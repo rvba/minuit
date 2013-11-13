@@ -45,6 +45,7 @@ typedef enum Data_Type
 	dt_rhizome,
 	dt_graph,
 	dt_set,
+	dt_geo,
 
 }t_data_type;
 

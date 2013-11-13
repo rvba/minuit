@@ -1716,7 +1716,9 @@ void *op_set_vlst(t_brick *brick)
 		brick_vlst=block_brick_get(block,"colors");
 	else if(is(block->id.name,"faces"))
 		brick_vlst=block_brick_get(block,"quads");
-	else
+	else if(is(block->id.name,"vlst"))
+		brick_vlst=block_brick_get(block,"vlst");
+	else 
 		printf("err!\n");
 
 	if(brick_vlst)

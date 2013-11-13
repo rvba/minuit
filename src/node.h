@@ -86,6 +86,7 @@ extern char node_name_symbol[];
 extern char node_name_vector[];
 extern char node_name_set[];
 extern char node_name_binding[];
+extern char node_name_geo[];
 
 int 		node_equal(t_node *m, t_node *n);
 t_node*		node_load(void *ptr,const char *type);

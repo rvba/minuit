@@ -56,6 +56,7 @@ typedef struct Scene
 	struct Lst *bindings;
 	struct Lst *rhizomes;
 	struct Lst *graphs;
+	struct Lst *geos;
 
 	struct Lst *vars;
 
