@@ -61,6 +61,8 @@ struct Node *	add_trigger(struct Context *C,const char *name,void*(* f)(struct B
 struct Node *	add_trigger_always(struct Context *C,const char *name,void*(* f)(struct Brick *brick));
 struct Node *	add_clone(struct Context *C);
 struct Node *	add_maths(struct Context *C,const char *name);
+struct Node *	add_geometry(struct Context *C,const char *name, void *data);
+struct Node *	add_geo_point(struct Context *C,const char *name, void *data);
 struct Node *	add_loop(struct Context *C);
 struct Node *	add_switch(struct Context *C,const char *name,void *data);
 struct Node *	add_switch_custom(struct Context *C,const char *name,void *data,void *(* f)(struct Brick *brick));

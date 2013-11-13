@@ -40,6 +40,12 @@ t_geo *op_new_geo(const char *name)
 	return geo;
 }
 
+t_geo_point *op_new_geo_point(const char *name)
+{
+	t_geo_point *geo_point = geo_point_make("point");
+	return geo_point;
+}
+
 // VLST
 t_vlst *op_new_vlst(const char *name, t_data_type type, int size)
  {
@@ -397,6 +403,15 @@ void *op_add_empty_geometry(t_brick *brick)
 	//t_context *C = ctx_get();
 	//scene_store(C->scene,1);
 	op_new_geo("geo");
+	//scene_store(C->scene,0);
+
+	return NULL;
+}
+
+void *op_add_empty_geo_point(t_brick *brick)
+{
+	//scene_store(C->scene,1);
+	op_new_geo_point("geo");
 	//scene_store(C->scene,0);
 
 	return NULL;

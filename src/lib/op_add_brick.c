@@ -33,6 +33,9 @@ int set_draw_plug=1;
 int current_frame = 0;
 int block_pos_offset = 0;
 
+t_node *parent_brick_vector(t_plug *plug_vector, t_node *node, int order);
+t_node *_parent_brick_vector(t_plug *plug_vector, t_node *node, int order);
+
 // GET LIST
 
 t_set *get_current_set(t_context *C)
@@ -509,6 +512,24 @@ t_node *add_brick_object(t_context *C,t_block *block,const char *name,void *data
 	return node;
 }
 
+// BRICK GEO POINT
+
+t_node *add_brick_geo(t_context *C,t_block *block,const char *name,void *data_target, t_data_type type)
+{
+	t_node *node=brick_make(block,name,bt_trigger,type,data_target);
+	t_brick *brick=node->data;
+
+	if(type == dt_geo) brick->action = op_geo;
+	else if(type == dt_geo_point) brick->action = op_geo_point;
+	
+	//brick->action=op_geo_point;
+
+	// PLUG
+	set_plug_option(brick);
+	
+	return node;
+}
+
 // BRICK MESH
 
 t_node *_add_brick_mesh(t_context *C,t_block *block,const char *name,void *data_target, t_data_type type)
@@ -629,6 +650,16 @@ t_node *add_part_object(t_context *C,t_block *block,const char *name,void *data,
 	return node;
 }
 
+// PART GEO POINT
+
+t_node *add_part_geo(t_context *C, t_block *block, const char *name, void *data, t_data_type type)
+{
+	t_node *node = add_brick_geo(C,block,name,data,type);
+	t_brick *brick = node->data;
+	brick->state.draw_outline = 0;
+	return node;
+}
+
 // PART OBJECT
 
 t_node *add_part_mesh(t_context *C,t_block *block,const char *name,void *data,t_data_type type)
@@ -696,9 +727,6 @@ t_node *add_part_vlst(t_context *C,t_block *block,t_data_type type,const char *n
 	t_vlst *vlst=ptr;
 
 	scene_add_ref(C->scene,"struct_ref","vlst","count",&vlst->count_new,vlst);
-
-		printf("::%d\n",vlst->count);
-		printf("::%d\n",vlst->count_new);
 
 	t_node *node_count=add_part_slider_int_positive(C,block,"count:",&vlst->count_new);
 	t_brick *brick_count=node_count->data;
@@ -1133,7 +1161,7 @@ void add_target_mesh( t_context *C, t_mesh *mesh, const char *name)
 	{
 		t_mesh *mesh = selected->data;
 		t_block *block = mesh->ref;
-		if( is( name, "vertex")) 	add_part_mesh( C, block, "vertex", &mesh->vertex, dt_vlst);
+		if( is( name, "vertex")) 	add_part_mesh( C, block, "vertex", mesh, dt_mesh);
 		block->state.update_geometry = 1;
 	}
 }
@@ -1303,6 +1331,62 @@ t_node *add_maths(t_context *C,const char *name)
 	return node_block;
 }
 
+// GEOMETRY
+
+t_node *add_geometry(t_context *C,const char *name, void *data)
+{
+	// NEW BLOCK
+	t_node *node_block = add_block(C,name);
+	t_block *block=node_block->data;
+	block->state.draw_outline = 1;
+
+	// CLONE
+	t_node *node_brick_clone = add_part_slider_int( C, block, "geometry", NULL);
+	t_brick *brick_clone=node_brick_clone->data;
+
+	// GEO 
+	add_part_geo(C,block,name,data,dt_geo);
+
+	brick_clone->plug_out.state.flow_out=0;
+	brick_clone->plug_out.state.open_out=0;
+	brick_clone->state.use_dragging = 0;
+
+	brick_clone->action=op_geometry;
+
+	return node_block;
+}
+
+t_node *add_geo_point(t_context *C,const char *name, void *data)
+{
+	// NEW BLOCK
+	t_node *node_block = add_block(C,name);
+	t_block *block=node_block->data;
+	block->state.draw_outline = 1;
+
+	// GEO POINT
+	add_part_geo(C,block,name,data,dt_geo_point);
+
+	// ADD VECTOR
+
+	C->ui->add_bricks = 0;
+
+	t_node *node_vector = add_part_vector(C,block,"vector");
+	t_brick *brick_vector = node_vector->data;
+	brick_vector->state.draw_value = 0;
+	brick_vector->state.has_components = 1;
+	t_plug *plug_vector = &brick_vector->plug_intern;
+
+	// ADD X Y Z
+
+	_parent_brick_vector(plug_vector, add_part_slider_float(C,block,"x",NULL),0);
+	_parent_brick_vector(plug_vector, add_part_slider_float(C,block,"y",NULL),1);
+	_parent_brick_vector(plug_vector, add_part_slider_float(C,block,"z",NULL),2);
+
+	C->ui->add_bricks = 1;
+
+	return node_block;
+}
+
 // GET
 
 t_node *add_get(t_context *C)
@@ -1398,8 +1482,25 @@ t_node *parent_brick_vector(t_plug *plug_vector, t_node *node, int order)
 
 // VECTOR
 
+t_node *_parent_brick_vector(t_plug *plug_vector, t_node *node, int order)
+{
+	t_brick *brick = node->data;
+	brick->block_order = order;
+	//brick->state.draw = 0;
+	brick->state.draw = 1;
+	t_plug *plug_intern = &brick->plug_intern;
+	plug_intern->state.store_data = 0;
+	plug_add_parent(plug_vector,plug_intern);
+
+	return node;
+}
+
+// VECTOR
+
 t_node *add_vector(t_context *C)
 {
+	C->ui->add_bricks = 0;
+
 	// NEW BLOCK
 	t_node *node_block = add_block(C,"vector");
 	t_block *block=node_block->data;
@@ -1419,6 +1520,8 @@ t_node *add_vector(t_context *C)
 	parent_brick_vector(plug_vector, add_part_slider_float(C,block,"y",NULL),1);
 	parent_brick_vector(plug_vector, add_part_slider_float(C,block,"z",NULL),2);
 	parent_brick_vector(plug_vector, add_part_slider_float(C,block,"w",NULL),3);
+
+	C->ui->add_bricks = 1;
 
 	return node_block;
 }

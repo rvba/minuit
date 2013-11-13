@@ -79,6 +79,7 @@ typedef enum Node_Type
 	nt_rhizome,
 	nt_graph,
 	nt_geo,
+	nt_geo_point,
 
 }t_node_type;
 

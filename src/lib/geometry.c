@@ -33,6 +33,7 @@
 #include "dict.h"
 #include "draw.h"
 #include "geometry.h"
+#include "vector.h"
 
 /*	*************************************************************	
  *		:SHOW
@@ -59,18 +60,18 @@ void geo_point_show(t_geo_point *point)
 
 void geo_show(t_geo *geo)
 {
-	printf("[SHOW ST]\n");
+	printf("[SHOW GEO]\n");
 	t_link *l;
 	t_geo_point *p;
 
-	printf("[SHOW ST POINTS]\n");
+	printf("[SHOW GEO POINTS]\n");
 	if(geo->points->count > 0)
 	{
-	for(l=geo->points->first;l;l=l->next)
-	{
-		p=l->data;
-		geo_point_show(p);
-	}
+		for(l=geo->points->first;l;l=l->next)
+		{
+			p=l->data;
+			geo_point_show(p);
+		}
 	}
 	else
 	{
@@ -104,9 +105,11 @@ t_geo *geo_new(const char *name)
 
 // NEW POINT 
 
-t_geo_point *geo_point_new(void)
+t_geo_point *geo_point_new(const char *name)
 {
 	t_geo_point *point = malloc(sizeof(t_geo_point));
+
+	set_name(point->id.name, name);
 
 	point->parent = NULL;
 	point->child = NULL;
@@ -188,6 +191,29 @@ void geo_free(t_geo *geo)
 	if(geo->faces) lst_free(geo->faces);
 }
 
+/*	*************************************************************	
+ *		:RESET
+ *	*************************************************************
+ */
+
+void geo_reset(t_geo *geo)
+{
+	t_link *l;
+	t_geo_point *point;
+	if(geo->points)
+	{
+		lst_show(geo->points);
+		for(l=geo->points->first;l;l=l->next)
+		{
+			point = l->data;
+			geo_point_free(point);
+		}
+
+		lst_free(geo->points);
+		geo->points = lst_new("points");
+	}
+}
+
 
 /*	*************************************************************	
  *		:MESH
@@ -207,6 +233,18 @@ void geo_mesh_point_update(t_geo *geo, t_mesh *mesh, t_geo_point *point)
 	srf_float(vertex,pos+0,indice+0);
 	srf_float(vertex,pos+1,indice+1);
 	srf_float(vertex,pos+2,indice+2);
+}
+
+/*	*************************************************************	
+ *		:UDPATE
+ *	*************************************************************
+ */
+
+void geo_point_vector_update(t_geo_point *point, t_vector *vector)
+{
+	t_vlst *vlst = vector->vector;
+	float *points = vlst->data;
+	vcp(point->pos,points);
 }
 
 /*	*************************************************************	
@@ -232,7 +270,7 @@ t_geo *geo_add(const char *name)
 
 t_geo_point *geo_add_point(t_geo *geo, float *p, float *v, int extrude, float *color)
 {
-	t_geo_point *point = geo_point_new();
+	t_geo_point *point = geo_point_new("point");
 
 	vcp(point->vector,v);
 	vcp(point->color, color);
@@ -259,6 +297,53 @@ t_geo_point *geo_add_point(t_geo *geo, float *p, float *v, int extrude, float *c
 	return point;
 }
 
+int geo_point_equal(t_geo_point *a, t_geo_point *b)
+{
+	if(a->id.id == b->id.id) return 1;
+	else return 0;
+}
+
+int geo_point_exists(t_geo *geo, t_geo_point *point)
+{
+	t_link *l;
+	t_geo_point *p;
+	if(geo->points)
+	{
+		for(l=geo->points->first;l;l=l->next)
+		{
+			p = l->data;
+			if(geo_point_equal(p,point))
+			{
+				return 1;
+			}
+		}
+	}
+
+	return 0;
+}
+
+void geo_fill_points(t_geo *geo, t_lst *lst)
+{
+	t_link *l;
+	t_geo_point *point;
+
+	if(geo->points)
+	{
+		for(l=lst->first;l;l=l->next)
+		{
+			point = l->data;
+			if(!geo_point_exists(geo, point))
+			{
+				lst_add(geo->points,point,"point");
+			}
+		}
+	}
+	else
+	{
+		geo->points = lst_new("points");
+		geo_fill_points(geo, lst);
+	}
+}
 
 void geo_point_edge_add(t_geo_point *point, t_geo_edge *edge)
 {
@@ -515,7 +600,7 @@ void geo_point_move(t_geo *geo, t_geo_point *point)
 }
 
 
-// ST UPDATE DATA
+// UPDATE DATA
 
 void geo_update_data(t_geo *geo)
 {
@@ -728,18 +813,59 @@ t_geo_point *geo_get_last(t_geo *geo)
 t_geo *geo_make(const char *name)
 {
 	t_context *C = ctx_get();
-	// add mesh
 	t_node *node_geo = scene_add(C->scene,nt_geo,name);
 	t_geo *geo = node_geo->data;
 
+	geo->points = lst_new("points");
+	geo->edges = lst_new("edges");
+
 	if(C->ui->add_bricks)
 	{
-		t_node *node_block=add_block(C,"vlst");
-		t_block *block=node_block->data;
-		add_part_selector(C,block,geo->id.name,node_geo,dt_geo);
+		t_node *node = add_geometry(C,"data",geo);
+		t_block *block = node->data;
 		geo->ref = block;
 	}
 
 	return geo;
+}
+
+t_geo_point *geo_point_make(const char *name)
+{
+	t_context *C = ctx_get();
+	t_node *node_geo_point = scene_add(C->scene,nt_geo_point,name);
+	t_geo_point *geo_point = node_geo_point->data;
+
+	if(C->ui->add_bricks)
+	{
+		t_node *node = add_geo_point(C,"point",geo_point);
+		t_block *block = node->data;
+		geo_point->ref = block;
+	}
+
+	return geo_point;
+}
+
+void geo_data_set(t_geo *geo, t_lst *points)
+{
+	geo_fill_points(geo, points);
+}
+
+void geo_vlst_set(t_geo *geo, t_vlst *vlst)
+{
+	if(geo->points->count > vlst->count)
+	{
+		vlst->count_new = geo->points->count;
+		 __vlst_update_data(vlst, NULL);
+	}
+
+	t_link *l;
+	float *v = vlst->data;
+	for(l=geo->points->first;l;l=l->next)
+	{
+		t_geo_point *point = l->data;
+		float *p = point->pos;
+		vcp(v,p);
+		v+=3;
+	}
 }
 

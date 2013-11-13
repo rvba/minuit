@@ -26,6 +26,7 @@
 #include "brick.h"
 
 #include "mesh.h"
+#include "geometry.h"
 
 int PLUG_DEBUG;
 
@@ -47,6 +48,7 @@ void cls_plug_make_trigger(t_plug *plug);
 void cls_plug_make_operator(t_plug *plug);
 void cls_plug_make_vector(t_plug *plug);
 void cls_plug_make_geo(t_plug *plug);
+void cls_plug_make_geo_point(t_plug *plug);
 
 void cls_plug_connect_general(t_plug_mode mode, t_plug *self, t_plug *dst);
 void cls_plug_disconnect_general(t_plug_mode mode, t_plug *self);
@@ -62,7 +64,16 @@ void object_show(t_object *object)
 
 void mesh_show(t_mesh *mesh)
 {
-	term_log("mesh");
+
+	//term_log("mesh");
+	if(mesh->vertex)
+	{
+		vlst_show(mesh->vertex);
+	}
+	else
+	{
+		printf("MESH no vlst\n");
+	}
 }
 
 
@@ -457,6 +468,18 @@ void cls_plug_disconnect_geo(t_plug_mode mode, t_plug *plug)
 }
 
 void cls_plug_connect_geo(t_plug_mode mode, t_plug *self, t_plug *dst)
+{
+	// General
+	cls_plug_connect_general(mode,self,dst);
+}
+
+void cls_plug_disconnect_geo_point(t_plug_mode mode, t_plug *plug)
+{
+	// General
+	cls_plug_disconnect_general(mode,plug);
+}
+
+void cls_plug_connect_geo_point(t_plug_mode mode, t_plug *self, t_plug *dst)
 {
 	// General
 	cls_plug_connect_general(mode,self,dst);
@@ -1383,6 +1406,15 @@ void cls_plug_flow_geo(t_plug *plug)
 	_cls_flow_(plug,__cls_plug_flow_geo);
 }
 
+void __cls_plug_flow_geo_point(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
+{
+}
+
+void cls_plug_flow_geo_point(t_plug *plug)
+{
+	_cls_flow_(plug,__cls_plug_flow_geo);
+}
+
 // TRIGGER
 
 void __cls_plug_flow_trigger(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
@@ -1648,7 +1680,7 @@ void cls_plug_flow_lst(t_plug *plug)
 	_cls_flow_(plug,__cls_plug_flow_lst);
 }
 
-// VLST
+// :VLST
 
 void __cls_plug_flow_vlst(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 {
@@ -1662,6 +1694,9 @@ void __cls_plug_flow_vlst(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 			case dt_vlst:
 				//copy pointer
 				plug->data=src_plug->data;
+				break;
+			case dt_geo:
+				geo_vlst_set(src_plug->data, plug->data);
 				break;
 				
 			default:
@@ -1716,12 +1751,24 @@ void __cls_plug_flow_mesh(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 {
 	if(src_plug)
 	{
+		t_mesh *mesh = plug->data;
+		t_vlst *vlst = NULL;
+
 		t_data_type src_type=src_plug->data_type;
 
 		switch(src_type)
 		{
 			case dt_mesh:
 				plug->data = src_plug->data;
+				break;
+
+			case dt_vlst:
+				vlst = src_plug->data;
+				if(vlst->data)
+				{
+					mesh->vertex = vlst;
+					mesh->var.tot_vertex = vlst->count;
+				}
 				break;
 			default:
 				plug_warning(plug,src_plug);
@@ -2032,6 +2079,15 @@ t_plug_class plug_geo ={
 	.disconnect = cls_plug_disconnect_geo,
 };
 
+t_plug_class plug_geo_point ={
+	.cls_type="geo_point",
+	.type=dt_geo_point,
+	.make=cls_plug_make_geo_point,
+	.flow=cls_plug_flow_geo_point,  
+	.connect = cls_plug_connect_geo_point,
+	.disconnect = cls_plug_disconnect_geo_point,
+};
+
 void cls_plug_make_float(t_plug *plug)
 {
 	plug->cls=&plug_float;
@@ -2123,6 +2179,11 @@ void cls_plug_make_geo(t_plug *plug)
 	plug->cls=&plug_geo;
 }
 
+void cls_plug_make_geo_point(t_plug *plug)
+{
+	plug->cls=&plug_geo_point;
+}
+
 t_plug_class *plugs[] = {
 	&plug_float,
 	&plug_int,
@@ -2141,6 +2202,7 @@ t_plug_class *plugs[] = {
 	&plug_operator,
 	&plug_vector,
 	&plug_geo,
+	&plug_geo_point,
 	};
 
 

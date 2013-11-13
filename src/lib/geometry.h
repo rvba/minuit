@@ -16,6 +16,8 @@
 struct Geometry;
 struct Lst;
 struct Block;
+struct Vector;
+struct VLst;
 
 // GEOMETRY
 
@@ -33,6 +35,8 @@ typedef struct Geo_Point
 	int indice;
 	int is_moving;
 	float velocity;
+
+	struct Block *ref;
 
 }t_geo_point;
 
@@ -77,9 +81,18 @@ typedef struct Geometry
 
 }t_geo;
 
+void geo_point_vector_update(t_geo_point *point, struct Vector *vector);
+
+void geo_point_show(t_geo_point *point);
+
 t_geo *geo_make(const char *name);
 t_geo *geo_new(const char *name);
 void geo_free(t_geo *geo);
 
+t_geo_point *geo_point_make(const char *name);
+t_geo_point *geo_point_new(const char *name);
+
+void geo_data_set(t_geo *geo, struct Lst *points);
+void geo_vlst_set(t_geo *geo, struct VLst *vlst);
 
 #endif

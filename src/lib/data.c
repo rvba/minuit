@@ -15,6 +15,8 @@
 #include "data.h"
 #include "list.h"
 #include "vector.h"
+#include "geometry.h"
+#include "ui.h"
 
 char name_null[] = "null";
 char name_int[] = "int";
@@ -42,6 +44,8 @@ char name_block[] = "block";
 char name_rhizome[] = "rhizome";
 char name_graph[] = "graph";
 char name_set[] = "set";
+char name_geo_point[] = "point";
+char name_geo[] = "geometry";
 
 void cls_data_init(t_data *data)
 {
@@ -81,6 +85,8 @@ char *data_name_get(t_data_type type)
 		case dt_set: return name_set; break;
 		case dt_rhizome: return name_rhizome; break;
 		case dt_graph:  return name_graph; break;
+		case dt_geo_point:  return name_geo_point; break;
+		case dt_geo:  return name_geo; break;
 		default: return name_default; break;
 	}
 }
@@ -97,12 +103,19 @@ void *data_add(t_data_type type,void *data)
 	t_vlst *_vlst;
 	t_vector *_vector;
 	t_node *node;
+	//t_geo_point *_point;
 
 	size_t size;
 
 
 	switch(type)
 	{
+
+		case dt_geo_point:
+
+			return data;
+			break;
+
 		case dt_vector:
 
 			node = vector_add("vector");
@@ -233,6 +246,8 @@ void *data_add(t_data_type type,void *data)
 				return NULL;
 			}
 			break;
+			
+				
 
 		default:
 			printf("[ERROR data_add] Unknown data type:%s\n",data_name_get(type));
@@ -391,9 +406,19 @@ void data_init(t_data_type type,void *data_dst, void *data_src)
 	float *_float;
 	t_vlst *_vlst;
 	char *_char;
+	t_geo_point *_geo_point_src;
+	t_geo_point *_geo_point_dst;
 
 	switch(type)
 	{
+		case dt_geo_point:
+			_geo_point_dst = (t_geo_point *) data_dst;
+			_geo_point_src = (t_geo_point *) data_src;
+
+			*_geo_point_dst = *_geo_point_src;
+			
+			break;
+
 		case dt_int:
 
 			_int = (int*) data_dst;

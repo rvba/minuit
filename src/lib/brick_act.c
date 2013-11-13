@@ -27,6 +27,7 @@
 #include "clock.h"
 #include "set.h"
 #include "rhizome.h"
+#include "geometry.h"
 
 int brick_check_loop(t_brick *brick)
 {
@@ -1565,6 +1566,73 @@ void *op_maths(t_operation operation,t_brick *brick)
 		
 		vset3f(v,0,0,0);
 	}
+
+	return NULL;
+}
+
+// GEOMETRY
+
+void op_geo_exe(t_brick *brick)
+{
+	t_link *l;
+	t_brick *b;
+	t_plug *p;
+	t_geo_point *point;
+
+	t_block *block=brick->block;
+	t_brick *brick_geometry = block_brick_get(block,"data");
+	t_geo *geo = brick_geometry->plug_intern.data;
+
+	t_lst *points = lst_new("lst");
+
+	for(l=block->bricks->first;l;l=l->next)
+	{
+		b=l->data;
+		p=&b->plug_intern;
+		if(p->cls->type == dt_geo_point)
+		{
+			point = p->data;
+			lst_add(points,point,"point");
+		}
+	}
+
+	if(points->count > 0) geo_data_set(geo, points);
+
+	lst_free(points);
+
+}
+
+void *op_geo_brick_add(t_brick *brick)
+{
+	t_block *block=brick->block;
+	t_brick *brick_result=block_brick_get(block,"data");
+
+	// add bricks
+	op_add_bricks(brick,brick_result,2,t_child_parent);
+
+	return NULL;
+}
+
+void *op_geometry(t_brick *brick)
+{
+	op_geo_brick_add(brick);
+	op_geo_exe(brick);
+	return NULL;
+}
+
+void *op_geo(t_brick *brick)
+{
+	return NULL;
+}
+
+void *op_geo_point(t_brick *brick)
+{
+	t_geo_point *point = brick->plug_intern.data;
+	t_block *block = brick->block;
+	t_brick *brick_vector = block_brick_get(block,"vector");
+	t_vector *vector = brick_vector->plug_intern.data;
+
+	geo_point_vector_update(point,vector);
 
 	return NULL;
 }
