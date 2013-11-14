@@ -1578,12 +1578,14 @@ void op_geo_exe(t_brick *brick)
 	t_brick *b;
 	t_plug *p;
 	t_geo_point *point;
+	t_geo_edge *edge;
 
 	t_block *block=brick->block;
 	t_brick *brick_geometry = block_brick_get(block,"data");
 	t_geo *geo = brick_geometry->plug_intern.data;
 
 	t_lst *points = lst_new("lst");
+	t_lst *edges = lst_new("lst");
 
 	for(l=block->bricks->first;l;l=l->next)
 	{
@@ -1594,11 +1596,21 @@ void op_geo_exe(t_brick *brick)
 			point = p->data;
 			lst_add(points,point,"point");
 		}
+		else if(p->cls->type == dt_geo_edge)
+		{
+			edge = p->data;
+			if(edge->a && edge->b)
+			{
+				lst_add(edges,edge,"edge");
+			}
+		}
 	}
 
-	if(points->count > 0) geo_data_set(geo, points);
+	if(points->count > 0) geo_data_set(geo, dt_geo_point, points);
+	if(edges->count > 0) geo_data_set(geo, dt_geo_edge, edges);
 
 	lst_free(points);
+	lst_free(edges);
 
 }
 
@@ -1627,12 +1639,31 @@ void *op_geo(t_brick *brick)
 
 void *op_geo_point(t_brick *brick)
 {
+	t_plug *plug = &brick->plug_intern;
+	// flow
+	plug->cls->flow(plug);
+
 	t_geo_point *point = brick->plug_intern.data;
 	t_block *block = brick->block;
 	t_brick *brick_vector = block_brick_get(block,"vector");
 	t_vector *vector = brick_vector->plug_intern.data;
 
 	geo_point_vector_update(point,vector);
+
+	return NULL;
+}
+
+void *op_geo_edge(t_brick *brick)
+{
+	t_geo_edge *edge = brick->plug_intern.data;
+	t_block *block = brick->block;
+	t_brick *brick_point_1 = block_brick_get_by_order(block,1);
+	t_brick *brick_point_2 = block_brick_get_by_order(block,2);
+	t_geo_point *point_1 = brick_point_1->plug_intern.data;
+	t_geo_point *point_2 = brick_point_2->plug_intern.data;
+
+	edge->a = point_1;
+	edge->b = point_2;
 
 	return NULL;
 }

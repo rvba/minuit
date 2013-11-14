@@ -521,9 +521,8 @@ t_node *add_brick_geo(t_context *C,t_block *block,const char *name,void *data_ta
 
 	if(type == dt_geo) brick->action = op_geo;
 	else if(type == dt_geo_point) brick->action = op_geo_point;
+	else if(type == dt_geo_edge) brick->action = op_geo_edge;
 	
-	//brick->action=op_geo_point;
-
 	// PLUG
 	set_plug_option(brick);
 	
@@ -1352,6 +1351,38 @@ t_node *add_geometry(t_context *C,const char *name, void *data)
 	brick_clone->state.use_dragging = 0;
 
 	brick_clone->action=op_geometry;
+
+	return node_block;
+}
+
+void add_geo_point_bare(t_context *C,t_block *block, const char *name, void *data, int order, t_plug *plug)
+{
+	t_node *node = add_part_geo(C,block,name,data,dt_geo_point);
+	t_brick *brick = node->data;
+	brick->action = op_void;
+
+	brick->block_order = order;
+	t_plug *plug_intern = &brick->plug_intern;
+	plug_add_parent(plug,plug_intern);
+}
+
+t_node *add_geo_edge(t_context *C,const char *name, void *data)
+{
+	// NEW BLOCK
+	t_node *node_block = add_block(C,name);
+	t_block *block=node_block->data;
+	block->state.draw_outline = 1;
+
+	// GEO EDGE
+	t_node *node_edge = add_part_geo(C,block,"edge",data,dt_geo_edge);
+	t_brick *brick_edge = node_edge->data;
+	t_plug *plug = &brick_edge->plug_intern;
+
+	brick_edge->state.always_trigger = 1;
+
+	// GEO POINT
+	add_geo_point_bare(C,block,"point",NULL,1,plug);
+	add_geo_point_bare(C,block,"point",NULL,2,plug);
 
 	return node_block;
 }

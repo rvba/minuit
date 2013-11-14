@@ -46,6 +46,12 @@ t_geo_point *op_new_geo_point(const char *name)
 	return geo_point;
 }
 
+t_geo_edge *op_new_geo_edge(const char *name)
+{
+	t_geo_edge *geo_edge = geo_edge_make("edge");
+	return geo_edge;
+}
+
 // VLST
 t_vlst *op_new_vlst(const char *name, t_data_type type, int size)
  {
@@ -411,7 +417,16 @@ void *op_add_empty_geometry(t_brick *brick)
 void *op_add_empty_geo_point(t_brick *brick)
 {
 	//scene_store(C->scene,1);
-	op_new_geo_point("geo");
+	op_new_geo_point("point");
+	//scene_store(C->scene,0);
+
+	return NULL;
+}
+
+void *op_add_empty_geo_edge(t_brick *brick)
+{
+	//scene_store(C->scene,1);
+	op_new_geo_edge("edge");
 	//scene_store(C->scene,0);
 
 	return NULL;

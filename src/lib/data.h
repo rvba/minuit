@@ -47,6 +47,7 @@ typedef enum Data_Type
 	dt_set,
 	dt_geo,
 	dt_geo_point,
+	dt_geo_edge,
 
 }t_data_type;
 
@@ -105,6 +106,7 @@ extern char name_brick[];
 extern char name_block[];
 extern char name_set[];
 extern char name_geo_point[];
+extern char name_geo_edge[];
 extern char name_geo[];
 
 char *		data_name_get(t_data_type);

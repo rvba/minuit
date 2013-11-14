@@ -80,6 +80,7 @@ typedef enum Node_Type
 	nt_graph,
 	nt_geo,
 	nt_geo_point,
+	nt_geo_edge,
 
 }t_node_type;
 

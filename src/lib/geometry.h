@@ -42,10 +42,12 @@ typedef struct Geo_Point
 
 typedef struct Geo_Edge
 {
+	t_id id;
 	struct Geo_Point *a;
 	struct Geo_Point *b;
 	struct Lst *faces;
 	int indice;
+	struct Block *ref;
 
 }t_geo_edge;
 
@@ -89,10 +91,16 @@ t_geo *geo_make(const char *name);
 t_geo *geo_new(const char *name);
 void geo_free(t_geo *geo);
 
+
+void geo_point_free(t_geo_point *point);
 t_geo_point *geo_point_make(const char *name);
 t_geo_point *geo_point_new(const char *name);
 
-void geo_data_set(t_geo *geo, struct Lst *points);
+void geo_edge_free(t_geo_edge *edge) ;
+t_geo_edge *geo_edge_make(const char *name);
+t_geo_edge *geo_edge_new(const char *name);
+
+void geo_data_set(t_geo *geo, t_data_type type, struct Lst *points);
 void geo_vlst_set(t_geo *geo, struct VLst *vlst);
 
 #endif

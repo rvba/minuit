@@ -263,6 +263,7 @@ void *		op_add_mesh(const char *name);
 void *		op_add_empty_vlst(struct Brick *brick);
 void *		op_add_empty_geometry(struct Brick *brick);
 void *		op_add_empty_geo_point(struct Brick *brick);
+void *		op_add_empty_geo_edge( struct Brick *brick);
 
 
 void *		op_camera_rotate_xy(struct Brick *brick);
@@ -287,6 +288,7 @@ void *		op_add(struct Brick *brick);
 void *		op_geometry(struct Brick *brick);
 void *		op_geo(struct Brick *brick);
 void * 		op_geo_point(struct Brick *brick);
+void * 		op_geo_edge(struct Brick *brick);
 void *		op_superior(struct Brick *brick);
 void *		op_inferior(struct Brick *brick);
 void *		op_plusplus(struct Brick *brick);

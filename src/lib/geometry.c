@@ -124,9 +124,11 @@ t_geo_point *geo_point_new(const char *name)
 
 // NEW EDGE 
 
-t_geo_edge *geo_edge_new(void)
+t_geo_edge *geo_edge_new(const char *name)
 {
 	t_geo_edge *edge = malloc(sizeof(t_geo_edge));
+
+	set_name(edge->id.name, name);
 
 	edge->a = NULL;
 	edge->b = NULL;
@@ -303,19 +305,24 @@ int geo_point_equal(t_geo_point *a, t_geo_point *b)
 	else return 0;
 }
 
-int geo_point_exists(t_geo *geo, t_geo_point *point)
+int geo_elem_exists(t_geo *geo, t_data_type type, void *data)
 {
 	t_link *l;
-	t_geo_point *p;
-	if(geo->points)
+	t_lst *lst=NULL;
+	t_id *_id = (t_id *) data;
+	int id = _id->id;
+	void *d;
+	if( type == dt_geo_point) lst = geo->points;
+	else if( type == dt_geo_edge ) lst = geo->edges;
+
+	for(l=lst->first;l;l=l->next)
 	{
-		for(l=geo->points->first;l;l=l->next)
+		d = l->data;
+		t_id *__id = (t_id *) d;
+		int ___id = __id->id;
+		if(___id == id)
 		{
-			p = l->data;
-			if(geo_point_equal(p,point))
-			{
-				return 1;
-			}
+			return 1;
 		}
 	}
 
@@ -332,7 +339,7 @@ void geo_fill_points(t_geo *geo, t_lst *lst)
 		for(l=lst->first;l;l=l->next)
 		{
 			point = l->data;
-			if(!geo_point_exists(geo, point))
+			if(!geo_elem_exists(geo, dt_geo_point, point))
 			{
 				lst_add(geo->points,point,"point");
 			}
@@ -345,6 +352,24 @@ void geo_fill_points(t_geo *geo, t_lst *lst)
 	}
 }
 
+void geo_fill_edges(t_geo *geo, t_lst *lst)
+{
+	t_link *l;
+	t_geo_edge *edge;
+
+	if(geo->edges)
+	{
+		for(l=lst->first;l;l=l->next)
+		{
+			edge = l->data;
+			if(!geo_elem_exists(geo, dt_geo_edge, edge))
+			{
+				lst_add(geo->edges,edge,"edge");
+			}
+		}
+	}
+}
+
 void geo_point_edge_add(t_geo_point *point, t_geo_edge *edge)
 {
 	lst_add(point->edges, edge, "edge");
@@ -353,7 +378,7 @@ void geo_point_edge_add(t_geo_point *point, t_geo_edge *edge)
 t_geo_edge *geo_edge_add(t_geo *geo, t_geo_point *a, t_geo_point *b, float *color)
 {
 	// New Edge
-	t_geo_edge *edge = geo_edge_new();
+	t_geo_edge *edge = geo_edge_new("edge");
 	edge->a = a;
 	edge->b = b;
 
@@ -845,9 +870,27 @@ t_geo_point *geo_point_make(const char *name)
 	return geo_point;
 }
 
-void geo_data_set(t_geo *geo, t_lst *points)
+t_geo_edge *geo_edge_make(const char *name)
 {
-	geo_fill_points(geo, points);
+	t_context *C = ctx_get();
+	t_node *node_geo_edge = scene_add(C->scene,nt_geo_edge,name);
+	t_geo_edge *geo_edge = node_geo_edge->data;
+
+	if(C->ui->add_bricks)
+	{
+		t_node *node = add_geo_edge(C,"point",geo_edge);
+		t_block *block = node->data;
+		geo_edge->ref = block;
+	}
+
+	return geo_edge;
+}
+
+void geo_data_set(t_geo *geo, t_data_type type, t_lst *lst)
+{
+	if( type == dt_geo_point) 	geo_fill_points(geo, lst);
+	else if( type == dt_geo_edge) 	geo_fill_edges(geo, lst);
+
 }
 
 void geo_vlst_set(t_geo *geo, t_vlst *vlst)
