@@ -261,6 +261,8 @@ void *		op_add_empty_mesh(struct Brick *brick);
 void *		op_add_object(const char *name);
 void *		op_add_mesh(const char *name);
 void *		op_add_empty_vlst(struct Brick *brick);
+void *		op_add_empty_float_vlst(struct Brick *brick);
+void *		op_add_empty_int_vlst(struct Brick *brick);
 void *		op_add_empty_geometry(struct Brick *brick);
 void *		op_add_empty_geo_point(struct Brick *brick);
 void *		op_add_empty_geo_edge( struct Brick *brick);

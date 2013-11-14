@@ -52,10 +52,22 @@ void vector_build(float *r,float *p, float *v)
 void geo_point_show(t_geo_point *point)
 {
 	printf("[SHOW POINT]\n");
+	printf("indice:%d\n",point->indice);
 	printf("pos:");
 	vprint3f(point->pos,'\n');
 	printf("vector:");
 	vprint3f(point->vector,'\n');
+}
+
+void geo_edge_show(t_geo_edge *edge)
+{
+	printf("[SHOW EDGE]\n");
+	if(edge->a) printf("%d", edge->a->indice);
+	else  printf("nil");
+	printf(":");
+	if(edge->a) printf("%d", edge->b->indice);
+	else  printf("nil");
+	printf("\n");
 }
 
 void geo_show(t_geo *geo)
@@ -63,6 +75,7 @@ void geo_show(t_geo *geo)
 	printf("[SHOW GEO]\n");
 	t_link *l;
 	t_geo_point *p;
+	t_geo_edge *e;
 
 	printf("[SHOW GEO POINTS]\n");
 	if(geo->points->count > 0)
@@ -71,6 +84,21 @@ void geo_show(t_geo *geo)
 		{
 			p=l->data;
 			geo_point_show(p);
+		}
+	}
+	else
+	{
+		printf("no points\n");
+	}
+
+	printf("[SHOW GEO EDGES]\n");
+
+	if(geo->edges->count > 0)
+	{
+		for(l=geo->edges->first;l;l=l->next)
+		{
+			e=l->data;
+			geo_edge_show(e);
 		}
 	}
 	else
@@ -329,6 +357,16 @@ int geo_elem_exists(t_geo *geo, t_data_type type, void *data)
 	return 0;
 }
 
+void geo_fill_point(t_geo *geo, t_geo_point *point)
+{
+	if(!geo_elem_exists(geo, dt_geo_point, point))
+	{
+		point->indice = geo->points->count;
+		lst_add(geo->points,point,"point");
+	}
+}
+
+
 void geo_fill_points(t_geo *geo, t_lst *lst)
 {
 	t_link *l;
@@ -339,16 +377,8 @@ void geo_fill_points(t_geo *geo, t_lst *lst)
 		for(l=lst->first;l;l=l->next)
 		{
 			point = l->data;
-			if(!geo_elem_exists(geo, dt_geo_point, point))
-			{
-				lst_add(geo->points,point,"point");
-			}
+			geo_fill_point( geo, point);
 		}
-	}
-	else
-	{
-		geo->points = lst_new("points");
-		geo_fill_points(geo, lst);
 	}
 }
 
@@ -357,13 +387,19 @@ void geo_fill_edges(t_geo *geo, t_lst *lst)
 	t_link *l;
 	t_geo_edge *edge;
 
+
 	if(geo->edges)
 	{
 		for(l=lst->first;l;l=l->next)
 		{
 			edge = l->data;
+
+
 			if(!geo_elem_exists(geo, dt_geo_edge, edge))
 			{
+				if( edge->a) geo_fill_point( geo, edge->a);
+				if( edge->b) geo_fill_point( geo, edge->b);
+
 				lst_add(geo->edges,edge,"edge");
 			}
 		}
@@ -844,6 +880,9 @@ t_geo *geo_make(const char *name)
 	geo->points = lst_new("points");
 	geo->edges = lst_new("edges");
 
+	geo->points->type = dt_geo_point;
+	geo->edges->type = dt_geo_edge;
+
 	if(C->ui->add_bricks)
 	{
 		t_node *node = add_geometry(C,"data",geo);
@@ -890,25 +929,56 @@ void geo_data_set(t_geo *geo, t_data_type type, t_lst *lst)
 {
 	if( type == dt_geo_point) 	geo_fill_points(geo, lst);
 	else if( type == dt_geo_edge) 	geo_fill_edges(geo, lst);
-
 }
 
-void geo_vlst_set(t_geo *geo, t_vlst *vlst)
+void geo_vlst(t_vlst *vlst, t_lst *lst)
 {
-	if(geo->points->count > vlst->count)
+	if(lst->count > vlst->count)
 	{
-		vlst->count_new = geo->points->count;
+		vlst->count_new = lst->count;
 		 __vlst_update_data(vlst, NULL);
 	}
+}
 
+void geo_vlst_points_set(t_lst *lst, t_vlst *vlst)
+{
 	t_link *l;
+
+	geo_vlst(vlst, lst);
+
 	float *v = vlst->data;
-	for(l=geo->points->first;l;l=l->next)
+
+	for(l=lst->first;l;l=l->next)
 	{
 		t_geo_point *point = l->data;
 		float *p = point->pos;
 		vcp(v,p);
 		v+=3;
 	}
+
+	vlst->type_target = dt_vertex;
 }
 
+void geo_vlst_edges_set(t_lst *lst, t_vlst *vlst)
+{
+	t_link *l;
+
+	geo_vlst(vlst, lst);
+
+	int *i = vlst->data;
+
+	for(l=lst->first;l;l=l->next)
+	{
+		t_geo_edge *edge = l->data;
+
+		t_geo_point *pa = edge->a;
+		t_geo_point *pb = edge->b;
+		int a = pa->indice;
+		int b = pb->indice;
+		*i = a;
+		*(i+1) = b;
+		i+=2;
+	}
+
+	vlst->type_target = dt_edge;
+}

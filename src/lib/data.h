@@ -28,6 +28,7 @@ typedef enum Data_Type
 	dt_string,
 	dt_pointer,
 	dt_vertex,
+	dt_edge,
 	dt_face,
 	dt_mesh,
 	dt_lst,

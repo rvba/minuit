@@ -101,6 +101,8 @@ t_geo_edge *geo_edge_make(const char *name);
 t_geo_edge *geo_edge_new(const char *name);
 
 void geo_data_set(t_geo *geo, t_data_type type, struct Lst *points);
-void geo_vlst_set(t_geo *geo, struct VLst *vlst);
+void geo_vlst_set(t_geo *geo, t_data_type type,  struct VLst *vlst);
+void geo_vlst_points_set(struct Lst *lst, struct VLst *vlst);
+void geo_vlst_edges_set(struct Lst *lst, struct VLst *vlst);
 
 #endif

@@ -176,6 +176,7 @@ void *op_brick_add(t_brick *brick)
 	else if(is(name,"stack")) 		node = add_stack(C); 
 	else if(is(name,"mesh")) 		node = add_slider_object(C,"mesh"); 
 	else if(is(name,"vertex")) 		node = add_brick_mesh(C,"vertex"); 
+	else if(is(name,"edges")) 		node = add_brick_mesh(C,"edges"); 
 
 	// Store
 	scene_store(C->scene,0);
@@ -1570,7 +1571,7 @@ void *op_maths(t_operation operation,t_brick *brick)
 	return NULL;
 }
 
-// GEOMETRY
+// :GEOMETRY
 
 void op_geo_exe(t_brick *brick)
 {
@@ -1583,6 +1584,9 @@ void op_geo_exe(t_brick *brick)
 	t_block *block=brick->block;
 	t_brick *brick_geometry = block_brick_get(block,"data");
 	t_geo *geo = brick_geometry->plug_intern.data;
+
+	t_brick *brick_points = block_brick_get( block, "points");
+	t_brick *brick_edges = block_brick_get( block, "edges");
 
 	t_lst *points = lst_new("lst");
 	t_lst *edges = lst_new("lst");
@@ -1609,6 +1613,9 @@ void op_geo_exe(t_brick *brick)
 	if(points->count > 0) geo_data_set(geo, dt_geo_point, points);
 	if(edges->count > 0) geo_data_set(geo, dt_geo_edge, edges);
 
+	if(geo->points) brick_points->plug_intern.data = geo->points;
+	if(geo->edges) brick_edges->plug_intern.data = geo->edges;
+
 	lst_free(points);
 	lst_free(edges);
 
@@ -1620,7 +1627,7 @@ void *op_geo_brick_add(t_brick *brick)
 	t_brick *brick_result=block_brick_get(block,"data");
 
 	// add bricks
-	op_add_bricks(brick,brick_result,2,t_child_parent);
+	op_add_bricks(brick,brick_result,4,t_child_parent);
 
 	return NULL;
 }

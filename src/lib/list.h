@@ -40,6 +40,8 @@ typedef struct Lst
 	t_link *last;
 	t_link *current;
 
+	t_data_type type;
+
 	int count;
 
 }t_lst;
@@ -65,6 +67,7 @@ typedef struct VLst
 	struct VLst *link;
 
 	t_data_type type;
+	t_data_type type_target;
 
 	void *data;
 	struct Block *ref;

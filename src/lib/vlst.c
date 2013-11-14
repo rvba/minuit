@@ -830,6 +830,8 @@ t_vlst *vlst_new(const char *name)
 	vlst->limit_low = -1;
 	vlst->limit_high = -1;
 	vlst->ref = NULL;
+	vlst->type = dt_null;
+	vlst->type_target = dt_null;
 
 	return vlst;
 }

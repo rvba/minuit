@@ -1035,6 +1035,7 @@ t_lst *lst_new(const char *name)
 	lst->first=NULL;
 	lst->last=NULL;
 	lst->current=NULL;
+	lst->type=dt_null;
 	
 	return lst;
 }

@@ -221,7 +221,8 @@ t_node *make_menu_node_add(void)
 	add_brick_trigger(C,block,"viewport",op_add_viewport);
 	add_brick_trigger(C,block,"object",op_add_empty_object);
 	add_brick_trigger(C,block,"mesh",op_add_empty_mesh);
-	add_brick_trigger(C,block,"list",op_add_empty_vlst);
+	add_brick_trigger(C,block,"vlstf",op_add_empty_float_vlst);
+	add_brick_trigger(C,block,"vlsti",op_add_empty_int_vlst);
 	add_brick_trigger(C,block,"geometry",op_add_empty_geometry);
 	add_brick_trigger(C,block,"point",op_add_empty_geo_point);
 	add_brick_trigger(C,block,"edge",op_add_empty_geo_edge);
@@ -273,6 +274,7 @@ t_node *make_menu_mesh(void)
 	block->state.is_moveable = 0;
 
 	add_brick_trigger(C,block,"vertex",op_brick_add);
+	add_brick_trigger(C,block,"edges",op_brick_add);
 	add_brick_trigger(C,block,"faces",op_brick_add);
 
 	return menu;

@@ -1408,7 +1408,7 @@ void cls_plug_flow_vector(t_plug *plug)
 	_cls_flow_(plug,__cls_plug_flow_vector);
 }
 
-// GEO
+// :GEO
 
 void __cls_plug_flow_geo(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 {
@@ -1732,6 +1732,9 @@ void __cls_plug_flow_vlst(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 	if(src_plug)
 	{
 		t_data_type src_type=src_plug->data_type;
+		t_vlst *vlst = plug->data;
+		t_lst *lst = NULL;
+		t_data_type lst_type = dt_null;
 
 		switch(src_type)
 		{
@@ -1741,8 +1744,24 @@ void __cls_plug_flow_vlst(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 				plug->data=src_plug->data;
 				break;
 			case dt_geo:
-				geo_vlst_set(src_plug->data, plug->data);
+				//geo_vlst_set(src_plug->data, plug->data);
 				break;
+			case dt_lst:
+				lst = src_plug->data;
+				lst_type = lst->type;
+				switch(lst_type)
+				{
+					case(dt_geo_point):
+						geo_vlst_points_set(lst, vlst);
+						break;
+					case(dt_geo_edge):
+						geo_vlst_edges_set(lst, vlst);
+						break;
+					default:
+						break;
+				}
+				break;
+				
 				
 			default:
 				plug_warning(plug,src_plug);
@@ -1790,7 +1809,7 @@ void cls_plug_flow_vertex(t_plug *plug)
 	_cls_flow_(plug,__cls_plug_flow_vertex);
 }
 
-// MESH
+// :MESH
 
 void __cls_plug_flow_mesh(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 {
@@ -1811,8 +1830,18 @@ void __cls_plug_flow_mesh(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 				vlst = src_plug->data;
 				if(vlst->data)
 				{
-					mesh->vertex = vlst;
-					mesh->var.tot_vertex = vlst->count;
+					switch(vlst->type_target)
+					{
+						case(dt_vertex):
+							mesh->vertex = vlst;
+							mesh->var.tot_vertex = vlst->count;
+							break;
+						case(dt_edge):
+							mesh->edges = vlst;
+							break;
+						default:
+							break;
+					}
 				}
 				break;
 			default:

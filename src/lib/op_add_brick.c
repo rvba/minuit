@@ -1161,6 +1161,7 @@ void add_target_mesh( t_context *C, t_mesh *mesh, const char *name)
 		t_mesh *mesh = selected->data;
 		t_block *block = mesh->ref;
 		if( is( name, "vertex")) 	add_part_mesh( C, block, "vertex", mesh, dt_mesh);
+		else if( is( name, "edges")) 	add_part_mesh( C, block, "edges", mesh, dt_mesh);
 		block->state.update_geometry = 1;
 	}
 }
@@ -1169,13 +1170,13 @@ void add_mesh_ref( t_context *C, t_mesh *mesh, const char *name)
 {
 }
 
-t_node *add_brick_mesh(t_context *C,const char *name)
+t_node *add_brick_mesh( t_context *C, const char *name)
 {
-	t_node *selected=C->scene->selected;
+	t_node *selected = C->scene->selected;
 
-	if(selected)
+	if( selected)
 	{
-		t_mesh *mesh=selected->data; 
+		t_mesh *mesh = selected->data; 
 
 		add_mesh_ref( C, mesh, name);
 		add_target_mesh( C, mesh, name);
@@ -1336,15 +1337,20 @@ t_node *add_geometry(t_context *C,const char *name, void *data)
 {
 	// NEW BLOCK
 	t_node *node_block = add_block(C,name);
-	t_block *block=node_block->data;
+	t_block *block = node_block->data;
 	block->state.draw_outline = 1;
 
 	// CLONE
 	t_node *node_brick_clone = add_part_slider_int( C, block, "geometry", NULL);
-	t_brick *brick_clone=node_brick_clone->data;
+	t_brick *brick_clone = node_brick_clone->data;
+
 
 	// GEO 
-	add_part_geo(C,block,name,data,dt_geo);
+	add_part_geo(C, block, name, data, dt_geo);
+
+	// LISTS
+	add_part_lst( C, block, dt_geo_point, "points", NULL);
+	add_part_lst( C, block, dt_geo_edge, "edges", NULL);
 
 	brick_clone->plug_out.state.flow_out=0;
 	brick_clone->plug_out.state.open_out=0;
