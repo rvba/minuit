@@ -50,6 +50,7 @@ void cls_plug_make_vector(t_plug *plug);
 void cls_plug_make_geo(t_plug *plug);
 void cls_plug_make_geo_point(t_plug *plug);
 void cls_plug_make_geo_edge(t_plug *plug);
+void cls_plug_make_geo_array(t_plug *plug);
 
 void cls_plug_connect_general(t_plug_mode mode, t_plug *self, t_plug *dst);
 void cls_plug_disconnect_general(t_plug_mode mode, t_plug *self);
@@ -496,6 +497,19 @@ void cls_plug_connect_geo_edge(t_plug_mode mode, t_plug *self, t_plug *dst)
 {
 	// General
 	cls_plug_connect_general(mode,self,dst);
+}
+
+void cls_plug_disconnect_geo_array(t_plug_mode mode, t_plug *plug)
+{
+	// General
+	cls_plug_disconnect_general(mode,plug);
+}
+
+void cls_plug_connect_geo_array(t_plug_mode mode, t_plug *self, t_plug *dst)
+{
+	// General
+	cls_plug_connect_general(mode,self,dst);
+
 }
 
 
@@ -1419,6 +1433,15 @@ void cls_plug_flow_geo(t_plug *plug)
 	_cls_flow_(plug,__cls_plug_flow_geo);
 }
 
+void __cls_plug_flow_geo_array(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
+{
+}
+
+void cls_plug_flow_geo_array(t_plug *plug)
+{
+	_cls_flow_(plug,__cls_plug_flow_geo_array);
+}
+
 // GEO POINT
 
 void __cls_plug_flow_geo_point(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
@@ -2171,6 +2194,16 @@ t_plug_class plug_geo_edge ={
 	.disconnect = cls_plug_disconnect_geo_edge,
 };
 
+t_plug_class plug_geo_array ={
+	.cls_type="geo_array",
+	.type=dt_geo_array,
+	.make=cls_plug_make_geo_array,
+	.flow=cls_plug_flow_geo_array,  
+	.connect = cls_plug_connect_geo_array,
+	.disconnect = cls_plug_disconnect_geo_array,
+};
+
+
 void cls_plug_make_float(t_plug *plug)
 {
 	plug->cls=&plug_float;
@@ -2272,6 +2305,11 @@ void cls_plug_make_geo_edge(t_plug *plug)
 	plug->cls=&plug_geo_edge;
 }
 
+void cls_plug_make_geo_array(t_plug *plug)
+{
+	plug->cls=&plug_geo_array;
+}
+
 t_plug_class *plugs[] = {
 	&plug_float,
 	&plug_int,
@@ -2292,6 +2330,7 @@ t_plug_class *plugs[] = {
 	&plug_geo,
 	&plug_geo_point,
 	&plug_geo_edge,
+	&plug_geo_array,
 	};
 
 

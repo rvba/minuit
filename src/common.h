@@ -81,6 +81,7 @@ typedef enum Node_Type
 	nt_geo,
 	nt_geo_point,
 	nt_geo_edge,
+	nt_geo_array,
 
 }t_node_type;
 

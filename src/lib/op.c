@@ -226,6 +226,7 @@ t_node *make_menu_node_add(void)
 	add_brick_trigger(C,block,"geometry",op_add_empty_geometry);
 	add_brick_trigger(C,block,"point",op_add_empty_geo_point);
 	add_brick_trigger(C,block,"edge",op_add_empty_geo_edge);
+	add_brick_trigger(C,block,"array",op_add_geo_array);
 
 	return menu;
 }

@@ -67,6 +67,7 @@ int node_make_graph(t_node *node);
 int node_make_geo(t_node *node);
 int node_make_geo_point(t_node *node);
 int node_make_geo_edge(t_node *node);
+int node_make_geo_array(t_node *node);
 
 char node_name_null[]="node_null";
 char node_name_brick[]="node_brick";
@@ -97,6 +98,7 @@ char node_name_graph[]="node_graph";
 char node_name_geo[]="node_geo";
 char node_name_geo_point[]="node_geo_point";
 char node_name_geo_edge[]="node_geo_edge";
+char node_name_geo_array[]="node_geo_array";
 
 
 int node_equal(t_node *m, t_node *n)
@@ -138,6 +140,7 @@ char *node_name_get(t_node_type type)
 		case(nt_geo):return node_name_geo;break;
 		case(nt_geo_point):return node_name_geo_point;break;
 		case(nt_geo_edge):return node_name_geo_edge;break;
+		case(nt_geo_array):return node_name_geo_array;break;
 		default:printf("[ERROR node_name_get] Unknown type %d\n",type);return node_name_null;break;
 	}
 }
@@ -275,6 +278,8 @@ void cls_node_build(t_node *node,const char *name)
 		case nt_geo_point:	p = geo_point_new(name);
 			break;
 		case nt_geo_edge:	p = geo_edge_new(name);
+			break;
+		case nt_geo_array:	p = geo_array_new(name);
 			break;
 
 		case nt_null: 
@@ -453,6 +458,11 @@ void cls_node_geo_edge_free(t_scene *sc,t_node *node)
 	geo_edge_free(node->data);
 }
 
+void cls_node_geo_array_free(t_scene *sc,t_node *node)
+{
+	geo_array_free(node->data);
+}
+
 // INIT
 
 // get Scene ID
@@ -586,6 +596,11 @@ void cls_node_init_geo_point(t_node *node)
 }
 
 void cls_node_init_geo_edge(t_node *node)
+{
+	cls_node_init_id(node);
+}
+
+void cls_node_init_geo_array(t_node *node)
 {
 	cls_node_init_id(node);
 }
@@ -957,6 +972,19 @@ t_node_class geo_edge = {
 	.get_ref = cls_node_get_ref,
 };
 
+t_node_class geo_array = {
+	.type=nt_geo_array,
+	.size=0,
+	.lst=NULL,
+	.make=node_make_geo_array,
+	.build=cls_node_build,
+	.link=cls_node_link,
+	.del=cls_node_del,
+	.init=cls_node_init_geo_array,
+	.free=cls_node_geo_array_free,
+	.get_ref = cls_node_get_ref,
+};
+
 // MAKE
 
 int node_make_mesh(t_node *node)
@@ -1233,6 +1261,16 @@ int node_make_geo_edge(t_node *node)
 	return 1;
 }
 
+int node_make_geo_array(t_node *node)
+{
+	t_context *C=ctx_get();
+	node->cls=&geo_array;
+	node->cls->size=sizeof(t_geo_array);
+	node->cls->lst=C->scene->geos;
+	node->type = nt_geo_array;
+	return 1;
+}
+
 // TYPES
 
 t_node_class *nodes[] = {
@@ -1264,6 +1302,7 @@ t_node_class *nodes[] = {
 				&geo,
 				&geo_point,
 				&geo_edge,
+				&geo_array,
 			};
 
 

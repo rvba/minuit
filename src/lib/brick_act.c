@@ -1573,6 +1573,29 @@ void *op_maths(t_operation operation,t_brick *brick)
 
 // :GEOMETRY
 
+
+void *op_geo_array( t_brick *brick)
+{
+	t_plug *plug_self = &brick->plug_intern;
+	t_geo_array *array = plug_self->data;
+	t_block *block = brick->block;
+	t_brick *brick_target = block_brick_get( block, "target");
+	t_brick *brick_vector = block_brick_get( block, "vector");
+	t_plug *plug_target = &brick_target->plug_intern;
+	t_plug *plug_vector = &brick_vector->plug_intern;
+	void *target = plug_target->data;
+	t_vector *vector = plug_vector->data;
+	t_data_type type = plug_target->cls->type;
+
+	array->type_element = type;
+	array->element = target;
+	array->vector = vector;
+
+	geo_array_build( array, type, vector, target); 
+
+	return NULL;
+}
+
 void op_geo_exe(t_brick *brick)
 {
 	t_link *l;
@@ -1580,13 +1603,11 @@ void op_geo_exe(t_brick *brick)
 	t_plug *p;
 	t_geo_point *point;
 	t_geo_edge *edge;
+	t_geo_array *array;
 
 	t_block *block=brick->block;
 	t_brick *brick_geometry = block_brick_get(block,"data");
 	t_geo *geo = brick_geometry->plug_intern.data;
-
-	t_brick *brick_points = block_brick_get( block, "points");
-	t_brick *brick_edges = block_brick_get( block, "edges");
 
 	t_lst *points = lst_new("lst");
 	t_lst *edges = lst_new("lst");
@@ -1608,17 +1629,34 @@ void op_geo_exe(t_brick *brick)
 				lst_add(edges,edge,"edge");
 			}
 		}
+		else if( p->cls->type == dt_geo_array)
+		{
+			array = p->data;
+
+			if( array->elements->count > 0)
+			{
+				geo_array_get_points( array, points);
+				geo_array_get_edges( array, edges);
+			}
+		}
 	}
 
-	if(points->count > 0) geo_data_set(geo, dt_geo_point, points);
-	if(edges->count > 0) geo_data_set(geo, dt_geo_edge, edges);
+	// Reset
 
-	if(geo->points) brick_points->plug_intern.data = geo->points;
-	if(geo->edges) brick_edges->plug_intern.data = geo->edges;
+	int count_points = points->count;
+	int count_edges = edges->count;
 
+	if( count_points || count_edges)
+	{
+		geo_reset( geo);
+
+		if(points->count > 0) geo_data_set(geo, dt_geo_point, points);
+		if(edges->count > 0) geo_data_set(geo, dt_geo_edge, edges);
+	}
+
+	// Free
 	lst_free(points);
 	lst_free(edges);
-
 }
 
 void *op_geo_brick_add(t_brick *brick)

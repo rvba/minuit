@@ -215,6 +215,11 @@ inline float vlength3f(float v0[3], float v1[3])
 	return sqrt(SQ(v[0])+SQ(v[1])+SQ(v[2]));
 }
 
+inline float vnorm3f(float v[3])
+{
+	return sqrt(SQ(v[0])+SQ(v[1])+SQ(v[2]));
+}
+
 inline void cnorm(float c[3],float o[3])
 {
 	c[0]=o[0]/255;
@@ -260,6 +265,22 @@ void vrot2d3f(float *v, int angle)
 
 	v[0] = x1;
 	v[1] = y1;
+}
+
+void vcenter3f( float *r, float *a, float *b)
+{
+	float h[3];
+	vsub( r, b, a);
+	vcp( h, r);
+	vmul( h, .5);
+	vadd( r, a, h);
+}
+
+void vinverse3f( float *v)
+{
+	v[0] = -v[0];
+	v[1] = -v[1];
+	v[2] = -v[2];
 }
 
 

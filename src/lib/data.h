@@ -49,6 +49,7 @@ typedef enum Data_Type
 	dt_geo,
 	dt_geo_point,
 	dt_geo_edge,
+	dt_geo_array,
 
 }t_data_type;
 

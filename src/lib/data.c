@@ -46,6 +46,7 @@ char name_graph[] = "graph";
 char name_set[] = "set";
 char name_geo_point[] = "point";
 char name_geo_edge[] = "edge";
+char name_geo_array[] = "array";
 char name_geo[] = "geometry";
 
 void cls_data_init(t_data *data)
@@ -88,6 +89,7 @@ char *data_name_get(t_data_type type)
 		case dt_graph:  return name_graph; break;
 		case dt_geo_point:  return name_geo_point; break;
 		case dt_geo_edge:  return name_geo_edge; break;
+		case dt_geo_array:  return name_geo_array; break;
 		case dt_geo:  return name_geo; break;
 		default: return name_default; break;
 	}
@@ -119,6 +121,11 @@ void *data_add(t_data_type type,void *data)
 			break;
 
 		case dt_geo_edge:
+
+			return data;
+			break;
+
+		case dt_geo_array:
 
 			return data;
 			break;
@@ -419,8 +426,20 @@ void data_init(t_data_type type,void *data_dst, void *data_src)
 	t_geo_edge *_geo_edge_src;
 	t_geo_edge *_geo_edge_dst;
 
+	t_geo_array *_geo_array_src;
+	t_geo_array *_geo_array_dst;
+
 	switch(type)
 	{
+
+		case dt_geo_array:
+			_geo_array_dst = (t_geo_array *) data_dst;
+			_geo_array_src = (t_geo_array *) data_src;
+
+			*_geo_array_dst = *_geo_array_src;
+			
+			break;
+
 		case dt_geo_point:
 			_geo_point_dst = (t_geo_point *) data_dst;
 			_geo_point_src = (t_geo_point *) data_src;

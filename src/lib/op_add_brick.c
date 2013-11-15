@@ -28,6 +28,7 @@
 #include "brick.h"
 #include "vector.h"
 #include "ui.h"
+#include "geometry.h"
 
 int set_draw_plug=1;
 int current_frame = 0;
@@ -522,9 +523,12 @@ t_node *add_brick_geo(t_context *C,t_block *block,const char *name,void *data_ta
 	if(type == dt_geo) brick->action = op_geo;
 	else if(type == dt_geo_point) brick->action = op_geo_point;
 	else if(type == dt_geo_edge) brick->action = op_geo_edge;
+	else if(type == dt_geo_array) brick->action = op_geo_array;
 	
 	// PLUG
 	set_plug_option(brick);
+
+	brick->state.always_trigger = 1;
 	
 	return node;
 }
@@ -1331,10 +1335,12 @@ t_node *add_maths(t_context *C,const char *name)
 	return node_block;
 }
 
-// GEOMETRY
+// :GEOMETRY
 
 t_node *add_geometry(t_context *C,const char *name, void *data)
 {
+	t_geo *geo = (t_geo *) data;
+
 	// NEW BLOCK
 	t_node *node_block = add_block(C,name);
 	t_block *block = node_block->data;
@@ -1344,13 +1350,12 @@ t_node *add_geometry(t_context *C,const char *name, void *data)
 	t_node *node_brick_clone = add_part_slider_int( C, block, "geometry", NULL);
 	t_brick *brick_clone = node_brick_clone->data;
 
-
 	// GEO 
 	add_part_geo(C, block, name, data, dt_geo);
 
 	// LISTS
-	add_part_lst( C, block, dt_geo_point, "points", NULL);
-	add_part_lst( C, block, dt_geo_edge, "edges", NULL);
+	add_part_lst( C, block, dt_lst, "points", geo->points);
+	add_part_lst( C, block, dt_lst, "edges", geo->edges);
 
 	brick_clone->plug_out.state.flow_out=0;
 	brick_clone->plug_out.state.open_out=0;
@@ -1384,11 +1389,36 @@ t_node *add_geo_edge(t_context *C,const char *name, void *data)
 	t_brick *brick_edge = node_edge->data;
 	t_plug *plug = &brick_edge->plug_intern;
 
-	brick_edge->state.always_trigger = 1;
-
 	// GEO POINT
 	add_geo_point_bare(C,block,"point",NULL,1,plug);
 	add_geo_point_bare(C,block,"point",NULL,2,plug);
+
+	return node_block;
+}
+
+t_node *add_geo_array( t_context *C, const char *name , void *data)
+{
+	t_geo_array *array = (t_geo_array *) data;
+	// NEW BLOCK
+	t_node *node_block = add_block(C,name);
+	t_block *block=node_block->data;
+	block->state.draw_outline = 1;
+
+	// GEO ARRAY
+	add_part_geo(C,block,"array",data,dt_geo_array);
+
+	// VECTOR
+	C->ui->add_bricks = 0;
+	add_part_vector(C,block,"vector");
+	C->ui->add_bricks = 1;
+
+	// TARGET
+	t_node *node_target = add_part_slider_float(C,block,"target",NULL);
+	t_brick *brick_target = node_target->data;
+	brick_target->state.is_versatil = 1;
+
+	// COUNT
+	add_part_slider_int(C,block,"count",&array->count);
 
 	return node_block;
 }

@@ -52,6 +52,13 @@ t_geo_edge *op_new_geo_edge(const char *name)
 	return geo_edge;
 }
 
+t_geo_array *op_new_geo_array(const char *name)
+{
+	t_geo_array *geo_array = geo_array_make("array");
+	return geo_array;
+}
+
+
 // VLST
 t_vlst *op_new_vlst(const char *name, t_data_type type, int size)
  {
@@ -447,6 +454,15 @@ void *op_add_empty_geo_edge(t_brick *brick)
 {
 	//scene_store(C->scene,1);
 	op_new_geo_edge("edge");
+	//scene_store(C->scene,0);
+
+	return NULL;
+}
+
+void *op_add_geo_array(t_brick *brick)
+{
+	//scene_store(C->scene,1);
+	op_new_geo_array("array");
 	//scene_store(C->scene,0);
 
 	return NULL;

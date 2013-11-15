@@ -89,6 +89,7 @@ extern char node_name_binding[];
 extern char node_name_geo[];
 extern char node_name_geo_point[];
 extern char node_name_geo_edge[];
+extern char node_name_geo_array[];
 
 int 		node_equal(t_node *m, t_node *n);
 t_node*		node_load(void *ptr,const char *type);

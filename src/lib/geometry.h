@@ -67,6 +67,17 @@ typedef struct Geo_Face
 
 }t_geo_face;
 
+typedef struct Geo_Array
+{
+	t_id id;
+	t_data_type type_element;
+	int count;
+	void *element;
+	struct Lst *elements;
+	struct Vector *vector;
+
+}t_geo_array;
+
 typedef struct Geometry
 {
 	t_id id;
@@ -87,6 +98,8 @@ void geo_point_vector_update(t_geo_point *point, struct Vector *vector);
 
 void geo_point_show(t_geo_point *point);
 
+
+void geo_show(t_geo *geo);
 t_geo *geo_make(const char *name);
 t_geo *geo_new(const char *name);
 void geo_free(t_geo *geo);
@@ -100,9 +113,20 @@ void geo_edge_free(t_geo_edge *edge) ;
 t_geo_edge *geo_edge_make(const char *name);
 t_geo_edge *geo_edge_new(const char *name);
 
+
+void geo_array_get_edges( t_geo_array *array, t_lst *lst);
+void geo_array_get_points( t_geo_array *array, t_lst *lst);
+
+void geo_array_build( t_geo_array *array, t_data_type type, struct Vector *vector, void *data);
+void geo_array_free(t_geo_array *array);
+t_geo_array *geo_array_make(const char *name);
+t_geo_array *geo_array_new(const char *name);
+
 void geo_data_set(t_geo *geo, t_data_type type, struct Lst *points);
 void geo_vlst_set(t_geo *geo, t_data_type type,  struct VLst *vlst);
 void geo_vlst_points_set(struct Lst *lst, struct VLst *vlst);
 void geo_vlst_edges_set(struct Lst *lst, struct VLst *vlst);
+
+void geo_reset(t_geo *geo);
 
 #endif
