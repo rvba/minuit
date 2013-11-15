@@ -117,7 +117,7 @@ t_geo_edge *geo_edge_new(const char *name);
 void geo_array_get_edges( t_geo_array *array, t_lst *lst);
 void geo_array_get_points( t_geo_array *array, t_lst *lst);
 
-void geo_array_build( t_geo_array *array, t_data_type type, struct Vector *vector, void *data);
+void geo_array_build( t_geo_array *array);
 void geo_array_free(t_geo_array *array);
 t_geo_array *geo_array_make(const char *name);
 t_geo_array *geo_array_new(const char *name);

@@ -1591,7 +1591,7 @@ void *op_geo_array( t_brick *brick)
 	array->element = target;
 	array->vector = vector;
 
-	geo_array_build( array, type, vector, target); 
+	geo_array_build( array); 
 
 	return NULL;
 }

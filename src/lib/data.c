@@ -130,6 +130,11 @@ void *data_add(t_data_type type,void *data)
 			return data;
 			break;
 
+		case dt_geo:
+
+			return data;
+			break;
+
 		case dt_vector:
 
 			node = vector_add("vector");
@@ -429,8 +434,19 @@ void data_init(t_data_type type,void *data_dst, void *data_src)
 	t_geo_array *_geo_array_src;
 	t_geo_array *_geo_array_dst;
 
+	t_geo *_geo_src;
+	t_geo *_geo_dst;
+
 	switch(type)
 	{
+
+		case dt_geo:
+			_geo_dst = (t_geo *) data_dst;
+			_geo_src = (t_geo *) data_src;
+
+			*_geo_dst = *_geo_src;
+			
+			break;
 
 		case dt_geo_array:
 			_geo_array_dst = (t_geo_array *) data_dst;
