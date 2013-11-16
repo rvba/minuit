@@ -13,6 +13,7 @@
 #define ST_DB_POINT_ADD 0
 #define ST_DB_POINT_EXTRUDE 0
 
+struct Context;
 struct Geometry;
 struct Lst;
 struct Block;
@@ -53,6 +54,7 @@ typedef struct Geo_Edge
 
 typedef struct Geo_Face
 {
+	t_id id;
 	struct Geo_Face *child;
 
 	struct Geo_Point *a;
@@ -98,29 +100,36 @@ void geo_point_vector_update(t_geo_point *point, struct Vector *vector);
 
 void geo_point_show(t_geo_point *point);
 
+// GEO
+
 
 void geo_show(t_geo *geo);
-t_geo *geo_make(const char *name);
+t_geo *geo_make( struct Context *C, const char *name);
 t_geo *geo_new(const char *name);
 void geo_free(t_geo *geo);
 
+// POINT
 
 void geo_point_free(t_geo_point *point);
-t_geo_point *geo_point_make(const char *name);
+t_geo_point *geo_point_make( struct Context *C, const char *name);
 t_geo_point *geo_point_new(const char *name);
 
+// EDGE
+
 void geo_edge_free(t_geo_edge *edge) ;
-t_geo_edge *geo_edge_make(const char *name);
+t_geo_edge *geo_edge_make( struct Context *C, const char *name);
 t_geo_edge *geo_edge_new(const char *name);
 
+// ARRAY
+
+void geo_array_build( t_geo_array *array);
+void geo_array_free(t_geo_array *array);
+t_geo_array *geo_array_make( struct Context *C, const char *name);
+t_geo_array *geo_array_new(const char *name);
 
 void geo_array_get_edges( t_geo_array *array, t_lst *lst);
 void geo_array_get_points( t_geo_array *array, t_lst *lst);
 
-void geo_array_build( t_geo_array *array);
-void geo_array_free(t_geo_array *array);
-t_geo_array *geo_array_make(const char *name);
-t_geo_array *geo_array_new(const char *name);
 
 void geo_data_set(t_geo *geo, t_data_type type, struct Lst *points);
 void geo_vlst_set(t_geo *geo, t_data_type type,  struct VLst *vlst);

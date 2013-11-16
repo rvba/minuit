@@ -34,27 +34,27 @@
 
 // GEO
 
-t_geo *op_new_geo(const char *name)
+t_geo *op_new_geo( t_context *C, const char *name)
 {
-	t_geo *geo = geo_make("geo");
+	t_geo *geo = geo_make( C,"geo");
 	return geo;
 }
 
-t_geo_point *op_new_geo_point(const char *name)
+t_geo_point *op_new_geo_point( t_context *C, const char *name)
 {
-	t_geo_point *geo_point = geo_point_make("point");
+	t_geo_point *geo_point = geo_point_make( C,"point");
 	return geo_point;
 }
 
-t_geo_edge *op_new_geo_edge(const char *name)
+t_geo_edge *op_new_geo_edge( t_context *C, const char *name)
 {
-	t_geo_edge *geo_edge = geo_edge_make("edge");
+	t_geo_edge *geo_edge = geo_edge_make( C, "edge");
 	return geo_edge;
 }
 
-t_geo_array *op_new_geo_array(const char *name)
+t_geo_array *op_new_geo_array( t_context *C,const char *name)
 {
-	t_geo_array *geo_array = geo_array_make("array");
+	t_geo_array *geo_array = geo_array_make( C, "array");
 	return geo_array;
 }
 
@@ -433,37 +433,40 @@ void *op_add_empty_int_vlst(t_brick *brick)
 
 void *op_add_empty_geometry(t_brick *brick)
 {
-	//t_context *C = ctx_get();
-	//scene_store(C->scene,1);
-	op_new_geo("geo");
-	//scene_store(C->scene,0);
+	t_context *C = ctx_get();
+	scene_store(C->scene,1);
+	op_new_geo( C, "geo");
+	scene_store(C->scene,0);
 
 	return NULL;
 }
 
 void *op_add_empty_geo_point(t_brick *brick)
 {
-	//scene_store(C->scene,1);
-	op_new_geo_point("point");
-	//scene_store(C->scene,0);
+	t_context *C = ctx_get();
+	scene_store(C->scene,1);
+	op_new_geo_point( C, "point");
+	scene_store(C->scene,0);
 
 	return NULL;
 }
 
 void *op_add_empty_geo_edge(t_brick *brick)
 {
-	//scene_store(C->scene,1);
-	op_new_geo_edge("edge");
-	//scene_store(C->scene,0);
+	t_context *C = ctx_get();
+	scene_store(C->scene,1);
+	op_new_geo_edge( C, "edge");
+	scene_store(C->scene,0);
 
 	return NULL;
 }
 
 void *op_add_geo_array(t_brick *brick)
 {
-	//scene_store(C->scene,1);
-	op_new_geo_array("array");
-	//scene_store(C->scene,0);
+	t_context *C = ctx_get();
+	scene_store(C->scene,1);
+	op_new_geo_array( C, "array");
+	scene_store(C->scene,0);
 
 	return NULL;
 }

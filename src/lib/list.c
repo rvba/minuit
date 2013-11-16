@@ -998,6 +998,14 @@ void link_free(t_link *link)
 	free(link);
 }
 
+t_lst *lst_make( t_context *C, t_data_type type, const char *name)
+{
+	t_node *node = scene_add( C->scene, nt_list, name);
+	t_lst *lst = node->data;
+	lst->type = type;
+	return lst;
+}
+
 // NEW
 
 t_link *link_new(const char *name)
