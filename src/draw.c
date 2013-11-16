@@ -194,25 +194,35 @@ void draw_mesh_edges(t_draw *draw, t_mesh *mesh)
 			int j=0;
 			float *color;
 			int width = 1;
+
+			int limit = points->count * l;
+
 			for(i=0; i < count; i++)
 			{
 				a = v[j];
 				b = v[j+1];
 
-				x =  p + (a * l);
-				y = p + (b * l);
-
-				if(draw->with_edge_color && mesh->edges_color)
+				if((a >= limit || b >= limit) || (a < 0 || b < 0))
 				{
-					color = grf_float(mesh->edges_color->data,i*3);
+					printf("[DRAW ERROR] EDGE IS OFF LIMIT\n");
 				}
 				else
 				{
-					t_context *C = ctx_get();
-					color = C->draw->front_color;
-				}
+					x =  p + (a * l);
+					y = p + (b * l);
 
-				skt_line(x,y,width,color);
+					if(draw->with_edge_color && mesh->edges_color)
+					{
+						color = grf_float(mesh->edges_color->data,i*3);
+					}
+					else
+					{
+						t_context *C = ctx_get();
+						color = C->draw->front_color;
+					}
+
+					skt_line(x,y,width,color);
+				}
 
 				j+=2;
 			}
