@@ -47,6 +47,7 @@
 #include "brick.h"
 #include "rhizome.h"
 #include "mesh.h"
+#include "geometry.h"
 
 #include "ctx.h"
 #include "op.h"
@@ -532,6 +533,10 @@ void load_rebind(t_scene *sc)
 			case(nt_set) : 		set_rebind(sc,ptr);break; 
 			case(nt_binding) : 	binding_rebind(sc,ptr);break; 
 			case(nt_rhizome) : 	rhizome_rebind(sc,ptr);break; 
+			case(nt_geo) : 		geo_rebind(sc,ptr);break; 
+			case(nt_geo_point) : 	geo_point_rebind(sc,ptr);break; 
+			case(nt_geo_edge) : 	geo_edge_rebind(sc,ptr);break; 
+			case(nt_geo_array) : 	geo_array_rebind(sc,ptr);break; 
 
 			case(nt_var): break;
 			default:

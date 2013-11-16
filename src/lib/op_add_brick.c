@@ -529,6 +529,7 @@ t_node *add_brick_geo(t_context *C,t_block *block,const char *name,void *data_ta
 	set_plug_option(brick);
 
 	brick->state.always_trigger = 1;
+	brick->plug_intern.state.store_data = 1;
 	
 	return node;
 }
@@ -1419,6 +1420,8 @@ t_node *add_geo_array( t_context *C, const char *name , void *data)
 
 	// COUNT
 	add_part_slider_int(C,block,"count",&array->count);
+
+	scene_add_ref(C->scene,"struct_ref","geo_array","count",&array->count,array);
 
 	return node_block;
 }

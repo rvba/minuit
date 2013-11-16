@@ -1598,6 +1598,7 @@ void *op_geo_array( t_brick *brick)
 
 void op_geo_exe(t_brick *brick)
 {
+	t_context *C = ctx_get();
 	t_link *l;
 	t_brick *b;
 	t_plug *p;
@@ -1612,6 +1613,7 @@ void op_geo_exe(t_brick *brick)
 	t_lst *points = lst_new("lst");
 	t_lst *edges = lst_new("lst");
 
+
 	for(l=block->bricks->first;l;l=l->next)
 	{
 		b=l->data;
@@ -1619,14 +1621,14 @@ void op_geo_exe(t_brick *brick)
 		if(p->cls->type == dt_geo_point)
 		{
 			point = p->data;
-			lst_add(points,point,"point");
+			lst_add( points, point, "point");
 		}
 		else if(p->cls->type == dt_geo_edge)
 		{
 			edge = p->data;
 			if(edge->a && edge->b)
 			{
-				lst_add(edges,edge,"edge");
+				lst_add(edges, edge, "edge");
 			}
 		}
 		else if( p->cls->type == dt_geo_array)
@@ -1646,6 +1648,8 @@ void op_geo_exe(t_brick *brick)
 	int count_points = points->count;
 	int count_edges = edges->count;
 
+	scene_store( C->scene, 1);
+
 	if( count_points || count_edges)
 	{
 		geo_reset( geo);
@@ -1653,6 +1657,8 @@ void op_geo_exe(t_brick *brick)
 		if(points->count > 0) geo_data_set(geo, dt_geo_point, points);
 		if(edges->count > 0) geo_data_set(geo, dt_geo_edge, edges);
 	}
+
+	scene_store( C->scene, 0);
 
 	// Free
 	lst_free(points);
@@ -1689,6 +1695,7 @@ void *op_geo_point(t_brick *brick)
 	plug->cls->flow(plug);
 
 	t_geo_point *point = brick->plug_intern.data;
+
 	t_block *block = brick->block;
 	t_brick *brick_vector = block_brick_get(block,"vector");
 	t_vector *vector = brick_vector->plug_intern.data;

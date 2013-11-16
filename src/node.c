@@ -177,6 +177,11 @@ void *cls_node_get_ref_camera(t_node *node, const char *ref)
 	return camera_get_ref(node->data, ref);
 }
 
+void *cls_node_get_ref_geo_array(t_node *node, const char *ref)
+{
+	return geo_array_get_ref(node->data, ref);
+}
+
 void *cls_node_get_ref(t_node *node, const char *ref)
 {
 	printf("get ref not implemented\n");
@@ -982,7 +987,7 @@ t_node_class geo_array = {
 	.del=cls_node_del,
 	.init=cls_node_init_geo_array,
 	.free=cls_node_geo_array_free,
-	.get_ref = cls_node_get_ref,
+	.get_ref = cls_node_get_ref_geo_array,
 };
 
 // MAKE

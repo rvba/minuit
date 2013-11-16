@@ -603,6 +603,11 @@ void register_set(t_context *C)
 	scene_add_data(C->scene,"app_data","func","op_mod",			op_mod);
 	scene_add_data(C->scene,"app_data","func","op_stack",			op_stack);
 	scene_add_data(C->scene,"app_data","func","op_if",			op_if);
+	scene_add_data(C->scene,"app_data","func","op_geo_point",		op_geo_point);
+	scene_add_data(C->scene,"app_data","func","op_geo_edge",		op_geo_edge);
+	scene_add_data(C->scene,"app_data","func","op_geo_array",		op_geo_array);
+	scene_add_data(C->scene,"app_data","func","op_geometry",		op_geometry);
+	scene_add_data(C->scene,"app_data","func","op_geo",			op_geo);
 
 	scene_add_data(C->scene,"app_data","func","viewport_draw_scene",	viewport_draw_scene);
 
@@ -664,6 +669,11 @@ void register_set(t_context *C)
 	dict_symbol_add(dict_func,"op_mod",dt_pointer,op_mod);
 	dict_symbol_add(dict_func,"op_stack",dt_pointer,op_stack);
 	dict_symbol_add(dict_func,"op_if",dt_pointer,op_if);
+	dict_symbol_add(dict_func,"op_geo_point",dt_pointer,op_geo_point);
+	dict_symbol_add(dict_func,"op_geo_edge",dt_pointer,op_geo_edge);
+	dict_symbol_add(dict_func,"op_geo_array",dt_pointer,op_geo_array);
+	dict_symbol_add(dict_func,"op_geometry",dt_pointer,op_geometry);
+	dict_symbol_add(dict_func,"op_geo",dt_pointer,op_geo);
 
 	dict_symbol_add(dict_func,"viewport_draw_scene",dt_pointer,viewport_draw_scene);
 

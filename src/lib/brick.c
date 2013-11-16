@@ -553,7 +553,7 @@ t_brick *brick_rebind(t_scene *sc,void *ptr)
 
 
 	rebind(sc,"brick","plug_out_dst",(void **)&brick->plug_out.dst);
-	rebind(sc,"brick",brick->id.name,(void **)&brick->action);
+	rebind(sc,"brick action",brick->id.name,(void **)&brick->action);
 
 	rebind(sc,"brick","plug_parents",(void **)&brick->plug_intern.parents);
 	rebind(sc,"brick","plug child",(void **)&brick->plug_intern.child);

@@ -374,8 +374,7 @@ void *op_add_empty_mesh(t_brick *brick)
 {
 	t_context *C = ctx_get();
 	scene_store(C->scene,1);
-	t_node *node = op_new_empty_mesh("mesh");
-	(void) node;
+	op_new_empty_mesh("mesh");
 	scene_store(C->scene,0);
 	return NULL;
 }
