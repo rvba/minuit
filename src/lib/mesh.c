@@ -101,6 +101,7 @@ t_mesh *mesh_rebind(t_scene *sc,void *ptr)
 	rebind(sc,"mesh","tris",(void **)&mesh->tris);
 	rebind(sc,"mesh","uvs",(void **)&mesh->uvs);
 	rebind(sc,"mesh","colors",(void **)&mesh->colors);
+	rebind(sc,"mesh","ref",(void **)&mesh->ref);
 
 	// RESET
 
@@ -286,6 +287,9 @@ t_node *mesh_make(
 	mesh->var.tot_tri_face=tottri;
 
 	if(C->ui->add_bricks) mesh_add_brick_mesh(C,node_mesh);
+
+	// add data node
+	scene_add_data_node( C->scene, "app_node", "mesh", name, node_mesh);
 
 	// add vertex list
 	if(verts)

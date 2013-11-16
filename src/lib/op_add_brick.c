@@ -767,6 +767,9 @@ t_node *add_part_selector(t_context *C, t_block *block, const char *name, t_node
 	brick->state.always_trigger = 1;
 	t_plug *plug=&brick->plug_intern;
 	plug->data=node->data;
+	plug->state.store_data = 1;
+
+	
 
 	return node_brick;
 }

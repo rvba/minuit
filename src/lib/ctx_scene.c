@@ -21,12 +21,25 @@
 #include "object.h"
 #include "brick.h"
 #include "util.h"
+#include "term.h"
 
 // Selections and updates
 
 void ctx_scene_selection(t_context *C, t_node *node, int state)
 {
 	t_object *object;
+
+	if(C->event->debug_all)
+	{
+		if(state)
+		{
+			term_log("set selected %s", node_name_get(node->cls->type));
+		}
+		else
+		{
+			term_log("set diselected %s", node_name_get(node->cls->type));
+		}
+	}
 	switch(node->cls->type)
 	{
 		case(nt_object):
