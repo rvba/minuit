@@ -530,8 +530,11 @@ t_node *scene_add_node(t_scene *sc,t_node_type type,const char *name)
 			// copy chunk indice to generic
 			t_id *id = (t_id *) node->data;
 			id->id_chunk = node->id_chunk;
-
 		}
+
+		t_id *id = ( t_id *) node->data;
+		id->store = 1;
+		
 	}
 
 	return node;

@@ -39,6 +39,11 @@ t_context *ctx_get(void)
 	return CONTEXT;
 }
 
+t_scene *ctx_scene_get(void)
+{
+	return CONTEXT->scene;
+}
+
 t_context *ctx_new(int argc,char **argv)
 {
 	t_context *C = (t_context *)malloc(sizeof(t_context));

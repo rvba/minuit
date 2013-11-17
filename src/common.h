@@ -48,6 +48,7 @@ typedef struct ID
 	int id_chunk;
 	short users;
 	char name[_NAME_];
+	int store;
 }t_id;
 
 typedef enum Node_Type

@@ -1364,6 +1364,7 @@ void id_init(t_id *id, const char *name)
 	id->id_chunk = 0;
 	id->users = 0;
 	set_name(id->name, name);
+	id->store = 0;
 }
 
 

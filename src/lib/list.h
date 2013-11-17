@@ -78,6 +78,7 @@ void 		lst_remove_doubles(t_lst *lst);
 
 void 		vlst_update_data(t_vlst *vlst,t_vlst *caller);
 void		vlst_free(t_vlst *vlst);
+void 		vlst_delete( t_vlst *vlst);
 void 		vlst_init(t_vlst *vlst);
 t_vlst *	vlst_new(const char *name);
 t_vlst *	vlst_make(const char *name,t_data_type type,int length, int count);
@@ -176,5 +177,7 @@ void 		link_free(t_link *link);
 
 void _list_free(t_lst *lst, t_data_type type);
 t_lst *lst_clone(t_lst *lst, t_data_type type);
+
+void lst_delete( t_lst *lst);
 
 #endif

@@ -28,6 +28,7 @@ typedef struct Context
 
 void ctx_test(void);
 t_context *ctx_get(void);
+struct Scene *ctx_scene_get(void);
 t_context *ctx_init(int argc,char **argv);
 
 

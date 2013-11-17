@@ -229,9 +229,19 @@ t_geo_array *geo_array_new(const char *name)
  *	*************************************************************
  */
 
+
+void geo_lst_delete( t_lst *lst);
+
 void geo_point_free( t_geo_point *point)
 {
 	free( point);
+}
+
+void geo_point_delete( t_geo_point *point)
+{
+	t_scene *sc = ctx_scene_get();
+	if( point->id.store) scene_struct_delete( sc, point);
+	else geo_point_free( point);
 }
 
 void geo_edge_free( t_geo_edge *edge) 
@@ -239,28 +249,75 @@ void geo_edge_free( t_geo_edge *edge)
 	free( edge);
 }
 
+void geo_edge_delete( t_geo_edge *edge)
+{
+	t_scene *sc = ctx_scene_get();
+	if( edge->id.store) scene_struct_delete( sc, edge);
+	else geo_edge_free( edge);
+}
+
 void geo_face_free( t_geo_face *face)
 {
 	free( face);
 }
 
+void geo_face_delete( t_geo_face *face)
+{
+	t_scene *sc = ctx_scene_get();
+	if( face->id.store) scene_struct_delete( sc, face);
+	else geo_face_free( face);
+}
+
 void geo_array_free( t_geo_array *array)
 {
-	t_context *C=ctx_get();
-	t_scene *sc=C->scene;
+	if( array->elements) geo_lst_delete( array->elements);
+	if( array->vector) vector_delete( array->vector);
+}
 
-	if( array->elements) scene_struct_delete( sc, array->elements);
-	if( array->vector) scene_struct_delete( sc, array->vector);
+void geo_array_delete( t_geo_array *array)
+{
+	t_scene *sc = ctx_scene_get();
+	if( array->id.store) scene_struct_delete( sc, array);
+	else geo_array_free( array);
+}
+
+void geo_lst_delete( t_lst *lst)
+{
+	t_link *l;
+	t_data_type type = lst->type;
+	t_geo_point *point;
+	t_geo_edge *edge;
+
+	for(l=lst->first;l;l=l->next)
+	{
+		if( type == dt_geo_point)
+		{
+			point = l->data;
+			geo_point_delete( point);
+		}
+		else if( type == dt_geo_edge)
+		{
+			edge = l->data;
+			geo_edge_delete( edge);
+		}
+		else printf("remove .... ?\n");
+	}
+
+	lst_delete( lst);
 }
 
 void geo_free( t_geo *geo)
 {
-	t_context *C=ctx_get();
-	t_scene *sc=C->scene;
+	if(geo->points) geo_lst_delete( geo->points);
+	if(geo->edges) geo_lst_delete( geo->edges);
+	if(geo->faces) geo_lst_delete( geo->faces);
+}
 
-	if(geo->points) scene_struct_delete( sc, geo->points);
-	if(geo->edges) scene_struct_delete( sc, geo->edges);
-	if(geo->faces) scene_struct_delete( sc, geo->faces);
+void geo_delete( t_geo *geo)
+{
+	t_scene *sc = ctx_scene_get();
+	if( geo->id.store) scene_struct_delete( sc, geo);
+	else geo_free( geo);
 }
 
 
@@ -440,12 +497,29 @@ void *geo_array_get_ref(t_geo_array *array, const char *ref)
  *	*************************************************************
  */
 
-void geo_reset_elements( t_context *C, t_lst *lst)
+void geo_point_reset( t_geo_point *point)
+{
+	geo_point_free( point);
+}
+
+void geo_edge_reset( t_geo_edge *edge)
+{
+	geo_edge_free( edge);
+}
+
+void geo_reset_elements( t_context *C, t_data_type type, t_lst *lst)
 {
 	t_link *l;
 	for(l=lst->first;l;l=l->next)
 	{
-		scene_struct_delete( C->scene, l->data);
+		if( type == dt_geo_point)
+		{
+			geo_point_reset( ( t_geo_point *) l->data) ;
+		}
+		else if( type == dt_geo_edge)
+		{
+			geo_edge_reset( ( t_geo_edge *) l->data) ;
+		}
 	}
 }
 
@@ -454,13 +528,13 @@ void geo_reset(t_geo *geo)
 	t_context *C = ctx_get();
 	if(geo->points)
 	{
-		geo_reset_elements( C, geo->points);
+		geo_reset_elements( C, dt_geo_point, geo->points);
 		lst_cleanup( geo->points);
 	}
 
 	if(geo->edges)
 	{
-		geo_reset_elements( C, geo->edges);
+		geo_reset_elements( C, dt_geo_edge, geo->edges);
 		lst_cleanup( geo->edges);
 	}
 }
@@ -476,7 +550,7 @@ void geo_array_reset( t_geo_array *array)
 			for(l=array->elements->first;l;l=l->next)
 			{
 				point = l->data;
-				geo_point_free( point);
+				geo_point_reset( point);
 			}
 
 			lst_cleanup( array->elements);

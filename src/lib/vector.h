@@ -45,6 +45,7 @@ int vector_is_different(t_vector *dst, t_vector *src);
 t_vector *vector_new(const char *name);
 t_node *vector_add(const char *name);
 void vector_free(t_vector *vector);
+void vector_delete( t_vector *vector);
 
 void vector_op_copy(t_vector *dst, t_vector *src);
 void vector_op_add(t_vector *dst,t_vector *src);
