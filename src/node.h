@@ -35,7 +35,8 @@ typedef struct NodeClass
 	int  (* make)(struct Node *node);
 	void (* build)(struct Node *node,const char *name);
 	void (* link)(struct Node *node);
-	void (* del)(struct Node *node);
+	//void (* del)(struct Node *node);
+	void (* del)( void *data);
 	void (* init)(struct Node *node);
 	void (* free)(struct Scene *sc,struct Node *node);
 	void *(* get_ref)(struct Node *node, const char *ref);

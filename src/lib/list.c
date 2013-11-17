@@ -1000,6 +1000,14 @@ void lst_delete( t_lst *lst)
 	else lst_free( lst);
 }
 
+void cls_lst_delete( void *data)
+{
+	t_scene *sc = ctx_scene_get();
+	t_lst *lst = (t_lst *) data;
+	if( lst->id.store) scene_struct_delete( sc, lst);
+	else lst_free( lst);
+}
+
 void link_free(t_link *link)
 {
 	free(link);

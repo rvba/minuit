@@ -312,7 +312,8 @@ void cls_node_build(t_node *node,const char *name)
 
 // DELETE
 
-void cls_node_del(t_node *node) { t_scene *scene  = scene_get(); scene_node_delete(scene,node);} 
+//void cls_node_del(t_node *node) { t_scene *scene  = scene_get(); scene_node_delete(scene,node);} 
+void cls_node_del(void *data) { t_node *node = (t_node *) data; t_scene *scene  = scene_get(); scene_node_delete(scene,node);} 
 
 // LINK
 
@@ -737,7 +738,8 @@ t_node_class list= {
 	.make=node_make_list,
 	.build=cls_node_build,
 	.link=cls_node_link,
-	.del=cls_node_del,
+	//.del=cls_node_del,
+	.del = cls_lst_delete,
 	.init=cls_node_init_id,
 	.free=cls_node_list_free,
 	.get_ref = cls_node_get_ref,

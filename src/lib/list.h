@@ -179,5 +179,6 @@ void _list_free(t_lst *lst, t_data_type type);
 t_lst *lst_clone(t_lst *lst, t_data_type type);
 
 void lst_delete( t_lst *lst);
+void cls_lst_delete( void *data);
 
 #endif
