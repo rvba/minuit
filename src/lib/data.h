@@ -25,6 +25,7 @@ typedef enum Data_Type
 	dt_uint,
 	dt_float,
 	dt_char,
+	dt_dict,
 	dt_string,
 	dt_pointer,
 	dt_vertex,

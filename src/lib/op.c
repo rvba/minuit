@@ -630,8 +630,7 @@ void register_set(t_context *C)
 
 	// FUNC
 
-	t_node *node_dict_func=dict_add("func");
-	t_dict *dict_func=node_dict_func->data;
+	t_dict *dict_func = dict_make( "func");
 
 	dict_symbol_add(dict_func,"op_slider",dt_pointer,op_slider);
 	dict_symbol_add(dict_func,"op_slider_positive",dt_pointer,op_slider_positive);
@@ -680,8 +679,7 @@ void register_set(t_context *C)
 
 	// APP
 
-	t_node *node_dict_app=dict_add("app");
-	t_dict *dict_app=node_dict_app->data;
+	t_dict *dict_app = dict_make( "app");
 
 	dict_symbol_add(dict_app,"frame",dt_pointer,&C->app->frame);
 	dict_symbol_add(dict_app,"timer",dt_pointer,&C->app->timer);
@@ -692,8 +690,7 @@ void register_set(t_context *C)
 
 	// MOUSE
 
-	t_node *node_mouse=dict_add("mouse");
-	t_dict *dict_mouse=node_mouse->data;
+	t_dict *dict_mouse = dict_make( "mouse");
 
 	t_mouse *mouse=C->app->mouse;
 

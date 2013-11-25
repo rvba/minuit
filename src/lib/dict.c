@@ -52,20 +52,28 @@ void dict_show(t_dict *dict)
 
 // ADD
 
-t_node *symbol_add(const char *name)
+t_symbol *symbol_make( const char *name)
 {
-	t_context *C=ctx_get();
-	t_node *node= scene_add(C->scene,nt_symbol,name);
+	t_scene *sc = ctx_scene_get();
+	t_symbol *symbol;
+	if( sc->store)
+	{
+		t_node *node= scene_add( sc, nt_symbol, name);
+		symbol = node->data;
+	}
+	else
+	{
+		symbol = symbol_new( name);
+	}
 
-	return node;
+	return symbol;
 }
 
 // DICT SYMBOL ADD
 
 t_symbol *dict_symbol_add(t_dict *dict,const char *name,t_data_type type,void *data)
 {
-	t_node *symbol_node=symbol_add(name);
-	t_symbol *symbol=symbol_node->data;
+	t_symbol *symbol = symbol_make( name);
 
 	symbol->data_type=type;
 	symbol->data=data;
@@ -101,20 +109,24 @@ void *dict_pop_data(t_dict *dict,const char *name)
 	return symbol->data;
 }
 
-t_node *dict_add(const char *name)
+t_dict *dict_make( const char *name)
 {
-	t_context *C = ctx_get();
-	// new dict
-	t_node *node_dict = scene_add(C->scene,nt_dict,name);
-	t_dict *dict=node_dict->data;
+	t_scene *sc = ctx_scene_get();
+	t_dict *dict;
+	if( sc->store)
+	{
+		t_node *node_dict = scene_add( sc, nt_dict, name);
+		dict=node_dict->data;
+	}
+	else
+	{
+		dict = dict_new( name);
+	}
 
 	// new list
-	t_node *node_list = scene_add(C->scene,nt_list,"dict_lst");
-	t_lst *lst=node_list->data;
+	dict->symbols = lst_make( dt_dict, "dict");
 
-	dict->symbols=lst;
-
-	return node_dict;
+	return dict;
 }
 
 // REBIND

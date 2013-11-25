@@ -818,6 +818,9 @@ void exe_add_brick_parent_child(t_dict *args)
 	//add brick
 
 	t_node *n=add_part_slider_float(C,block,".",NULL);
+
+	scene_store(C->scene,0);
+
 	t_brick *b=n->data;
 	b->state.is_versatil=1;
 
@@ -829,7 +832,6 @@ void exe_add_brick_parent_child(t_dict *args)
 	plug_add_parent(p_intern,plug_intern);
 	p_in->state.follow_in=0;
 
-	scene_store(C->scene,0);
 
 	block->state.update_geometry=1;
 }
@@ -850,6 +852,8 @@ void exe_add_brick_child_parent(t_dict *args)
 	t_brick *b=n->data;
 	b->state.is_versatil=1;
 
+	scene_store(C->scene,0);
+
 	brick_rhizome_setup(b);
 
 	t_plug *p_intern = &b->plug_intern;
@@ -860,7 +864,6 @@ void exe_add_brick_child_parent(t_dict *args)
 	plug_add_parent(plug_target,plug_brick);
 	p_in->state.follow_in=1;
 
-	scene_store(C->scene,0);
 
 	block->state.update_geometry=1;
 }
@@ -872,8 +875,7 @@ void add_exe_add_brick(t_brick *brick,t_brick *brick_target,void (* f)(t_dict *)
 
 	action->act = f;
 
-	t_node *node_dict = dict_add("args");
-	t_dict *dict = node_dict->data;
+	t_dict *dict = dict_make("args");
 	action->args = dict;
 
 	dict_symbol_add(action->args,"brick",dt_null,brick);
@@ -888,8 +890,7 @@ void add_exe_remove_brick(t_brick *brick)
 
 	action->act = exe_remove_brick;
 
-	t_node *node_dict = dict_add("args");
-	t_dict *dict = node_dict->data;
+	t_dict *dict = dict_make("args");
 	action->args = dict;
 
 	dict_symbol_add(action->args,"brick",dt_null,brick);
@@ -1598,7 +1599,7 @@ void *op_geo_array( t_brick *brick)
 
 void op_geo_exe(t_brick *brick)
 {
-	t_context *C = ctx_get();
+	//t_context *C = ctx_get();
 	t_link *l;
 	t_brick *b;
 	t_plug *p;
@@ -1648,7 +1649,7 @@ void op_geo_exe(t_brick *brick)
 	int count_points = points->count;
 	int count_edges = edges->count;
 
-	scene_store( C->scene, 1);
+	//scene_store( C->scene, 1);
 
 	if( count_points || count_edges)
 	{
@@ -1658,7 +1659,7 @@ void op_geo_exe(t_brick *brick)
 		if(edges->count > 0) geo_data_set(geo, dt_geo_edge, edges);
 	}
 
-	scene_store( C->scene, 0);
+	//scene_store( C->scene, 0);
 
 	// Free
 	lst_free(points);

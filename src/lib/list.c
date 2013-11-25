@@ -707,9 +707,18 @@ t_link *list_add(t_lst *lst,void *data)
 	t_context *C=ctx_get();
 
 	t_id *id = (t_id *) data;
+	t_link *link;
 
-	t_node *node=scene_add(C->scene,nt_link,id->name);
-	t_link *link=node->data;
+	if( C->scene->store)
+	{
+		t_node *node=scene_add(C->scene,nt_link,id->name);
+		link=node->data;
+	}
+	else
+	{
+		link = link_new("link");
+	}
+
 	link->data=data;
 	lst_push_back(lst,link);
 
@@ -1013,10 +1022,20 @@ void link_free(t_link *link)
 	free(link);
 }
 
-t_lst *lst_make( t_context *C, t_data_type type, const char *name)
+t_lst *lst_make( t_data_type type, const char *name)
 {
-	t_node *node = scene_add( C->scene, nt_list, name);
-	t_lst *lst = node->data;
+	t_scene *sc = ctx_scene_get();
+	t_lst *lst;
+	if( sc->store)
+	{
+		t_node *node = scene_add( sc, nt_list, name);
+		lst = node->data;
+	}
+	else
+	{
+		lst = lst_new( name);
+	}
+
 	lst->type = type;
 	return lst;
 }

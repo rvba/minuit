@@ -20,6 +20,7 @@
 #include "brick.h"
 #include "data.h"
 #include "object.h"
+#include "log.h"
 
 #define _PRECISION "%-.4f"
 

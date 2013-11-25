@@ -244,9 +244,15 @@ void ctx_scene_update_lst(t_context *C, t_lst *lst)
 	}
 }
 
+void scene_debug( t_context *C)
+{
+	printf( "%d scene_debug\n", C->app->frame);
+}
+
 // update selction status for meshes and lights
 void ctx_scene(t_context *C)
 {
+	if( C->scene->debug_all) scene_debug(C);
 	if(!C->event->is_brick_transformed)
 	{
 		// if object selection

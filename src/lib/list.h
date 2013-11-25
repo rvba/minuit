@@ -162,7 +162,7 @@ void 		lst_delete_all(t_lst *lst);
 void 		lst_link_delete(t_lst *lst,t_link *link);
 t_lst *		lst_copy(t_lst *lst);
 t_lst *		lst_new(const char *name);
-t_lst *		lst_make( struct Context *C, t_data_type type,  const char *name);
+t_lst *		lst_make( t_data_type type,  const char *name);
 void 		lst_free(t_lst *lst);
 void 		lst_cleanup(t_lst *lst);
 void 		lst_push_back(t_lst *lst,t_link *link);

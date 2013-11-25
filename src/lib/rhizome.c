@@ -625,8 +625,7 @@ void rhizome_graph_split(t_rhizome *rhizome, t_brick *brick_x, t_brick *brick_y)
 
 	t_link *link;
 	t_dot *dot;
-	t_node *dict_node = dict_add("dict");
-	t_dict *dict = dict_node->data;
+	t_dict *dict = dict_make( "dict");
 	t_symbol *symbol;
 	t_lst *lst;
 

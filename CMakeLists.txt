@@ -25,7 +25,7 @@ include_directories(
 	)
 
 set(CMAKE_BUILD_TYPE debug)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DWITH_DEBUG -Wall -O")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DWITH_DEBUG -Wall ")
 
 add_subdirectory(src)
 

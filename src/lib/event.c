@@ -82,6 +82,7 @@ t_event *event_new(void)
 	event->debug_key = DEBUG_KEY;
 	event->debug_plug = DEBUG_PLUG;
 	event->debug_all = DEBUG_ALL;
+	event->debug_to_file = DEBUG_TO_FILE;
 
 	event->free_scene=FREE_SCENE;
 

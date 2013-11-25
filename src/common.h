@@ -33,6 +33,7 @@
 #define DEBUG_KEY 0
 #define DEBUG_PLUG 1 
 #define DEBUG_ALL 0
+#define DEBUG_TO_FILE 0
 
 #define PI 3.14159655f
 

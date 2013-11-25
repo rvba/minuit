@@ -32,6 +32,7 @@ t_scene *scene_get(void)
 
 void scene_store(t_scene *scene, int val)
 {
+	if( scene->debug_all) printf("scene_store %d\n", val);
 	if(val)
 	{
 		scene->store_stack++;
@@ -43,6 +44,8 @@ void scene_store(t_scene *scene, int val)
 		if(scene->store_stack ==  0)
 			scene->store = 0;
 	}
+
+	if( scene->debug_all) printf("scene_store store=%d\n", scene->store);
 }
 
 // LOG
@@ -332,6 +335,8 @@ void scene_mem_remove(t_scene *sc,t_node *node)
 
 void scene_node_free(t_scene *sc,t_node *node)
 {
+	if( sc->debug_all) printf("scene_node_free %s \n",node_name_get(node->cls->type));
+
 	// Remove from Lst
 	lst_remove_node(node->cls->lst,node);
 	lst_remove_node(sc->nodes,node);
@@ -413,6 +418,8 @@ t_node *scene_struct_get(t_scene *sc,void *ptr)
 
 void scene_struct_delete(t_scene *sc,void *ptr)
 {
+
+
 	//XXX var has no ID
 	t_id *id = (t_id *) ptr;
 
@@ -495,6 +502,7 @@ void scene_node_load(t_scene *sc,t_node *node)
 
 t_node *scene_add_node(t_scene *sc,t_node_type type,const char *name)
 {
+	if( sc->debug_all) printf("scene_add_node %s %s\n",node_name_get( type), name);
 	// new node
 	t_node *node = node_new(type);
 
@@ -686,6 +694,7 @@ t_scene *scene_new(void)
 	sc->has_generic_viewport = 0;
 	sc->store_stack = 0;
 	sc->edit_mode = 0;
+	sc->debug_all = 0;
 
 	// build lists
 	sc->nodes=lst_new("nodes");

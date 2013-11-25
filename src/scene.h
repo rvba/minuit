@@ -30,6 +30,7 @@ typedef struct Scene
 	int color[3];	
 	int use_tmp_colors;
 	int edit_mode;
+	int debug_all;
 	
 	struct Lst *nodes;
 

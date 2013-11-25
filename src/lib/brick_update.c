@@ -331,8 +331,7 @@ void cls_brick_update(t_brick *brick)
 
 		action->act = brick_remove;
 
-		t_node *node_dict = dict_add("args");
-		t_dict *dict = node_dict->data;
+		t_dict *dict = dict_make("args");
 		action->args = dict;
 
 		dict_symbol_add(action->args,"brick",dt_null,brick);
