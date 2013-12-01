@@ -113,15 +113,8 @@ t_dict *dict_make( const char *name)
 {
 	t_scene *sc = ctx_scene_get();
 	t_dict *dict;
-	if( sc->store)
-	{
-		t_node *node_dict = scene_add( sc, nt_dict, name);
-		dict=node_dict->data;
-	}
-	else
-	{
-		dict = dict_new( name);
-	}
+	t_node *node_dict = scene_add( sc, nt_dict, name);
+	dict=node_dict->data;
 
 	// new list
 	dict->symbols = lst_make( dt_dict, "dict");

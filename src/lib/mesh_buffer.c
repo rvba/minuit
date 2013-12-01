@@ -14,6 +14,7 @@
 #include "context.h"
 #include "block.h"
 #include "ctx.h"
+#include "ui.h"
 
 // ADD GEOMETRY
 
@@ -110,6 +111,9 @@ void mesh_buffer_add_direct(t_mesh *mesh)
 	if(mesh->state.has_quad)
 	{
 		int tot_quad=mesh->var.tot_quad_face;
+
+		t_context *C = ctx_get();
+		C->ui->add_bricks = 0;
 
 		if(!mesh->quad_normal) mesh->quad_normal=vlst_make("quad_normal", dt_float, 3, tot_quad);
 	}

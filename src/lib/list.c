@@ -1026,15 +1026,8 @@ t_lst *lst_make( t_data_type type, const char *name)
 {
 	t_scene *sc = ctx_scene_get();
 	t_lst *lst;
-	if( sc->store)
-	{
-		t_node *node = scene_add( sc, nt_list, name);
-		lst = node->data;
-	}
-	else
-	{
-		lst = lst_new( name);
-	}
+	t_node *node = scene_add( sc, nt_list, name);
+	lst = node->data;
 
 	lst->type = type;
 	return lst;
