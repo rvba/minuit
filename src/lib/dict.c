@@ -58,7 +58,7 @@ t_symbol *symbol_make( const char *name)
 	t_symbol *symbol;
 	if( sc->store)
 	{
-		t_node *node= scene_add( sc, nt_symbol, name);
+		t_node *node= scene_add( sc, dt_symbol, name);
 		symbol = node->data;
 	}
 	else
@@ -113,7 +113,7 @@ t_dict *dict_make( const char *name)
 {
 	t_scene *sc = ctx_scene_get();
 	t_dict *dict;
-	t_node *node_dict = scene_add( sc, nt_dict, name);
+	t_node *node_dict = scene_add( sc, dt_dict, name);
 	dict=node_dict->data;
 
 	// new list

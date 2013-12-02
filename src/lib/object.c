@@ -81,26 +81,26 @@ void cls_object_show(t_object *object)
 
 void cls_object_link(t_object *self,t_node *target)
 {
-	if(target->type==nt_mesh)
+	if(target->type==dt_mesh)
 	{
 		t_mesh *mesh=target->data;
 		self->mesh=mesh;
 		target->users++;
 
 	}
-	else if(target->type==nt_list)
+	else if(target->type==dt_list)
 	{
 		t_lst *lst=target->data;
 		self->blocks=lst;
 		target->users++;
 	}
-	else if(target->type==nt_camera)
+	else if(target->type==dt_camera)
 	{
 		t_camera *camera=target->data;
 		self->data=camera;
 		target->users++;
 	}
-	else printf("[ERROR:cls_object_link] Unknown node type %s",node_name_get(target->type));
+	else printf("[ERROR:cls_object_link] Unknown node type %s",data_name_get(target->type));
 }
 
 void object_build(t_object *object,const char *type)
@@ -318,14 +318,14 @@ t_node *object_make(const char *type,const char *name)
 	t_scene *sc = C->scene;
 
 	// new object
-	t_node *node = scene_add(C->scene,nt_object,name);
+	t_node *node = scene_add(C->scene,dt_object,name);
 	t_object *object=node->data;
 
 	// build cls
 	object_build(object,type);
 
 	// new list (bricks list)
-	t_node *list = scene_add(C->scene,nt_list,"object_blocks");
+	t_node *list = scene_add(C->scene,dt_list,"object_blocks");
 
 	// bind list
 	object->cls->link(object,list);

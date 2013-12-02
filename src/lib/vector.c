@@ -210,7 +210,7 @@ void vector_default(t_vector *vector)
 t_node *vector_add(const char *name)
 {
 	t_context *C = ctx_get();
-	t_node *node = scene_add(C->scene,nt_vector,name);
+	t_node *node = scene_add(C->scene,dt_vector,name);
 	t_vector *vector = node->data;
 
 	vector_default(vector);

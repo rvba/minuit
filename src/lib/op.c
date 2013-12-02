@@ -485,10 +485,10 @@ t_node *make_menu_brick_add(void)
 	add_brick_submenu(C,menu,menu_mouse,"mouse");
 
 	t_node *menu_object=make_menu_object();
-	add_brick_submenu_contextual(C,menu,menu_object,"object",nt_object);
+	add_brick_submenu_contextual(C,menu,menu_object,"object",dt_object);
 
 	t_node *menu_mesh=make_menu_mesh();
-	add_brick_submenu_contextual(C,menu,menu_mesh,"mesh",nt_mesh);
+	add_brick_submenu_contextual(C,menu,menu_mesh,"mesh",dt_mesh);
 
 	return menu;
 }

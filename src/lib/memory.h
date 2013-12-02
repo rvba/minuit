@@ -10,9 +10,7 @@
 #ifndef __MEMORY_H_
 #define __MEMORY_H_
 
-#include "util.h"
 #include "common.h"
-
 
 typedef struct Chunk t_chunk;
 typedef enum Chunk_Type t_chunk_type;
@@ -26,7 +24,7 @@ enum Chunk_Type
 struct Chunk
 {
 	t_chunk_type chunk_type;
-	enum Node_Type type;
+	t_data_type type;
 	int id;			// chunk id (order in Static MEMORY)
 
 	int size;		// block size
@@ -35,12 +33,12 @@ struct Chunk
 	void *pointer;		// pointer to data 
 };
 
-int		mem_store(t_chunk_type chunk_type,t_node_type type,size_t size,int tot,void *pointer);
+int		mem_store(t_chunk_type chunk_type,t_data_type type,size_t size,int tot,void *pointer);
 void 		mem_show(void);
 void 		mem_read(void);
 void 		mem_init(void);
 void 		mem_write(const char *path);
-t_chunk *	chunk_new(t_chunk_type chunk_type,t_node_type type,size_t size,int tot,void *pointer);
+t_chunk *	chunk_new(t_chunk_type chunk_type,t_data_type type,size_t size,int tot,void *pointer);
 void 		mem_remove(int id);
 
 void mem_free(void);

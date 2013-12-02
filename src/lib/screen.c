@@ -38,7 +38,7 @@ t_screen *screen_default(const char *name, void (* draw)(t_screen *s))
 {
 	t_context *C=ctx_get();
 
-	t_node *node=scene_add(C->scene,nt_screen,name);
+	t_node *node=scene_add(C->scene,dt_screen,name);
 	t_screen *screen=node->data;
 
 	screen->keymap=keymap_generic;
@@ -47,17 +47,17 @@ t_screen *screen_default(const char *name, void (* draw)(t_screen *s))
 	lst_add(C->ui->screens,node,name);
 
 	// Lst
-	t_node *node_lst = scene_add( C->scene, nt_list, "lst");
+	t_node *node_lst = scene_add( C->scene, dt_list, "lst");
 	t_lst *lst = node_lst->data;
 
 	screen->viewports = lst;
 
 	// Viewport
-	t_node *node_viewport = scene_add( C->scene, nt_viewport, name);
+	t_node *node_viewport = scene_add( C->scene, dt_viewport, name);
 	t_viewport *viewport = node_viewport->data;
 
 	// Camera
-	t_node *node_camera = scene_add( C->scene, nt_camera, name);
+	t_node *node_camera = scene_add( C->scene, dt_camera, name);
 	t_camera *camera = node_camera->data;
 
 	viewport->camera = camera;

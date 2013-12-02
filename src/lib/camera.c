@@ -101,7 +101,7 @@ t_node *camera_add(const char *name)
 t_node *camera_make(const char *name)
 {
 	t_context *C=ctx_get();
-	t_node *node_camera=scene_add(C->scene,nt_camera,name);
+	t_node *node_camera=scene_add(C->scene,dt_camera,name);
 	return node_camera;
 }
 

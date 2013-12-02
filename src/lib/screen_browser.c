@@ -280,7 +280,7 @@ void screen_browser_make(void)
 {
 	t_context *C=ctx_get();
 
-	t_node *node=scene_add(C->scene,nt_screen,"screen_browser");
+	t_node *node=scene_add(C->scene,dt_screen,"screen_browser");
 	t_screen *screen=node->data;
 
 	screen->keymap=keymap_browser;

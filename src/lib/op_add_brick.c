@@ -468,7 +468,7 @@ t_node *add_brick_submenu(t_context *C,t_node *menu,t_node *submenu,const char *
 
 // BRICK SUBMENU CONTEXTUAL
 
-t_node *add_brick_submenu_contextual(t_context *C,t_node *menu,t_node *submenu,const char *name,t_node_type context)
+t_node *add_brick_submenu_contextual(t_context *C,t_node *menu,t_node *submenu,const char *name,t_data_type context)
 {
 	t_node *node=add_brick_submenu(C,menu,submenu,name);
 	t_brick *brick=node->data;

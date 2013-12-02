@@ -688,7 +688,7 @@ t_vlst *vlst_make(const char *name,t_data_type type, int length, int count)
 {
 	t_context *C=ctx_get();
 
-	t_node *node_vlst=scene_add(C->scene,nt_vlst,name);
+	t_node *node_vlst=scene_add(C->scene,dt_vlst,name);
 	t_vlst *vlst=node_vlst->data;
 
 	vlst->type = type;

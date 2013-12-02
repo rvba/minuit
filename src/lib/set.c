@@ -174,16 +174,16 @@ t_node *set_make(const char *name)
 	t_context *C = ctx_get();
 
 	// New Set
-	t_node *node_set = scene_add(C->scene,nt_set,name);
+	t_node *node_set = scene_add(C->scene,dt_set,name);
 	t_set *set = node_set->data;
 
 	// Add Blocks List
-	t_node *node_blocks = scene_add(C->scene,nt_list,name);
+	t_node *node_blocks = scene_add(C->scene,dt_list,name);
 	t_lst *lst_blocks = node_blocks->data;
 	set->blocks = lst_blocks;
 
 	// Add Graphs List
-	t_node *node_rhizomes = scene_add(C->scene,nt_list,name);
+	t_node *node_rhizomes = scene_add(C->scene,dt_list,name);
 	t_lst *lst_rhizomes = node_rhizomes->data;
 	set->rhizomes = lst_rhizomes;
 

@@ -92,7 +92,7 @@ t_node *viewport_make(const char *name)
 {
 	t_context *C = ctx_get();
 
-	t_node *node_viewport = scene_add(C->scene, nt_viewport, name);
+	t_node *node_viewport = scene_add(C->scene, dt_viewport, name);
 	t_node *node_camera = op_new_camera("vp_camera");
 	t_object *object = node_camera->data;
 

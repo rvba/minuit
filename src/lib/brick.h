@@ -156,7 +156,7 @@ typedef struct Brick
 	t_brick_class *cls;			// cls
 
 	enum Brick_Type type;
-	enum Node_Type context;			// contextual menus
+	t_data_type context;			// contextual menus
 
 	int idcol_right[3];			// col
 	int idcol_left[3];

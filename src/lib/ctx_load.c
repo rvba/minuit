@@ -73,7 +73,7 @@ void id_store(t_scene *sc,t_chunk *c,void *data)
 		lst=sc->tmp_node;
 
 		// var node: store tmp node
-		if(c->type==nt_var)
+		if(c->type==dt_var)
 		{
 			tmp_node=data;
 		}
@@ -84,7 +84,7 @@ void id_store(t_scene *sc,t_chunk *c,void *data)
 		lst=sc->tmp_data;
 
 		// var data: bind tmp node
-		if(c->type==nt_var)
+		if(c->type==dt_var)
 		{
 			if(tmp_node)
 			{
@@ -174,7 +174,7 @@ t_node *find_by_ptr(t_scene *sc,void *ptr)
 		n=l->data;
 
 		// data->pointer 
-		if(n->type==nt_data)
+		if(n->type==dt_data)
 		{
 			t_data *data=n->data;
 
@@ -194,7 +194,7 @@ t_node *find_by_ptr(t_scene *sc,void *ptr)
 		// node->id_ptr
 		else
 		{
-			if(n->type==nt_var)
+			if(n->type==dt_var)
 			{
 				if(n->id_ptr==ptr) 
 				{
@@ -321,7 +321,7 @@ void load_store(t_scene *sc)
 		t_id *id = (t_id *) d;
 
 		// DATA
-		if(n->type==nt_data)
+		if(n->type==dt_data)
 		{
 			d=n->data;
 
@@ -342,8 +342,8 @@ void load_store(t_scene *sc)
 					id->id_chunk = n->id_chunk;
 
 					// store
-					var->id_chunk_self=mem_store(ct_node,nt_var,sizeof(t_node),1,var);
-					var->id_chunk=mem_store(ct_data,nt_var,d->size,1,var_data);
+					var->id_chunk_self=mem_store(ct_node,dt_var,sizeof(t_node),1,var);
+					var->id_chunk=mem_store(ct_data,dt_var,d->size,1,var_data);
 					var->id_ptr=var_data;
 
 					d->pointer=var_data;
@@ -402,7 +402,7 @@ void load_store(t_scene *sc)
 		}
 
 		// ELSE
-		else if(n->type==nt_var)
+		else if(n->type==dt_var)
 		{
 			// don't store
 			// stored by dynamic data
@@ -410,7 +410,7 @@ void load_store(t_scene *sc)
 		else
 		{
 			// Option
-			if(n->type==nt_option)
+			if(n->type==dt_option)
 			{
 				// don't store
 			}
@@ -443,7 +443,7 @@ void rebind(t_scene *sc,const char *type,const char *name,void **ptr)
 		if(node)
 		{
 			// [INDIRECT DATA]
-			if(node->type==nt_data)
+			if(node->type==dt_data)
 			{
 				t_data *data=node->data;
 
@@ -511,36 +511,36 @@ void load_rebind(t_scene *sc)
 
 		switch(node->type)
 		{
-			case(nt_link): 		link_rebind(sc,ptr);break;
-			case(nt_list): 		lst_rebind(sc,ptr); break;
-			case(nt_object): 	object_rebind(sc,ptr); break;
-			case(nt_mesh): 		mesh_rebind(sc,ptr); break;
-			case(nt_brick): 	brick_rebind(sc,ptr); break;
-			case(nt_block): 	block_rebind(sc,ptr); break;
-			case(nt_light): 	light_rebind(sc,ptr); break;
-			case(nt_material): 	material_rebind(sc,ptr); break;
-			case(nt_vlst): 		vlst_rebind(sc,ptr); break;
-			case(nt_data): 		data_rebind(sc,ptr);break;
-			case(nt_file): 		file_rebind(sc,ptr);break;
-			case(nt_texture): 	texture_rebind(sc,ptr);break;
-			case(nt_screen): 	screen_rebind(sc,ptr);break;
-			case(nt_option): 	option_rebind(sc,ptr);break;
-			case(nt_camera): 	camera_rebind(sc,ptr);break;
-			case(nt_dict): 		dict_rebind(sc,ptr); break;
-			case(nt_symbol): 	symbol_rebind(sc,ptr); break;
-			case(nt_vector) : 	vector_rebind(sc,ptr);break; 
-			case(nt_viewport) : 	viewport_rebind(sc,ptr);break; 
-			case(nt_set) : 		set_rebind(sc,ptr);break; 
-			case(nt_binding) : 	binding_rebind(sc,ptr);break; 
-			case(nt_rhizome) : 	rhizome_rebind(sc,ptr);break; 
-			case(nt_geo) : 		geo_rebind(sc,ptr);break; 
-			case(nt_geo_point) : 	geo_point_rebind(sc,ptr);break; 
-			case(nt_geo_edge) : 	geo_edge_rebind(sc,ptr);break; 
-			case(nt_geo_array) : 	geo_array_rebind(sc,ptr);break; 
+			case(dt_link): 		link_rebind(sc,ptr);break;
+			case(dt_list): 		lst_rebind(sc,ptr); break;
+			case(dt_object): 	object_rebind(sc,ptr); break;
+			case(dt_mesh): 		mesh_rebind(sc,ptr); break;
+			case(dt_brick): 	brick_rebind(sc,ptr); break;
+			case(dt_block): 	block_rebind(sc,ptr); break;
+			case(dt_light): 	light_rebind(sc,ptr); break;
+			case(dt_material): 	material_rebind(sc,ptr); break;
+			case(dt_vlst): 		vlst_rebind(sc,ptr); break;
+			case(dt_data): 		data_rebind(sc,ptr);break;
+			case(dt_file): 		file_rebind(sc,ptr);break;
+			case(dt_texture): 	texture_rebind(sc,ptr);break;
+			case(dt_screen): 	screen_rebind(sc,ptr);break;
+			case(dt_option): 	option_rebind(sc,ptr);break;
+			case(dt_camera): 	camera_rebind(sc,ptr);break;
+			case(dt_dict): 		dict_rebind(sc,ptr); break;
+			case(dt_symbol): 	symbol_rebind(sc,ptr); break;
+			case(dt_vector) : 	vector_rebind(sc,ptr);break; 
+			case(dt_viewport) : 	viewport_rebind(sc,ptr);break; 
+			case(dt_set) : 		set_rebind(sc,ptr);break; 
+			case(dt_binding) : 	binding_rebind(sc,ptr);break; 
+			case(dt_rhizome) : 	rhizome_rebind(sc,ptr);break; 
+			case(dt_geo) : 		geo_rebind(sc,ptr);break; 
+			case(dt_geo_point) : 	geo_point_rebind(sc,ptr);break; 
+			case(dt_geo_edge) : 	geo_edge_rebind(sc,ptr);break; 
+			case(dt_geo_array) : 	geo_array_rebind(sc,ptr);break; 
 
-			case(nt_var): break;
+			case(dt_var): break;
 			default:
-				printf("[ERROR load_data] Unknown type %s\n",node_name_get(node->type));
+				printf("[ERROR load_data] Unknown type %s\n",data_name_get(node->type));
 				load_error = 1;
 				break;
 		}
@@ -562,7 +562,7 @@ void load_var(t_scene *sc)
 		n=l->data;
 
 		// data
-		if(n->type==nt_data)
+		if(n->type==dt_data)
 		{
 			d=n->data;
 
@@ -620,7 +620,7 @@ void load_node(t_scene *sc)
 		void *ptr=NULL;
 
 		// VAR
-		if(n->type==nt_var)
+		if(n->type==dt_var)
 		{
 			// don't
 		}
@@ -644,7 +644,7 @@ void load_node(t_scene *sc)
 			}
 			else
 			{
-				printf("[ERROR load_node] Can't find chunk, node class:%s\n",node_name_get(n->type));
+				printf("[ERROR load_node] Can't find chunk, node class:%s\n",data_name_get(n->type));
 				load_error = 1;
 
 			}
@@ -691,7 +691,7 @@ void load_read(t_scene *sc,const char *path)
 	rewind(file);
 
 	// NEW CHUNK
-	c=chunk_new(ct_node,nt_null,0,0,NULL);
+	c=chunk_new(ct_node,dt_null,0,0,NULL);
 
 	ulog((LOG_READ,"File size:%d\n",file_size));
 	ulog((LOG_READ,"[0]\n",file_size));
@@ -741,7 +741,7 @@ void load_read(t_scene *sc,const char *path)
 			(void) rsize;
 			//if( rsize != (sizeof(t_chunk) * 1)) printf("read error 3\n");
 			ulog((LOG_READ,"[%d]\t(+%d)\tchunk",(int)ftell(file),(int)sizeof(t_chunk)));
-			ulog((LOG_READ," %s:%s:%d:%d\n",chunk_type_get(c->chunk_type),node_name_get(c->type),c->size,c->tot));
+			ulog((LOG_READ," %s:%s:%d:%d\n",chunk_type_get(c->chunk_type),data_name_get(c->type),c->size,c->tot));
 
 			// READ DATA
 

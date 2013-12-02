@@ -24,7 +24,7 @@ t_light *light_rebind(t_scene *sc,void *ptr)
 t_node *light_make(const char *name)
 {
 	t_context *C=ctx_get();
-	t_node *node=scene_add(C->scene,nt_light,name);
+	t_node *node=scene_add(C->scene,dt_light,name);
 	t_light *light=node->data;
 
 	// set pos

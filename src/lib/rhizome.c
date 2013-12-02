@@ -317,7 +317,7 @@ void rhizome_get_roots(t_rhizome *rhizome)
 	// Add Lst
 	if(!rhizome->roots)
 	{
-		t_node *node_list = scene_add(C->scene,nt_list,"roots");
+		t_node *node_list = scene_add(C->scene,dt_list,"roots");
 		rhizome->roots = node_list->data;
 	}
 
@@ -755,12 +755,12 @@ t_rhizome *rhizome_add(const char *name)
 	t_context *C = ctx_get();
 
 	// New Rhizome
-	t_node *node_rhizome = scene_add(C->scene,nt_rhizome,"rhizome");
+	t_node *node_rhizome = scene_add(C->scene,dt_rhizome,"rhizome");
 	t_rhizome *rhizome = node_rhizome->data;
 
 	// New Blocks Lst
 
-	t_node *node_lst = scene_add(C->scene, nt_list, "blocks");
+	t_node *node_lst = scene_add(C->scene, dt_list, "blocks");
 	t_lst *lst = node_lst->data;
 	rhizome->blocks = lst;
 

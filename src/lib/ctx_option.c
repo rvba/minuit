@@ -40,7 +40,7 @@ t_node *ctx_node_find_option(t_scene *sc)
 		n=l->data;
 
 		//if(is(n->cls->type,"option"))
-		if(n->type==nt_option)
+		if(n->type==dt_option)
 		{
 			return n;
 		}
@@ -108,7 +108,7 @@ void option_load(t_context *C,t_node *node)
 void option_save(t_context *C)
 {
 	scene_store(C->scene,1);
-	t_node *node=scene_add(C->scene,nt_option,"option");
+	t_node *node=scene_add(C->scene,dt_option,"option");
 	scene_store(C->scene,0);
 
 	t_option *option=node->data;

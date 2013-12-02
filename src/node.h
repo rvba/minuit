@@ -28,11 +28,11 @@ object screen txt image link lst
 
 typedef struct NodeClass
 {
-	t_node_type type;
+	t_data_type type;
 	int size;
 	struct Lst *lst;
 
-	int  (* make)(struct Node *node);
+	//int  (* make)(struct Node *node);
 	void (* build)(struct Node *node,const char *name);
 	void (* link)(struct Node *node);
 	//void (* del)(struct Node *node);
@@ -55,7 +55,7 @@ typedef struct Node
 	void *id_ptr_old;
 	int users;
 
-	t_node_type type;
+	t_data_type type;
 	struct NodeClass *cls;
 
 	void *data;  
@@ -64,6 +64,7 @@ typedef struct Node
 
 // NODE.C
 
+/*
 extern char node_name_null[];
 extern char node_name_brick[];
 extern char node_name_mesh[];
@@ -91,13 +92,14 @@ extern char node_name_geo[];
 extern char node_name_geo_point[];
 extern char node_name_geo_edge[];
 extern char node_name_geo_array[];
+*/
 
 int 		node_equal(t_node *m, t_node *n);
 t_node*		node_load(void *ptr,const char *type);
-void		node_init(t_node *node,t_node_type type);
-t_node *	node_new(t_node_type type);
+void		node_init(t_node *node,t_data_type type);
+t_node *	node_new(t_data_type type);
 t_node *	node_clone(t_node *src);
-char *		node_name_get(t_node_type type);
+//char *		node_name_get(t_data_type type);
 
 void id_init(t_id *id, const char *name);
 

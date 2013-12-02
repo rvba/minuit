@@ -52,6 +52,7 @@ typedef struct ID
 	int store;
 }t_id;
 
+/*
 typedef enum Node_Type
 {
 	nt_null,
@@ -86,6 +87,57 @@ typedef enum Node_Type
 	nt_geo_array,
 
 }t_node_type;
+*/
+
+typedef enum Data_Type
+{
+	dt_null,
+	dt_bool,
+	dt_int,
+	dt_uint,
+	dt_float,
+	dt_char,
+	dt_dict,
+	dt_string,
+	dt_pointer,
+	dt_vertex,
+	dt_edge,
+	dt_face,
+	dt_mesh,
+	dt_lst,
+	dt_vlst,
+	dt_camera,
+	dt_object,
+	dt_selector,
+	dt_trigger,
+	dt_operator,
+	dt_vector,
+	dt_viewport,
+	dt_binding,
+	dt_brick,
+	dt_block,
+	dt_rhizome,
+	dt_graph,
+	dt_set,
+	dt_geo,
+	dt_geo_point,
+	dt_geo_edge,
+	dt_geo_face,
+	dt_geo_array,
+	dt_light,
+	dt_screen,
+	dt_file,
+	dt_image,
+	dt_material,
+	dt_list,
+	dt_link,
+	dt_data,
+	dt_texture,
+	dt_option,
+	dt_symbol,
+	dt_var,
+
+}t_data_type;
 
 
 

@@ -711,7 +711,7 @@ t_link *list_add(t_lst *lst,void *data)
 
 	if( C->scene->store)
 	{
-		t_node *node=scene_add(C->scene,nt_link,id->name);
+		t_node *node=scene_add(C->scene,dt_link,id->name);
 		link=node->data;
 	}
 	else
@@ -1026,7 +1026,7 @@ t_lst *lst_make( t_data_type type, const char *name)
 {
 	t_scene *sc = ctx_scene_get();
 	t_lst *lst;
-	t_node *node = scene_add( sc, nt_list, name);
+	t_node *node = scene_add( sc, dt_list, name);
 	lst = node->data;
 
 	lst->type = type;

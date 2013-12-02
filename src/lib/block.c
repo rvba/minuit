@@ -326,14 +326,14 @@ void _block_init(t_block *block)
 
 void cls_block_link(t_block *self,t_node *target)
 {
-	if(target->type==nt_list)
+	if(target->type==dt_list)
 	{
 		t_lst *lst=target->data;
 		self->bricks=lst;
 		target->users++;
 	}
 
-	else printf("[ERROR:cls_block_link] Unknown node type %s",node_name_get(target->type));
+	else printf("[ERROR:cls_block_link] Unknown node type %s",data_name_get(target->type));
 }
 
 void cls_block_link(t_block *self,t_node *target);
@@ -529,8 +529,8 @@ t_node *block_make(const char *name,const char *type)
 {
 	t_context *C=ctx_get();
 
-	t_node *n_block=scene_add(C->scene,nt_block,name);
-	t_node *n_list=scene_add(C->scene,nt_list,name);
+	t_node *n_block=scene_add(C->scene,dt_block,name);
+	t_node *n_list=scene_add(C->scene,dt_list,name);
 
 	t_block *block=n_block->data;
 

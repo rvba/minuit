@@ -335,7 +335,7 @@ t_geo *geo_make( t_context *C, const char *name)
 	t_geo *geo;
 	if( C->scene->store)
 	{
-		t_node *node_geo = scene_add( C->scene, nt_geo, name);
+		t_node *node_geo = scene_add( C->scene, dt_geo, name);
 		geo = node_geo->data;
 	}
 	else
@@ -359,7 +359,7 @@ t_geo_point *geo_point_make( t_context *C, const char *name)
 	t_geo_point *geo_point;
 	if( C->scene->store)
 	{
-		t_node *node = scene_add( C->scene, nt_geo_point, name);
+		t_node *node = scene_add( C->scene, dt_geo_point, name);
 		geo_point = node->data;
 	}
 	else
@@ -380,7 +380,7 @@ t_geo_edge *geo_edge_make( t_context *C, const char *name)
 	t_geo_edge *geo_edge;
 	if( C->scene->store)
 	{
-		t_node *node_geo_edge = scene_add(C->scene,nt_geo_edge,name);
+		t_node *node_geo_edge = scene_add(C->scene,dt_geo_edge,name);
 		geo_edge = node_geo_edge->data;
 	}
 	else
@@ -398,7 +398,7 @@ t_geo_edge *geo_edge_make( t_context *C, const char *name)
 
 t_geo_array *geo_array_make( t_context *C, const char *name)
 {
-	t_node *node_geo_array = scene_add(C->scene,nt_geo_array,name);
+	t_node *node_geo_array = scene_add(C->scene,dt_geo_array,name);
 	t_geo_array *geo_array = node_geo_array->data;
 
 	geo_array->elements = lst_make( dt_null, "elements");

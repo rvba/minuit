@@ -59,7 +59,7 @@ void scene_log_loop_var(t_lst *lst)
 	for(l=lst->first;l;l=l->next)
 	{
 		n=l->data;
-		ulog((LOG_SCENE_NODES,"node id:%d cls:%s\n",n->id,node_name_get(n->type)));
+		ulog((LOG_SCENE_NODES,"node id:%d cls:%s\n",n->id,data_name_get(n->type)));
 	}
 }
 
@@ -74,7 +74,7 @@ void scene_log_loop(t_lst *lst)
 	{
 		n=l->data;
 		id = (t_id *) n->data;
-		ulog((LOG_SCENE_NODES,"node id:%d\tcls:%s\tname:%s\n",n->id,node_name_get(n->type),id->name));
+		ulog((LOG_SCENE_NODES,"node id:%d\tcls:%s\tname:%s\n",n->id,data_name_get(n->type),id->name));
 	}
 }
 
@@ -335,7 +335,7 @@ void scene_mem_remove(t_scene *sc,t_node *node)
 
 void scene_node_free(t_scene *sc,t_node *node)
 {
-	if( sc->debug_all) printf("scene_node_free %s \n",node_name_get(node->cls->type));
+	if( sc->debug_all) printf("scene_node_free %s \n",data_name_get(node->cls->type));
 
 	// Remove from Lst
 	lst_remove_node(node->cls->lst,node);
@@ -382,7 +382,7 @@ int scene_node_delete(t_scene *sc,t_node *node)
 {
 	if(sc->is_ready)
 	{
-		lst_add(sc->stack,node,node_name_get(node->type));
+		lst_add(sc->stack,node,data_name_get(node->type));
 		return 1;
 	}
 	else
@@ -403,7 +403,7 @@ t_node *scene_struct_get(t_scene *sc,void *ptr)
 	for(l=sc->nodes->first;l;l=l->next)
 	{
 		n=l->data;
-		if(n->type!=nt_var)
+		if(n->type!=dt_var)
 		{
 			if(n->id == id->id)
 			{
@@ -430,7 +430,7 @@ void scene_struct_delete(t_scene *sc,void *ptr)
 	for(l=sc->nodes->first;l;l=l->next)
 	{
 		n=l->data;
-		if(n->type!=nt_var)
+		if(n->type!=dt_var)
 		{
 			if(n->id == id->id)
 			{
@@ -474,9 +474,9 @@ void scene_node_load(t_scene *sc,t_node *node)
 	// INIT NODE && DATA
 	node->cls->init(node);
 
-	if(node->type==nt_var)
+	if(node->type==dt_var)
 	{
-		lst_add(node->cls->lst,node,node_name_get(node->type));
+		lst_add(node->cls->lst,node,data_name_get(node->type));
 		lst_add(sc->nodes,node,"var");
 	}
 	else
@@ -486,7 +486,7 @@ void scene_node_load(t_scene *sc,t_node *node)
 		// option have no lst
 		if(node->cls->lst)
 		{
-			lst_add(node->cls->lst,node,node_name_get(node->type));
+			lst_add(node->cls->lst,node,data_name_get(node->type));
 		}
 	}
 }
@@ -500,9 +500,9 @@ void scene_node_load(t_scene *sc,t_node *node)
 
 // node
 
-t_node *scene_add_node(t_scene *sc,t_node_type type,const char *name)
+t_node *scene_add_node(t_scene *sc,t_data_type type,const char *name)
 {
-	if( sc->debug_all) printf("scene_add_node %s %s\n",node_name_get( type), name);
+	if( sc->debug_all) printf("scene_add_node %s %s\n",data_name_get( type), name);
 	// new node
 	t_node *node = node_new(type);
 
@@ -523,7 +523,7 @@ t_node *scene_add_node(t_scene *sc,t_node_type type,const char *name)
 	// store data
 	if(sc->store)
 	{
-		if(type==nt_var)
+		if(type==dt_var)
 		{
 			// stored by scene_add_data_var
 		}
@@ -551,9 +551,9 @@ t_node *scene_add_node(t_scene *sc,t_node_type type,const char *name)
 
 // add regular struct
 
-t_node *scene_add(t_scene *sc,t_node_type type,const char *name)
+t_node *scene_add(t_scene *sc,t_data_type type,const char *name)
 {
-	ulog((LOG_SCENE,"scene_add %s %s \n",node_name_get(type),name));
+	ulog((LOG_SCENE,"scene_add %s %s \n",data_name_get(type),name));
 
 	t_node *node=scene_add_node(sc,type,name);
 
@@ -567,7 +567,7 @@ t_node *scene_add_data(t_scene *sc,const char *type,const char *target,const cha
 	ulog((LOG_SCENE,"scene_add_data %s %s %s\n",type,target,name));
 	//printf("scene_add_data %s %s %s\n",type,target,name);
 
-	t_node *node=scene_add_node(sc,nt_data,name);
+	t_node *node=scene_add_node(sc,dt_data,name);
 	t_data *data=node->data;
 
 	set_name(data->type,type);
@@ -585,7 +585,7 @@ t_node *scene_add_data_node(t_scene *sc,const char *type,const char *target,cons
 {
 	ulog((LOG_SCENE,"scene_add_node %s %s %s\n",type,target,name));
 
-	t_node *node=scene_add_node(sc,nt_data,name);
+	t_node *node=scene_add_node(sc,dt_data,name);
 	t_data *data=node->data;
 
 	set_name(data->type,type);
@@ -635,7 +635,7 @@ t_node *scene_add_ref(t_scene *sc,const char *type,const char *target,const char
 {
 	ulog((LOG_SCENE,"scene_add_ref %s %s %s\n",type,target,name));
 
-	t_node *node=scene_add_node(sc,nt_data,name);
+	t_node *node=scene_add_node(sc,dt_data,name);
 	t_data *data=node->data;
 
 	set_name(data->type,type); 
@@ -666,13 +666,13 @@ void scene_add_data_var(t_scene *sc,const char *name,const char *name_var,int si
 	data->size=size;
 
 	// VAR
-	t_node *node_var=scene_add(sc,nt_var,"var");
+	t_node *node_var=scene_add(sc,dt_var,"var");
 	node_var->data=ptr;
 	node_var->id_ptr=ptr;
 
 	// store 
-	node_var->id_chunk_self=mem_store(ct_node,nt_var,sizeof(t_node),1,node_var);
-	node_var->id_chunk=mem_store(ct_data,nt_var,size,1,ptr);
+	node_var->id_chunk_self=mem_store(ct_node,dt_var,sizeof(t_node),1,node_var);
+	node_var->id_chunk=mem_store(ct_data,dt_var,size,1,ptr);
 }
 
 /***	INIT	***/

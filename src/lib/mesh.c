@@ -272,11 +272,11 @@ t_node *mesh_make(
 	t_context *C = ctx_get();
 
 	// add mesh
-	t_node *node_mesh=scene_add(C->scene,nt_mesh,name);
+	t_node *node_mesh=scene_add(C->scene,dt_mesh,name);
 	t_mesh *mesh=node_mesh->data;
 
 	// add material
-	t_node *node_material=scene_add(C->scene,nt_material,name);
+	t_node *node_material=scene_add(C->scene,dt_material,name);
 	t_material *material=node_material->data;
 	mesh->material=material;
 

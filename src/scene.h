@@ -10,6 +10,8 @@
 #ifndef __SCENE_H
 #define __SCENE_H
 
+#include "common.h"
+
 struct Node;
 struct Lst;
 enum Node_Type;
@@ -94,7 +96,7 @@ struct Node *	scene_node_get_by_id_global(t_scene *sc,int id);
 struct Node*	scene_node_get(t_scene *sc,const char *type,const char *name);
 void		scene_cleanup(t_scene *sc);
 
-struct Node *	scene_add(t_scene *sc,enum Node_Type type,const char *name);
+struct Node *	scene_add(t_scene *sc, t_data_type type,const char *name);
 struct Node *	scene_add_data(t_scene *sc,const char *type,const char *target,const char *name,void *ptr);
 struct Node *	scene_add_data_node(t_scene *sc,const char *type,const char *target,const char *name,void *ptr);
 struct Node *	scene_add_ref(t_scene *sc,const char *type,const char *target,const char *name,void *ptr,void *ref);

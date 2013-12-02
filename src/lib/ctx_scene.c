@@ -33,16 +33,16 @@ void ctx_scene_selection(t_context *C, t_node *node, int state)
 	{
 		if(state)
 		{
-			term_log("set selected %s", node_name_get(node->cls->type));
+			term_log("set selected %s", data_name_get(node->cls->type));
 		}
 		else
 		{
-			term_log("set diselected %s", node_name_get(node->cls->type));
+			term_log("set diselected %s", data_name_get(node->cls->type));
 		}
 	}
 	switch(node->cls->type)
 	{
-		case(nt_object):
+		case(dt_object):
 			object = node->data;
 			if(state)
 			{
@@ -91,9 +91,9 @@ void ctx_scene_selection(t_context *C, t_node *node, int state)
 
 			}
 			break;
-		case(nt_mesh): break;
+		case(dt_mesh): break;
 		default:
-			printf("[WARINING set selected] Unknown type %s\n", node_name_get(node->type));
+			printf("[WARINING set selected] Unknown type %s\n", data_name_get(node->type));
 			break;
 	}
 }
@@ -200,8 +200,8 @@ int node_hover(t_context *C, t_node *node)
 {
 	switch(node->type)
 	{
-		case(nt_brick): return node_hover_brick(C,node); break;
-		case(nt_object): return node_hover_object(C,node); break;
+		case(dt_brick): return node_hover_brick(C,node); break;
+		case(dt_object): return node_hover_object(C,node); break;
 		default: break;
 	}
 

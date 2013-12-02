@@ -108,12 +108,12 @@ void brick_binding_add(t_brick *brick, t_data_type type, void *data)
 	t_plug *plug_intern = &brick->plug_intern;
 	if(!plug_intern->bindings)
 	{
-		t_node *node_list = scene_add(C->scene,nt_list,"binding");
+		t_node *node_list = scene_add(C->scene,dt_list,"binding");
 		t_lst *list = node_list->data;
 		plug_intern->bindings = list;
 	}
 
-	t_node *node_binding = scene_add(C->scene,nt_binding,"binding");
+	t_node *node_binding = scene_add(C->scene,dt_binding,"binding");
 	t_binding *binding = node_binding->data;
 
 	binding->type = type;
@@ -130,7 +130,7 @@ void plug_add_parent(t_plug *child, t_plug *parent)
 	if(!child->parents)
 	{
 		// add list
-		t_node *node_list = scene_add(C->scene,nt_list,"parent");
+		t_node *node_list = scene_add(C->scene,dt_list,"parent");
 		t_lst *list = node_list->data;
 		child->parents = list;
 	}
@@ -625,7 +625,7 @@ t_node *brick_make(t_block *block,const char *name,t_brick_type brick_type,t_dat
 	t_context *C=ctx_get();
 
 	// NEW BRICK
-	t_node *node_brick = scene_add(C->scene,nt_brick,name);
+	t_node *node_brick = scene_add(C->scene,dt_brick,name);
 	t_brick *brick = node_brick->data;
 
 	// TYPE
@@ -718,7 +718,7 @@ t_brick *brick_new(const char *name)
 	txt_init(&brick->txt_name,name);
 	txt_init(&brick->txt_data,NULL);
 
-	brick->context=nt_null;
+	brick->context=dt_null;
 
 	bzero(&brick->state,sizeof(t_brick_state));
 

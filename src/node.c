@@ -39,68 +39,6 @@
 
 #include "ctx.h"
 
-int node_make_mesh(t_node *node);
-int node_make_block(t_node *node);
-int node_make_brick(t_node *node);
-int node_make_light(t_node *node);
-int node_make_object(t_node *node);
-int node_make_screen(t_node *node);
-int node_make_file(t_node *node);
-int node_make_image(t_node *node);
-int node_make_material(t_node *node);
-int node_make_list(t_node *node);
-int node_make_link(t_node *node);
-int node_make_data(t_node *node);
-int node_make_texture(t_node *node);
-int node_make_var(t_node *node);
-int node_make_option(t_node *node);
-int node_make_vlst(t_node *node);
-int node_make_camera(t_node *node);
-int node_make_dict(t_node *node);
-int node_make_symbol(t_node *node);
-int node_make_vector(t_node *node);
-int node_make_viewport(t_node *node);
-int node_make_set(t_node *node);
-int node_make_binding(t_node *node);
-int node_make_rhizome(t_node *node);
-int node_make_graph(t_node *node);
-int node_make_geo(t_node *node);
-int node_make_geo_point(t_node *node);
-int node_make_geo_edge(t_node *node);
-int node_make_geo_array(t_node *node);
-
-char node_name_null[]="node_null";
-char node_name_brick[]="node_brick";
-char node_name_mesh[]="node_mesh";
-char node_name_block[]="node_block";
-char node_name_light[]="node_light";
-char node_name_object[]="node_object";
-char node_name_screen[]="node_screen";
-char node_name_file[]="node_file";
-char node_name_image[]="node_image";
-char node_name_material[]="node_material";
-char node_name_list[]="node_list";
-char node_name_link[]="node_link";
-char node_name_data[]="node_data";
-char node_name_texture[]="node_texture";
-char node_name_var[]="node_var";
-char node_name_option[]="node_option";
-char node_name_vlst[]="node_vlst";
-char node_name_camera[]="node_camera";
-char node_name_dict[]="node_dict";
-char node_name_symbol[]="node_symbol";
-char node_name_vector[]="node_vector";
-char node_name_viewport[]="node_viewport";
-char node_name_set[]="node_set";
-char node_name_binding[]="node_binding";
-char node_name_rhizome[]="node_rhizome";
-char node_name_graph[]="node_graph";
-char node_name_geo[]="node_geo";
-char node_name_geo_point[]="node_geo_point";
-char node_name_geo_edge[]="node_geo_edge";
-char node_name_geo_array[]="node_geo_array";
-
-
 int node_equal(t_node *m, t_node *n)
 {
 	if(m->id == n->id) return 1;
@@ -108,43 +46,6 @@ int node_equal(t_node *m, t_node *n)
 }
 
 
-char *node_name_get(t_node_type type)
-{
-	switch(type)
-	{
-		case(nt_null):return node_name_null;break;
-		case(nt_brick):return node_name_brick;break;
-		case(nt_mesh):return node_name_mesh;break;
-		case(nt_block):return node_name_block;break;
-		case(nt_light):return node_name_light;break;
-		case(nt_object):return node_name_object;break;
-		case(nt_screen):return node_name_screen;break;
-		case(nt_file):return node_name_file;break;
-		case(nt_image):return node_name_image;break;
-		case(nt_material):return node_name_material;break;
-		case(nt_list):return node_name_list;break;
-		case(nt_link):return node_name_link;break;
-		case(nt_data):return node_name_data;break;
-		case(nt_texture):return node_name_texture;break;
-		case(nt_var):return node_name_var;break;
-		case(nt_option):return node_name_option;break;
-		case(nt_vlst):return node_name_vlst;break;
-		case(nt_camera):return node_name_camera;break;
-		case(nt_dict):return node_name_dict;break;
-		case(nt_symbol):return node_name_symbol;break;
-		case(nt_vector):return node_name_vector;break;
-		case(nt_viewport):return node_name_viewport;break;
-		case(nt_set):return node_name_set;break;
-		case(nt_binding):return node_name_binding;break;
-		case(nt_rhizome):return node_name_rhizome;break;
-		case(nt_graph):return node_name_graph;break;
-		case(nt_geo):return node_name_geo;break;
-		case(nt_geo_point):return node_name_geo_point;break;
-		case(nt_geo_edge):return node_name_geo_edge;break;
-		case(nt_geo_array):return node_name_geo_array;break;
-		default:printf("[ERROR node_name_get] Unknown type %d\n",type);return node_name_null;break;
-	}
-}
 
 // GET REF
 
@@ -203,7 +104,7 @@ void cls_node_id_add(t_node *node)
 	node->id = scene_id;
 	id->id = scene_id;
 
-	if(node->cls->type == nt_brick)
+	if(node->cls->type == dt_brick)
 	{
 		cls_node_init_brick_ids(node);
 	}
@@ -231,67 +132,67 @@ void cls_node_build(t_node *node,const char *name)
 
 	switch(node->type)
 	{
-		case nt_mesh:		p = mesh_new(name);
+		case dt_mesh:		p = mesh_new(name);
 			break;
-		case nt_block:		p = block_new(name);
+		case dt_block:		p = block_new(name);
 			break;
-		case nt_brick:		p = brick_new(name);
+		case dt_brick:		p = brick_new(name);
 			break;
-		case nt_light:		p = light_new(name);
+		case dt_light:		p = light_new(name);
 			break;
-		case nt_object:		p = object_new(name);
+		case dt_object:		p = object_new(name);
 			break;
-		case nt_screen:		p = screen_new(name);
+		case dt_screen:		p = screen_new(name);
 			break;
-		case nt_file:		p = file_new(name);
+		case dt_file:		p = file_new(name);
 			break;
-		case nt_image:		p = image_new(name);
+		case dt_image:		p = image_new(name);
 			break;
-		case nt_material:	p = material_new(name);
+		case dt_material:	p = material_new(name);
 			break;
-		case nt_list:		p = lst_new(name);
+		case dt_list:		p = lst_new(name);
 			break;
-		case nt_link:		p = link_new(name);
+		case dt_link:		p = link_new(name);
 			break;
-		case nt_data:		p = data_new(name);
+		case dt_data:		p = data_new(name);
 			break;
-		case nt_texture:	p = texture_new(name);
+		case dt_texture:	p = texture_new(name);
 			break;
-		case nt_option:		p = option_new(name);
+		case dt_option:		p = option_new(name);
 			break;
-		case nt_vlst:		p = vlst_new(name);
+		case dt_vlst:		p = vlst_new(name);
 			break;
-		case nt_camera:		p = camera_new(name);
+		case dt_camera:		p = camera_new(name);
 			break;
-		case nt_dict:		p = dict_new(name);
+		case dt_dict:		p = dict_new(name);
 			break;
-		case nt_symbol: 	p = symbol_new(name);
+		case dt_symbol: 	p = symbol_new(name);
 			break;
-		case nt_vector: 	p = vector_new(name);
+		case dt_vector: 	p = vector_new(name);
 			break;
-		case nt_viewport: 	p = viewport_new(name);
+		case dt_viewport: 	p = viewport_new(name);
 			break;
-		case nt_set:	 	p = set_new(name);
+		case dt_set:	 	p = set_new(name);
 			break;
-		case nt_binding:	 p = binding_new(name);
+		case dt_binding:	 p = binding_new(name);
 			break;
-		case nt_rhizome: 	p = rhizome_new(name);
+		case dt_rhizome: 	p = rhizome_new(name);
 			break;
-		case nt_graph: 		p = graph_new(name);
+		case dt_graph: 		p = graph_new(name);
 			break;
-		case nt_geo: 		p = geo_new(name);
+		case dt_geo: 		p = geo_new(name);
 			break;
-		case nt_geo_point:	p = geo_point_new(name);
+		case dt_geo_point:	p = geo_point_new(name);
 			break;
-		case nt_geo_edge:	p = geo_edge_new(name);
+		case dt_geo_edge:	p = geo_edge_new(name);
 			break;
-		case nt_geo_array:	p = geo_array_new(name);
+		case dt_geo_array:	p = geo_array_new(name);
 			break;
 
-		case nt_null: 
+		case dt_null: 
 			printf("[WARNING node_cls_build] null node\n");
 			break;
-		case nt_var: 
+		case dt_var: 
 			cls_node_build_var(node,name);
 			break;
 
@@ -303,7 +204,7 @@ void cls_node_build(t_node *node,const char *name)
 	node->data=p;
 	node->id_ptr=node->data;
 
-	if(node->type != nt_var)
+	if(node->type != dt_var)
 	{
 		cls_node_id_add(node);
 		cls_node_user_add(node);
@@ -616,10 +517,9 @@ void cls_node_init_geo_array(t_node *node)
 // CLASSES
 
 t_node_class mesh= {
-	.type=nt_mesh,
+	.type=dt_mesh,
 	.size=sizeof( t_mesh),
 	.lst=NULL,
-	.make=node_make_mesh,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
@@ -629,10 +529,9 @@ t_node_class mesh= {
 };
 
 t_node_class block= {
-	.type=nt_block,
+	.type=dt_block,
 	.size=sizeof( t_block),
 	.lst=NULL,
-	.make=node_make_block,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
@@ -642,10 +541,9 @@ t_node_class block= {
 };
 
 t_node_class brick= {
-	.type=nt_brick,
+	.type=dt_brick,
 	.size=sizeof( t_brick),
 	.lst=NULL,
-	.make=node_make_brick,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
@@ -655,10 +553,9 @@ t_node_class brick= {
 };
 
 t_node_class light= {
-	.type=nt_light,
+	.type=dt_light,
 	.size=sizeof( t_light),
 	.lst=NULL,
-	.make=node_make_light,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
@@ -668,10 +565,9 @@ t_node_class light= {
 };
 
 t_node_class object= {
-	.type=nt_object,
+	.type=dt_object,
 	.size=sizeof( t_object),
 	.lst=NULL,
-	.make=node_make_object,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
@@ -681,10 +577,9 @@ t_node_class object= {
 };
 
 t_node_class screen= {
-	.type=nt_screen,
+	.type=dt_screen,
 	.size=sizeof( t_screen),
 	.lst=NULL,
-	.make=node_make_screen,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
@@ -694,10 +589,9 @@ t_node_class screen= {
 };
 
 t_node_class file= {
-	.type=nt_file,
+	.type=dt_file,
 	.size=sizeof( t_file),
 	.lst=NULL,
-	.make=node_make_file,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
@@ -707,10 +601,9 @@ t_node_class file= {
 };
 
 t_node_class image= {
-	.type=nt_image,
+	.type=dt_image,
 	.size=sizeof( t_image),
 	.lst=NULL,
-	.make=node_make_image,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
@@ -720,10 +613,9 @@ t_node_class image= {
 };
 
 t_node_class material= {
-	.type=nt_material,
+	.type=dt_material,
 	.size=sizeof( t_material),
 	.lst=NULL,
-	.make=node_make_material,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
@@ -733,10 +625,9 @@ t_node_class material= {
 };
 
 t_node_class list= {
-	.type=nt_list,
+	.type=dt_list,
 	.size=sizeof( t_lst),
 	.lst=NULL,
-	.make=node_make_list,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	//.del=cls_node_del,
@@ -747,10 +638,9 @@ t_node_class list= {
 };
 
 t_node_class _link_= {
-	.type=nt_link,
+	.type=dt_link,
 	.size=sizeof( t_link),
 	.lst=NULL,
-	.make=node_make_link,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
@@ -760,10 +650,9 @@ t_node_class _link_= {
 };
 
 t_node_class data= {
-	.type=nt_data,
+	.type=dt_data,
 	.size=sizeof( t_data),
 	.lst=NULL,
-	.make=node_make_data,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
@@ -773,10 +662,9 @@ t_node_class data= {
 };
 
 t_node_class texture= {
-	.type=nt_texture,
+	.type=dt_texture,
 	.size=sizeof( t_texture),
 	.lst=NULL,
-	.make=node_make_texture,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
@@ -786,10 +674,9 @@ t_node_class texture= {
 };
 
 t_node_class var= {
-	.type=nt_var,
+	.type=dt_var,
 	.size=0,
 	.lst=NULL,
-	.make=node_make_var,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
@@ -799,10 +686,9 @@ t_node_class var= {
 };
 
 t_node_class option= {
-	.type=nt_option,
+	.type=dt_option,
 	.size=sizeof( t_option),
 	.lst=NULL,
-	.make=node_make_option,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
@@ -812,10 +698,9 @@ t_node_class option= {
 };
 
 t_node_class vlst= {
-	.type=nt_vlst,
+	.type=dt_vlst,
 	.size=sizeof( t_vlst),
 	.lst=NULL,
-	.make=node_make_vlst,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
@@ -825,10 +710,9 @@ t_node_class vlst= {
 };
 
 t_node_class camera= {
-	.type=nt_camera,
+	.type=dt_camera,
 	.size=sizeof( t_camera),
 	.lst=NULL,
-	.make=node_make_camera,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
@@ -838,10 +722,9 @@ t_node_class camera= {
 };
 
 t_node_class dict= {
-	.type=nt_dict,
+	.type=dt_dict,
 	.size=sizeof( t_dict),
 	.lst=NULL,
-	.make=node_make_dict,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
@@ -851,10 +734,9 @@ t_node_class dict= {
 };
 
 t_node_class symbol= {
-	.type=nt_symbol,
+	.type=dt_symbol,
 	.size=sizeof( t_symbol),
 	.lst=NULL,
-	.make=node_make_symbol,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
@@ -864,10 +746,9 @@ t_node_class symbol= {
 };
 
 t_node_class vector= {
-	.type=nt_vector,
+	.type=dt_vector,
 	.size=sizeof( t_vector),
 	.lst=NULL,
-	.make=node_make_vector,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
@@ -877,10 +758,9 @@ t_node_class vector= {
 };
 
 t_node_class viewport= {
-	.type=nt_viewport,
+	.type=dt_viewport,
 	.size=sizeof( t_viewport),
 	.lst=NULL,
-	.make=node_make_viewport,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
@@ -890,10 +770,9 @@ t_node_class viewport= {
 };
 
 t_node_class set = {
-	.type=nt_set,
+	.type=dt_set,
 	.size=sizeof( t_set),
 	.lst=NULL,
-	.make=node_make_set,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
@@ -903,10 +782,9 @@ t_node_class set = {
 };
 
 t_node_class binding = {
-	.type=nt_binding,
+	.type=dt_binding,
 	.size=sizeof( t_binding),
 	.lst=NULL,
-	.make=node_make_binding,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
@@ -916,10 +794,9 @@ t_node_class binding = {
 };
 
 t_node_class rhizome = {
-	.type=nt_rhizome,
+	.type=dt_rhizome,
 	.size=sizeof( t_rhizome),
 	.lst=NULL,
-	.make=node_make_rhizome,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
@@ -929,10 +806,9 @@ t_node_class rhizome = {
 };
 
 t_node_class graph = {
-	.type=nt_graph,
+	.type=dt_graph,
 	.size=sizeof( t_graph),
 	.lst=NULL,
-	.make=node_make_graph,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
@@ -942,10 +818,9 @@ t_node_class graph = {
 };
 
 t_node_class geo = {
-	.type=nt_geo,
+	.type=dt_geo,
 	.size=sizeof( t_geo),
 	.lst=NULL,
-	.make=node_make_geo,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
@@ -955,10 +830,9 @@ t_node_class geo = {
 };
 
 t_node_class geo_point = {
-	.type=nt_geo_point,
+	.type=dt_geo_point,
 	.size=sizeof( t_geo_point),
 	.lst=NULL,
-	.make=node_make_geo_point,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
@@ -968,10 +842,9 @@ t_node_class geo_point = {
 };
 
 t_node_class geo_edge = {
-	.type=nt_geo_edge,
+	.type=dt_geo_edge,
 	.size=sizeof( t_geo_edge),
 	.lst=NULL,
-	.make=node_make_geo_edge,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
@@ -981,10 +854,9 @@ t_node_class geo_edge = {
 };
 
 t_node_class geo_array = {
-	.type=nt_geo_array,
+	.type=dt_geo_array,
 	.size=sizeof( t_geo_array),
 	.lst=NULL,
-	.make=node_make_geo_array,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
@@ -1033,37 +905,37 @@ void cls_node_lst_set( t_scene *sc, t_node *node)
 {
 	switch( node->cls->type)
 	{
-		case( nt_mesh): node->cls->lst = sc->meshes; break;
-		case( nt_block): node->cls->lst = sc->blocks; break;
-		case( nt_brick): node->cls->lst = sc->bricks; break;
-		case( nt_light): node->cls->lst = sc->lights; break;
-		case( nt_object): node->cls->lst = sc->objects; break;
-		case( nt_screen): node->cls->lst = sc->screens; break;
-		case( nt_file): node->cls->lst = sc->files; break;
-		case( nt_image): node->cls->lst = sc->images; break;
-		case( nt_material): node->cls->lst = sc->materials; break;
-		case( nt_list): node->cls->lst = sc->lists; break;
-		case( nt_link): node->cls->lst = sc->links; break;
-		case( nt_texture): node->cls->lst = sc->textures; break;
-		case( nt_option): node->cls->lst = NULL; break;
-		case( nt_vlst): node->cls->lst = sc->vlst; break;
-		case( nt_camera): node->cls->lst = sc->cameras; break;
-		case( nt_dict): node->cls->lst = sc->dicts; break;
-		case( nt_symbol): node->cls->lst = sc->symbols; break;
-		case( nt_vector): node->cls->lst = sc->vectors; break;
-		case( nt_binding): node->cls->lst = sc->bindings; break;
-		case( nt_rhizome): node->cls->lst = sc->rhizomes; break;
-		case( nt_graph): node->cls->lst = sc->graphs; break;
-		case( nt_viewport): node->cls->lst = sc->viewports; break;
-		case( nt_set): node->cls->lst = sc->sets; break;
-		case( nt_null): break;
-		case( nt_data):node->cls->lst = sc->datas; break;
-		case( nt_var): node->cls->lst = sc->vars; break;
-		case( nt_geo): node->cls->lst = sc->geos; break;
-		case( nt_geo_point): node->cls->lst = sc->geos; break;
-		case( nt_geo_edge): node->cls->lst = sc->geos; break;
-		case( nt_geo_array): node->cls->lst = sc->geos; break;
-		default: printf("[ERROR cls_node_lst_set] Unkown type %s\n", node_name_get( node->cls->type)); break;
+		case( dt_mesh): node->cls->lst = sc->meshes; break;
+		case( dt_block): node->cls->lst = sc->blocks; break;
+		case( dt_brick): node->cls->lst = sc->bricks; break;
+		case( dt_light): node->cls->lst = sc->lights; break;
+		case( dt_object): node->cls->lst = sc->objects; break;
+		case( dt_screen): node->cls->lst = sc->screens; break;
+		case( dt_file): node->cls->lst = sc->files; break;
+		case( dt_image): node->cls->lst = sc->images; break;
+		case( dt_material): node->cls->lst = sc->materials; break;
+		case( dt_list): node->cls->lst = sc->lists; break;
+		case( dt_link): node->cls->lst = sc->links; break;
+		case( dt_texture): node->cls->lst = sc->textures; break;
+		case( dt_option): node->cls->lst = NULL; break;
+		case( dt_vlst): node->cls->lst = sc->vlst; break;
+		case( dt_camera): node->cls->lst = sc->cameras; break;
+		case( dt_dict): node->cls->lst = sc->dicts; break;
+		case( dt_symbol): node->cls->lst = sc->symbols; break;
+		case( dt_vector): node->cls->lst = sc->vectors; break;
+		case( dt_binding): node->cls->lst = sc->bindings; break;
+		case( dt_rhizome): node->cls->lst = sc->rhizomes; break;
+		case( dt_graph): node->cls->lst = sc->graphs; break;
+		case( dt_viewport): node->cls->lst = sc->viewports; break;
+		case( dt_set): node->cls->lst = sc->sets; break;
+		case( dt_null): break;
+		case( dt_data):node->cls->lst = sc->datas; break;
+		case( dt_var): node->cls->lst = sc->vars; break;
+		case( dt_geo): node->cls->lst = sc->geos; break;
+		case( dt_geo_point): node->cls->lst = sc->geos; break;
+		case( dt_geo_edge): node->cls->lst = sc->geos; break;
+		case( dt_geo_array): node->cls->lst = sc->geos; break;
+		default: printf("[ERROR cls_node_lst_set] Unkown type %s\n", data_name_get( node->cls->type)); break;
 	}
 }
 
@@ -1071,42 +943,42 @@ void cls_node_cls_set( t_node *node)
 {
 	switch( node->type)
 	{
-		case( nt_mesh): node->cls = &mesh; break;
-		case( nt_block): node->cls = &block; break;
-		case( nt_brick): node->cls = &brick; break;
-		case( nt_light): node->cls = &light; break;
-		case( nt_object): node->cls = &object; break;
-		case( nt_screen): node->cls = &screen; break;
-		case( nt_file): node->cls = &file; break;
-		case( nt_image): node->cls = &image; break;
-		case( nt_material): node->cls = &material; break;
-		case( nt_list): node->cls = &list; break;
-		case( nt_link): node->cls = &_link_; break;
-		case( nt_texture): node->cls = &texture; break;
-		case( nt_option): node->cls = &option; break;
-		case( nt_vlst): node->cls = &vlst; break;
-		case( nt_camera): node->cls = &camera; break;
-		case( nt_dict): node->cls = &dict; break;
-		case( nt_symbol): node->cls = &symbol; break;
-		case( nt_vector): node->cls = &vector; break;
-		case( nt_binding): node->cls = &binding; break;
-		case( nt_rhizome): node->cls = &rhizome; break;
-		case( nt_graph): node->cls = &graph; break;
-		case( nt_viewport): node->cls = &viewport; break;
-		case( nt_set): node->cls = &set; break;
-		case( nt_null): node->cls = NULL;break;
-		case( nt_data): node->cls = &data; break;
-		case( nt_var): node->cls = &var; break;
-		case( nt_geo): node->cls = &geo ; break;
-		case( nt_geo_point): node->cls = &geo_point; break;
-		case( nt_geo_edge): node->cls = &geo_edge; break;
-		case( nt_geo_array): node->cls = &geo_array; break;
-		default: printf("[ERROR cls_node_cls_set] Unkown type %s\n", node_name_get( node->cls->type)); break;
+		case( dt_mesh): node->cls = &mesh; break;
+		case( dt_block): node->cls = &block; break;
+		case( dt_brick): node->cls = &brick; break;
+		case( dt_light): node->cls = &light; break;
+		case( dt_object): node->cls = &object; break;
+		case( dt_screen): node->cls = &screen; break;
+		case( dt_file): node->cls = &file; break;
+		case( dt_image): node->cls = &image; break;
+		case( dt_material): node->cls = &material; break;
+		case( dt_list): node->cls = &list; break;
+		case( dt_link): node->cls = &_link_; break;
+		case( dt_texture): node->cls = &texture; break;
+		case( dt_option): node->cls = &option; break;
+		case( dt_vlst): node->cls = &vlst; break;
+		case( dt_camera): node->cls = &camera; break;
+		case( dt_dict): node->cls = &dict; break;
+		case( dt_symbol): node->cls = &symbol; break;
+		case( dt_vector): node->cls = &vector; break;
+		case( dt_binding): node->cls = &binding; break;
+		case( dt_rhizome): node->cls = &rhizome; break;
+		case( dt_graph): node->cls = &graph; break;
+		case( dt_viewport): node->cls = &viewport; break;
+		case( dt_set): node->cls = &set; break;
+		case( dt_null): node->cls = NULL;break;
+		case( dt_data): node->cls = &data; break;
+		case( dt_var): node->cls = &var; break;
+		case( dt_geo): node->cls = &geo ; break;
+		case( dt_geo_point): node->cls = &geo_point; break;
+		case( dt_geo_edge): node->cls = &geo_edge; break;
+		case( dt_geo_array): node->cls = &geo_array; break;
+		default: printf("[ERROR cls_node_cls_set] Unkown type %s\n", data_name_get( node->cls->type)); break;
 	}
 }
 
 
-void cls_node_make( t_scene *sc, t_node *node, t_node_type type)
+void cls_node_make( t_scene *sc, t_node *node, t_data_type type)
 {
 	node->type = type;
 	cls_node_cls_set( node);
@@ -1116,20 +988,20 @@ void cls_node_make( t_scene *sc, t_node *node, t_node_type type)
 
 // INIT 
 
-void cls_node_init(t_node *node,t_node_type type)
+void cls_node_init(t_node *node,t_data_type type)
 {
 	t_scene *sc = ctx_scene_get();
 	cls_node_make( sc, node, type);
 }
 
-void node_init(t_node *node,t_node_type type)
+void node_init(t_node *node,t_data_type type)
 {
 	cls_node_init(node,type);
 }
 
 // NEW
 
-t_node *node_new(t_node_type type)
+t_node *node_new(t_data_type type)
 {
 	t_node *node = (t_node *)malloc(sizeof(t_node));
 
