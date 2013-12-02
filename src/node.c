@@ -107,6 +107,7 @@ int node_equal(t_node *m, t_node *n)
 	else return 0;
 }
 
+
 char *node_name_get(t_node_type type)
 {
 	switch(type)
@@ -616,7 +617,7 @@ void cls_node_init_geo_array(t_node *node)
 
 t_node_class mesh= {
 	.type=nt_mesh,
-	.size=0,
+	.size=sizeof( t_mesh),
 	.lst=NULL,
 	.make=node_make_mesh,
 	.build=cls_node_build,
@@ -629,7 +630,7 @@ t_node_class mesh= {
 
 t_node_class block= {
 	.type=nt_block,
-	.size=0,
+	.size=sizeof( t_block),
 	.lst=NULL,
 	.make=node_make_block,
 	.build=cls_node_build,
@@ -642,7 +643,7 @@ t_node_class block= {
 
 t_node_class brick= {
 	.type=nt_brick,
-	.size=0,
+	.size=sizeof( t_brick),
 	.lst=NULL,
 	.make=node_make_brick,
 	.build=cls_node_build,
@@ -655,7 +656,7 @@ t_node_class brick= {
 
 t_node_class light= {
 	.type=nt_light,
-	.size=0,
+	.size=sizeof( t_light),
 	.lst=NULL,
 	.make=node_make_light,
 	.build=cls_node_build,
@@ -668,7 +669,7 @@ t_node_class light= {
 
 t_node_class object= {
 	.type=nt_object,
-	.size=0,
+	.size=sizeof( t_object),
 	.lst=NULL,
 	.make=node_make_object,
 	.build=cls_node_build,
@@ -681,7 +682,7 @@ t_node_class object= {
 
 t_node_class screen= {
 	.type=nt_screen,
-	.size=0,
+	.size=sizeof( t_screen),
 	.lst=NULL,
 	.make=node_make_screen,
 	.build=cls_node_build,
@@ -694,7 +695,7 @@ t_node_class screen= {
 
 t_node_class file= {
 	.type=nt_file,
-	.size=0,
+	.size=sizeof( t_file),
 	.lst=NULL,
 	.make=node_make_file,
 	.build=cls_node_build,
@@ -707,7 +708,7 @@ t_node_class file= {
 
 t_node_class image= {
 	.type=nt_image,
-	.size=0,
+	.size=sizeof( t_image),
 	.lst=NULL,
 	.make=node_make_image,
 	.build=cls_node_build,
@@ -720,7 +721,7 @@ t_node_class image= {
 
 t_node_class material= {
 	.type=nt_material,
-	.size=0,
+	.size=sizeof( t_material),
 	.lst=NULL,
 	.make=node_make_material,
 	.build=cls_node_build,
@@ -733,7 +734,7 @@ t_node_class material= {
 
 t_node_class list= {
 	.type=nt_list,
-	.size=0,
+	.size=sizeof( t_lst),
 	.lst=NULL,
 	.make=node_make_list,
 	.build=cls_node_build,
@@ -747,7 +748,7 @@ t_node_class list= {
 
 t_node_class _link_= {
 	.type=nt_link,
-	.size=0,
+	.size=sizeof( t_link),
 	.lst=NULL,
 	.make=node_make_link,
 	.build=cls_node_build,
@@ -760,7 +761,7 @@ t_node_class _link_= {
 
 t_node_class data= {
 	.type=nt_data,
-	.size=0,
+	.size=sizeof( t_data),
 	.lst=NULL,
 	.make=node_make_data,
 	.build=cls_node_build,
@@ -773,7 +774,7 @@ t_node_class data= {
 
 t_node_class texture= {
 	.type=nt_texture,
-	.size=0,
+	.size=sizeof( t_texture),
 	.lst=NULL,
 	.make=node_make_texture,
 	.build=cls_node_build,
@@ -799,7 +800,7 @@ t_node_class var= {
 
 t_node_class option= {
 	.type=nt_option,
-	.size=0,
+	.size=sizeof( t_option),
 	.lst=NULL,
 	.make=node_make_option,
 	.build=cls_node_build,
@@ -812,7 +813,7 @@ t_node_class option= {
 
 t_node_class vlst= {
 	.type=nt_vlst,
-	.size=0,
+	.size=sizeof( t_vlst),
 	.lst=NULL,
 	.make=node_make_vlst,
 	.build=cls_node_build,
@@ -825,7 +826,7 @@ t_node_class vlst= {
 
 t_node_class camera= {
 	.type=nt_camera,
-	.size=0,
+	.size=sizeof( t_camera),
 	.lst=NULL,
 	.make=node_make_camera,
 	.build=cls_node_build,
@@ -838,7 +839,7 @@ t_node_class camera= {
 
 t_node_class dict= {
 	.type=nt_dict,
-	.size=0,
+	.size=sizeof( t_dict),
 	.lst=NULL,
 	.make=node_make_dict,
 	.build=cls_node_build,
@@ -851,7 +852,7 @@ t_node_class dict= {
 
 t_node_class symbol= {
 	.type=nt_symbol,
-	.size=0,
+	.size=sizeof( t_symbol),
 	.lst=NULL,
 	.make=node_make_symbol,
 	.build=cls_node_build,
@@ -864,7 +865,7 @@ t_node_class symbol= {
 
 t_node_class vector= {
 	.type=nt_vector,
-	.size=0,
+	.size=sizeof( t_vector),
 	.lst=NULL,
 	.make=node_make_vector,
 	.build=cls_node_build,
@@ -877,7 +878,7 @@ t_node_class vector= {
 
 t_node_class viewport= {
 	.type=nt_viewport,
-	.size=0,
+	.size=sizeof( t_viewport),
 	.lst=NULL,
 	.make=node_make_viewport,
 	.build=cls_node_build,
@@ -890,7 +891,7 @@ t_node_class viewport= {
 
 t_node_class set = {
 	.type=nt_set,
-	.size=0,
+	.size=sizeof( t_set),
 	.lst=NULL,
 	.make=node_make_set,
 	.build=cls_node_build,
@@ -903,7 +904,7 @@ t_node_class set = {
 
 t_node_class binding = {
 	.type=nt_binding,
-	.size=0,
+	.size=sizeof( t_binding),
 	.lst=NULL,
 	.make=node_make_binding,
 	.build=cls_node_build,
@@ -916,7 +917,7 @@ t_node_class binding = {
 
 t_node_class rhizome = {
 	.type=nt_rhizome,
-	.size=0,
+	.size=sizeof( t_rhizome),
 	.lst=NULL,
 	.make=node_make_rhizome,
 	.build=cls_node_build,
@@ -929,7 +930,7 @@ t_node_class rhizome = {
 
 t_node_class graph = {
 	.type=nt_graph,
-	.size=0,
+	.size=sizeof( t_graph),
 	.lst=NULL,
 	.make=node_make_graph,
 	.build=cls_node_build,
@@ -942,7 +943,7 @@ t_node_class graph = {
 
 t_node_class geo = {
 	.type=nt_geo,
-	.size=0,
+	.size=sizeof( t_geo),
 	.lst=NULL,
 	.make=node_make_geo,
 	.build=cls_node_build,
@@ -955,7 +956,7 @@ t_node_class geo = {
 
 t_node_class geo_point = {
 	.type=nt_geo_point,
-	.size=0,
+	.size=sizeof( t_geo_point),
 	.lst=NULL,
 	.make=node_make_geo_point,
 	.build=cls_node_build,
@@ -968,7 +969,7 @@ t_node_class geo_point = {
 
 t_node_class geo_edge = {
 	.type=nt_geo_edge,
-	.size=0,
+	.size=sizeof( t_geo_edge),
 	.lst=NULL,
 	.make=node_make_geo_edge,
 	.build=cls_node_build,
@@ -981,7 +982,7 @@ t_node_class geo_edge = {
 
 t_node_class geo_array = {
 	.type=nt_geo_array,
-	.size=0,
+	.size=sizeof( t_geo_array),
 	.lst=NULL,
 	.make=node_make_geo_array,
 	.build=cls_node_build,
@@ -992,291 +993,6 @@ t_node_class geo_array = {
 	.get_ref = cls_node_get_ref_geo_array,
 };
 
-// MAKE
-
-int node_make_mesh(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&mesh;
-	node->cls->size=sizeof(t_mesh);
-	node->cls->lst=C->scene->meshes;
-	node->type = nt_mesh;
-	return 1;
-}
-
-int node_make_block(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&block;
-	node->cls->size=sizeof(t_block);
-	node->cls->lst=C->scene->blocks;
-	node->type = nt_block;
-	return 1;
-}
-
-int node_make_brick(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&brick;
-	node->cls->size=sizeof(t_brick);
-	node->cls->lst=C->scene->bricks;
-	return 1;
-}
-
-int node_make_light(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&light;
-	node->cls->size=sizeof(t_light);
-	node->cls->lst=C->scene->lights;
-	node->type = nt_light;
-	return 1;
-}
-
-int node_make_object(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&object;
-	node->cls->size=sizeof(t_object);
-	node->cls->lst=C->scene->objects;
-	return 1;
-}
-
-int node_make_screen(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&screen;
-	node->cls->size=sizeof(t_screen);
-	node->cls->lst=C->scene->screens;
-	node->type = nt_screen;
-	return 1;
-}
-
-int node_make_file(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&file;
-	node->cls->size=sizeof(t_file);
-	node->cls->lst=C->scene->files;
-	return 1;
-}
-
-int node_make_image(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&image;
-	node->cls->size=sizeof(t_image);
-	node->cls->lst=C->scene->images;
-	node->type = nt_image;
-	return 1;
-}
-
-int node_make_material(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&material;
-	node->cls->size=sizeof(t_material);
-	node->cls->lst=C->scene->materials;
-	return 1;
-}
-
-int node_make_list(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&list;
-	node->cls->size=sizeof(t_lst);
-	node->cls->lst=C->scene->lists;
-	node->type = nt_list;
-	return 1;
-}
-
-int node_make_link(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&_link_;
-	node->cls->size=sizeof(t_link);
-	node->cls->lst=C->scene->links;
-	return 1;
-}
-
-int node_make_texture(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&texture;
-	node->cls->size=sizeof(t_texture);
-	node->cls->lst=C->scene->textures;
-	node->type = nt_texture;
-	return 1;
-}
-
-int node_make_data(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&data;
-	node->cls->size=sizeof(t_data);
-	node->cls->lst=C->scene->datas;
-	node->type = nt_data;
-	return 1;
-}
-
-int node_make_var(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&var;
-	node->cls->size=0; // variable,dynamic size
-	node->cls->lst=C->scene->vars;
-	node->type = nt_var;
-	return 1;
-}
-
-int node_make_option(t_node *node)
-{
-	node->cls=&option;
-	node->cls->size=sizeof(t_option);
-	node->cls->lst=NULL;
-	node->type=nt_option;
-	return 1;
-}
-
-int node_make_vlst(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&vlst;
-	node->cls->size=sizeof(t_vlst);
-	node->cls->lst=C->scene->vlst;
-	node->type = nt_vlst;
-	return 1;
-}
-
-int node_make_camera(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&camera;
-	node->cls->size=sizeof(t_camera);
-	node->cls->lst=C->scene->cameras;
-	node->type = nt_camera;
-	return 1;
-}
-
-int node_make_dict(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&dict;
-	node->cls->size=sizeof(t_dict);
-	node->cls->lst=C->scene->dicts;
-	node->type = nt_dict;
-	return 1;
-}
-
-int node_make_symbol(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&symbol;
-	node->cls->size=sizeof(t_symbol);
-	node->cls->lst=C->scene->symbols;
-	node->type = nt_symbol;
-	return 1;
-}
-
-int node_make_vector(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&vector;
-	node->cls->size=sizeof(t_vector);
-	node->cls->lst=C->scene->vectors;
-	node->type = nt_vector;
-	return 1;
-}
-
-int node_make_viewport(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&viewport;
-	node->cls->size=sizeof(t_viewport);
-	node->cls->lst=C->scene->viewports;
-	node->type = nt_viewport;
-	return 1;
-}
-
-int node_make_set(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&set;
-	node->cls->size=sizeof(t_set);
-	node->cls->lst=C->scene->sets;
-	node->type = nt_set;
-	return 1;
-}
-
-int node_make_binding(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&binding;
-	node->cls->size=sizeof(t_binding);
-	node->cls->lst=C->scene->bindings;
-	node->type = nt_binding;
-	return 1;
-}
-
-int node_make_rhizome(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&rhizome;
-	node->cls->size=sizeof(t_rhizome);
-	node->cls->lst=C->scene->rhizomes;
-	node->type = nt_rhizome;
-	return 1;
-}
-
-int node_make_graph(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&graph;
-	node->cls->size=sizeof(t_graph);
-	node->cls->lst=C->scene->graphs;
-	node->type = nt_graph;
-	return 1;
-}
-
-int node_make_geo(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&geo;
-	node->cls->size=sizeof(t_geo);
-	node->cls->lst=C->scene->geos;
-	node->type = nt_geo;
-	return 1;
-}
-
-int node_make_geo_point(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&geo_point;
-	node->cls->size=sizeof(t_geo_point);
-	node->cls->lst=C->scene->geos;
-	node->type = nt_geo_point;
-	return 1;
-}
-
-int node_make_geo_edge(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&geo_edge;
-	node->cls->size=sizeof(t_geo_edge);
-	node->cls->lst=C->scene->geos;
-	node->type = nt_geo_edge;
-	return 1;
-}
-
-int node_make_geo_array(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&geo_array;
-	node->cls->size=sizeof(t_geo_array);
-	node->cls->lst=C->scene->geos;
-	node->type = nt_geo_array;
-	return 1;
-}
 
 // TYPES
 
@@ -1313,28 +1029,97 @@ t_node_class *nodes[] = {
 			};
 
 
+void cls_node_lst_set( t_scene *sc, t_node *node)
+{
+	switch( node->cls->type)
+	{
+		case( nt_mesh): node->cls->lst = sc->meshes; break;
+		case( nt_block): node->cls->lst = sc->blocks; break;
+		case( nt_brick): node->cls->lst = sc->bricks; break;
+		case( nt_light): node->cls->lst = sc->lights; break;
+		case( nt_object): node->cls->lst = sc->objects; break;
+		case( nt_screen): node->cls->lst = sc->screens; break;
+		case( nt_file): node->cls->lst = sc->files; break;
+		case( nt_image): node->cls->lst = sc->images; break;
+		case( nt_material): node->cls->lst = sc->materials; break;
+		case( nt_list): node->cls->lst = sc->lists; break;
+		case( nt_link): node->cls->lst = sc->links; break;
+		case( nt_texture): node->cls->lst = sc->textures; break;
+		case( nt_option): node->cls->lst = NULL; break;
+		case( nt_vlst): node->cls->lst = sc->vlst; break;
+		case( nt_camera): node->cls->lst = sc->cameras; break;
+		case( nt_dict): node->cls->lst = sc->dicts; break;
+		case( nt_symbol): node->cls->lst = sc->symbols; break;
+		case( nt_vector): node->cls->lst = sc->vectors; break;
+		case( nt_binding): node->cls->lst = sc->bindings; break;
+		case( nt_rhizome): node->cls->lst = sc->rhizomes; break;
+		case( nt_graph): node->cls->lst = sc->graphs; break;
+		case( nt_viewport): node->cls->lst = sc->viewports; break;
+		case( nt_set): node->cls->lst = sc->sets; break;
+		case( nt_null): break;
+		case( nt_data):node->cls->lst = sc->datas; break;
+		case( nt_var): node->cls->lst = sc->vars; break;
+		case( nt_geo): node->cls->lst = sc->geos; break;
+		case( nt_geo_point): node->cls->lst = sc->geos; break;
+		case( nt_geo_edge): node->cls->lst = sc->geos; break;
+		case( nt_geo_array): node->cls->lst = sc->geos; break;
+		default: printf("[ERROR cls_node_lst_set] Unkown type %s\n", node_name_get( node->cls->type)); break;
+	}
+}
+
+void cls_node_cls_set( t_node *node)
+{
+	switch( node->type)
+	{
+		case( nt_mesh): node->cls = &mesh; break;
+		case( nt_block): node->cls = &block; break;
+		case( nt_brick): node->cls = &brick; break;
+		case( nt_light): node->cls = &light; break;
+		case( nt_object): node->cls = &object; break;
+		case( nt_screen): node->cls = &screen; break;
+		case( nt_file): node->cls = &file; break;
+		case( nt_image): node->cls = &image; break;
+		case( nt_material): node->cls = &material; break;
+		case( nt_list): node->cls = &list; break;
+		case( nt_link): node->cls = &_link_; break;
+		case( nt_texture): node->cls = &texture; break;
+		case( nt_option): node->cls = &option; break;
+		case( nt_vlst): node->cls = &vlst; break;
+		case( nt_camera): node->cls = &camera; break;
+		case( nt_dict): node->cls = &dict; break;
+		case( nt_symbol): node->cls = &symbol; break;
+		case( nt_vector): node->cls = &vector; break;
+		case( nt_binding): node->cls = &binding; break;
+		case( nt_rhizome): node->cls = &rhizome; break;
+		case( nt_graph): node->cls = &graph; break;
+		case( nt_viewport): node->cls = &viewport; break;
+		case( nt_set): node->cls = &set; break;
+		case( nt_null): node->cls = NULL;break;
+		case( nt_data): node->cls = &data; break;
+		case( nt_var): node->cls = &var; break;
+		case( nt_geo): node->cls = &geo ; break;
+		case( nt_geo_point): node->cls = &geo_point; break;
+		case( nt_geo_edge): node->cls = &geo_edge; break;
+		case( nt_geo_array): node->cls = &geo_array; break;
+		default: printf("[ERROR cls_node_cls_set] Unkown type %s\n", node_name_get( node->cls->type)); break;
+	}
+}
+
+
+void cls_node_make( t_scene *sc, t_node *node, t_node_type type)
+{
+	node->type = type;
+	cls_node_cls_set( node);
+	cls_node_lst_set( sc, node);
+}
+
+
 // INIT 
 
 void cls_node_init(t_node *node,t_node_type type)
 {
-	int i;
-	int done=0;
-	int n = sizeof(nodes)/sizeof(nodes[0]);
-
-	for(i=0;i<n;i++)
-	{
-		if(type==nodes[i]->type)
-		{
-			nodes[i]->make(node);
-			done=1;
-		}
-	}
-
-	if(!done) 
-	{
-		printf("[ERROR:node_make] Unknown node type [%s]\n",node_name_get(type));
-	}
-
+	t_scene *sc = ctx_scene_get();
+	cls_node_make( sc, node, type);
 }
 
 void node_init(t_node *node,t_node_type type)
