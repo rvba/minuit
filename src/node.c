@@ -152,6 +152,8 @@ void cls_node_build(t_node *node,const char *name)
 			break;
 		case dt_list:		p = lst_new(name);
 			break;
+		case dt_lst:		p = lst_new(name);
+			break;
 		case dt_link:		p = link_new(name);
 			break;
 		case dt_data:		p = data_new(name);
@@ -197,7 +199,7 @@ void cls_node_build(t_node *node,const char *name)
 			break;
 
 		default:
-			printf("[ERROR cls_node_build] Unkown type\n");
+			printf("[ERROR cls_node_build] Unkown type %s\n", data_name_get( node->type));
 			break;
 	}
 
@@ -953,6 +955,7 @@ void cls_node_cls_set( t_node *node)
 		case( dt_image): node->cls = &image; break;
 		case( dt_material): node->cls = &material; break;
 		case( dt_list): node->cls = &list; break;
+		case( dt_lst): node->cls = &list; break;
 		case( dt_link): node->cls = &_link_; break;
 		case( dt_texture): node->cls = &texture; break;
 		case( dt_option): node->cls = &option; break;
@@ -973,7 +976,7 @@ void cls_node_cls_set( t_node *node)
 		case( dt_geo_point): node->cls = &geo_point; break;
 		case( dt_geo_edge): node->cls = &geo_edge; break;
 		case( dt_geo_array): node->cls = &geo_array; break;
-		default: printf("[ERROR cls_node_cls_set] Unkown type %s\n", data_name_get( node->cls->type)); break;
+		default: printf("[ERROR cls_node_cls_set] Unkown type %s\n", data_name_get( node->type)); break;
 	}
 }
 

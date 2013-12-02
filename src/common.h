@@ -52,43 +52,6 @@ typedef struct ID
 	int store;
 }t_id;
 
-/*
-typedef enum Node_Type
-{
-	nt_null,
-	nt_mesh,
-	nt_block,
-	nt_brick,
-	nt_light,
-	nt_object,
-	nt_screen,
-	nt_file,
-	nt_image,
-	nt_material,
-	nt_list,
-	nt_link,
-	nt_data,
-	nt_texture,
-	nt_var,
-	nt_option,
-	nt_vlst,
-	nt_camera,
-	nt_dict,
-	nt_symbol,
-	nt_vector,
-	nt_viewport,
-	nt_set,
-	nt_binding,
-	nt_rhizome,
-	nt_graph,
-	nt_geo,
-	nt_geo_point,
-	nt_geo_edge,
-	nt_geo_array,
-
-}t_node_type;
-*/
-
 typedef enum Data_Type
 {
 	dt_null,
