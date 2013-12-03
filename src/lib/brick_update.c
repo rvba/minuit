@@ -486,6 +486,9 @@ void cls_brick_update(t_brick *brick)
 						brick->mode=bm_typing;
 						C->event->ui.typing_start = 1;
 						C->event->is_typing=1;
+
+						set_name_long( C->event->buffer_char, brick->txt_data.name);
+						C->event->buffer_char_counter = strlen( brick->txt_data.name);
 					}
 
 					// START TRIGGER 
