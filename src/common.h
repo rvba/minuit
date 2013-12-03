@@ -50,6 +50,7 @@ typedef struct ID
 	short users;
 	char name[_NAME_];
 	int store;
+	struct Node *node;
 }t_id;
 
 typedef enum Data_Type

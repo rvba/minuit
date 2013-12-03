@@ -109,6 +109,7 @@ void cls_node_id_add(t_node *node)
 		cls_node_init_brick_ids(node);
 	}
 
+	id->node = node;
 }
 
 void cls_node_user_add(t_node *node)
@@ -1027,6 +1028,7 @@ void id_init(t_id *id, const char *name)
 	id->users = 0;
 	set_name(id->name, name);
 	id->store = 0;
+	id->node = NULL;
 }
 
 

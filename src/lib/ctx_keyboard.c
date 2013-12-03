@@ -107,6 +107,12 @@ void keymap_typing(unsigned char key)
 			C->event->is_typing=0; 
 			break;
 
+		// BACKSPACE
+		case 8:
+			C->event->buffer_char[C->event->buffer_char_counter-1] = '\0';
+			C->event->buffer_char_counter--;
+			break;
+
 		default:
 			char_key = (char)key;
 			strncat(C->event->buffer_char,&char_key,1);

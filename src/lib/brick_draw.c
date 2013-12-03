@@ -494,19 +494,15 @@ void brick_draw_txt(t_brick *brick)
 
 			if(brick->mode==bm_typing)
 			{
-				t_txt txt;
-				set_name_long(txt.name, C->event->buffer_char);
-				int count = C->event->buffer_char_counter;
-				if( !count) count = 1;
-				float ww = txt_get_width( &txt);
+				t_txt *txt = txt_new("");
+				set_name_long(txt->name, C->event->buffer_char);
+				txt_draw( txt);
+				txt_free(txt);
+
 				unsigned int sec = C->app->clock->sec;
-
-				txt_draw( &txt);
-
-				glTranslatef((C->event->buffer_char_counter)*6,0,0);
-
 				if( sec%2)
 				{
+					glTranslatef((C->event->buffer_char_counter)*5,0,0);
 					float a[] = {0,0,0};
 					float b[] = {8,0,0};
 					float c[] = {1,1,1};

@@ -21,6 +21,8 @@ size_t get_memory_peak(void)
 }
 */
 
+int db=0;
+
 void color_id(int *color)	
 {
 	color[0]++;

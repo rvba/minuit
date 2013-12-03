@@ -165,6 +165,8 @@ int u_randrange_relative(int start,int end);
 
 int u_lookup(char *word,char *array[]);
 
+extern int db;
+
 
 
 #endif

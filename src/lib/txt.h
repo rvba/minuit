@@ -52,6 +52,7 @@ float txt_get_width(t_txt *txt);
 void txt_alphabet_make(void);
 void txt_layout_init(void);
 
+void txt_draw(t_txt *txt);
 float txt_get_length(t_txt *txt);
 
 void txt_draw_direct_2d(char *string,float pos[3],float *color,float scale);
