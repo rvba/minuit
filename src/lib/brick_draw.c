@@ -22,6 +22,8 @@
 #include "object.h"
 #include "log.h"
 
+#include "app.h"
+#include "clock.h"
 #define _PRECISION "%-.4f"
 
 int brick_get_width(t_brick *brick)
@@ -489,10 +491,36 @@ void brick_draw_txt(t_brick *brick)
 				glTranslatef(5,0,0);
 			}
 
+
+			if(brick->mode==bm_typing)
+			{
+				t_txt txt;
+				set_name_long(txt.name, C->event->buffer_char);
+				int count = C->event->buffer_char_counter;
+				if( !count) count = 1;
+				float ww = txt_get_width( &txt);
+				unsigned int sec = C->app->clock->sec;
+
+				txt_draw( &txt);
+
+				glTranslatef((C->event->buffer_char_counter)*6,0,0);
+
+				if( sec%2)
+				{
+					float a[] = {0,0,0};
+					float b[] = {8,0,0};
+					float c[] = {1,1,1};
+					skt_line(a,b,1,c);
+				}
+			}
+			else
+			{
+
 			// draw DATA
 			if(brick->state.draw_value || C->ui->show_step)
 			{
 				brick->txt_data.draw(&brick->txt_data);
+			}
 			}
 
 		glPopMatrix();

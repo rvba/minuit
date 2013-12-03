@@ -43,6 +43,7 @@ struct Txt
 	float (* get_width)(t_txt *txt);
 
 	int use_bitmap_font;
+	int edit;
 };
 
 // TXT.C

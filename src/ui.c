@@ -302,6 +302,9 @@ void ui_draw_screens(t_context *C)
 
 void ui_navigation(t_context *C)
 {
+	if( !C->event->is_mouse_over_brick)
+	{
+		//printf("nav\n");
 	// Pan
 	if(C->app->mouse->button_right == button_pressed && C->app->keyboard->ctrl)
 	{
@@ -333,6 +336,7 @@ void ui_navigation(t_context *C)
 
 		C->event->ui.pan_x = C->ui->pan_x;
 		C->event->ui.pan_y = C->ui->pan_y;
+	}
 	}
 }
 

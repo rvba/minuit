@@ -156,10 +156,10 @@ void ctx_reset(t_context *C)
 void ctx_update(t_context *C)
 {
 	ctx_app(C);
-	ctx_camera(C);
 	ctx_keyboard(C);	
 	ctx_ui(C);
 	ctx_scene(C); 
+	ctx_camera(C);
 	ctx_mode(C);
 }
 

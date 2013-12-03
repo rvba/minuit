@@ -297,8 +297,17 @@ void cls_brick_update(t_brick *brick)
 
 	int button_left=C->app->mouse->button_left;
 	int button_right=C->app->mouse->button_right;
+	int button_middle=C->app->mouse->button_middle;
 	int mouse_over = is_mouse_over_brick(C,brick);
 	int brick_clic=0;
+
+	int edit = 0;
+	if(mouse_over && (button_middle == button_pressed))
+	{
+		edit = 1;
+		C->event->is_mouse_over_brick = 1;
+	}
+	
 
 	float mouse_pos[3];
 	vset(mouse_pos,0,0,0);
@@ -325,8 +334,6 @@ void cls_brick_update(t_brick *brick)
 
 	if(mouse_over && C->event->brick_delete) 
 	{
-		C->event->brick_delete = 0;
-
 		t_action *action = action_new("action");
 
 		action->act = brick_remove;
@@ -382,6 +389,7 @@ void cls_brick_update(t_brick *brick)
 		plug_debug(plug);
 	}
 
+	//printf("%d %d %d\n",C->event->ui.pan,C->event->camera_rotation,C->event->ui.zoom);
 
 	// MODES
 
@@ -471,12 +479,13 @@ void cls_brick_update(t_brick *brick)
 					}
 
 					// START TYPING
-					else if(mouse_over && (button_left == button_pressed) && C->app->keyboard->alt)
+					else if( edit)
 					{
 						C->event->is_brick_transformed=1;
 						C->ui->brick_selected=brick;
 						brick->mode=bm_typing;
 						C->event->ui.typing_start = 1;
+						C->event->is_typing=1;
 					}
 
 					// START TRIGGER 
@@ -718,7 +727,12 @@ void cls_brick_update(t_brick *brick)
 			case bm_typing:
 
 				//release
-				if(C->event->ui.typing_start && C->event->ui.typing_end)
+
+				if(
+					(C->event->is_typing==0)
+					||
+					(C->event->ui.typing_start && C->event->ui.typing_end)
+					)
 				{
 					brick->mode=bm_idle;
 					C->event->is_brick_transformed=0;
@@ -727,6 +741,7 @@ void cls_brick_update(t_brick *brick)
 					C->event->buffer_char_counter=0;
 					C->event->ui.typing_start = 0;
 					C->event->ui.typing_end = 0;
+
 				}
 				// change data
 				else
@@ -743,6 +758,7 @@ void cls_brick_update(t_brick *brick)
 						float *dt=plug->data;
 						*dt=atof(C->event->buffer_char);
 					}
+					
 				}
 
 				break;

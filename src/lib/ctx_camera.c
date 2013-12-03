@@ -24,7 +24,7 @@ void ctx_camera_movment(t_context *C, t_camera *camera)
 	int dy = app->mouse->sign_y * app->mouse->dy; 
 
 	// When No UI event
-	if(!C->event->is_brick_transformed)
+	if(!C->event->is_brick_transformed && !C->event->is_mouse_over_brick)
 	{
 		// Release Camera Rotation
 		if(C->event->camera_rotation)
@@ -47,7 +47,9 @@ void ctx_camera_movment(t_context *C, t_camera *camera)
 				||
 				app->mouse->button_middle == button_pressed
 			)
+			{
 				C->event->camera_rotation = 1;
+			}
 		}
 
 		// perspective

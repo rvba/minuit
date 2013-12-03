@@ -104,6 +104,7 @@ void keymap_typing(unsigned char key)
 		// RETURN
 		case 13:
 			event->ui.typing_end = 1;
+			C->event->is_typing=0; 
 			break;
 
 		default:
@@ -255,10 +256,10 @@ void ctx_keyboard(t_context *C)
 			s=n->data;
 			if(s->is_active)
 			{
-				if(!C->event->is_typing)
-				{
+				//if(!C->event->is_typing)
+				//{
 					 s->keymap(C->app->keyboard->key_pressed);
-				}
+			//	}
 			}
 
 		}

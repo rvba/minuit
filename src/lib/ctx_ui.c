@@ -419,6 +419,10 @@ void ctx_ui(t_context *C)
 	// test background 
 	ctx_ui_background(C);
 
+
+	if(C->app->mouse->button_left == button_pressed) C->event->ui.typing_end = 1;
+	C->event->is_mouse_over_brick = 0;
+
 	// update blocks
 	ctx_block_mouse_update(C); 
 	ctx_block_screen_update(C);
