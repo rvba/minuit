@@ -19,9 +19,9 @@ find_package(JPEG REQUIRED)
 find_package(Threads)
 
 include_directories(
-	${CMAKE_SOURCE_DIR}/src
-	${CMAKE_SOURCE_DIR}/src/lib
 	${CMAKE_SOURCE_DIR}/src/util
+	${CMAKE_SOURCE_DIR}/src/lib
+	${CMAKE_SOURCE_DIR}/src
 	)
 
 set(CMAKE_BUILD_TYPE debug)

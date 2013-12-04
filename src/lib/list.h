@@ -15,37 +15,8 @@
 struct Context;
 struct Scene;
 struct Node;
-
-// LINK
-
-typedef struct Link
-{
-	t_id id;
-
-	int order;		// Used by rhizome sorting
-
-	struct Link *next;
-	struct Link *prev;
-
-	void *data;
-
-}t_link;
-
-// LST
-
-typedef struct Lst
-{
-	t_id id;
-
-	t_link *first;
-	t_link *last;
-	t_link *current;
-
-	t_data_type type;
-
-	int count;
-
-}t_lst;
+struct Lst;
+struct Link;
 
 typedef struct VLst
 {
@@ -74,7 +45,7 @@ typedef struct VLst
 	struct Block *ref;
 }t_vlst;
 
-void 		lst_remove_doubles(t_lst *lst);
+void 		lst_remove_doubles(struct Lst *lst);
 
 void 		vlst_update_data(t_vlst *vlst,t_vlst *caller);
 void		vlst_free(t_vlst *vlst);
@@ -115,70 +86,24 @@ void __vlst_update_data(t_vlst *vlst,t_vlst *caller);
 
 // LST
 
-
-int 		lst_sort_bubble(t_lst *lst);
-int 		lst_sort_quick(t_lst *lst);
-
-void 		lst_link_insert(t_lst *lst, t_link *link, t_link *prev);
-
  
-t_link * 	list_add(t_lst *lst,void *data);
-t_link * 	list_add_global(t_lst *lst,void *data);
-t_lst *		lst_rebind(struct Scene *sc,void *ptr);
-t_link *	link_rebind(struct Scene *sc,void *ptr);
-
-int 		lst_remove_node(t_lst *lst,struct Node *node);
-void 		lst_remove_all(t_lst *lst);
-void *		lst_get(t_lst *lst,char *name);
-
-struct Node *	lst_find_node_by_name(t_lst *lst,const char *name);
-int 		lst_remove_by_id(t_lst *lst,int id);
-
-void 		list_remove_by_ptr(t_lst *lst,void *ptr);
-void 		list_free(t_lst *lst);
-void 		_link_free(t_link *link);
-
-
-void 		list_remove_by_name(t_lst *lst, const char *name);
-void 		lst_show_generic(t_lst *lst);
-
-void 		list_cleanup(t_lst *lst);
-void 		list_show(t_lst *lst);
-
-struct Node *	lst_get_node(t_lst *lst,int id);
-
-struct Node *	lst_find_node(t_lst *lst,const char *name);
-
-// LST
-
-t_link *	lst_link_find_by_name(t_lst *lst, const char *name);
-void 		lst_link_delete_by_name(t_lst *lst, const char *name);
-
-void 		lst_show(t_lst *lst);
-t_link *	lst_add(t_lst *lst,void *data,const char *name);
-void 		lst_add_lst(t_lst *dst, t_lst *src);
-void		lst_link_remove(t_lst *lst,t_link *link);
-void 		lst_delete_all(t_lst *lst);
-void 		lst_link_delete(t_lst *lst,t_link *link);
-t_lst *		lst_copy(t_lst *lst);
-t_lst *		lst_new(const char *name);
-t_lst *		lst_make( t_data_type type,  const char *name);
-void 		lst_free(t_lst *lst);
-void 		lst_cleanup(t_lst *lst);
-void 		lst_push_back(t_lst *lst,t_link *link);
-
-void 		lst_remove_by_ptr(t_lst *lst,void *ptr);
-void 		lst_remove_by_ptr(t_lst *lst, void *ptr);
-void 		list_remove_by_id(t_lst *lst, int id);
-void 		link_free(t_link *link);
-
-t_link *	link_new(const char *name);
-void 		link_free(t_link *link);
-
-void _list_free(t_lst *lst, t_data_type type);
-t_lst *lst_clone(t_lst *lst, t_data_type type);
-
-void lst_delete( t_lst *lst);
-void cls_lst_delete( void *data);
+struct Link * 	list_add(struct Lst *lst,void *data);
+struct Link * 	list_add_global(struct Lst *lst,void *data);
+struct Lst *	lst_rebind(struct Scene *sc,void *ptr);
+struct Link *	link_rebind(struct Scene *sc,void *ptr);
+int 		lst_remove_node(struct Lst *lst,struct Node *node);
+struct Node *	lst_find_node_by_name(struct Lst *lst,const char *name);
+void 		list_remove_by_ptr(struct Lst *lst,void *ptr);
+void 		list_free(struct Lst *lst);
+void 		_link_free(struct Link *link);
+void 		list_remove_by_name(struct Lst *lst, const char *name);
+void 		lst_show_generic(struct Lst *lst);
+void 		list_cleanup(struct Lst *lst);
+void 		list_show(struct Lst *lst);
+struct Node *	lst_get_node(struct Lst *lst,int id);
+void 		_list_free(struct Lst *lst, t_data_type type);
+struct Lst *	lst_clone(struct Lst *lst, t_data_type type);
+void 		lst_delete( struct Lst *lst);
+void 		cls_lst_delete( void *data);
 
 #endif

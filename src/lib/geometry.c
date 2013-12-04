@@ -19,7 +19,6 @@
 #include "camera.h"
 #include "ui.h"
 #include "file.h"
-#include "system.h"
 #include "list.h"
 #include "block.h"
 #include "brick.h"

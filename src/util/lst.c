@@ -8,7 +8,6 @@
  */
 
 #include "util.h"
-#include "memory.h"
  
 // PUSH BACK 
 // add a new link at the end of the list
@@ -429,6 +428,32 @@ void lst_cleanup(t_lst *lst)
 	}
 }
 
+// FIND NODE BY ID
+
+t_link *lst_get_by_id(t_lst *lst,int item_id)
+{
+	t_link *l;
+	t_id *id;
+
+	if(lst->first)
+	{
+		for(l=lst->first;l;l=l->next)
+		{
+			id = (t_id *) l->data;
+			if(id->id == item_id)
+			{
+				return l;
+			}
+		}
+
+		return NULL;
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
 // copy a list
 t_lst *lst_copy(t_lst *lst)
 {
@@ -494,44 +519,6 @@ void lst_remove_doubles(t_lst *lst)
 	}
 }
 
-// CLONE
-
-t_lst *lst_clone(t_lst *lst, t_data_type type)
-{
-	if(lst)
-	{
-		t_lst *clone = lst_new("clone");
-		t_link *link;
-		for(link=lst->first;link;link=link->next)
-		{
-			switch(type)
-			{
-				case(dt_block):
-					lst_add(clone,block_clone(link->data),"block");
-					break;
-				case(dt_brick):
-					lst_add(clone,brick_clone(link->data),"brick");
-					break;
-				case(dt_viewport):
-					lst_add(clone,viewport_clone(link->data),"viewport");
-					break;
-				case(dt_rhizome):
-					lst_add(clone,rhizome_clone(link->data),"rhizome");
-					break;
-				default:
-					printf("[lst_clone WARNING] Unknown type %s\n",data_name_get(type));
-					break;
-			}
-		}
-		//lst_show(clone);
-
-		return clone;
-	}
-	else
-	{
-		return NULL;
-	}
-}
 // SHOW
 
 void link_show(const char *name,t_link *link)
@@ -568,6 +555,19 @@ void lst_show(t_lst *lst)
 		i++;
 	}
 	printf("~\n");
+}
+
+// FREE
+
+void link_free(t_link *link)
+{
+	mem_free( link, sizeof( t_link));
+}
+
+void lst_free(t_lst *lst)
+{
+	lst_cleanup(lst);
+	mem_free( lst, sizeof( t_lst));
 }
 
 

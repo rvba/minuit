@@ -30,6 +30,7 @@
 
 #include "dict.h"
 #include "memory.h"
+#include "list.h"
 
 void rhizome_show(t_rhizome *rhizome)
 {

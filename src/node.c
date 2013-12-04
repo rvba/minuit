@@ -1022,14 +1022,5 @@ t_node *node_new(t_data_type type)
 	return node;
 }
 
-void id_init(t_id *id, const char *name)
-{
-	id->id = 0;
-	id->id_chunk = 0;
-	id->users = 0;
-	set_name(id->name, name);
-	id->store = 0;
-	id->node = NULL;
-}
 
 

@@ -19,7 +19,6 @@
 #include "term.h"
 #include "object.h"
 #include "clock.h"
-#include "system.h"
 #include "event.h"
 #include "set.h"
 #include "memory.h"

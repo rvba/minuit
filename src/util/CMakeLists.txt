@@ -3,23 +3,26 @@ set(SRC
 	common.h
 	cpt.h
 	cpt.c
-	util.c
-	util.h
+	lst.h
+	lst.c
 	mem.h
 	mem.c
 	net.h
 	net.c
+	ptr.h
+	ptr.c
 	rnd.c
 	rnd.h
-	system.h
-	system.c
+	sys.h
+	sys.c
 	str.h
 	str.c
 	vec.h
 	vec.c
 	vol.c
 	vol.h
+	util.c
+	util.h
 	)
 
-include_directories(${CMAKE_SOURCE_DIR}/src)
 add_library(minuit-util STATIC ${SRC})

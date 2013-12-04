@@ -21,7 +21,6 @@
 #include "list.h"
 #include "clock.h"
 #include "file.h"
-#include "system.h"
 #include "memory.h"
 
 // used for GL calls without args

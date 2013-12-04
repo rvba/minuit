@@ -16,6 +16,7 @@
 #include "camera.h"
 #include "ui.h"
 #include "list.h"
+#include "util.h"
 
 void ctx_camera_movment(t_context *C, t_camera *camera)
 {

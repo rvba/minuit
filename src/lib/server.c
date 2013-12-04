@@ -22,7 +22,6 @@
 #include "ui.h"
 #include "file.h"
 
-#include "system.h"
 #include "server.h"
 
 #include "term.h"
