@@ -128,15 +128,8 @@ t_link *list_add_data( t_lst *lst, void *data)
 	t_id *id = (t_id *) data;
 	t_link *link;
 
-	if( C->scene->store)
-	{
-		t_node *node=scene_add(C->scene,dt_link,id->name);
-		link=node->data;
-	}
-	else
-	{
-		link = link_new("link");
-	}
+	t_node *node=scene_add(C->scene,dt_link,id->name);
+	link=node->data;
 
 	link->data=data;
 	lst_push_back(lst,link);

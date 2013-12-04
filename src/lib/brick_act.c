@@ -808,19 +808,18 @@ void exe_remove_brick(t_dict *args)
 void exe_add_brick_parent_child(t_dict *args)
 {
 	t_context *C = ctx_get();
+	scene_store(C->scene,1);
 
 	t_brick *brick = dict_pop_data(args,"brick");
 
 	t_block *block=brick->block;
 	t_plug *plug_intern=&brick->plug_intern;
 
-	scene_store(C->scene,1);
 
 	//add brick
 
 	t_node *n=add_part_slider_float(C,block,".",NULL);
 
-	scene_store(C->scene,0);
 
 	t_brick *b=n->data;
 	b->state.is_versatil=1;
@@ -833,13 +832,15 @@ void exe_add_brick_parent_child(t_dict *args)
 	plug_add_parent(p_intern,plug_intern);
 	p_in->state.follow_in=0;
 
-
 	block->state.update_geometry=1;
+
+	scene_store(C->scene,0);
 }
 
 void exe_add_brick_child_parent(t_dict *args)
 {
 	t_context *C = ctx_get();
+	scene_store(C->scene,1);
 
 	t_brick *brick = dict_pop_data(args,"brick");
 	t_plug *plug_brick = &brick->plug_intern;
@@ -847,13 +848,11 @@ void exe_add_brick_child_parent(t_dict *args)
 
 	t_block *block=brick->block;
 
-	scene_store(C->scene,1);
 
 	t_node *n=add_part_slider_float(C,block,".",NULL);
 	t_brick *b=n->data;
 	b->state.is_versatil=1;
 
-	scene_store(C->scene,0);
 
 	brick_rhizome_setup(b);
 
@@ -867,6 +866,7 @@ void exe_add_brick_child_parent(t_dict *args)
 
 
 	block->state.update_geometry=1;
+	scene_store(C->scene,0);
 }
 
 

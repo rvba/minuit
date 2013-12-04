@@ -57,15 +57,8 @@ t_symbol *symbol_make( const char *name)
 {
 	t_scene *sc = ctx_scene_get();
 	t_symbol *symbol;
-	if( sc->store)
-	{
-		t_node *node= scene_add( sc, dt_symbol, name);
-		symbol = node->data;
-	}
-	else
-	{
-		symbol = symbol_new( name);
-	}
+	t_node *node= scene_add( sc, dt_symbol, name);
+	symbol = node->data;
 
 	return symbol;
 }
