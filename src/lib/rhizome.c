@@ -835,7 +835,7 @@ t_rhizome *rhizome_rebind(t_scene *sc,void *ptr)
 
 void _rhizome_free(t_rhizome *rhizome)
 {
-	if(rhizome->blocks) _list_free(rhizome->blocks, dt_block);
+	if(rhizome->blocks) list_free_data(rhizome->blocks, dt_block);
 	mem_free( rhizome, sizeof( t_rhizome));
 }
 

@@ -306,7 +306,7 @@ void geo_lst_delete( t_lst *lst)
 		else printf("remove .... ?\n");
 	}
 
-	lst_delete( lst);
+	list_delete( lst);
 }
 
 void geo_free( t_geo *geo)

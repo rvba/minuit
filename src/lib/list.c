@@ -54,7 +54,6 @@ t_node *list_node_exists(t_lst *lst,int id)
 {
 	t_link *l;
 	t_node *node;
-//	assert(lst);
 
 	for(l=lst->first;l;l=l->next)
 	{
@@ -223,7 +222,7 @@ void list_free(t_lst *lst)
 	mem_free( lst, sizeof( t_lst));
 }
 
-void _list_free(t_lst *lst, t_data_type type)
+void list_free_data(t_lst *lst, t_data_type type)
 {
 	t_link *link;
 
@@ -244,7 +243,7 @@ void _list_free(t_lst *lst, t_data_type type)
 				_rhizome_free(link->data);
 				break;
 			default:
-				printf("[WARNING _list_free] Unknown type %s\n",data_name_get(type));
+				printf("[WARNING list_free_data] Unknown type %s\n",data_name_get(type));
 				break;
 		}
 	}
@@ -359,14 +358,14 @@ t_lst *list_make( t_data_type type, const char *name)
 	return lst;
 }
 
-void lst_delete( t_lst *lst)
+void list_delete( t_lst *lst)
 {
 	t_scene *sc = ctx_scene_get();
 	if( lst->id.store) scene_struct_delete( sc, lst);
 	else lst_free( lst);
 }
 
-void cls_lst_delete( void *data)
+void cls_list_delete( void *data)
 {
 	t_scene *sc = ctx_scene_get();
 	t_lst *lst = (t_lst *) data;

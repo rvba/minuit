@@ -35,10 +35,10 @@ void 		lst_show_generic(struct Lst *lst);
 void 		list_cleanup(struct Lst *lst);
 void 		list_show(struct Lst *lst);
 struct Node *	list_node_exists(struct Lst *lst,int id);
-void 		_list_free(struct Lst *lst, t_data_type type);
+void 		list_free_data(struct Lst *lst, t_data_type type);
 struct Lst *	list_clone(struct Lst *lst, t_data_type type);
-void 		lst_delete( struct Lst *lst);
+void 		list_delete( struct Lst *lst);
 struct Lst *	list_make( t_data_type type,  const char *name);
-void 		cls_lst_delete( void *data);
+void 		cls_list_delete( void *data);
 
 #endif

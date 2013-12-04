@@ -211,8 +211,8 @@ t_set *set_clone(t_set *set)
 
 void _set_free(t_set *set)
 {
-	if(set->blocks) _list_free(set->blocks, dt_block);
-	if(set->rhizomes) _list_free(set->rhizomes, dt_rhizome);
+	if(set->blocks) list_free_data(set->blocks, dt_block);
+	if(set->rhizomes) list_free_data(set->rhizomes, dt_rhizome);
 
 	mem_free( set, sizeof( t_set));
 }

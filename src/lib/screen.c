@@ -326,8 +326,8 @@ t_screen *screen_clone(t_screen *screen)
 
 void _screen_free(t_screen *screen)
 {
-	if(screen->blocks) _list_free(screen->blocks, dt_block);
-	if(screen->viewports) _list_free(screen->viewports,dt_viewport);
+	if(screen->blocks) list_free_data(screen->blocks, dt_block);
+	if(screen->viewports) list_free_data(screen->viewports,dt_viewport);
 
 	mem_free( screen, sizeof( t_screen));
 }
