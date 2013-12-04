@@ -18,6 +18,7 @@
 #include "sketch.h"
 #include "draw.h"
 #include "list.h"
+#include "memory.h"
 
 #define PRINT_FILE 0
 #define PRINT_CHUNK 0
@@ -184,7 +185,7 @@ void option_free(t_option *option)
 
 t_option *option_new(const char *name)
 {
-	t_option *option = (t_option *)malloc(sizeof(t_option));
+	t_option *option = (t_option *)mem_malloc(sizeof(t_option));
 	set_name(option->name,name);
 	return option;
 }

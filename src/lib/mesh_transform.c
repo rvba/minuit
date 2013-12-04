@@ -10,6 +10,7 @@
 #include "op.h"
 
 #include "node.h"
+#include "memory.h"
 
 //static int debug=0;
 
@@ -43,7 +44,7 @@ t_node *mesh_join(t_mesh **meshes,int tot_mesh)
 
 	// // VERTICES
 
-	float *vertices = (float *)malloc(sizeof(float)*n_verts*3);
+	float *vertices = (float *)mem_malloc(sizeof(float)*n_verts*3);
 
 	pos=0;
 
@@ -71,7 +72,7 @@ t_node *mesh_join(t_mesh **meshes,int tot_mesh)
 	if(n_quads>0)
 	{
 		if(debug)printf("QUADS\n");
-		quads = (int *)malloc(sizeof(int)*n_quads*4);
+		quads = (int *)mem_malloc(sizeof(int)*n_quads*4);
 
 		pos=0;
 
@@ -102,7 +103,7 @@ t_node *mesh_join(t_mesh **meshes,int tot_mesh)
 	if(n_tris>0)
 	{
 		if(debug)printf("TRIS\n");
-		tris = (int *)malloc(sizeof(int)*n_tris*3);
+		tris = (int *)mem_malloc(sizeof(int)*n_tris*3);
 
 		pos=0;
 
@@ -137,7 +138,7 @@ int op_mesh_vert_copy(t_scene *sc,t_node *target,t_node *source)
 	t_mesh *source_mesh = source->data;
 
 	target_mesh->var.tot_vertex=source_mesh->var.tot_vertex;
-	target_mesh->verts = (t_vertex*)malloc(sizeof(t_vertex)*target_mesh->var.tot_vertex);
+	target_mesh->verts = (t_vertex*)mem_malloc(sizeof(t_vertex)*target_mesh->var.tot_vertex);
 	
 	int i;
 	for(i=0;i<target_mesh->var.tot_vertex;i++)
@@ -160,7 +161,7 @@ int op_mesh_face_copy(t_scene *sc,t_node *target,t_node *source)
 	target_mesh->var.tot_quad_face = source_mesh->var.tot_quad_face;
 	target_mesh->var.tot_tri_face = source_mesh->var.tot_tri_face;
 
-	target_mesh->faces = (t_face*)malloc(sizeof(t_face)*target_mesh->var.tot_face);
+	target_mesh->faces = (t_face*)mem_malloc(sizeof(t_face)*target_mesh->var.tot_face);
 	
 	int i;
 	for(i=0;i<target_mesh->var.tot_face;i++)
@@ -205,8 +206,8 @@ void op_mesh_join_all(t_node *node)
 	t_node *result;
 	t_link *link;
 
-	t_node **nodes = (t_node **)malloc(sizeof(t_node*)*C->scene->meshes->tot);
-	t_mesh **meshes = (t_mesh **)malloc(sizeof(t_mesh*)*C->scene->meshes->tot);
+	t_node **nodes = (t_node **)mem_malloc(sizeof(t_node*)*C->scene->meshes->tot);
+	t_mesh **meshes = (t_mesh **)mem_malloc(sizeof(t_mesh*)*C->scene->meshes->tot);
 
 	// join all meshes
 

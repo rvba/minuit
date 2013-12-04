@@ -21,6 +21,7 @@
 #include "brick.h"
 #include "vector.h"
 #include "ui.h"
+#include "memory.h"
 
 void object_default(t_node *node){}
 void cls_object_link(t_object *self,t_node *target);
@@ -341,7 +342,7 @@ t_node *object_make(const char *type,const char *name)
 
 t_object *object_new(const char *name)
 {
-	t_object *object = (t_object *)malloc(sizeof(t_object));
+	t_object *object = (t_object *)mem_malloc(sizeof(t_object));
 
 	id_init(&object->id, name);
 

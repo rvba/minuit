@@ -155,7 +155,7 @@ t_node *scene_get_data(t_scene *sc,void *ptr)
 	return NULL;
 }
 
-// ptr was malloc'ed, find data var with ptr address
+// ptr was mem_malloc'ed, find data var with ptr address
 
 t_node *scene_get_var(t_scene *sc,void *ptr)
 {
@@ -681,7 +681,7 @@ void scene_add_data_var(t_scene *sc,const char *name,const char *name_var,int si
 t_scene *scene_new(void)
 {
 	// new scene
-	t_scene *sc = (t_scene *)malloc(sizeof(t_scene));
+	t_scene *sc = (t_scene *)mem_malloc(sizeof(t_scene));
 
 	// init
 	sc->id=1;

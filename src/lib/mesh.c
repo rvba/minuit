@@ -18,6 +18,7 @@
 #include "op.h"
 #include "list.h"
 #include "ui.h"
+#include "memory.h"
 
 
 void mesh_add_brick_vertex(t_context *C,t_mesh *mesh);
@@ -430,7 +431,7 @@ t_mesh *mesh_clone(t_mesh *mesh)
 
 t_mesh *mesh_new(const char *name)
 {
-	t_mesh *mesh = (t_mesh *)malloc(sizeof(t_mesh));
+	t_mesh *mesh = (t_mesh *)mem_malloc(sizeof(t_mesh));
 
 	id_init(&mesh->id, name);
 

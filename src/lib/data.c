@@ -17,6 +17,7 @@
 #include "vector.h"
 #include "geometry.h"
 #include "ui.h"
+#include "memory.h"
 
 char name_null[] = "null";
 char name_int[] = "int";
@@ -145,7 +146,7 @@ void *data_add(t_data_type type,void *data)
 			
 		case dt_int:
 
-			_int = (int *)malloc(sizeof(int));
+			_int = (int *)mem_malloc(sizeof(int));
 
 			if(C->scene->store)
 			{
@@ -162,7 +163,7 @@ void *data_add(t_data_type type,void *data)
 
 		case dt_uint:
 
-			_uint = (unsigned int *)malloc(sizeof(unsigned int));
+			_uint = (unsigned int *)mem_malloc(sizeof(unsigned int));
 
 			if(C->scene->store)
 			{
@@ -179,7 +180,7 @@ void *data_add(t_data_type type,void *data)
 
 		case dt_char:
 			
-			_char = (char *)malloc(sizeof(char));
+			_char = (char *)mem_malloc(sizeof(char));
 
 			if(C->scene->store)
 			{
@@ -197,7 +198,7 @@ void *data_add(t_data_type type,void *data)
 
 		case dt_float:
 
-			_float = (float *)malloc(sizeof(float));
+			_float = (float *)mem_malloc(sizeof(float));
 
 			if(C->scene->store)
 			{
@@ -216,7 +217,7 @@ void *data_add(t_data_type type,void *data)
 			if(data)
 			{
 				size=sizeof(char)*(strlen(data)+1);
-				_string = (char *)malloc(size);
+				_string = (char *)mem_malloc(size);
 				strcpy(_string,data);
 
 				if(C->scene->store)
@@ -325,7 +326,7 @@ void *data_copy(t_data_type type,void *data)
 
 		case dt_char:
 			
-			_char = (char *)malloc(sizeof(char));
+			_char = (char *)mem_malloc(sizeof(char));
 
 			if(C->scene->store)
 			{
@@ -343,7 +344,7 @@ void *data_copy(t_data_type type,void *data)
 
 		case dt_float:
 
-			_float = (float *)malloc(sizeof(float));
+			_float = (float *)mem_malloc(sizeof(float));
 
 			if(C->scene->store)
 			{
@@ -362,7 +363,7 @@ void *data_copy(t_data_type type,void *data)
 			if(data)
 			{
 				size=sizeof(char)*(strlen(data)+1);
-				_string = (char *)malloc(size);
+				_string = (char *)mem_malloc(size);
 				strcpy(_string,data);
 
 				if(C->scene->store)
@@ -569,7 +570,7 @@ t_data *data_rebind(t_scene *sc,void *ptr)
 
 t_data *data_new(const char *name)
 {
-	t_data *data = (t_data *)malloc(sizeof(t_data));
+	t_data *data = (t_data *)mem_malloc(sizeof(t_data));
 	id_init(&data->id, name);
 	bzero(data->type,_NAME_);
 	bzero(data->target,_NAME_);
@@ -596,7 +597,7 @@ void datum_free(t_datum *datum)
 
 t_datum *datum_new(t_data_type type, int count, void *data)
 {
-	t_datum *datum = (t_datum *) malloc(sizeof(t_datum));
+	t_datum *datum = (t_datum *) mem_malloc(sizeof(t_datum));
 	datum->type = type;
 	datum->count = count;
 
@@ -604,7 +605,7 @@ t_datum *datum_new(t_data_type type, int count, void *data)
 	switch(type)
 	{
 		case(dt_int):
-			datum->data = (int *)malloc(sizeof(int) * count);
+			datum->data = (int *)mem_malloc(sizeof(int) * count);
 			if(data)
 			{
 				for(i=0;i<count;i++)
@@ -615,7 +616,7 @@ t_datum *datum_new(t_data_type type, int count, void *data)
 			break;
 
 		case(dt_bool):
-			datum->data = (int *)malloc(sizeof(int) * count);
+			datum->data = (int *)mem_malloc(sizeof(int) * count);
 			if(data)
 			{
 				for(i=0;i<count;i++)
@@ -626,7 +627,7 @@ t_datum *datum_new(t_data_type type, int count, void *data)
 			break;
 
 		case(dt_float):
-			datum->data = (int *)malloc(sizeof(float) * count);
+			datum->data = (int *)mem_malloc(sizeof(float) * count);
 			if(data)
 			{
 				for(i=0;i<count;i++)

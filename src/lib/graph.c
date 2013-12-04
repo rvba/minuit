@@ -14,6 +14,7 @@
 #include "context.h"
 #include "scene.h"
 #include "node.h"
+#include "memory.h"
 
 
 // DISJOIN
@@ -346,7 +347,7 @@ t_graph *graph_make(const char *name)
 
 t_dot *dot_new(void *data)
 {
-	t_dot *dot = (t_dot *)malloc(sizeof(t_dot));
+	t_dot *dot = (t_dot *)mem_malloc(sizeof(t_dot));
 
 	t_id *id = (t_id *) data;
 
@@ -361,7 +362,7 @@ t_dot *dot_new(void *data)
 
 t_dash *dash_new(t_dot *x, t_dot *y)
 {
-	t_dash *dash = (t_dash *)malloc(sizeof(t_dash));
+	t_dash *dash = (t_dash *)mem_malloc(sizeof(t_dash));
 
 	dash->x = x;
 	dash->y = y;
@@ -371,7 +372,7 @@ t_dash *dash_new(t_dot *x, t_dot *y)
 
 t_graph *graph_new(const char *name)
 {
-	t_graph *graph = (t_graph *)malloc(sizeof(t_graph));
+	t_graph *graph = (t_graph *)mem_malloc(sizeof(t_graph));
 
 	id_init(&graph->id, name);
 

@@ -19,6 +19,7 @@
 #include "list.h"
 #include "ui.h"
 #include "data.h"
+#include "memory.h"
 
 void cls_vector_init(t_vector *vector)
 {
@@ -229,7 +230,7 @@ t_vector *vector_rebind(t_scene *sc,void *ptr)
 
 t_vector *vector_new(const char *name)
 {
-	t_vector *vector = (t_vector *) malloc(sizeof(t_vector));
+	t_vector *vector = (t_vector *) mem_malloc(sizeof(t_vector));
 
 	id_init(&vector->id, name);
 

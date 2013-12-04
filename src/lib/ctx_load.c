@@ -746,7 +746,7 @@ void load_read(t_scene *sc,const char *path)
 			// READ DATA
 
 			// MALLOC
-			data=malloc(c->size*c->tot);
+			data=mem_malloc(c->size*c->tot);
 
 			// READ
 			rsize = fread(data,c->size,c->tot,file);

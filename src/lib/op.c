@@ -28,6 +28,7 @@
 #include "obj.h"
 #include "viewport.h"
 #include "set.h"
+#include "memory.h"
 
 // store menu
 
@@ -70,6 +71,7 @@ t_node *make_menu_debug(void)
 	add_brick_switch(C,block,"debug loop",&C->event->debug_loop);
 	add_brick_switch(C,block,"debug key",&C->event->debug_key);
 	add_brick_switch(C,block,"debug plug",&C->event->debug_plug);
+	add_brick_int(C,block,"mem",(int *) &MEM_SIZE);
 
 	return menu;
 }

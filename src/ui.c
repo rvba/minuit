@@ -27,6 +27,7 @@
 #include "data.h"
 #include "camera.h"
 #include "rhizome.h"
+#include "memory.h"
 
 t_lst *sets = NULL;
 
@@ -427,7 +428,7 @@ void ui_init(void)
 
 t_ui *ui_new(void)
 {
-	t_ui *ui = (t_ui *)malloc(sizeof(t_ui));
+	t_ui *ui = (t_ui *)mem_malloc(sizeof(t_ui));
 
 	ui->draw_plug_state = 1;
 
@@ -448,6 +449,7 @@ t_ui *ui_new(void)
 	ui->show_sets = 0;
 	ui->show_rhizome_bounding_box = UI_SHOW_RHIZOME_BOUNDING_BOX;
 	ui->show_rhizome_order = UI_SHOW_RHIZOME_ORDER;
+	ui->show_status = UI_SHOW_STATUS;
 
 	ui->step = 0;
 	ui->step_reset = 0;

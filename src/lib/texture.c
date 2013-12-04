@@ -15,6 +15,7 @@
 #include "op.h"
 #include "texture.h"
 #include "image.h"
+#include "memory.h"
 
 /***		TEXTURE		***/
 
@@ -76,7 +77,7 @@ void texture_image_bind(t_texture *texture,t_image *image)
 
 t_texture *texture_new(const char *name)
 {
-	t_texture *texture = (t_texture *)malloc(sizeof(t_texture));
+	t_texture *texture = (t_texture *)mem_malloc(sizeof(t_texture));
 
 	id_init(&texture->id, name);
 

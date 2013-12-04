@@ -10,6 +10,7 @@
 #include "opengl.h"
 #include "image.h"
 #include "util.h"
+#include "memory.h"
 
 int img_save_png(int alpha,int width,int height,GLubyte *bitmap,const char name[])
 {
@@ -209,11 +210,11 @@ t_image *img_read_png(char *filename)
 			break;
 	}
 
-	image->data = (unsigned char *)malloc(sizeof(unsigned char) * image->width * image->height * image->bpp);
+	image->data = (unsigned char *)mem_malloc(sizeof(unsigned char) * image->width * image->height * image->bpp);
 
 	png_bytep *row_pointers;
 
-	row_pointers = (png_bytep *)malloc (sizeof (png_bytep) * image->height);
+	row_pointers = (png_bytep *)mem_malloc (sizeof (png_bytep) * image->height);
 
 	int i;
 	for (i = 0; i < image->height; ++i)

@@ -9,6 +9,7 @@
 
 #include "common.h"
 #include "util.h"
+#include "memory.h"
 
 #define _PI 3.14159655f
 
@@ -54,7 +55,7 @@ void calc_normals(float *v1,float *v2,float *v3,float *result)
 
 float *calc_circle(float center[3],double radius,int divisions)
 {
-	float *points = (float *)malloc(sizeof(float)*divisions*3);
+	float *points = (float *)mem_malloc(sizeof(float)*divisions*3);
 	int i;
 	int j=0;
 
@@ -78,7 +79,7 @@ float *calc_circle(float center[3],double radius,int divisions)
 
 float *calc_arc(float center[3],double radius,int divisions, int start, int end)
 {
-	float *points = (float *)malloc(sizeof(float)*(divisions*3));
+	float *points = (float *)mem_malloc(sizeof(float)*(divisions*3));
 	int i;
 	int j=0;
 

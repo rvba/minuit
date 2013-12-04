@@ -19,6 +19,7 @@
 
 #include "common.h"
 #include "util.h"
+#include "memory.h"
 
 static int Width = 400;
 static int Height = 400;
@@ -50,7 +51,7 @@ int app_off_screen(t_app *app)
 	}
 
 	// Allocate the image buffer 
-	buffer = malloc( Width * Height * 4 * sizeof(GLubyte) );
+	buffer = mem_malloc( Width * Height * 4 * sizeof(GLubyte) );
 	if (!buffer) {
 	printf("Alloc image buffer failed!\n");
 	return 0;

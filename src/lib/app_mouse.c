@@ -11,6 +11,7 @@
 #include "util.h"
 #include "app.h"
 #include "clock.h"
+#include "memory.h"
 
 void set_mouse_delta(t_app *app,int x,int y)
 {
@@ -216,7 +217,7 @@ void app_gl_motion(int x,int y)
 
 t_mouse *mouse_new(void)
 {
-	t_mouse *mouse  = (t_mouse *)malloc(sizeof(t_mouse));
+	t_mouse *mouse  = (t_mouse *)mem_malloc(sizeof(t_mouse));
 
 	mouse->button_left=button_released;
 	mouse->button_right=button_released;

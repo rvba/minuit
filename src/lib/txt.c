@@ -14,6 +14,7 @@
 #include "event.h"
 #include "ui.h"
 #include "node.h"
+#include "memory.h"
 
 #define _gLS GL_LINE_STRIP
 #define _gL GL_LINES
@@ -469,7 +470,7 @@ void txt_layout_add(char letter,int  *points)
 
 	psize++;//XXX
 		
-	LAYOUT[(int)letter]=(int *)malloc(sizeof(int)*psize);
+	LAYOUT[(int)letter]=(int *)mem_malloc(sizeof(int)*psize);
 
 	p=points;
 
@@ -497,7 +498,7 @@ void txt_layout_add_special(int letter,int  *points)
 
 	psize++;//XXX
 		
-	LAYOUT[letter]=(int *)malloc(sizeof(int)*psize);
+	LAYOUT[letter]=(int *)mem_malloc(sizeof(int)*psize);
 
 	p=points;
 
@@ -513,7 +514,7 @@ void txt_layout_add_special(int letter,int  *points)
 
 void txt_layout_init(void)
 {
-	LAYOUT=(int **)malloc(sizeof(int *)*TXT_LAYOUT_X);
+	LAYOUT=(int **)mem_malloc(sizeof(int *)*TXT_LAYOUT_X);
 
 	int i;
 	for(i=0;i<TXT_LAYOUT_X;i++)
@@ -814,7 +815,7 @@ void txt_init(t_txt *txt,const char *name)
 
 t_txt *txt_new(const char *name)
 {
-	t_txt *txt=(t_txt *)malloc(sizeof(t_txt));
+	t_txt *txt=(t_txt *)mem_malloc(sizeof(t_txt));
 
 	id_init(&txt->id, name);
 

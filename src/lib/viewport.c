@@ -20,6 +20,7 @@
 #include "draw.h"
 
 #include "brick.h"
+#include "memory.h"
 
 // DRAW
 
@@ -126,7 +127,7 @@ void viewport_free(t_viewport *viewport)
 
 t_viewport *viewport_new(const char *name)
 {
-	t_viewport *viewport = (t_viewport *) malloc(sizeof(t_viewport));
+	t_viewport *viewport = (t_viewport *) mem_malloc(sizeof(t_viewport));
 
 	id_init(&viewport->id, name);
 

@@ -13,6 +13,7 @@
 #include "node.h"
 #include "op.h"
 #include "camera.h"
+#include "memory.h"
 
 void cls_camera_init(t_camera *camera)
 {
@@ -178,7 +179,7 @@ t_camera *camera_rebind(t_scene *scene, void *ptr)
 
 t_camera *camera_new(const char *name)
 {
-	t_camera *camera  = (t_camera *)malloc(sizeof(t_camera));
+	t_camera *camera  = (t_camera *)mem_malloc(sizeof(t_camera));
 
 	id_init(&camera->id, name);
 

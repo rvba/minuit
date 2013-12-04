@@ -22,6 +22,7 @@
 #include "clock.h"
 #include "file.h"
 #include "system.h"
+#include "memory.h"
 
 // used for GL calls without args
 t_app *APP;
@@ -253,7 +254,7 @@ void app_init(t_app *app, const char *name)
 
 t_app *app_new(int argc,char **argv)
 {
-	t_app *app = (t_app *)malloc(sizeof(t_app));
+	t_app *app = (t_app *)mem_malloc(sizeof(t_app));
 
 	app->argc=argc;
 	app->argv=argv;

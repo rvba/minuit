@@ -11,6 +11,7 @@
 #include "util.h"
 #include "network.h"
 #include "system.h"
+#include "memory.h"
 
 void socket_print(char *msg)
 {
@@ -129,7 +130,7 @@ void socket_disconect(t_socket *sock)
 
 t_socket *socket_new(void)
 {
-	t_socket *socket=(t_socket *)malloc(sizeof(t_socket));
+	t_socket *socket=(t_socket *)mem_malloc(sizeof(t_socket));
 	socket->connect=socket_connect;
 	socket->print=socket_print;
 

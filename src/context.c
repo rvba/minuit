@@ -25,6 +25,7 @@
 #include "process.h"
 #include "list.h"
 #include "brick.h"
+#include "util.h"
 
 t_context *CONTEXT;
 
@@ -46,7 +47,7 @@ t_scene *ctx_scene_get(void)
 
 t_context *ctx_new(int argc,char **argv)
 {
-	t_context *C = (t_context *)malloc(sizeof(t_context));
+	t_context *C = (t_context *) mem_malloc(sizeof(t_context));
 
 	C->app = app_new(argc,argv);
 	C->event=event_new();

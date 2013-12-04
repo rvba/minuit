@@ -27,6 +27,7 @@
 
 #include "set.h"
 #include "rhizome.h"
+#include "memory.h"
 
 
 void set_setup(t_set *set)
@@ -229,7 +230,7 @@ void set_free(t_set *set)
 	
 t_set *set_new(const char *name)
 {
-	t_set *set = (t_set *)malloc(sizeof(t_set));
+	t_set *set = (t_set *)mem_malloc(sizeof(t_set));
 
 	id_init(&set->id, name);
 

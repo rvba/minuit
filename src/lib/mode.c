@@ -11,10 +11,11 @@
 #include "op.h"
 #include "mode.h"
 #include "list.h"
+#include "memory.h"
 
 t_module *module_new(char *name,void *data)
 {
-	t_module *module=(t_module *)malloc(sizeof(t_module));
+	t_module *module=(t_module *)mem_malloc(sizeof(t_module));
 	strncpy(module->name,name,10);
 	module->data=data;
 	module->update=NULL;
@@ -84,7 +85,7 @@ void mode_init(t_mode *mode)
 
 t_mode *mode_new(void)
 {
-	t_mode *mode=(t_mode *)malloc(sizeof(t_mode));
+	t_mode *mode=(t_mode *)mem_malloc(sizeof(t_mode));
 	mode->modules=NULL;
 	mode->init=mode_init;
 	mode->update=mode_update;

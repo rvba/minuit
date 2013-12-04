@@ -15,6 +15,7 @@
 #include "list.h"
 #include "context.h"
 #include "app.h"
+#include "memory.h"
 
 t_engine_cls cls_engine=
 {
@@ -143,7 +144,7 @@ void engine_process_add(t_engine *engine, t_process *process)
 
 t_engine *engine_new(const char *name)
 {
-	t_engine *engine = (t_engine *)malloc(sizeof(t_engine));
+	t_engine *engine = (t_engine *)mem_malloc(sizeof(t_engine));
 
 	id_init(&engine->id, name);
 

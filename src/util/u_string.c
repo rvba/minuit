@@ -9,6 +9,7 @@
 
 #include "common.h"
 #include "util.h"
+#include "memory.h"
 
 void s_raw_cp(char *src,char *dst) 
 {
@@ -22,7 +23,7 @@ void s_raw_cp(char *src,char *dst)
 
 char *s_allocate(const char *data)
 {
-	char *string=(char *)malloc(sizeof(char)*(strlen(data)+1));
+	char *string=(char *)mem_malloc(sizeof(char)*(strlen(data)+1));
 	strcpy(string,data);
 	return string;
 }

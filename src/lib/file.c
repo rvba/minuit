@@ -15,6 +15,7 @@
 #include "node.h"
 #include "file.h"
 #include "list.h"
+#include "memory.h"
 
 #define PATH_LIMIT 1024
 #define S_DEBUG 0
@@ -86,7 +87,7 @@ void word_show(t_word *word)
 
 t_word *word_new(void)
 {
-	t_word *word = (t_word *)malloc(sizeof(t_word));
+	t_word *word = (t_word *)mem_malloc(sizeof(t_word));
 	word->size=0;
 	word->data=NULL;
 
@@ -132,7 +133,7 @@ void line_read_words(t_line *line)
 	k=0;
 	t_word *word=word_new();
 	word->size=sizes[j];
-	word->data=(char *)malloc(sizeof(char)*sizes[j]);
+	word->data=(char *)mem_malloc(sizeof(char)*sizes[j]);
 
 	for(i=0;i<line->size;i++)
 	{
@@ -148,7 +149,7 @@ void line_read_words(t_line *line)
 
 				word=word_new();
 				word->size=sizes[j];
-				word->data=(char *)malloc(sizeof(char)*sizes[j]);
+				word->data=(char *)mem_malloc(sizeof(char)*sizes[j]);
 			}
 		}
 		else
@@ -181,7 +182,7 @@ void line_show(t_line *line)
 
 t_line *line_new(void)
 {
-	t_line *line=(t_line *)malloc(sizeof(t_line));
+	t_line *line=(t_line *)mem_malloc(sizeof(t_line));
 	line->size=0;
 	line->data=NULL;
 	line->words=lst_new("lst");
@@ -235,7 +236,7 @@ void file_read_lines(t_file *file)
 
 		t_line *line=line_new();
 		line->size=line_size[j];
-		line->data=(char *)malloc(sizeof(char)*line_size[j]);
+		line->data=(char *)mem_malloc(sizeof(char)*line_size[j]);
 
 		for(i=0;i<file->data_size;i++)
 		{
@@ -252,7 +253,7 @@ void file_read_lines(t_file *file)
 					int size = line_size[j];
 					line=line_new();
 					line->size=size;
-					line->data=(char *)malloc(sizeof(char)*size);
+					line->data=(char *)mem_malloc(sizeof(char)*size);
 				}
 			}
 			else
@@ -300,7 +301,7 @@ void file_data_add(t_file *file,char *data)
 		free(file->data);
 	}
 
-	file->data=(char *)malloc(sizeof(char)*(strlen(data)+1));
+	file->data=(char *)mem_malloc(sizeof(char)*(strlen(data)+1));
 	strcpy(file->data,data);
 }
 
@@ -330,7 +331,7 @@ void file_read(t_file *file)
 	fseek (f,0,SEEK_END);
 	file->data_size = ftell(f);
 	rewind(f);
-	file->data = (char *)malloc(sizeof(char)*file->data_size);
+	file->data = (char *)mem_malloc(sizeof(char)*file->data_size);
 	size_t r = fread (file->data,1,file->data_size,f);
 	if(r != file->data_size) printf("read error\n");
 
@@ -429,7 +430,7 @@ int file_path_split(t_file *file)
 	else
 	{
 		// size: length of directories
-		size = (int *) malloc(sizeof(int) * slash_count);
+		size = (int *) mem_malloc(sizeof(int) * slash_count);
 
 		// check size of string directories
 		for(letter=path; *letter!='\0'; letter++)
@@ -449,7 +450,7 @@ int file_path_split(t_file *file)
 		}
 
 		// directories
-		file->directories = (char**) malloc( sizeof(char *) * slash_count);
+		file->directories = (char**) mem_malloc( sizeof(char *) * slash_count);
 
 		// allocate parts
 		start = 0;
@@ -460,7 +461,7 @@ int file_path_split(t_file *file)
 			start++;
 
 			//XXX add 2 more char : start from 0 +  one for endline
-			file->directories[i] = (char *)malloc(sizeof(char) * (size[i]+1));
+			file->directories[i] = (char *)mem_malloc(sizeof(char) * (size[i]+1));
 
 			for(j=0;j<size[i];j++)
 			{
@@ -597,7 +598,7 @@ void file_free(t_file *file)
 
 t_file *file_new(const char *path)
 {
-	t_file *file = (t_file *)malloc(sizeof(t_file));
+	t_file *file = (t_file *)mem_malloc(sizeof(t_file));
 
 	id_init( &file->id, path);
 

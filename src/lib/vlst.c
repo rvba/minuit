@@ -21,6 +21,7 @@
 #include "dict.h"
 #include "ui.h"
 #include "block.h"
+#include "memory.h"
 
 
 void *vlst_get_pointer(t_vlst *vlst, int indice)
@@ -139,7 +140,7 @@ void __vlst_update_data(t_vlst *vlst,t_vlst *caller)
 		}
 		else
 		{
-			new_ptr = malloc((vlst->size)*(vlst->length)*(vlst->count));
+			new_ptr = mem_malloc((vlst->size)*(vlst->length)*(vlst->count));
 		}
 
 		if(!new_ptr) printf("[ERROR vls_update_data]\n"); 
@@ -703,7 +704,7 @@ t_vlst *vlst_make(const char *name,t_data_type type, int length, int count)
 
 	if(length && count)
 	{
-		vlst->data=malloc((vlst->size)*(vlst->length)*(vlst->count));
+		vlst->data=mem_malloc((vlst->size)*(vlst->length)*(vlst->count));
 		if(C->scene->store)
 		{
 			 scene_add_data_var(C->scene,"vlst_data","v_data",((vlst->size)*(vlst->length)*(vlst->count)),vlst->data);
@@ -767,7 +768,7 @@ t_vlst *vlst_clone(t_vlst *vlst)
 		clone->type = vlst->type;
 
 		size_t size = sizeof(vlst->type)*vlst->length*vlst->count;
-		clone->data = malloc(size);
+		clone->data = mem_malloc(size);
 		memcpy(clone->data,vlst->data,size);
 
 		return clone;
@@ -813,7 +814,7 @@ t_vlst *vlst_rebind(t_scene *sc,void *ptr)
 
 t_vlst *vlst_new(const char *name)
 {
-	t_vlst *vlst=(t_vlst *)malloc(sizeof(t_vlst));
+	t_vlst *vlst=(t_vlst *)mem_malloc(sizeof(t_vlst));
 
 	id_init(&vlst->id, name);
 

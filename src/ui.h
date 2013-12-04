@@ -26,6 +26,7 @@
 #define UI_SHOW_TERM 0
 #define UI_SHOW_RHIZOME_BOUNDING_BOX 0
 #define UI_SHOW_RHIZOME_ORDER 0
+#define UI_SHOW_STATUS 0
 #define UI_ADD_BRICKS 1
 
 float intro_intensity;
@@ -73,6 +74,7 @@ typedef struct Ui
 	int add_bricks;
 	int show_rhizome_bounding_box;
 	int show_rhizome_order;
+	int show_status;
 
 	int bitrate;
 

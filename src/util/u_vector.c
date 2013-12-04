@@ -9,6 +9,7 @@
 
 #include "common.h"
 #include "util.h"
+#include "memory.h"
 
 
 /*
@@ -64,7 +65,7 @@ void vprint3f(float *v,char end)
 
 float *vnew(float x,float y,float z)
 {
-	float *v = (float *)malloc(sizeof(float)*3);
+	float *v = (float *)mem_malloc(sizeof(float)*3);
 	v[0]=x;
 	v[1]=y;
 	v[2]=z;

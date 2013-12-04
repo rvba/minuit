@@ -15,6 +15,7 @@
 #include "ctx.h"
 #include "dict.h"
 #include "list.h"
+#include "memory.h"
 
 void symbol_show(t_symbol *symbol)
 {
@@ -147,7 +148,7 @@ t_dict *dict_rebind(t_scene *sc,void *ptr)
 
 t_symbol *symbol_new(const char *name)
 {
-	t_symbol *symbol = (t_symbol *)malloc(sizeof(t_symbol));
+	t_symbol *symbol = (t_symbol *)mem_malloc(sizeof(t_symbol));
 
 	symbol->id=0;
 	symbol->id_chunk=0;
@@ -163,7 +164,7 @@ t_symbol *symbol_new(const char *name)
 
 t_dict *dict_new(const char *name)
 {
-	t_dict *dict = (t_dict *)malloc(sizeof(t_dict));
+	t_dict *dict = (t_dict *)mem_malloc(sizeof(t_dict));
 
 	id_init(&dict->id, name);
 

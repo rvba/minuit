@@ -23,6 +23,7 @@
 #include "ctx.h"
 #include "viewport.h"
 #include "camera.h"
+#include "memory.h"
 
 t_camera *screen_camera(t_screen *screen)
 {
@@ -176,6 +177,17 @@ void screen_generic(t_screen *screen)
 	op_camera_switch_3d(C, camera);
 }
 
+void ui_draw_status(void)
+{
+	t_context *C=ctx_get();
+	if(C->ui->show_status)
+	{
+		C->event->ui.use_scale = 0;
+
+
+	}
+}
+
 // SCREEN MAIN
 
 void screen_main(t_screen *screen)
@@ -192,6 +204,7 @@ void screen_main(t_screen *screen)
 	op_camera_switch_2d(C,camera);
 	ui_draw_status_bar();
 	ui_draw_term();
+	ui_draw_status();
 	ui_draw_grid();
 
 	ui_draw_menu();
@@ -339,7 +352,7 @@ t_screen *screen_rebind(t_scene *scene, void *ptr)
 
 t_screen *screen_new(const char *name)
 {
-	t_screen *screen=(t_screen *)malloc(sizeof(t_screen));
+	t_screen *screen=(t_screen *)mem_malloc(sizeof(t_screen));
 
 	id_init(&screen->id, name);
 

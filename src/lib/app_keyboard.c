@@ -10,6 +10,7 @@
 #include "opengl.h"
 #include "app.h"
 #include "util.h"
+#include "memory.h"
 
 // KEYBOARD
 
@@ -76,7 +77,7 @@ void app_gl_keyboard(unsigned char key,int x,int y)
 
 t_keyboard *keyboard_new(void)
 {
-	t_keyboard *keyboard = (t_keyboard *)malloc(sizeof(t_keyboard));
+	t_keyboard *keyboard = (t_keyboard *)mem_malloc(sizeof(t_keyboard));
 
 	keyboard->key_pressed=0;
 	keyboard->shift=0;

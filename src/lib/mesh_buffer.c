@@ -23,7 +23,7 @@ void mesh_line_add(t_mesh *mesh,int *lines,int totline)
 {
 	int i;
 	size_t size = sizeof(int)*totline;
-	int *_lines=(int *)malloc(size);
+	int *_lines=(int *)mem_malloc(size);
 
 	mesh->lines = _lines;
 	mesh->var.totline=totline;

@@ -18,6 +18,7 @@
 #define DEBUG 1
 
 t_lst *MEMORY;
+size_t MEM_SIZE = 0;
 
 int indice;
 
@@ -63,7 +64,7 @@ void mem_show(void)
 
 t_chunk *chunk_new(t_chunk_type chunk_type,t_data_type type,size_t size,int tot,void *pointer)
 {
-	t_chunk *chunk=(t_chunk *)malloc(sizeof(t_chunk));
+	t_chunk *chunk=(t_chunk *)mem_malloc(sizeof(t_chunk));
 
 	chunk->chunk_type=chunk_type;
 	chunk->type=type;
@@ -231,5 +232,12 @@ void mem_free(void)
 
 	lst_delete_all(MEMORY);
 }
+
+void *mem_malloc(size_t size)
+{
+	MEM_SIZE += size;
+	return( malloc( size));
+}
+
 
 

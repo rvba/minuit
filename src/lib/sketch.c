@@ -19,6 +19,7 @@
 #include "ui.h"
 
 #include "camera.h"
+#include "memory.h"
 
 // LOCAL
 t_skt *SKT=NULL;
@@ -259,7 +260,7 @@ void skt_msh_rectangle(float *p,float w,float h,float *color)
 
 t_skt *skt_new(void)
 {
-	t_skt *skt = (t_skt *)malloc(sizeof(t_skt));
+	t_skt *skt = (t_skt *)mem_malloc(sizeof(t_skt));
 
 	SKT=skt;
 

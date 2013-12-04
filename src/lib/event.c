@@ -10,10 +10,11 @@
 #include "context.h"
 #include "event.h"
 #include "util.h"
+#include "memory.h"
 
 t_event *event_new(void)
 {
-	t_event *event=(t_event*)malloc(sizeof(t_event));
+	t_event *event=(t_event*)mem_malloc(sizeof(t_event));
 
 	bzero(&event->ui,sizeof(t_state_event_ui));
 

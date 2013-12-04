@@ -19,6 +19,7 @@
 #include "rhizome.h"
 #include "set.h"
 #include "graph.h"
+#include "memory.h"
 
 // Reset Update State
 void block_reset(t_block *block)
@@ -585,7 +586,7 @@ void block_free(t_block *block)
 
 t_block *block_new(const char *name)
 {
-	t_block *block  = (t_block *)malloc(sizeof(t_block));
+	t_block *block  = (t_block *)mem_malloc(sizeof(t_block));
 
 	id_init(&block->id, name);
 

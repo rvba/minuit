@@ -19,6 +19,7 @@
 #include "ctx.h"
 #include "object.h"
 #include "screen.h"
+#include "memory.h"
 
 t_lst *OBJECTS;
 
@@ -97,8 +98,8 @@ void obj_free(t_obj *obj)
 
 t_obj *obj_new(const char *name)
 {
-	t_obj *obj = (t_obj *)malloc(sizeof(t_obj));
-	obj->name=(char *)malloc(sizeof(char)*(strlen(name)+1));
+	t_obj *obj = (t_obj *)mem_malloc(sizeof(t_obj));
+	obj->name=(char *)mem_malloc(sizeof(char)*(strlen(name)+1));
 	strcpy(obj->name,name);
 	obj->tot_vert=0;
 	obj->tot_face=0;
@@ -128,9 +129,9 @@ void obj_add(const char *object_name,int tot_vert,int tot_face,int tot_quad,int 
 	obj->tot_quad=tot_quad;
 	obj->tot_tri=tot_tri;
 
-	if(tot_vert) obj->verts=(float *)malloc(sizeof(float)*obj->tot_vert*3);
-	if(tot_tri) obj->tris=(int *)malloc(sizeof(int)*obj->tot_tri*3);
-	if(tot_quad) obj->quads=(int *)malloc(sizeof(int)*obj->tot_quad*4);
+	if(tot_vert) obj->verts=(float *)mem_malloc(sizeof(float)*obj->tot_vert*3);
+	if(tot_tri) obj->tris=(int *)mem_malloc(sizeof(int)*obj->tot_tri*3);
+	if(tot_quad) obj->quads=(int *)mem_malloc(sizeof(int)*obj->tot_quad*4);
 
 	lst_add(OBJECTS,obj,"obj");
 }
@@ -223,7 +224,7 @@ void _op_obj_import(void)
 				}
 				else if(line_object)
 				{
-					object_name=(char *)malloc(sizeof(char)*(strlen(word->data)+1));
+					object_name=(char *)mem_malloc(sizeof(char)*(strlen(word->data)+1));
 					strcpy(object_name,word->data);
 					line_object=0;
 				}

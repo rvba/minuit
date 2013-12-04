@@ -29,6 +29,7 @@
 #include "graph.h"
 
 #include "dict.h"
+#include "memory.h"
 
 void rhizome_show(t_rhizome *rhizome)
 {
@@ -861,7 +862,7 @@ void rhizome_free(t_rhizome *rhizome)
 
 t_rhizome *rhizome_new(const char *name)
 {
-	t_rhizome *rhizome = (t_rhizome *)malloc(sizeof(t_rhizome));
+	t_rhizome *rhizome = (t_rhizome *)mem_malloc(sizeof(t_rhizome));
 
 	id_init(&rhizome->id, name);
 

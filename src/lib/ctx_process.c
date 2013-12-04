@@ -22,6 +22,7 @@
 #include "system.h"
 #include "event.h"
 #include "set.h"
+#include "memory.h"
 
 void *ctx_compute_rhizome(void *data)
 {
@@ -184,7 +185,7 @@ void process_free(t_process *process)
 
 t_process *process_new(const char *name,void*(* func)(void *data))
 {
-	t_process *process = (t_process *)malloc(sizeof(t_process));
+	t_process *process = (t_process *)mem_malloc(sizeof(t_process));
 
 	id_init(&process->id, name);
 

@@ -106,7 +106,7 @@ void server_connect(t_server *server,int port)
 
 t_server *server_new(void)
 {
-	t_server *server = (t_server *)malloc(sizeof(t_server));
+	t_server *server = (t_server *)mem_malloc(sizeof(t_server));
 
 	server->socket=socket_new();
 	server->socket->print=server_print;

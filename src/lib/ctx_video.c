@@ -18,6 +18,7 @@
 #include "ui.h"
 #include "image.h"
 #include "list.h"
+#include "memory.h"
 
 #include <dirent.h>
 #include <sys/types.h>
@@ -178,7 +179,7 @@ void ctx_render_video(t_context *C)
 				{
 					C->event->video_frame = C->app->frame;
 
-					unsigned char *buffer = (unsigned char *)malloc(sizeof(unsigned char *)*width*height*4);
+					unsigned char *buffer = (unsigned char *)mem_malloc(sizeof(unsigned char *)*width*height*4);
 
 					glPixelStorei(GL_PACK_ALIGNMENT, 1);
 					glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, buffer);

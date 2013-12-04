@@ -23,6 +23,7 @@
 
 #include "sketch.h"
 #include "ui.h"
+#include "memory.h"
 
 t_draw *DRAW;
 
@@ -822,7 +823,7 @@ void draw_scene(t_draw *draw, t_scene *scene)
 
 t_draw *draw_new(void)
 {
-	t_draw *draw = (t_draw *)malloc(sizeof(t_draw));
+	t_draw *draw = (t_draw *)mem_malloc(sizeof(t_draw));
 
 	DRAW=draw;
 	

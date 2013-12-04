@@ -27,6 +27,7 @@
 
 #include "block.h"
 #include "brick.h"
+#include "memory.h"
 
 #define CTX_TERM_TOT_LINE 50
 #define CTX_TERM_LINE_LENGTH 30
@@ -198,7 +199,7 @@ void _term_init(t_term *term)
 
 t_term *term_new(const char *name)
 {
-	t_term *term  = (t_term *)malloc(sizeof(t_term));
+	t_term *term  = (t_term *)mem_malloc(sizeof(t_term));
 
 	id_init(&term->id, name);
 

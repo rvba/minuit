@@ -14,6 +14,7 @@
 #include "ctx.h"
 #include "binding.h"
 #include "data.h"
+#include "memory.h"
 
 // UPDATE
 
@@ -56,7 +57,7 @@ t_binding *binding_rebind(t_scene *sc, void *ptr)
 
 t_binding *binding_new(const char *name)
 {
-	t_binding *binding=(t_binding *)malloc(sizeof(t_binding));
+	t_binding *binding=(t_binding *)mem_malloc(sizeof(t_binding));
 
 	id_init(&binding->id, name);
 	binding->type=dt_null;

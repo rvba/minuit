@@ -22,6 +22,7 @@
 #include "event.h"
 #include "ctx.h"
 #include "viewport.h"
+#include "memory.h"
 
 t_txt *txt_intro;
 t_txt *txt_version;
@@ -127,11 +128,11 @@ void screen_intro(t_screen *screen)
 	if(!star_init)
 	{
 		star_init = 1;
-		stars = malloc(sizeof(float)* star_count * 3);
-		stars_color = malloc(sizeof(float)* star_count * 3);
-		stars_chance = malloc(sizeof(int) * star_count);
-		stars_velocity = malloc(sizeof(float) * star_count);
-		stars_size = malloc(sizeof(int) * star_count);
+		stars = mem_malloc(sizeof(float)* star_count * 3);
+		stars_color = mem_malloc(sizeof(float)* star_count * 3);
+		stars_chance = mem_malloc(sizeof(int) * star_count);
+		stars_velocity = mem_malloc(sizeof(float) * star_count);
+		stars_size = mem_malloc(sizeof(int) * star_count);
 		for(i=0;i<star_count;i++)
 		{
 			stars[(i*3)+0] = rnd_range(0,dist)*get_sign();

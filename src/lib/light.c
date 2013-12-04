@@ -14,6 +14,7 @@
 #include "scene.h"
 #include "node.h"
 #include "list.h"
+#include "memory.h"
 
 t_light *light_rebind(t_scene *sc,void *ptr)
 {
@@ -43,7 +44,7 @@ void light_free(t_light *light)
 
 t_light *light_new(const char *name)
 {
-	t_light *light = (t_light *)malloc(sizeof(t_light));
+	t_light *light = (t_light *)mem_malloc(sizeof(t_light));
 
 	id_init(&light->id, name);
 	

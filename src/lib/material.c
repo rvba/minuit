@@ -12,6 +12,7 @@
 #include "material.h"
 #include "scene.h"
 #include "node.h"
+#include "memory.h"
 
 // CLONE
 
@@ -80,7 +81,7 @@ void material_free(t_material *material)
 
 t_material *material_new(const char *name)
 {
-	t_material *material = (t_material *)malloc(sizeof(t_material));
+	t_material *material = (t_material *)mem_malloc(sizeof(t_material));
 
 	id_init(&material->id, name);
 

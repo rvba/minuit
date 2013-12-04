@@ -18,6 +18,7 @@
 #include "brick.h"
 #include "binding.h"
 #include "rhizome.h"
+#include "memory.h"
 
 // Split
 void brick_rhizome_split(t_brick *brick_x, t_brick *brick_y)
@@ -663,7 +664,7 @@ t_brick *brick_clone(t_brick *brick)
 {
 	if(brick)
 	{
-		t_brick *clone = (t_brick *) malloc(sizeof(t_brick));
+		t_brick *clone = (t_brick *) mem_malloc(sizeof(t_brick));
 		memcpy(clone,brick,sizeof(t_brick));
 		return clone;
 	}
@@ -711,7 +712,7 @@ void brick_free(t_brick *brick)
 
 t_brick *brick_new(const char *name)
 {
-	t_brick *brick = (t_brick *)malloc(sizeof(t_brick));
+	t_brick *brick = (t_brick *)mem_malloc(sizeof(t_brick));
 
 	id_init(&brick->id, name);
 

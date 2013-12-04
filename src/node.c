@@ -36,6 +36,7 @@
 #include "material.h"
 #include "mesh.h"
 #include "geometry.h"
+#include "memory.h"
 
 #include "ctx.h"
 
@@ -1007,7 +1008,7 @@ void node_init(t_node *node,t_data_type type)
 
 t_node *node_new(t_data_type type)
 {
-	t_node *node = (t_node *)malloc(sizeof(t_node));
+	t_node *node = (t_node *) mem_malloc(sizeof(t_node));
 
 	node->id=0;
 	node->id_old=0;
