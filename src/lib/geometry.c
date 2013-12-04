@@ -343,8 +343,8 @@ t_geo *geo_make( t_context *C, const char *name)
 		geo = geo_new( name);
 	}
 
-	geo->points = lst_make( dt_geo_point, "points");
-	geo->edges = lst_make( dt_geo_edge, "edges");
+	geo->points = list_make( dt_geo_point, "points");
+	geo->edges = list_make( dt_geo_edge, "edges");
 
 	if(C->ui->add_bricks)
 	{
@@ -401,7 +401,7 @@ t_geo_array *geo_array_make( t_context *C, const char *name)
 	t_node *node_geo_array = scene_add(C->scene,dt_geo_array,name);
 	t_geo_array *geo_array = node_geo_array->data;
 
-	geo_array->elements = lst_make( dt_null, "elements");
+	geo_array->elements = list_make( dt_null, "elements");
 
 	if(C->ui->add_bricks)
 	{

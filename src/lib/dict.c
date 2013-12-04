@@ -118,7 +118,7 @@ t_dict *dict_make( const char *name)
 	dict=node_dict->data;
 
 	// new list
-	dict->symbols = lst_make( dt_dict, "dict");
+	dict->symbols = list_make( dt_dict, "dict");
 
 	return dict;
 }

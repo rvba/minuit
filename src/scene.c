@@ -209,7 +209,7 @@ t_node *scene_node_get(t_scene *sc,const char *type,const char *name)
 
 	if(lst)
 	{
-		return lst_find_node_by_name(lst,name);
+		return list_find_node_by_name(lst,name);
 	}
 	else
 	{
@@ -338,8 +338,8 @@ void scene_node_free(t_scene *sc,t_node *node)
 	if( sc->debug_all) printf("scene_node_free %s \n",data_name_get(node->cls->type));
 
 	// Remove from Lst
-	lst_remove_node(node->cls->lst,node);
-	lst_remove_node(sc->nodes,node);
+	list_remove_node(node->cls->lst,node);
+	list_remove_node(sc->nodes,node);
 
 	// Remove from Memory
 	scene_mem_remove(sc,node);
@@ -366,7 +366,7 @@ void scene_cleanup(t_scene *sc)
 		{
 			t_node *node = link->data;
 			scene_node_free(sc,node);
-			lst_remove_node(sc->stack,node);
+			list_remove_node(sc->stack,node);
 		}
 	}
 

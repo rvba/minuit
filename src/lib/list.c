@@ -68,32 +68,8 @@ t_node *list_node_exists(t_lst *lst,int id)
 	return NULL;
 }
 
-void *lst_get(t_lst *lst,char *name)
-{
-	t_link *l;
-	t_id *id;
-
-	if(lst->first)
-	{
-		for(l=lst->first;l;l=l->next)
-		{
-			id = (t_id *) l->data;
-			if(is(id->name,name))
-			{
-				return l->data;
-			}
-		}
-
-		return NULL;
-	}
-	else
-	{
-		return NULL;
-	}
-}
-
 // remove node
-int lst_remove_node(t_lst *lst,t_node *node)
+int list_remove_node(t_lst *lst,t_node *node)
 {
 	t_link *link;
 	if(lst->first)
@@ -115,27 +91,9 @@ int lst_remove_node(t_lst *lst,t_node *node)
 	return 0;
 }
 
-void lst_node_delete_all(t_lst *lst)
-{
-	t_link *l=lst->first;
-	t_node *n;
-	if(l)
-	{
-		for(;l;l=l->next)
-		{
-			n=l->data;
-			n->cls->del(n);
-		}
-	}	
-
-	lst_cleanup(lst);
-}
-
-
-
 // FIND NODE BY NAME
 
-t_node *lst_find_node_by_name(t_lst *lst,const char *name)
+t_node *list_find_node_by_name(t_lst *lst,const char *name)
 {
 	t_link *link;
 	t_node *node;
@@ -390,7 +348,7 @@ t_link *link_rebind(t_scene *sc,void *ptr)
 	return link;
 }
 
-t_lst *lst_make( t_data_type type, const char *name)
+t_lst *list_make( t_data_type type, const char *name)
 {
 	t_scene *sc = ctx_scene_get();
 	t_lst *lst;

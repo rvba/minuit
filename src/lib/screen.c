@@ -114,7 +114,7 @@ void screen_switch_by_name(char *name)
 {
 	t_context *C=ctx_get();
 	// check if screen exists
-	t_node *node=lst_find_node_by_name(C->ui->screens,name);
+	t_node *node = list_find_node_by_name(C->ui->screens,name);
 
 	if(node)
 	{
