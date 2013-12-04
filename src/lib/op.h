@@ -70,6 +70,7 @@ struct Node *	add_switch(struct Context *C,const char *name,void *data);
 struct Node *	add_switch_custom(struct Context *C,const char *name,void *data,void *(* f)(struct Brick *brick));
 struct Node *	add_label(struct Context *C,const char *name);
 struct Node *	add_slider_float(struct Context *C,const char *name,void *target_data);
+struct Node *	add_brick_int(struct Context *C, struct Block *block, const char *name, void *data_target);
 struct Node *	add_slider_int(struct Context *C,const char *name,void *target_data);
 struct Node *	add_slider_int_custom(struct Context *C,const char *name,void *target_data,void*(* f)(struct Brick *b));
 struct Node *	add_slider_int_positive(struct Context *C,const char *name,void *target_data);

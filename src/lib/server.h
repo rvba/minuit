@@ -10,7 +10,7 @@
 #ifndef __SERVER_H_
 #define __SERVER_H_
 
-#include "network.h"
+#include "net.h"
 
 typedef struct MNserver t_server;
 

@@ -1,19 +1,24 @@
 # UTIL
 set(SRC
-	network.h
-	system.h
-	u_calc.c
-	u_client.c
-	u_off_screen.c
-	u_rand.c
-	u_server.c
-	u_socket.c
-	u_string.c
-	u_system.c
+	common.h
+	cpt.h
+	cpt.c
 	util.c
 	util.h
-	u_vector.c
-	u_volume.c
+	mem.h
+	mem.c
+	net.h
+	net.c
+	rnd.c
+	rnd.h
+	system.h
+	system.c
+	str.h
+	str.c
+	vec.h
+	vec.c
+	vol.c
+	vol.h
 	)
 
 include_directories(${CMAKE_SOURCE_DIR}/src)

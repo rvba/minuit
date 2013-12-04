@@ -14,11 +14,11 @@
 #include "memory.h"
 #include "log.h"
 #include "list.h"
+#include "util.h"
 
 #define DEBUG 1
 
 t_lst *MEMORY;
-size_t MEM_SIZE = 0;
 
 int indice;
 
@@ -219,17 +219,6 @@ void mem_remove(int id)
 	}
 }
 
-void *mem_malloc(size_t size)
-{
-	MEM_SIZE += size;
-	return( malloc( size));
-}
-
-void mem_free( void *ptr, size_t size)
-{
-	MEM_SIZE -= size;
-	free( ptr);
-}
 
 
 

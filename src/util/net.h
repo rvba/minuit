@@ -10,10 +10,14 @@
 #ifndef __NETWORK_H
 #define __NETWORK_H
 
+#include "common.h"
+
+#include <fcntl.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h> 
+#include <unistd.h>
 
 #define SOCKET_BUFFER 2024
 
@@ -38,12 +42,12 @@ struct MN_Socket
 	void (* print)(char *msg);
 };
 
-
-// SOCKET
-
 int socket_listen(t_socket *sock);
 void socket_connect(t_socket *socket,int port);
 t_socket *socket_new(void);
+void slave(void);
+int tcp_client(void);
+int net_connect(void);
 
 #endif
 

@@ -29,6 +29,7 @@
 #include "viewport.h"
 #include "set.h"
 #include "memory.h"
+#include "util.h"
 
 // store menu
 

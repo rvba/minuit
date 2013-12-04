@@ -5,7 +5,6 @@ add_subdirectory(util)
 set(SRC 
 	app.c
 	app.h
-	common.h
 	context.c
 	context.h
 	draw.c

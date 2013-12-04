@@ -15,7 +15,6 @@
 typedef struct Chunk t_chunk;
 typedef enum Chunk_Type t_chunk_type;
 
-extern size_t MEM_SIZE;
 
 enum Chunk_Type
 {	
@@ -45,8 +44,6 @@ void 		mem_remove(int id);
 
 //void mem_free(void);
 
-void *mem_malloc(size_t size);
-void mem_free( void *ptr, size_t size);
 
 char *chunk_type_get(t_chunk_type type);
 
