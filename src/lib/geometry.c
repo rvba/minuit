@@ -234,7 +234,7 @@ void geo_lst_delete( t_lst *lst);
 
 void geo_point_free( t_geo_point *point)
 {
-	free( point);
+	mem_free( point, sizeof( t_geo_point));
 }
 
 void geo_point_delete( t_geo_point *point)
@@ -247,7 +247,7 @@ void geo_point_delete( t_geo_point *point)
 
 void geo_edge_free( t_geo_edge *edge) 
 {
-	free( edge);
+	mem_free( edge, sizeof( t_geo_edge));
 }
 
 void geo_edge_delete( t_geo_edge *edge)
@@ -260,7 +260,7 @@ void geo_edge_delete( t_geo_edge *edge)
 
 void geo_face_free( t_geo_face *face)
 {
-	free( face);
+	mem_free( face, sizeof( t_geo_face));
 }
 
 void geo_face_delete( t_geo_face *face)

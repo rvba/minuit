@@ -156,7 +156,8 @@ void img_save_video(int width, int height, const char *name,unsigned char *image
 void img_save_jpg(int width, int height, const char *name)
 {
 //	GLubyte *image = (GLubyte *)mem_malloc(width*height*sizeof(GLubyte)*3);
-	unsigned char *image = (unsigned char *)mem_malloc(width*height*sizeof(unsigned char)*3);
+	size_t malloc_size = width * height * sizeof( unsigned char) * 3;
+	unsigned char *image = (unsigned char *)mem_malloc(malloc_size);
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, image);
 
@@ -198,7 +199,7 @@ void img_save_jpg(int width, int height, const char *name)
 		fclose(outfile);
 
 		jpeg_destroy_compress(&cinfo);
-		free(image);
+		mem_free( image, malloc_size);
 
 	}
 	else
@@ -249,6 +250,7 @@ void img_save_jpg_highres(int width, int height, const char name[],GLubyte *imag
 		fclose(outfile);
 
 		jpeg_destroy_compress(&cinfo);
+		/* **MEM** */
 		free(image);
 	}
 	else

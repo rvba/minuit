@@ -494,7 +494,7 @@ void _mesh_free(t_mesh *mesh)
 	if(mesh->material) _material_free(mesh->material);
 	if(mesh->texture) _texture_free(mesh->texture);
 
-	free(mesh);
+	mem_free( mesh, sizeof( t_mesh));
 }
 
 void mesh_free(t_mesh *mesh)

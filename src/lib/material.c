@@ -69,12 +69,12 @@ t_material *material_rebind(t_scene *sc,void *ptr)
 
 void _material_free(t_material *material)
 {
-	free(material);
+	mem_free( material, sizeof( t_material));
 }
 
 void material_free(t_material *material)
 {
-	free(material);
+	mem_free( material, sizeof( t_material));
 }
 
 // NEW

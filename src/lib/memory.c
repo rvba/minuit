@@ -209,7 +209,7 @@ void mem_remove(int id)
 		if(_link)
 		{
 			lst_link_delete(MEMORY,_link);
-			free(_chunk);
+			mem_free(_chunk, sizeof( t_chunk));
 		}
 		else
 		{
@@ -219,24 +219,16 @@ void mem_remove(int id)
 	}
 }
 
-void mem_free(void)
-{
-	t_link *l;
-	t_chunk *c;
-
-	for(l=MEMORY->first;l;l=l->next)
-	{
-		c=l->data;
-		free(c);
-	}
-
-	lst_delete_all(MEMORY);
-}
-
 void *mem_malloc(size_t size)
 {
 	MEM_SIZE += size;
 	return( malloc( size));
+}
+
+void mem_free( void *ptr, size_t size)
+{
+	MEM_SIZE -= size;
+	free( ptr);
 }
 
 

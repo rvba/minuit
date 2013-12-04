@@ -287,12 +287,12 @@ t_dash *graph_dash_add(t_graph *graph, t_dot *x, t_dot *y)
 
 void dash_free(t_dash *dash)
 {
-	free(dash);
+	mem_free( dash, sizeof( t_dash));
 }
 
 void dot_free(t_dot *dot)
 {
-	free(dot);
+	mem_free( dot, sizeof( t_dot));
 }
 
 void graph_free_dots(t_lst *lst)
@@ -325,7 +325,7 @@ void graph_free(t_graph *graph)
 	lst_free(graph->dots);
 	lst_free(graph->dashes);
 
-	free(graph);
+	mem_free( graph, sizeof( t_graph));
 }
 
 // MAKE

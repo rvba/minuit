@@ -85,12 +85,12 @@ void camera_copy(t_camera *target,t_camera *source)
 
 void _camera_free(t_camera *camera)
 {
-	free(camera);
+	mem_free( camera, sizeof( t_camera));
 }
 
 void camera_free(t_camera *camera)
 {
-	free(camera);
+	mem_free( camera, sizeof( t_camera));
 }
 
 t_node *camera_add(const char *name)
@@ -176,6 +176,7 @@ t_camera *camera_rebind(t_scene *scene, void *ptr)
 {
 	return ptr;
 }
+
 
 t_camera *camera_new(const char *name)
 {

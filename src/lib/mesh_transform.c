@@ -236,8 +236,8 @@ void op_mesh_join_all(t_node *node)
 	}
 
 	// free
-	free(nodes);
-	free(meshes);
+	mem_free(nodes);
+	mem_free(meshes);
 	
 }
 */

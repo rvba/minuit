@@ -222,7 +222,7 @@ void object_free(t_object *object)
 		scene_struct_delete(sc,object->blocks);
 	}
 
-	free(object);
+	mem_free( object, sizeof( t_object));
 }
 
 

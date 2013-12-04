@@ -43,9 +43,10 @@ void 		mem_write(const char *path);
 t_chunk *	chunk_new(t_chunk_type chunk_type,t_data_type type,size_t size,int tot,void *pointer);
 void 		mem_remove(int id);
 
-void mem_free(void);
+//void mem_free(void);
 
 void *mem_malloc(size_t size);
+void mem_free( void *ptr, size_t size);
 
 char *chunk_type_get(t_chunk_type type);
 

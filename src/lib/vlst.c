@@ -838,8 +838,9 @@ t_vlst *vlst_new(const char *name)
 
 void vlst_free(t_vlst *vlst)
 {
-	if(vlst->data) free(vlst->data);
-	free(vlst);
+	int l = vlst->count * vlst->length * vlst->size;
+	if(vlst->data) mem_free(vlst->data, l);
+	mem_free( vlst, sizeof( t_vlst));
 }
 
 void vlst_delete( t_vlst *vlst)

@@ -835,7 +835,7 @@ t_rhizome *rhizome_rebind(t_scene *sc,void *ptr)
 void _rhizome_free(t_rhizome *rhizome)
 {
 	if(rhizome->blocks) _list_free(rhizome->blocks, dt_block);
-	free(rhizome);
+	mem_free( rhizome, sizeof( t_rhizome));
 }
 
 void rhizome_free(t_rhizome *rhizome)
@@ -855,7 +855,7 @@ void rhizome_free(t_rhizome *rhizome)
 		graph_free(rhizome->graph);
 	}
 	
-	free(rhizome);
+	mem_free( rhizome, sizeof( t_rhizome));
 }
 
 // NEW

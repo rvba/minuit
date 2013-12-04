@@ -24,6 +24,7 @@ struct Texture
 	t_id id;
 
 	int idcol[3];
+	size_t size;
 
 	GLuint width;
 	GLuint height;

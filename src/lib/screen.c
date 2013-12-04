@@ -329,7 +329,7 @@ void _screen_free(t_screen *screen)
 	if(screen->blocks) _list_free(screen->blocks, dt_block);
 	if(screen->viewports) _list_free(screen->viewports,dt_viewport);
 
-	free(screen);
+	mem_free( screen, sizeof( t_screen));
 }
 
 void screen_free(t_screen *screen)

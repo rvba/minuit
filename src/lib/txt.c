@@ -785,7 +785,7 @@ float txt_get_width(t_txt *txt)
 
 void txt_free(t_txt *txt)
 {
-	free(txt);
+	mem_free( txt, sizeof( t_txt));
 }
 
 void txt_init(t_txt *txt,const char *name)

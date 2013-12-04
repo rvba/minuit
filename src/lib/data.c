@@ -584,15 +584,16 @@ t_data *data_new(const char *name)
 
 void data_free(t_data *data)
 {
-	free(data);
+	mem_free( data, sizeof( t_data));
 }
 
 // DATUM
 
 void datum_free(t_datum *datum)
 {
-	free(datum->data);
-	free(datum);
+	/* **MEM** */
+	mem_free( datum->data, datum->size);
+	mem_free( datum, sizeof( t_datum));
 }
 
 t_datum *datum_new(t_data_type type, int count, void *data)
@@ -600,12 +601,14 @@ t_datum *datum_new(t_data_type type, int count, void *data)
 	t_datum *datum = (t_datum *) mem_malloc(sizeof(t_datum));
 	datum->type = type;
 	datum->count = count;
+	datum->size = 0;
 
 	int i;
 	switch(type)
 	{
 		case(dt_int):
 			datum->data = (int *)mem_malloc(sizeof(int) * count);
+			datum->size = sizeof(int) * count;
 			if(data)
 			{
 				for(i=0;i<count;i++)
@@ -617,6 +620,7 @@ t_datum *datum_new(t_data_type type, int count, void *data)
 
 		case(dt_bool):
 			datum->data = (int *)mem_malloc(sizeof(int) * count);
+			datum->size = sizeof(int) * count;
 			if(data)
 			{
 				for(i=0;i<count;i++)
@@ -628,6 +632,7 @@ t_datum *datum_new(t_data_type type, int count, void *data)
 
 		case(dt_float):
 			datum->data = (int *)mem_malloc(sizeof(float) * count);
+			datum->size = sizeof(float) * count;
 			if(data)
 			{
 				for(i=0;i<count;i++)

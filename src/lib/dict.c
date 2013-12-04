@@ -179,7 +179,7 @@ t_dict *dict_new(const char *name)
 
 void symbol_free(t_symbol *symbol)
 {
-	free(symbol);
+	mem_free( symbol, sizeof( t_symbol));
 }
 
 void dict_free(t_dict *dict)

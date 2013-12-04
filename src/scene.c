@@ -348,7 +348,7 @@ void scene_node_free(t_scene *sc,t_node *node)
 	node->cls->free(sc,node);
 
 	// Free Node
-	free(node);
+	mem_free(node, sizeof(t_node));
 }
 
 

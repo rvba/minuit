@@ -47,13 +47,13 @@ t_texture *texture_clone(t_texture *texture)
 
 void texture_free(t_texture *texture)
 {
-	if(texture->texels) free(texture->texels);
+	if(texture->texels) mem_free( texture->texels, texture->size);
 }
 
 void _texture_free(t_texture *texture)
 {
-	if(texture->texels) free(texture->texels);
-	free(texture);
+	if(texture->texels) mem_free( texture->texels, texture->size);
+	mem_free( texture, sizeof( t_texture));
 }
 
 // REBIND
@@ -71,6 +71,7 @@ void texture_image_bind(t_texture *texture,t_image *image)
 	texture->texels=image->data;
 	texture->internal_format=image->bpp;
 	texture->format=image->format;
+	texture->size = image->size;
 }
 
 // NEW
@@ -80,6 +81,8 @@ t_texture *texture_new(const char *name)
 	t_texture *texture = (t_texture *)mem_malloc(sizeof(t_texture));
 
 	id_init(&texture->id, name);
+
+	texture->size = 0;
 
 	texture->width=0;
 	texture->height=0;

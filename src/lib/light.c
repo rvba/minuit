@@ -39,7 +39,7 @@ t_node *light_make(const char *name)
 
 void light_free(t_light *light)
 {
-	free(light);
+	mem_free( light, sizeof( t_light));
 }
 
 t_light *light_new(const char *name)

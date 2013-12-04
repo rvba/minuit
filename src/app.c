@@ -201,10 +201,10 @@ void app_args_scan(t_app *app)
 
 int app_free(t_app *app)
 {
-	free(app->mouse);
-	free(app->keyboard);
-	free(app->window);
-	free(app->clock);
+	mem_free( app->mouse, sizeof( t_mouse));
+	mem_free( app->keyboard, sizeof( t_keyboard));
+	mem_free(app->window, sizeof( t_window));
+	mem_free(app->clock, sizeof( t_clock));
 
 	return 1;
 }

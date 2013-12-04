@@ -746,7 +746,7 @@ void list_remove_by_name(t_lst *lst, const char *name)
 
 void _link_free(t_link *link)
 {
-	free(link);
+	mem_free( link, sizeof( t_link));
 }
 
 // CLONE
@@ -804,7 +804,7 @@ void list_free(t_lst *lst)
 		scene_struct_delete(sc,l);
 	}
 
-	free(lst);
+	mem_free( lst, sizeof( t_lst));
 }
 
 void _list_free(t_lst *lst, t_data_type type)
@@ -834,7 +834,7 @@ void _list_free(t_lst *lst, t_data_type type)
 	}
 
 	lst_cleanup(lst);
-	free(lst);
+	mem_free( lst, sizeof( t_lst));
 }
 
 void list_cleanup(t_lst *lst)
@@ -1000,7 +1000,7 @@ void lst_show(t_lst *lst)
 void lst_free(t_lst *lst)
 {
 	lst_cleanup(lst);
-	free(lst);
+	mem_free( lst, sizeof( t_lst));
 }
 
 void lst_delete( t_lst *lst)
@@ -1020,8 +1020,9 @@ void cls_lst_delete( void *data)
 
 void link_free(t_link *link)
 {
-	free(link);
+	mem_free( link, sizeof( t_link));
 }
+
 
 t_lst *lst_make( t_data_type type, const char *name)
 {

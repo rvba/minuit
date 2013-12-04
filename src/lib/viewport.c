@@ -112,7 +112,7 @@ t_node *viewport_make(const char *name)
 void _viewport_free(t_viewport *viewport)
 {
 	if(viewport->camera) _camera_free(viewport->camera);
-	free(viewport);
+	mem_free( viewport, sizeof( t_viewport));
 }
 
 

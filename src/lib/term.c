@@ -182,7 +182,7 @@ void term_free(t_term *term)
 	lst_free(term->lines);
 	link_free(term->cursor);
 
-	free(term);
+	mem_free( term, sizeof( t_term));
 }
 
 // INIT

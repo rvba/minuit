@@ -244,8 +244,8 @@ void skt_msh_rectangle(float *p,float w,float h,float *color)
 	vadd(c,b,vh);
 	vadd(d,a,vh);
 
-	free(vw);
-	free(vh);
+	mem_free(vw , sizeof( float) *3);
+	mem_free(vh , sizeof( float) *3);
 
 	glColor3f(color[0],color[1],color[2]);
 

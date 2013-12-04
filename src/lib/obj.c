@@ -90,6 +90,7 @@ void obj_show(t_obj *obj,int show_data)
 
 void obj_free(t_obj *obj)
 {
+	/* **MEM **/
 	free(obj->name);
 	if(obj->verts)free(obj->verts);
 	if(obj->tris) free(obj->tris);

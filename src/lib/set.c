@@ -214,7 +214,7 @@ void _set_free(t_set *set)
 	if(set->blocks) _list_free(set->blocks, dt_block);
 	if(set->rhizomes) _list_free(set->rhizomes, dt_rhizome);
 
-	free(set);
+	mem_free( set, sizeof( t_set));
 }
 
 // FREE

@@ -141,6 +141,7 @@ char *		render_fbo;
 char *		render_tiled;
 
 void 		op_3d_orientation(void);
+void camera_free( t_camera *camera);
 
 
 

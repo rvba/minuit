@@ -22,6 +22,7 @@ typedef struct Datum
 {
 	t_data_type type;
 	int count;
+	size_t size;
 	void *data;
 }t_datum;
 

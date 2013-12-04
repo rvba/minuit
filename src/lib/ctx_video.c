@@ -24,6 +24,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+/* **MEM** */
+
 void ctx_switch_record_video(t_context *C)
 {
 	if(C->event->video_record)

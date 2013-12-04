@@ -23,7 +23,7 @@ void clock_init(t_clock *clock)
 
 void clock_free(t_clock *clock)
 {
-	free(clock);
+	mem_free( clock, sizeof( t_clock));
 }
 
 // CLOCK

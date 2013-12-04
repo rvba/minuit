@@ -547,7 +547,7 @@ t_node *block_make(const char *name,const char *type)
 void _block_free(t_block *block)
 {
 	if(block->bricks) _list_free(block->bricks, dt_brick);
-	free(block);
+	mem_free( block, sizeof( t_block));
 }
 
 // FREE BRICKS

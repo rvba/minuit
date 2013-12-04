@@ -26,6 +26,7 @@ typedef struct Image
 	int bpp; 		//byte per pixel
 	GLenum format;
 
+	size_t size;
 	unsigned char *data;
 
 }t_image;

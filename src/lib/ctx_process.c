@@ -180,7 +180,7 @@ t_process *process_add(t_context *C, const char *name, void *(* f)(void *d))
 void process_free(t_process *process)
 {
 	clock_free(process->clock);
-	free(process);
+	mem_free( process, sizeof( t_process));
 }
 
 t_process *process_new(const char *name,void*(* func)(void *data))

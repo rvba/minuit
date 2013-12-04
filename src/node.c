@@ -277,7 +277,7 @@ void cls_node_list_free(t_scene *sc,t_node *node)
 
 void cls_node_camera_free(t_scene *sc,t_node *node)
 {
-	free(node->data);
+	camera_free(node->data);
 }
 
 void cls_node_mesh_free(t_scene *sc,t_node *node)

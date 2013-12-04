@@ -39,7 +39,7 @@ void binding_update(t_binding *binding, void *ptr)
 
 void binding_free(t_binding *binding)
 {
-	free(binding);
+	mem_free( binding, sizeof( t_binding));
 }
 
 // REBIND

@@ -77,7 +77,8 @@ int app_off_screen(t_app *app)
 
 	printf("all done\n");
 
-	free( buffer );
+	// WARN!
+	//free( buffer );
 
 	OSMesaDestroyContext( ctx );
 

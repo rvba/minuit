@@ -27,5 +27,7 @@ t_image *image_new(const char *name)
 	image->bpp=0;
 	image->data=NULL;
 
+	image->size = 0;
+
 	return image;
 }

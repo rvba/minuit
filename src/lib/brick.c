@@ -316,7 +316,7 @@ void brick_selector_list_free(t_lst *lst)
 		for(;l;l=l->next)
 		{
 			txt=l->data;
-			free(txt);
+			mem_free( txt, sizeof( t_txt));
 		}
 	}
 	lst_free(lst);
@@ -677,7 +677,7 @@ t_brick *brick_clone(t_brick *brick)
 void _brick_free(t_brick *brick)
 {
 	// that simple !
-	free(brick);
+	mem_free(brick, sizeof( t_brick));
 }
 
 

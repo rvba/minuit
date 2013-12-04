@@ -18,7 +18,7 @@ void action_free(t_action *action)
 	t_context *C = ctx_get();
 	t_scene *sc = C->scene;
 	if(action->args) scene_struct_delete(sc,action->args);
-	free(action);
+	mem_free( action, sizeof( t_action));
 }
 
 t_action *action_new(const char *name)
