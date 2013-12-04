@@ -495,11 +495,11 @@ t_geo *geo_duplicate( t_geo *geo, float *point)
 	{
 		edge = l->data;
 		edge_new = geo_edge_duplicate( edge, nul);
-		list_add( geo_new->edges, edge_new);
+		list_add_data( geo_new->edges, edge_new);
 		a = edge_new->a;
 		b = edge_new->b;
-		list_add( geo_new->points, a);
-		list_add( geo_new->points, b);
+		list_add_data( geo_new->points, a);
+		list_add_data( geo_new->points, b);
 
 	}
 	C->ui->add_bricks = 1;
@@ -795,7 +795,7 @@ void geo_fill_point(t_geo *geo, t_geo_point *point)
 	if(!geo_elem_exists(geo, dt_geo_point, point))
 	{
 		point->indice = geo->points->count;
-		list_add( geo->points, point);
+		list_add_data( geo->points, point);
 	}
 }
 
@@ -830,7 +830,7 @@ void geo_fill_edges(t_geo *geo, t_lst *lst)
 				if( edge->a) geo_fill_point( geo, edge->a);
 				if( edge->b) geo_fill_point( geo, edge->b);
 
-				list_add( geo->edges, edge);
+				list_add_data( geo->edges, edge);
 			}
 		}
 	}
@@ -996,9 +996,9 @@ void geo_array_duplicate_elements( t_geo_array *array, float *point)
 {
 	switch( array->type_element)
 	{
-		case dt_geo_point: list_add( array->elements, geo_point_duplicate( ( t_geo_point *) array->element, point)); break;
-		case dt_geo_edge: list_add( array->elements, geo_edge_duplicate( ( t_geo_edge *) array->element, point)); break;
-		case dt_geo: list_add( array->elements, geo_duplicate( ( t_geo *) array->element, point)); break;
+		case dt_geo_point: list_add_data( array->elements, geo_point_duplicate( ( t_geo_point *) array->element, point)); break;
+		case dt_geo_edge: list_add_data( array->elements, geo_edge_duplicate( ( t_geo_edge *) array->element, point)); break;
+		case dt_geo: list_add_data( array->elements, geo_duplicate( ( t_geo *) array->element, point)); break;
 		default: printf("warning geo_array_build_element\n"); break;
 	}
 }

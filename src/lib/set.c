@@ -143,7 +143,7 @@ void set_block_push(t_set *set, t_block *block)
 	t_context *C = ctx_get();
 	t_lst *lst = set->blocks;
 	scene_store(C->scene,1);
-	list_add(lst, block);
+	list_add_data(lst, block);
 	scene_store(C->scene,0);
 
 	block->set = set;

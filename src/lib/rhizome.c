@@ -353,7 +353,7 @@ void rhizome_get_roots(t_rhizome *rhizome)
 		if(add_to_roots)
 		{
 			block->state.is_root = 1;
-			list_add(roots,block);
+			list_add_data(roots,block);
 		}
 		else
 		{
@@ -721,7 +721,7 @@ void rhizome_block_add(t_rhizome *rhizome, t_block *block)
 
 	// Add to Rhizome List
 	scene_store(C->scene,1);
-	list_add(rhizome->blocks, block);
+	list_add_data(rhizome->blocks, block);
 	block->rhizome = rhizome;
 	scene_store(C->scene,0);
 
@@ -772,7 +772,7 @@ t_rhizome *rhizome_add(const char *name)
 
 	// Add To Set
 	t_set *set = get_current_set(C);
-	list_add(set->rhizomes,rhizome);
+	list_add_data(set->rhizomes,rhizome);
 
 	rhizome->set = set;
 

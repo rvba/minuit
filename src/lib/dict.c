@@ -79,7 +79,7 @@ t_symbol *dict_symbol_add(t_dict *dict,const char *name,t_data_type type,void *d
 	symbol->data_type=type;
 	symbol->data=data;
 
-	list_add(dict->symbols,symbol);
+	list_add_data(dict->symbols,symbol);
 
 	dict->count++;
 

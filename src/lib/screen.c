@@ -96,7 +96,7 @@ void screen_block_add(t_screen *screen, t_block *block)
 
 	if(screen->blocks)
 	{
-		list_add(screen->blocks, block);
+		list_add_data(screen->blocks, block);
 	}
 	else
 	{

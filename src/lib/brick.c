@@ -120,7 +120,7 @@ void brick_binding_add(t_brick *brick, t_data_type type, void *data)
 	binding->type = type;
 	binding->data = data;
 
-	list_add(plug_intern->bindings,binding);
+	list_add_data(plug_intern->bindings,binding);
 }
 
 void plug_add_parent(t_plug *child, t_plug *parent)
@@ -137,7 +137,7 @@ void plug_add_parent(t_plug *child, t_plug *parent)
 	}
 
 	// add parent
-	list_add(child->parents,parent);
+	list_add_data(child->parents,parent);
 
 	// remember child
 	parent->child = child;

@@ -121,7 +121,7 @@ t_node *list_find_node_by_name(t_lst *lst,const char *name)
 	}
 }
 
-t_link *list_add(t_lst *lst,void *data)
+t_link *list_add_data( t_lst *lst, void *data)
 {
 	t_context *C=ctx_get();
 

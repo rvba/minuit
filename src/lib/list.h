@@ -21,7 +21,7 @@ struct Link;
 void 		lst_remove_doubles(struct Lst *lst);
 
  
-struct Link * 	list_add(struct Lst *lst,void *data);
+struct Link * 	list_add_data( struct Lst *lst, void *data);
 struct Link * 	list_add_global(struct Lst *lst,void *data);
 struct Lst *	list_rebind(struct Scene *sc,void *ptr);
 struct Link *	link_rebind(struct Scene *sc,void *ptr);

@@ -262,7 +262,7 @@ void _add_block(t_context *C,t_block *block)
 	t_set *set = get_current_set(C);
 	t_lst *list = set->blocks;
 
-	list_add(list, block);
+	list_add_data(list, block);
 }
 
 t_block *block_dupli(t_block *block)
@@ -408,7 +408,7 @@ void block_brick_add(t_block *block,t_node *node_brick)
 	brick->geom.block_pos=block->tot_bricks;
 	block->tot_bricks++;
 
-	list_add(block->bricks,brick);
+	list_add_data(block->bricks,brick);
 }
 
 t_brick *block_brick_get(t_block *block,const char *name)
