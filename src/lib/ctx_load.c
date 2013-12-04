@@ -32,6 +32,7 @@
 #include "data.h"
 #include "binding.h"
 #include "list.h"
+#include "vlst.h"
 #include "ui.h"
 #include "block.h"
 #include "object.h"
@@ -48,6 +49,8 @@
 #include "rhizome.h"
 #include "mesh.h"
 #include "geometry.h"
+#include "material.h"
+#include "texture.h"
 
 #include "ctx.h"
 #include "op.h"
@@ -512,7 +515,7 @@ void load_rebind(t_scene *sc)
 		switch(node->type)
 		{
 			case(dt_link): 		link_rebind(sc,ptr);break;
-			case(dt_list): 		lst_rebind(sc,ptr); break;
+			case(dt_list): 		list_rebind(sc,ptr); break;
 			case(dt_object): 	object_rebind(sc,ptr); break;
 			case(dt_mesh): 		mesh_rebind(sc,ptr); break;
 			case(dt_brick): 	brick_rebind(sc,ptr); break;

@@ -805,7 +805,7 @@ t_rhizome *rhizome_clone(t_rhizome *rhizome)
 	{
 		t_rhizome *clone = rhizome_new(rhizome->id.name);
 
-		clone->blocks = lst_clone(rhizome->blocks, dt_block);
+		clone->blocks = list_clone(rhizome->blocks, dt_block);
 		clone->set = NULL;
 
 		return clone;

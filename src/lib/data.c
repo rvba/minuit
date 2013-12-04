@@ -14,6 +14,7 @@
 #include "op.h"
 #include "data.h"
 #include "list.h"
+#include "vlst.h"
 #include "vector.h"
 #include "geometry.h"
 #include "ui.h"

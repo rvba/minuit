@@ -110,6 +110,7 @@ set(SRC
 	vector.h
 	viewport.c
 	viewport.h
+	vlst.h
 	vlst.c
 	)
  

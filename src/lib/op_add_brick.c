@@ -21,6 +21,8 @@
 #include "light.h"
 #include "data.h"
 #include "list.h"
+#include "vlst.h"
+#include "material.h"
 #include "viewport.h"
 #include "ctx.h"
 #include "mesh.h"

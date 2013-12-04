@@ -479,7 +479,7 @@ t_block *block_clone(t_block *block)
 		clone->tot_bricks = block->tot_bricks;
 		clone->rhizome_order = block->rhizome_order;
 		clone->rhizome_pos = block->rhizome_pos;
-		clone->bricks = lst_clone(block->bricks,dt_brick);
+		clone->bricks = list_clone(block->bricks,dt_brick);
 
 		clone->submenu = NULL;
 		clone->selected = NULL; 

@@ -308,8 +308,8 @@ t_screen *screen_clone(t_screen *screen)
 		clone->pan_x = screen->pan_x;
 		clone->pan_y = screen->pan_y;
 
-		clone->blocks = lst_clone(screen->blocks, dt_block);
-		clone->viewports = lst_clone(screen->viewports, dt_viewport);
+		clone->blocks = list_clone(screen->blocks, dt_block);
+		clone->viewports = list_clone(screen->viewports, dt_viewport);
 
 		clone->draw = screen->draw;
 		clone->keymap = screen->keymap;

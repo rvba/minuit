@@ -242,7 +242,7 @@ void graph_dash_remove(t_graph *graph, t_dot *x, t_dot *y)
 	t_dash *dash = graph_dash_find(graph,x,y); 
 	if(dash)
 	{
-		lst_remove_by_ptr(graph->dashes, dash);
+		list_remove_by_ptr(graph->dashes, dash);
 		graph->dash_count--;
 		dash_free(dash);
 	}
@@ -253,7 +253,7 @@ void graph_link_remove(t_graph *graph, int id_x, int id_y)
 	t_dash *dash = graph_link_find(graph,id_x,id_y); 
 	if(dash)
 	{
-		lst_remove_by_ptr(graph->dashes, dash);
+		list_remove_by_ptr(graph->dashes, dash);
 		graph->dash_count--;
 		dash_free(dash);
 	}

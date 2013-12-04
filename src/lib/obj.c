@@ -9,6 +9,7 @@
 
 #include "op.h"
 #include "node.h"
+#include "scene.h"
 #include "context.h"
 #include "brick.h"
 #include "obj.h"

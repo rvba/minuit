@@ -11,13 +11,13 @@
 #ifndef __MESH_H_
 #define __MESH_H_
 
-#include "texture.h"
-#include "material.h"
-#include "list.h"
-#include "scene.h"
-#include "node.h"
-
 #define MESH_LENGTH_TYPE 20
+
+struct Node;
+struct Scene;
+struct VLst;
+struct Material;
+struct Texture;
 
 typedef struct Mesh t_mesh;
 typedef struct Mesh_Class t_mesh_cls;
@@ -86,33 +86,33 @@ struct Mesh
 
 	// geometry
 
-	t_vlst *vertex;
-	t_vlst *quads;
-	t_vlst *tris;
-	t_vlst *uvs;
-	t_vlst *colors;
+	struct VLst *vertex;
+	struct VLst *quads;
+	struct VLst *tris;
+	struct VLst *uvs;
+	struct VLst *colors;
 
-	t_vlst *quad_vertex;
-	t_vlst *quad_face;
-	t_vlst *quad_normal;
-	t_vlst *quad_color;
-	t_vlst *quad_uv;
+	struct VLst *quad_vertex;
+	struct VLst *quad_face;
+	struct VLst *quad_normal;
+	struct VLst *quad_color;
+	struct VLst *quad_uv;
 
-	t_vlst *tri_vertex;
-	t_vlst *tri_face;
-	t_vlst *tri_normal;
-	t_vlst *tri_color;
-	t_vlst *tri_uv;
+	struct VLst *tri_vertex;
+	struct VLst *tri_face;
+	struct VLst *tri_normal;
+	struct VLst *tri_color;
+	struct VLst *tri_uv;
 
-	t_vlst *edges;
-	t_vlst *edges_color;
+	struct VLst *edges;
+	struct VLst *edges_color;
 
 	// materials
 
 	int texture_id;
 	char texture_name[_NAME_];	
-	t_texture *texture;
-	t_material *material;
+	struct Texture *texture;
+	struct Material *material;
 
 	struct Block *ref;
 
@@ -127,7 +127,7 @@ void		 _mesh_free(t_mesh *mesh);
 void 		mesh_free(t_mesh *mesh);
 void 		mesh_update(t_mesh *mesh);
 
-t_node*		mesh_make(
+struct Node*		mesh_make(
 			const char *name,
 			int totvert,
 			int totface,
@@ -137,12 +137,12 @@ t_node*		mesh_make(
 			int *quads,
 			int *tris);
 
-t_node *mesh_make_empty(const char *name);
+struct Node *mesh_make_empty(const char *name);
 
 t_mesh *	mesh_clone(t_mesh *mesh);
 void *		mesh_get_ref(t_mesh *mesh, const char *ref);
-t_mesh*		mesh_rebind(t_scene *sc,void *ptr);
-void 		mesh_init(t_scene *sc,t_mesh *mesh);
+t_mesh*		mesh_rebind(struct Scene *sc,void *ptr);
+void 		mesh_init(struct Scene *sc,t_mesh *mesh);
 
 t_mesh *	mesh_clone(t_mesh *mesh);
 
@@ -157,7 +157,7 @@ void mesh_add_brick_faces(t_mesh *mesh);
 
 // OP_MESH
 
-void 		mesh_object_add(t_node *node,t_node *object);
+void 		mesh_object_add(struct Node *node,struct Node *object);
 void 		mesh_line_add(t_mesh *mesh,int *lines,int totline);
 void 		mesh_line_cube_add(t_mesh *mesh);
 void 		mesh_calc_vertex_array(t_mesh *mesh);

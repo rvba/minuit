@@ -227,7 +227,7 @@ void ctx_scene_update_lst(t_context *C, t_lst *lst)
 					// multi selection
 					if(C->app->keyboard->shift)
 					{
-						if(!lst_get_node(C->scene->selections,node->id))
+						if(!list_node_exists(C->scene->selections,node->id))
 						{
 							lst_add(C->scene->selections,node,"object");
 						}

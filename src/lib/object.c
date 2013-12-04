@@ -15,6 +15,7 @@
 #include "object.h"
 #include "camera.h"
 #include "list.h"
+#include "vlst.h"
 #include "set.h"
 #include "set.h"
 #include "block.h"
@@ -22,6 +23,7 @@
 #include "vector.h"
 #include "ui.h"
 #include "memory.h"
+#include "scene.h"
 
 void object_default(t_node *node){}
 void cls_object_link(t_object *self,t_node *target);

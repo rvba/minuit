@@ -20,6 +20,7 @@
 #include "ui.h"
 #include "file.h"
 #include "list.h"
+#include "vlst.h"
 #include "block.h"
 #include "brick.h"
 #include "viewport.h"

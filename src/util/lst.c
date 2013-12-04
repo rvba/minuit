@@ -428,6 +428,24 @@ void lst_cleanup(t_lst *lst)
 	}
 }
 
+/*
+int lst_remove_by_id(t_lst *lst,int id)
+{
+	t_link *link=lst_get_by_id(lst,id);
+
+	if(link)
+	{
+		lst_link_delete(lst,link);
+		return 1;
+	}
+	else
+	{
+		printf("[ERROR lst_remove_by_id] Can't get link\n");
+		return 0;
+	}
+}
+*/
+
 // FIND NODE BY ID
 
 t_link *lst_get_by_id(t_lst *lst,int item_id)

@@ -10,7 +10,8 @@
 #ifndef __VECTOR_H
 #define __VECTOR_H
 
-#include "list.h"
+struct VLst;
+struct Scene;
 
 typedef struct Vector t_vector;
 typedef struct Vector_Class t_vector_cls;
@@ -25,7 +26,7 @@ struct Vector
 	int length;
 
 	void *pointer;
-	t_vlst *vector; 
+	struct VLst *vector; 
 
 	int has_limit_low;
 	int has_limit_high;
@@ -51,7 +52,7 @@ void vector_op_copy(t_vector *dst, t_vector *src);
 void vector_op_add(t_vector *dst,t_vector *src);
 void vector_show(t_vector *vector);
 
-t_vector *vector_rebind(t_scene *sc,void *ptr);
+t_vector *vector_rebind( struct Scene *sc,void *ptr);
 
 
 #endif

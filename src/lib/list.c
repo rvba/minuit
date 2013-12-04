@@ -50,7 +50,7 @@ void list_show(t_lst *lst)
 	}
 }
 
-t_node *lst_get_node(t_lst *lst,int id)
+t_node *list_node_exists(t_lst *lst,int id)
 {
 	t_link *l;
 	t_node *node;
@@ -132,21 +132,6 @@ void lst_node_delete_all(t_lst *lst)
 }
 
 
-int lst_remove_by_id(t_lst *lst,int id)
-{
-	t_link *link=lst_get_by_id(lst,id);
-
-	if(link)
-	{
-		lst_link_delete(lst,link);
-		return 1;
-	}
-	else
-	{
-		printf("[ERROR lst_remove_by_id] Can't get link\n");
-		return 0;
-	}
-}
 
 // FIND NODE BY NAME
 
@@ -202,8 +187,6 @@ t_link *list_add(t_lst *lst,void *data)
 	return link;
 }
 
-void list_remove(t_lst *lst);
-
 void list_remove_by_name(t_lst *lst, const char *name)
 {
 	t_link *link;
@@ -227,7 +210,7 @@ void _link_free(t_link *link)
 
 // CLONE
 
-t_lst *lst_clone(t_lst *lst, t_data_type type)
+t_lst *list_clone(t_lst *lst, t_data_type type)
 {
 	if(lst)
 	{
@@ -263,7 +246,6 @@ t_lst *lst_clone(t_lst *lst, t_data_type type)
 		return NULL;
 	}
 }
-
 
 
 // free links && list 
@@ -355,31 +337,6 @@ void list_remove_by_ptr(t_lst *lst,void *ptr)
 	}
 }
 
-void lst_remove_by_ptr(t_lst *lst, void *ptr)
-{
-	t_link *l;
-	t_link *link=NULL;
-
-	for(l=lst->first;l;l=l->next)
-	{
-		if(l->data==ptr)
-		{
-			link=l;
-			break;
-		}
-	}
-
-	if(link)
-	{
-		lst_link_remove(lst,link);
-		link_free(link);
-	}
-	else
-	{
-		printf("[ERROR lst_remove_by_ptr] Can't find link\n");
-	}
-}
-
 void list_remove_by_id(t_lst *lst, int item_id)
 {
 	t_context *C = ctx_get();
@@ -411,7 +368,7 @@ void list_remove_by_id(t_lst *lst, int item_id)
 
 // REBIND
 
-t_lst *lst_rebind(t_scene *sc,void *ptr)
+t_lst *list_rebind(t_scene *sc,void *ptr)
 {
 	t_lst *lst=(t_lst *)ptr;
 

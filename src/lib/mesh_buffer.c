@@ -11,10 +11,12 @@
 #include "util.h"
 #include "mesh.h"
 #include "list.h"
+#include "vlst.h"
 #include "context.h"
 #include "block.h"
 #include "ctx.h"
 #include "ui.h"
+#include "scene.h"
 
 // ADD GEOMETRY
 

@@ -198,8 +198,8 @@ t_set *set_clone(t_set *set)
 	if(set)
 	{
 		t_set *clone = set_new(set->id.name);
-		clone->blocks = lst_clone(set->blocks, dt_block);
-		clone->rhizomes = lst_clone(set->rhizomes, dt_rhizome);
+		clone->blocks = list_clone(set->blocks, dt_block);
+		clone->rhizomes = list_clone(set->rhizomes, dt_rhizome);
 
 		return clone;
 	}

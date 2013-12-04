@@ -27,6 +27,7 @@
 
 #include "mesh.h"
 #include "geometry.h"
+#include "vlst.h"
 
 int PLUG_DEBUG;
 

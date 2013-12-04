@@ -22,6 +22,7 @@
 #include "ui.h"
 #include "block.h"
 #include "memory.h"
+#include "vlst.h"
 
 
 void *vlst_get_pointer(t_vlst *vlst, int indice)

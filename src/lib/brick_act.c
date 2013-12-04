@@ -20,6 +20,7 @@
 #include "data.h"
 #include "binding.h"
 #include "list.h"
+#include "vlst.h"
 #include "ui.h"
 #include "block.h"
 #include "brick.h"

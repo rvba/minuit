@@ -61,7 +61,6 @@ void 		lst_cleanup(t_lst *lst);
 void 		lst_push_back(t_lst *lst,t_link *link);
 
 
-void 		lst_remove_by_ptr(t_lst *lst,void *ptr);
 void 		lst_remove_by_ptr(t_lst *lst, void *ptr);
 void 		list_remove_by_id(t_lst *lst, int id);
 void 		link_free(t_link *link);
@@ -73,5 +72,6 @@ int 		lst_sort_bubble(struct Lst *lst);
 int 		lst_sort_quick(struct Lst *lst);
 
 void 		lst_link_insert(struct Lst *lst, struct Link *link, struct Link *prev);
+t_link *	lst_get_by_id(t_lst *lst,int item_id);
 
 #endif

@@ -12,6 +12,7 @@
 #include "context.h"
 #include "scene.h"
 #include "list.h"
+#include "vlst.h"
 #include "block.h"
 #include "brick.h"
 #include "ctx.h"
@@ -19,6 +20,8 @@
 #include "list.h"
 #include "ui.h"
 #include "memory.h"
+#include "material.h"
+#include "texture.h"
 
 
 void mesh_add_brick_vertex(t_context *C,t_mesh *mesh);

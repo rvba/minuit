@@ -17,6 +17,7 @@
 #include "term.h"
 #include "vector.h"
 #include "list.h"
+#include "vlst.h"
 #include "ui.h"
 #include "data.h"
 #include "memory.h"

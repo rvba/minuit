@@ -14,6 +14,7 @@
 #include "scene.h"
 #include "light.h"
 #include "list.h"
+#include "vlst.h"
 #include "object.h"
 
 #include "context.h"
@@ -24,6 +25,9 @@
 #include "sketch.h"
 #include "ui.h"
 #include "memory.h"
+#include "node.h"
+#include "material.h"
+#include "texture.h"
 
 t_draw *DRAW;
 
