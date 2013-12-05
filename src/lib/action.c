@@ -25,6 +25,8 @@ t_action *action_new(const char *name)
 {
 	t_action *action = (t_action *)mem_malloc(sizeof(t_action));
 	
+	id_init( &action->id, name);
+	
 	action->act = NULL;
 	action->args = NULL;
 

@@ -40,7 +40,6 @@ char name_trigger[] = "trigger";
 char name_operator[] = "operator";
 char name_vector[] = "vector";
 char name_viewport[] = "viewport";
-
 char name_brick[] = "brick";
 char name_block[] = "block";
 char name_rhizome[] = "rhizome";
@@ -50,6 +49,14 @@ char name_geo_point[] = "point";
 char name_geo_edge[] = "edge";
 char name_geo_array[] = "array";
 char name_geo[] = "geometry";
+char name_dict[] = "dict";
+char name_symbol[] = "symbol";
+char name_var[] = "var";
+char name_list[] = "list";
+char name_link[] = "link";
+char name_data[] = "data";
+char name_screen[] = "screen";
+char name_option[] = "option";
 
 void cls_data_init(t_data *data)
 {
@@ -93,7 +100,15 @@ char *data_name_get(t_data_type type)
 		case dt_geo_edge:  return name_geo_edge; break;
 		case dt_geo_array:  return name_geo_array; break;
 		case dt_geo:  return name_geo; break;
-		default: return name_default; break;
+		case dt_dict: return name_dict; break;
+		case dt_symbol: return name_symbol; break;
+		case dt_var: return name_var; break;
+		case dt_list: return name_list; break;
+		case dt_link: return name_link; break;
+		case dt_data: return name_data; break;
+		case dt_screen: return name_screen; break;
+		case dt_option: return name_option; break;
+		default: printf("data_name_get type not implemented %d\n", type);return name_default; break;
 	}
 }
 

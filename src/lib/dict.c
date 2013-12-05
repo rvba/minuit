@@ -143,7 +143,7 @@ t_symbol *symbol_new(const char *name)
 {
 	t_symbol *symbol = (t_symbol *)mem_malloc(sizeof(t_symbol));
 
-	symbol->id=0;
+	id_init( &symbol->id, name);
 	symbol->id_chunk=0;
 	symbol->users=0;
 	set_name(symbol->name,name);
@@ -160,7 +160,6 @@ t_dict *dict_new(const char *name)
 	t_dict *dict = (t_dict *)mem_malloc(sizeof(t_dict));
 
 	id_init(&dict->id, name);
-
 
 	dict->symbols=NULL;
 	dict->count = 0;

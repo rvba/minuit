@@ -20,7 +20,7 @@ struct Node;
 
 typedef struct Symbol
 {
-	int id;
+	t_id id;
 	int id_chunk;
 	short users;
 	char name[_NAME_];

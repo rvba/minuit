@@ -333,13 +333,13 @@ void scene_mem_remove(t_scene *sc,t_node *node)
 	mem_remove(node->id_chunk_self);
 }
 
-void scene_node_free(t_scene *sc,t_node *node)
+void scene_node_free( t_scene *sc, t_node *node)
 {
 	if( sc->debug_all) printf("scene_node_free %s \n",data_name_get(node->cls->type));
 
 	// Remove from Lst
-	list_remove_node(node->cls->lst,node);
-	list_remove_node(sc->nodes,node);
+	lst_remove_by_id( node->cls->lst, node->id);
+	lst_remove_by_id( sc->nodes, node->id);
 
 	// Remove from Memory
 	scene_mem_remove(sc,node);
@@ -418,8 +418,6 @@ t_node *scene_struct_get(t_scene *sc,void *ptr)
 
 void scene_struct_delete(t_scene *sc,void *ptr)
 {
-
-
 	//XXX var has no ID
 	t_id *id = (t_id *) ptr;
 

@@ -76,6 +76,13 @@ extern char name_set[];
 extern char name_geo_point[];
 extern char name_geo_edge[];
 extern char name_geo[];
+extern char name_dict[];
+extern char name_symbol[];
+extern char name_var[];
+extern char name_link[];
+extern char name_data[];
+extern char name_screen[];
+extern char name_option[];
 
 char *		data_name_get(t_data_type);
 void		print_type(t_data_type type);

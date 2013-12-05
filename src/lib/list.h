@@ -40,5 +40,6 @@ struct Lst *	list_clone(struct Lst *lst, t_data_type type);
 void 		list_delete( struct Lst *lst);
 struct Lst *	list_make( t_data_type type,  const char *name);
 void 		cls_list_delete( void *data);
+void 		list_link_remove( struct Lst *lst, struct Link *link);
 
 #endif

@@ -768,8 +768,6 @@ void brick_rhizome_setup(t_brick *brick)
 
 void exe_remove_brick(t_dict *args)
 {
-	t_context *C = ctx_get();
-
 	// remove brick
 
 	t_brick *_brick = dict_pop_data(args,"brick");
@@ -791,9 +789,8 @@ void exe_remove_brick(t_dict *args)
 		if(brick_delete(brick,remove_connected))
 		{
 			// remove link from bricks
-			lst_link_remove(bricks,last);
+			list_link_remove(bricks,last);
 			brick_rhizome_setup(brick);
-			scene_struct_delete(C->scene,last);
 			block->tot_bricks--;
 			block->state.update_geometry=1;
 		}
@@ -872,6 +869,8 @@ void exe_add_brick_child_parent(t_dict *args)
 
 void add_exe_add_brick(t_brick *brick,t_brick *brick_target,void (* f)(t_dict *))
 {
+	t_scene *sc = scene_get();
+	scene_store( sc, 1);
 	t_action *action = action_new("action");
 
 	action->act = f;
@@ -883,10 +882,14 @@ void add_exe_add_brick(t_brick *brick,t_brick *brick_target,void (* f)(t_dict *)
 	dict_symbol_add(action->args,"target",dt_null,brick_target);
 
 	exe_add_action(action);
+
+	scene_store( sc, 0);
 }
 
 void add_exe_remove_brick(t_brick *brick)
 {
+	t_scene *sc = scene_get();
+	scene_store( sc, 1);
 	t_action *action = action_new("action");
 
 	action->act = exe_remove_brick;
@@ -897,6 +900,8 @@ void add_exe_remove_brick(t_brick *brick)
 	dict_symbol_add(action->args,"brick",dt_null,brick);
 
 	exe_add_action(action);
+
+	scene_store( sc, 00);
 }
 
 // ADD BRICKS

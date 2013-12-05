@@ -327,7 +327,7 @@ void rhizome_get_roots(t_rhizome *rhizome)
 	t_lst *roots = rhizome->roots;
 
 	// Cleanup Lst
-	lst_cleanup(roots);
+	list_cleanup(roots);
 
 	// For Lst
 	for(l=lst->first;l;l=l->next)

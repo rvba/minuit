@@ -107,7 +107,6 @@ void 		block_dash_add(t_block *block, struct Dot *dot_x, struct Dot *dot_y);
 struct Brick *	block_brick_get_by_order(t_block *block, int order);
 void 		block_set_rhizome_order(t_block *block, int order);
 int 		block_is_connected(const char *gate, t_block *block);
-struct Lst 		*block_get_connections(const char *gate,t_block *block);
 t_block *	block_copy(t_block *block);
 t_block *	block_clone(t_block *block);
 t_block *	block_dupli(t_block *block);

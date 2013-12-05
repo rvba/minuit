@@ -201,61 +201,6 @@ int block_is_connected(const char *gate, t_block *block)
 
 }
 
-t_lst *block_get_connections(const char *gate,t_block *block)
-{
-	t_link *link;
-	t_brick *brick;
-	t_brick *brick_dst;
-	t_block *block_dst;
-	t_plug *plug_dst;
-	t_plug *plug;
-	int plug_in;
-	int follow;
-	t_lst *lst = NULL;
-
-	if(is(gate,"in")) plug_in = 1;
-	else plug_in = 0;
-
-	if(block->bricks->first)
-	{
-		for(link = block->bricks->first; link; link = link->next)
-		{
-			brick = link->data;
-
-			if(plug_in)
-			{
-				plug = &brick->plug_in;
-				follow = plug->state.follow_in;
-			}
-			else
-			{
-				plug = &brick->plug_out;
-				follow = plug->state.follow_out;
-			}
-
-			if(plug->state.is_connected && follow)
-			{
-				if(!lst) lst = lst_new("connections");
-
-				if(plug_in) plug_dst = plug->src;
-				else plug_dst = plug->dst;
-
-				brick_dst = plug_dst->brick;
-
-				block_dst = brick_dst->block;
-
-				if(!block_is_in_lst(lst,block_dst))
-				{
-					lst_add(lst,block_dst,"block");
-				}
-			}
-
-		}
-	}
-
-	return lst;
-}
-
 void _add_block(t_context *C,t_block *block)
 {
 	// get list

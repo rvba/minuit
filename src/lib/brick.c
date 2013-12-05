@@ -174,8 +174,6 @@ void plug_remove_child(t_plug *plug)
 
 void plug_child_remove_parent(t_plug *plug)
 {
-	t_context *C = ctx_get();
-
 	if(plug->child)
 	{
 		t_plug *plug_child = plug->child;
@@ -198,8 +196,7 @@ void plug_child_remove_parent(t_plug *plug)
 
 		if(l)
 		{
-			lst_link_remove(lst,l);
-			scene_struct_delete(C->scene,l);
+			list_link_remove(lst,l);
 		}
 		else
 		{

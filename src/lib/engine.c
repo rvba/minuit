@@ -108,8 +108,8 @@ void engine_cleanup(t_engine *engine)
 
 			if(process->done)
 			{
-				list_remove_by_name(engine->processes, process->id.name);
-				list_remove_by_name(engine->garbage, process->id.name);
+				lst_remove_by_name(engine->processes, process->id.name);
+				lst_remove_by_name(engine->garbage, process->id.name);
 				process_free(process);
 
 				do_loop = 1;

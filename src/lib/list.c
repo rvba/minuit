@@ -79,7 +79,7 @@ int list_remove_node(t_lst *lst,t_node *node)
 			//match node
 			if(node->id==n->id)
 			{
-				lst_link_remove(lst,link); 
+				list_link_remove(lst,link); 
 				return 1;
 			}
 		}
@@ -147,7 +147,7 @@ void list_remove_by_name(t_lst *lst, const char *name)
 		id = (t_id *) link->data;
 		if(is (id->name, name))
 		{
-			lst_link_remove(lst,link);
+			list_link_remove(lst,link);
 		}
 	}
 }
@@ -259,11 +259,15 @@ void list_cleanup(t_lst *lst)
 
 }
 
+void list_link_remove( t_lst *lst, t_link *link)
+{
+	t_scene *sc = scene_get();
+	lst_link_remove( lst, link);
+	scene_struct_delete( sc, link);
+}
+
 void list_remove_by_ptr(t_lst *lst,void *ptr)
 {
-	t_context *C=ctx_get();
-	t_scene *sc=C->scene;
-
 	t_link *l;
 	t_link *link=NULL;
 
@@ -278,8 +282,7 @@ void list_remove_by_ptr(t_lst *lst,void *ptr)
 
 	if(link)
 	{
-		lst_link_remove(lst,link);
-		scene_struct_delete(sc,link);
+		list_link_remove(lst,link);
 	}
 	else
 	{
@@ -289,8 +292,6 @@ void list_remove_by_ptr(t_lst *lst,void *ptr)
 
 void list_remove_by_id(t_lst *lst, int item_id)
 {
-	t_context *C = ctx_get();
-	t_scene *sc = C->scene;
 	t_link *link = NULL;
 	t_link *l;
 	t_id *id;
@@ -307,8 +308,7 @@ void list_remove_by_id(t_lst *lst, int item_id)
 
 	if(link)
 	{
-		lst_link_remove(lst,link);
-		scene_struct_delete(sc,link);
+		list_link_remove(lst,link);
 	}
 	else
 	{
