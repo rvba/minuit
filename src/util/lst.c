@@ -250,6 +250,21 @@ t_link *lst_link_find_by_name(t_lst *lst, const char *name)
 	return NULL;
 }
 
+t_link *lst_link_find_by_ptr(t_lst *lst, void *ptr)
+{
+	t_link *link;
+
+	for(link = lst->first; link; link=link->next)
+	{
+		if( link->data == ptr)
+		{
+			return link;
+		}
+	}
+
+	return NULL;
+}
+
 
 void lst_remove_by_name(t_lst *lst, const char *name)
 {
@@ -486,6 +501,16 @@ void lst_link_delete_by_name(t_lst *lst, const char *name)
 		lst_link_delete(lst, link);
 	else
 		printf("[ERROR lst_link_delete_by_name] Can't find link %s\n",name);
+}
+
+void lst_link_delete_by_ptr(t_lst *lst, void *ptr)
+{
+	t_link *link = lst_link_find_by_ptr(lst, ptr);
+
+	if(link)
+		lst_link_delete(lst, link);
+	else
+		printf("[ERROR lst_link_delete_by_ptr] Can't find link\n");
 }
 
 // PUSH BACK 

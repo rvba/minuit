@@ -46,6 +46,7 @@ typedef struct Lst
 
 t_link *	lst_link_find_by_name(t_lst *lst, const char *name);
 void 		lst_link_delete_by_name(t_lst *lst, const char *name);
+void 		lst_link_delete_by_ptr( t_lst *lst, void *ptr);
 
 void 		lst_show(t_lst *lst);
 t_link *	lst_add(t_lst *lst,void *data,const char *name);
@@ -62,7 +63,6 @@ void 		lst_push_back(t_lst *lst,t_link *link);
 
 int 		lst_remove_by_id(t_lst *lst,int id);
 void 		lst_remove_by_name(t_lst *lst, const char *name);
-void 		lst_remove_by_ptr(t_lst *lst, void *ptr);
 void 		list_remove_by_id(t_lst *lst, int id);
 void 		link_free(t_link *link);
 
