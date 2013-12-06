@@ -83,6 +83,10 @@ extern char name_link[];
 extern char name_data[];
 extern char name_screen[];
 extern char name_option[];
+extern char name_binding[];
+extern char name_material[];
+extern char name_light[];
+
 
 char *		data_name_get(t_data_type);
 void		print_type(t_data_type type);

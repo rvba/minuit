@@ -57,6 +57,9 @@ char name_link[] = "link";
 char name_data[] = "data";
 char name_screen[] = "screen";
 char name_option[] = "option";
+char name_binding[] = "binding";
+char name_light[] = "light";
+char name_material[] = "material";
 
 void cls_data_init(t_data *data)
 {
@@ -108,6 +111,9 @@ char *data_name_get(t_data_type type)
 		case dt_data: return name_data; break;
 		case dt_screen: return name_screen; break;
 		case dt_option: return name_option; break;
+		case dt_binding: return name_binding; break;
+		case dt_material: return name_material; break;
+		case dt_light: return name_light; break;
 		default: printf("data_name_get type not implemented %d\n", type);return name_default; break;
 	}
 }
