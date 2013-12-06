@@ -181,7 +181,6 @@ void keymap_command(unsigned char key)
 		case 'm': C->draw->with_draw_pass=0; break;
 		case 'x': op_switch_color(C);break;
 		case 't': switch_txt(C);break;
-		case 'l': scene_log(C->scene);break;
 		case 'n': C->ui->step = 1; break;
 		case 'r':
 			if(C->app->keyboard->alt)

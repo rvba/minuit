@@ -48,61 +48,6 @@ void scene_store(t_scene *scene, int val)
 	if( scene->debug_all) printf("scene_store store=%d\n", scene->store);
 }
 
-// LOG
-
-void scene_log_loop_var(t_lst *lst)
-{
-	t_link *l;
-	t_node *n;
-
-	ulog((LOG_SCENE_NODES, "lst:%s\n", lst->id.name));
-	for(l=lst->first;l;l=l->next)
-	{
-		n=l->data;
-		ulog((LOG_SCENE_NODES,"node id:%d cls:%s\n",n->id,data_name_get(n->type)));
-	}
-}
-
-void scene_log_loop(t_lst *lst)
-{
-	t_link *l;
-	t_node *n;
-	t_id *id;
-
-	ulog((LOG_SCENE_NODES, "lst:%s\n", lst->id.name));
-	for(l=lst->first;l;l=l->next)
-	{
-		n=l->data;
-		id = (t_id *) n->data;
-		ulog((LOG_SCENE_NODES,"node id:%d\tcls:%s\tname:%s\n",n->id,data_name_get(n->type),id->name));
-	}
-}
-
-void scene_log(t_scene *sc)
-{
-	//scene_log_loop(sc->nodes);
-	/*
-	scene_log_loop(sc->bricks);
-	scene_log_loop(sc->blocks);
-	scene_log_loop(sc->textures);
-	scene_log_loop(sc->materials);
-	scene_log_loop(sc->files);
-	scene_log_loop(sc->meshes);
-	scene_log_loop(sc->cameras);
-	scene_log_loop(sc->lights);
-	scene_log_loop(sc->objects);
-	scene_log_loop(sc->screens);
-	scene_log_loop(sc->lists);
-	scene_log_loop(sc->images);
-	scene_log_loop(sc->vlst);
-	scene_log_loop(sc->dicts);
-	scene_log_loop(sc->symbols);
-	*/
-
-	scene_log_loop(sc->datas);
-	scene_log_loop_var(sc->vars);
-}
-
 // get lst
 
 t_lst *scene_lst_get(t_scene *sc,const char *type)
