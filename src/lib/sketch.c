@@ -186,8 +186,8 @@ void skt_line_rectangle(float *p,float w,float h,int line_width,float *color)
 	float c[3];
 	float d[3];
 
-	float *vw = vnew(w,0,0);
-	float *vh = vnew(0,h,0);
+	float vw[] = {w,0,0};
+	float vh[] = {0,h,0};
 
 	vcp(a,p);
 	vadd(b,a,vw);
@@ -236,16 +236,13 @@ void skt_msh_rectangle(float *p,float w,float h,float *color)
 	float c[3];
 	float d[3];
 
-	float *vw = vnew(w,0,0);
-	float *vh = vnew(0,h,0);
+	float vw[] = {w,0,0};
+	float vh[] = {0,h,0};
 
 	vcp(a,p);
 	vadd(b,a,vw);
 	vadd(c,b,vh);
 	vadd(d,a,vh);
-
-	mem_free(vw , sizeof( float) *3);
-	mem_free(vh , sizeof( float) *3);
 
 	glColor3f(color[0],color[1],color[2]);
 
