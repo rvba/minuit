@@ -9,7 +9,6 @@
 
 #include "util.h"
  
-
 // SWAP
 void lst_link_swap(t_lst *lst, t_link *n1, t_link *n2)
 {
@@ -23,8 +22,6 @@ void lst_link_swap(t_lst *lst, t_link *n1, t_link *n2)
 		lst_link_insert(lst, tmp, n2);
 	}
 }
-
-
 
 t_link *lst_link_get(t_lst *lst, int pos)
 {
@@ -49,7 +46,6 @@ t_link *lst_link_get(t_lst *lst, int pos)
 
 // SORT
 
- 
 int get_pivot(int i,int j )
 {
     return((i+j) /2);
@@ -191,7 +187,6 @@ void lst_swap_simple(t_lst *lst, t_link *link)
 	}
 }
 
-
 int lst_sort_bubble(t_lst *lst)
 {
 	int swap=1;
@@ -225,7 +220,8 @@ int lst_sort_quick(t_lst *lst)
 	return 1;
 }
 
-// merge two lists
+// MERGE
+
 void lst_add_lst(t_lst *dst, t_lst *src)
 {
 	t_link *link;
@@ -284,35 +280,8 @@ t_link *lst_link_find_by_ptr(t_lst *lst, void *ptr)
 	return NULL;
 }
 
+// COPY
 
-
-// FIND NODE BY ID
-
-t_link *lst_get_by_id(t_lst *lst,int item_id)
-{
-	t_link *l;
-	t_id *id;
-
-	if(lst->first)
-	{
-		for(l=lst->first;l;l=l->next)
-		{
-			id = (t_id *) l->data;
-			if(id->id == item_id)
-			{
-				return l;
-			}
-		}
-
-		return NULL;
-	}
-	else
-	{
-		return NULL;
-	}
-}
-
-// copy a list
 t_lst *lst_copy(t_lst *lst)
 {
 	if(lst->first)
@@ -332,52 +301,6 @@ t_lst *lst_copy(t_lst *lst)
 		return NULL;
 	}
 }
-
-// DELETE
-
-// remove and free all links from a list
-void lst_delete_all(t_lst *lst)
-{
-	t_link *link=lst->first;
-	t_link *tmp;
-
-	while(link)
-	{
-		tmp=link;
-		link=NULL;
-		lst_link_delete(lst,tmp);
-		lst_delete_all(lst);
-	}
-}
-
-// remove all links
-void lst_remove_all(t_lst *lst)
-{
-	t_link *link;
-
-	if(lst->count>0)
-	{
-		for(link=lst->first;link;link=link->next)
-		{
-			lst_link_remove(lst,link);
-		}
-	}
-}
-
-// remove and free all links
-void lst_cleanup(t_lst *lst)
-{
-	t_link *link=lst->first;
-	t_link *tmp=NULL;
-	while(link)
-	{
-		tmp=link->next;
-		lst_link_remove(lst,link);
-		link_free(link);
-		link=tmp;
-	}
-}
-
 
 // REMOVE DOUBLE
 
@@ -422,8 +345,8 @@ void lst_remove_doubles(t_lst *lst)
 	}
 }
 
-// REMOVE
-// remove a link from the list
+// LINK DELETE 
+
 void lst_link_remove(t_lst *lst,t_link *link)
 {
 	if(link)
@@ -467,27 +390,10 @@ void lst_link_remove(t_lst *lst,t_link *link)
 
 }
 
-// remove a link from the list and free it
 void lst_link_delete(t_lst *lst,t_link *link)
 {
 	lst_link_remove(lst,link);
 	link_free(link);
-}
-
-void lst_remove_by_name(t_lst *lst, const char *name)
-{
-	t_link *link;
-	t_id *id;
-
-	for(link = lst->first; link; link = link->next)
-	{
-		id = (t_id *) link->data;
-		if(is (id->name, name))
-		{
-			lst_link_remove(lst,link);
-			link_free( link);
-		}
-	}
 }
 
 void lst_link_delete_by_id( t_lst *lst, int id)
@@ -520,7 +426,21 @@ void lst_link_delete_by_ptr(t_lst *lst, void *ptr)
 		printf("[ERROR lst_link_delete_by_ptr] Can't find link\n");
 }
 
+void lst_cleanup(t_lst *lst)
+{
+	t_link *link=lst->first;
+	t_link *tmp=NULL;
+	while(link)
+	{
+		tmp=link->next;
+		lst_link_remove(lst,link);
+		link_free(link);
+		link=tmp;
+	}
+}
+
 // PUSH BACK 
+
 void lst_push_back(t_lst *lst,t_link *link)
 {
 	// next link
@@ -541,6 +461,7 @@ void lst_push_back(t_lst *lst,t_link *link)
 }
 
 // INSERT
+
 void lst_link_insert(t_lst *lst, t_link *prev, t_link *link)
 {
 	if(link)
@@ -583,8 +504,8 @@ void lst_link_insert(t_lst *lst, t_link *prev, t_link *link)
 	}
 }
 
-
 // ADD
+
 t_link *lst_add(t_lst *lst,void *data,const char *name)
 {
 	t_link *link=link_new(name);
@@ -644,7 +565,6 @@ void lst_free(t_lst *lst)
 	mem_free( lst, sizeof( t_lst));
 }
 
-
 // NEW
 
 t_link *link_new(const char *name)
@@ -668,15 +588,6 @@ t_lst *lst_new(const char *name)
 	t_lst *lst = (t_lst *)mem_malloc(sizeof(t_lst));
 
 	id_init(&lst->id, name);
-
-	if(strlen(name)==0) 
-	{
-		set_name(lst->id.name, "no_name");
-	}
-	else
-	{
-		set_name(lst->id.name, name);
-	}
 
 	lst->count=0;
 	lst->first=NULL;
