@@ -338,8 +338,8 @@ void scene_node_free( t_scene *sc, t_node *node)
 	if( sc->debug_all) printf("scene_node_free %s \n",data_name_get(node->cls->type));
 
 	// Remove from Lst
-	lst_remove_by_id( node->cls->lst, node->id);
-	lst_remove_by_id( sc->nodes, node->id);
+	lst_link_delete_by_id( node->cls->lst, node->id);
+	lst_link_delete_by_id( sc->nodes, node->id);
 
 	// Remove from Memory
 	scene_mem_remove(sc,node);
@@ -366,7 +366,6 @@ void scene_cleanup(t_scene *sc)
 		{
 			t_node *node = link->data;
 			scene_node_free(sc,node);
-			list_remove_node(sc->stack,node);
 		}
 	}
 

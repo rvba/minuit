@@ -235,13 +235,32 @@ void lst_add_lst(t_lst *dst, t_lst *src)
 	}
 }
 
+// FIND
+
+t_link *lst_link_find_by_id( t_lst *lst, int id)
+{
+	t_link *link;
+
+	for(link = lst->first; link; link=link->next)
+	{
+		t_id *_id = (t_id *) link->data;
+		if( _id->id == id)
+		{
+			return link;
+		}
+	}
+
+	return NULL;
+}
+
 t_link *lst_link_find_by_name(t_lst *lst, const char *name)
 {
 	t_link *link;
 
 	for(link = lst->first; link; link=link->next)
 	{
-		if(is(link->id.name, name))
+		t_id *id = (t_id *) link->data;
+		if( is( id->name, name))
 		{
 			return link;
 		}
@@ -266,21 +285,6 @@ t_link *lst_link_find_by_ptr(t_lst *lst, void *ptr)
 }
 
 
-void lst_remove_by_name(t_lst *lst, const char *name)
-{
-	t_link *link;
-	t_id *id;
-
-	for(link = lst->first; link; link = link->next)
-	{
-		id = (t_id *) link->data;
-		if(is (id->name, name))
-		{
-			lst_link_remove(lst,link);
-			link_free( link);
-		}
-	}
-}
 
 // FIND NODE BY ID
 
@@ -329,6 +333,7 @@ t_lst *lst_copy(t_lst *lst)
 	}
 }
 
+// DELETE
 
 // remove and free all links from a list
 void lst_delete_all(t_lst *lst)
@@ -469,28 +474,30 @@ void lst_link_delete(t_lst *lst,t_link *link)
 	link_free(link);
 }
 
-int lst_remove_by_id(t_lst *lst,int id)
+void lst_remove_by_name(t_lst *lst, const char *name)
 {
-	if( lst)
-	{
-		t_link *link=lst_get_by_id(lst,id);
+	t_link *link;
+	t_id *id;
 
-		if(link)
-		{
-			lst_link_delete(lst,link);
-			return 1;
-		}
-		else
-		{
-			printf("[ERROR lst_remove_by_id] Can't get link\n");
-			return 0;
-		}
-	}
-	else
+	for(link = lst->first; link; link = link->next)
 	{
-		printf("[ERROR lst_remove_by_id] No List\n");
-		return 0;
+		id = (t_id *) link->data;
+		if(is (id->name, name))
+		{
+			lst_link_remove(lst,link);
+			link_free( link);
+		}
 	}
+}
+
+void lst_link_delete_by_id( t_lst *lst, int id)
+{
+	t_link *link = lst_link_find_by_id( lst, id);
+
+	if(link)
+		lst_link_delete(lst, link);
+	else
+		printf("[ERROR lst_link_delete_by_name] Can't find link %d\n", id);
 }
 
 void lst_link_delete_by_name(t_lst *lst, const char *name)

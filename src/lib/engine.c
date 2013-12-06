@@ -108,8 +108,8 @@ void engine_cleanup(t_engine *engine)
 
 			if(process->done)
 			{
-				lst_remove_by_name(engine->processes, process->id.name);
-				lst_remove_by_name(engine->garbage, process->id.name);
+				lst_link_delete_by_id(engine->processes, process->id.id);
+				lst_link_delete_by_id(engine->garbage, process->id.id);
 				process_free(process);
 
 				do_loop = 1;
@@ -138,6 +138,7 @@ void engine_process_add(t_engine *engine, t_process *process)
 	engine->process_count++;
 	engine->process_id++;
 	process->engine_id = engine->process_id;
+	process->id.id = engine->process_id;
 }
 
 // NEW

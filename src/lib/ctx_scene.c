@@ -125,7 +125,7 @@ void ctx_scene_clear_selections(t_context *C)
 		ctx_scene_selection(C, node, 0);
 
 	}
-	lst_delete_all(C->scene->selections);
+	lst_cleanup( C->scene->selections);
 }
 
 int node_hover_object(t_context *C, t_node *node)
@@ -274,8 +274,6 @@ void ctx_scene(t_context *C)
 					ctx_scene_update_lst(C,C->scene->objects);
 				}
 			}
-
-			//ctx_scene_update_lst(C,C->scene->objects);
 		}
 	}
 

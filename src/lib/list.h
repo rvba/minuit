@@ -30,6 +30,7 @@ struct Node *	list_find_node_by_name(struct Lst *lst,const char *name);
 void 		list_remove_by_ptr(struct Lst *lst,void *ptr);
 void 		list_free(struct Lst *lst);
 void 		_link_free(struct Link *link);
+void 		list_remove_by_id( struct Lst *lst, int item_id);
 void 		list_remove_by_name(struct Lst *lst, const char *name);
 void 		lst_show_generic(struct Lst *lst);
 void 		list_cleanup(struct Lst *lst);
