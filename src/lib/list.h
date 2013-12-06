@@ -26,7 +26,9 @@ struct Link * 	list_add_global(struct Lst *lst,void *data);
 struct Lst *	list_rebind(struct Scene *sc,void *ptr);
 struct Link *	link_rebind(struct Scene *sc,void *ptr);
 int 		list_remove_node(struct Lst *lst,struct Node *node);
+
 struct Node *	list_find_node_by_name(struct Lst *lst,const char *name);
+struct Node *	list_find_node_by_id( struct Lst *lst, int id);
 void 		list_remove_by_ptr(struct Lst *lst,void *ptr);
 void 		list_free(struct Lst *lst);
 void 		_link_free(struct Link *link);

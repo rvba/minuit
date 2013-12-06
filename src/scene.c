@@ -117,6 +117,7 @@ t_node *scene_get_var(t_scene *sc,void *ptr)
 	return NULL;
 }
 
+/*
 t_node *scene_node_get_by_id_global(t_scene *sc,int id)
 {
 	t_link *l;
@@ -143,6 +144,12 @@ t_node *scene_node_get_by_id_global(t_scene *sc,int id)
 		printf("[ERROR scene_node_get_by_id_global] Node not found\n");
 		return NULL;
 	}
+}
+*/
+
+t_node *scene_find_node_by_id( t_scene *sc, int id)
+{
+	return( list_find_node_by_id( sc->nodes, id));
 }
 
 

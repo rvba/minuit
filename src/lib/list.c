@@ -121,6 +121,24 @@ t_node *list_find_node_by_name(t_lst *lst,const char *name)
 	}
 }
 
+t_node *list_find_node_by_id( t_lst *lst, int id)
+{
+	t_link *l;
+	t_node *node;
+
+	for(l=lst->first;l;l=l->next)
+	{
+		node = l->data;
+		if( node->id == id)
+		{
+			return node;
+		}
+	}
+
+	printf("[ERROR list_find_node_by_id] Node not found\n");
+	return NULL;
+}
+
 t_link *list_add_data( t_lst *lst, void *data)
 {
 	t_context *C=ctx_get();
