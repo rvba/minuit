@@ -1020,6 +1020,8 @@ t_node *node_new(t_data_type type)
 
 	node->data=NULL;
 	node->type=type;
+	node->store = 0;
+	node->size = 0;
 
 	return node;
 }

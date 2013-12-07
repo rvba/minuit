@@ -28,6 +28,7 @@ void load_last(struct Context *C);
 
 // CTX_SAVE
 
+void save_to_file( struct Context *C);
 void save_file(struct Context *C);
 void save_file_increment(struct Context *C);
 

@@ -336,22 +336,10 @@ void load_store(t_scene *sc)
 				if(var)
 				{
 					void *var_data=var->data;
-
-					// store
-					n->id_chunk_self=mem_store(ct_node,n->type,sizeof(t_node),1,n);
-					n->id_chunk=mem_store(ct_data,n->type,n->cls->size,1,n->data);
 					n->id_ptr=n->data;
-
 					id->id_chunk = n->id_chunk;
-
-					// store
-					var->id_chunk_self=mem_store(ct_node,dt_var,sizeof(t_node),1,var);
-					var->id_chunk=mem_store(ct_data,dt_var,d->size,1,var_data);
 					var->id_ptr=var_data;
-
 					d->pointer=var_data;
-
-
 				}
 				else
 				{
@@ -365,8 +353,6 @@ void load_store(t_scene *sc)
 				t_node *node=find_by_id(sc,d->id_node);
 				d->pointer=node;
 
-				n->id_chunk_self=mem_store(ct_node,n->type,sizeof(t_node),1,n);
-				n->id_chunk=mem_store(ct_data,n->type,n->cls->size,1,n->data);
 				n->id_ptr=n->data;
 
 				id->id_chunk = n->id_chunk;
@@ -384,9 +370,6 @@ void load_store(t_scene *sc)
 				d->ref=data;
 				d->pointer=p;
 
-				// store
-				n->id_chunk_self=mem_store(ct_node,n->type,sizeof(t_node),1,n);
-				n->id_chunk=mem_store(ct_data,n->type,n->cls->size,1,n->data);
 				n->id_ptr=n->data;
 
 				id->id_chunk = n->id_chunk;
@@ -420,11 +403,7 @@ void load_store(t_scene *sc)
 			// Regular Struct
 			else
 			{
-				// store
-				n->id_chunk_self=mem_store(ct_node,n->type,sizeof(t_node),1,n);
-				n->id_chunk=mem_store(ct_data,n->type,n->cls->size,1,n->data);
 				n->id_ptr=n->data;
-
 				id->id_chunk = n->id_chunk;
 			}
 		}

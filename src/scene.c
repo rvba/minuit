@@ -263,9 +263,6 @@ void scene_node_free( t_scene *sc, t_node *node)
 	lst_link_delete_by_id( node->cls->lst, node->id);
 	lst_link_delete_by_id( sc->nodes, node->id);
 
-	// Remove from Memory
-	scene_mem_remove(sc,node);
-
 	// Free Struct
 	node->cls->free(sc,node);
 
@@ -431,9 +428,6 @@ t_node *scene_add_node(t_scene *sc,t_data_type type,const char *name)
 	// build data (allocate struct data (!var), add node->id=g->id (!var))
 	node->cls->build(node,name);
 
-	//[TODO]
-	//node->cls->init(node);
-
 	// add to local list
 	if(node->cls->lst) lst_add(node->cls->lst,node,name); 
 
@@ -441,30 +435,7 @@ t_node *scene_add_node(t_scene *sc,t_data_type type,const char *name)
 	lst_add(sc->nodes,node,name);
 
 	// store data
-	if(sc->store)
-	{
-		if(type==dt_var)
-		{
-			// stored by scene_add_data_var
-		}
-		else
-		{
-			// store node && get chunk indice
-			node->id_chunk_self=mem_store(ct_node,type,sizeof(t_node),1,node);
-
-			// store data && get chunk indice
-			node->id_chunk=mem_store(ct_data,node->type,node->cls->size,1,node->data);
-
-			// copy chunk indice to generic
-			t_id *id = (t_id *) node->data;
-			id->id_chunk = node->id_chunk;
-
-			// Set stored
-			id->store = 1;
-		}
-
-		
-	}
+	if(sc->store) node->store = 1; 
 
 	return node;
 }
@@ -589,10 +560,7 @@ void scene_add_data_var(t_scene *sc,const char *name,const char *name_var,int si
 	t_node *node_var=scene_add(sc,dt_var,"var");
 	node_var->data=ptr;
 	node_var->id_ptr=ptr;
-
-	// store 
-	node_var->id_chunk_self=mem_store(ct_node,dt_var,sizeof(t_node),1,node_var);
-	node_var->id_chunk=mem_store(ct_data,dt_var,size,1,ptr);
+	node_var->size = size;
 }
 
 /***	INIT	***/
