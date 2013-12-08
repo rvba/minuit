@@ -623,6 +623,9 @@ void load_node(t_scene *sc)
 				// bind
 				n->data=ptr;
 
+				t_id *id = (t_id *) n->data;
+				id->node = n;
+
 			}
 			else
 			{

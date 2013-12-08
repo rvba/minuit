@@ -517,7 +517,6 @@ void block_bricks_free(t_block *block)
 
 void block_free(t_block *block)
 {
-	/*
 	t_context *C=ctx_get();
 	t_scene *sc=C->scene;
 
@@ -526,7 +525,6 @@ void block_free(t_block *block)
 
 	// free lst
 	scene_delete(sc,block->bricks);
-	*/
 }
 
 // NEW

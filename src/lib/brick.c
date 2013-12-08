@@ -689,7 +689,7 @@ void brick_free(t_brick *brick)
 
 	if(plug_intern->parents)
 	{
-		scene_delete(C->scene,plug_intern->parents);
+		//scene_delete(C->scene,plug_intern->parents);
 	}
 
 	if(plug_intern->bindings)
