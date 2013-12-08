@@ -187,10 +187,10 @@ void dict_free(t_dict *dict)
 		for(l=dict->symbols->first;l;l=l->next)
 		{
 			s = l->data;
-			scene_struct_delete(sc,s);
+			scene_delete(sc,s);
 		}
 
 		// free list
-		scene_struct_delete(sc,dict->symbols);
+		scene_delete(sc,dict->symbols);
 	}
 }

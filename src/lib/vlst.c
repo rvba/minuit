@@ -847,7 +847,7 @@ void vlst_free(t_vlst *vlst)
 void vlst_delete( t_vlst *vlst)
 {
 	t_scene *sc = ctx_scene_get();
-	if( vlst->id.store)  scene_struct_delete( sc, vlst); 
+	if( vlst->id.store)  scene_delete( sc, vlst); 
 	else  vlst_free( vlst); 
 }
 

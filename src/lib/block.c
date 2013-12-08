@@ -509,7 +509,7 @@ void block_bricks_free(t_block *block)
 	for(l=block->bricks->first;l;l=l->next)
 	{
 		b=l->data;
-		scene_struct_delete(sc,b);
+		scene_delete(sc,b);
 	}
 }
 
@@ -517,6 +517,7 @@ void block_bricks_free(t_block *block)
 
 void block_free(t_block *block)
 {
+	/*
 	t_context *C=ctx_get();
 	t_scene *sc=C->scene;
 
@@ -524,7 +525,8 @@ void block_free(t_block *block)
 	block_bricks_free(block);
 
 	// free lst
-	scene_struct_delete(sc,block->bricks);
+	scene_delete(sc,block->bricks);
+	*/
 }
 
 // NEW

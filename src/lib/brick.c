@@ -150,7 +150,7 @@ void plug_child_remove_all_parents(t_plug *child)
 	if(child->parents)
 	{
 		//list_free(child->parents);
-		scene_struct_delete(C->scene,child->parents);
+		scene_delete(C->scene,child->parents);
 		child->parents = NULL;
 	}
 }
@@ -342,7 +342,7 @@ int brick_delete(t_brick *brick,int remove_connected)
 		if(plug->child) plug_child_remove_parent(plug);
 		if(plug->parents) plug_remove_child(plug);
 
-		scene_struct_delete(C->scene,brick);
+		scene_delete(C->scene,brick);
 		return 1;
 	}
 	else
@@ -689,12 +689,12 @@ void brick_free(t_brick *brick)
 
 	if(plug_intern->parents)
 	{
-		scene_struct_delete(C->scene,plug_intern->parents);
+		scene_delete(C->scene,plug_intern->parents);
 	}
 
 	if(plug_intern->bindings)
 	{
-		scene_struct_delete(C->scene, plug_intern->bindings);
+		scene_delete(C->scene, plug_intern->bindings);
 	}
 
 	if(brick->state.has_ref)

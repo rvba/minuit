@@ -746,7 +746,7 @@ void rhizome_delete(t_rhizome *rhizome)
 	// Remove From Set
 	list_remove_by_id(set->rhizomes, rhizome->id.id);
 	// Struct Delete
-	scene_struct_delete(C->scene,rhizome);
+	scene_delete(C->scene,rhizome);
 }
 
 // ADD
@@ -844,11 +844,11 @@ void rhizome_free(t_rhizome *rhizome)
 
 	if(rhizome->blocks)
 	{
-		scene_struct_delete(C->scene,rhizome->blocks);
+		scene_delete(C->scene,rhizome->blocks);
 	}
 	if(rhizome->roots)
 	{
-		scene_struct_delete(C->scene,rhizome->roots);
+		scene_delete(C->scene,rhizome->roots);
 	}
 	if(rhizome->graph)
 	{

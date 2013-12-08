@@ -108,7 +108,7 @@ void 		scene_free(t_scene *sc);
 void 		scene_init(t_scene *scene);
 int 		scene_delete_by_id(t_scene *sc,const char *type,int id);
 void 		scene_data_load(t_scene *sc);
-void 		scene_struct_delete(t_scene *sc,void *ptr);
+//void 		scene_struct_delete(t_scene *sc,void *ptr);
 
 
 void scene_remove_data_node(t_scene *sc,void *ptr);
@@ -142,8 +142,9 @@ void scene_image_free(t_scene *sc,struct Node *node);
 void scene_material_free(t_scene *sc,struct Node *node); 
 void scene_option_free(t_scene *sc,struct Node *node) ;
 
-struct Node *scene_struct_get(t_scene *sc,void *ptr);
 t_scene *scene_new(void);
 void scene_store(t_scene *scene, int val);
+
+void scene_delete( t_scene *sc, void *data);
 
 #endif

@@ -241,7 +241,7 @@ void geo_point_delete( t_geo_point *point)
 {
 	t_scene *sc = ctx_scene_get();
 	if( sc->debug_all) printf("geo_point_delete _%s\n", point->id.name);
-	if( point->id.store) scene_struct_delete( sc, point);
+	if( point->id.store) scene_delete( sc, point);
 	else geo_point_free( point);
 }
 
@@ -254,7 +254,7 @@ void geo_edge_delete( t_geo_edge *edge)
 {
 	t_scene *sc = ctx_scene_get();
 	if( sc->debug_all) printf("geo_edge_delete _%s\n", edge->id.name);
-	if( edge->id.store) scene_struct_delete( sc, edge);
+	if( edge->id.store) scene_delete( sc, edge);
 	else geo_edge_free( edge);
 }
 
@@ -266,7 +266,7 @@ void geo_face_free( t_geo_face *face)
 void geo_face_delete( t_geo_face *face)
 {
 	t_scene *sc = ctx_scene_get();
-	if( face->id.store) scene_struct_delete( sc, face);
+	if( face->id.store) scene_delete( sc, face);
 	else geo_face_free( face);
 }
 
@@ -280,7 +280,7 @@ void geo_array_delete( t_geo_array *array)
 {
 	t_scene *sc = ctx_scene_get();
 	if( sc->debug_all) printf("geo_array_delete %s\n", array->id.name);
-	if( array->id.store) scene_struct_delete( sc, array);
+	if( array->id.store) scene_delete( sc, array);
 	else geo_array_free( array);
 }
 
@@ -319,7 +319,7 @@ void geo_free( t_geo *geo)
 void geo_delete( t_geo *geo)
 {
 	t_scene *sc = ctx_scene_get();
-	if( geo->id.store) scene_struct_delete( sc, geo);
+	if( geo->id.store) scene_delete( sc, geo);
 	else geo_free( geo);
 }
 

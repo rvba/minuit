@@ -82,7 +82,7 @@ void browser_delete_bricks(t_context *C,t_block *b)
 		for(;l;l=l->next)
 		{
 			t_brick *brick=l->data;
-			scene_struct_delete(C->scene,brick);
+			scene_delete(C->scene,brick);
 		}
 	}
 	

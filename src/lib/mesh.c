@@ -505,22 +505,22 @@ void mesh_free(t_mesh *mesh)
 	t_context *C=ctx_get();
 	t_scene *sc=C->scene;
 
-	if (mesh->vertex) scene_struct_delete(sc,mesh->vertex); 
-	if (mesh->quads) scene_struct_delete(sc,mesh->quads);
-	if (mesh->tris) scene_struct_delete(sc,mesh->tris);
-	if (mesh->uvs) scene_struct_delete(sc,mesh->uvs);
+	if (mesh->vertex) scene_delete(sc,mesh->vertex); 
+	if (mesh->quads) scene_delete(sc,mesh->quads);
+	if (mesh->tris) scene_delete(sc,mesh->tris);
+	if (mesh->uvs) scene_delete(sc,mesh->uvs);
 
-	if (mesh->quad_vertex) scene_struct_delete(sc,mesh->quad_vertex);
-	if (mesh->quad_face) scene_struct_delete(sc,mesh->quad_face);
-	if (mesh->quad_normal) scene_struct_delete(sc,mesh->quad_normal);
-	if (mesh->quad_color) scene_struct_delete(sc,mesh->quad_color); 
-	if (mesh->quad_uv) scene_struct_delete(sc,mesh->quad_uv);
+	if (mesh->quad_vertex) scene_delete(sc,mesh->quad_vertex);
+	if (mesh->quad_face) scene_delete(sc,mesh->quad_face);
+	if (mesh->quad_normal) scene_delete(sc,mesh->quad_normal);
+	if (mesh->quad_color) scene_delete(sc,mesh->quad_color); 
+	if (mesh->quad_uv) scene_delete(sc,mesh->quad_uv);
 
-	if (mesh->tri_vertex) scene_struct_delete(sc,mesh->tri_vertex);
-	if (mesh->tri_face) scene_struct_delete(sc,mesh->tri_face);
-	if (mesh->tri_normal) scene_struct_delete(sc,mesh->tri_normal);
-	if (mesh->tri_color) scene_struct_delete(sc,mesh->tri_color);
-	if (mesh->tri_uv) scene_struct_delete(sc,mesh->tri_uv);
+	if (mesh->tri_vertex) scene_delete(sc,mesh->tri_vertex);
+	if (mesh->tri_face) scene_delete(sc,mesh->tri_face);
+	if (mesh->tri_normal) scene_delete(sc,mesh->tri_normal);
+	if (mesh->tri_color) scene_delete(sc,mesh->tri_color);
+	if (mesh->tri_uv) scene_delete(sc,mesh->tri_uv);
 
 
 	//XXX

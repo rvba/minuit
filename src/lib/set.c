@@ -222,8 +222,8 @@ void _set_free(t_set *set)
 void set_free(t_set *set)
 {
 	t_context *C = ctx_get();
-	if(set->blocks) scene_struct_delete(C->scene,set->blocks);
-	if(set->rhizomes) scene_struct_delete(C->scene,set->rhizomes);
+	if(set->blocks) scene_delete(C->scene,set->blocks);
+	if(set->rhizomes) scene_delete(C->scene,set->rhizomes);
 }
 
 // NEW

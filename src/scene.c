@@ -309,68 +309,11 @@ int scene_node_delete(t_scene *sc,t_node *node)
 	}
 }
 
-t_node *scene_struct_get(t_scene *sc,void *ptr)
+void scene_delete( t_scene *sc, void *data)
 {
-	//XXX!!! var is not generic
-	t_id *id = (t_id *) ptr;
-
-	t_link *l;
-	t_node *n;
-	t_node *node=NULL;
-
-	for(l=sc->nodes->first;l;l=l->next)
-	{
-		n=l->data;
-		if(n->type!=dt_var)
-		{
-			if(n->id == id->id)
-			{
-				node=n;
-				break;
-			}
-		}
-	}
-
-	return node;
-}
-
-void scene_struct_delete(t_scene *sc,void *ptr)
-{
-	//XXX var has no ID
-	t_id *id = (t_id *) ptr;
-
-	t_link *l;
-	t_node *n;
-	t_node *node=NULL;
-
-	for(l=sc->nodes->first;l;l=l->next)
-	{
-		n=l->data;
-		if(n->type!=dt_var)
-		{
-			if(n->id == id->id)
-			{
-				node=n;
-				break;
-			}
-		}
-	}
-
-	if(node)
-	{
-		scene_node_free(sc,node);
-	}
-	else
-	{
-		if(!ptr)
-		{
-			printf("[ERROR scene_struct_delete] pointer is void\n");
-		}
-		else
-		{
-			printf("[ERROR scene_struct_delete] Can't find node of [%s]\n", id->name);
-		}
-	}
+	t_id *id = (t_id *) data;
+	t_node *node = id->node;
+	scene_node_free( sc, node);
 }
 
 

@@ -126,15 +126,15 @@ void mesh_buffer_reset(t_mesh *mesh)
 	t_context *C=ctx_get();
 	t_scene *scene=C->scene;
 
-	if(mesh->quad_vertex) scene_struct_delete(scene,mesh->quad_vertex);
-	if(mesh->quad_face) scene_struct_delete(scene,mesh->quad_face);
-	if(mesh->quad_color) scene_struct_delete(scene,mesh->quad_color);
-	if(mesh->quad_normal) scene_struct_delete(scene,mesh->quad_normal);
+	if(mesh->quad_vertex) scene_delete(scene,mesh->quad_vertex);
+	if(mesh->quad_face) scene_delete(scene,mesh->quad_face);
+	if(mesh->quad_color) scene_delete(scene,mesh->quad_color);
+	if(mesh->quad_normal) scene_delete(scene,mesh->quad_normal);
 
-	if(mesh->tri_vertex) scene_struct_delete(scene,mesh->tri_vertex);
-	if(mesh->tri_face) scene_struct_delete(scene,mesh->tri_face);
-	if(mesh->tri_color) scene_struct_delete(scene,mesh->tri_color);
-	if(mesh->tri_normal) scene_struct_delete(scene,mesh->tri_normal);
+	if(mesh->tri_vertex) scene_delete(scene,mesh->tri_vertex);
+	if(mesh->tri_face) scene_delete(scene,mesh->tri_face);
+	if(mesh->tri_color) scene_delete(scene,mesh->tri_color);
+	if(mesh->tri_normal) scene_delete(scene,mesh->tri_normal);
 
 	mesh->quad_vertex=NULL;
 	mesh->quad_face=NULL;

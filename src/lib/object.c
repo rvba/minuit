@@ -213,15 +213,15 @@ void object_free(t_object *object)
 
 		list_remove_by_ptr(lst,object->ref);
 		// free block
-		scene_struct_delete(sc,object->ref);
+		scene_delete(sc,object->ref);
 	}
 
-	if(object->mesh) scene_struct_delete(sc,object->mesh);
-	if(object->data) scene_struct_delete(sc,object->data);
+	if(object->mesh) scene_delete(sc,object->mesh);
+	if(object->data) scene_delete(sc,object->data);
 	if(object->blocks)
 	{
 		list_cleanup(object->blocks);
-		scene_struct_delete(sc,object->blocks);
+		scene_delete(sc,object->blocks);
 	}
 
 	mem_free( object, sizeof( t_object));

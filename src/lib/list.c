@@ -227,7 +227,7 @@ void list_free(t_lst *lst)
 
 	for(l=lst->first;l;l=l->next)
 	{
-		scene_struct_delete(sc,l);
+		scene_delete(sc,l);
 	}
 
 	mem_free( lst, sizeof( t_lst));
@@ -272,7 +272,7 @@ void list_cleanup(t_lst *lst)
 
 	for(l=lst->first;l;l=l->next)
 	{
-		scene_struct_delete(sc,l);
+		scene_delete(sc,l);
 	}
 
 }
@@ -281,7 +281,7 @@ void list_link_remove( t_lst *lst, t_link *link)
 {
 	t_scene *sc = scene_get();
 	lst_link_remove( lst, link);
-	scene_struct_delete( sc, link);
+	scene_delete( sc, link);
 }
 
 void list_remove_by_ptr(t_lst *lst,void *ptr)
@@ -372,7 +372,7 @@ t_lst *list_make( t_data_type type, const char *name)
 void list_delete( t_lst *lst)
 {
 	t_scene *sc = ctx_scene_get();
-	if( lst->id.store) scene_struct_delete( sc, lst);
+	if( lst->id.store) scene_delete( sc, lst);
 	else lst_free( lst);
 }
 
@@ -380,7 +380,7 @@ void cls_list_delete( void *data)
 {
 	t_scene *sc = ctx_scene_get();
 	t_lst *lst = (t_lst *) data;
-	if( lst->id.store) scene_struct_delete( sc, lst);
+	if( lst->id.store) scene_delete( sc, lst);
 	else lst_free( lst);
 }
 

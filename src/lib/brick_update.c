@@ -279,7 +279,7 @@ void brick_remove(t_dict *args)
 		t_lst *lst = set->blocks;
 
 		list_remove_by_ptr(lst,block);
-		scene_struct_delete(C->scene,block);
+		scene_delete(C->scene,block);
 	}
 }
 

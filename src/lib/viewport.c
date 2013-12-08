@@ -120,7 +120,7 @@ void viewport_free(t_viewport *viewport)
 {
 	t_context *C = ctx_get();
 	if(viewport->camera)
-		scene_struct_delete(C->scene,viewport->camera);
+		scene_delete(C->scene,viewport->camera);
 }
 
 // NEW
