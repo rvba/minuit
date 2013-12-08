@@ -1603,17 +1603,29 @@ t_node *add_vector(t_context *C)
 
 // VECTOR 3D
 
+void set_vector_state( t_lst *lst, int count)
+{
+	t_brick *brick;
+	t_link *l;
+	int i = 0;
+	for(l=lst->first;l;l=l->next)
+	{
+		if( i < count + 1) // first component after brick vector
+		{
+			brick = l->data;
+			brick->state.draw = 1;
+		}
+		i++;
+	}
+
+}
+
 t_node *add_vector_3d(t_context *C)
 {
 	t_node *node_block = add_vector(C);
 	t_block *block = node_block->data;
-	
-	int i;
-	for(i = 0; i < 3; i++)
-	{
-		t_brick *brick = block_brick_get_by_order(block, i);
-		brick->state.draw = 1;
-	}
+
+	set_vector_state( block->bricks, 3);
 
 	return node_block;
 }
@@ -1625,12 +1637,7 @@ t_node *add_vector_2d(t_context *C)
 	t_node *node_block = add_vector(C);
 	t_block *block = node_block->data;
 	
-	int i;
-	for(i = 0; i < 2; i++)
-	{
-		t_brick *brick = block_brick_get_by_order(block, i);
-		brick->state.draw = 1;
-	}
+	set_vector_state( block->bricks, 2);
 
 	return node_block;
 }
