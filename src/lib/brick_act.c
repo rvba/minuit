@@ -166,7 +166,6 @@ void *op_brick_add(t_brick *brick)
 	else if(is(name,"neg")) 		node = add_slider_int_custom(C,"neg",NULL,op_neg);
 	else if(is(name,"last?")) 		node = add_switch_custom(C,"last?",NULL,op_is_last);
 	else if(is(name,"for")) 		node = add_for(C);
-	else if(is(name,"vector")) 		node = add_vector(C);
 	else if(is(name,"vector 3d")) 		node = add_vector_3d(C);
 	else if(is(name,"vector 2d")) 		node = add_vector_2d(C);
 	else if(is(name,"bang")) 		node = add_slider_int_custom(C,"bang",NULL,op_bang); 

@@ -393,7 +393,6 @@ t_node *make_menu_vector(void)
 
 	add_brick_trigger(C,block,"vector 3d",op_brick_add);
 	add_brick_trigger(C,block,"vector 2d",op_brick_add);
-	add_brick_trigger(C,block,"vector",op_brick_add);
 
 	return menu;
 }

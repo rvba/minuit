@@ -98,7 +98,6 @@ struct Node *	add_brick_mesh( struct Context *C,const char *name);
 struct Node *	add_loop_get(struct Context *C);
 struct Node *	add_get(struct Context *C);
 struct Node *	add_for(struct Context *C);
-struct Node *	add_vector(struct Context *C);
 struct Node *	add_vector_3d(struct Context *C);
 struct Node *	add_vector_2d(struct Context *C);
 struct Node *	add_stack(struct Context *C);

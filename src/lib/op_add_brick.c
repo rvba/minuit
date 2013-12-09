@@ -1547,7 +1547,7 @@ t_node *parent_brick_vector(t_plug *plug_vector, t_node *node, int order)
 {
 	t_brick *brick = node->data;
 	brick->block_order = order;
-	brick->state.draw = 0;
+	brick->state.draw = 1;
 	t_plug *plug_intern = &brick->plug_intern;
 	plug_intern->state.store_data = 0;
 	plug_add_parent(plug_vector,plug_intern);
@@ -1572,7 +1572,7 @@ t_node *_parent_brick_vector(t_plug *plug_vector, t_node *node, int order)
 
 // VECTOR
 
-t_node *add_vector(t_context *C)
+t_node *add_vector(t_context *C, int length)
 {
 	C->ui->add_bricks = 0;
 
@@ -1588,57 +1588,41 @@ t_node *add_vector(t_context *C)
 	brick_vector->state.draw_value = 0;
 	brick_vector->state.has_components = 1;
 	t_plug *plug_vector = &brick_vector->plug_intern;
+	t_vector *vector = plug_vector->data;
 
 	// ADD X Y Z
 
-	parent_brick_vector(plug_vector, add_part_slider_float(C,block,"x",NULL),0);
-	parent_brick_vector(plug_vector, add_part_slider_float(C,block,"y",NULL),1);
-	parent_brick_vector(plug_vector, add_part_slider_float(C,block,"z",NULL),2);
-	parent_brick_vector(plug_vector, add_part_slider_float(C,block,"w",NULL),3);
+	if(length >= 2)
+	{
+		parent_brick_vector(plug_vector, add_part_slider_float(C,block,"x",NULL),0);
+		parent_brick_vector(plug_vector, add_part_slider_float(C,block,"y",NULL),1);
+		vector->length = 2;
+	}
+	if(length >=3 )
+	{
+		parent_brick_vector(plug_vector, add_part_slider_float(C,block,"z",NULL),2);
+		vector->length = 3;
+	}
+	if(length >= 4)
+	{
+		parent_brick_vector(plug_vector, add_part_slider_float(C,block,"w",NULL),3);
+		vector->length = 4;
+	}
 
 	C->ui->add_bricks = 1;
 
 	return node_block;
 }
 
-// VECTOR 3D
-
-void set_vector_state( t_lst *lst, int count)
-{
-	t_brick *brick;
-	t_link *l;
-	int i = 0;
-	for(l=lst->first;l;l=l->next)
-	{
-		if( i < count + 1) // first component after brick vector
-		{
-			brick = l->data;
-			brick->state.draw = 1;
-		}
-		i++;
-	}
-
-}
-
 t_node *add_vector_3d(t_context *C)
 {
-	t_node *node_block = add_vector(C);
-	t_block *block = node_block->data;
-
-	set_vector_state( block->bricks, 3);
-
+	t_node *node_block = add_vector(C, 3);
 	return node_block;
 }
 
-// VECTOR 2D
-
 t_node *add_vector_2d(t_context *C)
 {
-	t_node *node_block = add_vector(C);
-	t_block *block = node_block->data;
-	
-	set_vector_state( block->bricks, 2);
-
+	t_node *node_block = add_vector(C, 2);
 	return node_block;
 }
 
