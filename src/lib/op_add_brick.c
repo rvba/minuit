@@ -1522,6 +1522,7 @@ t_node *add_for(t_context *C)
 	brick_indice->plug_in.state.flow_in = 0;
 
 	// vector
+	C->ui->add_bricks = 0;
 	t_node *node_vector = add_part_vector(C,block,"vector");
 	t_brick *brick_vector = node_vector->data;
 	t_plug *plug_vector = &brick_vector->plug_intern;
@@ -1532,6 +1533,8 @@ t_node *add_for(t_context *C)
 	brick_vector->plug_in.state.flow_in = 0;
 	brick_vector->plug_in.state.open_in = 1;
 	brick_vector->plug_intern.state.is_state_volatil = 0;
+
+	C->ui->add_bricks = 1;
 
 	// Parent
 	plug_add_parent(plug_for,plug_vector);
