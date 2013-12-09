@@ -26,30 +26,6 @@
 
 void mesh_add_brick_vertex(t_context *C,t_mesh *mesh);
 
-/*
-void mesh_vertex_add(t_mesh *mesh, float *v)
-{
-	if(mesh->vertex)
-	{
-		t_vlst *vertex = mesh->vertex;
-		vertex->count_new++;
-		mesh->var.tot_vertex++;
-		__vlst_update_data(vertex,NULL);
-		vlst_set_data(vertex,v,vertex->count);
-	}
-	else
-	{
-		mesh->vertex=vlst_make("vertex", dt_float, 3, 0);
-		mesh_vertex_add(mesh,v);
-
-		t_context *C = ctx_get();
-		// add brick vertex
-		mesh_add_brick_vertex(C,mesh);
-	}
-
-}
-*/
-
 void mesh_init(t_scene *sc,t_mesh *mesh)
 {
 	int col[3];
@@ -151,27 +127,6 @@ void mesh_add_brick_faces(t_mesh *mesh)
 	// Add Global offset
 	add_block_offset(C,_block);
 }
-
-// ADD BRICK MESH
-
-/*
-void mesh_add_brick_mesh(t_context *C,t_mesh *mesh)
-{
-	t_node *node_block=add_block(C,"mesh");
-	t_block *block=node_block->data;
-
-	// add pointers
-	add_part_pointer(C,block,dt_mesh,mesh->id.name,mesh);
-	add_part_pointer(C,block,dt_vertex,"v",mesh);
-	add_part_pointer(C,block,dt_face,"f",mesh);
-
-	// init
-	mesh_init(C->scene,mesh);
-
-	// Add Global offset
-	add_block_offset(C,block);
-}
-*/
 
 // COLOR
 
