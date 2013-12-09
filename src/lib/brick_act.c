@@ -101,6 +101,7 @@ void *op_brick_add(t_brick *brick)
 	t_context *C = ctx_get();
 	t_node *node = NULL;
 	t_block *this_block;
+	t_brick *this_brick;
 
 	// store
 	scene_store(C->scene,1);
@@ -191,6 +192,13 @@ void *op_brick_add(t_brick *brick)
 		this_block = node->data;
 		if(this_block)
 		{
+			t_link *link;
+			for(link = this_block->bricks->first; link; link = link->next)
+			{
+				this_brick = link->data;
+				op_limit(this_brick);
+			}
+
 			// Frame Based
 			if(is(name,"frame") || is(name,"timer") || is(name,"timer low"))
 			{
@@ -200,6 +208,64 @@ void *op_brick_add(t_brick *brick)
 
 	}
 		
+	return NULL;
+}
+
+
+// LIMIT
+
+void *op_limit(t_brick *brick)
+{
+	if(brick->state.has_limit_low)
+	{
+		switch(brick->plug_intern.data_type)
+		{
+			case(dt_float):
+				if(drf_float(brick->plug_intern.data) < brick->var.limit_float_low)
+					set_float(brick->plug_intern.data,brick->var.limit_float_low);
+				break;
+
+			case(dt_int):
+				if(drf_int(brick->plug_intern.data) < brick->var.limit_int_low)
+					set_int(brick->plug_intern.data,brick->var.limit_int_low);
+				break;
+
+			case(dt_uint):
+				if(drf_uint(brick->plug_intern.data) < brick->var.limit_int_low)
+					set_uint(brick->plug_intern.data,brick->var.limit_int_low);
+				break;
+
+			default:
+				printf("[op_limit] case not implemented : %s\n",data_name_get(brick->plug_intern.data_type));
+				break;
+		}
+	}
+
+	if(brick->state.has_limit_high)
+	{
+		switch(brick->plug_intern.data_type)
+		{
+			case(dt_float):
+				if(drf_float(brick->plug_intern.data) > brick->var.limit_float_high)
+					set_float(brick->plug_intern.data,brick->var.limit_float_high);
+				break;
+
+			case(dt_int):
+				if(drf_int(brick->plug_intern.data) > brick->var.limit_int_high)
+					set_int(brick->plug_intern.data,brick->var.limit_int_high);
+				break;
+
+			case(dt_uint):
+				if(drf_uint(brick->plug_intern.data) > brick->var.limit_int_high)
+					set_uint(brick->plug_intern.data,brick->var.limit_int_high);
+				break;
+
+			default:
+				printf("[op_limit] case not implemented : %s\n",data_name_get(brick->plug_intern.data_type));
+				break;
+		}
+	}
+
 	return NULL;
 }
 
@@ -308,6 +374,11 @@ void *op_slider(t_brick *brick)
 				}
 			}
 		}
+
+		// Limit
+
+		op_limit(brick);
+
 	}
 
 	return NULL;

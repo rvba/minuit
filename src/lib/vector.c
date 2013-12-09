@@ -49,6 +49,11 @@ void vector_copy_pointer(t_vector *dst, t_vector *src)
 	dst->pointer = src->pointer;
 	dst->length = src->length;
 	dst->type = src->type;
+	dst->has_limit_high = src->has_limit_high;
+	dst->has_limit_low = src->has_limit_low;
+	dst->limit_int_high = src->limit_int_high;
+	dst->has_limit_low = src->has_limit_low;
+	dst->limit_int_low = src->limit_int_low;
 
 	//XXX vector cls !!!
 }
@@ -235,6 +240,11 @@ t_vector *vector_new(const char *name)
 	vector->pointer=NULL;
 
 	vector->cls=&cls_vector;
+
+	vector->has_limit_low = 0;
+	vector->has_limit_high = 0;
+	vector->limit_int_low = 0;
+	vector->limit_int_high = 0;
 
 	return vector;
 }

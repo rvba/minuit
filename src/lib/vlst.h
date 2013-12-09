@@ -24,6 +24,10 @@ typedef struct VLst
 	int count_new;
 	int need_update;
 	int is_linked;
+	int has_limit_high;
+	int has_limit_low;
+	int limit_high;
+	int limit_low;
 
 	struct VLst *link;
 

@@ -314,6 +314,10 @@ t_node *mesh_make(
 
 		mesh->quads=vlst_make("quads", dt_uint, 4, totquad);
 		vlst_add_data(mesh->quads,quads);
+
+		t_vlst *vquads = mesh->quads;
+		vquads->has_limit_high = 1;
+		vquads->has_limit_low = 1;
 	}
 
 	// add tri list
