@@ -275,245 +275,6 @@ void _cls_flow_(t_plug *plug,void (* f)(t_plug_mode mode,t_plug *p1,t_plug *p2))
 }
 
 
-
-
-
-void cls_plug_connect_int(t_plug_mode mode, t_plug *self,t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_int(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_uint(t_plug_mode mode, t_plug *self,t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_uint(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_float(t_plug_mode mode, t_plug *self,t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_float(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_string(t_plug_mode mode, t_plug *self,t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_string(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_pointer(t_plug_mode mode, t_plug *self, t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_pointer(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_mesh(t_plug_mode mode, t_plug *self, t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_mesh(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_vertex(t_plug_mode mode, t_plug *self, t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_vertex(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_face(t_plug_mode mode, t_plug *self, t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_face(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_vlst(t_plug_mode mode, t_plug *self, t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_vlst(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_lst(t_plug_mode mode, t_plug *self, t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_lst(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_camera(t_plug_mode mode, t_plug *self, t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_camera(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_char(t_plug_mode mode, t_plug *self, t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_char(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_object(t_plug_mode mode, t_plug *self, t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_object(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_selector(t_plug_mode mode, t_plug *self, t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_selector(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_trigger(t_plug_mode mode, t_plug *self, t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_trigger(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_operator(t_plug_mode mode, t_plug *self, t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_geo(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_geo(t_plug_mode mode, t_plug *self, t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_geo_point(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_geo_point(t_plug_mode mode, t_plug *self, t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_geo_edge(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_geo_edge(t_plug_mode mode, t_plug *self, t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_geo_array(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_geo_array(t_plug_mode mode, t_plug *self, t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-
-}
-
-
 // DISCONNECT FOR
 
 void cls_plug_disconnect_operator(t_plug_mode mode, t_plug *plug)
@@ -1960,8 +1721,8 @@ t_plug_class plug_float ={
 	.type=dt_float,
 	.make=cls_plug_make_float,
 	.flow=cls_plug_flow_float,
-	.connect = cls_plug_connect_float,
-	.disconnect = cls_plug_disconnect_float,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // INT
@@ -1971,8 +1732,8 @@ t_plug_class plug_int ={
 	.type=dt_int,
 	.make=cls_plug_make_int,
 	.flow=cls_plug_flow_int,
-	.connect = cls_plug_connect_int,
-	.disconnect = cls_plug_disconnect_int,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // UINT
@@ -1982,8 +1743,8 @@ t_plug_class plug_uint ={
 	.type=dt_uint,
 	.make=cls_plug_make_uint,
 	.flow=cls_plug_flow_uint,
-	.connect = cls_plug_connect_uint,
-	.disconnect = cls_plug_disconnect_uint,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // STRING
@@ -1993,8 +1754,8 @@ t_plug_class plug_string ={
 	.type=dt_string,
 	.make=cls_plug_make_string,
 	.flow=cls_plug_flow_generic, //XXX
-	.connect = cls_plug_connect_string,
-	.disconnect = cls_plug_disconnect_string,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // POINTER
@@ -2004,8 +1765,8 @@ t_plug_class plug_pointer ={
 	.type=dt_pointer,
 	.make=cls_plug_make_string,
 	.flow=cls_plug_flow_pointer, //XXX
-	.connect = cls_plug_connect_pointer,
-	.disconnect = cls_plug_disconnect_pointer,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // MESH
@@ -2015,8 +1776,8 @@ t_plug_class plug_mesh ={
 	.type=dt_mesh,
 	.make=cls_plug_make_mesh,
 	.flow=cls_plug_flow_mesh, 
-	.connect = cls_plug_connect_mesh,
-	.disconnect = cls_plug_disconnect_mesh,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // VERTEX
@@ -2026,8 +1787,8 @@ t_plug_class plug_vertex ={
 	.type=dt_vertex,
 	.make=cls_plug_make_vertex,
 	.flow=cls_plug_flow_vertex, 
-	.connect = cls_plug_connect_vertex,
-	.disconnect = cls_plug_disconnect_vertex,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // FACE
@@ -2037,8 +1798,8 @@ t_plug_class plug_face ={
 	.type=dt_face,
 	.make=cls_plug_make_face,
 	.flow=cls_plug_flow_generic, //XXX
-	.connect = cls_plug_connect_face,
-	.disconnect = cls_plug_disconnect_face,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // VLST
@@ -2048,8 +1809,8 @@ t_plug_class plug_vlst ={
 	.type=dt_vlst,
 	.make=cls_plug_make_vlst,
 	.flow=cls_plug_flow_vlst, 
-	.connect = cls_plug_connect_vlst,
-	.disconnect = cls_plug_disconnect_vlst,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // LST
@@ -2059,8 +1820,8 @@ t_plug_class plug_lst ={
 	.type=dt_lst,
 	.make=cls_plug_make_lst,
 	.flow=cls_plug_flow_lst, 
-	.connect = cls_plug_connect_lst,
-	.disconnect = cls_plug_disconnect_lst,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // CAMERA
@@ -2070,8 +1831,8 @@ t_plug_class plug_camera ={
 	.type=dt_camera,
 	.make=cls_plug_make_camera,
 	.flow=cls_plug_flow_camera, 
-	.connect = cls_plug_connect_camera,
-	.disconnect = cls_plug_disconnect_camera,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // CHAR
@@ -2081,8 +1842,8 @@ t_plug_class plug_char ={
 	.type=dt_char,
 	.make=cls_plug_make_char,
 	.flow=cls_plug_flow_generic, //XXX
-	.connect = cls_plug_connect_char,
-	.disconnect = cls_plug_disconnect_char,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // OBJECT
@@ -2092,8 +1853,8 @@ t_plug_class plug_object ={
 	.type=dt_object,
 	.make=cls_plug_make_object,
 	.flow=cls_plug_flow_object, 
-	.connect = cls_plug_connect_object,
-	.disconnect = cls_plug_disconnect_object,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // SELECTOR
@@ -2103,8 +1864,8 @@ t_plug_class plug_selector ={
 	.type=dt_selector,
 	.make=cls_plug_make_selector,
 	.flow=cls_plug_flow_object, 
-	.connect = cls_plug_connect_selector,
-	.disconnect = cls_plug_disconnect_selector,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // TRIGGER
@@ -2114,8 +1875,8 @@ t_plug_class plug_trigger ={
 	.type=dt_trigger,
 	.make=cls_plug_make_trigger,
 	.flow=cls_plug_flow_trigger, 
-	.connect = cls_plug_connect_trigger,
-	.disconnect = cls_plug_disconnect_trigger,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // OPERATOR
@@ -2125,8 +1886,8 @@ t_plug_class plug_operator ={
 	.type=dt_operator,
 	.make=cls_plug_make_operator,
 	.flow=cls_plug_flow_operator, 
-	.connect = cls_plug_connect_operator,
-	.disconnect = cls_plug_disconnect_operator,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // VECTOR
@@ -2147,8 +1908,8 @@ t_plug_class plug_geo ={
 	.type=dt_geo,
 	.make=cls_plug_make_geo,
 	.flow=cls_plug_flow_geo,  
-	.connect = cls_plug_connect_geo,
-	.disconnect = cls_plug_disconnect_geo,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 t_plug_class plug_geo_point ={
@@ -2156,8 +1917,8 @@ t_plug_class plug_geo_point ={
 	.type=dt_geo_point,
 	.make=cls_plug_make_geo_point,
 	.flow=cls_plug_flow_geo_point,  
-	.connect = cls_plug_connect_geo_point,
-	.disconnect = cls_plug_disconnect_geo_point,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 t_plug_class plug_geo_edge ={
@@ -2165,8 +1926,8 @@ t_plug_class plug_geo_edge ={
 	.type=dt_geo_edge,
 	.make=cls_plug_make_geo_edge,
 	.flow=cls_plug_flow_geo_edge,  
-	.connect = cls_plug_connect_geo_edge,
-	.disconnect = cls_plug_disconnect_geo_edge,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 t_plug_class plug_geo_array ={
@@ -2174,8 +1935,8 @@ t_plug_class plug_geo_array ={
 	.type=dt_geo_array,
 	.make=cls_plug_make_geo_array,
 	.flow=cls_plug_flow_geo_array,  
-	.connect = cls_plug_connect_geo_array,
-	.disconnect = cls_plug_disconnect_geo_array,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 
