@@ -114,8 +114,6 @@ typedef struct Brick_State
 	int has_components:1;
 	int clone;
 	int frame_loop;
-	int has_limit_low:1;
-	int has_limit_high:1;
 
 }t_brick_state;
 
@@ -141,10 +139,6 @@ typedef struct Brick_Var
 	int selector;
 	int selector_length;
 	char selector_list[_LIST_*_NAME_LONG_];
-	int limit_int_low;
-	int limit_int_high;
-	float limit_float_low;
-	float limit_float_high;
 
 }t_brick_var;
 
@@ -275,7 +269,6 @@ void *		op_camera_rotate_z(struct Brick *brick);
 
 
 void *		op_brick_add(struct Brick *brick);
-void *		op_limit(struct Brick *brick);
 void *		op_selector(struct Brick *brick);
 void *		op_brick_node_action(struct Brick *brick);
 void *		op_void(struct Brick *brick);

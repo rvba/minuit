@@ -760,10 +760,6 @@ t_vlst *vlst_clone(t_vlst *vlst)
 		clone->count_new = vlst->count_new;
 		clone->need_update = vlst->need_update;
 		clone->is_linked = vlst->is_linked;
-		clone->has_limit_high = vlst->has_limit_high;
-		clone->has_limit_low = vlst->has_limit_low;
-		clone->limit_high = vlst->limit_high;
-		clone->limit_low = vlst->limit_low;
 
 		clone->link = NULL; //XXX
 		clone->type = vlst->type;
@@ -826,10 +822,6 @@ t_vlst *vlst_new(const char *name)
 	vlst->need_update=0;
 	vlst->is_linked=0;
 	vlst->link=NULL;
-	vlst->has_limit_high = 0;
-	vlst->has_limit_low = 0;
-	vlst->limit_low = -1;
-	vlst->limit_high = -1;
 	vlst->ref = NULL;
 	vlst->type = dt_null;
 	vlst->type_target = dt_null;
