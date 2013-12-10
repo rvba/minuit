@@ -1575,6 +1575,7 @@ t_node *_parent_brick_vector(t_plug *plug_vector, t_node *node, int order)
 
 // VECTOR
 
+/*
 t_node *add_vector(t_context *C, int length)
 {
 	C->ui->add_bricks = 0;
@@ -1611,6 +1612,48 @@ t_node *add_vector(t_context *C, int length)
 		parent_brick_vector(plug_vector, add_part_slider_float(C,block,"w",NULL),3);
 		vector->length = 4;
 	}
+
+	C->ui->add_bricks = 1;
+
+	return node_block;
+}
+*/
+
+t_node *add_vector(t_context *C, int length)
+{
+	C->ui->add_bricks = 0;
+
+	// NEW BLOCK
+	t_node *node_block = add_block(C,"vector");
+	t_block *block=node_block->data;
+	block->state.draw_outline=1;
+
+
+	// ADD X Y Z
+
+	if(length >= 2)
+	{
+		add_part_slider_float(C,block,"x",NULL);
+		add_part_slider_float(C,block,"y",NULL);
+	}
+	if(length >=3 )
+	{
+		add_part_slider_float(C,block,"z",NULL);
+	}
+	if(length >= 4)
+	{
+		add_part_slider_float(C,block,"w",NULL);
+	}
+
+	// ADD VECTOR
+
+	t_node *node_vector = add_part_vector(C,block,"vector");
+	t_brick *brick_vector = node_vector->data;
+	brick_vector->state.draw_value = 0;
+	brick_vector->state.has_components = 1;
+	t_plug *plug_vector = &brick_vector->plug_intern;
+	t_vector *vector = plug_vector->data;
+	vector->length = length;
 
 	C->ui->add_bricks = 1;
 

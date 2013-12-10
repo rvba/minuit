@@ -397,6 +397,25 @@ t_brick *block_brick_get_by_order(t_block *block, int order)
 	return NULL;
 }
 
+t_brick *block_brick_get_by_position(t_block *block, int pos)
+{
+	t_brick *brick;
+	t_link *l;
+	int i=0;
+
+	for(l=block->bricks->first;l;l=l->next)
+	{
+		brick=l->data;
+		if( i == pos )
+		{
+			return brick;
+		}
+		i++;
+	}
+
+	return NULL;
+}
+
 void block_brick_init(t_node *node_brick)
 {
 	t_brick *brick=node_brick->data;

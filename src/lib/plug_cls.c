@@ -315,7 +315,8 @@ void cls_plug_disconnect_operator(t_plug_mode mode, t_plug *plug)
 					for(i=0; i < vector->length; i++)
 					{
 						// Get Brick Component
-						brick_component = block_brick_get_by_order(block_vector,i);
+						//brick_component = block_brick_get_by_order(block_vector,i);
+						brick_component = block_brick_get_by_position(block_vector,i);
 
 						// Get Plugs
 						plug_intern_component = &brick_component->plug_intern;
@@ -508,7 +509,8 @@ void cls_plug_connect_vector(t_plug_mode mode, t_plug *self, t_plug *dst)
 					for(i = 0; i < vector_src->length; i++)
 					{
 						// Get Component
-						brick_component = block_brick_get_by_order(block, i); 
+						//brick_component = block_brick_get_by_order(block, i); 
+						brick_component = block_brick_get_by_position(block, i); 
 						plug_in_component = &brick_component->plug_in;
 						plug_intern_component = &brick_component->plug_intern;
 
@@ -565,7 +567,8 @@ void cls_plug_connect_vector(t_plug_mode mode, t_plug *self, t_plug *dst)
 				// For All Components 
 				for(i = 0; i < 4; i++)
 				{
-					brick_component = block_brick_get_by_order(block, i); 
+					//brick_component = block_brick_get_by_order(block, i); 
+					brick_component = block_brick_get_by_position(block, i); 
 					plug_intern_component = &brick_component->plug_intern;
 
 					// If i < Vector Length
@@ -633,7 +636,8 @@ void cls_plug_disconnect_vector(t_plug_mode mode, t_plug *plug)
 		// For All Components
 		for(i = 0; i < 4; i++)
 		{
-			brick_component = block_brick_get_by_order(block, i);
+			//brick_component = block_brick_get_by_order(block, i);
+			brick_component = block_brick_get_by_position(block, i);
 			plug_intern_component = &brick_component->plug_intern;
 
 			plug_intern_component->data = plug_intern_component->data_memory;
@@ -679,7 +683,8 @@ void close_vector(t_brick *brick, int open)
 			for(i=0; i < vector->length; i++)
 			{
 				// Get Brick Component
-				brick_component = block_brick_get_by_order(block,i);
+				//brick_component = block_brick_get_by_order(block,i);
+				brick_component = block_brick_get_by_position(block,i);
 
 				// Get Plugs
 				plug_in_component = &brick_component->plug_in;
@@ -699,7 +704,8 @@ void close_vector(t_brick *brick, int open)
 			for(i=0; i < vector->length; i++)
 			{
 				// Get Brick Component
-				brick_component = block_brick_get_by_order(block,i);
+				//brick_component = block_brick_get_by_order(block,i);
+				brick_component = block_brick_get_by_position(block,i);
 
 				// Get Plugs
 				plug_in_component = &brick_component->plug_in;
@@ -1028,7 +1034,8 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 						for(i=0; i < vector_self->length; i++)
 						{
 							// Get Brick Component
-							brick_component = block_brick_get_by_order(block,i);
+							//brick_component = block_brick_get_by_order(block,i);
+							brick_component = block_brick_get_by_position(block,i);
 
 							// Get Plugs
 							plug_intern_component = &brick_component->plug_intern;
@@ -1068,7 +1075,8 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 						for(i=0; i < vector_self->length; i++)
 						{
 							// Get Component
-							brick_component = block_brick_get_by_order(block,i);
+							//brick_component = block_brick_get_by_order(block,i);
+							brick_component = block_brick_get_by_position(block,i);
 							plug_intern_component = &brick_component->plug_intern;
 
 							// Set Component Pointer
@@ -1108,7 +1116,8 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 				for(i=0; i < vector_self->length; i++)
 				{
 					// Get Componenent
-					brick_component = block_brick_get_by_order(block,i);
+					//brick_component = block_brick_get_by_order(block,i);
+					brick_component = block_brick_get_by_position(block,i);
 					plug_intern_component = &brick_component->plug_intern;
 
 					// If Componenent Has Data (Scalar)
