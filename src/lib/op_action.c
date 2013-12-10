@@ -20,34 +20,6 @@
 #include "ui.h"
 #include "file.h"
 
-/*
-void op_set_color(t_context *C,int color)
-{
-	C->draw->color = color;
-
-	if(C->draw->color==color_black)
-	{
-		vset4i(C->draw->background_color,0,0,0,0);
-		vset4i(C->ui->background_color,0,0,0,0);
-		vset4f(C->ui->front_color,1,1,1,0);
-		vset4f(C->draw->front_color,1,1,1,0);
-		vset4f(C->draw->back_color,0,0,0,0);
-		vset4f(C->ui->back_color,0,0,0,0);
-	}
-	else
-	{
-		vset4i(C->draw->background_color,255,255,255,0);
-		vset4i(C->ui->background_color,255,255,255,0);
-		vset4f(C->ui->front_color,0,0,0,0);
-		vset4f(C->draw->front_color,0,0,0,0);
-		vset4f(C->draw->back_color,1,1,1,0);
-		vset4f(C->ui->back_color,1,1,1,0);
-	}
-
-}
-*/
-
-
 void op_set_color(t_context *C,int color)
 {
 	if(C->event->color_transition)

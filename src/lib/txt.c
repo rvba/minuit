@@ -684,7 +684,12 @@ void txt_draw(t_txt *txt)
 {
 	t_context *C=ctx_get();
 	char *letter=txt->name;
-	float *c=C->ui->front_color;
+	float *c;
+	if(txt->use_front_color)
+		c = C->ui->front_color;
+	else
+		c = C->ui->back_color;
+
 	t_skt *skt = C->skt;
 	float i = skt->intensity;
 
@@ -810,7 +815,8 @@ void txt_init(t_txt *txt,const char *name)
 	txt->data_change=txt_data_change;
 	txt->get_width=txt_get_width;
 
-	txt->use_bitmap_font=1;
+	txt->use_bitmap_font = 1;
+	txt->use_front_color = 1;
 }
 
 t_txt *txt_new(const char *name)
@@ -840,6 +846,6 @@ t_txt *txt_new(const char *name)
 
 	txt_init(txt, name);
 	txt->edit = 0;
-
+	
 	return txt;
 }

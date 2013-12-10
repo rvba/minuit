@@ -44,6 +44,8 @@ struct Txt
 
 	int use_bitmap_font;
 	int edit;
+	int use_front_color;
+
 };
 
 // TXT.C
