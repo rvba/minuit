@@ -457,6 +457,7 @@ t_ui *ui_new(void)
 
 	ui->update_links = 1;
 	ui->use_rhizomes = 1;
+	ui->use_parenting = 1;
 	ui->threading_on = 0;
 	ui->rhizome_updated = 1;
 

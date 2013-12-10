@@ -8,6 +8,7 @@
  */
 
 #include "context.h"
+#include "ui.h"
 #include "scene.h"
 #include "node.h"
 #include "util.h"
@@ -76,6 +77,7 @@ void block_set_loop_state(t_block *block, int state)
 // Trigger All Bricks
 void block_exec(t_block *block)
 {
+	t_context *C = ctx_get();
 	t_link *link;
 	t_brick *brick;
 	t_plug *plug;
@@ -89,14 +91,17 @@ void block_exec(t_block *block)
 		brick = link->data;
 		plug = &brick->plug_intern;
 
-		// First: Parents
-		if(plug->parents)
+		if( C->ui->use_parenting)
 		{
-			t_link *l;
-			for(l=plug->parents->first;l;l=l->next)
+			// First: Parents
+			if(plug->parents)
 			{
-				t_plug *p = l->data;
-				block_brick_trigger(p);
+				t_link *l;
+				for(l=plug->parents->first;l;l=l->next)
+				{
+					t_plug *p = l->data;
+					block_brick_trigger(p);
+				}
 			}
 		}
 
