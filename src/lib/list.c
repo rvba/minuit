@@ -173,6 +173,7 @@ void list_remove_by_name(t_lst *lst, const char *name)
 
 void _link_free(t_link *link)
 {
+	// link is remove removed from scene by list_free
 	mem_free( link, sizeof( t_link));
 }
 
@@ -220,6 +221,7 @@ t_lst *list_clone(t_lst *lst, t_data_type type)
 // but not the data it points to
 void list_free(t_lst *lst)
 {
+	/*
 	t_context *C=ctx_get();
 	t_scene *sc=C->scene;
 
@@ -229,6 +231,9 @@ void list_free(t_lst *lst)
 	{
 		scene_delete(sc,l);
 	}
+	*/
+
+	list_cleanup( lst);
 
 	mem_free( lst, sizeof( t_lst));
 }
@@ -265,16 +270,14 @@ void list_free_data(t_lst *lst, t_data_type type)
 
 void list_cleanup(t_lst *lst)
 {
-	t_context *C=ctx_get();
-	t_scene *sc=C->scene;
-
-	t_link *l;
-
-	for(l=lst->first;l;l=l->next)
+	t_link *link=lst->first;
+	t_link *tmp=NULL;
+	while(link)
 	{
-		scene_delete(sc,l);
+		tmp=link->next;
+		list_link_remove(lst,link);
+		link=tmp;
 	}
-
 }
 
 void list_link_remove( t_lst *lst, t_link *link)
@@ -367,13 +370,6 @@ t_lst *list_make( t_data_type type, const char *name)
 
 	lst->type = type;
 	return lst;
-}
-
-void list_delete( t_lst *lst)
-{
-	t_scene *sc = ctx_scene_get();
-	if( lst->id.store) scene_delete( sc, lst);
-	else lst_free( lst);
 }
 
 void cls_list_delete( void *data)

@@ -190,7 +190,6 @@ void 		brick_remove(struct Dict *args);
 int 		brick_is_different(struct Brick *dst, struct Brick *src);
 void 		brick_copy_data(struct Brick *dst, struct Brick *src);
 void 		brick_binding_add(struct Brick *brick, enum Data_Type type, void *data);
-void 		plug_child_remove_all_parents(struct Plug *child);
 struct Brick *	brick_copy(struct Block *block,struct Brick *brick);
 struct Brick *	brick_dupli(struct Block *block,struct Brick *brick);
 void 		plug_color_init(struct Plug *plug);

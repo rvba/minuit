@@ -44,6 +44,7 @@ typedef struct Lst
 }t_lst;
 
 
+void 		lst_lifo( t_lst *lst);
 void 		lst_link_delete(t_lst *lst,t_link *link);
 void 		lst_link_remove(t_lst *lst,t_link *link);
 t_link *	lst_link_find_by_id( t_lst *lst, int id);
@@ -60,6 +61,7 @@ t_lst *		lst_new(const char *name);
 void 		lst_free(t_lst *lst);
 void 		lst_cleanup(t_lst *lst);
 void 		lst_push_back(t_lst *lst,t_link *link);
+void 		lst_push_front( t_lst *lst, t_link *link);
 t_link *	link_new(const char *name);
 void 		link_free(t_link *link);
 int 		lst_sort_bubble(struct Lst *lst);

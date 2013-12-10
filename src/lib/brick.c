@@ -123,89 +123,6 @@ void brick_binding_add(t_brick *brick, t_data_type type, void *data)
 	list_add_data(plug_intern->bindings,binding);
 }
 
-void plug_add_parent(t_plug *child, t_plug *parent)
-{
-	t_context *C = ctx_get();
-
-	// if not parents yet
-	if(!child->parents)
-	{
-		// add list
-		t_node *node_list = scene_add(C->scene,dt_list,"parent");
-		t_lst *list = node_list->data;
-		child->parents = list;
-	}
-
-	// add parent
-	list_add_data(child->parents,parent);
-
-	// remember child
-	parent->child = child;
-}
-
-// Empty Parents List
-void plug_child_remove_all_parents(t_plug *child)
-{
-	t_context *C = ctx_get();
-	if(child->parents)
-	{
-		//list_free(child->parents);
-		scene_delete(C->scene,child->parents);
-		child->parents = NULL;
-	}
-}
-
-void plug_remove_child(t_plug *plug)
-{
-	t_link *l;
-	t_plug *p;
-
-	for(l=plug->parents->first;l;l=l->next)
-	{
-		p = l->data;
-
-		if(p->child == plug)
-		{
-			p->child = NULL;
-		}
-
-	}
-}
-
-void plug_child_remove_parent(t_plug *plug)
-{
-	if(plug->child)
-	{
-		t_plug *plug_child = plug->child;
-
-		t_lst *lst = plug_child->parents;
-
-		t_link *l=NULL;
-		t_plug *p;
-		t_brick *brick_parent=plug->brick;
-		t_brick *b;
-
-		for(l=lst->first;l;l=l->next)
-		{
-			p = l->data;
-			b = p->brick;
-
-			if(b->id.id == brick_parent->id.id)
-				break;
-		}
-
-		if(l)
-		{
-			list_link_remove(lst,l);
-		}
-		else
-		{
-			printf("[ERROR plug_child_remove_parent] Can't find link\n");
-		}
-	}
-}
-
-
 // CLONE
 
 void brick_clone_change_name(t_brick *brick)
@@ -334,14 +251,6 @@ int brick_delete(t_brick *brick,int remove_connected)
 		(!plug_in->state.is_connected && !plug_out->state.is_connected)
 		)
 	{
-		// remove users
-		//dlink("block",brick->block);
-
-		t_plug *plug = &brick->plug_intern;
-
-		if(plug->child) plug_child_remove_parent(plug);
-		if(plug->parents) plug_remove_child(plug);
-
 		scene_delete(C->scene,brick);
 		return 1;
 	}
@@ -472,8 +381,6 @@ void plug_reset(t_plug *plug,const char *name)
 
 	plug->src=NULL;
 	plug->dst=NULL;
-	plug->parents=NULL;
-	plug->child=NULL;
 	plug->pos=0; 
 	plug->data=NULL;
 	plug->data_memory = NULL;
@@ -494,7 +401,6 @@ void plug_reset(t_plug *plug,const char *name)
 	plug->state.is_a_loop = 0;
 	plug->state.close_flow_in = 0;
 	plug->state.use_flow = 1;
-	plug->state.is_parent = 0;
 	plug->state.flow_in = 1;
 	plug->state.flow_out = 0;
 	plug->state.follow_in=1;
@@ -553,8 +459,6 @@ t_brick *brick_rebind(t_scene *sc,void *ptr)
 	rebind(sc,"brick","plug_out_dst",(void **)&brick->plug_out.dst);
 	rebind(sc,"brick action",brick->id.name,(void **)&brick->action);
 
-	rebind(sc,"brick","plug_parents",(void **)&brick->plug_intern.parents);
-	rebind(sc,"brick","plug child",(void **)&brick->plug_intern.child);
 	rebind(sc,"brick","plug binding",(void **)&brick->plug_intern.bindings);
 
 	txt_init(&brick->txt_name,brick->id.name);
@@ -686,11 +590,6 @@ void brick_free(t_brick *brick)
 	t_scene *sc=C->scene;
 
 	t_plug *plug_intern = &brick->plug_intern;
-
-	if(plug_intern->parents)
-	{
-		scene_delete(C->scene,plug_intern->parents);
-	}
 
 	if(plug_intern->bindings)
 	{

@@ -27,12 +27,6 @@ typedef struct Block t_block;
 typedef struct Block_Class t_block_class;
 typedef struct Block_State t_block_state;
 
-typedef enum Type_Parent
-{
-	t_parent_child,
-	t_child_parent
-}t_parent;
-
 typedef enum Type_Operation 
 {
 	t_op_add,
@@ -102,6 +96,7 @@ struct Block
 
 // BLOCK
 
+void block_brick_set_order( t_block *block);
 void 		block_dash_add(t_block *block, struct Dot *dot_x, struct Dot *dot_y);
 
 struct Brick *	block_brick_get_by_order(t_block *block, int order);

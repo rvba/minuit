@@ -82,7 +82,6 @@ typedef struct Ui
 	int step_reset;
 
 	int use_rhizomes;
-	int use_parenting;
 	int threading_on;
 	int rhizome_updated;
 

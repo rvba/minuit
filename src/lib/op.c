@@ -102,7 +102,6 @@ t_node *make_menu_ui(void)
 	t_block *block=menu->data;
 	block->state.is_moveable = 0;
 
-	add_brick_switch(C,block,"use parenting",&C->ui->use_parenting);
 	add_brick_switch(C,block,"update links",&C->ui->update_links);
 	add_brick_switch(C,block,"fixed menu",&C->ui->fixed_menu);
 	add_brick_switch(C,block,"flow brick",&C->ui->flow_brick);

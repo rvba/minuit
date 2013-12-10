@@ -8,6 +8,7 @@
  */
 
 #include "util.h"
+
  
 // SWAP
 void lst_link_swap(t_lst *lst, t_link *n1, t_link *n2)
@@ -21,6 +22,13 @@ void lst_link_swap(t_lst *lst, t_link *n1, t_link *n2)
 		lst_link_remove(lst, n2);
 		lst_link_insert(lst, tmp, n2);
 	}
+}
+
+void lst_lifo( t_lst *lst)
+{
+	t_link *tmp = lst->last;
+	lst_link_remove( lst, lst->last);
+	lst_push_front( lst, tmp);
 }
 
 t_link *lst_link_get(t_lst *lst, int pos)
@@ -449,6 +457,27 @@ void lst_push_back(t_lst *lst,t_link *link)
 		link->prev=lst->last;
 		lst->last->next=link;
 		lst->last=link;
+	}	
+	// first link
+	else
+	{
+		lst->first=link;
+		lst->last=link;
+	}
+
+	lst->count++;
+}
+
+// PUSH FRONT 
+
+void lst_push_front( t_lst *lst, t_link *link)
+{
+	// next link
+	if(lst->first)
+	{
+		link->next = lst->first;
+		lst->first->prev = link;
+		lst->first = link;
 	}	
 	// first link
 	else

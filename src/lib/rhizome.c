@@ -309,7 +309,6 @@ void rhizome_sort(t_rhizome *rhizome)
 void rhizome_get_roots(t_rhizome *rhizome)
 {
 	t_context *C = ctx_get();
-
 	t_link *l;
 	t_block *block;
 	t_brick *brick;
@@ -326,7 +325,7 @@ void rhizome_get_roots(t_rhizome *rhizome)
 	t_lst *roots = rhizome->roots;
 
 	// Cleanup Lst
-	lst_cleanup(roots);
+	list_cleanup(roots);
 
 	// For Lst
 	for(l=lst->first;l;l=l->next)

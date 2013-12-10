@@ -77,7 +77,6 @@ void block_set_loop_state(t_block *block, int state)
 // Trigger All Bricks
 void block_exec(t_block *block)
 {
-	t_context *C = ctx_get();
 	t_link *link;
 	t_brick *brick;
 	t_plug *plug;
@@ -90,22 +89,6 @@ void block_exec(t_block *block)
 	{
 		brick = link->data;
 		plug = &brick->plug_intern;
-
-		if( C->ui->use_parenting)
-		{
-			// First: Parents
-			if(plug->parents)
-			{
-				t_link *l;
-				for(l=plug->parents->first;l;l=l->next)
-				{
-					t_plug *p = l->data;
-					block_brick_trigger(p);
-				}
-			}
-		}
-
-		// Then: this brick
 		block_brick_trigger(plug);
 	}
 }
@@ -134,6 +117,19 @@ void block_set_rhizome_order(t_block *block, int order)
 	{
 		brick = link->data;
 		brick->rhizome_order = order;
+	}
+}
+
+void block_brick_set_order( t_block *block)
+{
+	t_link *l;
+	t_brick *brick;
+	int pos = 0;
+	for(l=block->bricks->first;l;l=l->next)
+	{
+		brick = l->data;
+		brick->geom.block_pos = pos;
+		pos++;
 	}
 }
 

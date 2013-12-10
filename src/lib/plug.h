@@ -64,7 +64,6 @@ struct Plug_State
 	int is_a_loop:1;
 	int close_flow_in:1;		// will close target's flow in
 	int use_flow:1;
-	int is_parent:1;
 	int swap_flow:1;
 
 	int flow_in:1;
@@ -98,9 +97,7 @@ struct Plug
 
 	t_plug *src;
 	t_plug *dst;
-	t_plug *child;
 
-	struct Lst *parents;
 	struct Lst *bindings;
 
 	void *data;
@@ -115,8 +112,6 @@ void 		plug_data_set(t_plug *plug,t_data_type type,void *data);
 
 void 		plug_debug(t_plug *plug);
 
-void 		plug_add_parent(t_plug *plug,t_plug *parent);
-void 		plug_remove_parent(t_plug *plug);
 
 t_plug *	plug_get_dst(t_plug *plug);
 t_plug *	plug_get_src(t_plug *plug);

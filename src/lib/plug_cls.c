@@ -455,8 +455,6 @@ void cls_plug_disconnect_general(t_plug_mode mode, t_plug *self)
 
 void cls_plug_connect_vector(t_plug_mode mode, t_plug *self, t_plug *dst)
 {
-	t_context *C = ctx_get();
-
 	t_brick *brick = self->brick;
 	t_block *block = brick->block;
 	t_plug *plug_in = &brick->plug_in;
@@ -495,7 +493,11 @@ void cls_plug_connect_vector(t_plug_mode mode, t_plug *self, t_plug *dst)
 					plug_out->state.flow_out = 1;
 					plug_out->state.open_in = 1;
 				}
-					
+			}
+
+			// Get, For, ...
+			if(dst->state.is_volatil)
+			{
 				// IF Vector Has Components
 				if(brick->state.has_components)
 				{
@@ -503,9 +505,7 @@ void cls_plug_connect_vector(t_plug_mode mode, t_plug *self, t_plug *dst)
 					t_plug *plug_in_component;
 					t_plug *plug_intern_component;
 
-					// For 4 (xyzw) XX
 					int i;
-					//for(i = 0; i < 4; i++)
 					for(i = 0; i < vector_src->length; i++)
 					{
 						// Get Component
@@ -528,74 +528,15 @@ void cls_plug_connect_vector(t_plug_mode mode, t_plug *self, t_plug *dst)
 				}
 			}
 
-			// ***************************
-			// Reverse Parenting
-			// ***************************
-
-			// Normal: Vector is Child Of XYZ Components
-			// Pointer: XYZ are childs of Vector
-			if(
-				// If Vector Has Components
-				brick->state.has_components
-				&&
-				(
-				// And Dst is For Pointer [OUT] 
-					dst->state.is_parent 
-				||
-				// Or Dst is Vector [IN] 
-					(
-						(dst->data_type == dt_vector)
-						&&
-						(mode == mode_in)
-					)
-				)
-			)
-			{
-				// **************************
-				// Remove Vectors' XYZ Parents 
-				// *************************
-				plug_child_remove_all_parents(self);
-
-				// Store
-				scene_store(C->scene,1);
-
-				t_brick *brick_component;
-				t_plug *plug_intern_component;
-				t_vector *vector_dst = dst->data;
-				int i;
-
-				// For All Components 
-				for(i = 0; i < 4; i++)
-				{
-					//brick_component = block_brick_get_by_order(block, i); 
-					brick_component = block_brick_get_by_position(block, i); 
-					plug_intern_component = &brick_component->plug_intern;
-
-					// If i < Vector Length
-					if(i < vector_dst->length)
-
-						// **************************
-						// Parent Component To Vector
-						// **************************
-						plug_add_parent(plug_intern_component,self);
-
-				}
-
-				scene_store(C->scene,0);
-			}
 		}
 	}
 }
 
 void cls_plug_disconnect_vector(t_plug_mode mode, t_plug *plug)
 {
-	t_context *C = ctx_get();
-
 	t_brick *brick = plug->brick;
-	t_block *block = brick->block;
 	t_plug *plug_in = &brick->plug_in;
 	t_plug *plug_out = &brick->plug_out;
-	t_vector *vector = plug->data;
 
 	// Disconnect General
 	cls_plug_disconnect_general(mode,plug);
@@ -619,47 +560,6 @@ void cls_plug_disconnect_vector(t_plug_mode mode, t_plug *plug)
 	{
 		plug_in->state.flow_in = 0;
 		plug_in->state.open_in = 1;
-	}
-
-	// ******************
-	// Reverse Parenting
-	// ******************
-
-	if(brick->state.has_components)
-	{
-
-		t_brick *brick_component;
-		t_plug *plug_intern_component;
-
-		int i;
-
-		// For All Components
-		for(i = 0; i < 4; i++)
-		{
-			//brick_component = block_brick_get_by_order(block, i);
-			brick_component = block_brick_get_by_position(block, i);
-			plug_intern_component = &brick_component->plug_intern;
-
-			plug_intern_component->data = plug_intern_component->data_memory;
-			
-			// Show Value
-			brick_component->state.draw_value = 1;
-
-			// Remove Parenting
-			plug_child_remove_all_parents(plug_intern_component);
-
-			// Store
-			scene_store(C->scene,1);
-
-			// If i < Length
-			if(i < vector->length)
-			{
-				// Reverse Parenting
-				plug_add_parent(plug, plug_intern_component);
-			}
-
-			scene_store(C->scene,0);
-		}
 	}
 }
 
@@ -954,6 +854,7 @@ void __cls_plug_flow_operator_get(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 					if(i >= vlst->count) set_int(plug_indice->data,vlst->count-1);
 
 					// Set Pointer
+					plug_result->state.is_volatil = 1;
 					vector = plug_result->data;
 					vector->pointer = vlst_get_pointer(vlst, vlst->length * i);
 				}

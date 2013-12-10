@@ -36,9 +36,6 @@ int set_draw_plug=1;
 int current_frame = 0;
 int block_pos_offset = 0;
 
-t_node *parent_brick_vector(t_plug *plug_vector, t_node *node, int order);
-t_node *_parent_brick_vector(t_plug *plug_vector, t_node *node, int order);
-
 // GET LIST
 
 t_set *get_current_set(t_context *C)
@@ -904,29 +901,23 @@ t_node *add_operator_double(t_context *C,const char *type)
 	t_block *block=node_block->data;
 	block->state.draw_outline=1;
 
-	t_node *node_op_2 = add_brick_operand(C,block,"b"); //XXX name ! -> op_add
+	// OPERANDS
+	t_node *node_op_1 = add_brick_operand(C,block,"a");
+	t_node *node_op_2 = add_brick_operand(C,block,"b"); 
+	t_brick *brick_op_1=node_op_1->data;
+	t_brick *brick_op_2=node_op_2->data;
+	brick_op_1->state.is_versatil=1;
+	brick_op_2->state.is_versatil=1;
 
 	// RESULT
 	t_node *brick_result=add_brick_operator(C,block,type);
 	t_brick *result=brick_result->data;
 	
-	// OPERANDS
-	t_node *node_op_1 = add_brick_operand(C,block,"a");
-
-	t_brick *brick_op_1=node_op_1->data;
-	t_brick *brick_op_2=node_op_2->data;
-
-	brick_op_1->state.is_versatil=1;
-	brick_op_2->state.is_versatil=1;
-
 	// ACTIONS
 	if(is(type,">"))  			result->action=op_superior;
 	else if(is(type,"<"))  			result->action=op_inferior;
 	else if(is(type,"="))  			result->action=op_equal;
 	else if(is(type,"mod"))  		result->action=op_mod;
-
-	plug_add_parent(&result->plug_intern,&brick_op_1->plug_intern);
-	plug_add_parent(&result->plug_intern,&brick_op_2->plug_intern);
 
 	return node_block;
 }
@@ -1249,8 +1240,6 @@ t_node *add_slider_camera(t_context *C,const char *name)
 	return node;
 }
 
-
-
 // CLONE
 
 t_node *add_clone(t_context *C)
@@ -1260,6 +1249,13 @@ t_node *add_clone(t_context *C)
 	t_block *block=node_block->data;
 	block->state.draw_outline=1;
 
+	// Add Brick
+	t_node *node_brick = add_part_slider_float(C,block,"brick",NULL);
+	t_brick *brick_brick = node_brick->data;
+	brick_brick->state.is_versatil = 1;
+	t_plug *plug_brick = &brick_brick->plug_intern;
+	plug_brick->state.swap_flow = 1;
+
 	// Add Clone
 	t_node *node_brick_clone=add_part_slider_int(C,block,"clone",NULL);
 	t_brick *brick_clone=node_brick_clone->data;
@@ -1267,20 +1263,8 @@ t_node *add_clone(t_context *C)
 	brick_clone->action=op_clone;
 	brick_clone->state.use_dragging = 0;
 
-	// Add Brick
-	t_node *node_brick = add_part_slider_float(C,block,"brick",NULL);
-	t_brick *brick_brick = node_brick->data;
-	brick_brick->state.is_versatil = 1;
-	t_plug *plug_brick = &brick_brick->plug_intern;
-
-	plug_brick->state.swap_flow = 1;
-
-	t_plug *plug_clone = &brick_clone->plug_intern;
-	plug_add_parent(plug_clone,plug_brick);
-
 	return node_block;
 }
-
 
 // PIPE
 
@@ -1291,12 +1275,12 @@ t_node *add_pipe(t_context *C)
 	t_block *block=node_block->data;
 	block->state.draw_outline=1;
 
-	// CLONE
+	// INT
+	add_part_slider_int(C,block,"state",NULL);
 
+	// CLONE
 	t_node *node_brick_clone=add_part_slider_int(C,block,"pipe",NULL);
 	t_brick *brick_clone=node_brick_clone->data;
-
-	add_part_slider_int(C,block,"state",NULL);
 
 	// re-init to float (old int data used by plug_out)
 	plug_init(&brick_clone->plug_in,dt_float,brick_clone,NULL,0);
@@ -1318,13 +1302,12 @@ t_node *add_maths(t_context *C,const char *name)
 	t_block *block=node_block->data;
 	block->state.draw_outline = 1;
 
-	// CLONE
-	t_node *node_brick_clone = add_part_slider_int( C, block, name, NULL);
-	t_brick *brick_clone=node_brick_clone->data;
-
 	// Brick Result
 	add_part_slider_int(C,block,"result",NULL);
 
+	// CLONE
+	t_node *node_brick_clone = add_part_slider_int( C, block, name, NULL);
+	t_brick *brick_clone=node_brick_clone->data;
 	brick_clone->plug_out.state.flow_out=0;
 	brick_clone->plug_out.state.open_out=0;
 	brick_clone->state.use_dragging = 0;
@@ -1377,10 +1360,7 @@ void add_geo_point_bare(t_context *C,t_block *block, const char *name, void *dat
 	t_node *node = add_part_geo(C,block,name,data,dt_geo_point);
 	t_brick *brick = node->data;
 	brick->action = op_void;
-
 	brick->block_order = order;
-	t_plug *plug_intern = &brick->plug_intern;
-	plug_add_parent(plug,plug_intern);
 }
 
 t_node *add_geo_edge(t_context *C,const char *name, void *data)
@@ -1449,13 +1429,12 @@ t_node *add_geo_point(t_context *C,const char *name, void *data)
 	t_brick *brick_vector = node_vector->data;
 	brick_vector->state.draw_value = 0;
 	brick_vector->state.has_components = 1;
-	t_plug *plug_vector = &brick_vector->plug_intern;
 
 	// ADD X Y Z
 
-	_parent_brick_vector(plug_vector, add_part_slider_float(C,block,"x",NULL),0);
-	_parent_brick_vector(plug_vector, add_part_slider_float(C,block,"y",NULL),1);
-	_parent_brick_vector(plug_vector, add_part_slider_float(C,block,"z",NULL),2);
+	add_part_slider_float(C,block,"x",NULL);
+	add_part_slider_float(C,block,"y",NULL);
+	add_part_slider_float(C,block,"z",NULL);
 
 	C->ui->add_bricks = 1;
 
@@ -1474,7 +1453,6 @@ t_node *add_get(t_context *C)
 	// get
 	t_node *node_get = add_part_trigger_type(C,block,"get",op_operator,dt_operator);
 	t_brick *brick_get = node_get->data;
-	t_plug *plug_get = &brick_get->plug_intern;
 	brick_get->state.always_trigger = 1;
 	brick_get->plug_intern.operator_type = ot_get;
 
@@ -1487,12 +1465,7 @@ t_node *add_get(t_context *C)
 	plug_result->state.is_volatil = 1;
 
 	// indice
-	t_node *node_indice = add_part_slider_int_positive(C,block,"indice",NULL);
-	t_brick *brick_indice = node_indice->data;
-	t_plug *plug_indice = &brick_indice->plug_intern;
-
-	plug_add_parent(plug_result,plug_get);
-	plug_add_parent(plug_get,plug_indice);
+	add_part_slider_int_positive(C,block,"indice",NULL);
 
 	return node_block;
 }
@@ -1528,7 +1501,6 @@ t_node *add_for(t_context *C)
 	t_plug *plug_vector = &brick_vector->plug_intern;
 	plug_vector->state.is_volatil = 1;
 	plug_vector->state.is_a_loop = 1;
-	plug_vector->state.is_parent = 1;
 	brick_vector->state.draw_value = 0;
 	brick_vector->plug_in.state.flow_in = 0;
 	brick_vector->plug_in.state.open_in = 1;
@@ -1536,88 +1508,13 @@ t_node *add_for(t_context *C)
 
 	C->ui->add_bricks = 1;
 
-	// Parent
-	plug_add_parent(plug_for,plug_vector);
-
 	block->state.is_a_loop = 1;
 
 	return node_block;
 }
 
-// VECTOR
-
-t_node *parent_brick_vector(t_plug *plug_vector, t_node *node, int order)
-{
-	t_brick *brick = node->data;
-	brick->block_order = order;
-	brick->state.draw = 1;
-	t_plug *plug_intern = &brick->plug_intern;
-	plug_intern->state.store_data = 0;
-	plug_add_parent(plug_vector,plug_intern);
-
-	return node;
-}
 
 // VECTOR
-
-t_node *_parent_brick_vector(t_plug *plug_vector, t_node *node, int order)
-{
-	t_brick *brick = node->data;
-	brick->block_order = order;
-	//brick->state.draw = 0;
-	brick->state.draw = 1;
-	t_plug *plug_intern = &brick->plug_intern;
-	plug_intern->state.store_data = 0;
-	plug_add_parent(plug_vector,plug_intern);
-
-	return node;
-}
-
-// VECTOR
-
-/*
-t_node *add_vector(t_context *C, int length)
-{
-	C->ui->add_bricks = 0;
-
-	// NEW BLOCK
-	t_node *node_block = add_block(C,"vector");
-	t_block *block=node_block->data;
-	block->state.draw_outline=1;
-
-	// ADD VECTOR
-
-	t_node *node_vector = add_part_vector(C,block,"vector");
-	t_brick *brick_vector = node_vector->data;
-	brick_vector->state.draw_value = 0;
-	brick_vector->state.has_components = 1;
-	t_plug *plug_vector = &brick_vector->plug_intern;
-	t_vector *vector = plug_vector->data;
-
-	// ADD X Y Z
-
-	if(length >= 2)
-	{
-		parent_brick_vector(plug_vector, add_part_slider_float(C,block,"x",NULL),0);
-		parent_brick_vector(plug_vector, add_part_slider_float(C,block,"y",NULL),1);
-		vector->length = 2;
-	}
-	if(length >=3 )
-	{
-		parent_brick_vector(plug_vector, add_part_slider_float(C,block,"z",NULL),2);
-		vector->length = 3;
-	}
-	if(length >= 4)
-	{
-		parent_brick_vector(plug_vector, add_part_slider_float(C,block,"w",NULL),3);
-		vector->length = 4;
-	}
-
-	C->ui->add_bricks = 1;
-
-	return node_block;
-}
-*/
 
 t_node *add_vector(t_context *C, int length)
 {
@@ -1681,13 +1578,14 @@ t_node *add_const(t_context *C)
 	t_block *block=node_block->data;
 	block->state.draw_outline=1;
 
+	// i
+	add_part_slider_int(C,block,"i",NULL);
+
+	// const
 	t_node *node_const = add_part_slider_int(C,block,"const",NULL);
 	t_brick *brick_const = node_const->data;
-
 	brick_const->action = op_const;
 	brick_const->state.always_trigger=1;
-
-	add_part_slider_int(C,block,"i",NULL);
 
 	return node_block;
 }
@@ -1702,33 +1600,20 @@ t_node *add_stack(t_context *C)
 	block->state.draw_outline=1;
 
 	// counter
-	t_node *node_counter = add_part_slider_int(C,block,"counter",NULL);
-	t_brick *brick_counter = node_counter->data;
-	t_plug *plug_counter = &brick_counter->plug_intern;
+	add_part_slider_int(C,block,"counter",NULL);
 
 	// i
-	t_node *node_i = add_part_slider_int(C,block,"i",NULL);
-	t_brick *brick_i = node_i->data;
-	t_plug *plug_i = &brick_i->plug_intern;
+	add_part_slider_int(C,block,"i",NULL);
 
 	// limit
 	t_node *node_limit = add_part_slider_int(C,block,"limit",NULL);
 	t_brick *brick_limit = node_limit->data;
-	t_plug *plug_limit = &brick_limit->plug_intern;
-
 	brick_limit->state.use_loops = 0;
 
 	// ++
-
 	t_node *node_plus = add_part_slider_int(C,block,"++",NULL);
 	t_brick *brick_plus = node_plus->data;
-	t_plug *plug_plus = &brick_plus->plug_intern;
-
 	brick_plus->action = op_stack;
-
-	plug_add_parent(plug_i,plug_plus);
-	plug_add_parent(plug_counter,plug_plus);
-	plug_add_parent(plug_limit,plug_plus);
 
 	return node_block;
 }
@@ -1746,6 +1631,8 @@ t_node *add_plusplus(t_context *C)
 	return node_block;
 }
 
+// IF
+
 t_node *add_if(t_context *C)
 {
 	// NEW BLOCK
@@ -1753,33 +1640,24 @@ t_node *add_if(t_context *C)
 	t_block *block=node_block->data;
 	block->state.draw_outline=1;
 
-	// if
-	t_node *node_if = add_part_slider_int(C,block,"if",NULL);
-	t_brick *brick_if = node_if->data;
-	t_plug *plug_if = &brick_if->plug_intern;
-
 	// true
 	t_node *node_true = add_part_slider_int(C,block,"true",NULL);
 	t_brick *brick_true = node_true->data;
 	brick_true->state.is_versatil = 1;
-	t_plug *plug_true = &brick_true->plug_intern;
 
 	// false
 	t_node *node_false = add_part_slider_int(C,block,"false",NULL);
 	t_brick *brick_false = node_false->data;
 	brick_false->state.is_versatil = 1;
-	t_plug *plug_false = &brick_false->plug_intern;
 
 	// result
-	t_node *node_result = add_part_slider_int(C,block,"result",NULL);
-	t_brick *brick_result = node_result->data;
-	t_plug *plug_result = &brick_result->plug_intern;
+	add_part_slider_int(C,block,"result",NULL);
 
+	// if
+	t_node *node_if = add_part_slider_int(C,block,"if",NULL);
+	t_brick *brick_if = node_if->data;
 	brick_if->action = op_if;
 
-	plug_add_parent(plug_true,plug_if);
-	plug_add_parent(plug_false,plug_if);
-	plug_add_parent(plug_result,plug_if);
 
 	return node_block;
 }
