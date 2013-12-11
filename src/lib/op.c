@@ -97,32 +97,6 @@ t_block *make_menu_view( t_context *C)
 	return block;
 }
 
-// menu ui
-
-t_block *make_menu_ui( t_context *C)
-{
-	t_block *block = add_menu_block( C, "menu_ui");
-
-	add_brick_switch(C,block,"update links",&C->ui->update_links);
-	add_brick_switch(C,block,"fixed menu",&C->ui->fixed_menu);
-	add_brick_switch(C,block,"flow brick",&C->ui->flow_brick);
-	add_brick_switch(C,block,"selection",&C->ui->object_selection);
-	add_brick_switch(C,block,"bitmap font",&C->ui->use_bitmap_font);
-	add_brick_switch(C,block,"mouse mode",&C->ui->mouse_mode);
-	add_brick_switch(C,block,"show states",&C->ui->show_states);
-	add_brick_switch(C,block,"show step",&C->ui->show_step);
-	add_brick_switch(C,block,"show brick step",&C->ui->show_brick_step);
-	add_brick_switch(C,block,"video build",&C->app->video_build);
-	add_brick_slider_int(C,block,"video offset",&C->app->video_offset);
-	add_brick_slider_int(C,block,"mouse size",&C->ui->mouse_size);
-	add_brick_switch(C,block,"show mouse",&C->ui->visualize_mouse);
-	add_brick_switch(C,block,"draw plug state",&C->ui->draw_plug_state);
-	add_brick_switch(C,block,"use rhizomes",&C->ui->use_rhizomes);
-	add_brick_slider_int(C,block,"video bitrate",&C->ui->bitrate);
-
-	return block;
-}
-
 // menu app
 
 t_block *make_menu_app( t_context *C)
@@ -144,7 +118,6 @@ t_block *make_menu_set( t_context *C)
 
 	add_brick_submenu( C, block, make_menu_view( C), "view");
 	add_brick_submenu( C, block, make_menu_debug( C), "debug");
-	add_brick_submenu( C, block, make_menu_ui( C), "ui");
 	add_brick_submenu( C, block, make_menu_app( C), "app");
 
 	return block;

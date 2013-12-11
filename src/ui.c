@@ -399,6 +399,7 @@ void ui_draw(void)
 	t_context *C = ctx_get();
 
 	C->event->ui.use_line_global_width = 0;
+	C->event->ui.use_point_global_width = 0;
 
 	// Skt
 	skt_update( C);
@@ -415,6 +416,7 @@ void ui_draw(void)
 		ui_draw_icon_freeze(C);
 	}
 
+	C->event->ui.use_point_global_width = 1;
 	C->event->ui.use_line_global_width = 1;
 }
 
