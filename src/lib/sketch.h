@@ -25,6 +25,7 @@
 #define SKT_POINT_SMOOTH 1
 
 
+struct Context;
 typedef struct Sketch t_skt;
 
 struct Sketch
@@ -45,6 +46,9 @@ struct Sketch
 	//scale
 	int with_scale;
 	float scale;
+
+	int use_point_global_width;
+	int use_line_global_width;
 };
 
 // NEW
@@ -96,6 +100,7 @@ void skt_msh_rectangle(float *p,float w,float h,float *color);
 
 void skt_sphere(float radius,float sx,float sy);
 
+void skt_update( struct Context *C);
 t_skt *skt_get(void);
 
 #endif

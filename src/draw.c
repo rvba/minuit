@@ -813,6 +813,10 @@ void draw_init(t_draw *draw)
 		glDisable(GL_BLEND);
 	}
 
+	t_context *C = ctx_get();
+	C->event->ui.use_line_global_width = 1;
+	skt_update( C);
+
 }
 
 void draw_scene(t_draw *draw, t_scene *scene)

@@ -89,6 +89,7 @@ void ui_draw_lines(void)
 	t_context *C=ctx_get();
 	if(C->event->is_drawing && C->draw->mode==mode_draw)
 	{
+		C->event->ui.use_line_global_width = 0;
 		float start[3] = {
 				(float)C->event->start_x,
 				(float)C->event->start_y,
@@ -103,6 +104,7 @@ void ui_draw_lines(void)
 
 		float *color=C->ui->front_color;
 		skt_line(start,end,1,color);
+		C->event->ui.use_line_global_width = 1;
 	}
 }
 
@@ -396,7 +398,10 @@ void ui_draw(void)
 {
 	t_context *C = ctx_get();
 
-	// Threads
+	C->event->ui.use_line_global_width = 0;
+
+	// Skt
+	skt_update( C);
 
 	// Navigation
 	ui_navigation(C);
@@ -409,6 +414,8 @@ void ui_draw(void)
 	{
 		ui_draw_icon_freeze(C);
 	}
+
+	C->event->ui.use_line_global_width = 1;
 }
 
 // INIT

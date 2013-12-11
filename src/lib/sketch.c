@@ -29,6 +29,12 @@ t_skt *skt_get(void)
 	return SKT;
 }
 
+int skt_get_line_scale( void)
+{
+	if(SKT->use_line_global_width) return SKT->line_width;
+	else return 1;
+}
+
 void skt_color(float r,float g,float b,float a)
 {
 	glColor4f(r,g,b,a);
@@ -43,11 +49,13 @@ void skt_tint(const char tint[])
 
 // LINE
 
-void skt_line(float *v1,float *v2,int width,float *color)
+void skt_line( float *v1, float *v2, int width, float *color)
 {
 	float i = SKT->intensity;
+	int scale = skt_get_line_scale();
+
 	glColor3f(color[0]*i,color[1]*i,color[2]*i);
-	glLineWidth(width * SKT->line_width);
+	glLineWidth(width * scale);
 
 	glBegin(GL_LINES);
 		glVertex3f(v1[0],v1[1],v1[2]);
@@ -59,7 +67,7 @@ void skt_closedline(float *points,int tot,float *color,int width)
 {
 	float i = SKT->intensity;
 	glColor3f(color[0]*i,color[1]*i,color[2]*i);
-	glLineWidth(width);
+	glLineWidth( skt_get_line_scale() * width);
 
 	int p=0;
 	glBegin(GL_LINE_LOOP); 
@@ -150,13 +158,11 @@ void skt_circle(float *pos)
 
 void skt_point(float *pos,int width,float *color) 
 {
-	t_context *C = ctx_get();
-
 	if(SKT->point_smooth) glEnable(GL_POINT_SMOOTH);
 	else glDisable(GL_POINT_SMOOTH);
 
 	float scale;
-	if(C->event->ui.use_point_global_width)
+	if(SKT->use_point_global_width)
 		scale = SKT->scale * SKT->point_size;
 	else
 		scale = 1;
@@ -253,6 +259,15 @@ void skt_msh_rectangle(float *p,float w,float h,float *color)
 		glVertex3f(d[0],d[1],d[2]);
 	glEnd();
 }
+
+void skt_update( t_context *C)
+{
+	if( C->event->ui.use_point_global_width) SKT->use_point_global_width = 1;
+	else SKT->use_point_global_width = 0;
+
+	if( C->event->ui.use_line_global_width) SKT->use_line_global_width = 1;
+	else SKT->use_line_global_width = 0;
+}
 	
 
 t_skt *skt_new(void)
@@ -270,6 +285,8 @@ t_skt *skt_new(void)
 	skt->point_resolution = SKT_POINT_RESOLUTION;
 	vset(skt->color,SKT_COLOR_FRONT,SKT_COLOR_FRONT,SKT_COLOR_FRONT);
 	skt->point_smooth = SKT_POINT_SMOOTH;
+	skt->use_point_global_width = 1;
+	skt->use_line_global_width = 1;
 
 	return skt;
 }
