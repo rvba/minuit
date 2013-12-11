@@ -1666,9 +1666,9 @@ t_block *get_menu(t_context *C,const char *name)
 	t_node *node;
 	t_block *block = NULL;
 
-	if(is(name,"add"))
+	if(is(name,"menu_add_object"))
 	{
-		node = scene_node_get(C->scene,"block","menu_node_add");
+		node = scene_node_get(C->scene, "block", "menu_add_object");
 		block = node->data;
 	}
 
