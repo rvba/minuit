@@ -440,24 +440,23 @@ t_node *add_brick_operator(t_context *C,t_block *block,const char *name)
 t_block *add_default_menu(t_context *C, const char *name)
 {
 	t_node *menu_root = scene_node_get(C->scene,"block","menu_mouse");
+	t_block *block_root = menu_root->data;
 
 	t_node *menu = block_make(name,"menu");
 	t_block *block = menu->data;
 
-	add_brick_submenu(C, menu_root, menu, name);
+	add_brick_submenu(C, block_root, block, name);
 
 	return block;
 }
 
-t_node *add_brick_submenu(t_context *C,t_node *menu,t_node *submenu,const char *name)
+t_node *add_brick_submenu( t_context *C, t_block *menu, t_block *submenu, const char *name)
 {
-	t_block *block=menu->data;
-	t_node *node=brick_make(block,name,bt_menu,dt_string,NULL);
+	t_node *node=brick_make( menu, name, bt_menu, dt_string, NULL);
 	t_brick *brick=node->data;
 
-	t_block *m_target = submenu->data;
-	m_target->state.is_root=0;
-	brick->menu=m_target;
+	submenu->state.is_root=0;
+	brick->menu = submenu;
 
 	// PLUG
 	set_plug_option(brick);
@@ -467,9 +466,9 @@ t_node *add_brick_submenu(t_context *C,t_node *menu,t_node *submenu,const char *
 
 // BRICK SUBMENU CONTEXTUAL
 
-t_node *add_brick_submenu_contextual(t_context *C,t_node *menu,t_node *submenu,const char *name,t_data_type context)
+t_node *add_brick_submenu_contextual( t_context *C, t_block *menu, t_block *submenu, const char *name, t_data_type context)
 {
-	t_node *node=add_brick_submenu(C,menu,submenu,name);
+	t_node *node = add_brick_submenu( C, menu, submenu, name);
 	t_brick *brick=node->data;
 
 	brick->state.is_contextual=1;
