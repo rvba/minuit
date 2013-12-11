@@ -14,13 +14,15 @@ if [[ $input == "y" ]];then
 				libxi-dev
 fi
 
+echo "bin name:"
+read -r name
 echo "build name:"
 read -r input
 cd ..
 mkdir $input
 cd $input
 echo "cmaking..."
-cmake ../minuit
+cmake ../$name
 echo "making..."
 make
 echo "done."
