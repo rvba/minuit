@@ -168,7 +168,6 @@ void keymap_command(unsigned char key)
 
 		case '*': draw_switch_axis_world(C->draw);break;
 
-		case 'a': ctx_switch_record_video(C); break;
 		case 'q': op_quit(NULL);break;
 		case '.': if(camera) op_camera_reset_pos(camera);break;
 		case '5': if(camera) op_camera_switch_type(camera);break;
@@ -178,9 +177,7 @@ void keymap_command(unsigned char key)
 		case '3': if(camera) op_camera_view_left(camera);break;
 		case '2': if(camera) op_camera_ortho_rotate(camera,-5,0,0);break;
 		case 'z': app_screen_switch_fullscreen(C->app);break;
-		case 'm': C->draw->with_draw_pass=0; break;
 		case 'x': op_switch_color(C);break;
-		case 't': switch_txt(C);break;
 		case 'n': C->ui->step = 1; break;
 		case 'r':
 			if(C->app->keyboard->alt)
@@ -216,9 +213,6 @@ void keymap_command(unsigned char key)
 			switch_sets(C);
 			// reset key
 			C->app->keyboard->key_pressed=0;
-			break;
-		case 'c':
-			server_connect(C->server,9901);
 			break;
 	}
 
