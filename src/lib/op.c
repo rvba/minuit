@@ -198,7 +198,7 @@ t_block *make_menu_add_object( t_context *C)
 	add_brick_trigger(C,block,"default",op_add_default);
 	add_brick_trigger(C,block,"cube",op_add_cube);
 	add_brick_trigger(C,block,"plane",op_add_plane);
-	add_brick_trigger(C,block,"uv cube",op_add_uv_cube);
+	//add_brick_trigger(C,block,"uv cube",op_add_uv_cube);
 	add_brick_trigger(C,block,"light",op_add_light);
 	add_brick_trigger(C,block,"camera",op_add_camera);
 	add_brick_trigger(C,block,"viewport",op_add_viewport);
@@ -445,7 +445,7 @@ t_block *make_menu_brick_add( t_context *C)
 
 	add_brick_submenu( C, menu, make_menu_scalar( C), "scalar");
 	add_brick_submenu( C, menu, make_menu_vector( C), "vector");
-	add_brick_submenu( C, menu, make_menu_lst( C), "list");
+	//add_brick_submenu( C, menu, make_menu_lst( C), "list");
 	add_brick_submenu( C, menu, make_menu_logic( C), "logic");
 	add_brick_submenu( C, menu, make_menu_maths( C), "maths");
 	add_brick_submenu( C, menu, make_menu_ops( C), "operator");

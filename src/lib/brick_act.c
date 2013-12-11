@@ -1795,6 +1795,8 @@ void *op_rnd(t_brick *brick)
 	int *data=plug_intern->data;
 	*data=rnd_range(0,100);
 
+	brick_release(brick); 
+
 	return NULL;
 }
 
@@ -1811,6 +1813,8 @@ void *op_neg(t_brick *brick)
 	// negate
 	if(plug_in->state.is_connected)
 		plug_data_negate(plug_intern);
+
+	brick_release(brick); 
 
 	return NULL;
 }

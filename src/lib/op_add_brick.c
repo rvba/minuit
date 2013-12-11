@@ -873,14 +873,14 @@ t_node *add_switch_custom(t_context *C,const char *name,void *data,void *(* f)(t
 
 // MULTIPLIER 
 
-t_node *add_multiplier(t_context *C,const char *type)
+t_node *add_multiplier( t_context *C, const char *type)
 {
 	// BLOCK
-	t_node *node_block = add_block(C,"mulitplier");
-	t_block *block=node_block->data;
+	t_node *node_block = add_block(C, type);
+	t_block *block = node_block->data;
 
-	t_node *node_brick=add_brick_slider_float(C,block,"multiplier",NULL);
-	t_brick *brick=node_brick->data;
+	t_node *node_brick = add_brick_slider_float( C, block, type, NULL);
+	t_brick *brick = node_brick->data;
 
 	if(is(type,"10"))  brick->var.increment=10; 
 	else if(is(type,"100"))  brick->var.increment=100; 

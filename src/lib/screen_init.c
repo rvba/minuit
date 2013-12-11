@@ -89,8 +89,11 @@ void screen_sets_make(void)
 void screen_block_add_by_name(t_context *C, t_screen *screen, const char *name)
 {
 	t_node *node = scene_node_get(C->scene,"block",name);
-	t_block *block = node->data;
-	screen_block_add(screen, block);
+	if( node)
+	{
+		t_block *block = node->data;
+		screen_block_add(screen, block);
+	}
 }
 
 void screen_bricks_make(void)
@@ -113,7 +116,7 @@ void screen_bricks_make(void)
 	screen_block_add_by_name(C, screen, "menu_vector");
 	screen_block_add_by_name(C, screen, "menu_logic");
 	screen_block_add_by_name(C, screen, "menu_maths");
-	screen_block_add_by_name(C, screen, "menu_lst");
+	//screen_block_add_by_name(C, screen, "menu_lst");
 };
 
 void screen_intro_make(void)
