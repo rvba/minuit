@@ -24,6 +24,7 @@ enum Data_Type;
 struct Brick_State;
 struct Brick_Geometry;
 struct Brick_Var;
+struct Action;
 
 // BRICK TYPE
 
@@ -185,7 +186,7 @@ typedef struct Brick
 
 void brick_rhizome_split(t_brick *brick_x, t_brick *brick_y);
 void brick_rhizome_add(t_brick *brick_x, t_brick *brick_y);
-void 		brick_remove(struct Dict *args);
+void 		brick_remove(struct Action *action);
 
 int 		brick_is_different(struct Brick *dst, struct Brick *src);
 void 		brick_copy_data(struct Brick *dst, struct Brick *src);

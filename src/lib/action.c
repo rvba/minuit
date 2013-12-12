@@ -29,6 +29,8 @@ t_action *action_new(const char *name)
 	
 	action->act = NULL;
 	action->args = NULL;
+	action->done = 0;
+	action->brick = NULL;
 
 	return action;
 }

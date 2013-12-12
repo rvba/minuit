@@ -361,19 +361,35 @@ void ctx_ui_intro(t_context *C)
 
 t_lst *EXE=NULL;
 
+int action_check( t_action *action)
+{
+	t_brick *brick = action->brick;
+	t_set *set = brick->block->set;
+	if(set->processing) return 0;
+	else return 1;
+}
+
 void ctx_exe(t_context *C)
 {
 	t_link *l;
 	t_action *action;
 
-	for(l=EXE->first;l;l=l->next)
+	t_lst *tmp = lst_copy( EXE);
+	lst_cleanup(EXE);
+
+	for(l=tmp->first;l;l=l->next)
 	{
 		action = l->data;
-		action->act(action->args);
-		action_free(action);
+		if( action_check( action))
+		{
+			action->act(action);
+			action_free(action);
+		}
+		else
+		{
+			exe_add_action( action);
+		}
 	}
-
-	lst_cleanup(EXE);
 }
 
 void exe_init(void)

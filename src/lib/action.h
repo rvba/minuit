@@ -20,7 +20,9 @@ struct Action
 {
 	t_id id;
 
-	void (* act)(struct Dict *args);
+	int done;
+	struct Brick *brick;
+	void (* act)(struct Action *action);
 	struct Dict *args;
 };
 

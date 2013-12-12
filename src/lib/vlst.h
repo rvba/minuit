@@ -10,6 +10,7 @@
 #ifndef __VLST_H
 #define __VLST_H
 
+struct Brick;
 
 typedef struct VLst
 {
@@ -35,7 +36,7 @@ typedef struct VLst
 }t_vlst;
 
 
-void 		vlst_update_data(t_vlst *vlst,t_vlst *caller);
+void 		vlst_update_data( struct Brick *brick, t_vlst *vlst,t_vlst *caller);
 void		vlst_free(t_vlst *vlst);
 void 		vlst_delete( t_vlst *vlst);
 void 		vlst_init(t_vlst *vlst);
@@ -69,7 +70,7 @@ t_vlst *	vlst_duplicate(t_vlst *vlst);
 void 		vlst_set(t_vlst *vlst,int i);
 t_vlst *	vlst_clone(t_vlst *vlst);
 
-void __vlst_update_data(t_vlst *vlst,t_vlst *caller);
+void __vlst_update_data( struct Brick *brick, t_vlst *vlst,t_vlst *caller);
 
 
 #endif

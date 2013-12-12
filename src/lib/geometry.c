@@ -937,23 +937,23 @@ void geo_data_set(t_geo *geo, t_data_type type, t_lst *lst)
 	else if( type == dt_geo_edge) 	geo_fill_edges(geo, lst);
 }
 
-void geo_vlst(t_vlst *vlst, t_lst *lst)
+void geo_vlst( t_brick *brick, t_vlst *vlst, t_lst *lst)
 {
 	if(lst->count != vlst->count)
 	{
 		if(lst->count > 0)
 		{
 			vlst->count_new = lst->count;
-			 __vlst_update_data(vlst, NULL);
+			 __vlst_update_data( brick, vlst, NULL);
 		}
 	}
 }
 
-void geo_vlst_points_set(t_lst *lst, t_vlst *vlst)
+void geo_vlst_points_set( t_brick *brick, t_lst *lst, t_vlst *vlst)
 {
 	t_link *l;
 
-	geo_vlst(vlst, lst);
+	geo_vlst( brick, vlst, lst);
 
 	float *v = vlst->data;
 
@@ -969,11 +969,11 @@ void geo_vlst_points_set(t_lst *lst, t_vlst *vlst)
 	vlst->type_target = dt_vertex;
 }
 
-void geo_vlst_edges_set(t_lst *lst, t_vlst *vlst)
+void geo_vlst_edges_set( t_brick *brick, t_lst *lst, t_vlst *vlst)
 {
 	t_link *l;
 
-	geo_vlst(vlst, lst);
+	geo_vlst( brick, vlst, lst);
 
 	int *i = vlst->data;
 

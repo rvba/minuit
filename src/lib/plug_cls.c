@@ -1390,10 +1390,10 @@ void __cls_plug_flow_vlst(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 				switch(lst_type)
 				{
 					case(dt_geo_point):
-						geo_vlst_points_set(lst, vlst);
+						geo_vlst_points_set( plug->brick, lst, vlst);
 						break;
 					case(dt_geo_edge):
-						geo_vlst_edges_set(lst, vlst);
+						geo_vlst_edges_set( plug->brick, lst, vlst);
 						break;
 					default:
 						break;

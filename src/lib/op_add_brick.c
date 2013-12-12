@@ -105,6 +105,14 @@ void add_block_offset(t_context *C, t_block *block)
 	block_pos_offset+=(brick_height*tot_brick);
 }
 
+
+void add_block_frame_state( t_block *block)
+{
+		{
+		}
+
+	}
+
 t_node *add_block(t_context *C,const char *name)
 {
 	// Get Set

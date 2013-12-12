@@ -556,6 +556,12 @@ t_node *brick_make(t_block *block,const char *name,t_brick_type brick_type,t_dat
 	// BRICK INIT
 	brick_init(C->scene,brick);
 
+	// Frame Based
+	if(is(name,"frame"))
+	{
+		block->state.frame_based  =1;
+	}
+
 	return node_brick;
 }
 

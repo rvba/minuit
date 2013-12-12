@@ -265,9 +265,10 @@ void brick_release(t_brick *brick)
 
 // REMOVE
 
-void brick_remove(t_dict *args)
+void brick_remove(t_action *action)
 {
 	t_context *C = ctx_get();
+	t_dict *args = action->args;
 
 	t_brick *brick = dict_pop_data(args,"brick");
 	t_block *block = brick->block;
@@ -340,6 +341,7 @@ void cls_brick_update(t_brick *brick)
 
 		t_dict *dict = dict_make("args");
 		action->args = dict;
+		action->brick = brick;
 
 		dict_symbol_add(action->args,"brick",dt_null,brick);
 

@@ -92,7 +92,8 @@ void ctx_compute(t_context *C)
 			else
 			{
 				set_exec(set);
-				set->process = 0;
+				if(set->frame_based) set->process = 1;
+				else set->process = 0;
 				set->processing = 0;
 			}
 		}

@@ -124,8 +124,8 @@ void geo_array_get_points( t_geo_array *array, t_lst *lst);
 
 void geo_data_set(t_geo *geo, t_data_type type, struct Lst *points);
 void geo_vlst_set(t_geo *geo, t_data_type type,  struct VLst *vlst);
-void geo_vlst_points_set(struct Lst *lst, struct VLst *vlst);
-void geo_vlst_edges_set(struct Lst *lst, struct VLst *vlst);
+void geo_vlst_points_set( struct Brick *brick, struct Lst *lst, struct VLst *vlst);
+void geo_vlst_edges_set( struct Brick *brick, struct Lst *lst, struct VLst *vlst);
 
 void geo_reset(t_geo *geo);
 

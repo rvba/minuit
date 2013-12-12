@@ -23,6 +23,7 @@
 #include "block.h"
 #include "memory.h"
 #include "vlst.h"
+#include "brick.h"
 
 
 void *vlst_get_pointer(t_vlst *vlst, int indice)
@@ -55,15 +56,18 @@ void vlst_set_data(t_vlst *vlst, void *data, int indice)
 	}
 }
 
-void exe_vlst(t_dict *args)
+void exe_vlst(t_action *action)
 {
+	t_dict *args = action->args;
 	t_vlst *vlst = dict_pop_data(args,"vlst");
 	t_vlst *caller = dict_pop_data(args,"caller");
 
-	__vlst_update_data(vlst,caller);
+	__vlst_update_data( action->brick, vlst, caller);
+
+	action->done = 1;
 }
 
-void vlst_update_data(t_vlst *vlst,t_vlst *caller)
+void vlst_update_data( t_brick *brick, t_vlst *vlst,t_vlst *caller)
 {
 	t_action *action = action_new("action");
 
@@ -71,6 +75,7 @@ void vlst_update_data(t_vlst *vlst,t_vlst *caller)
 
 	t_dict *dict = dict_make( "args");
 	action->args = dict;
+	action->brick = brick;
 
 	dict_symbol_add(action->args,"vlst",dt_null,vlst);
 	dict_symbol_add(action->args,"caller",dt_null,caller);
@@ -112,7 +117,7 @@ void vlst_data_init(t_vlst *vlst, int old_count)
 	}
 }
 	
-void __vlst_update_data(t_vlst *vlst,t_vlst *caller)
+void __vlst_update_data( t_brick *brick, t_vlst *vlst,t_vlst *caller)
 {
 	t_context *C=ctx_get();
 
@@ -168,13 +173,13 @@ void __vlst_update_data(t_vlst *vlst,t_vlst *caller)
 				// prevent infinite loop
 				if(link_vlst->id.id != caller->id.id)
 				{
-					vlst_update_data(link_vlst,vlst);
+					vlst_update_data( brick, link_vlst,vlst);
 				}
 				
 			}
 			else
 			{
-				vlst_update_data(link_vlst,vlst);
+				vlst_update_data( brick, link_vlst, vlst);
 			}
 		}
 	}

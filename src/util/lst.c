@@ -292,22 +292,15 @@ t_link *lst_link_find_by_ptr(t_lst *lst, void *ptr)
 
 t_lst *lst_copy(t_lst *lst)
 {
-	if(lst->first)
-	{
-		t_lst *copy = lst_new(lst->id.name);
-		t_link *link;
+	t_lst *copy = lst_new(lst->id.name);
+	t_link *link;
 
-		for(link=lst->first;link;link=link->next)
-		{
-			void *data = link->data;
-			lst_add(copy, data, link->id.name);
-		}
-		return copy;
-	}
-	else
+	for(link=lst->first;link;link=link->next)
 	{
-		return NULL;
+		void *data = link->data;
+		lst_add(copy, data, link->id.name);
 	}
+	return copy;
 }
 
 // REMOVE DOUBLE

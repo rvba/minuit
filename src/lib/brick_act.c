@@ -100,7 +100,8 @@ void *op_brick_add(t_brick *brick)
 {
 	t_context *C = ctx_get();
 	t_node *node = NULL;
-	t_block *this_block;
+	t_block *block;
+	t_set *set;
 
 	// store
 	scene_store(C->scene,1);
@@ -183,21 +184,9 @@ void *op_brick_add(t_brick *brick)
 	// Switch Desk
 	if(!C->ui->show_sets) show_sets(C);
 
-	// Limit
-
-	if(node)
-	{
-		this_block = node->data;
-		if(this_block)
-		{
-			// Frame Based
-			if(is(name,"frame") || is(name,"timer") || is(name,"timer low"))
-			{
-				this_block->state.frame_based  =1;
-			}
-		}
-
-	}
+	block = node->data;
+	set = block->set;
+	set_setup( set);
 		
 	return NULL;
 }
@@ -694,9 +683,11 @@ void brick_rhizome_setup(t_brick *brick)
 	}
 }
 
-void exe_remove_brick(t_dict *args)
+void exe_remove_brick(t_action *action)
 {
 	// remove brick
+
+	t_dict *args = action->args;
 
 	t_brick *_brick = dict_pop_data(args,"brick");
 	t_block *block = _brick->block;
@@ -738,10 +729,12 @@ void exe_remove_brick(t_dict *args)
 }
 
 
-void exe_add_brick(t_dict *args)
+void exe_add_brick(t_action *action)
 {
 	t_context *C = ctx_get();
 	scene_store(C->scene, 1);
+
+	t_dict *args = action->args;
 
 	t_brick *brick = dict_pop_data(args,"brick");
 
@@ -769,7 +762,7 @@ void exe_add_brick(t_dict *args)
 
 
 
-void add_exe_add_brick(t_brick *brick,t_brick *brick_target,void (* f)(t_dict *))
+void add_exe_add_brick(t_brick *brick,t_brick *brick_target,void (* f)(t_action *))
 {
 	t_scene *sc = scene_get();
 	scene_store( sc, 1);
@@ -779,6 +772,7 @@ void add_exe_add_brick(t_brick *brick,t_brick *brick_target,void (* f)(t_dict *)
 
 	t_dict *dict = dict_make("args");
 	action->args = dict;
+	action->brick = brick;
 
 	dict_symbol_add(action->args,"brick",dt_null,brick);
 	dict_symbol_add(action->args,"target",dt_null,brick_target);
@@ -798,6 +792,7 @@ void add_exe_remove_brick(t_brick *brick)
 
 	t_dict *dict = dict_make("args");
 	action->args = dict;
+	action->brick = brick;
 
 	dict_symbol_add(action->args,"brick",dt_null,brick);
 
@@ -1777,7 +1772,7 @@ void *op_set_vlst(t_brick *brick)
 				if(_released)
 				{
 					_released=0;
-					vlst_update_data(vlst,NULL);
+					vlst_update_data(brick, vlst, NULL);
 				}
 			}
 		}
