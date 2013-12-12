@@ -313,8 +313,8 @@ void ctx_block_set_update(t_context *C)
 		t_lst *lst = set->blocks;
 		t_link *l = lst->first;
 
-		//if(!set->processing)
-		//{
+		if(!set->processing)
+		{
 			if(l)
 			{
 				for(;l;l=l->next)
@@ -341,7 +341,7 @@ void ctx_block_set_update(t_context *C)
 					block->cls->update(block);
 				}
 			}
-		//}
+		}
 	}
 }
 
