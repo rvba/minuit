@@ -1655,6 +1655,11 @@ void *op_not(t_brick *brick)
 		default:printf("op_not need an int\n");break;
 	}
 
+	if(brick->mode==bm_triggering) // (see:plug_update)
+	{
+		brick_release(brick); 
+	}
+
 	return NULL;
 }
 
@@ -1728,7 +1733,10 @@ void *op_rnd(t_brick *brick)
 	int *data=plug_intern->data;
 	*data=rnd_range(0,100);
 
-	brick_release(brick); 
+	if(brick->mode==bm_triggering) // (see:plug_update)
+	{
+		brick_release(brick); 
+	}
 
 	return NULL;
 }
@@ -1747,7 +1755,10 @@ void *op_neg(t_brick *brick)
 	if(plug_in->state.is_connected)
 		plug_data_negate(plug_intern);
 
-	brick_release(brick); 
+	if(brick->mode==bm_triggering) // (see:plug_update)
+	{
+		brick_release(brick); 
+	}
 
 	return NULL;
 }
@@ -1857,6 +1868,11 @@ void *op_bang(t_brick *brick)
 		*state=0;
 	}
 
+	if(brick->mode==bm_triggering) // (see:plug_update)
+	{
+		brick_release(brick); 
+	}
+
 	return NULL;
 }
 
@@ -1912,15 +1928,6 @@ void *op_const(t_brick *brick)
 	// flow
 	plug_const->cls->flow(plug_const);
 
-	/*
-	if(!plug_const->state.is_eval)
-	{
-		plug_const->state.is_eval = 1;
-
-		*_const = *_i;
-	}
-	*/
-	
 	t_context *C = ctx_get();
 
 	if(brick->state.frame_loop != C->app->frame)
