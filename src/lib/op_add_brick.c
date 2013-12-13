@@ -488,6 +488,21 @@ t_node *add_brick_submenu_contextual( t_context *C, t_block *menu, t_block *subm
 	return node;
 }
 
+t_node *add_brick_submenu_poll( t_context *C, t_block *menu, t_block *submenu, const char *name, int (* f)(t_brick *brick))
+{
+	t_node *node = add_brick_submenu( C, menu, submenu, name);
+	t_brick *brick=node->data;
+
+	brick->state.is_contextual=1;
+	brick->state.poll = 1;
+	brick->poll = f;
+
+	// PLUG
+	set_plug_option(brick);
+
+	return node;
+}
+
 // BRICK SELECTOR
 
 t_node *add_brick_selector(t_context *C,t_block *block,const char *name,void *data_target,int length)

@@ -563,11 +563,18 @@ void brick_draw_check_context(t_brick *brick)
 	{
 		brick->state.draw = 0;
 
-		if(node)
+		if(brick->state.poll)
 		{
-			type = node->type;
+			brick->state.draw = brick->poll( brick);
+		}
+		else
+		{
+			if(node)
+			{
+				type = node->type;
 
-			if( context == type) brick->state.draw = 1;
+				if( context == type) brick->state.draw = 1;
+			}
 		}
 	}
 }

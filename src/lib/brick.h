@@ -105,6 +105,7 @@ typedef struct Brick_State
 	int is_plug_update:1;
 	int always_trigger:1;
 	int is_contextual:1;
+	int poll:1;
 	int is_versatil:1;
 	int has_ref:1;
 	int use_dragging:1;
@@ -180,6 +181,7 @@ typedef struct Brick
 
 	// action
 	void *(* action)(struct Brick *brick);	
+	int (* poll)(struct Brick *brick);	
 
 }t_brick;
 
@@ -323,6 +325,7 @@ void 		brick_set_updated(struct Brick *brick);
 
 // BRICK_UPDATE
 
+int brick_check_viewport( t_brick *brick);
 int brick_pre_check_loop(t_brick *brick);
 
 void 		cls_brick_trigger_selector(struct Brick *brick);

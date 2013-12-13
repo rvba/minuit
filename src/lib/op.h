@@ -48,6 +48,7 @@ struct Set *get_current_set(struct Context *C);
 struct Block *	add_default_menu(struct Context *C, const char *name);
 struct Node *	add_brick_submenu( struct Context *C, struct Block *menu, struct Block *submenu, const char *name);
 struct Node *	add_brick_submenu_contextual( struct Context *C, struct Block *menu, struct Block *submenu, const char *name, t_data_type context);
+struct Node *	add_brick_submenu_poll( struct Context *C, struct Block *menu, struct Block *submenu, const char *name, int (* f)( struct Brick *brick));
 struct Node *	add_brick_selector(struct Context *C,struct Block *block,const char *name,void *data_target,int length);
 struct Node *	add_brick(struct Context *C,struct Block *block,const char *name,const char *type,const char *data_type,void *data_target);
 struct Node *	add_brick_slider_int(struct Context *C,struct Block *block,const char *name,void *data_target);

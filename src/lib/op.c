@@ -154,8 +154,8 @@ t_block *make_menu_draw( t_context *C)
 	add_brick_switch(C,block,"light",&C->event->with_light);
 	add_brick_switch(C,block,"depth",&C->event->with_depth);
 	add_brick_switch(C,block,"blend",&C->event->with_blend);
-	add_brick_switch(C,block,"restrict",&C->draw->with_restrict_matrix);
-	add_brick_switch(C,block,"direct",&C->draw->mode_direct);
+	//add_brick_switch(C,block,"restrict",&C->draw->with_restrict_matrix);
+	//add_brick_switch(C,block,"direct",&C->draw->mode_direct);
 	add_brick_switch(C,block,"draw lights",&C->draw->draw_lights);
 
 	return block;
@@ -422,7 +422,7 @@ t_block *make_menu_brick_add( t_context *C)
 	add_brick_submenu( C, menu, make_menu_maths( C), "maths");
 	add_brick_submenu( C, menu, make_menu_ops( C), "operator");
 	add_brick_submenu( C, menu, make_menu_time( C), "time");
-	add_brick_submenu( C, menu, make_menu_cam( C), "camera");
+	add_brick_submenu_poll( C, menu, make_menu_cam( C), "camera", brick_check_viewport);
 	add_brick_submenu( C, menu, make_submenu_mouse( C), "mouse");
 	add_brick_submenu_contextual( C, menu, make_menu_object( C), "object", dt_object);
 	add_brick_submenu_contextual(C, menu, make_menu_mesh( C),"mesh", dt_mesh);

@@ -635,6 +635,7 @@ t_brick *brick_new(const char *name)
 	brick->state.use_block_width=1;
 	brick->state.is_mouse_mode=1;
 	brick->state.is_contextual=0;
+	brick->state.poll=0;
 	brick->state.is_versatil=0;
 	brick->state.has_ref=0;
 	brick->state.is_current=0;
@@ -661,6 +662,7 @@ t_brick *brick_new(const char *name)
 
 	brick->cls=NULL;
 	brick->action=NULL;
+	brick->poll = NULL;
 	brick->menu=NULL;
 
 	brick->rhizome_order = -1;
