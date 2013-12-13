@@ -11,7 +11,6 @@
 #define __BINDING_H
 
 #include "common.h"
-#include "data.h"
 
 struct Scene;
 

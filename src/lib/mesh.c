@@ -7,6 +7,7 @@
  *
  */
 
+#include "node.h"
 #include "util.h"
 #include "mesh.h"
 #include "context.h"

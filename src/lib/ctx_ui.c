@@ -7,6 +7,7 @@
  *
  */
 
+#include "node.h"
 #include "context.h"
 #include "scene.h"
 #include "action.h"
@@ -26,7 +27,6 @@
 #include "set.h"
 #include "screen.h"
 #include "rhizome.h"
-
 #include "op.h"
 
 void ctx_ui_freeze(t_context *C)

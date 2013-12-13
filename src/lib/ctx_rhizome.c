@@ -7,6 +7,7 @@
  *
  */
 
+#include "node.h"
 #include "context.h"
 #include "scene.h"
 #include "ctx.h"
@@ -19,7 +20,6 @@
 #include "memory.h"
 #include "list.h"
 #include "set.h"
-
 #include "rhizome.h"
 
 void ctx_set_exec(struct Context *C)

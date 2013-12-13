@@ -33,25 +33,6 @@ float vec[3];
 
 int brick_check_viewport( t_brick *brick)
 {
-	/*
-	t_context *C=ctx_get();
-	t_event *event = C->event;
-
-	t_camera *camera = NULL;
-	if(C->scene->has_generic_viewport)
-	{
-		// Get default Viewport
-		t_node *node_viewport = scene_node_get(C->scene,"viewport","viewport");
-		t_viewport *viewport = NULL;
-
-		if(node_viewport)
-		{
-			viewport = node_viewport->data;
-			camera = viewport->camera;
-		}
-	}
-	*/
-
 	t_context *C=ctx_get();
 	if(C->scene->has_generic_viewport) return 1;
 	else return 0;
@@ -65,7 +46,6 @@ int brick_check_loop(t_brick *brick)
 
 	if(brick->state.frame_loop != frame)
 	{
-	//	brick->state.frame_loop = frame;
 		return 1;
 	}
 	else

@@ -13,7 +13,6 @@
 
 #include "txt.h"
 #include "plug.h"
-#include "node.h"
 
 struct Block;
 struct Brick;

@@ -7,6 +7,7 @@
  *
  */
 
+#include "node.h"
 #include "util.h"
 #include "context.h"
 #include "scene.h"

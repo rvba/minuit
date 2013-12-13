@@ -7,29 +7,31 @@
  *
  */
 
-#include "op.h"
-#include "app.h"
 
 #include "context.h"
-#include "node.h"
 #include "scene.h"
+#include "block.h"
+#include "brick.h"
+#include "app.h"
+#include "op.h"
+#include "dict.h"
+#include "event.h"
+#include "sketch.h"
+#include "draw.h"
+#include "clock.h"
+#include "obj.h"
+#include "viewport.h"
+/*
+#include "node.h"
 #include "obj.h"
 #include "process.h"
 #include "engine.h"
-#include "event.h"
-#include "sketch.h"
 #include "ui.h"
-#include "draw.h"
-#include "dict.h"
 #include "list.h"
-#include "clock.h"
-#include "block.h"
-#include "brick.h"
-#include "obj.h"
-#include "viewport.h"
 #include "set.h"
 #include "memory.h"
 #include "util.h"
+*/
 
 // store menu
 
@@ -40,86 +42,6 @@ t_block *add_menu_block( t_context *C, const char *name)
 	t_node *menu = block_make( name, "menu");
 	t_block *block = menu->data;
 	block->state.is_moveable = 0;
-	return block;
-}
-
-// menu process
-
-/*
-t_node *add_menu_process(void)
-{
-	t_context *C=ctx_get();
-	t_node *menu_main=scene_node_get(C->scene,"block","menu_set");
-	t_node *menu=block_make("menu_process","menu");
-	t_block *block=menu->data;
-	block->state.is_moveable = 0;
-
-	add_brick_switch(C,block,"debug process",&C->event->debug_process);
-	add_brick_slider_float(C,block,"limit",&C->engine->global_limit);
-	add_brick_slider_float(C,block,"freq",&C->engine->global_freq);
-	add_brick_switch(C,block,"limit process",&C->engine->with_global_limit);
-
-	add_brick_submenu(C,menu_main,menu,"process");
-
-	return menu;
-}
-*/
-
-// menu debug
-
-t_block *make_menu_debug( t_context *C)
-{
-	t_block *block = add_menu_block( C, "menu_debug");
-
-	add_brick_switch(C,block,"show terminal",&C->ui->show_term);
-	add_brick_switch(C,block,"debug keyboard",&C->app->debug_keyboard);
-	add_brick_switch(C,block,"debug select",&C->event->debug_select);
-	add_brick_switch(C,block,"debug console",&C->event->debug_console);
-	add_brick_switch(C,block,"debug terminal",&C->event->debug_terminal);
-	add_brick_switch(C,block,"debug loop",&C->event->debug_loop);
-	add_brick_switch(C,block,"debug key",&C->event->debug_key);
-	add_brick_switch(C,block,"debug plug",&C->event->debug_plug);
-	add_brick_int(C,block,"mem",(int *) &MEM_SIZE);
-
-	return block;
-}
-
-// menu view
-
-t_block *make_menu_view( t_context *C)
-{
-	t_block *block = add_menu_block( C, "menu_view");
-
-	add_brick_slider_int_custom(C,block,"win width",&C->app->window->width,op_window);
-	add_brick_slider_int_custom(C,block,"win height",&C->app->window->height,op_window);
-	add_brick_slider_int(C,block,"vp width",&C->app->window->viewport_width);
-
-	return block;
-}
-
-// menu app
-
-t_block *make_menu_app( t_context *C)
-{
-	t_block *block = add_menu_block( C, "menu_app");
-
-	add_brick_switch(C,block,"loop",&C->app->loop);
-	add_brick_switch(C,block,"rec save",&C->event->rec_save);
-	add_brick_switch(C,block,"use threading",&C->event->use_threading);
-
-	return block;
-}
-
-// menu set
-
-t_block *make_menu_set( t_context *C)
-{
-	t_block * block = add_menu_block( C, "menu_set");
-
-	add_brick_submenu( C, block, make_menu_view( C), "view");
-	add_brick_submenu( C, block, make_menu_debug( C), "debug");
-	add_brick_submenu( C, block, make_menu_app( C), "app");
-
 	return block;
 }
 
@@ -154,8 +76,6 @@ t_block *make_menu_draw( t_context *C)
 	add_brick_switch(C,block,"light",&C->event->with_light);
 	add_brick_switch(C,block,"depth",&C->event->with_depth);
 	add_brick_switch(C,block,"blend",&C->event->with_blend);
-	//add_brick_switch(C,block,"restrict",&C->draw->with_restrict_matrix);
-	//add_brick_switch(C,block,"direct",&C->draw->mode_direct);
 	add_brick_switch(C,block,"draw lights",&C->draw->draw_lights);
 
 	return block;
@@ -169,8 +89,6 @@ t_block *make_menu_add_object( t_context *C)
 
 	add_brick_trigger(C,block,"default",op_add_default);
 	add_brick_trigger(C,block,"cube",op_add_cube);
-	//add_brick_trigger(C,block,"plane",op_add_plane);
-	//add_brick_trigger(C,block,"uv cube",op_add_uv_cube);
 	add_brick_trigger(C,block,"light",op_add_light);
 	add_brick_trigger(C,block,"camera",op_add_camera);
 	add_brick_trigger(C,block,"viewport",op_add_viewport);
@@ -289,17 +207,6 @@ t_block *make_menu_scalar( t_context *C)
 	return block;
 }
 
-// lst
-
-t_block *make_menu_lst( t_context *C)
-{
-	t_block *block = add_menu_block( C, "menu_lst");
-
-	add_brick_trigger(C,block,"last?",op_brick_add);
-	add_brick_trigger(C,block,"rewind",op_brick_add);
-
-	return block;
-}
 
 // logic
 
@@ -372,10 +279,6 @@ t_block *make_menu_time( t_context *C)
 	add_brick_trigger(C,block,"sec",op_brick_add);
 	add_brick_trigger(C,block,"msec",op_brick_add);
 	add_brick_trigger(C,block,"frame",op_brick_add);
-	/*
-	add_brick_trigger(C,block,"timer",op_brick_add);
-	add_brick_trigger(C,block,"timer low",op_brick_add);
-	*/
 
 	return block;
 }
@@ -406,7 +309,6 @@ t_block *make_submenu_mouse( t_context *C)
 
 	add_brick_trigger(C,block,"mouse_x",op_brick_add);
 	add_brick_trigger(C,block,"mouse_y",op_brick_add);
-	//add_brick_trigger(C,block,"keyboard",op_brick_add);
 
 	return block;
 }
@@ -419,7 +321,6 @@ t_block *make_menu_brick_add( t_context *C)
 
 	add_brick_submenu( C, menu, make_menu_scalar( C), "scalar");
 	add_brick_submenu( C, menu, make_menu_vector( C), "vector");
-	//add_brick_submenu( C, menu, make_menu_lst( C), "list");
 	add_brick_submenu( C, menu, make_menu_logic( C), "logic");
 	add_brick_submenu( C, menu, make_menu_maths( C), "maths");
 	add_brick_submenu( C, menu, make_menu_ops( C), "operator");
@@ -440,13 +341,11 @@ void make_menu_mouse( t_context *C)
 
 	t_block *add = make_menu_add( C);
 	t_block *brick = make_menu_brick_add( C);
-	//t_block *set = make_menu_set( C);
 	t_block *skt = make_menu_skt( C);
 	t_block *draw = make_menu_draw( C);
 
 	add_brick_submenu(C, menu, add, "add");
 	add_brick_submenu(C, menu, brick, "brick");
-	//add_brick_submenu(C, menu, set, "set");
 	add_brick_submenu(C, menu, skt, "sketch");
 	add_brick_submenu(C, menu, draw, "draw");
 }
