@@ -169,7 +169,7 @@ t_block *make_menu_add_object( t_context *C)
 
 	add_brick_trigger(C,block,"default",op_add_default);
 	add_brick_trigger(C,block,"cube",op_add_cube);
-	add_brick_trigger(C,block,"plane",op_add_plane);
+	//add_brick_trigger(C,block,"plane",op_add_plane);
 	//add_brick_trigger(C,block,"uv cube",op_add_uv_cube);
 	add_brick_trigger(C,block,"light",op_add_light);
 	add_brick_trigger(C,block,"camera",op_add_camera);

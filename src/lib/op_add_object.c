@@ -8,11 +8,9 @@
  */
 
 #include "op.h"
-
 #include "context.h"
 #include "node.h"
 #include "scene.h"
-
 #include "vlst.h"
 #include "ctx.h"
 #include "event.h"
@@ -25,13 +23,9 @@
 #include "object.h"
 #include "file.h"
 #include "screen.h"
-
 #include "block.h"
 #include "brick.h"
-
 #include "geometry.h"
-
-#define LOGOUT 1
 
 // GEO
 
@@ -267,67 +261,6 @@ void *op_add_default(t_brick *brick)
 	op_add_light(NULL);
 	op_add_cube(NULL);
 	op_add_viewport(NULL);
-	return NULL;
-}
-
-void *op_add_uv_cube(t_brick *brick)
-{
-	/*
-	t_context *C=ctx_get();
-	term_print(C->term,"+ uv cube");
-
-	scene_store(C->scene,1);
-
-		t_node *node_mesh = op_new_cube("me_uv_cube");
-		t_node *node_object=object_add("mesh","ob_uvcube");
-
-		// add uvs
-		t_mesh *mesh = node_mesh->data;
-		set_name(mesh->texture_name,"image");
-		mesh->state.with_texture=1;
-		mesh_uv_add(mesh,uvlst,48);
-
-		t_object *object=node_object->data;
-		object->cls->link(object,node_mesh);
-
-	scene_store(C->scene,0);
-	*/
-	return NULL;
-}	
-
-t_node *op_add_new_wire_cube(t_node *n)
-{
-	/*
-	t_context *C=ctx_get();
-
-	scene_store(C->scene,1);
-
-		t_node *node_mesh = op_new_cube("me_wire_cube");
-		t_node *node_object=object_add("mesh","ob_wire_cube");
-
-		t_mesh *mesh = node_mesh->data;
-
-		// set draw modes
-		mesh->state.with_line=1;
-		
-		// add lines
-		mesh_line_cube_add(mesh);
-
-		t_object *object = node_object->data;
-		object->cls->link(object,node_mesh);
-
-	scene_store(C->scene,0);
-
-	return node_object;
-	*/
-	return NULL;
-}
-
-void *op_add_wire_cube(t_brick *brick)
-{
-	t_context *C=ctx_get();
-	term_print(C->term,"+ wire cube");
-	op_add_new_wire_cube(NULL);
 	return NULL;
 }
 
