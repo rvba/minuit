@@ -23,13 +23,81 @@
 #include "event.h"
 #include "brick.h"
 #include "block.h"
-
+#include "binding.h"
 #include "rhizome.h"
 #include "set.h"
 
 int is_vec_stored=0;
 float v[3];
 float vec[3];
+
+int brick_check_loop(t_brick *brick)
+{
+	t_context *C = ctx_get();
+
+	int frame = C->app->frame;
+
+	if(brick->state.frame_loop != frame)
+	{
+	//	brick->state.frame_loop = frame;
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+int brick_pre_check_loop(t_brick *brick)
+{
+	t_context *C = ctx_get();
+
+	int frame = C->app->frame;
+
+	if(brick->state.frame_loop != frame)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+// SET UPDATED
+
+void brick_set_updated(t_brick *brick)
+{
+	t_plug *plug = &brick->plug_intern;
+
+	// Bindings
+	if(plug->bindings)
+	{
+		t_link *link;
+		for(link = plug->bindings->first; link; link = link->next)
+		{
+			t_binding *binding = link->data;
+			binding_update(binding,plug->data);
+		}
+	}
+
+	// Set Updated
+	brick->plug_in.state.is_updated = 1;
+	brick->plug_intern.state.is_updated = 1;
+	brick->plug_out.state.is_updated = 1;
+
+	// Set Setup
+	if(brick->mode == bm_triggering)
+	{
+		t_block *block = brick->block;
+		t_set *set = block->set;
+		if(set) set_setup(set);
+	}
+}
+
+/*
+	**************************	CONNECT / DISCONNECT   **************************** 
+*/
 
 // CONNECT
 
@@ -115,9 +183,12 @@ int brick_start_cloning(t_context *C,int mouse_over)
 		return 0;
 }
 
-// TRIGGER
+/*
+	**************************	TRIGGER **************************** 
+*/
 
-void cls_brick_trigger_number(t_brick *brick)
+// SLIDER
+void cls_brick_trigger_slider( t_brick *brick)
 {
 	if(brick->state.use_loops == 0)
 	{
@@ -139,60 +210,31 @@ void cls_brick_trigger_number(t_brick *brick)
 
 }
 
+// SWITCH
 void cls_brick_trigger_switch(t_brick *brick)
 {
 	brick->action(brick);
 	brick_set_updated(brick);
 }
 
+// SELECTOR
 void cls_brick_trigger_selector(t_brick *brick)
 {
 	brick->action(brick);
 	brick_set_updated(brick);
 }
 
+// MENU
 void cls_brick_trigger_menu(t_brick *brick)
 {
 	brick->action(brick);
 	brick_set_updated(brick);
 }
 
-void cls_brick_trigger_operator(t_brick *brick)
-{
-	brick->action(brick);
-	if(brick->mode == bm_triggering)
-		brick_release(brick);
-	brick_set_updated(brick);
-}
-
-void cls_brick_trigger_vlst(t_brick *brick)
-{
-	brick->action(brick);
-	brick_set_updated(brick);
-}
-
-void cls_brick_trigger_lst(t_brick *brick)
-{
-	brick->action(brick);
-	brick_set_updated(brick);
-}
-
-
-void cls_brick_trigger_generic(t_brick *brick)
+// TRIGGER
+void cls_brick_trigger_trigger(t_brick *brick)
 {
 	t_context *C = ctx_get();
-
-	/*
-	if(brick->state.use_loops == 0)
-	{
-		int frame = C->app->frame;
-
-		if(brick->state.frame_loop != frame)
-		{
-			brick->state.frame_loop = frame;
-		}
-	}
-	*/
 
 	t_plug *plug_in=&brick->plug_in;
 	t_plug *plug_out = &brick->plug_out;
@@ -244,12 +286,6 @@ void cls_brick_trigger_generic(t_brick *brick)
 		}
 	}
 
-	brick_set_updated(brick);
-}
-
-void cls_brick_trigger_action_default(t_brick *brick)
-{
-	brick->action(brick);
 	brick_set_updated(brick);
 }
 

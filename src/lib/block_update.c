@@ -48,6 +48,7 @@ void block_unstore(t_block *block)
 	block->submenu=NULL;
 }
 
+// regular block
 void cls_block_block_update(t_block *block)
 {
 	t_context *C = ctx_get();
@@ -89,6 +90,7 @@ void cls_block_block_update(t_block *block)
 	}
 }
 
+// menu block
 void cls_block_menu_update(t_block *block)
 {
 	t_context *C = ctx_get();
@@ -191,6 +193,7 @@ void cls_block_menu_update(t_block *block)
 }
 
 
+// Screen blocks
 void cls_block_generic_update(t_block *block)
 {
 	t_context *C = ctx_get();

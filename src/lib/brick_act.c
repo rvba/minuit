@@ -18,7 +18,6 @@
 #include "camera.h"
 #include "dict.h"
 #include "data.h"
-#include "binding.h"
 #include "list.h"
 #include "vlst.h"
 #include "ui.h"
@@ -30,69 +29,6 @@
 #include "rhizome.h"
 #include "geometry.h"
 
-int brick_check_loop(t_brick *brick)
-{
-	t_context *C = ctx_get();
-
-	int frame = C->app->frame;
-
-	if(brick->state.frame_loop != frame)
-	{
-	//	brick->state.frame_loop = frame;
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
-}
-
-int brick_pre_check_loop(t_brick *brick)
-{
-	t_context *C = ctx_get();
-
-	int frame = C->app->frame;
-
-	if(brick->state.frame_loop != frame)
-	{
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
-}
-
-// SET UPDATED
-
-void brick_set_updated(t_brick *brick)
-{
-	t_plug *plug = &brick->plug_intern;
-
-	// Bindings
-	if(plug->bindings)
-	{
-		t_link *link;
-		for(link = plug->bindings->first; link; link = link->next)
-		{
-			t_binding *binding = link->data;
-			binding_update(binding,plug->data);
-		}
-	}
-
-	// Set Updated
-	brick->plug_in.state.is_updated = 1;
-	brick->plug_intern.state.is_updated = 1;
-	brick->plug_out.state.is_updated = 1;
-
-	// Set Setup
-	if(brick->mode == bm_triggering)
-	{
-		t_block *block = brick->block;
-		t_set *set = block->set;
-		if(set) set_setup(set);
-	}
-}
 
 // BRICK ADD
 
@@ -184,9 +120,12 @@ void *op_brick_add(t_brick *brick)
 	// Switch Desk
 	if(!C->ui->show_sets) show_sets(C);
 
-	block = node->data;
-	set = block->set;
-	set_setup( set);
+	if( node)
+	{
+		block = node->data;
+		set = block->set;
+		set_setup( set);
+	}
 		
 	return NULL;
 }
@@ -206,7 +145,6 @@ void *op_slider(t_brick *brick)
 	plug_intern->cls->flow(plug_intern);
 
 	// trigger
-	//if(brick_check_loop(brick) && brick->mode==bm_triggering) // (see:plug_update)
 	if(brick->mode==bm_triggering) // (see:plug_update)
 	{
 		// dragging
@@ -321,9 +259,6 @@ void *op_slider_positive_non_zero(t_brick *brick)
 {
 	// slide
 	op_slider(brick);
-
-	//t_context *C = ctx_get();
-	//printf("%d slider positive %d\n",C->app->frame,drf_int(brick->plug_intern.data));
 
 	// set positive
 	int *val = brick->plug_intern.data;
@@ -808,24 +743,27 @@ void op_add_bricks( t_brick *brick, t_brick *brick_target, int offset)
 	// slide
 	op_slider_positive(brick);
 
-	t_block *block=brick->block;
-	t_plug *plug_intern=&brick->plug_intern;
-	int tot_bricks=block->tot_bricks;
-	int *slider = plug_intern->data;
+	if( brick->mode == bm_idle)
+	{
+		t_block *block=brick->block;
+		t_plug *plug_intern=&brick->plug_intern;
+		int tot_bricks=block->tot_bricks;
+		int *slider = plug_intern->data;
 
-	if(slider==0)
-	{
-	}
+		if(slider==0)
+		{
+		}
 
-	// add brick
-	else if( *slider > tot_bricks - offset) 
-	{
-		add_exe_add_brick( brick, brick_target, exe_add_brick);
-	}
-	// remove brick
-	else if(*slider < tot_bricks - offset)
-	{
-		add_exe_remove_brick(brick);
+		// add brick
+		else if( *slider > tot_bricks - offset) 
+		{
+			add_exe_add_brick( brick, brick_target, exe_add_brick);
+		}
+		// remove brick
+		else if(*slider < tot_bricks - offset)
+		{
+			add_exe_remove_brick(brick);
+		}
 	}
 }
 

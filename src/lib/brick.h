@@ -326,13 +326,14 @@ void 		brick_set_updated(struct Brick *brick);
 
 // BRICK_UPDATE
 
-void 		cls_brick_trigger_vlst(struct Brick *brick);
-void		cls_brick_trigger_lst(struct Brick *brick);
+int brick_pre_check_loop(t_brick *brick);
+
 void 		cls_brick_trigger_selector(struct Brick *brick);
-void 		cls_brick_trigger_number(struct Brick *brick);
+void 		cls_brick_trigger_slider(struct Brick *brick);
 void 		cls_brick_trigger_switch(struct Brick *brick);
 void 		cls_brick_trigger_menu(struct Brick *brick);
-void 		cls_brick_trigger_generic(struct Brick *brick);
+void 		cls_brick_trigger_trigger(struct Brick *brick);
+
 void 		cls_brick_trigger_operator(struct Brick *brick);
 void 		cls_brick_update(struct Brick *brick);
 void 		cls_brick_trigger_action_default(struct Brick *brick);
