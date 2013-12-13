@@ -5,11 +5,6 @@ if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
 		message(FATAL_ERROR "Don't build in SOURCE directory !")
 endif()
 
-message("[M]INUIT\n[I]s\n[N]ot a\n[U]ser\n[I]nterface\n[T]oolkit")
-message("SOURCE_DIR\t" ${CMAKE_SOURCE_DIR})
-message("BINARY_DIR\t" ${CMAKE_BINARY_DIR})
-
-
 project(Minuit)
 
 find_package(OpenGL REQUIRED)
@@ -35,7 +30,7 @@ add_executable(
 )
 
 target_link_libraries(minuit minuit-core minuit-lib minuit-util)
-target_link_libraries(minuit ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${PNG_LIBRARY} ${JPEG_LIBRARY} pthread)
+target_link_libraries(minuit ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${PNG_LIBRARY} ${JPEG_LIBRARY} pthread m)
 
 
 
