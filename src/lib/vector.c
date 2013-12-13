@@ -40,8 +40,7 @@ void vector_free(t_vector *vector)
 void vector_delete( t_vector *vector)
 {
 	t_scene *sc = ctx_scene_get();
-	if( vector->id.store) scene_delete( sc, vector);
-	else vector_free( vector);
+	scene_delete( sc, vector);
 }
 
 void vector_copy_pointer(t_vector *dst, t_vector *src)

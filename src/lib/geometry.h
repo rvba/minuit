@@ -29,6 +29,7 @@ typedef struct Geo_Point
 	float pos[3];
 	float color[3];
 	int indice;
+	int is_virtual;
 
 }t_geo_point;
 
@@ -38,6 +39,7 @@ typedef struct Geo_Edge
 	struct Geo_Point *a;
 	struct Geo_Point *b;
 	int indice;
+	int is_virtual;
 
 }t_geo_edge;
 

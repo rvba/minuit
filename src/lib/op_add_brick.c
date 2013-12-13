@@ -1348,7 +1348,7 @@ t_node *add_maths(t_context *C,const char *name)
 
 // :GEOMETRY
 
-t_node *add_geometry(t_context *C,const char *name, void *data)
+t_node *add_brick_geometry(t_context *C,const char *name, void *data)
 {
 	t_geo *geo = (t_geo *) data;
 
@@ -1357,9 +1357,6 @@ t_node *add_geometry(t_context *C,const char *name, void *data)
 	t_block *block = node_block->data;
 	block->state.draw_outline = 1;
 
-	// CLONE
-	t_node *node_brick_clone = add_part_slider_int( C, block, "geometry", NULL);
-	t_brick *brick_clone = node_brick_clone->data;
 
 	// GEO 
 	add_part_geo(C, block, name, data, dt_geo);
@@ -1368,6 +1365,10 @@ t_node *add_geometry(t_context *C,const char *name, void *data)
 	add_part_lst( C, block, dt_lst, "points", geo->points);
 	add_part_lst( C, block, dt_lst, "edges", geo->edges);
 
+
+	// CLONE
+	t_node *node_brick_clone = add_part_slider_int( C, block, "geometry", NULL);
+	t_brick *brick_clone = node_brick_clone->data;
 	brick_clone->plug_out.state.flow_out=0;
 	brick_clone->plug_out.state.open_out=0;
 	brick_clone->state.use_dragging = 0;
@@ -1377,43 +1378,39 @@ t_node *add_geometry(t_context *C,const char *name, void *data)
 	return node_block;
 }
 
-void add_geo_point_bare(t_context *C,t_block *block, const char *name, void *data, int order, t_plug *plug)
+void add_brick_geo_point_bare(t_context *C,t_block *block, const char *name, void *data, int order)
 {
-	t_node *node = add_part_geo(C,block,name,data,dt_geo_point);
+	t_node *node = add_part_geo( C, block, name, data, dt_geo_point);
 	t_brick *brick = node->data;
 	brick->action = op_void;
 	brick->block_order = order;
 }
 
-t_node *add_geo_edge(t_context *C,const char *name, void *data)
+t_node *add_brick_geo_edge(t_context *C,const char *name, void *data)
 {
 	// NEW BLOCK
 	t_node *node_block = add_block(C,name);
 	t_block *block=node_block->data;
 	block->state.draw_outline = 1;
 
-	// GEO EDGE
-	t_node *node_edge = add_part_geo(C,block,"edge",data,dt_geo_edge);
-	t_brick *brick_edge = node_edge->data;
-	t_plug *plug = &brick_edge->plug_intern;
-
 	// GEO POINT
-	add_geo_point_bare(C,block,"point",NULL,1,plug);
-	add_geo_point_bare(C,block,"point",NULL,2,plug);
+	add_brick_geo_point_bare(C,block,"point",NULL,1);
+	add_brick_geo_point_bare(C,block,"point",NULL,2);
+
+	// GEO EDGE
+	add_part_geo(C,block,"edge",data,dt_geo_edge);
 
 	return node_block;
 }
 
-t_node *add_geo_array( t_context *C, const char *name , void *data)
+t_node *add_brick_geo_array( t_context *C, const char *name , void *data)
 {
 	t_geo_array *array = (t_geo_array *) data;
+
 	// NEW BLOCK
 	t_node *node_block = add_block(C,name);
 	t_block *block=node_block->data;
 	block->state.draw_outline = 1;
-
-	// GEO ARRAY
-	add_part_geo(C,block,"array",data,dt_geo_array);
 
 	// VECTOR
 	C->ui->add_bricks = 0;
@@ -1427,38 +1424,36 @@ t_node *add_geo_array( t_context *C, const char *name , void *data)
 
 	// COUNT
 	add_part_slider_int(C,block,"count",&array->count);
-
 	scene_add_ref(C->scene,"struct_ref","geo_array","count",&array->count,array);
+
+	// GEO ARRAY
+	add_part_geo(C,block,"array",data,dt_geo_array);
 
 	return node_block;
 }
 
-t_node *add_geo_point(t_context *C,const char *name, void *data)
+t_node *add_brick_geo_point(t_context *C,const char *name, void *data)
 {
 	// NEW BLOCK
 	t_node *node_block = add_block(C,name);
 	t_block *block=node_block->data;
 	block->state.draw_outline = 1;
 
-	// GEO POINT
-	add_part_geo(C,block,name,data,dt_geo_point);
-
-	// ADD VECTOR
-
-	C->ui->add_bricks = 0;
-
-	t_node *node_vector = add_part_vector(C,block,"vector");
-	t_brick *brick_vector = node_vector->data;
-	brick_vector->state.draw_value = 0;
-	brick_vector->state.has_components = 1;
-
 	// ADD X Y Z
-
 	add_part_slider_float(C,block,"x",NULL);
 	add_part_slider_float(C,block,"y",NULL);
 	add_part_slider_float(C,block,"z",NULL);
 
+	// ADD VECTOR
+	C->ui->add_bricks = 0;
+	t_node *node_vector = add_part_vector(C,block,"vector");
+	t_brick *brick_vector = node_vector->data;
+	brick_vector->state.draw_value = 0;
+	brick_vector->state.has_components = 1;
 	C->ui->add_bricks = 1;
+
+	// GEO POINT
+	add_part_geo(C,block,name,data,dt_geo_point);
 
 	return node_block;
 }

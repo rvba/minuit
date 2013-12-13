@@ -118,6 +118,8 @@ void mesh_buffer_add_direct(t_mesh *mesh)
 		C->ui->add_bricks = 0;
 
 		if(!mesh->quad_normal) mesh->quad_normal=vlst_make("quad_normal", dt_float, 3, tot_quad);
+
+		C->ui->add_bricks = 1;
 	}
 }
 

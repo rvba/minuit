@@ -1396,6 +1396,7 @@ void __cls_plug_flow_vlst(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 						geo_vlst_edges_set( plug->brick, lst, vlst);
 						break;
 					default:
+						printf("?? %s\n", data_name_get( lst_type));
 						break;
 				}
 				break;

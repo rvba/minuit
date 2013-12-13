@@ -134,7 +134,7 @@ void geo_show(t_geo *geo)
 	}
 	else
 	{
-		printf("no points\n");
+		printf("no edges\n");
 	}
 }
 
@@ -170,6 +170,7 @@ t_geo_point *geo_point_new( const char *name)
 
 	vset3f(point->pos,0,0,0);
 	point->indice = 0;
+	point->is_virtual = 0;
 
 	return point;
 }
@@ -183,6 +184,7 @@ t_geo_edge *geo_edge_new( const char *name)
 
 	edge->a = NULL;
 	edge->b = NULL;
+	edge->is_virtual = 0;
 
 	return edge;
 }
@@ -237,25 +239,21 @@ void geo_point_free( t_geo_point *point)
 	mem_free( point, sizeof( t_geo_point));
 }
 
-void geo_point_delete( t_geo_point *point)
-{
-	t_scene *sc = ctx_scene_get();
-	if( sc->debug_all) printf("geo_point_delete _%s\n", point->id.name);
-	if( point->id.store) scene_delete( sc, point);
-	else geo_point_free( point);
-}
-
 void geo_edge_free( t_geo_edge *edge) 
 {
 	mem_free( edge, sizeof( t_geo_edge));
 }
 
+void geo_point_delete( t_geo_point *point)
+{
+	t_scene *sc = ctx_scene_get();
+	scene_delete( sc, point);
+}
+
 void geo_edge_delete( t_geo_edge *edge)
 {
 	t_scene *sc = ctx_scene_get();
-	if( sc->debug_all) printf("geo_edge_delete _%s\n", edge->id.name);
-	if( edge->id.store) scene_delete( sc, edge);
-	else geo_edge_free( edge);
+	scene_delete( sc, edge);
 }
 
 void geo_face_free( t_geo_face *face)
@@ -266,8 +264,7 @@ void geo_face_free( t_geo_face *face)
 void geo_face_delete( t_geo_face *face)
 {
 	t_scene *sc = ctx_scene_get();
-	if( face->id.store) scene_delete( sc, face);
-	else geo_face_free( face);
+	scene_delete( sc, face);
 }
 
 void geo_array_free( t_geo_array *array)
@@ -279,9 +276,7 @@ void geo_array_free( t_geo_array *array)
 void geo_array_delete( t_geo_array *array)
 {
 	t_scene *sc = ctx_scene_get();
-	if( sc->debug_all) printf("geo_array_delete %s\n", array->id.name);
-	if( array->id.store) scene_delete( sc, array);
-	else geo_array_free( array);
+	scene_delete( sc, array);
 }
 
 void geo_lst_delete( t_lst *lst)
@@ -320,8 +315,7 @@ void geo_free( t_geo *geo)
 void geo_delete( t_geo *geo)
 {
 	t_scene *sc = ctx_scene_get();
-	if( geo->id.store) scene_delete( sc, geo);
-	else geo_free( geo);
+	scene_delete( sc, geo);
 }
 
 
@@ -333,23 +327,23 @@ void geo_delete( t_geo *geo)
 
 t_geo *geo_make( t_context *C, const char *name)
 {
+	t_scene *sc = C->scene;
 	t_geo *geo;
-	if( C->scene->store)
-	{
-		t_node *node_geo = scene_add( C->scene, dt_geo, name);
-		geo = node_geo->data;
-	}
-	else
-	{
-		geo = geo_new( name);
-	}
+	t_node *node_geo = scene_add( sc, dt_geo, name);
+	geo = node_geo->data;
+	t_node *node_points = scene_add( sc, dt_list, "points");
+	t_lst *points = node_points->data;
+	points->type = dt_geo_point;
+	geo->points = points;
 
-	geo->points = list_make( dt_geo_point, "points");
-	geo->edges = list_make( dt_geo_edge, "edges");
+	t_node *node_edges = scene_add( sc, dt_list, "edges");
+	t_lst *edges = node_edges->data;
+	edges->type = dt_geo_edge;
+	geo->edges = edges;
 
 	if(C->ui->add_bricks)
 	{
-		add_geometry(C,"data",geo);
+		add_brick_geometry( C, "data", geo);
 	}
 
 	return geo;
@@ -358,19 +352,12 @@ t_geo *geo_make( t_context *C, const char *name)
 t_geo_point *geo_point_make( t_context *C, const char *name)
 {
 	t_geo_point *geo_point;
-	if( C->scene->store)
-	{
-		t_node *node = scene_add( C->scene, dt_geo_point, name);
-		geo_point = node->data;
-	}
-	else
-	{
-		geo_point = geo_point_new( name);
-	}
+	t_node *node = scene_add( C->scene, dt_geo_point, name);
+	geo_point = node->data;
 
 	if(C->ui->add_bricks)
 	{
-		add_geo_point(C,"point",geo_point);
+		add_brick_geo_point(C,"point",geo_point);
 	}
 
 	return geo_point;
@@ -379,19 +366,12 @@ t_geo_point *geo_point_make( t_context *C, const char *name)
 t_geo_edge *geo_edge_make( t_context *C, const char *name)
 {
 	t_geo_edge *geo_edge;
-	if( C->scene->store)
-	{
-		t_node *node_geo_edge = scene_add(C->scene,dt_geo_edge,name);
-		geo_edge = node_geo_edge->data;
-	}
-	else
-	{
-		geo_edge = geo_edge_new( name);
-	}
+	t_node *node_geo_edge = scene_add(C->scene,dt_geo_edge,name);
+	geo_edge = node_geo_edge->data;
 
 	if(C->ui->add_bricks)
 	{
-		add_geo_edge(C,"point",geo_edge);
+		add_brick_geo_edge(C,"point",geo_edge);
 	}
 
 	return geo_edge;
@@ -402,11 +382,14 @@ t_geo_array *geo_array_make( t_context *C, const char *name)
 	t_node *node_geo_array = scene_add(C->scene,dt_geo_array,name);
 	t_geo_array *geo_array = node_geo_array->data;
 
-	geo_array->elements = list_make( dt_null, "elements");
+	t_node *node_elements = scene_add( C->scene, dt_list, "elements");
+	t_lst *elements = node_elements->data;
+	elements->type = dt_geo_array;
+	geo_array->elements = elements;
 
 	if(C->ui->add_bricks)
 	{
-		add_geo_array(C, name, geo_array);
+		add_brick_geo_array(C, name, geo_array);
 	}
 
 	return geo_array;
@@ -455,6 +438,7 @@ t_geo_point *geo_point_duplicate( t_geo_point *point, float *v)
 	t_context *C = ctx_get();
 	C->ui->add_bricks = 0;
 	t_geo_point *point_new = geo_point_make( C, "point");
+	point_new->is_virtual = 1;
 	C->ui->add_bricks = 1;
 
 	// Transform
@@ -471,6 +455,7 @@ t_geo_edge *geo_edge_duplicate( t_geo_edge *edge, float *point)
 	t_geo_edge *edge_new = geo_edge_make( C, "edge");
 	edge_new->a = geo_point_duplicate(edge->a, nul);
 	edge_new->b = geo_point_duplicate(edge->b, nul);
+	edge_new->is_virtual = 1;
 	C->ui->add_bricks = 1;
 
 	geo_edge_transform( edge_new, point);
@@ -574,12 +559,12 @@ void *geo_array_get_ref(t_geo_array *array, const char *ref)
 
 void geo_point_reset( t_geo_point *point)
 {
-	geo_point_delete( point);
+	if( point->is_virtual) geo_point_delete( point);
 }
 
 void geo_edge_reset( t_geo_edge *edge)
 {
-	geo_edge_delete( edge);
+	if( edge->is_virtual) geo_edge_delete( edge);
 }
 
 void geo_reset_elements( t_context *C, t_data_type type, t_lst *lst)
@@ -604,13 +589,13 @@ void geo_reset(t_geo *geo)
 	if(geo->points)
 	{
 		geo_reset_elements( C, dt_geo_point, geo->points);
-		lst_cleanup( geo->points);
+		list_cleanup( geo->points);
 	}
 
 	if(geo->edges)
 	{
 		geo_reset_elements( C, dt_geo_edge, geo->edges);
-		lst_cleanup( geo->edges);
+		list_cleanup( geo->edges);
 	}
 }
 
@@ -795,8 +780,11 @@ void geo_fill_point(t_geo *geo, t_geo_point *point)
 {
 	if(!geo_elem_exists(geo, dt_geo_point, point))
 	{
+		t_scene *sc = ctx_scene_get();
+		scene_store(sc, 1);
 		point->indice = geo->points->count;
 		list_add_data( geo->points, point);
+		scene_store(sc, 0);
 	}
 }
 
@@ -819,6 +807,7 @@ void geo_fill_edges(t_geo *geo, t_lst *lst)
 {
 	t_link *l;
 	t_geo_edge *edge;
+	t_scene *sc = ctx_scene_get();
 
 	if(geo->edges)
 	{
@@ -831,7 +820,9 @@ void geo_fill_edges(t_geo *geo, t_lst *lst)
 				if( edge->a) geo_fill_point( geo, edge->a);
 				if( edge->b) geo_fill_point( geo, edge->b);
 
+				scene_store(sc, 1);
 				list_add_data( geo->edges, edge);
+				scene_store(sc, 0);
 			}
 		}
 	}
@@ -1010,6 +1001,7 @@ void geo_array_build( t_geo_array *array)
 	if(C->scene->debug_all) printf("geo_array_build %s\n", array->id.name);
 	C->ui->add_bricks = 0;
 
+	scene_store( C->scene, 0);
 	if( array->element)
 	{
 		if( array->vector)
@@ -1037,6 +1029,7 @@ void geo_array_build( t_geo_array *array)
 			}
 		}
 	}
+	scene_store( C->scene, 1);
 
 	C->ui->add_bricks = 1;
 }
