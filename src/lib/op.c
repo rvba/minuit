@@ -372,8 +372,10 @@ t_block *make_menu_time( t_context *C)
 	add_brick_trigger(C,block,"sec",op_brick_add);
 	add_brick_trigger(C,block,"msec",op_brick_add);
 	add_brick_trigger(C,block,"frame",op_brick_add);
+	/*
 	add_brick_trigger(C,block,"timer",op_brick_add);
 	add_brick_trigger(C,block,"timer low",op_brick_add);
+	*/
 
 	return block;
 }
@@ -404,7 +406,7 @@ t_block *make_submenu_mouse( t_context *C)
 
 	add_brick_trigger(C,block,"mouse_x",op_brick_add);
 	add_brick_trigger(C,block,"mouse_y",op_brick_add);
-	add_brick_trigger(C,block,"keyboard",op_brick_add);
+	//add_brick_trigger(C,block,"keyboard",op_brick_add);
 
 	return block;
 }
@@ -438,13 +440,13 @@ void make_menu_mouse( t_context *C)
 
 	t_block *add = make_menu_add( C);
 	t_block *brick = make_menu_brick_add( C);
-	t_block *set = make_menu_set( C);
+	//t_block *set = make_menu_set( C);
 	t_block *skt = make_menu_skt( C);
 	t_block *draw = make_menu_draw( C);
 
 	add_brick_submenu(C, menu, add, "add");
 	add_brick_submenu(C, menu, brick, "brick");
-	add_brick_submenu(C, menu, set, "set");
+	//add_brick_submenu(C, menu, set, "set");
 	add_brick_submenu(C, menu, skt, "sketch");
 	add_brick_submenu(C, menu, draw, "draw");
 }
