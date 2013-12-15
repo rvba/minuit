@@ -296,7 +296,6 @@ int scene_node_delete(t_scene *sc,t_node *node)
 void scene_delete( t_scene *sc, void *data)
 {
 	t_id *id = (t_id *) data;
-	printf(">>%d\n",id->id);
 	if( ( id->id > 0)  && ( id->id <= sc->id))
 	{
 		t_node *node = id->node;
