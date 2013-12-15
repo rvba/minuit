@@ -395,6 +395,7 @@ void plug_reset(t_plug *plug,const char *name)
 	plug->state.is_updated=0;
 	plug->state.is_versatil=0;
 	plug->state.store_data = 1;
+	plug->state.store_data_memory = 1;
 	plug->state.bang = 0;
 	plug->state.last_bang = 0;
 	plug->state.is_init=0;
@@ -449,11 +450,14 @@ t_brick *brick_rebind(t_scene *sc,void *ptr)
 	else 	
 		brick->plug_intern.data = NULL;
 
+	if(brick->plug_intern.state.store_data_memory)
+	{
 	if(brick->plug_intern.data_memory) 
 	{
 		rebind(sc,"brick","plug_intern_data_memory",(void **)&brick->plug_intern.data_memory);
 		if(brick->plug_intern.data == NULL)
 			brick->plug_intern.data = brick->plug_intern.data_memory;
+	}
 	}
 
 

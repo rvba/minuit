@@ -1367,8 +1367,14 @@ t_node *add_brick_geometry(t_context *C,const char *name, void *data)
 	add_part_geo(C, block, name, data, dt_geo);
 
 	// LISTS
-	add_part_lst( C, block, dt_lst, "points", geo->points);
-	add_part_lst( C, block, dt_lst, "edges", geo->edges);
+	t_node *node_points = add_part_lst( C, block, dt_lst, "points", geo->points);
+	t_brick *points = node_points->data;
+	points->plug_intern.state.store_data = 0;
+	points->plug_intern.state.store_data_memory = 0;
+	t_node *node_edges = add_part_lst( C, block, dt_lst, "edges", geo->edges);
+	t_brick *edges = node_edges->data;
+	edges->plug_intern.state.store_data = 0;
+	edges->plug_intern.state.store_data_memory = 0;
 
 
 	// CLONE
@@ -1683,6 +1689,8 @@ t_node *add_if(t_context *C)
 
 	return node_block;
 }
+
+
 
 
 

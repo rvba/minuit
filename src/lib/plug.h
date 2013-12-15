@@ -58,6 +58,7 @@ struct Plug_State
 	int is_init:1;
 	int is_versatil:1;		// change plug type if connected
 	int store_data:1;		// for rebind
+	int store_data_memory:1;		// for rebind
 	int is_eval:1;
 	int is_volatil:1;		// stored data is volatil
 	int is_state_volatil:1;		// plug ports can change state when connected

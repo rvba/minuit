@@ -1386,6 +1386,8 @@ void __cls_plug_flow_vlst(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 				break;
 			case dt_lst:
 				lst = src_plug->data;
+				if(lst)
+				{
 				lst_type = lst->type;
 				switch(lst_type)
 				{
@@ -1398,6 +1400,7 @@ void __cls_plug_flow_vlst(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 					default:
 						printf("?? %s\n", data_name_get( lst_type));
 						break;
+				}
 				}
 				break;
 				

@@ -58,6 +58,14 @@ t_geo_array *op_new_geo_array( t_context *C,const char *name)
 t_vlst *op_new_vlst(const char *name, t_data_type type, int size)
  {
 	 t_vlst *vlst = vlst_make("vlst", type, size, 0);
+	 /*
+	 t_block *block = vlst->ref;
+	 if( block)
+	 {
+		t_brick *brick = block_brick_get( block, "vlst");
+	 	brick->plug_intern.state.store_data_memory = 0;
+	 }
+	 */
 	 return vlst;
  }
 

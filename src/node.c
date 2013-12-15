@@ -502,6 +502,7 @@ void cls_node_init_graph(t_node *node)
 void cls_node_init_geo(t_node *node)
 {
 	cls_node_init_id(node);
+	geo_init( node->data);
 }
 
 void cls_node_init_geo_point(t_node *node)
@@ -517,6 +518,7 @@ void cls_node_init_geo_edge(t_node *node)
 void cls_node_init_geo_array(t_node *node)
 {
 	cls_node_init_id(node);
+	geo_array_init( node->data);
 }
 
 

@@ -357,6 +357,7 @@ t_link *link_rebind(t_scene *sc,void *ptr)
 {
 	t_link *link=(t_link *)ptr;
 
+
 	rebind(sc,"link","next",(void **)&link->next);
 	rebind(sc,"link","prev",(void **)&link->prev);
 	rebind(sc,"link", link->id.name, (void **)&link->data);
