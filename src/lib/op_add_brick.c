@@ -723,6 +723,21 @@ t_node *add_part_slider_int(t_context *C,t_block *block,const char *name,void *d
 	return node;
 }
 
+// PART SLIDER ADD
+
+t_node *add_part_slider_add( t_context *C, t_block *block, const char *name, void *data_target)
+{
+	t_node *node = add_brick_slider_int( C, block, name, data_target);
+	t_brick *brick = node->data;
+	brick->state.draw_outline = 0;
+	brick->plug_out.state.flow_out = 0;
+	brick->plug_out.state.open_out = 0;
+	brick->plug_in.state.open_in = 0;
+	brick->plug_in.state.flow_in = 0;
+	brick->state.use_dragging = 0;
+	return node;
+}
+
 t_node *add_part_int(t_context *C,t_block *block,const char *name,void *data_target)
 {
 	t_node *node=add_brick_int(C,block,name,data_target);
@@ -1279,7 +1294,7 @@ t_node *add_clone(t_context *C)
 	plug_brick->state.swap_flow = 1;
 
 	// Add Clone
-	t_node *node_brick_clone=add_part_slider_int(C,block,"clone",NULL);
+	t_node *node_brick_clone=add_part_slider_add( C, block, "clone", NULL);
 	t_brick *brick_clone=node_brick_clone->data;
 
 	brick_clone->action=op_clone;
@@ -1301,16 +1316,13 @@ t_node *add_pipe(t_context *C)
 	add_part_slider_int(C,block,"state",NULL);
 
 	// CLONE
-	t_node *node_brick_clone=add_part_slider_int(C,block,"pipe",NULL);
+	t_node *node_brick_clone=add_part_slider_add( C, block, "pipe", NULL);
 	t_brick *brick_clone=node_brick_clone->data;
 
 	// re-init to float (old int data used by plug_out)
 	plug_init(&brick_clone->plug_in,dt_float,brick_clone,NULL,0);
 
 	brick_clone->action=op_pipe;
-	brick_clone->plug_out.state.flow_out=0;
-	brick_clone->plug_in.state.flow_in=0;
-	brick_clone->plug_out.state.open_out=0;
 
 	return node_block;
 }
@@ -1328,20 +1340,13 @@ t_node *add_maths(t_context *C,const char *name)
 	add_part_slider_int(C,block,"result",NULL);
 
 	// CLONE
-	t_node *node_brick_clone = add_part_slider_int( C, block, name, NULL);
+	t_node *node_brick_clone = add_part_slider_add( C, block, name, NULL);
 	t_brick *brick_clone=node_brick_clone->data;
-	brick_clone->plug_out.state.flow_out=0;
-	brick_clone->plug_out.state.open_out=0;
-	brick_clone->state.use_dragging = 0;
 
-	if(is(name,"+"))
-		brick_clone->action=op_add;
-	else if(is(name,"x"))
-		brick_clone->action=op_mult;
-	else if(is(name,"and"))
-		brick_clone->action=op_and;
-	else
-		printf("[WARNING add_maths] Unknown type %s\n",name);
+	if(is(name,"+")) brick_clone->action=op_add;
+	else if(is(name,"x")) brick_clone->action=op_mult;
+	else if(is(name,"and")) brick_clone->action=op_and;
+	else printf("[WARNING add_maths] Unknown type %s\n",name);
 
 	return node_block;
 }
