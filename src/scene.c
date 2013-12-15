@@ -313,7 +313,7 @@ void scene_delete( t_scene *sc, void *data)
 {
 	t_id *id = (t_id *) data;
 	t_node *node = id->node;
-	scene_node_free( sc, node);
+	if( node) scene_node_free( sc, node);
 }
 
 

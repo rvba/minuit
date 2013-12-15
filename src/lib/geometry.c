@@ -99,6 +99,9 @@ void geo_array_show( t_geo_array *array)
 			geo_edge_show( edge);
 		}
 	}
+	else printf("???\n");
+
+	printf("[/ELEMENTS]\n");
 }
 
 void geo_show(t_geo *geo)
@@ -157,6 +160,7 @@ t_geo *geo_new( const char *name)
 	geo->faces = NULL;
 
 	geo->selected = 0;
+	geo->is_virtual = 0;
 
 	return geo;
 }
@@ -206,6 +210,8 @@ t_geo_face *geo_face_new( const char *name)
 	face->cd = NULL;
 	face->da = NULL;
 
+	face->is_virtual = 0;
+
 	return face;
 }
 
@@ -221,6 +227,8 @@ t_geo_array *geo_array_new(const char *name)
 	array->type_element = dt_null;
 	array->elements = NULL;
 	array->vector = NULL;
+
+	array->is_virtual = 0;
 
 	return array;
 }
@@ -246,8 +254,10 @@ void geo_edge_free( t_geo_edge *edge)
 
 void geo_point_delete( t_geo_point *point)
 {
+	printf("geo point delete\n");
 	t_scene *sc = ctx_scene_get();
 	scene_delete( sc, point);
+	printf("done\n");
 }
 
 void geo_edge_delete( t_geo_edge *edge)
@@ -366,12 +376,12 @@ t_geo_point *geo_point_make( t_context *C, const char *name)
 t_geo_edge *geo_edge_make( t_context *C, const char *name)
 {
 	t_geo_edge *geo_edge;
-	t_node *node_geo_edge = scene_add(C->scene,dt_geo_edge,name);
+	t_node *node_geo_edge = scene_add( C->scene, dt_geo_edge, name);
 	geo_edge = node_geo_edge->data;
 
 	if(C->ui->add_bricks)
 	{
-		add_brick_geo_edge(C,"point",geo_edge);
+		add_brick_geo_edge( C, "point", geo_edge);
 	}
 
 	return geo_edge;
@@ -379,7 +389,7 @@ t_geo_edge *geo_edge_make( t_context *C, const char *name)
 
 t_geo_array *geo_array_make( t_context *C, const char *name)
 {
-	t_node *node_geo_array = scene_add(C->scene,dt_geo_array,name);
+	t_node *node_geo_array = scene_add( C->scene, dt_geo_array, name);
 	t_geo_array *geo_array = node_geo_array->data;
 
 	t_node *node_elements = scene_add( C->scene, dt_list, "elements");
@@ -437,11 +447,16 @@ t_geo_point *geo_point_duplicate( t_geo_point *point, float *v)
 {
 	t_context *C = ctx_get();
 	C->ui->add_bricks = 0;
-	t_geo_point *point_new = geo_point_make( C, "point");
+	//t_geo_point *point_new = geo_point_make( C, "point");
+	t_node *node_point = scene_add( C->scene, dt_geo_point, "point");
+	t_geo_point *point_new = node_point->data;
 	point_new->is_virtual = 1;
 	C->ui->add_bricks = 1;
 
+	printf("geo point dupli new=%d\n", point_new->id.id);
+
 	// Transform
+	// ??? point_new ?
 	geo_point_transform( point, v);
 
 	return point_new;
@@ -468,6 +483,8 @@ t_geo *geo_duplicate( t_geo *geo, float *point)
 	t_context *C = ctx_get();
 	C->ui->add_bricks = 0;
 	t_geo *geo_new = geo_make( C, "geo");
+
+	geo->is_virtual = 1;
 
 	t_link *l;
 	t_geo_edge *edge;
@@ -559,6 +576,7 @@ void *geo_array_get_ref(t_geo_array *array, const char *ref)
 
 void geo_point_reset( t_geo_point *point)
 {
+	printf("geo point reset %s %d\n", point->id.name, point->id.id);
 	if( point->is_virtual) geo_point_delete( point);
 }
 
@@ -585,6 +603,7 @@ void geo_reset_elements( t_context *C, t_data_type type, t_lst *lst)
 
 void geo_reset(t_geo *geo)
 {
+	printf("geo reset\n");
 	t_context *C = ctx_get();
 	if(geo->points)
 	{
@@ -843,6 +862,7 @@ void geo_array_get_points( t_geo_array *array, t_lst *lst)
 	if( type == dt_geo_point)
 	{
 		lst_add_lst( lst, array->elements);
+		lst_show( lst);
 	}
 	else if( type  == dt_geo_edge)
 	{
@@ -999,9 +1019,10 @@ void geo_array_build( t_geo_array *array)
 {
 	t_context *C = ctx_get();
 	if(C->scene->debug_all) printf("geo_array_build %s\n", array->id.name);
+	printf("geo_array_build %s\n", array->id.name);
 	C->ui->add_bricks = 0;
 
-	scene_store( C->scene, 0);
+	scene_store( C->scene, 1);
 	if( array->element)
 	{
 		if( array->vector)
@@ -1012,6 +1033,9 @@ void geo_array_build( t_geo_array *array)
 			{
 				// Reset
 				geo_array_reset( array);
+
+	printf("AFTER RESET\n");
+	geo_array_show( array);
 
 				// Build Points
 				float *points = geo_array_build_circle( array);
@@ -1025,11 +1049,12 @@ void geo_array_build( t_geo_array *array)
 				}
 
 				// Free
-				free(points);
+				mem_free(points, sizeof( float) * count * 3);
 			}
 		}
 	}
-	scene_store( C->scene, 1);
+	geo_array_show( array);
+	scene_store( C->scene, 0);
 
 	C->ui->add_bricks = 1;
 }

@@ -404,7 +404,7 @@ void lst_link_delete_by_id( t_lst *lst, int id)
 	if(link)
 		lst_link_delete(lst, link);
 	else
-		printf("[ERROR lst_link_delete_by_name] Can't find link %d\n", id);
+		printf("[ERROR lst_link_delete_by_id] Can't find link %d\n", id);
 }
 
 void lst_link_delete_by_name(t_lst *lst, const char *name)

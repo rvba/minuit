@@ -536,10 +536,10 @@ t_node *add_brick_object(t_context *C,t_block *block,const char *name,void *data
 
 // BRICK GEO POINT
 
-t_node *add_brick_geo(t_context *C,t_block *block,const char *name,void *data_target, t_data_type type)
+t_node *add_brick_geo( t_context *C, t_block *block, const char *name, void *data_target, t_data_type type)
 {
-	t_node *node=brick_make(block,name,bt_trigger,type,data_target);
-	t_brick *brick=node->data;
+	t_node *node = brick_make( block, name, bt_trigger, type, data_target);
+	t_brick *brick = node->data;
 
 	if(type == dt_geo) brick->action = op_geo;
 	else if(type == dt_geo_point) brick->action = op_geo_point;
@@ -679,7 +679,7 @@ t_node *add_part_object(t_context *C,t_block *block,const char *name,void *data,
 
 t_node *add_part_geo(t_context *C, t_block *block, const char *name, void *data, t_data_type type)
 {
-	t_node *node = add_brick_geo(C,block,name,data,type);
+	t_node *node = add_brick_geo( C, block, name, data, type);
 	t_brick *brick = node->data;
 	brick->state.draw_outline = 0;
 	return node;
@@ -1409,25 +1409,25 @@ t_node *add_brick_geo_array( t_context *C, const char *name , void *data)
 
 	// NEW BLOCK
 	t_node *node_block = add_block(C,name);
-	t_block *block=node_block->data;
+	t_block *block = node_block->data;
 	block->state.draw_outline = 1;
 
 	// VECTOR
 	C->ui->add_bricks = 0;
-	add_part_vector(C,block,"vector");
+	add_part_vector( C, block, "vector");
 	C->ui->add_bricks = 1;
 
 	// TARGET
-	t_node *node_target = add_part_slider_float(C,block,"target",NULL);
+	t_node *node_target = add_part_slider_float( C, block, "target", NULL);
 	t_brick *brick_target = node_target->data;
 	brick_target->state.is_versatil = 1;
 
 	// COUNT
-	add_part_slider_int(C,block,"count",&array->count);
-	scene_add_ref(C->scene,"struct_ref","geo_array","count",&array->count,array);
+	add_part_slider_int( C, block, "count", &array->count);
+	scene_add_ref( C->scene, "struct_ref", "geo_array", "count", &array->count, array);
 
 	// GEO ARRAY
-	add_part_geo(C,block,"array",data,dt_geo_array);
+	add_part_geo( C, block, "array", data, dt_geo_array);
 
 	return node_block;
 }

@@ -58,6 +58,8 @@ typedef struct Geo_Face
 	struct Geo_Edge *cd;
 	struct Geo_Edge *da;
 
+	int is_virtual;
+
 }t_geo_face;
 
 typedef struct Geo_Array
@@ -68,6 +70,8 @@ typedef struct Geo_Array
 	void *element;
 	struct Lst *elements;
 	struct Vector *vector;
+
+	int is_virtual;
 
 }t_geo_array;
 
@@ -81,6 +85,7 @@ typedef struct Geometry
 
 	int use_final_pos;
 	int selected;
+	int is_virtual;
 
 }t_geo;
 
