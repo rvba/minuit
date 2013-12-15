@@ -1679,18 +1679,5 @@ t_node *add_if(t_context *C)
 	return node_block;
 }
 
-t_block *get_menu(t_context *C,const char *name)
-{
-	t_node *node;
-	t_block *block = NULL;
-
-	if(is(name,"menu_add_object"))
-	{
-		node = scene_node_get(C->scene, "block", "menu_add_object");
-		block = node->data;
-	}
-
-	return block;
-}
 
 

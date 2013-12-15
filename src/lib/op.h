@@ -93,9 +93,7 @@ struct Node *	add_part_lst(struct Context *C,struct Block *block,enum Data_Type 
 struct Node *	add_part_vlst(struct Context *C,struct Block *block,enum Data_Type type,const char *name,void *ptr);
 struct Node *	add_part_pointer(struct Context *C,struct Block *block,enum Data_Type type,const char *name,void *ptr);
 struct Node *	add_part_vector(struct Context *C,struct Block *block,const char *name);
-
 struct Node *	add_brick_mesh( struct Context *C,const char *name);
-
 struct Node *	add_loop_get(struct Context *C);
 struct Node *	add_get(struct Context *C);
 struct Node *	add_for(struct Context *C);
@@ -106,16 +104,10 @@ struct Node * 	add_if(struct Context *C);
 struct Node *	add_plusplus(struct Context *C);
 struct Node *	add_const(struct Context *C);
 struct Node *	add_pipe(struct Context *C);
-
-struct Block*	get_menu(struct Context *C, const char *name);
-
-struct Node *add_block(struct Context *C,const char *name);
-
-void add_block_offset(struct Context *C, struct Block *block);
-
-int op_post_quit(struct Node *node);
-
-struct Block *add_menu_block( struct Context *C, const char *name);
+struct Node *	add_block(struct Context *C,const char *name);
+void 		add_block_offset(struct Context *C, struct Block *block);
+int 		op_post_quit(struct Node *node);
+struct Block *	add_menu_block( struct Context *C, const char *name);
 
 
 #endif
