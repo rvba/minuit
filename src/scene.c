@@ -296,8 +296,17 @@ int scene_node_delete(t_scene *sc,t_node *node)
 void scene_delete( t_scene *sc, void *data)
 {
 	t_id *id = (t_id *) data;
-	t_node *node = id->node;
-	if( node) scene_node_free( sc, node);
+	printf(">>%d\n",id->id);
+	if( ( id->id > 0)  && ( id->id <= sc->id))
+	{
+		t_node *node = id->node;
+		if( node) scene_node_free( sc, node);
+		else printf("[WARNING] scene_delete: node is null\n");
+	}
+	else
+	{
+		printf("[WARNING] scene_delete: id (%d) is wrong\n", id->id);
+	}
 }
 
 
