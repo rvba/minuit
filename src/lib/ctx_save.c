@@ -130,8 +130,6 @@ void save_file_increment(t_context *C)
 		strcat(file->id.name, number);
 		set_name(file->id.name, name);
 		file_build_location(file);
-
-		save_file(C);
 	}
 	else
 	{
@@ -185,7 +183,8 @@ void save_file_increment(t_context *C)
 			set_name(file->id.name, new_name);
 			file_build_location(file);
 
-			save_file(C);
 		}
 	}
+
+	save_to_file(C);
 }
