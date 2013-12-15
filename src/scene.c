@@ -237,17 +237,7 @@ int scene_id_get(t_scene *sc)
 	return sc->id;
 }
 
-
-
-
 /***	 FREE	***/
-
-
-void scene_mem_remove(t_scene *sc,t_node *node)
-{
-	mem_remove(node->id_chunk);
-	mem_remove(node->id_chunk_self);
-}
 
 void scene_node_free( t_scene *sc, t_node *node)
 {
