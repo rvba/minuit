@@ -201,8 +201,7 @@ void object_free(t_object *object)
 	t_scene *sc=C->scene;
 
 	// free data
-	t_node *node = scene_find_node_by_id( sc, object->id.id);
-	scene_remove_data_node(sc,node);
+	scene_remove_data_node( sc, object->id.node);
 
 	// free ref block 
 	if(object->ref)

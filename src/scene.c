@@ -117,12 +117,6 @@ t_node *scene_get_var(t_scene *sc,void *ptr)
 	return NULL;
 }
 
-t_node *scene_find_node_by_id( t_scene *sc, int id)
-{
-	return( list_find_node_by_id( sc->nodes, id));
-}
-
-
 // get node by type/name
 
 t_node *scene_node_get(t_scene *sc,const char *type,const char *name)

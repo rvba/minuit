@@ -80,9 +80,6 @@ typedef struct Scene
 struct Node *	scene_get_data(t_scene *sc,void *ptr);
 struct Node *	scene_get_var(t_scene *sc,void *ptr);
 t_scene*	scene_get(void);
-
-struct Node *	scene_find_node_by_id( t_scene *sc, int id);
-
 void 		scene_color_tmp_reset(t_scene *scene);
 void 		scene_color_get(t_scene *scene,int *color);
 void		scene_color_set(t_scene *sc,struct Node *node);
