@@ -221,21 +221,16 @@ t_lst *list_clone(t_lst *lst, t_data_type type)
 // but not the data it points to
 void list_free(t_lst *lst)
 {
-	/*
-	t_context *C=ctx_get();
-	t_scene *sc=C->scene;
-
-	t_link *l;
-
-	for(l=lst->first;l;l=l->next)
+	if( lst->id.id)
 	{
-		scene_delete(sc,l);
+		list_cleanup( lst);
+		mem_free( lst, sizeof( t_lst));
 	}
-	*/
-
-	list_cleanup( lst);
-
-	mem_free( lst, sizeof( t_lst));
+	else
+	{
+		printf("[WARINING] list_free: list not in scene\n");
+		lst_free( lst);
+	}
 }
 
 void list_free_data(t_lst *lst, t_data_type type)
@@ -270,13 +265,21 @@ void list_free_data(t_lst *lst, t_data_type type)
 
 void list_cleanup(t_lst *lst)
 {
-	t_link *link=lst->first;
-	t_link *tmp=NULL;
-	while(link)
+	if( lst->id.id)
 	{
-		tmp=link->next;
-		list_link_remove(lst,link);
-		link=tmp;
+		t_link *link=lst->first;
+		t_link *tmp=NULL;
+		while(link)
+		{
+			tmp=link->next;
+			list_link_remove(lst,link);
+			link=tmp;
+		}
+	}
+	else
+	{
+		printf("[WARINING] list_cleanup: list not in scene\n");
+		lst_cleanup( lst);
 	}
 }
 
@@ -374,10 +377,8 @@ t_lst *list_make( t_data_type type, const char *name)
 
 void cls_list_delete( void *data)
 {
-	t_scene *sc = ctx_scene_get();
 	t_lst *lst = (t_lst *) data;
-	if( lst->id.store) scene_delete( sc, lst);
-	else lst_free( lst);
+	list_free( lst);
 }
 
 
