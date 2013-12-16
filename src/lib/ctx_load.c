@@ -469,7 +469,9 @@ void rebind(t_scene *sc,const char *type,const char *name,void **ptr)
 		}
 		else
 		{
+			t_id *id = (t_id *) *ptr;
 			printf("[ERROR rebind] Can't find data %s %s\n",type,name);
+			printf("[ERROR rebind] ID: %d %s\n",id->id, id->name);
 			load_error = 1;
 		}
 	}

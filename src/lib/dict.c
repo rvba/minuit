@@ -131,6 +131,8 @@ t_symbol *symbol_rebind(t_scene *sc,void *ptr)
 t_dict *dict_rebind(t_scene *sc,void *ptr)
 {
 	t_dict *dict=(t_dict *)ptr;
+	printf(":: %s\n", dict->id.name);
+	printf(":: %s\n", dict->symbols->id.name);
 
 	rebind(sc,"dict","symbols",(void **)&dict->symbols);
 

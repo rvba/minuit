@@ -73,6 +73,8 @@ typedef struct Geo_Array
 
 	int is_virtual;
 
+	struct Block *block;
+
 }t_geo_array;
 
 typedef struct Geometry
