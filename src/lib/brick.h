@@ -307,6 +307,7 @@ void *		op_set_vlst(struct Brick *brick);
 void *		op_set_colors(struct Brick *brick);
 void *		op_rnd(struct Brick *brick);
 void *		op_neg(struct Brick *brick);
+void *		op_abs(struct Brick *brick);
 void *		op_is_last(struct Brick *brick);
 void *		op_operator(struct Brick *brick);
 void *		op_vector(struct Brick *brick);

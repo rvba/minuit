@@ -237,6 +237,7 @@ t_block *make_menu_maths( t_context *C)
 	add_brick_trigger(C,block,"++",op_brick_add);
 	add_brick_trigger(C,block,"neg",op_brick_add);
 	add_brick_trigger(C,block,"mod",op_brick_add);
+	add_brick_trigger(C,block,"abs",op_brick_add);
 
 	return block;
 }

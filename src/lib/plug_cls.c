@@ -154,6 +154,16 @@ void plug_data_negate(t_plug *plug)
 	}
 }
 
+void plug_data_abs(t_plug *plug)
+{
+	switch (plug->data_type)
+	{
+		case (dt_int): abs_int(plug->data); break;
+		case (dt_float): abs_float(plug->data); break;
+		default: break;
+	}
+}
+
 // input: 	plug_intern 
 // return: 	plug_intern
 t_plug *plug_get_src(t_plug *plug)

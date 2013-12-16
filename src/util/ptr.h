@@ -26,6 +26,9 @@ inline void flow_float_int(void *_dst, void *_src);
 inline void negate_int(void *_dst);
 inline void negate_float(void *_dst);
 
+inline void abs_int(void *_dst);
+inline void abs_float(void *_dst);
+
 inline void srf_float(void *ptr, void *data, int indice);
 inline void srf_uint(void *ptr, void *data, int indice);
 inline void srf_int(void *ptr, void *data, int indice);

@@ -27,6 +27,18 @@ inline void negate_float(void *_dst)
 	*dst = - (*dst);
 }
 
+inline void abs_float(void *_dst)
+{
+	float *dst = _dst;
+	*dst = fabs(*dst);
+}
+
+inline void abs_int(void *_dst)
+{
+	int *dst = _dst;
+	*dst = abs(*dst);
+}
+
 inline void set_int(void *_ptr,int i)
 {
 	int *ptr = (int *)_ptr;

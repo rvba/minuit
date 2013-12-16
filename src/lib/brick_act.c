@@ -101,6 +101,7 @@ void *op_brick_add(t_brick *brick)
 	else if(is(name,"keyboard")) 		node = add_slider_char(C,"keyboard",&C->app->keyboard->key_pressed); 
 	else if(is(name,"rnd")) 		node = add_slider_int_custom(C,"rnd",NULL,op_rnd);
 	else if(is(name,"neg")) 		node = add_slider_int_custom(C,"neg",NULL,op_neg);
+	else if(is(name,"abs")) 		node = add_slider_int_custom( C, "abs", NULL, op_abs); 
 	else if(is(name,"last?")) 		node = add_switch_custom(C,"last?",NULL,op_is_last);
 	else if(is(name,"for")) 		node = add_for(C);
 	else if(is(name,"vector 3d")) 		node = add_vector_3d(C);
@@ -1752,6 +1753,28 @@ void *op_neg(t_brick *brick)
 	// negate
 	if(plug_in->state.is_connected)
 		plug_data_negate(plug_intern);
+
+	if(brick->mode==bm_triggering) // (see:plug_update)
+	{
+		brick_release(brick); 
+	}
+
+	return NULL;
+}
+
+// ABS
+
+void *op_abs(t_brick *brick)
+{
+	t_plug *plug_intern=&brick->plug_intern;
+	t_plug *plug_in=&brick->plug_in;
+
+	// flow
+	plug_intern->cls->flow(plug_intern);
+
+	// negate
+	if(plug_in->state.is_connected)
+		plug_data_abs(plug_intern);
 
 	if(brick->mode==bm_triggering) // (see:plug_update)
 	{

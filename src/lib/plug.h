@@ -109,6 +109,7 @@ void 		plug_get_data(t_plug *plug);
 
 void 		plug_data_reset(t_plug *plug);
 void 		plug_data_negate(t_plug *plug);
+void 		plug_data_abs(t_plug *plug);
 void 		plug_data_set(t_plug *plug,t_data_type type,void *data);
 
 void 		plug_debug(t_plug *plug);
