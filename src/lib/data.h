@@ -20,6 +20,7 @@ struct Data;
 
 typedef struct Datum
 {
+	t_id id;
 	t_data_type type;
 	int count;
 	size_t size;

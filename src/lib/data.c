@@ -621,6 +621,8 @@ void datum_free(t_datum *datum)
 t_datum *datum_new(t_data_type type, int count, void *data)
 {
 	t_datum *datum = (t_datum *) mem_malloc(sizeof(t_datum));
+	t_id *id = (t_id *) data;
+	id_init( &datum->id, id->name);
 	datum->type = type;
 	datum->count = count;
 	datum->size = 0;
