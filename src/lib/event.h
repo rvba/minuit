@@ -19,16 +19,9 @@
 #define CTX_DEBUG_SELECT 0
 
 #define WITH_HIGHLIGHT 0
-//#define GLFONT 1
 #define FREE_SCENE 0
 
 #include "common.h"
-
-/*
-typedef struct Event t_event;
-typedef enum EventState t_event_state;
-typedef struct State_Event_UI t_state_event_ui;
-*/
 
 typedef enum EventState
 {
@@ -82,7 +75,7 @@ typedef struct State_Event_UI
 	int pan_y;
 }t_state_event_ui;
 
-typedef struct Event
+typedef struct Main_Event
 {
 	t_event_state state;
 
@@ -213,8 +206,8 @@ typedef struct Event
 	int color_transition_set;
 	int color_transition_count;
 
-}t_event;
+}t_main_event;
 
-t_event *event_new(void);
+t_main_event *event_new(void);
 
 #endif

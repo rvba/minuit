@@ -230,15 +230,9 @@ void block_draw_outline(t_block *block)
 
 void cls_block_draw_block(t_block *block)
 {
-	t_context *C = ctx_get();
-
-	C->event->ui.use_point_global_width = 0;
-
 	block_update_data(block);
 	block_update_geometry(block);
 	block_draw_bricks(block);
 	block_draw_outline(block);
-
-	C->event->ui.use_point_global_width = 1;
 }
 	

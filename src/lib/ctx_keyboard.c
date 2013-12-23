@@ -92,7 +92,7 @@ void switch_bricks(t_context *C)
 void keymap_typing(unsigned char key)
 {
 	t_context *C=ctx_get();
-	t_event *event = C->event;
+	t_main_event *event = C->event;
 
 	char char_key;
 
@@ -124,7 +124,7 @@ void keymap_typing(unsigned char key)
 void keymap_command(unsigned char key)
 {
 	t_context *C=ctx_get();
-	t_event *event = C->event;
+	t_main_event *event = C->event;
 
 	t_camera *camera = NULL;
 	if(C->scene->has_generic_viewport)
@@ -228,7 +228,7 @@ void keymap_command(unsigned char key)
 void keymap_main(unsigned char key)
 {
 	t_context *C=ctx_get();
-	t_event *event = C->event;
+	t_main_event *event = C->event;
 
 	if(event->ui.typing_start)
 	{

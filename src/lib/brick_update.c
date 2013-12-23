@@ -391,7 +391,7 @@ void cls_brick_update(t_brick *brick)
 	}
 
 	// PLUGS
-	t_event *event = C->event;
+	t_main_event *event = C->event;
 
 	if(mouse_over)
 	{

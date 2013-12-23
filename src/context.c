@@ -122,7 +122,7 @@ void ctx_mode(t_context *C)
 void ctx_reset(t_context *C)
 {
 	// event
-	t_event *event = C->event;
+	t_main_event *event = C->event;
 
 	event->switch_plug_in_flow_in = 0;
 	event->switch_plug_in_flow_out = 0;

@@ -12,9 +12,9 @@
 #include "util.h"
 #include "memory.h"
 
-t_event *event_new(void)
+t_main_event *event_new(void)
 {
-	t_event *event=(t_event*)mem_malloc(sizeof(t_event));
+	t_main_event *event = (t_main_event *) mem_malloc( sizeof( t_main_event));
 
 	bzero(&event->ui,sizeof(t_state_event_ui));
 
