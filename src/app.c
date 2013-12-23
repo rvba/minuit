@@ -13,7 +13,7 @@
 #define APP_PLAY 1
 #define APP_WITH_GLUT 1
 #define APP_VIDEO_LIMIT 20
-#define VERSION "0.4"
+#define VERSION "0.5"
 
 #include "opengl.h"
 #include "util.h"
