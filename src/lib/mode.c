@@ -13,14 +13,6 @@
 #include "list.h"
 #include "memory.h"
 
-t_module *module_new(char *name,void *data)
-{
-	t_module *module=(t_module *)mem_malloc(sizeof(t_module));
-	strncpy(module->name,name,10);
-	module->data=data;
-	module->update=NULL;
-	return module;
-}
 
 t_module *mode_module_add(t_mode *mode,char *name,void *data)
 {
@@ -32,7 +24,7 @@ t_module *mode_module_add(t_mode *mode,char *name,void *data)
 		for(link=mode->modules->first;link;link=link->next)
 		{
 			t_module *module=link->data;
-			if(is(module->name,"name"))
+			if( is( module->id.name,"name"))
 			{
 				printf("module %s exists\n",name);
 				is_free=0;
@@ -42,8 +34,8 @@ t_module *mode_module_add(t_mode *mode,char *name,void *data)
 
 	if(is_free)
 	{
-		t_module *module=module_new(name,data);
-		lst_add(mode->modules,module,module->name);
+		t_module *module = module_new( name, data);
+		lst_add( mode->modules, module, module->id.name);
 		return module;
 	}
 	else
@@ -58,8 +50,7 @@ t_module *mode_module_get(t_mode *mode,char *name)
 	for(link=mode->modules->first;link;link=link->next)
 	{
 		t_module *module=link->data;
-		if(is(module->name,name))
-			return module;
+		if( is( module->id.name, name)) return module;
 	}
 	return NULL;
 }
@@ -83,9 +74,19 @@ void mode_init(t_mode *mode)
 	mode->modules=lst_new("lst");
 }
 
-t_mode *mode_new(void)
+t_module *module_new( char *name, void *data)
+{
+	t_module *module=(t_module *)mem_malloc(sizeof(t_module));
+	id_init( &module->id, name);
+	module->data=data;
+	module->update=NULL;
+	return module;
+}
+
+t_mode *mode_new( const char *name)
 {
 	t_mode *mode=(t_mode *)mem_malloc(sizeof(t_mode));
+	id_init( &mode->id, name);
 	mode->modules=NULL;
 	mode->init=mode_init;
 	mode->update=mode_update;

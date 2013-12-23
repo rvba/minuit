@@ -58,7 +58,7 @@ t_context *ctx_new(int argc,char **argv)
 	C->ui = ui_new();
 	C->term = term_new( "main");
 	C->terms = lst_new( "terms");
-	C->mode = mode_new();
+	C->mode = mode_new( "mode");
 	C->server = server_new( "server");
 
 	return C;
