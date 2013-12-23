@@ -16,7 +16,9 @@ struct Lst;
 
 typedef struct Dot
 {
-	int id;
+	t_id id;
+
+	int i;
 	int root;
 	int rank;
 	struct Dot *parent;
@@ -27,10 +29,12 @@ typedef struct Dot
 
 typedef struct Dash
 {
+	t_id id;
+
 	t_dot *x;
 	t_dot *y;
-	int id_x;
-	int id_y;
+	int i_x;
+	int i_y;
 
 }t_dash;
 

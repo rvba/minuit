@@ -407,8 +407,8 @@ void rhizome_graph_link_add(t_rhizome *rhizome, t_brick *brick_x, t_brick *brick
 
 	t_dash *dash = graph_dash_add(graph, dot_x, dot_y);
 
-	dash->id_x = brick_x->id.id;
-	dash->id_y = brick_y->id.id;
+	dash->i_x = brick_x->id.id;
+	dash->i_y = brick_y->id.id;
 }
 
 

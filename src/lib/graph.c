@@ -63,7 +63,7 @@ void graph_dj_set(t_graph *graph)
 		dot = link->data;
 
 		dot->parent = dot;
-		dot->root = dot->id;
+		dot->root = dot->i;
 		dot->rank = 0;
 	}
 
@@ -79,7 +79,7 @@ void graph_dj_set(t_graph *graph)
 	{
 		dot = link->data;
 		t_dot *root = graph_dj_find(dot);
-		dot->root = root->id;
+		dot->root = root->i;
 	}
 }
 
@@ -90,13 +90,13 @@ void dash_show(t_dash *dash)
 	t_id *x = (t_id *) dash->x->data;
 	t_id *y = (t_id *) dash->y->data;
 
-	printf("dash %d:%d (%s)->(%s)\n",dash->id_x, dash->id_y,x->name,y->name);
+	printf("dash %d:%d (%s)->(%s)\n",dash->i_x, dash->i_y,x->name,y->name);
 }
 
 void dot_show(t_dot *dot)
 {
 	t_id *id = (t_id *) dot->data;
-	printf("dot data:%s id:%d root:%d\n",id->name, dot->id, dot->root);
+	printf("dot data:%s id:%d root:%d\n",id->name, dot->i, dot->root);
 
 	if(dot->parent)
 	{
@@ -128,37 +128,7 @@ void graph_show(t_graph *graph)
 	}
 }
 
-// DASH EXISTS
-
-int graph_dash_exists(t_graph *graph, t_dot *dot_x, t_dot *dot_y)
-{
-	t_link *link;
-	t_dash *dash;
-
-	t_id *s_x;
-	t_id *s_y;
-	t_id *g_x;
-	t_id *g_y;
-
-	s_x = (t_id *) dot_x->data;
-	s_y = (t_id *) dot_y->data;
-
-	for(link=graph->dashes->first;link;link=link->next)
-	{
-		dash = link->data;
-		g_x = (t_id *)dash->x->data;
-		g_y = (t_id *)dash->y->data;
-
-		if((s_x->id == g_x->id) && (s_y->id == g_y->id))
-		{
-			return 1;
-		}
-	}
-
-	return 0;
-}
-
-int graph_link_exists(t_graph *graph, int id_x, int id_y)
+int graph_link_exists(t_graph *graph, int i_x, int i_y)
 {
 	t_link *link;
 	t_dash *dash;
@@ -166,10 +136,10 @@ int graph_link_exists(t_graph *graph, int id_x, int id_y)
 	for(link=graph->dashes->first;link;link=link->next)
 	{
 		dash = link->data;
-		int dash_x = dash->id_x;
-		int dash_y = dash->id_y;
+		int dash_x = dash->i_x;
+		int dash_y = dash->i_y;
 
-		if(((id_x == dash_x) && (id_y == dash_y)) || ((id_x == dash_y) && (id_y == dash_x)))
+		if(((i_x == dash_x) && (i_y == dash_y)) || ((i_x == dash_y) && (i_y == dash_x)))
 		{
 			return 1;
 		}
@@ -188,9 +158,9 @@ t_dash *graph_dash_find(t_graph *graph, t_dot *x, t_dot *y)
 	{
 		dash = link->data;
 		if(
-			((dash->x->id == x->id) && (dash->y->id == y->id))
+			((dash->x->i == x->i) && (dash->y->i == y->i))
 			||
-			((dash->y->id == x->id) && (dash->x->id == y->id))
+			((dash->y->i == x->i) && (dash->x->i == y->i))
 			)
 		{
 			return dash;
@@ -199,17 +169,17 @@ t_dash *graph_dash_find(t_graph *graph, t_dot *x, t_dot *y)
 	return NULL;
 }
 
-t_dash *graph_link_find(t_graph *graph, int id_x, int id_y)
+t_dash *graph_link_find(t_graph *graph, int i_x, int i_y)
 {
 	t_link *link;
 	t_dash *dash;
 	for(link=graph->dashes->first;link;link=link->next)
 	{
 		dash = link->data;
-		int dash_x = dash->id_x;
-		int dash_y = dash->id_y;
+		int dash_x = dash->i_x;
+		int dash_y = dash->i_y;
 
-		if(((id_x == dash_x) && (id_y == dash_y)) || ((id_x == dash_y) && (id_y == dash_x)))
+		if(((i_x == dash_x) && (i_y == dash_y)) || ((i_x == dash_y) && (i_y == dash_x)))
 		{
 			return dash;
 		}
@@ -217,7 +187,7 @@ t_dash *graph_link_find(t_graph *graph, int id_x, int id_y)
 	return NULL;
 }
 
-t_dot *graph_dot_find(t_graph *graph, int id)
+t_dot *graph_dot_find(t_graph *graph, int i)
 {
 	t_link *link;
 	t_dot *dot;
@@ -225,7 +195,7 @@ t_dot *graph_dot_find(t_graph *graph, int id)
 	for(link=graph->dots->first;link;link=link->next)
 	{
 		dot = link->data;
-		if(dot->id == id)
+		if(dot->i == i)
 		{
 			return dot;
 		}
@@ -248,9 +218,9 @@ void graph_dash_remove(t_graph *graph, t_dot *x, t_dot *y)
 	}
 }
 
-void graph_link_remove(t_graph *graph, int id_x, int id_y)
+void graph_link_remove(t_graph *graph, int i_x, int i_y)
 {
-	t_dash *dash = graph_link_find(graph,id_x,id_y); 
+	t_dash *dash = graph_link_find(graph,i_x,i_y); 
 	if(dash)
 	{
 		lst_link_delete_by_ptr(graph->dashes, dash);
@@ -351,7 +321,7 @@ t_dot *dot_new(void *data)
 
 	t_id *id = (t_id *) data;
 
-	dot->id = id->id;
+	dot->i = id->id;
 	dot->root = 0;
 	dot->rank = 0;
 	dot->parent = NULL;
