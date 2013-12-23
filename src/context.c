@@ -50,16 +50,16 @@ t_context *ctx_new(int argc,char **argv)
 	t_context *C = (t_context *) mem_malloc(sizeof(t_context));
 
 	C->app = app_new(argc,argv);
-	C->event=event_new();
-	C->scene=scene_new(); 
-	C->engine=engine_new("engine");
-	C->draw=draw_new();
-	C->skt=skt_new();
-	C->ui=ui_new();
-	C->term=term_new("main");
-	C->terms = lst_new("terms");
-	C->mode=mode_new();
-	C->server=server_new();
+	C->event = event_new();
+	C->scene = scene_new(); 
+	C->engine = engine_new( "engine");
+	C->draw = draw_new();
+	C->skt = skt_new();
+	C->ui = ui_new();
+	C->term = term_new( "main");
+	C->terms = lst_new( "terms");
+	C->mode = mode_new();
+	C->server = server_new( "server");
 
 	return C;
 }
