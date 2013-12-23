@@ -188,7 +188,7 @@ t_process *process_new(const char *name,void*(* func)(void *data))
 
 	id_init(&process->id, name);
 
-	process->clock=clock_new();
+	process->clock = clock_new( "clock");
 	process->limit=1;
 	process->play=1;
 	process->exit=0;

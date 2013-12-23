@@ -290,7 +290,7 @@ t_app *app_new(int argc,char **argv)
 	app->mouse=mouse_new();
 	app->window=window_new(app->with_glut);
 	app->keyboard=keyboard_new();
-	app->clock=clock_new();
+	app->clock=clock_new( "clock");
 
 	app->file = file_new("void");
 	file_init(app->file);

@@ -236,8 +236,8 @@ t_mouse *mouse_new(void)
 	mouse->button_left_is_ready=1;
 	mouse->sign_x=0;
 	mouse->sign_y=0;
-	mouse->clic_clock=clock_new();
-	mouse->release_clock=clock_new();
+	mouse->clic_clock = clock_new( "clock");
+	mouse->release_clock = clock_new( "clock");
 	mouse->dbclic=0;
 	mouse->lgclic=0;
 
