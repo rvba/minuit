@@ -14,6 +14,7 @@
 #include "memory.h"
 #include "log.h"
 #include "list.h"
+#include "util.h"
 
 #define DEBUG 1
 
@@ -47,7 +48,7 @@ void mem_init(void)
 void chunk_show(t_chunk *c)
 {
 	printf("chunk chunk_type:%s type:%s id:%d size:%d tot:%d ptr:%p\n",
-		chunk_type_get(c->chunk_type),node_name_get(c->type),c->id,c->size,c->tot,c->pointer);
+		chunk_type_get(c->chunk_type),data_name_get(c->type),c->id,c->size,c->tot,c->pointer);
 }
 
 void mem_show(void)
@@ -61,9 +62,9 @@ void mem_show(void)
 	}
 }
 
-t_chunk *chunk_new(t_chunk_type chunk_type,t_node_type type,size_t size,int tot,void *pointer)
+t_chunk *chunk_new(t_chunk_type chunk_type,t_data_type type,size_t size,int tot,void *pointer)
 {
-	t_chunk *chunk=(t_chunk *)malloc(sizeof(t_chunk));
+	t_chunk *chunk=(t_chunk *)mem_malloc(sizeof(t_chunk));
 
 	chunk->chunk_type=chunk_type;
 	chunk->type=type;
@@ -112,7 +113,7 @@ void mem_write(const char *path)
 		check_size+=(int)sizeof(t_chunk);
 
 		ulog((LOG_SAVE,"[%d]\t(+%d)\tchunk\t",(int)ftell(file),(int)sizeof(t_chunk)));
-		ulog((LOG_SAVE,"%s:%s:%d:%d:%p \n",chunk_type_get(c->chunk_type),node_name_get(c->type),c->size,c->tot,c->pointer));
+		ulog((LOG_SAVE,"%s:%s:%d:%d:%p \n",chunk_type_get(c->chunk_type),data_name_get(c->type),c->size,c->tot,c->pointer));
 
 		if(DEBUG)
 		{
@@ -122,14 +123,14 @@ void mem_write(const char *path)
 				if(node->type!=c->type)
 				{
 					printf("[ERROR mem_write] Wrong node %d cls type %s chunk type:%s chunk_id:%d\n",
-						node->id,node_name_get(node->type),node_name_get(c->type),c->id);
+						node->id,data_name_get(node->type),data_name_get(c->type),c->id);
 				}
 			}
 			else
 			{
 				if(node)
 				{
-					if(node->type!=nt_var)
+					if(node->type!=dt_var)
 					{
 						/*
 						t_generic *g=(t_generic *)node->data;
@@ -145,8 +146,8 @@ void mem_write(const char *path)
 				}
 				else
 				{
-					t_generic *g=(t_generic *)c->pointer;
-					printf("[ERROR mem_write] No Node for data:%s,name:%s\n",node_name_get(c->type),g->name);
+					t_id *id = (t_id *) c->pointer;
+					printf("[ERROR mem_write] No Node for data:%s,name:%s\n",data_name_get(c->type), id->name);
 				}
 			}
 		}
@@ -155,7 +156,7 @@ void mem_write(const char *path)
 		fwrite(c->pointer,c->size,c->tot,file);
 		check_size+=c->size*c->tot;
 
-		ulog((LOG_SAVE,"[%d]\t(+%d)\t%s\n",(int)ftell(file),c->size,node_name_get(c->type)));
+		ulog((LOG_SAVE,"[%d]\t(+%d)\t%s\n",(int)ftell(file),c->size,data_name_get(c->type)));
 
 		// check for memory offset
 		if(check_size!=ftell(file)) printf("[ERROR mem_write] Memory offset\n");
@@ -171,15 +172,15 @@ void mem_write(const char *path)
 }
 
 // add new chunk to MEMORY return chunk_id
-int mem_store(t_chunk_type chunk_type,t_node_type type,size_t size,int tot,void *pointer)
+int mem_store(t_chunk_type chunk_type,t_data_type type,size_t size,int tot,void *pointer)
 {
 	if(!pointer) printf("[ERROR mem_store] NULL ptr\n");
 
 	t_chunk *chunk=chunk_new(chunk_type,type,size,tot,pointer);
 	lst_add(MEMORY,chunk,"chunk");
 
-	ulog((LOG_MEMORY,"mem_store %d %s %s\n",chunk->id,chunk_type_get(chunk_type),node_name_get(type)));
-	//printf("mem_store %d %s %s\n",chunk->id,chunk_type_get(chunk_type),node_name_get(type));
+	ulog((LOG_MEMORY,"mem_store %d %s %s\n",chunk->id,chunk_type_get(chunk_type),data_name_get(type)));
+	//printf("mem_store %d %s %s\n",chunk->id,chunk_type_get(chunk_type),data_name_get(type));
 
 	return chunk->id;
 }
@@ -208,7 +209,7 @@ void mem_remove(int id)
 		if(_link)
 		{
 			lst_link_delete(MEMORY,_link);
-			free(_chunk);
+			mem_free(_chunk, sizeof( t_chunk));
 		}
 		else
 		{
@@ -218,18 +219,6 @@ void mem_remove(int id)
 	}
 }
 
-void mem_free(void)
-{
-	t_link *l;
-	t_chunk *c;
 
-	for(l=MEMORY->first;l;l=l->next)
-	{
-		c=l->data;
-		free(c);
-	}
-
-	lst_delete_all(MEMORY);
-}
 
 

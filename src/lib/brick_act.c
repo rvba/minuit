@@ -18,92 +18,31 @@
 #include "camera.h"
 #include "dict.h"
 #include "data.h"
-#include "binding.h"
 #include "list.h"
+#include "vlst.h"
 #include "ui.h"
 #include "block.h"
 #include "brick.h"
 #include "vector.h"
 #include "clock.h"
 #include "set.h"
+#include "rhizome.h"
+#include "geometry.h"
 
-int brick_check_loop(t_brick *brick)
-{
-	t_context *C = ctx_get();
-
-	int frame = C->app->frame;
-
-	if(brick->state.frame_loop != frame)
-	{
-	//	brick->state.frame_loop = frame;
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
-}
-
-int brick_pre_check_loop(t_brick *brick)
-{
-	t_context *C = ctx_get();
-
-	int frame = C->app->frame;
-
-	if(brick->state.frame_loop != frame)
-	{
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
-}
-
-// SET UPDATED
-
-void brick_set_updated(t_brick *brick)
-{
-	t_plug *plug = &brick->plug_intern;
-
-	// Bindings
-	if(plug->bindings)
-	{
-		t_link *link;
-		for(link = plug->bindings->first; link; link = link->next)
-		{
-			t_binding *binding = link->data;
-			binding_update(binding,plug->data);
-		}
-	}
-
-	// Set Updated
-	brick->plug_in.state.is_updated = 1;
-	brick->plug_intern.state.is_updated = 1;
-	brick->plug_out.state.is_updated = 1;
-
-	// Set Setup
-	if(brick->mode == bm_triggering)
-	{
-		t_block *block = brick->block;
-		t_set *set = block->set;
-		if(set) set_setup(set);
-	}
-}
 
 // BRICK ADD
 
 void *op_brick_add(t_brick *brick)
 {
 	t_context *C = ctx_get();
-	t_node *node;
-	t_block *this_block;
-	t_brick *this_brick;
+	t_node *node = NULL;
+	t_block *block;
+	t_set *set;
 
 	// store
 	scene_store(C->scene,1);
 
-	char *name=brick->name;
+	char *name=brick->id.name;
 
 	     if(is(name,"frame")) 		node = add_slider_int(C,"frame",&C->app->frame); 
 	else if(is(name,"timer"))  		node = add_slider_float(C,"timer",&C->app->timer); 
@@ -162,9 +101,9 @@ void *op_brick_add(t_brick *brick)
 	else if(is(name,"keyboard")) 		node = add_slider_char(C,"keyboard",&C->app->keyboard->key_pressed); 
 	else if(is(name,"rnd")) 		node = add_slider_int_custom(C,"rnd",NULL,op_rnd);
 	else if(is(name,"neg")) 		node = add_slider_int_custom(C,"neg",NULL,op_neg);
+	else if(is(name,"abs")) 		node = add_slider_int_custom( C, "abs", NULL, op_abs); 
 	else if(is(name,"last?")) 		node = add_switch_custom(C,"last?",NULL,op_is_last);
 	else if(is(name,"for")) 		node = add_for(C);
-	else if(is(name,"vector")) 		node = add_vector(C);
 	else if(is(name,"vector 3d")) 		node = add_vector_3d(C);
 	else if(is(name,"vector 2d")) 		node = add_vector_2d(C);
 	else if(is(name,"bang")) 		node = add_slider_int_custom(C,"bang",NULL,op_bang); 
@@ -172,6 +111,9 @@ void *op_brick_add(t_brick *brick)
 	else if(is(name,"const")) 		node = add_const(C); 
 	else if(is(name,"and")) 		node = add_maths(C,"and"); 
 	else if(is(name,"stack")) 		node = add_stack(C); 
+	else if(is(name,"mesh")) 		node = add_slider_object(C,"mesh"); 
+	else if(is(name,"vertex")) 		node = add_brick_mesh(C,"vertex"); 
+	else if(is(name,"edges")) 		node = add_brick_mesh(C,"edges"); 
 
 	// Store
 	scene_store(C->scene,0);
@@ -179,84 +121,13 @@ void *op_brick_add(t_brick *brick)
 	// Switch Desk
 	if(!C->ui->show_sets) show_sets(C);
 
-	// Limit
-
-	if(node)
+	if( node)
 	{
-		this_block = node->data;
-		t_link *link;
-		for(link = this_block->bricks->first; link; link = link->next)
-		{
-			this_brick = link->data;
-			op_limit(this_brick);
-		}
-
-		// Frame Based
-		if(is(name,"frame") || is(name,"timer") || is(name,"timer low"))
-		{
-			this_block->state.frame_based  =1;
-		}
-
+		block = node->data;
+		set = block->set;
+		set_setup( set);
 	}
 		
-	return NULL;
-}
-
-
-// LIMIT
-
-void *op_limit(t_brick *brick)
-{
-	if(brick->state.has_limit_low)
-	{
-		switch(brick->plug_intern.data_type)
-		{
-			case(dt_float):
-				if(drf_float(brick->plug_intern.data) < brick->var.limit_float_low)
-					set_float(brick->plug_intern.data,brick->var.limit_float_low);
-				break;
-
-			case(dt_int):
-				if(drf_int(brick->plug_intern.data) < brick->var.limit_int_low)
-					set_int(brick->plug_intern.data,brick->var.limit_int_low);
-				break;
-
-			case(dt_uint):
-				if(drf_uint(brick->plug_intern.data) < brick->var.limit_int_low)
-					set_uint(brick->plug_intern.data,brick->var.limit_int_low);
-				break;
-
-			default:
-				printf("[op_limit] case not implemented : %s\n",data_name_get(brick->plug_intern.data_type));
-				break;
-		}
-	}
-
-	if(brick->state.has_limit_high)
-	{
-		switch(brick->plug_intern.data_type)
-		{
-			case(dt_float):
-				if(drf_float(brick->plug_intern.data) > brick->var.limit_float_high)
-					set_float(brick->plug_intern.data,brick->var.limit_float_high);
-				break;
-
-			case(dt_int):
-				if(drf_int(brick->plug_intern.data) > brick->var.limit_int_high)
-					set_int(brick->plug_intern.data,brick->var.limit_int_high);
-				break;
-
-			case(dt_uint):
-				if(drf_uint(brick->plug_intern.data) > brick->var.limit_int_high)
-					set_uint(brick->plug_intern.data,brick->var.limit_int_high);
-				break;
-
-			default:
-				printf("[op_limit] case not implemented : %s\n",data_name_get(brick->plug_intern.data_type));
-				break;
-		}
-	}
-
 	return NULL;
 }
 
@@ -275,7 +146,6 @@ void *op_slider(t_brick *brick)
 	plug_intern->cls->flow(plug_intern);
 
 	// trigger
-	//if(brick_check_loop(brick) && brick->mode==bm_triggering) // (see:plug_update)
 	if(brick->mode==bm_triggering) // (see:plug_update)
 	{
 		// dragging
@@ -365,11 +235,6 @@ void *op_slider(t_brick *brick)
 				}
 			}
 		}
-
-		// Limit
-
-		op_limit(brick);
-
 	}
 
 	return NULL;
@@ -395,9 +260,6 @@ void *op_slider_positive_non_zero(t_brick *brick)
 {
 	// slide
 	op_slider(brick);
-
-	//t_context *C = ctx_get();
-	//printf("%d slider positive %d\n",C->app->frame,drf_int(brick->plug_intern.data));
 
 	// set positive
 	int *val = brick->plug_intern.data;
@@ -746,11 +608,22 @@ void *op_plusplus(t_brick *brick)
 	return NULL;
 }
 
-void exe_remove_brick(t_dict *args)
-{
-	t_context *C = ctx_get();
 
+void brick_rhizome_setup(t_brick *brick)
+{
+	t_block *block = brick->block;
+	t_rhizome *rhizome = block->rhizome;
+	if(block->rhizome)
+	{
+		rhizome_setup(rhizome);
+	}
+}
+
+void exe_remove_brick(t_action *action)
+{
 	// remove brick
+
+	t_dict *args = action->args;
 
 	t_brick *_brick = dict_pop_data(args,"brick");
 	t_block *block = _brick->block;
@@ -761,9 +634,12 @@ void exe_remove_brick(t_dict *args)
 	int *slider = plug_intern->data;
 
 	t_lst *bricks=block->bricks;
-	t_link *last=bricks->last;
+	t_link *first = bricks->first;
 	t_brick *brick=NULL;
-	if(last) brick=last->data;
+	if(first) brick = first->data;
+
+	t_context *C = ctx_get();
+	scene_store( C->scene, 1);
 
 	if(brick)
 	{
@@ -771,10 +647,12 @@ void exe_remove_brick(t_dict *args)
 		if(brick_delete(brick,remove_connected))
 		{
 			// remove link from bricks
-			lst_link_remove(bricks,last);
-			scene_struct_delete(C->scene,last);
+			list_link_remove( bricks, first);
+			brick_rhizome_setup(brick);
 			block->tot_bricks--;
 			block->state.update_geometry=1;
+			block_brick_set_order( block);
+			block->pos[1] += brick->geom.height;
 		}
 		else
 		{
@@ -782,126 +660,111 @@ void exe_remove_brick(t_dict *args)
 			(*slider)++;
 		}
 	}
+
+	scene_store( C->scene, 0);
 }
 
-void exe_add_brick_parent_child(t_dict *args)
+
+void exe_add_brick(t_action *action)
 {
 	t_context *C = ctx_get();
+	scene_store(C->scene, 1);
+
+	t_dict *args = action->args;
 
 	t_brick *brick = dict_pop_data(args,"brick");
 
 	t_block *block=brick->block;
-	t_plug *plug_intern=&brick->plug_intern;
-
-	scene_store(C->scene,1);
-
-	//add brick
 
 	t_node *n=add_part_slider_float(C,block,".",NULL);
 	t_brick *b=n->data;
 	b->state.is_versatil=1;
 
-	t_plug *p_intern = &b->plug_intern;
+	lst_lifo( block->bricks);
+	block_brick_set_order( block);
+
+	block->pos[1] -= b->geom.height;
+
+	brick_rhizome_setup(b);
+
 	t_plug *p_in = &b->plug_in;
 	
-	plug_add_parent(p_intern,plug_intern);
-	p_in->state.follow_in=0;
-
-	scene_store(C->scene,0);
-
-	block->state.update_geometry=1;
-}
-
-void exe_add_brick_child_parent(t_dict *args)
-{
-	t_context *C = ctx_get();
-
-	t_brick *brick = dict_pop_data(args,"brick");
-	t_plug *plug_brick = &brick->plug_intern;
-	t_brick *brick_target = dict_pop_data(args,"target");
-
-	t_block *block=brick->block;
-
-	scene_store(C->scene,1);
-
-	t_node *n=add_part_slider_float(C,block,".",NULL);
-	t_brick *b=n->data;
-	b->state.is_versatil=1;
-
-	t_plug *p_intern = &b->plug_intern;
-	t_plug *p_in = &b->plug_in;
-	
-	t_plug *plug_target = &brick_target->plug_intern;
-	plug_add_parent(plug_brick,p_intern);
-	plug_add_parent(plug_target,plug_brick);
 	p_in->state.follow_in=1;
 
-	scene_store(C->scene,0);
-
 	block->state.update_geometry=1;
+
+	scene_store(C->scene,0);
 }
 
 
-void add_exe_add_brick(t_brick *brick,t_brick *brick_target,void (* f)(t_dict *))
+
+void add_exe_add_brick(t_brick *brick,t_brick *brick_target,void (* f)(t_action *))
 {
+	t_scene *sc = scene_get();
+	scene_store( sc, 1);
 	t_action *action = action_new("action");
 
 	action->act = f;
 
-	t_node *node_dict = dict_add("args");
-	t_dict *dict = node_dict->data;
+	t_dict *dict = dict_make("args");
 	action->args = dict;
+	action->brick = brick;
 
 	dict_symbol_add(action->args,"brick",dt_null,brick);
 	dict_symbol_add(action->args,"target",dt_null,brick_target);
 
 	exe_add_action(action);
+
+	scene_store( sc, 0);
 }
 
 void add_exe_remove_brick(t_brick *brick)
 {
+	t_scene *sc = scene_get();
+	scene_store( sc, 1);
 	t_action *action = action_new("action");
 
 	action->act = exe_remove_brick;
 
-	t_node *node_dict = dict_add("args");
-	t_dict *dict = node_dict->data;
+	t_dict *dict = dict_make("args");
 	action->args = dict;
+	action->brick = brick;
 
 	dict_symbol_add(action->args,"brick",dt_null,brick);
 
 	exe_add_action(action);
+
+	scene_store( sc, 0);
 }
 
 // ADD BRICKS
 
-void op_add_bricks(t_brick *brick,t_brick *brick_target,int offset,t_parent parent)
+void op_add_bricks( t_brick *brick, t_brick *brick_target, int offset)
 {
 	// slide
 	op_slider_positive(brick);
 
-	t_block *block=brick->block;
-	t_plug *plug_intern=&brick->plug_intern;
-	int tot_bricks=block->tot_bricks;
-	int *slider = plug_intern->data;
-
-	if(slider==0)
+	if( brick->mode == bm_idle)
 	{
-	}
+		t_block *block=brick->block;
+		t_plug *plug_intern=&brick->plug_intern;
+		int tot_bricks=block->tot_bricks;
+		int *slider = plug_intern->data;
 
-	// add brick
-	else if( *slider > tot_bricks - offset) 
-	{
-		if(parent == t_parent_child)
-			add_exe_add_brick(brick,brick_target,exe_add_brick_parent_child);
-		else
-			add_exe_add_brick(brick,brick_target,exe_add_brick_child_parent);
+		if(slider==0)
+		{
+		}
 
-	}
-	// remove brick
-	else if(*slider < tot_bricks - offset)
-	{
-		add_exe_remove_brick(brick);
+		// add brick
+		else if( *slider > tot_bricks - offset) 
+		{
+			add_exe_add_brick( brick, brick_target, exe_add_brick);
+		}
+		// remove brick
+		else if(*slider < tot_bricks - offset)
+		{
+			add_exe_remove_brick(brick);
+		}
 	}
 }
 
@@ -909,7 +772,7 @@ void op_add_bricks(t_brick *brick,t_brick *brick_target,int offset,t_parent pare
 void *op_pipe(t_brick *brick)
 {
 	// add bricks
-	op_add_bricks(brick,NULL,2,t_parent_child); //XXX 2
+	op_add_bricks(brick,NULL,2); //XXX 2
 
 	t_block *block = brick->block;
 	t_plug *plug_intern = &brick->plug_intern;
@@ -931,7 +794,7 @@ void *op_pipe(t_brick *brick)
 		for(l = block->bricks->first;l;l = l->next)
 		{
 			b = l->data;
-			if(!is(b->name,"clone"))
+			if(!is(b->id.name,"clone"))
 			{
 				t_plug *plug_clone = &b->plug_intern;
 				t_plug *plug_in_clone = &b->plug_in;
@@ -975,7 +838,7 @@ void *op_clone(t_brick *brick)
 	// Add New Bricks
 	if(brick_pre_check_loop(brick)) 
 	{
-		op_add_bricks(brick,brick_brick,2,t_parent_child);
+		op_add_bricks(brick,brick_brick,2);
 	}
 
 	// Update Clones
@@ -987,7 +850,7 @@ void *op_clone(t_brick *brick)
 		for(l = block->bricks->first;l;l = l->next)
 		{
 			b = l->data;
-			if(!is(b->name,"brick") && !is(b->name,"clone"))
+			if(!is(b->id.name,"brick") && !is(b->id.name,"clone"))
 			{
 				t_plug *plug_clone = &b->plug_intern;
 				t_plug *plug_in_clone = &b->plug_in;
@@ -1154,6 +1017,10 @@ void *op_menu(t_brick *brick)
 
 void *op_void(t_brick *brick)
 {
+	t_plug *plug_intern = &brick->plug_intern;
+	// flow
+	plug_intern->cls->flow(plug_intern);
+
 	brick_release(brick);
 
 	return NULL;
@@ -1191,7 +1058,7 @@ void op_maths_plug(t_operation operation,t_plug *dst,t_plug *src)
 	int i,j;
 
 	float *data_dst;
-	float *data;
+	float *data = NULL;
 	t_data_type type=dt_null;
 
 	t_vector *vector_src;
@@ -1433,26 +1300,16 @@ void op_maths_exe(t_operation operation,t_brick *brick)
 	t_plug *plug_result=&brick_result->plug_intern;
 
 	int pos=0;
-
-	// Get Pos
-	pos=get_first_vlst_pos(block);
-
-	// Offset first two bricks operator, result
-	l=block->bricks->first;
-	l=l->next;
-	l=l->next;
-
-	// get type
-	int this_pos=2;
-	for(;l;l=l->next)
+	int count = block->bricks->count;
+	for(l=block->bricks->first;l;l=l->next)
 	{
 		b=l->data;
 		p=&b->plug_intern;
 		// don't evaluate result plug
-		if(this_pos != pos) 
+		if(pos < count -2 ) 
 			// compute
 			op_maths_plug(operation,plug_result,p);
-		this_pos++;
+		pos++;
 	}
 }
 
@@ -1476,15 +1333,10 @@ void *op_maths(t_operation operation,t_brick *brick)
 	t_plug *plug_result=&brick_result->plug_intern;
 
 	// add bricks
-	op_add_bricks(brick,brick_result,2,t_child_parent);
-
-	// offset first two bricks
-	l=block->bricks->first;
-	l=l->next;
-	l=l->next;
+	op_add_bricks(brick,brick_result,2);
 
 	// get type
-	for(;l;l=l->next)
+	for(l=block->bricks->first;l;l=l->next)
 	{
 		b=l->data;
 		p=&b->plug_intern;
@@ -1543,6 +1395,155 @@ void *op_maths(t_operation operation,t_brick *brick)
 	return NULL;
 }
 
+// :GEOMETRY
+
+
+void *op_geo_array( t_brick *brick)
+{
+	t_plug *plug_self = &brick->plug_intern;
+	t_geo_array *array = plug_self->data;
+	t_block *block = brick->block;
+	t_brick *brick_target = block_brick_get( block, "target");
+	t_brick *brick_vector = block_brick_get( block, "vector");
+	t_plug *plug_target = &brick_target->plug_intern;
+	t_plug *plug_vector = &brick_vector->plug_intern;
+	void *target = plug_target->data;
+	t_vector *vector = plug_vector->data;
+	t_data_type type = plug_target->cls->type;
+
+	array->type_element = type;
+	array->element = target;
+	array->vector = vector;
+
+	geo_array_build( array); 
+
+	return NULL;
+}
+
+void op_geo_exe(t_brick *brick)
+{
+	//t_context *C = ctx_get();
+	t_link *l;
+	t_brick *b;
+	t_plug *p;
+	t_geo_point *point;
+	t_geo_edge *edge;
+	t_geo_array *array;
+
+	t_block *block=brick->block;
+	t_brick *brick_geometry = block_brick_get(block,"data");
+	t_geo *geo = brick_geometry->plug_intern.data;
+
+	t_lst *points = lst_new("lst");
+	t_lst *edges = lst_new("lst");
+
+
+	for(l=block->bricks->first;l;l=l->next)
+	{
+		b=l->data;
+		p=&b->plug_intern;
+		if(p->cls->type == dt_geo_point)
+		{
+			point = p->data;
+			lst_add( points, point, "point");
+		}
+		else if(p->cls->type == dt_geo_edge)
+		{
+			edge = p->data;
+			if(edge->a && edge->b)
+			{
+				lst_add(edges, edge, "edge");
+			}
+		}
+		else if( p->cls->type == dt_geo_array)
+		{
+			array = p->data;
+
+			if( array->elements->count > 0)
+			{
+				geo_array_get_points( array, points);
+				geo_array_get_edges( array, edges);
+			}
+		}
+	}
+
+	// Reset
+
+	int count_points = points->count;
+	int count_edges = edges->count;
+
+	//scene_store( C->scene, 1);
+
+	if( count_points || count_edges)
+	{
+		geo_reset( geo);
+
+		if(points->count > 0) geo_data_set(geo, dt_geo_point, points);
+		if(edges->count > 0) geo_data_set(geo, dt_geo_edge, edges);
+	}
+
+	//scene_store( C->scene, 0);
+
+	// Free
+	lst_free(points);
+	lst_free(edges);
+}
+
+void *op_geo_brick_add(t_brick *brick)
+{
+	t_block *block=brick->block;
+	t_brick *brick_result=block_brick_get(block,"data");
+
+	// add bricks
+	op_add_bricks(brick,brick_result,4);
+
+	return NULL;
+}
+
+void *op_geometry(t_brick *brick)
+{
+	op_geo_brick_add(brick);
+	op_geo_exe(brick);
+	return NULL;
+}
+
+void *op_geo(t_brick *brick)
+{
+	return NULL;
+}
+
+void *op_geo_point(t_brick *brick)
+{
+	t_plug *plug = &brick->plug_intern;
+	// flow
+	plug->cls->flow(plug);
+
+	t_geo_point *point = brick->plug_intern.data;
+
+	t_block *block = brick->block;
+	t_brick *brick_vector = block_brick_get(block,"vector");
+	t_vector *vector = brick_vector->plug_intern.data;
+
+	geo_point_vector_update(point,vector);
+
+	return NULL;
+}
+
+void *op_geo_edge(t_brick *brick)
+{
+	t_geo_edge *edge = brick->plug_intern.data;
+	t_block *block = brick->block;
+	t_brick *brick_point_1 = block_brick_get_by_order(block,1);
+	t_brick *brick_point_2 = block_brick_get_by_order(block,2);
+	t_geo_point *point_1 = brick_point_1->plug_intern.data;
+	t_geo_point *point_2 = brick_point_2->plug_intern.data;
+
+	edge->a = point_1;
+	edge->b = point_2;
+
+	return NULL;
+}
+
 void *op_add(t_brick *brick)
 {
 	op_maths(t_op_add,brick);
@@ -1569,39 +1570,28 @@ void *op_and(t_brick *brick)
 	int *result = plug_result->data;
 
 	// add bricks
-	op_add_bricks(brick,brick_result,2,t_child_parent);
+	op_add_bricks(brick,brick_result,2);
 
-	int pos=0;
-
-	pos=get_first_vlst_pos(block);
-
-	// offset first two bricks operator, result
-	l=block->bricks->first;
-	l=l->next;
-	l=l->next;
-
-	int r=1;
-
-	// get type
-	int this_pos=2;
-	for(;l;l=l->next)
+	int pos = 0;
+	int count = block->bricks->count;
+	int r = 1; // true
+	for(l=block->bricks->first;l;l=l->next)
 	{
 		b=l->data;
 		p=&b->plug_intern;
 		// don't evaluate result plug
-		if(this_pos != pos)
+		if(pos < count - 2)
 		{
 			int *_r = p->data;
-			if(*_r == 0) r=0;
+			if(*_r == 0) r=0; // false
 
 		}
-		this_pos++;
+		pos++;
 	}
 
 	*result = r;
 
 	return NULL;
-
 }
 
 // SELECT
@@ -1618,7 +1608,8 @@ void *op_set_selected(t_brick *brick)
 	{
 		if(plug->data)
 		{
-			ctx_scene_set_selected(C,plug->data);
+			t_id *id = (t_id *) plug->data;
+			ctx_scene_set_selected( C, id->node);
 		}
 	}
 
@@ -1663,6 +1654,11 @@ void *op_not(t_brick *brick)
 		default:printf("op_not need an int\n");break;
 	}
 
+	if(brick->mode==bm_triggering) // (see:plug_update)
+	{
+		brick_release(brick); 
+	}
+
 	return NULL;
 }
 
@@ -1679,39 +1675,49 @@ void *op_set_vlst(t_brick *brick)
 
 	t_block *block=brick->block;
 
-	t_brick *brick_vlst;
+	t_brick *brick_vlst = NULL;
 
-	if(is(block->name,"vertex"))
+	if(is(block->id.name,"vertex"))
 		brick_vlst=block_brick_get(block,"vertex");
-	else if(is(block->name,"color"))
+	else if(is(block->id.name,"color"))
 		brick_vlst=block_brick_get(block,"colors");
-	else if(is(block->name,"faces"))
+	else if(is(block->id.name,"faces"))
 		brick_vlst=block_brick_get(block,"quads");
-	else
+	else if(is(block->id.name,"vlst"))
+		brick_vlst=block_brick_get(block,"vlst");
+	else 
 		printf("err!\n");
 
-	t_vlst *vlst=brick_vlst->plug_intern.data;
+	if(brick_vlst)
+	{
 
-	if(C->app->mouse->button_left == button_pressed)
-	{
-		_pressed=1;
-	}
-	
-	if(_pressed== 1 && C->app->mouse->button_left == button_released)
-	{
-		_pressed=0;
-		_released=1;
-	}
-	
-	if(C->app->mouse->button_left==button_released)
-	{
-		if(vlst->count != vlst->count_new) 
+		t_vlst *vlst=brick_vlst->plug_intern.data;
+
+		if(vlst)
 		{
-			if(_released)
+
+		if(C->app->mouse->button_left == button_pressed)
+		{
+			_pressed=1;
+		}
+		
+		if(_pressed== 1 && C->app->mouse->button_left == button_released)
+		{
+			_pressed=0;
+			_released=1;
+		}
+		
+		if(C->app->mouse->button_left==button_released)
+		{
+			if(vlst->count != vlst->count_new) 
 			{
-				_released=0;
-				vlst_update_data(vlst,NULL);
+				if(_released)
+				{
+					_released=0;
+					vlst_update_data(brick, vlst, NULL);
+				}
 			}
+		}
 		}
 	}
 
@@ -1724,7 +1730,12 @@ void *op_rnd(t_brick *brick)
 {
 	t_plug *plug_intern=&brick->plug_intern;
 	int *data=plug_intern->data;
-	*data=u_randrange(0,100);
+	*data=rnd_range(0,100);
+
+	if(brick->mode==bm_triggering) // (see:plug_update)
+	{
+		brick_release(brick); 
+	}
 
 	return NULL;
 }
@@ -1742,6 +1753,33 @@ void *op_neg(t_brick *brick)
 	// negate
 	if(plug_in->state.is_connected)
 		plug_data_negate(plug_intern);
+
+	if(brick->mode==bm_triggering) // (see:plug_update)
+	{
+		brick_release(brick); 
+	}
+
+	return NULL;
+}
+
+// ABS
+
+void *op_abs(t_brick *brick)
+{
+	t_plug *plug_intern=&brick->plug_intern;
+	t_plug *plug_in=&brick->plug_in;
+
+	// flow
+	plug_intern->cls->flow(plug_intern);
+
+	// negate
+	if(plug_in->state.is_connected)
+		plug_data_abs(plug_intern);
+
+	if(brick->mode==bm_triggering) // (see:plug_update)
+	{
+		brick_release(brick); 
+	}
 
 	return NULL;
 }
@@ -1851,6 +1889,11 @@ void *op_bang(t_brick *brick)
 		*state=0;
 	}
 
+	if(brick->mode==bm_triggering) // (see:plug_update)
+	{
+		brick_release(brick); 
+	}
+
 	return NULL;
 }
 
@@ -1906,15 +1949,6 @@ void *op_const(t_brick *brick)
 	// flow
 	plug_const->cls->flow(plug_const);
 
-	/*
-	if(!plug_const->state.is_eval)
-	{
-		plug_const->state.is_eval = 1;
-
-		*_const = *_i;
-	}
-	*/
-	
 	t_context *C = ctx_get();
 
 	if(brick->state.frame_loop != C->app->frame)

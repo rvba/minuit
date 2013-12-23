@@ -24,6 +24,10 @@
 #define UI_SHOW_INTRO 1
 #define UI_SHOW_MOUSE 0
 #define UI_SHOW_TERM 0
+#define UI_SHOW_RHIZOME_BOUNDING_BOX 0
+#define UI_SHOW_RHIZOME_ORDER 0
+#define UI_SHOW_STATUS 0
+#define UI_ADD_BRICKS 1
 
 float intro_intensity;
 
@@ -60,20 +64,26 @@ typedef struct Ui
 	int show_intro;
 	int always_show_intro;
 	int show_mouse;
+	int visualize_mouse;
 	int show_term;
 	int show_grid;
 	int show_states;
 	int show_step;
 	int show_brick_step;
 	int show_sets;
+	int add_bricks;
+	int show_rhizome_bounding_box;
+	int show_rhizome_order;
+	int show_status;
+
+	int bitrate;
 
 	int step;
 	int step_reset;
 
-	int use_threading;
-	int use_graphs;
+	int use_rhizomes;
 	int threading_on;
-	int graph_updated;
+	int rhizome_updated;
 
 	// brick flags
 	int fixed_menu;
@@ -97,6 +107,7 @@ typedef struct Ui
 
 	// selections
 	struct Brick *brick_selected;
+
 	struct Node *link;
 	struct Node *link_node;
 
@@ -107,6 +118,7 @@ typedef struct Ui
 
 	struct Brick *connect_brick_in;
 	struct Brick *connect_brick_out;
+
 
 	int do_connect;
 	int do_disconnect;
@@ -132,7 +144,7 @@ void ui_draw(void);
 void ui_init(void);
 void ui_reboot(void);
 
-void ui_draw_graphs(void);
+void ui_draw_rhizomes(void);
 void ui_draw_intro(void);
 void ui_draw_lines(void);
 void ui_draw_menu(void);

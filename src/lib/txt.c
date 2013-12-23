@@ -13,6 +13,8 @@
 #include "context.h"
 #include "event.h"
 #include "ui.h"
+#include "node.h"
+#include "memory.h"
 
 #define _gLS GL_LINE_STRIP
 #define _gL GL_LINES
@@ -468,7 +470,7 @@ void txt_layout_add(char letter,int  *points)
 
 	psize++;//XXX
 		
-	LAYOUT[(int)letter]=(int *)malloc(sizeof(int)*psize);
+	LAYOUT[(int)letter]=(int *)mem_malloc(sizeof(int)*psize);
 
 	p=points;
 
@@ -496,7 +498,7 @@ void txt_layout_add_special(int letter,int  *points)
 
 	psize++;//XXX
 		
-	LAYOUT[letter]=(int *)malloc(sizeof(int)*psize);
+	LAYOUT[letter]=(int *)mem_malloc(sizeof(int)*psize);
 
 	p=points;
 
@@ -512,7 +514,7 @@ void txt_layout_add_special(int letter,int  *points)
 
 void txt_layout_init(void)
 {
-	LAYOUT=(int **)malloc(sizeof(int *)*TXT_LAYOUT_X);
+	LAYOUT=(int **)mem_malloc(sizeof(int *)*TXT_LAYOUT_X);
 
 	int i;
 	for(i=0;i<TXT_LAYOUT_X;i++)
@@ -616,7 +618,7 @@ int get_special_key()
 
 int txt_letter_draw(char letter,float factor_x,float factor_y, int line_width)
 {
-	int _letter;
+	int _letter=0;
 
 	if(start_special_key)
 	{
@@ -658,7 +660,7 @@ int txt_letter_draw(char letter,float factor_x,float factor_y, int line_width)
 				{
 					int p = *points;
 					p*=2;
-					glVertex2f((_qd[p])*factor_x,(_qd[p+1])*factor_y);
+					glVertex2f((_qd[p])*factor_x ,(_qd[p+1])*factor_y);
 					points++;
 				}
 
@@ -675,15 +677,19 @@ int txt_letter_draw(char letter,float factor_x,float factor_y, int line_width)
 
 void txt_data_change(t_txt *txt,const char *name)
 {
-	strncpy(txt->name,name,_NAME_LONG_);
-	//txt->width=(float)strlen(name)*txt->letter_width;
+	strncpy(txt->name, name, _NAME_LONG_);
 }
 
 void txt_draw(t_txt *txt)
 {
 	t_context *C=ctx_get();
 	char *letter=txt->name;
-	float *c=C->ui->front_color;
+	float *c;
+	if(txt->use_front_color)
+		c = C->ui->front_color;
+	else
+		c = C->ui->back_color;
+
 	t_skt *skt = C->skt;
 	float i = skt->intensity;
 
@@ -737,6 +743,8 @@ void txt_draw(t_txt *txt)
 
 		//void * font = GLUT_BITMAP_HELVETICA_10;
 
+		if(db) printf(">%s\n",letter);
+
 		while(*letter)
 		{
 			glutBitmapCharacter(font,*letter);
@@ -782,7 +790,7 @@ float txt_get_width(t_txt *txt)
 
 void txt_free(t_txt *txt)
 {
-	free(txt);
+	mem_free( txt, sizeof( t_txt));
 }
 
 void txt_init(t_txt *txt,const char *name)
@@ -807,15 +815,15 @@ void txt_init(t_txt *txt,const char *name)
 	txt->data_change=txt_data_change;
 	txt->get_width=txt_get_width;
 
-	txt->use_bitmap_font=1;
+	txt->use_bitmap_font = 1;
+	txt->use_front_color = 1;
 }
 
 t_txt *txt_new(const char *name)
 {
-	t_txt *txt=(t_txt *)malloc(sizeof(t_txt));
-	set_name(txt->name,name);
-	txt->id=0;
-	txt->id_chunk=0;
+	t_txt *txt=(t_txt *)mem_malloc(sizeof(t_txt));
+
+	id_init(&txt->id, name);
 
 	txt->grid_step=TXT_GRID_STEP;
 	txt->grid_size_x=TXT_GRID_SIZE_X;
@@ -836,5 +844,8 @@ t_txt *txt_new(const char *name)
 
 	txt->use_bitmap_font=1;
 
+	txt_init(txt, name);
+	txt->edit = 0;
+	
 	return txt;
 }

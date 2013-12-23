@@ -19,6 +19,7 @@
 #include "data.h"
 #include "binding.h"
 #include "list.h"
+#include "vlst.h"
 #include "ui.h"
 #include "block.h"
 #include "brick.h"
@@ -31,94 +32,23 @@
 #include "set.h"
 #include "image.h"
 #include "file.h"
+#include "rhizome.h"
 #include "graph.h"
+#include "material.h"
+#include "texture.h"
+#include "mesh.h"
+#include "geometry.h"
+#include "memory.h"
 
 #include "ctx.h"
 
-int node_make_mesh(t_node *node);
-int node_make_block(t_node *node);
-int node_make_brick(t_node *node);
-int node_make_light(t_node *node);
-int node_make_object(t_node *node);
-int node_make_screen(t_node *node);
-int node_make_file(t_node *node);
-int node_make_image(t_node *node);
-int node_make_material(t_node *node);
-int node_make_list(t_node *node);
-int node_make_link(t_node *node);
-int node_make_data(t_node *node);
-int node_make_texture(t_node *node);
-int node_make_var(t_node *node);
-int node_make_option(t_node *node);
-int node_make_vlst(t_node *node);
-int node_make_camera(t_node *node);
-int node_make_dict(t_node *node);
-int node_make_symbol(t_node *node);
-int node_make_vector(t_node *node);
-int node_make_viewport(t_node *node);
-int node_make_set(t_node *node);
-int node_make_binding(t_node *node);
-int node_make_graph(t_node *node);
-
-char node_name_null[]="node_null";
-char node_name_brick[]="node_brick";
-char node_name_mesh[]="node_mesh";
-char node_name_block[]="node_block";
-char node_name_light[]="node_light";
-char node_name_object[]="node_object";
-char node_name_screen[]="node_screen";
-char node_name_file[]="node_file";
-char node_name_image[]="node_image";
-char node_name_material[]="node_material";
-char node_name_list[]="node_list";
-char node_name_link[]="node_link";
-char node_name_data[]="node_data";
-char node_name_texture[]="node_texture";
-char node_name_var[]="node_var";
-char node_name_option[]="node_option";
-char node_name_vlst[]="node_vlst";
-char node_name_camera[]="node_camera";
-char node_name_dict[]="node_dict";
-char node_name_symbol[]="node_symbol";
-char node_name_vector[]="node_vector";
-char node_name_viewport[]="node_viewport";
-char node_name_set[]="node_set";
-char node_name_binding[]="node_binding";
-char node_name_graph[]="node_graph";
-
-
-char *node_name_get(t_node_type type)
+int node_equal(t_node *m, t_node *n)
 {
-	switch(type)
-	{
-		case(nt_null):return node_name_null;break;
-		case(nt_brick):return node_name_brick;break;
-		case(nt_mesh):return node_name_mesh;break;
-		case(nt_block):return node_name_block;break;
-		case(nt_light):return node_name_light;break;
-		case(nt_object):return node_name_object;break;
-		case(nt_screen):return node_name_screen;break;
-		case(nt_file):return node_name_file;break;
-		case(nt_image):return node_name_image;break;
-		case(nt_material):return node_name_material;break;
-		case(nt_list):return node_name_list;break;
-		case(nt_link):return node_name_link;break;
-		case(nt_data):return node_name_data;break;
-		case(nt_texture):return node_name_texture;break;
-		case(nt_var):return node_name_var;break;
-		case(nt_option):return node_name_option;break;
-		case(nt_vlst):return node_name_vlst;break;
-		case(nt_camera):return node_name_camera;break;
-		case(nt_dict):return node_name_dict;break;
-		case(nt_symbol):return node_name_symbol;break;
-		case(nt_vector):return node_name_vector;break;
-		case(nt_viewport):return node_name_viewport;break;
-		case(nt_set):return node_name_set;break;
-		case(nt_binding):return node_name_binding;break;
-		case(nt_graph):return node_name_graph;break;
-		default:printf("[ERROR node_name_get] Unknown type %d\n",type);return node_name_null;break;
-	}
+	if(m->id == n->id) return 1;
+	else return 0;
 }
+
+
 
 // GET REF
 
@@ -152,6 +82,11 @@ void *cls_node_get_ref_camera(t_node *node, const char *ref)
 	return camera_get_ref(node->data, ref);
 }
 
+void *cls_node_get_ref_geo_array(t_node *node, const char *ref)
+{
+	return geo_array_get_ref(node->data, ref);
+}
+
 void *cls_node_get_ref(t_node *node, const char *ref)
 {
 	printf("get ref not implemented\n");
@@ -166,21 +101,24 @@ void cls_node_init_brick_ids(t_node *node);
 void cls_node_id_add(t_node *node)
 {
 	t_context *C=ctx_get();
-	t_generic *g=(t_generic *)node->data;
+	t_id *id = (t_id *) node->data;
 
-	int id=scene_id_get(C->scene);
-	node->id=id;
-	g->id=id;
+	int scene_id = scene_id_get(C->scene);
+	node->id = scene_id;
+	id->id = scene_id;
 
-	if(node->cls->type == nt_brick)
+	if(node->cls->type == dt_brick)
+	{
 		cls_node_init_brick_ids(node);
+	}
 
+	id->node = node;
 }
 
 void cls_node_user_add(t_node *node)
 {
-	t_generic *g = (t_generic *) node->data;
-	g->users++;
+	t_id *id = (t_id *) node->data;
+	id->users++;
 }
 
 void cls_node_build_var(t_node *node,const char *name)
@@ -194,73 +132,85 @@ void cls_node_build_var(t_node *node,const char *name)
 
 void cls_node_build(t_node *node,const char *name)
 {
-	void *p;
+	void *p = NULL;
 
 	switch(node->type)
 	{
-		case nt_mesh:		p = mesh_new(name);
+		case dt_mesh:		p = mesh_new(name);
 			break;
-		case nt_block:		p = block_new(name);
+		case dt_block:		p = block_new(name);
 			break;
-		case nt_brick:		p = brick_new(name);
+		case dt_brick:		p = brick_new(name);
 			break;
-		case nt_light:		p = light_new(name);
+		case dt_light:		p = light_new(name);
 			break;
-		case nt_object:		p = object_new(name);
+		case dt_object:		p = object_new(name);
 			break;
-		case nt_screen:		p = screen_new(name);
+		case dt_screen:		p = screen_new(name);
 			break;
-		case nt_file:		p = file_new(name);
+		case dt_file:		p = file_new(name);
 			break;
-		case nt_image:		p = image_new(name);
+		case dt_image:		p = image_new(name);
 			break;
-		case nt_material:	p = material_new(name);
+		case dt_material:	p = material_new(name);
 			break;
-		case nt_list:		p = lst_new(name);
+		case dt_list:		p = lst_new(name);
 			break;
-		case nt_link:		p = link_new(name);
+		case dt_lst:		p = lst_new(name);
 			break;
-		case nt_data:		p = data_new(name);
+		case dt_link:		p = link_new(name);
 			break;
-		case nt_texture:	p = texture_new(name);
+		case dt_data:		p = data_new(name);
 			break;
-		case nt_option:		p = option_new(name);
+		case dt_texture:	p = texture_new(name);
 			break;
-		case nt_vlst:		p = vlst_new(name);
+		case dt_option:		p = option_new(name);
 			break;
-		case nt_camera:		p = camera_new(name);
+		case dt_vlst:		p = vlst_new(name);
 			break;
-		case nt_dict:		p = dict_new(name);
+		case dt_camera:		p = camera_new(name);
 			break;
-		case nt_symbol: 	p = symbol_new(name);
+		case dt_dict:		p = dict_new(name);
 			break;
-		case nt_vector: 	p = vector_new(name);
+		case dt_symbol: 	p = symbol_new(name);
 			break;
-		case nt_viewport: 	p = viewport_new(name);
+		case dt_vector: 	p = vector_new(name);
 			break;
-		case nt_set:	 	p = set_new(name);
+		case dt_viewport: 	p = viewport_new(name);
 			break;
-		case nt_binding:	 p = binding_new(name);
+		case dt_set:	 	p = set_new(name);
 			break;
-		case nt_graph: 		p = graph_new(name);
+		case dt_binding:	 p = binding_new(name);
+			break;
+		case dt_rhizome: 	p = rhizome_new(name);
+			break;
+		case dt_graph: 		p = graph_new(name);
+			break;
+		case dt_geo: 		p = geo_new(name);
+			break;
+		case dt_geo_point:	p = geo_point_new(name);
+			break;
+		case dt_geo_edge:	p = geo_edge_new(name);
+			break;
+		case dt_geo_array:	p = geo_array_new(name);
 			break;
 
-		case nt_null: 
+		case dt_null: 
 			printf("[WARNING node_cls_build] null node\n");
 			break;
-		case nt_var: 
+		case dt_var: 
 			cls_node_build_var(node,name);
 			break;
 
 		default:
-			printf("[ERROR cls_node_build] Unkown type\n");
+			printf("[ERROR cls_node_build] Unkown type %s\n", data_name_get( node->type));
 			break;
 	}
 
 	node->data=p;
 	node->id_ptr=node->data;
 
-	if(node->type != nt_var)
+	if(node->type != dt_var)
 	{
 		cls_node_id_add(node);
 		cls_node_user_add(node);
@@ -268,73 +218,10 @@ void cls_node_build(t_node *node,const char *name)
 
 }
 
-// SELECT
+// DELETE
 
-void cls_node_del(t_node *node) { t_scene *scene  = scene_get(); scene_node_delete(scene,node);} 
-void cls_node_set_state_selected(t_node *node,int i) {}
-void cls_node_light_set_state_selected(t_node *node,int state)
-{
-	t_light *light=node->data;
-	light->is_selected=state;
-}
-void cls_node_mesh_set_state_selected(t_node *node,int state)
-{
-	t_mesh *mesh=node->data;
-	mesh->state.is_selected=state;
-}
-
-void cls_node_object_set_state_selected(t_node *node,int state)
-{
-	t_object *object=node->data;
-	object->is_selected=state;
-}
-
-// MOUSE OVER
-
-int cls_node_is_mouse_over(t_node *node)
-{
-	return 0;
-};
-
-int cls_node_object_is_mouse_over(t_node *node)
-{
-	t_context *C=ctx_get();
-	t_object *object=node->data;
-	t_mesh *mesh=object->mesh;
-
-	if(mesh)
-	{
-		if(is_mouse_over(C,mesh->idcol))
-		{
-			return 1;
-		}
-		else
-		{
-			return 0;
-		}
-	}
-	else
-	{
-		return 0;
-	}
-}
-
-int cls_node_brick_is_mouse_over(t_node *node)
-{
-	t_context *C=ctx_get();
-	t_brick *brick=node->data;
-
-	if(is_mouse_over_brick(C,brick))
-	{
-		brick->state.is_mouse_over=1;
-		return 1;
-	}
-	else
-	{
-		brick->state.is_mouse_over=0;
-		return 0;
-	}
-}
+//void cls_node_del(t_node *node) { t_scene *scene  = scene_get(); scene_node_delete(scene,node);} 
+void cls_node_del(void *data) { t_node *node = (t_node *) data; t_scene *scene  = scene_get(); scene_node_delete(scene,node);} 
 
 // LINK
 
@@ -392,7 +279,7 @@ void cls_node_list_free(t_scene *sc,t_node *node)
 
 void cls_node_camera_free(t_scene *sc,t_node *node)
 {
-	free(node->data);
+	camera_free(node->data);
 }
 
 void cls_node_mesh_free(t_scene *sc,t_node *node)
@@ -460,25 +347,50 @@ void cls_node_binding_free(t_scene *sc,t_node *node)
 	binding_free(node->data);
 }
 
+void cls_node_rhizome_free(t_scene *sc,t_node *node)
+{
+	rhizome_free(node->data);
+}
+
 void cls_node_graph_free(t_scene *sc,t_node *node)
 {
 	graph_free(node->data);
 }
 
+void cls_node_geo_free(t_scene *sc,t_node *node)
+{
+	geo_free(node->data);
+}
+
+void cls_node_geo_point_free(t_scene *sc,t_node *node)
+{
+	geo_point_free(node->data);
+}
+
+void cls_node_geo_edge_free(t_scene *sc,t_node *node)
+{
+	geo_edge_free(node->data);
+}
+
+void cls_node_geo_array_free(t_scene *sc,t_node *node)
+{
+	geo_array_free(node->data);
+}
+
 // INIT
 
 // get Scene ID
-void cls_node_init_generic(t_node *node)
+void cls_node_init_id(t_node *node)
 {
 	t_context *C=ctx_get();
 
-	int id=scene_id_get(C->scene);
-	t_generic *g=(t_generic *)node->data;
+	int scene_id = scene_id_get(C->scene);
+	t_id *id = (t_id *) node->data;
 
 	// node
-	node->id=id;
+	node->id = scene_id;
 	// data
-	g->id=id;
+	id->id = scene_id;
 }
 
 void cls_node_init_brick_ids(t_node *node)
@@ -491,15 +403,15 @@ void cls_node_init_brick_ids(t_node *node)
 	// node
 	node->id=id;
 	// data
-	brick->id=id;
+	brick->id.id=id;
 
-	brick->plug_in.id = scene_id_get(C->scene);
-	brick->plug_out.id = scene_id_get(C->scene);
+	brick->plug_in.id.id = scene_id_get(C->scene);
+	brick->plug_out.id.id = scene_id_get(C->scene);
 }
 
 void cls_node_init_block(t_node *node)
 {
-	cls_node_init_generic(node);
+	cls_node_init_id(node);
 	t_block *block=node->data;
 	block->cls->init(block);
 }
@@ -513,7 +425,7 @@ void cls_node_init_brick(t_node *node)
 
 void cls_node_init_mesh(t_node *node)
 {
-	cls_node_init_generic(node);
+	cls_node_init_id(node);
 	t_mesh *mesh=node->data;
 	t_context *C=ctx_get();
 	mesh_init(C->scene,mesh);
@@ -521,7 +433,7 @@ void cls_node_init_mesh(t_node *node)
 
 void cls_node_init_object(t_node *node)
 {
-	cls_node_init_generic(node);
+	cls_node_init_id(node);
 	t_object *object=node->data;
 	object->cls->init(object);
 }
@@ -529,7 +441,7 @@ void cls_node_init_object(t_node *node)
 void cls_node_init_var(t_node *node)
 {
 	// node var has direct data
-	// no generic id
+	// no id
 	// no init
 
 	t_context *C=ctx_get();
@@ -539,646 +451,428 @@ void cls_node_init_var(t_node *node)
 
 void cls_node_init_camera(t_node *node)
 {
-	cls_node_init_generic(node);
+	cls_node_init_id(node);
 }
 
 void cls_node_init_dict(t_node *node)
 {
-	cls_node_init_generic(node);
+	cls_node_init_id(node);
 }
 
 void cls_node_init_symbol(t_node *node)
 {
-	cls_node_init_generic(node);
+	cls_node_init_id(node);
 }
 
 void cls_node_init_vector(t_node *node)
 {
-	cls_node_init_generic(node);
+	cls_node_init_id(node);
 	t_vector *vector=node->data;
 	vector->cls->init(vector);
 }
 
 void cls_node_init_viewport(t_node *node)
 {
-	cls_node_init_generic(node);
+	cls_node_init_id(node);
 }
 
 void cls_node_init_set(t_node *node)
 {
-	cls_node_init_generic(node);
+	cls_node_init_id(node);
 }
 
 void cls_node_init_binding(t_node *node)
 {
-	cls_node_init_generic(node);
+	cls_node_init_id(node);
+}
+
+void cls_node_init_rhizome(t_node *node)
+{
+	t_rhizome *rhizome = node->data;
+	rhizome->roots = NULL;
+	cls_node_init_id(node);
+	rhizome_init(rhizome);
 }
 
 void cls_node_init_graph(t_node *node)
 {
-	t_graph *graph = node->data;
-	graph->roots = NULL;
-	cls_node_init_generic(node);
-	graph_init(graph);
+	cls_node_init_id(node);
 }
+
+void cls_node_init_geo(t_node *node)
+{
+	cls_node_init_id(node);
+	geo_init( node->data);
+}
+
+void cls_node_init_geo_point(t_node *node)
+{
+	cls_node_init_id(node);
+}
+
+void cls_node_init_geo_edge(t_node *node)
+{
+	cls_node_init_id(node);
+}
+
+void cls_node_init_geo_array(t_node *node)
+{
+	cls_node_init_id(node);
+	geo_array_init( node->data);
+}
+
 
 // CLASSES
 
 t_node_class mesh= {
-	.type=nt_mesh,
-	.size=0,
+	.type=dt_mesh,
+	.size=sizeof( t_mesh),
 	.lst=NULL,
-	.make=node_make_mesh,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_mesh,
-	.set_state_selected=cls_node_mesh_set_state_selected,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_mesh_free,
 	.get_ref = cls_node_get_ref_mesh,
 };
 
 t_node_class block= {
-	.type=nt_block,
-	.size=0,
+	.type=dt_block,
+	.size=sizeof( t_block),
 	.lst=NULL,
-	.make=node_make_block,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_block,
-	.set_state_selected=cls_node_set_state_selected,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_block_free,
 	.get_ref = cls_node_get_ref,
 };
 
 t_node_class brick= {
-	.type=nt_brick,
-	.size=0,
+	.type=dt_brick,
+	.size=sizeof( t_brick),
 	.lst=NULL,
-	.make=node_make_brick,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_brick,
-	.is_mouse_over=cls_node_brick_is_mouse_over,
 	.free=cls_node_brick_free,
 	.get_ref = cls_node_get_ref_brick,
 };
 
 t_node_class light= {
-	.type=nt_light,
-	.size=0,
+	.type=dt_light,
+	.size=sizeof( t_light),
 	.lst=NULL,
-	.make=node_make_light,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
-	.init=cls_node_init_generic,
-	.set_state_selected=cls_node_light_set_state_selected,
-	.is_mouse_over=cls_node_is_mouse_over,
+	.init=cls_node_init_id,
 	.free=cls_node_light_free,
 	.get_ref = cls_node_get_ref,
 };
 
 t_node_class object= {
-	.type=nt_object,
-	.size=0,
+	.type=dt_object,
+	.size=sizeof( t_object),
 	.lst=NULL,
-	.make=node_make_object,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
-	.init=cls_node_init_generic,
-	.set_state_selected=cls_node_object_set_state_selected,
-	.is_mouse_over=cls_node_object_is_mouse_over,
+	.init=cls_node_init_id,
 	.free=cls_node_object_free,
 	.get_ref = cls_node_get_ref_object,
 };
 
 t_node_class screen= {
-	.type=nt_screen,
-	.size=0,
+	.type=dt_screen,
+	.size=sizeof( t_screen),
 	.lst=NULL,
-	.make=node_make_screen,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
-	.init=cls_node_init_generic,
-	.set_state_selected=cls_node_set_state_selected,
-	.is_mouse_over=cls_node_is_mouse_over,
+	.init=cls_node_init_id,
 	.free=cls_node_screen_free,
 	.get_ref = cls_node_get_ref,
 };
 
 t_node_class file= {
-	.type=nt_file,
-	.size=0,
+	.type=dt_file,
+	.size=sizeof( t_file),
 	.lst=NULL,
-	.make=node_make_file,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
-	.init=cls_node_init_generic,
-	.set_state_selected=cls_node_set_state_selected,
-	.is_mouse_over=cls_node_is_mouse_over,
+	.init=cls_node_init_id,
 	.free=cls_node_file_free,
 	.get_ref = cls_node_get_ref,
 };
 
 t_node_class image= {
-	.type=nt_image,
-	.size=0,
+	.type=dt_image,
+	.size=sizeof( t_image),
 	.lst=NULL,
-	.make=node_make_image,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
-	.init=cls_node_init_generic,
-	.set_state_selected=cls_node_set_state_selected,
-	.is_mouse_over=cls_node_is_mouse_over,
+	.init=cls_node_init_id,
 	.free=cls_node_image_free,
 	.get_ref = cls_node_get_ref,
 };
 
 t_node_class material= {
-	.type=nt_material,
-	.size=0,
+	.type=dt_material,
+	.size=sizeof( t_material),
 	.lst=NULL,
-	.make=node_make_material,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
-	.init=cls_node_init_generic,
-	.set_state_selected=cls_node_set_state_selected,
-	.is_mouse_over=cls_node_is_mouse_over,
+	.init=cls_node_init_id,
 	.free=cls_node_material_free,
 	.get_ref = cls_node_get_ref_material,
 };
 
 t_node_class list= {
-	.type=nt_list,
-	.size=0,
+	.type=dt_list,
+	.size=sizeof( t_lst),
 	.lst=NULL,
-	.make=node_make_list,
 	.build=cls_node_build,
 	.link=cls_node_link,
-	.del=cls_node_del,
-	.init=cls_node_init_generic,
-	.set_state_selected=cls_node_set_state_selected,
-	.is_mouse_over=cls_node_is_mouse_over,
+	//.del=cls_node_del,
+	.del = cls_list_delete,
+	.init=cls_node_init_id,
 	.free=cls_node_list_free,
 	.get_ref = cls_node_get_ref,
 };
 
 t_node_class _link_= {
-	.type=nt_link,
-	.size=0,
+	.type=dt_link,
+	.size=sizeof( t_link),
 	.lst=NULL,
-	.make=node_make_link,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
-	.init=cls_node_init_generic,
-	.set_state_selected=cls_node_set_state_selected,
-	.is_mouse_over=cls_node_is_mouse_over,
+	.init=cls_node_init_id,
 	.free=cls_node_link_free,
 	.get_ref = cls_node_get_ref,
 };
 
 t_node_class data= {
-	.type=nt_data,
-	.size=0,
+	.type=dt_data,
+	.size=sizeof( t_data),
 	.lst=NULL,
-	.make=node_make_data,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
-	.init=cls_node_init_generic,
-	.set_state_selected=cls_node_set_state_selected,
-	.is_mouse_over=cls_node_is_mouse_over,
+	.init=cls_node_init_id,
 	.free=cls_node_data_free,
 	.get_ref = cls_node_get_ref,
 };
 
 t_node_class texture= {
-	.type=nt_texture,
-	.size=0,
+	.type=dt_texture,
+	.size=sizeof( t_texture),
 	.lst=NULL,
-	.make=node_make_texture,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
-	.init=cls_node_init_generic,
-	.set_state_selected=cls_node_set_state_selected,
-	.is_mouse_over=cls_node_is_mouse_over,
+	.init=cls_node_init_id,
 	.free=cls_node_texture_free,
 	.get_ref = cls_node_get_ref,
 };
 
 t_node_class var= {
-	.type=nt_var,
+	.type=dt_var,
 	.size=0,
 	.lst=NULL,
-	.make=node_make_var,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_var,
-	.set_state_selected=cls_node_set_state_selected,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_var_free,
 	.get_ref = cls_node_get_ref,
 };
 
 t_node_class option= {
-	.type=nt_option,
-	.size=0,
+	.type=dt_option,
+	.size=sizeof( t_option),
 	.lst=NULL,
-	.make=node_make_option,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
-	.init=cls_node_init_generic,
-	.set_state_selected=cls_node_set_state_selected,
-	.is_mouse_over=cls_node_is_mouse_over,
+	.init=cls_node_init_id,
 	.free=cls_node_option_free,
 	.get_ref = cls_node_get_ref,
 };
 
 t_node_class vlst= {
-	.type=nt_vlst,
-	.size=0,
+	.type=dt_vlst,
+	.size=sizeof( t_vlst),
 	.lst=NULL,
-	.make=node_make_vlst,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
-	.init=cls_node_init_generic,
-	.set_state_selected=cls_node_set_state_selected,
-	.is_mouse_over=cls_node_is_mouse_over,
+	.init=cls_node_init_id,
 	.free=cls_node_vlst_free,
 	.get_ref = cls_node_get_ref_vlst,
 };
 
 t_node_class camera= {
-	.type=nt_camera,
-	.size=0,
+	.type=dt_camera,
+	.size=sizeof( t_camera),
 	.lst=NULL,
-	.make=node_make_camera,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_camera,
-	.set_state_selected=cls_node_set_state_selected,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_camera_free,
 	.get_ref = cls_node_get_ref_camera,
 };
 
 t_node_class dict= {
-	.type=nt_dict,
-	.size=0,
+	.type=dt_dict,
+	.size=sizeof( t_dict),
 	.lst=NULL,
-	.make=node_make_dict,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
-	.init=cls_node_init_generic,
-	.set_state_selected=cls_node_set_state_selected,
-	.is_mouse_over=cls_node_is_mouse_over,
+	.init=cls_node_init_id,
 	.free=cls_node_dict_free,
 	.get_ref = cls_node_get_ref,
 };
 
 t_node_class symbol= {
-	.type=nt_symbol,
-	.size=0,
+	.type=dt_symbol,
+	.size=sizeof( t_symbol),
 	.lst=NULL,
-	.make=node_make_symbol,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_symbol,
-	.set_state_selected=cls_node_set_state_selected,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_symbol_free,
 	.get_ref = cls_node_get_ref,
 };
 
 t_node_class vector= {
-	.type=nt_vector,
-	.size=0,
+	.type=dt_vector,
+	.size=sizeof( t_vector),
 	.lst=NULL,
-	.make=node_make_vector,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_vector,
-	.set_state_selected=cls_node_set_state_selected,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_vector_free,
 	.get_ref = cls_node_get_ref,
 };
 
 t_node_class viewport= {
-	.type=nt_viewport,
-	.size=0,
+	.type=dt_viewport,
+	.size=sizeof( t_viewport),
 	.lst=NULL,
-	.make=node_make_viewport,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_viewport,
-	.set_state_selected=cls_node_set_state_selected,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_viewport_free,
 	.get_ref = cls_node_get_ref,
 };
 
 t_node_class set = {
-	.type=nt_set,
-	.size=0,
+	.type=dt_set,
+	.size=sizeof( t_set),
 	.lst=NULL,
-	.make=node_make_set,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_set,
-	.set_state_selected=cls_node_set_state_selected,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_set_free,
 	.get_ref = cls_node_get_ref,
 };
 
 t_node_class binding = {
-	.type=nt_binding,
-	.size=0,
+	.type=dt_binding,
+	.size=sizeof( t_binding),
 	.lst=NULL,
-	.make=node_make_binding,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_binding,
-	.set_state_selected=cls_node_set_state_selected,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_binding_free,
 	.get_ref = cls_node_get_ref,
 };
 
-t_node_class graph = {
-	.type=nt_graph,
-	.size=0,
+t_node_class rhizome = {
+	.type=dt_rhizome,
+	.size=sizeof( t_rhizome),
 	.lst=NULL,
-	.make=node_make_graph,
+	.build=cls_node_build,
+	.link=cls_node_link,
+	.del=cls_node_del,
+	.init=cls_node_init_rhizome,
+	.free=cls_node_rhizome_free,
+	.get_ref = cls_node_get_ref,
+};
+
+t_node_class graph = {
+	.type=dt_graph,
+	.size=sizeof( t_graph),
+	.lst=NULL,
 	.build=cls_node_build,
 	.link=cls_node_link,
 	.del=cls_node_del,
 	.init=cls_node_init_graph,
-	.set_state_selected=cls_node_set_state_selected,
-	.is_mouse_over=cls_node_is_mouse_over,
 	.free=cls_node_graph_free,
 	.get_ref = cls_node_get_ref,
 };
 
+t_node_class geo = {
+	.type=dt_geo,
+	.size=sizeof( t_geo),
+	.lst=NULL,
+	.build=cls_node_build,
+	.link=cls_node_link,
+	.del=cls_node_del,
+	.init=cls_node_init_geo,
+	.free=cls_node_geo_free,
+	.get_ref = cls_node_get_ref,
+};
 
-// MAKE
+t_node_class geo_point = {
+	.type=dt_geo_point,
+	.size=sizeof( t_geo_point),
+	.lst=NULL,
+	.build=cls_node_build,
+	.link=cls_node_link,
+	.del=cls_node_del,
+	.init=cls_node_init_geo_point,
+	.free=cls_node_geo_point_free,
+	.get_ref = cls_node_get_ref,
+};
 
-int node_make_mesh(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&mesh;
-	node->cls->size=sizeof(t_mesh);
-	node->cls->lst=C->scene->meshes;
-	node->type = nt_mesh;
-	return 1;
-}
+t_node_class geo_edge = {
+	.type=dt_geo_edge,
+	.size=sizeof( t_geo_edge),
+	.lst=NULL,
+	.build=cls_node_build,
+	.link=cls_node_link,
+	.del=cls_node_del,
+	.init=cls_node_init_geo_edge,
+	.free=cls_node_geo_edge_free,
+	.get_ref = cls_node_get_ref,
+};
 
-int node_make_block(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&block;
-	node->cls->size=sizeof(t_block);
-	node->cls->lst=C->scene->blocks;
-	node->type = nt_block;
-	return 1;
-}
+t_node_class geo_array = {
+	.type=dt_geo_array,
+	.size=sizeof( t_geo_array),
+	.lst=NULL,
+	.build=cls_node_build,
+	.link=cls_node_link,
+	.del=cls_node_del,
+	.init=cls_node_init_geo_array,
+	.free=cls_node_geo_array_free,
+	.get_ref = cls_node_get_ref_geo_array,
+};
 
-int node_make_brick(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&brick;
-	node->cls->size=sizeof(t_brick);
-	node->cls->lst=C->scene->bricks;
-	return 1;
-}
-
-int node_make_light(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&light;
-	node->cls->size=sizeof(t_light);
-	node->cls->lst=C->scene->lights;
-	node->type = nt_light;
-	return 1;
-}
-
-int node_make_object(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&object;
-	node->cls->size=sizeof(t_object);
-	node->cls->lst=C->scene->objects;
-	return 1;
-}
-
-int node_make_screen(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&screen;
-	node->cls->size=sizeof(t_screen);
-	node->cls->lst=C->scene->screens;
-	node->type = nt_screen;
-	return 1;
-}
-
-int node_make_file(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&file;
-	node->cls->size=sizeof(t_file);
-	node->cls->lst=C->scene->files;
-	return 1;
-}
-
-int node_make_image(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&image;
-	node->cls->size=sizeof(t_image);
-	node->cls->lst=C->scene->images;
-	node->type = nt_image;
-	return 1;
-}
-
-int node_make_material(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&material;
-	node->cls->size=sizeof(t_material);
-	node->cls->lst=C->scene->materials;
-	return 1;
-}
-
-int node_make_list(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&list;
-	node->cls->size=sizeof(t_lst);
-	node->cls->lst=C->scene->lists;
-	node->type = nt_list;
-	return 1;
-}
-
-int node_make_link(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&_link_;
-	node->cls->size=sizeof(t_link);
-	node->cls->lst=C->scene->links;
-	return 1;
-}
-
-int node_make_texture(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&texture;
-	node->cls->size=sizeof(t_texture);
-	node->cls->lst=C->scene->textures;
-	node->type = nt_texture;
-	return 1;
-}
-
-int node_make_data(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&data;
-	node->cls->size=sizeof(t_data);
-	node->cls->lst=C->scene->datas;
-	node->type = nt_data;
-	return 1;
-}
-
-int node_make_var(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&var;
-	node->cls->size=0; // variable,dynamic size
-	node->cls->lst=C->scene->vars;
-	node->type = nt_var;
-	return 1;
-}
-
-int node_make_option(t_node *node)
-{
-	node->cls=&option;
-	node->cls->size=sizeof(t_option);
-	node->cls->lst=NULL;
-	node->type=nt_option;
-	return 1;
-}
-
-int node_make_vlst(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&vlst;
-	node->cls->size=sizeof(t_vlst);
-	node->cls->lst=C->scene->vlst;
-	node->type = nt_vlst;
-	return 1;
-}
-
-int node_make_camera(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&camera;
-	node->cls->size=sizeof(t_camera);
-	node->cls->lst=C->scene->cameras;
-	node->type = nt_camera;
-	return 1;
-}
-
-int node_make_dict(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&dict;
-	node->cls->size=sizeof(t_dict);
-	node->cls->lst=C->scene->dicts;
-	node->type = nt_dict;
-	return 1;
-}
-
-int node_make_symbol(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&symbol;
-	node->cls->size=sizeof(t_symbol);
-	node->cls->lst=C->scene->symbols;
-	node->type = nt_symbol;
-	return 1;
-}
-
-int node_make_vector(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&vector;
-	node->cls->size=sizeof(t_vector);
-	node->cls->lst=C->scene->vectors;
-	node->type = nt_vector;
-	return 1;
-}
-
-int node_make_viewport(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&viewport;
-	node->cls->size=sizeof(t_viewport);
-	node->cls->lst=C->scene->viewports;
-	node->type = nt_viewport;
-	return 1;
-}
-
-int node_make_set(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&set;
-	node->cls->size=sizeof(t_set);
-	node->cls->lst=C->scene->sets;
-	node->type = nt_set;
-	return 1;
-}
-
-int node_make_binding(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&binding;
-	node->cls->size=sizeof(t_binding);
-	node->cls->lst=C->scene->bindings;
-	node->type = nt_binding;
-	return 1;
-}
-
-int node_make_graph(t_node *node)
-{
-	t_context *C=ctx_get();
-	node->cls=&graph;
-	node->cls->size=sizeof(t_graph);
-	node->cls->lst=C->scene->graphs;
-	node->type = nt_graph;
-	return 1;
-}
 
 // TYPES
 
@@ -1206,44 +900,119 @@ t_node_class *nodes[] = {
 				&viewport,
 				&set,
 				&binding,
+				&rhizome,
 				&graph,
+				&geo,
+				&geo_point,
+				&geo_edge,
+				&geo_array,
 			};
+
+
+void cls_node_lst_set( t_scene *sc, t_node *node)
+{
+	switch( node->cls->type)
+	{
+		case( dt_mesh): node->cls->lst = sc->meshes; break;
+		case( dt_block): node->cls->lst = sc->blocks; break;
+		case( dt_brick): node->cls->lst = sc->bricks; break;
+		case( dt_light): node->cls->lst = sc->lights; break;
+		case( dt_object): node->cls->lst = sc->objects; break;
+		case( dt_screen): node->cls->lst = sc->screens; break;
+		case( dt_file): node->cls->lst = sc->files; break;
+		case( dt_image): node->cls->lst = sc->images; break;
+		case( dt_material): node->cls->lst = sc->materials; break;
+		case( dt_list): node->cls->lst = sc->lists; break;
+		case( dt_link): node->cls->lst = sc->links; break;
+		case( dt_texture): node->cls->lst = sc->textures; break;
+		case( dt_option): node->cls->lst = NULL; break;
+		case( dt_vlst): node->cls->lst = sc->vlst; break;
+		case( dt_camera): node->cls->lst = sc->cameras; break;
+		case( dt_dict): node->cls->lst = sc->dicts; break;
+		case( dt_symbol): node->cls->lst = sc->symbols; break;
+		case( dt_vector): node->cls->lst = sc->vectors; break;
+		case( dt_binding): node->cls->lst = sc->bindings; break;
+		case( dt_rhizome): node->cls->lst = sc->rhizomes; break;
+		case( dt_graph): node->cls->lst = sc->graphs; break;
+		case( dt_viewport): node->cls->lst = sc->viewports; break;
+		case( dt_set): node->cls->lst = sc->sets; break;
+		case( dt_null): break;
+		case( dt_data):node->cls->lst = sc->datas; break;
+		case( dt_var): node->cls->lst = sc->vars; break;
+		case( dt_geo): node->cls->lst = sc->geos; break;
+		case( dt_geo_point): node->cls->lst = sc->geos; break;
+		case( dt_geo_edge): node->cls->lst = sc->geos; break;
+		case( dt_geo_array): node->cls->lst = sc->geos; break;
+		default: printf("[ERROR cls_node_lst_set] Unkown type %s\n", data_name_get( node->cls->type)); break;
+	}
+}
+
+void cls_node_cls_set( t_node *node)
+{
+	switch( node->type)
+	{
+		case( dt_mesh): node->cls = &mesh; break;
+		case( dt_block): node->cls = &block; break;
+		case( dt_brick): node->cls = &brick; break;
+		case( dt_light): node->cls = &light; break;
+		case( dt_object): node->cls = &object; break;
+		case( dt_screen): node->cls = &screen; break;
+		case( dt_file): node->cls = &file; break;
+		case( dt_image): node->cls = &image; break;
+		case( dt_material): node->cls = &material; break;
+		case( dt_list): node->cls = &list; break;
+		case( dt_lst): node->cls = &list; break;
+		case( dt_link): node->cls = &_link_; break;
+		case( dt_texture): node->cls = &texture; break;
+		case( dt_option): node->cls = &option; break;
+		case( dt_vlst): node->cls = &vlst; break;
+		case( dt_camera): node->cls = &camera; break;
+		case( dt_dict): node->cls = &dict; break;
+		case( dt_symbol): node->cls = &symbol; break;
+		case( dt_vector): node->cls = &vector; break;
+		case( dt_binding): node->cls = &binding; break;
+		case( dt_rhizome): node->cls = &rhizome; break;
+		case( dt_graph): node->cls = &graph; break;
+		case( dt_viewport): node->cls = &viewport; break;
+		case( dt_set): node->cls = &set; break;
+		case( dt_null): node->cls = NULL;break;
+		case( dt_data): node->cls = &data; break;
+		case( dt_var): node->cls = &var; break;
+		case( dt_geo): node->cls = &geo ; break;
+		case( dt_geo_point): node->cls = &geo_point; break;
+		case( dt_geo_edge): node->cls = &geo_edge; break;
+		case( dt_geo_array): node->cls = &geo_array; break;
+		default: printf("[ERROR cls_node_cls_set] Unkown type %s\n", data_name_get( node->type)); break;
+	}
+}
+
+
+void cls_node_make( t_scene *sc, t_node *node, t_data_type type)
+{
+	node->type = type;
+	cls_node_cls_set( node);
+	cls_node_lst_set( sc, node);
+}
 
 
 // INIT 
 
-void cls_node_init(t_node *node,t_node_type type)
+void cls_node_init(t_node *node,t_data_type type)
 {
-	int i;
-	int done=0;
-	int n = sizeof(nodes)/sizeof(nodes[0]);
-
-	for(i=0;i<n;i++)
-	{
-		if(type==nodes[i]->type)
-		{
-			nodes[i]->make(node);
-			done=1;
-		}
-	}
-
-	if(!done) 
-	{
-		printf("[ERROR:node_make] Unknown node type [%s]\n",node_name_get(type));
-	}
-
+	t_scene *sc = ctx_scene_get();
+	cls_node_make( sc, node, type);
 }
 
-void node_init(t_node *node,t_node_type type)
+void node_init(t_node *node,t_data_type type)
 {
 	cls_node_init(node,type);
 }
 
 // NEW
 
-t_node *node_new(t_node_type type)
+t_node *node_new(t_data_type type)
 {
-	t_node *node = (t_node *)malloc(sizeof(t_node));
+	t_node *node = (t_node *) mem_malloc(sizeof(t_node));
 
 	node->id=0;
 	node->id_old=0;
@@ -1253,7 +1022,11 @@ t_node *node_new(t_node_type type)
 
 	node->data=NULL;
 	node->type=type;
+	node->store = 0;
+	node->size = 0;
 
 	return node;
 }
+
+
 

@@ -10,6 +10,7 @@
 #include "opengl.h"
 #include "util.h"
 #include "app.h"
+#include "memory.h"
 
 // SCREEN -- glViewport
 
@@ -69,7 +70,7 @@ void app_screen_switch_fullscreen(t_app *app)
 
 t_window *window_new(int with_glut)
 {
-	t_window *window = (t_window  *)malloc(sizeof(t_window));
+	t_window *window = (t_window  *)mem_malloc(sizeof(t_window));
 
 	int width;
 	int height;

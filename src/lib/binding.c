@@ -7,12 +7,14 @@
  *
  */
 
+#include "node.h"
 #include "util.h"
 #include "scene.h"
 #include "op.h"
 #include "ctx.h"
 #include "binding.h"
 #include "data.h"
+#include "memory.h"
 
 // UPDATE
 
@@ -37,7 +39,7 @@ void binding_update(t_binding *binding, void *ptr)
 
 void binding_free(t_binding *binding)
 {
-	free(binding);
+	mem_free( binding, sizeof( t_binding));
 }
 
 // REBIND
@@ -55,12 +57,9 @@ t_binding *binding_rebind(t_scene *sc, void *ptr)
 
 t_binding *binding_new(const char *name)
 {
-	t_binding *binding=(t_binding *)malloc(sizeof(t_binding));
+	t_binding *binding=(t_binding *)mem_malloc(sizeof(t_binding));
 
-	binding->id=0;
-	binding->id_chunk=0;
-	set_name(binding->name,name);
-	binding->users=0;
+	id_init(&binding->id, name);
 	binding->type=dt_null;
 
 	binding->data = NULL;

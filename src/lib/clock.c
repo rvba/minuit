@@ -10,6 +10,7 @@
 
 #include "clock.h"
 #include "util.h"
+//#include "memory.h"
 
 void clock_init(t_clock *clock)
 {
@@ -22,14 +23,16 @@ void clock_init(t_clock *clock)
 
 void clock_free(t_clock *clock)
 {
-	free(clock);
+	mem_free( clock, sizeof( t_clock));
 }
 
 // CLOCK
 
-t_clock *clock_new(void)
+t_clock *clock_new( const char *name)
 {
-	t_clock *clock = (t_clock *)malloc(sizeof(t_clock));
+	t_clock *clock = (t_clock *)mem_malloc(sizeof(t_clock));
+
+	id_init( &clock->id, name);
 
 	clock->freq=1.0;
 	clock->delta=0;

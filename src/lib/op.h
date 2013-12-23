@@ -10,14 +10,7 @@
 #ifndef __OPS_H
 #define __OPS_H
 
-/*
-#include "context.h"
-#include "scene.h"
-#include "node.h"
-#include "block.h"
-#include "brick.h"
-#include "list.h"
-*/
+#include "data.h"
 
 struct Context;
 struct Node;
@@ -26,6 +19,11 @@ struct Brick;
 struct Lst;
 enum Node_Type;
 enum Data_Type;
+
+
+// OP_DEBUG
+
+void op_debug_all(struct Context *C);
 
 int set_draw_plug;
 
@@ -47,8 +45,10 @@ void *		find_register(const char *target,const char *name);
 
 struct Set *get_current_set(struct Context *C);
 
-struct Node *	add_brick_submenu(struct Context *C,struct Node *menu,struct Node *submenu,const char *name);
-struct Node *	add_brick_submenu_contextual(struct Context *C,struct Node *menu,struct Node *submenu,const char *name,enum Node_Type context);
+struct Block *	add_default_menu(struct Context *C, const char *name);
+struct Node *	add_brick_submenu( struct Context *C, struct Block *menu, struct Block *submenu, const char *name);
+struct Node *	add_brick_submenu_contextual( struct Context *C, struct Block *menu, struct Block *submenu, const char *name, t_data_type context);
+struct Node *	add_brick_submenu_poll( struct Context *C, struct Block *menu, struct Block *submenu, const char *name, int (* f)( struct Brick *brick));
 struct Node *	add_brick_selector(struct Context *C,struct Block *block,const char *name,void *data_target,int length);
 struct Node *	add_brick(struct Context *C,struct Block *block,const char *name,const char *type,const char *data_type,void *data_target);
 struct Node *	add_brick_slider_int(struct Context *C,struct Block *block,const char *name,void *data_target);
@@ -62,11 +62,16 @@ struct Node *	add_trigger(struct Context *C,const char *name,void*(* f)(struct B
 struct Node *	add_trigger_always(struct Context *C,const char *name,void*(* f)(struct Brick *brick));
 struct Node *	add_clone(struct Context *C);
 struct Node *	add_maths(struct Context *C,const char *name);
+struct Node *	add_brick_geometry(struct Context *C,const char *name, void *data);
+struct Node *	add_brick_geo_point(struct Context *C,const char *name, void *data);
+struct Node * 	add_brick_geo_edge(struct Context *C,const char *name, void *data);
+struct Node * 	add_brick_geo_array(struct Context *C,const char *name, void *data);
 struct Node *	add_loop(struct Context *C);
 struct Node *	add_switch(struct Context *C,const char *name,void *data);
 struct Node *	add_switch_custom(struct Context *C,const char *name,void *data,void *(* f)(struct Brick *brick));
 struct Node *	add_label(struct Context *C,const char *name);
 struct Node *	add_slider_float(struct Context *C,const char *name,void *target_data);
+struct Node *	add_brick_int(struct Context *C, struct Block *block, const char *name, void *data_target);
 struct Node *	add_slider_int(struct Context *C,const char *name,void *target_data);
 struct Node *	add_slider_int_custom(struct Context *C,const char *name,void *target_data,void*(* f)(struct Brick *b));
 struct Node *	add_slider_int_positive(struct Context *C,const char *name,void *target_data);
@@ -83,14 +88,15 @@ struct Node *	add_slider_camera(struct Context *C,const char *name);
 struct Node *	add_part_label(struct Context *C,struct Block *block,const char *name);
 struct Node *	add_part_slider_float(struct Context *C,struct Block *block,const char *name,void *data_target);
 struct Node *	add_part_trigger(struct Context *C,struct Block *block,const char *name,void *(*f)(struct Brick *b));
-struct Node *	add_part_selector(struct Context *C,struct Block *block,const char *name,struct Node *node);
+struct Node *	add_part_selector(struct Context *C,struct Block *block,const char *name,struct Node *node, t_data_type type);
 struct Node *	add_part_lst(struct Context *C,struct Block *block,enum Data_Type type,const char *name,void *ptr);
 struct Node *	add_part_vlst(struct Context *C,struct Block *block,enum Data_Type type,const char *name,void *ptr);
 struct Node *	add_part_pointer(struct Context *C,struct Block *block,enum Data_Type type,const char *name,void *ptr);
+struct Node *	add_part_vector(struct Context *C,struct Block *block,const char *name);
+struct Node *	add_brick_mesh( struct Context *C,const char *name);
 struct Node *	add_loop_get(struct Context *C);
 struct Node *	add_get(struct Context *C);
 struct Node *	add_for(struct Context *C);
-struct Node *	add_vector(struct Context *C);
 struct Node *	add_vector_3d(struct Context *C);
 struct Node *	add_vector_2d(struct Context *C);
 struct Node *	add_stack(struct Context *C);
@@ -98,11 +104,10 @@ struct Node * 	add_if(struct Context *C);
 struct Node *	add_plusplus(struct Context *C);
 struct Node *	add_const(struct Context *C);
 struct Node *	add_pipe(struct Context *C);
+struct Node *	add_block(struct Context *C,const char *name);
+void 		add_block_offset(struct Context *C, struct Block *block);
+int 		op_post_quit(struct Node *node);
+struct Block *	add_menu_block( struct Context *C, const char *name);
 
-struct Node *add_block(struct Context *C,const char *name);
-
-void add_block_offset(struct Context *C, struct Block *block);
-
-int op_post_quit(struct Node *node);
 
 #endif

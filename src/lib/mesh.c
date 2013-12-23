@@ -7,15 +7,25 @@
  *
  */
 
+#include "node.h"
 #include "util.h"
 #include "mesh.h"
 #include "context.h"
 #include "scene.h"
 #include "list.h"
+#include "vlst.h"
 #include "block.h"
 #include "brick.h"
 #include "ctx.h"
 #include "op.h"
+#include "list.h"
+#include "ui.h"
+#include "memory.h"
+#include "material.h"
+#include "texture.h"
+
+
+void mesh_add_brick_vertex(t_context *C,t_mesh *mesh);
 
 void mesh_init(t_scene *sc,t_mesh *mesh)
 {
@@ -65,13 +75,14 @@ t_mesh *mesh_rebind(t_scene *sc,void *ptr)
 
 	rebind(sc,"mesh","texture",(void **)&mesh->texture);
 	rebind(sc,"mesh","material",(void **)&mesh->material);
-	rebind(sc,"mesh","lines",(void **)&mesh->lines);
+	rebind(sc,"mesh","edges",(void **)&mesh->edges);
 
 	rebind(sc,"mesh","vertex",(void **)&mesh->vertex);
 	rebind(sc,"mesh","quads",(void **)&mesh->quads);
 	rebind(sc,"mesh","tris",(void **)&mesh->tris);
 	rebind(sc,"mesh","uvs",(void **)&mesh->uvs);
 	rebind(sc,"mesh","colors",(void **)&mesh->colors);
+	rebind(sc,"mesh","ref",(void **)&mesh->ref);
 
 	// RESET
 
@@ -116,25 +127,6 @@ void mesh_add_brick_faces(t_mesh *mesh)
 
 	// Add Global offset
 	add_block_offset(C,_block);
-}
-
-// ADD BRICK MESH
-
-void mesh_add_brick_mesh(t_context *C,t_mesh *mesh)
-{
-	t_node *node_block=add_block(C,"mesh");
-	t_block *block=node_block->data;
-
-	// add pointers
-	add_part_pointer(C,block,dt_mesh,mesh->name,mesh);
-	add_part_pointer(C,block,dt_vertex,"v",mesh);
-	add_part_pointer(C,block,dt_face,"f",mesh);
-
-	// init
-	mesh_init(C->scene,mesh);
-
-	// Add Global offset
-	add_block_offset(C,block);
 }
 
 // COLOR
@@ -213,7 +205,19 @@ void mesh_add_brick_vertex(t_context *C,t_mesh *mesh)
 	add_block_offset(C,_block);
 }
 
+void mesh_add_brick_mesh(t_context *C, t_node *node_mesh)
+{
+	// New Block
+	t_node *node_block=add_block(C,"mesh");
+	t_block *block=node_block->data;
+	t_mesh *mesh = node_mesh->data;
+	add_part_selector(C,block,mesh->id.name,node_mesh,dt_mesh);
+	mesh->ref = block;
+
+}
+
 // MAKE
+
 
 t_node *mesh_make(
 			const char name[],
@@ -228,11 +232,11 @@ t_node *mesh_make(
 	t_context *C = ctx_get();
 
 	// add mesh
-	t_node *node_mesh=scene_add(C->scene,nt_mesh,name);
+	t_node *node_mesh=scene_add(C->scene,dt_mesh,name);
 	t_mesh *mesh=node_mesh->data;
 
 	// add material
-	t_node *node_material=scene_add(C->scene,nt_material,name);
+	t_node *node_material=scene_add(C->scene,dt_material,name);
 	t_material *material=node_material->data;
 	mesh->material=material;
 
@@ -242,9 +246,21 @@ t_node *mesh_make(
 	mesh->var.tot_quad_face=totquad;
 	mesh->var.tot_tri_face=tottri;
 
+	if(C->ui->add_bricks) mesh_add_brick_mesh(C,node_mesh);
+
+	// add data node
+	scene_add_data_node( C->scene, "app_node", "mesh", name, node_mesh);
+
 	// add vertex list
-	mesh->vertex=vlst_make("vertex", dt_float, 3, totvert);
-	vlst_add_data(mesh->vertex,verts);
+	if(verts)
+	{
+		mesh->vertex=vlst_make("vertex", dt_float, 3, totvert);
+		vlst_add_data(mesh->vertex,verts);
+
+		// add brick vertex
+		if(C->ui->add_bricks) mesh_add_brick_vertex(C,mesh);
+	
+	}
 
 	// add quad list
 	if(quads)
@@ -254,10 +270,6 @@ t_node *mesh_make(
 
 		mesh->quads=vlst_make("quads", dt_uint, 4, totquad);
 		vlst_add_data(mesh->quads,quads);
-
-		t_vlst *vquads = mesh->quads;
-		vquads->has_limit_high = 1;
-		vquads->has_limit_low = 1;
 	}
 
 	// add tri list
@@ -270,10 +282,17 @@ t_node *mesh_make(
 		vlst_add_data(mesh->tris,tris);
 	}
 
-	// add brick vertex
-	mesh_add_brick_vertex(C,mesh);
+
+	// init
+	mesh_init(C->scene,mesh);
 
 	return node_mesh;
+}
+
+
+t_node *mesh_make_empty(const char *name)
+{
+	return mesh_make(name,0,0,0,0,NULL,NULL,NULL);
 }
 
 // INIT
@@ -293,6 +312,8 @@ void mesh_state_init(t_mesh_state *state)
 	state->need_update=0;
 	state->buffer_type=buffer_empty;
 	state->is_buffer_built=0;
+	state->selected_vertex = -1;
+	state->hover_vertex = -1;
 }
 
 void mesh_var_init(t_mesh_var *var)
@@ -311,7 +332,7 @@ t_mesh *mesh_clone(t_mesh *mesh)
 {
 	if(mesh)
 	{
-		t_mesh *clone = mesh_new(mesh->name);
+		t_mesh *clone = mesh_new(mesh->id.name);
 
 		clone->state.has_face = mesh->state.has_face;
 		clone->state.has_tri = mesh->state.has_tri;
@@ -334,7 +355,7 @@ t_mesh *mesh_clone(t_mesh *mesh)
 
 		clone->texture = texture_clone(mesh->texture);
 		clone->material = material_clone(mesh->material);
-		//clone->lines = 
+		clone->edges = vlst_clone(mesh->edges);
 		clone->texture_id = mesh->texture_id;
 		clone->vertex = vlst_clone(mesh->vertex);
 		clone->quads = vlst_clone(mesh->quads);
@@ -365,19 +386,15 @@ t_mesh *mesh_clone(t_mesh *mesh)
 
 t_mesh *mesh_new(const char *name)
 {
-	t_mesh *mesh = (t_mesh *)malloc(sizeof(t_mesh));
+	t_mesh *mesh = (t_mesh *)mem_malloc(sizeof(t_mesh));
 
-	set_name(mesh->name,name);
-	mesh->id=0;
-	mesh->id_chunk=0;
-	mesh->users=0;
+	id_init(&mesh->id, name);
 
 	mesh_state_init(&mesh->state);
 	mesh_var_init(&mesh->var);
 
 	mesh->texture=NULL;
 	mesh->material=NULL;
-	mesh->lines=NULL;
 	mesh->texture_id=0;
 
 	mesh->vertex=NULL;
@@ -398,6 +415,11 @@ t_mesh *mesh_new(const char *name)
 	mesh->tri_color=NULL;
 	mesh->tri_uv=NULL;
 
+	mesh->edges = NULL;
+	mesh->edges_color = NULL;
+
+	mesh->ref = NULL;
+
 	return mesh;
 }
 
@@ -409,6 +431,8 @@ void _mesh_free(t_mesh *mesh)
 	if (mesh->quads) vlst_free(mesh->quads);
 	if (mesh->tris) vlst_free(mesh->tris);
 	if (mesh->uvs) vlst_free(mesh->uvs);
+	if (mesh->edges) vlst_free(mesh->edges);
+	if (mesh->edges_color) vlst_free(mesh->edges_color);
 
 	if (mesh->quad_vertex) vlst_free(mesh->quad_vertex);
 	if (mesh->quad_face) vlst_free(mesh->quad_face);
@@ -425,7 +449,7 @@ void _mesh_free(t_mesh *mesh)
 	if(mesh->material) _material_free(mesh->material);
 	if(mesh->texture) _texture_free(mesh->texture);
 
-	free(mesh);
+	mem_free( mesh, sizeof( t_mesh));
 }
 
 void mesh_free(t_mesh *mesh)
@@ -433,27 +457,28 @@ void mesh_free(t_mesh *mesh)
 	t_context *C=ctx_get();
 	t_scene *sc=C->scene;
 
-	if (mesh->vertex) scene_struct_delete(sc,mesh->vertex); 
-	if (mesh->quads) scene_struct_delete(sc,mesh->quads);
-	if (mesh->tris) scene_struct_delete(sc,mesh->tris);
-	if (mesh->uvs) scene_struct_delete(sc,mesh->uvs);
+	if (mesh->vertex) scene_delete(sc,mesh->vertex); 
+	if (mesh->quads) scene_delete(sc,mesh->quads);
+	if (mesh->tris) scene_delete(sc,mesh->tris);
+	if (mesh->uvs) scene_delete(sc,mesh->uvs);
 
-	if (mesh->quad_vertex) scene_struct_delete(sc,mesh->quad_vertex);
-	if (mesh->quad_face) scene_struct_delete(sc,mesh->quad_face);
-	if (mesh->quad_normal) scene_struct_delete(sc,mesh->quad_normal);
-	if (mesh->quad_color) scene_struct_delete(sc,mesh->quad_color); 
-	if (mesh->quad_uv) scene_struct_delete(sc,mesh->quad_uv);
+	if (mesh->quad_vertex) scene_delete(sc,mesh->quad_vertex);
+	if (mesh->quad_face) scene_delete(sc,mesh->quad_face);
+	if (mesh->quad_normal) scene_delete(sc,mesh->quad_normal);
+	if (mesh->quad_color) scene_delete(sc,mesh->quad_color); 
+	if (mesh->quad_uv) scene_delete(sc,mesh->quad_uv);
 
-	if (mesh->tri_vertex) scene_struct_delete(sc,mesh->tri_vertex);
-	if (mesh->tri_face) scene_struct_delete(sc,mesh->tri_face);
-	if (mesh->tri_normal) scene_struct_delete(sc,mesh->tri_normal);
-	if (mesh->tri_color) scene_struct_delete(sc,mesh->tri_color);
-	if (mesh->tri_uv) scene_struct_delete(sc,mesh->tri_uv);
+	if (mesh->tri_vertex) scene_delete(sc,mesh->tri_vertex);
+	if (mesh->tri_face) scene_delete(sc,mesh->tri_face);
+	if (mesh->tri_normal) scene_delete(sc,mesh->tri_normal);
+	if (mesh->tri_color) scene_delete(sc,mesh->tri_color);
+	if (mesh->tri_uv) scene_delete(sc,mesh->tri_uv);
+
 
 	//XXX
 	// material
 	// texture
-	//lines
+	// edges
 }
 
 

@@ -26,13 +26,14 @@
 #include "brick.h"
 
 #include "set.h"
-#include "graph.h"
+#include "rhizome.h"
+#include "memory.h"
 
 
 void set_setup(t_set *set)
 {
 	t_link *link;
-	t_graph *graph;
+	t_rhizome *rhizome;
 	t_block *block;
 
 	int frame_based = 0;
@@ -46,26 +47,27 @@ void set_setup(t_set *set)
 		}
 	}
 
-	if(set->graphs)
+	if(set->rhizomes)
 	{
-		for(link=set->graphs->first;link;link=link->next)
+		for(link=set->rhizomes->first;link;link=link->next)
 		{
-			graph = link->data;
-			if(graph->frame_based) frame_based = 1;
+			rhizome = link->data;
+			if(rhizome->frame_based) frame_based = 1;
 		}
 	}
 
 	set->frame_based = frame_based;
 
 	// Do Process
-	set->process = 1;
-	set->processing = 0;
+	if(!set->processing) set->process = 1;
+	else set->process_delay = 1;
 }
 
 void set_exec(t_set *set)
 {
 	t_link *l;
 
+	// Single Blocks
 	if(set->blocks)
 	{
 		l = set->blocks->first;
@@ -75,27 +77,23 @@ void set_exec(t_set *set)
 			t_block *b;
 			b=l->data;
 
-			// Exec Single Blocks
 			block_exec(b);
 		}
 	}
 
-	if(set->graphs)
+	// Rhizomes
+	if(set->rhizomes)
 	{
-		l = set->graphs->first;
+		l = set->rhizomes->first;
 
 		for(;l;l=l->next)
 		{
-			t_graph *g;
+			t_rhizome *g;
 			g=l->data;
 
-			// Exec Graphs
-			graph_exec(g);
+			rhizome_exec(g);
 		}
 	}
-
-	set->process = 0;
-//	set->processing = 0;
 }
 
 void set_draw(t_set *set)
@@ -116,17 +114,17 @@ void set_draw(t_set *set)
 		}
 	}
 
-	if(set->graphs)
+	if(set->rhizomes)
 	{
-		l = set->graphs->first;
+		l = set->rhizomes->first;
 
 		for(;l;l=l->next)
 		{
-			t_graph *g;
+			t_rhizome *g;
 			g=l->data;
 
 			// Draw Graphs
-			graph_draw(g);
+			rhizome_draw(g);
 		}
 	}
 }
@@ -135,7 +133,7 @@ void set_draw(t_set *set)
 void set_block_pop(t_set *set, t_block *block)
 {
 	t_lst *lst = set->blocks;
-	list_remove_by_id(lst, block->id);
+	list_remove_by_id(lst, block->id.id);
 
 	set_setup(set);
 }
@@ -145,7 +143,7 @@ void set_block_push(t_set *set, t_block *block)
 	t_context *C = ctx_get();
 	t_lst *lst = set->blocks;
 	scene_store(C->scene,1);
-	list_add(lst, block);
+	list_add_data(lst, block);
 	scene_store(C->scene,0);
 
 	block->set = set;
@@ -159,7 +157,7 @@ t_set *set_rebind(t_scene *sc, void **ptr)
 	t_set *set=(t_set *)ptr;
 
 	rebind(sc,"set","blocks",(void **)&set->blocks);
-	rebind(sc,"set","graphs",(void **)&set->graphs);
+	rebind(sc,"set","rhizomes",(void **)&set->rhizomes);
 
 	return set;
 }
@@ -177,18 +175,18 @@ t_node *set_make(const char *name)
 	t_context *C = ctx_get();
 
 	// New Set
-	t_node *node_set = scene_add(C->scene,nt_set,name);
+	t_node *node_set = scene_add(C->scene,dt_set,name);
 	t_set *set = node_set->data;
 
 	// Add Blocks List
-	t_node *node_blocks = scene_add(C->scene,nt_list,name);
+	t_node *node_blocks = scene_add(C->scene,dt_list,name);
 	t_lst *lst_blocks = node_blocks->data;
 	set->blocks = lst_blocks;
 
 	// Add Graphs List
-	t_node *node_graphs = scene_add(C->scene,nt_list,name);
-	t_lst *lst_graphs = node_graphs->data;
-	set->graphs = lst_graphs;
+	t_node *node_rhizomes = scene_add(C->scene,dt_list,name);
+	t_lst *lst_rhizomes = node_rhizomes->data;
+	set->rhizomes = lst_rhizomes;
 
 	return node_set;
 };
@@ -199,9 +197,9 @@ t_set *set_clone(t_set *set)
 {
 	if(set)
 	{
-		t_set *clone = set_new(set->name);
-		clone->blocks = lst_clone(set->blocks, dt_block);
-		clone->graphs = lst_clone(set->graphs, dt_graph);
+		t_set *clone = set_new(set->id.name);
+		clone->blocks = list_clone(set->blocks, dt_block);
+		clone->rhizomes = list_clone(set->rhizomes, dt_rhizome);
 
 		return clone;
 	}
@@ -213,10 +211,10 @@ t_set *set_clone(t_set *set)
 
 void _set_free(t_set *set)
 {
-	if(set->blocks) _list_free(set->blocks, dt_block);
-	if(set->graphs) _list_free(set->graphs, dt_graph);
+	if(set->blocks) list_free_data(set->blocks, dt_block);
+	if(set->rhizomes) list_free_data(set->rhizomes, dt_rhizome);
 
-	free(set);
+	mem_free( set, sizeof( t_set));
 }
 
 // FREE
@@ -224,26 +222,24 @@ void _set_free(t_set *set)
 void set_free(t_set *set)
 {
 	t_context *C = ctx_get();
-	if(set->blocks) scene_struct_delete(C->scene,set->blocks);
-	if(set->graphs) scene_struct_delete(C->scene,set->graphs);
+	if(set->blocks) scene_delete(C->scene,set->blocks);
+	if(set->rhizomes) scene_delete(C->scene,set->rhizomes);
 }
 
 // NEW
 	
 t_set *set_new(const char *name)
 {
-	t_set *set = (t_set *)malloc(sizeof(t_set));
+	t_set *set = (t_set *)mem_malloc(sizeof(t_set));
 
-	set->id = 0;
-	set->id_chunk = 0;
-	set_name(set->name,name);
-	set->users = 0;
+	id_init(&set->id, name);
 
 	set->blocks = NULL;
-	set->graphs = NULL;
+	set->rhizomes = NULL;
 
 	set->frame_based = 0;
 	set->process = 0;
+	set->process_delay = 0;
 	set->process_id = 0;
 	set->processing = 0;
 

@@ -13,13 +13,14 @@
 
 #include "data.h"
 
+struct Context;
 struct Scene;
 struct Lst;
 struct Node;
 
 typedef struct Symbol
 {
-	int id;
+	t_id id;
 	int id_chunk;
 	short users;
 	char name[_NAME_];
@@ -31,27 +32,19 @@ typedef struct Symbol
 
 typedef struct Dict
 {
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
-
+	t_id id;
 	struct Lst *symbols;
+	int count;
 
 }t_dict;
 
-
-void dict_symbol_add(t_dict *dict,const char *name,t_data_type type,void *data);
-t_symbol *dict_pop(t_dict *dict,const char *name);
-void *dict_pop_data(t_dict *dict,const char *name);
-
-
-struct Node *dict_add(const char *name);
-
+t_symbol *		dict_symbol_add(t_dict *dict,const char *name,t_data_type type,void *data);
+t_symbol *		dict_pop(t_dict *dict,const char *name);
+void *			dict_pop_data(t_dict *dict,const char *name);
+t_dict *		dict_make( const char *name);
 void			symbol_free(t_symbol *symbol);
 t_symbol *		symbol_rebind(struct Scene *sc,void *ptr);
 t_symbol *		symbol_new(const char *name);
-
 void 			dict_free(t_dict *dict);
 t_dict *		dict_rebind(struct Scene *sc,void *ptr);
 t_dict *		dict_new(const char *name);

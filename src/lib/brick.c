@@ -7,6 +7,7 @@
  *
  */
 
+#include "node.h"
 #include "util.h"
 #include "context.h"
 #include "scene.h"
@@ -17,6 +18,75 @@
 #include "block.h"
 #include "brick.h"
 #include "binding.h"
+#include "rhizome.h"
+#include "memory.h"
+
+// Split
+void brick_rhizome_split(t_brick *brick_x, t_brick *brick_y)
+{
+	t_block *block_x = brick_x->block;
+	t_block *block_y = brick_y->block;
+
+	block_x->state.is_root = 0;
+	block_y->state.is_root = 0;
+
+	rhizome_graph_split(block_x->rhizome, brick_x, brick_y);
+}
+
+// Add Block To Rhizome
+void brick_rhizome_add(t_brick *brick_x, t_brick *brick_y)
+{
+	t_context *C = ctx_get();
+
+	t_block *block_x = brick_x->block;
+	t_block *block_y = brick_y->block;
+
+	// Each Block Have A Rhizome
+	if(block_x->rhizome && block_y->rhizome)
+	{
+		// Add Dash
+		rhizome_graph_link_add(block_x->rhizome, brick_x, brick_y);
+
+		// Merge
+		rhizome_merge(block_x->rhizome, block_y->rhizome);
+	}
+	// Only One Rhizome
+	else if(block_x->rhizome)
+	{
+		// Add Block
+		rhizome_block_add(block_x->rhizome, block_y);
+
+		// Add Dash
+		rhizome_graph_link_add(block_x->rhizome, brick_x, brick_y);
+	}
+	// Only One Rhizome
+	else if(block_y->rhizome)
+	{
+		// Add Block
+		rhizome_block_add(block_y->rhizome, block_x);
+
+		// Add Dash
+		rhizome_graph_link_add(block_y->rhizome, brick_x, brick_y);
+	}
+	// No Rhizome
+	else
+	{
+		// Build New Rhizome
+		scene_store(C->scene,1);
+		t_rhizome *rhizome = rhizome_add("rhizome");
+		scene_store(C->scene,0);
+
+		// Add Blocks
+		rhizome_block_add(rhizome, block_x);
+		rhizome_block_add(rhizome, block_y);
+
+		// Add Dash
+		rhizome_graph_link_add(block_y->rhizome, brick_x, brick_y);
+	}
+
+	// Setup
+	rhizome_setup(block_x->rhizome);
+}
 
 int brick_is_different(t_brick *dst, t_brick *src)
 {
@@ -40,105 +110,19 @@ void brick_binding_add(t_brick *brick, t_data_type type, void *data)
 	t_plug *plug_intern = &brick->plug_intern;
 	if(!plug_intern->bindings)
 	{
-		t_node *node_list = scene_add(C->scene,nt_list,"binding");
+		t_node *node_list = scene_add(C->scene,dt_list,"binding");
 		t_lst *list = node_list->data;
 		plug_intern->bindings = list;
 	}
 
-	t_node *node_binding = scene_add(C->scene,nt_binding,"binding");
+	t_node *node_binding = scene_add(C->scene,dt_binding,"binding");
 	t_binding *binding = node_binding->data;
 
 	binding->type = type;
 	binding->data = data;
 
-	list_add(plug_intern->bindings,binding);
+	list_add_data(plug_intern->bindings,binding);
 }
-
-void plug_add_parent(t_plug *child, t_plug *parent)
-{
-	t_context *C = ctx_get();
-
-	// if not parents yet
-	if(!child->parents)
-	{
-		// add list
-		t_node *node_list = scene_add(C->scene,nt_list,"parent");
-		t_lst *list = node_list->data;
-		child->parents = list;
-	}
-
-	// add parent
-	list_add(child->parents,parent);
-
-	// remember child
-	parent->child = child;
-}
-
-// Empty Parents List
-void plug_child_remove_all_parents(t_plug *child)
-{
-	t_context *C = ctx_get();
-	if(child->parents)
-	{
-		//list_free(child->parents);
-		scene_struct_delete(C->scene,child->parents);
-		child->parents = NULL;
-	}
-}
-
-void plug_remove_child(t_plug *plug)
-{
-	t_link *l;
-	t_plug *p;
-
-	for(l=plug->parents->first;l;l=l->next)
-	{
-		p = l->data;
-
-		if(p->child == plug)
-		{
-			p->child = NULL;
-		}
-
-	}
-}
-
-void plug_child_remove_parent(t_plug *plug)
-{
-	t_context *C = ctx_get();
-
-	if(plug->child)
-	{
-		t_plug *plug_child = plug->child;
-
-		t_lst *lst = plug_child->parents;
-
-		t_link *l=NULL;
-		t_plug *p;
-		t_brick *brick_parent=plug->brick;
-		t_brick *b;
-
-		for(l=lst->first;l;l=l->next)
-		{
-			p = l->data;
-			b = p->brick;
-
-			if(b->id == brick_parent->id)
-				break;
-		}
-
-		if(l)
-		{
-			lst_link_remove(lst,l);
-			scene_struct_delete(C->scene,l);
-		}
-		else
-		{
-			printf("[ERROR plug_child_remove_parent] Can't find link\n");
-		}
-	}
-}
-
 
 // CLONE
 
@@ -181,7 +165,7 @@ t_brick *brick_dupli(t_block *block,t_brick *brick)
 
 	t_plug *plug_intern=&brick->plug_intern;
 
-	t_node *clone_node=brick_make(block,brick->name,brick->type,plug_intern->data_type,plug_intern->data);
+	t_node *clone_node=brick_make(block,brick->id.name,brick->type,plug_intern->data_type,plug_intern->data);
 
 	t_brick *clone_brick=clone_node->data;
 
@@ -199,8 +183,8 @@ t_brick *brick_dupli(t_block *block,t_brick *brick)
 	}
 	else
 	{
-		brick->state.clone = brick->id;
-		clone_brick->state.clone = brick->id;
+		brick->state.clone = brick->id.id;
+		clone_brick->state.clone = brick->id.id;
 		brick_clone_change_name(brick);
 		brick_clone_change_name(clone_brick);
 		brick_build_width(brick);
@@ -222,7 +206,7 @@ t_brick *brick_copy(t_block *block,t_brick *brick)
 	void *data = plug_intern->data;
 	void *data_new = data_copy(data_type,data);
 
-	t_node *clone_node=brick_make(block,brick->name,brick->type,plug_intern->data_type,data_new);
+	t_node *clone_node=brick_make(block,brick->id.name,brick->type,plug_intern->data_type,data_new);
 
 	t_brick *clone_brick=clone_node->data;
 
@@ -247,7 +231,7 @@ void brick_selector_list_free(t_lst *lst)
 		for(;l;l=l->next)
 		{
 			txt=l->data;
-			free(txt);
+			mem_free( txt, sizeof( t_txt));
 		}
 	}
 	lst_free(lst);
@@ -268,15 +252,7 @@ int brick_delete(t_brick *brick,int remove_connected)
 		(!plug_in->state.is_connected && !plug_out->state.is_connected)
 		)
 	{
-		// remove users
-		//dlink("block",brick->block);
-
-		t_plug *plug = &brick->plug_intern;
-
-		if(plug->child) plug_child_remove_parent(plug);
-		if(plug->parents) plug_remove_child(plug);
-
-		scene_struct_delete(C->scene,brick);
+		scene_delete(C->scene,brick);
 		return 1;
 	}
 	else
@@ -402,15 +378,10 @@ void plug_init(
 
 void plug_reset(t_plug *plug,const char *name)
 {
-	plug->id=0;
-	plug->id_chunk=0;
-	set_name(plug->name,name);
-	plug->users=0;
+	id_init(&plug->id, name);
 
 	plug->src=NULL;
 	plug->dst=NULL;
-	plug->parents=NULL;
-	plug->child=NULL;
 	plug->pos=0; 
 	plug->data=NULL;
 	plug->data_memory = NULL;
@@ -424,6 +395,7 @@ void plug_reset(t_plug *plug,const char *name)
 	plug->state.is_updated=0;
 	plug->state.is_versatil=0;
 	plug->state.store_data = 1;
+	plug->state.store_data_memory = 1;
 	plug->state.bang = 0;
 	plug->state.last_bang = 0;
 	plug->state.is_init=0;
@@ -431,7 +403,6 @@ void plug_reset(t_plug *plug,const char *name)
 	plug->state.is_a_loop = 0;
 	plug->state.close_flow_in = 0;
 	plug->state.use_flow = 1;
-	plug->state.is_parent = 0;
 	plug->state.flow_in = 1;
 	plug->state.flow_out = 0;
 	plug->state.follow_in=1;
@@ -475,26 +446,27 @@ t_brick *brick_rebind(t_scene *sc,void *ptr)
 	rebind(sc,"brick","plug_in_src",(void **)&brick->plug_in.src);
 
 	if(brick->plug_intern.state.store_data) 
-		rebind(sc,"brick",brick->name,(void **)&brick->plug_intern.data);
+		rebind(sc,"brick",brick->id.name,(void **)&brick->plug_intern.data);
 	else 	
 		brick->plug_intern.data = NULL;
 
+	if(brick->plug_intern.state.store_data_memory)
+	{
 	if(brick->plug_intern.data_memory) 
 	{
 		rebind(sc,"brick","plug_intern_data_memory",(void **)&brick->plug_intern.data_memory);
 		if(brick->plug_intern.data == NULL)
 			brick->plug_intern.data = brick->plug_intern.data_memory;
 	}
+	}
 
 
 	rebind(sc,"brick","plug_out_dst",(void **)&brick->plug_out.dst);
-	rebind(sc,"brick",brick->name,(void **)&brick->action);
+	rebind(sc,"brick action",brick->id.name,(void **)&brick->action);
 
-	rebind(sc,"brick","plug_parents",(void **)&brick->plug_intern.parents);
-	rebind(sc,"brick","plug child",(void **)&brick->plug_intern.child);
 	rebind(sc,"brick","plug binding",(void **)&brick->plug_intern.bindings);
 
-	txt_init(&brick->txt_name,brick->name);
+	txt_init(&brick->txt_name,brick->id.name);
 	txt_init(&brick->txt_data,NULL);
 
 	if(brick->state.clone)
@@ -560,7 +532,7 @@ t_node *brick_make(t_block *block,const char *name,t_brick_type brick_type,t_dat
 	t_context *C=ctx_get();
 
 	// NEW BRICK
-	t_node *node_brick = scene_add(C->scene,nt_brick,name);
+	t_node *node_brick = scene_add(C->scene,dt_brick,name);
 	t_brick *brick = node_brick->data;
 
 	// TYPE
@@ -589,6 +561,12 @@ t_node *brick_make(t_block *block,const char *name,t_brick_type brick_type,t_dat
 	// BRICK INIT
 	brick_init(C->scene,brick);
 
+	// Frame Based
+	if(is(name,"frame"))
+	{
+		block->state.frame_based  =1;
+	}
+
 	return node_brick;
 }
 
@@ -598,7 +576,7 @@ t_brick *brick_clone(t_brick *brick)
 {
 	if(brick)
 	{
-		t_brick *clone = (t_brick *) malloc(sizeof(t_brick));
+		t_brick *clone = (t_brick *) mem_malloc(sizeof(t_brick));
 		memcpy(clone,brick,sizeof(t_brick));
 		return clone;
 	}
@@ -611,7 +589,7 @@ t_brick *brick_clone(t_brick *brick)
 void _brick_free(t_brick *brick)
 {
 	// that simple !
-	free(brick);
+	mem_free(brick, sizeof( t_brick));
 }
 
 
@@ -624,14 +602,9 @@ void brick_free(t_brick *brick)
 
 	t_plug *plug_intern = &brick->plug_intern;
 
-	if(plug_intern->parents)
-	{
-		scene_struct_delete(C->scene,plug_intern->parents);
-	}
-
 	if(plug_intern->bindings)
 	{
-		scene_struct_delete(C->scene, plug_intern->bindings);
+		scene_delete(C->scene, plug_intern->bindings);
 	}
 
 	if(brick->state.has_ref)
@@ -646,15 +619,14 @@ void brick_free(t_brick *brick)
 
 t_brick *brick_new(const char *name)
 {
-	t_brick *brick = (t_brick *)malloc(sizeof(t_brick));
+	t_brick *brick = (t_brick *)mem_malloc(sizeof(t_brick));
+
+	id_init(&brick->id, name);
 
 	txt_init(&brick->txt_name,name);
 	txt_init(&brick->txt_data,NULL);
 
-	set_name(brick->name,name);
-	brick->context=nt_null;
-
-	brick->users=0;
+	brick->context=dt_null;
 
 	bzero(&brick->state,sizeof(t_brick_state));
 
@@ -668,6 +640,7 @@ t_brick *brick_new(const char *name)
 	brick->state.use_block_width=1;
 	brick->state.is_mouse_mode=1;
 	brick->state.is_contextual=0;
+	brick->state.poll=0;
 	brick->state.is_versatil=0;
 	brick->state.has_ref=0;
 	brick->state.is_current=0;
@@ -682,8 +655,6 @@ t_brick *brick_new(const char *name)
 	brick->state.debug = 0;
 	brick->state.draw = 1;
 	brick->state.has_components = 0;
-	brick->state.has_limit_low = 0;
-	brick->state.has_limit_high = 0;
 
 	brick->geom.block_pos=0;
 	brick->geom.height=20;
@@ -693,16 +664,13 @@ t_brick *brick_new(const char *name)
 	brick->var.increment=0;
 	brick->var.selector=0;
 	brick->var.selector_length=0;
-	brick->var.limit_int_low = 0;
-	brick->var.limit_int_high = 0;
-	brick->var.limit_float_low = 0;
-	brick->var.limit_float_high = 0;
 
 	brick->cls=NULL;
 	brick->action=NULL;
+	brick->poll = NULL;
 	brick->menu=NULL;
 
-	brick->graph_order = -1;
+	brick->rhizome_order = -1;
 	brick->block_order = -1;
 
 	brick->mode=bm_idle;

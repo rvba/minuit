@@ -16,7 +16,7 @@ struct Scene;
 
 typedef struct Option
 {
-	int id;
+	t_id id;
 	short users;
 	char name[_NAME_];
 

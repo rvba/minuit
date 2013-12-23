@@ -17,8 +17,10 @@
 #include "term.h"
 #include "vector.h"
 #include "list.h"
+#include "vlst.h"
 #include "ui.h"
 #include "data.h"
+#include "memory.h"
 
 void cls_vector_init(t_vector *vector)
 {
@@ -32,6 +34,13 @@ t_vector_cls cls_vector=
 
 void vector_free(t_vector *vector)
 {
+	if(vector->vector) vlst_delete(vector->vector);
+}
+
+void vector_delete( t_vector *vector)
+{
+	t_scene *sc = ctx_scene_get();
+	scene_delete( sc, vector);
 }
 
 void vector_copy_pointer(t_vector *dst, t_vector *src)
@@ -39,11 +48,6 @@ void vector_copy_pointer(t_vector *dst, t_vector *src)
 	dst->pointer = src->pointer;
 	dst->length = src->length;
 	dst->type = src->type;
-	dst->has_limit_high = src->has_limit_high;
-	dst->has_limit_low = src->has_limit_low;
-	dst->limit_int_high = src->limit_int_high;
-	dst->has_limit_low = src->has_limit_low;
-	dst->limit_int_low = src->limit_int_low;
 
 	//XXX vector cls !!!
 }
@@ -80,7 +84,7 @@ void vector_show(t_vector *vector)
 
 	if(C->event->debug_console)
 	{
-		term_log( "vector %s\n", vector->name);
+		term_log( "vector %s\n", vector->id.name);
 		term_log( "type %s\n", data_name_get(vector->type));
 		term_log( "length %d\n", vector->length);
 		term_log( "pointer %p\n", vector->pointer);
@@ -95,17 +99,19 @@ void vector_show(t_vector *vector)
 					{
 						case 3:
 							data_int = vector->pointer;
-							term_log( "[v3] %f %f %f",
+							term_log( "pointer [v3] %f %f %f",
 								drf_float(data_int),
 								drf_float(data_int+1),
 								drf_float(data_int+2)
 								);
 							break;
 						default:
+							printf("[VECTOR SHOW FLOAT] Unknwon length %d\n",vector->length);
 							break;
 					}
 					break;
 				default:
+					printf("[VECTOR SHOW] Unkown type \n");
 					break;
 			}
 		}
@@ -113,11 +119,39 @@ void vector_show(t_vector *vector)
 
 	if(C->event->debug_terminal)
 	{
-		printf( "vector %s\n", vector->name);
+		printf( "vector %s\n", vector->id.name);
 		printf( "type %s\n", data_name_get(vector->type));
 		printf( "length %d\n", vector->length);
 		printf( "pointer %p\n", vector->pointer);
 		printf( "vector %p\n", vector->vector);
+
+		if(vector->pointer)
+		{
+			int *data_int;
+
+			switch(vector->type)
+			{
+				case dt_float:
+					switch(vector->length)
+					{
+						case 3:
+							data_int = vector->pointer;
+							printf( "pointer [v3] %f %f %f\n",
+								drf_float(data_int),
+								drf_float(data_int+1),
+								drf_float(data_int+2)
+								);
+							break;
+						default:
+							printf("[VECTOR SHOW FLOAT] Unknwon length %d\n",vector->length);
+							break;
+					}
+					break;
+				default:
+					printf("[VECTOR SHOW] Unkown type \n");
+					break;
+			}
+		}
 	}
 
 	if(vector->vector) vlst_show(vector->vector);
@@ -172,7 +206,7 @@ void vector_default(t_vector *vector)
 t_node *vector_add(const char *name)
 {
 	t_context *C = ctx_get();
-	t_node *node = scene_add(C->scene,nt_vector,name);
+	t_node *node = scene_add(C->scene,dt_vector,name);
 	t_vector *vector = node->data;
 
 	vector_default(vector);
@@ -191,23 +225,15 @@ t_vector *vector_rebind(t_scene *sc,void *ptr)
 
 t_vector *vector_new(const char *name)
 {
-	t_vector *vector = (t_vector *) malloc(sizeof(t_vector));
+	t_vector *vector = (t_vector *) mem_malloc(sizeof(t_vector));
 
-	vector->id=0;
-	vector->id_chunk=0;
-	set_name(vector->name,name);
-	vector->users=0;
+	id_init(&vector->id, name);
 
 	vector->type=dt_null;
 	vector->length=0;
 	vector->pointer=NULL;
 
 	vector->cls=&cls_vector;
-
-	vector->has_limit_low = 0;
-	vector->has_limit_high = 0;
-	vector->limit_int_low = 0;
-	vector->limit_int_high = 0;
 
 	return vector;
 }

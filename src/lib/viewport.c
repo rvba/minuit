@@ -20,6 +20,7 @@
 #include "draw.h"
 
 #include "brick.h"
+#include "memory.h"
 
 // DRAW
 
@@ -67,7 +68,7 @@ t_viewport *viewport_clone(t_viewport *viewport)
 {
 	if(viewport)
 	{
-		t_viewport *clone = viewport_new(viewport->name);
+		t_viewport *clone = viewport_new(viewport->id.name);
 
 		clone->width = viewport->width;
 		clone->height = viewport->height;
@@ -92,7 +93,7 @@ t_node *viewport_make(const char *name)
 {
 	t_context *C = ctx_get();
 
-	t_node *node_viewport = scene_add(C->scene, nt_viewport, name);
+	t_node *node_viewport = scene_add(C->scene, dt_viewport, name);
 	t_node *node_camera = op_new_camera("vp_camera");
 	t_object *object = node_camera->data;
 
@@ -111,7 +112,7 @@ t_node *viewport_make(const char *name)
 void _viewport_free(t_viewport *viewport)
 {
 	if(viewport->camera) _camera_free(viewport->camera);
-	free(viewport);
+	mem_free( viewport, sizeof( t_viewport));
 }
 
 
@@ -119,19 +120,16 @@ void viewport_free(t_viewport *viewport)
 {
 	t_context *C = ctx_get();
 	if(viewport->camera)
-		scene_struct_delete(C->scene,viewport->camera);
+		scene_delete(C->scene,viewport->camera);
 }
 
 // NEW
 
 t_viewport *viewport_new(const char *name)
 {
-	t_viewport *viewport = (t_viewport *) malloc(sizeof(t_viewport));
+	t_viewport *viewport = (t_viewport *) mem_malloc(sizeof(t_viewport));
 
-	viewport->id=0;
-	viewport->id_chunk=0;
-	set_name(viewport->name,name);
-	viewport->users=0;
+	id_init(&viewport->id, name);
 
 	viewport->width = 0;
 	viewport->height = 0;

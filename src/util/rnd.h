@@ -7,16 +7,13 @@
  *
  */
 
+#ifndef __RND_H
+#define __RND_H
 
-#ifndef __SYSTEM_H
-#define __SYSTEM_H
-
-#include <sys/stat.h>
-#include <sys/resource.h>
-
-#include <unistd.h>
-
-size_t get_memory_usage(void);
-
+float rndr(void);
+float rndf(void);
+void rnd_init(void);
+int rnd(int n);
+int rnd_range(int start,int end);
 
 #endif

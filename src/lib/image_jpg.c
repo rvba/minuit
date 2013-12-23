@@ -7,9 +7,11 @@
  *
  */
 
+#include "node.h"
 #include "opengl.h"
 #include "util.h"
 #include "image.h"
+#include "memory.h"
 
 t_image  *img_read_jpg(char* name)
 {
@@ -36,7 +38,7 @@ t_image  *img_read_jpg(char* name)
 	width = cinfo.output_width;
 	height = cinfo.output_height;
 
-	unsigned char *ptr = (unsigned char*)malloc(sizeof(unsigned char)*width*height*4); 
+	unsigned char *ptr = (unsigned char*)mem_malloc(sizeof(unsigned char)*width*height*4); 
 
 	ptr +=(width*height*4); 
 
@@ -79,7 +81,7 @@ t_image  *img_read_jpg(char* name)
 	(void) jpeg_finish_decompress(&cinfo);
 	jpeg_destroy_decompress(&cinfo);
 
-	//t_texture *texture = (t_texture*)malloc(sizeof(t_texture));
+	//t_texture *texture = (t_texture*)mem_malloc(sizeof(t_texture));
 	t_image *image = image_new(name);
 
 	/*
@@ -95,7 +97,7 @@ t_image  *img_read_jpg(char* name)
 	image->bpp=4;
 	image->data=ptr;
 
-	printf("image is done %s\n",image->name);
+	printf("image is done %s\n", image->id.name);
 
 	//return texture;
 	return image;
@@ -103,9 +105,9 @@ t_image  *img_read_jpg(char* name)
 
 void img_save_video(int width, int height, const char *name,unsigned char *image)
 {
-	//GLubyte *image = (GLubyte *)malloc(width*height*sizeof(GLubyte)*3);
+	//GLubyte *image = (GLubyte *)mem_malloc(width*height*sizeof(GLubyte)*3);
 	/*
-	unsigned char *image = (unsigned char *)malloc(width*height*sizeof(unsigned char)*3);
+	unsigned char *image = (unsigned char *)mem_malloc(width*height*sizeof(unsigned char)*3);
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, image);
 	*/
@@ -153,8 +155,9 @@ void img_save_video(int width, int height, const char *name,unsigned char *image
 
 void img_save_jpg(int width, int height, const char *name)
 {
-//	GLubyte *image = (GLubyte *)malloc(width*height*sizeof(GLubyte)*3);
-	unsigned char *image = (unsigned char *)malloc(width*height*sizeof(unsigned char)*3);
+//	GLubyte *image = (GLubyte *)mem_malloc(width*height*sizeof(GLubyte)*3);
+	size_t malloc_size = width * height * sizeof( unsigned char) * 3;
+	unsigned char *image = (unsigned char *)mem_malloc(malloc_size);
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, image);
 
@@ -196,7 +199,7 @@ void img_save_jpg(int width, int height, const char *name)
 		fclose(outfile);
 
 		jpeg_destroy_compress(&cinfo);
-		free(image);
+		mem_free( image, malloc_size);
 
 	}
 	else
@@ -247,6 +250,7 @@ void img_save_jpg_highres(int width, int height, const char name[],GLubyte *imag
 		fclose(outfile);
 
 		jpeg_destroy_compress(&cinfo);
+		/* **MEM** */
 		free(image);
 	}
 	else

@@ -31,7 +31,7 @@ t_node *op_texture_jpg_add(t_file *file)
 {
 	t_context *C = ctx_get();
 
-	t_node *node=scene_add(C->scene,nt_texture,file->name);
+	t_node *node = scene_add(C->scene, dt_texture, file->id.name);
 	t_texture *texture=node->data;
 
 	//t_image *image = img_read_jpg(file->path);
@@ -51,7 +51,7 @@ t_node *op_texture_png_add(t_file *file)
 {
 	t_context *C = ctx_get();
 
-	t_node *node=scene_add(C->scene,nt_texture,file->name);
+	t_node *node=scene_add(C->scene, dt_texture, file->id.name);
 	t_texture *texture=node->data;
 
 	//t_image *image = img_read_png(file->path);
@@ -70,7 +70,7 @@ t_node *op_texture_png_add(t_file *file)
 t_node *op_texture_add(const char *path)
 {
 	t_context *C = ctx_get();
-	t_node *node_file = scene_add(C->scene,nt_file,path);
+	t_node *node_file = scene_add(C->scene,dt_file,path);
 	t_file *file=node_file->data;
 
 	char *ext=file->ext;

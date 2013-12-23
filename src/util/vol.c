@@ -12,6 +12,18 @@
 int mesh_cube_lines[24]={0,1,1,2,2,3,3,0,4,5,5,6,6,7,7,4,0,4,1,5,2,6,3,7};
 int mesh_cube_tot_lines = 24;
 
+float plane_verts[4*3] = {
+	0,0,0,
+	1,0,0,
+	1,1,0,
+	0,1,0,
+};
+
+int plane_quads[4] = {
+	0,3,2,1,
+	};		
+
+
 float cube_verts[8*3] = {
 	0,0,0,
 	1,0,0,
@@ -22,6 +34,7 @@ float cube_verts[8*3] = {
 	1,1,1,
 	0,1,1
 };
+
 
 int cube_quads[6*4] = {
 	0,3,2,1,

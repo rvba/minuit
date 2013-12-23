@@ -26,7 +26,8 @@
 #include "list.h"
 #include "data.h"
 #include "camera.h"
-#include "graph.h"
+#include "rhizome.h"
+#include "memory.h"
 
 t_lst *sets = NULL;
 
@@ -88,6 +89,7 @@ void ui_draw_lines(void)
 	t_context *C=ctx_get();
 	if(C->event->is_drawing && C->draw->mode==mode_draw)
 	{
+		C->event->ui.use_line_global_width = 0;
 		float start[3] = {
 				(float)C->event->start_x,
 				(float)C->event->start_y,
@@ -102,6 +104,7 @@ void ui_draw_lines(void)
 
 		float *color=C->ui->front_color;
 		skt_line(start,end,1,color);
+		C->event->ui.use_line_global_width = 1;
 	}
 }
 
@@ -114,7 +117,7 @@ void ui_draw_grid(void)
 	{
 		glPushMatrix();
 
-		float color[]={0,0,0};
+		float *color = C->draw->front_color;
 		int w=1;
 
 		int i;
@@ -149,6 +152,18 @@ void ui_draw_grid(void)
 		float yy = (float)divy;
 		float dx = width/xx;
 		float dy = height/yy;
+
+		int usex = C->draw->usex;
+		int usey = C->draw->usey;
+
+		float ax = usex * dx;
+		float ay = usey * dy ;
+		float origin[3] = {ax,ay,0};
+		float v1[3] = {dx,0,0};
+		float v2[3] = {0,dy,0};
+		int _width = 5;
+
+		_skt_rectangle(origin,v1,v2,color,_width);
 
 		// verticals
 		for(i=0;i<divx-1;i++)
@@ -290,6 +305,9 @@ void ui_draw_screens(t_context *C)
 
 void ui_navigation(t_context *C)
 {
+	if( !C->event->is_mouse_over_brick)
+	{
+		//printf("nav\n");
 	// Pan
 	if(C->app->mouse->button_right == button_pressed && C->app->keyboard->ctrl)
 	{
@@ -321,6 +339,7 @@ void ui_navigation(t_context *C)
 
 		C->event->ui.pan_x = C->ui->pan_x;
 		C->event->ui.pan_y = C->ui->pan_y;
+	}
 	}
 }
 
@@ -379,7 +398,11 @@ void ui_draw(void)
 {
 	t_context *C = ctx_get();
 
-	// Threads
+	C->event->ui.use_line_global_width = 0;
+	C->event->ui.use_point_global_width = 0;
+
+	// Skt
+	skt_update( C);
 
 	// Navigation
 	ui_navigation(C);
@@ -392,6 +415,9 @@ void ui_draw(void)
 	{
 		ui_draw_icon_freeze(C);
 	}
+
+	C->event->ui.use_point_global_width = 1;
+	C->event->ui.use_line_global_width = 1;
 }
 
 // INIT
@@ -411,7 +437,7 @@ void ui_init(void)
 
 t_ui *ui_new(void)
 {
-	t_ui *ui = (t_ui *)malloc(sizeof(t_ui));
+	t_ui *ui = (t_ui *)mem_malloc(sizeof(t_ui));
 
 	ui->draw_plug_state = 1;
 
@@ -423,20 +449,25 @@ t_ui *ui_new(void)
 	ui->show_meshes = 0;
 	ui->show_objects = 0;
 	ui->show_mouse = UI_SHOW_MOUSE;
+	ui->visualize_mouse = 1;
 	ui->show_term = UI_SHOW_TERM;
 	ui->show_grid = 0;
 	ui->show_states = 0;
 	ui->show_step = 0;
 	ui->show_brick_step = 0;
 	ui->show_sets = 0;
+	ui->show_rhizome_bounding_box = UI_SHOW_RHIZOME_BOUNDING_BOX;
+	ui->show_rhizome_order = UI_SHOW_RHIZOME_ORDER;
+	ui->show_status = UI_SHOW_STATUS;
+
 	ui->step = 0;
 	ui->step_reset = 0;
+	ui->add_bricks = UI_ADD_BRICKS;
 
 	ui->update_links = 1;
-	ui->use_threading = 0;
-	ui->use_graphs = 1;
+	ui->use_rhizomes = 1;
 	ui->threading_on = 0;
-	ui->graph_updated = 1;
+	ui->rhizome_updated = 1;
 
 	ui->draw=UI_DRAW;
 	ui->font_width = 1;
@@ -479,6 +510,8 @@ t_ui *ui_new(void)
 	ui->connect_brick_out = NULL;
 	ui->do_connect = 0;
 	ui->do_disconnect = 0;
+
+	ui->bitrate = 15000;
 
 	return ui;
 }

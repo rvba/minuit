@@ -7,8 +7,10 @@
  *
  */
 
+#include "node.h"
 #include "op.h"
 #include "context.h"
+#include "scene.h"
 #include "ctx.h"
 #include "app.h"
 #include "event.h"
@@ -61,16 +63,50 @@ void save_file(t_context *C)
 {
 	t_file *file = C->app->file;
 
-	char *name = file->name;
+	char *name = file->id.name;
 
 	if(is(name,"void"))
 	{
-		set_name(file->name,"minuit.mn");
+		set_name(file->id.name, "minuit.mn");
 		file_build_location(file);
 	}
 
-	option_save(C);
 	mem_write(file->location);
+}
+
+void save_to_file( t_context *C)
+{
+	t_link *l;
+	t_node *node;
+
+	option_save(C);
+
+	for(l=C->scene->nodes->first;l;l=l->next)
+	{
+		node = l->data;
+		if( node->store)
+		{
+			if( node->type==dt_var)
+			{
+				node->id_chunk_self = mem_store(ct_node,dt_var,sizeof(t_node),1,node);
+				node->id_chunk = mem_store(ct_data,dt_var,node->size,1,node->id_ptr);
+			}
+			else
+			{
+				// store node && get chunk indice
+				node->id_chunk_self = mem_store( ct_node, node->type, sizeof( t_node), 1, node);
+
+				// store data && get chunk indice
+				node->id_chunk = mem_store( ct_data, node->type, node->cls->size, 1, node->data);
+
+				// copy chunk indice to generic
+				t_id *id = (t_id *) node->data;
+				id->id_chunk = node->id_chunk;
+			}
+		}
+	}
+
+	save_file( C);
 }
 
 void save_file_increment(t_context *C)
@@ -80,7 +116,7 @@ void save_file_increment(t_context *C)
 	file_path_split(file);
 
 	int i,j;
-	char *name = file->name;
+	char *name = file->id.name;
 	int length = strlen(name);
 	int last_char = length - 1; // starts from 0 !
 	int max_indice = 10;
@@ -91,11 +127,9 @@ void save_file_increment(t_context *C)
 	{
 		char number[4] = "-01";
 
-		strcat(file->name,number);
-		set_name(file->name,name);
+		strcat(file->id.name, number);
+		set_name(file->id.name, name);
 		file_build_location(file);
-
-		save_file(C);
 	}
 	else
 	{
@@ -146,10 +180,11 @@ void save_file_increment(t_context *C)
 
 			strcat(new_name,new_name_indice);
 
-			set_name(file->name,new_name);
+			set_name(file->id.name, new_name);
 			file_build_location(file);
 
-			save_file(C);
 		}
 	}
+
+	save_to_file(C);
 }

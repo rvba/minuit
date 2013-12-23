@@ -18,9 +18,11 @@ typedef struct Action t_action;
 
 struct Action
 {
-	char name[_NAME_];
+	t_id id;
 
-	void (* act)(struct Dict *args);
+	int done;
+	struct Brick *brick;
+	void (* act)(struct Action *action);
 	struct Dict *args;
 };
 

@@ -15,13 +15,11 @@
 struct Scene;
 struct Block;
 struct MINscreen;
+struct Camera;
 
 typedef struct MINscreen
 {
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
+	t_id id;
 
 	int idcol[3];
 
@@ -40,6 +38,7 @@ typedef struct MINscreen
 
 	void (* draw) (struct MINscreen *screen);
 	void (* keymap) (unsigned char key);
+	void *data;
 
 }t_screen;
 
@@ -59,6 +58,10 @@ void screen_sets(t_screen *screen);
 
 // SCREEN.C
 
+struct Camera *screen_camera(t_screen *screen);
+t_screen *screen_default(const char *name, void (* draw)(t_screen *s));
+
+void screen_always(t_screen *screen);
 void screen_on(t_screen *screen);
 void screen_off(t_screen *screen);
 

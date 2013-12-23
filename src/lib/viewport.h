@@ -18,11 +18,7 @@ typedef struct Viewport t_viewport;
 
 struct Viewport
 {
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
-	t_generic_cls *cls;
+	t_id id;
 
 	int width;
 	int height;

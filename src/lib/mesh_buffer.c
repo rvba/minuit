@@ -11,17 +11,21 @@
 #include "util.h"
 #include "mesh.h"
 #include "list.h"
+#include "vlst.h"
 #include "context.h"
 #include "block.h"
 #include "ctx.h"
+#include "ui.h"
+#include "scene.h"
 
 // ADD GEOMETRY
 
+/*
 void mesh_line_add(t_mesh *mesh,int *lines,int totline)
 {
 	int i;
 	size_t size = sizeof(int)*totline;
-	int *_lines=(int *)malloc(size);
+	int *_lines=(int *)mem_malloc(size);
 
 	mesh->lines = _lines;
 	mesh->var.totline=totline;
@@ -45,6 +49,7 @@ void mesh_line_cube_add(t_mesh *mesh)
 {
 	mesh_line_add(mesh,mesh_cube_lines,mesh_cube_tot_lines);
 }
+*/
 
 // INIT
 
@@ -109,7 +114,12 @@ void mesh_buffer_add_direct(t_mesh *mesh)
 	{
 		int tot_quad=mesh->var.tot_quad_face;
 
+		t_context *C = ctx_get();
+		C->ui->add_bricks = 0;
+
 		if(!mesh->quad_normal) mesh->quad_normal=vlst_make("quad_normal", dt_float, 3, tot_quad);
+
+		C->ui->add_bricks = 1;
 	}
 }
 
@@ -118,15 +128,15 @@ void mesh_buffer_reset(t_mesh *mesh)
 	t_context *C=ctx_get();
 	t_scene *scene=C->scene;
 
-	if(mesh->quad_vertex) scene_struct_delete(scene,mesh->quad_vertex);
-	if(mesh->quad_face) scene_struct_delete(scene,mesh->quad_face);
-	if(mesh->quad_color) scene_struct_delete(scene,mesh->quad_color);
-	if(mesh->quad_normal) scene_struct_delete(scene,mesh->quad_normal);
+	if(mesh->quad_vertex) scene_delete(scene,mesh->quad_vertex);
+	if(mesh->quad_face) scene_delete(scene,mesh->quad_face);
+	if(mesh->quad_color) scene_delete(scene,mesh->quad_color);
+	if(mesh->quad_normal) scene_delete(scene,mesh->quad_normal);
 
-	if(mesh->tri_vertex) scene_struct_delete(scene,mesh->tri_vertex);
-	if(mesh->tri_face) scene_struct_delete(scene,mesh->tri_face);
-	if(mesh->tri_color) scene_struct_delete(scene,mesh->tri_color);
-	if(mesh->tri_normal) scene_struct_delete(scene,mesh->tri_normal);
+	if(mesh->tri_vertex) scene_delete(scene,mesh->tri_vertex);
+	if(mesh->tri_face) scene_delete(scene,mesh->tri_face);
+	if(mesh->tri_color) scene_delete(scene,mesh->tri_color);
+	if(mesh->tri_normal) scene_delete(scene,mesh->tri_normal);
 
 	mesh->quad_vertex=NULL;
 	mesh->quad_face=NULL;

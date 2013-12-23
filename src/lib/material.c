@@ -11,6 +11,8 @@
 #include "util.h"
 #include "material.h"
 #include "scene.h"
+#include "node.h"
+#include "memory.h"
 
 // CLONE
 
@@ -18,7 +20,7 @@ t_material *material_clone(t_material *material)
 {
 	if(material)
 	{
-		t_material *clone = material_new(material->name);
+		t_material *clone = material_new(material->id.name);
 		vcp3i(clone->idcol,material->idcol);
 		clone->id_node = material->id_node;
 
@@ -67,22 +69,21 @@ t_material *material_rebind(t_scene *sc,void *ptr)
 
 void _material_free(t_material *material)
 {
-	free(material);
+	mem_free( material, sizeof( t_material));
 }
 
 void material_free(t_material *material)
 {
-	free(material);
+	mem_free( material, sizeof( t_material));
 }
 
 // NEW
 
 t_material *material_new(const char *name)
 {
-	t_material *material = (t_material *)malloc(sizeof(t_material));
+	t_material *material = (t_material *)mem_malloc(sizeof(t_material));
 
-	set_name(material->name,name);
-	material->users=0;
+	id_init(&material->id, name);
 
 	material->specular[0]=1;
 	material->specular[1]=1;

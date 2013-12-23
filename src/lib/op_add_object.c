@@ -8,11 +8,10 @@
  */
 
 #include "op.h"
-
 #include "context.h"
 #include "node.h"
 #include "scene.h"
-
+#include "vlst.h"
 #include "ctx.h"
 #include "event.h"
 #include "term.h"
@@ -24,15 +23,53 @@
 #include "object.h"
 #include "file.h"
 #include "screen.h"
-
 #include "block.h"
 #include "brick.h"
+#include "geometry.h"
+
+// GEO
+
+t_geo *op_new_geo( t_context *C, const char *name)
+{
+	t_geo *geo = geo_make( C,"geo");
+	return geo;
+}
+
+t_geo_point *op_new_geo_point( t_context *C, const char *name)
+{
+	t_geo_point *geo_point = geo_point_make( C,"point");
+	return geo_point;
+}
+
+t_geo_edge *op_new_geo_edge( t_context *C, const char *name)
+{
+	t_geo_edge *geo_edge = geo_edge_make( C, "edge");
+	return geo_edge;
+}
+
+t_geo_array *op_new_geo_array( t_context *C,const char *name)
+{
+	t_geo_array *geo_array = geo_array_make( C, "array");
+	return geo_array;
+}
 
 
+// VLST
+t_vlst *op_new_vlst(const char *name, t_data_type type, int size)
+ {
+	 t_vlst *vlst = vlst_make("vlst", type, size, 0);
+	 /*
+	 t_block *block = vlst->ref;
+	 if( block)
+	 {
+		t_brick *brick = block_brick_get( block, "vlst");
+	 	brick->plug_intern.state.store_data_memory = 0;
+	 }
+	 */
+	 return vlst;
+ }
 
-#define LOGOUT 1
-
-// new mesh cube
+// CUBE
 t_node *op_new_cube(const char *name)
 {
 	int tot_vertex=8;
@@ -47,6 +84,31 @@ t_node *op_new_cube(const char *name)
 	t_node *cube = mesh_make(name,tot_vertex,tot_face,tot_quad,tot_tri,verts,quads,tris);
 
 	return cube;
+}
+
+// PLANE
+t_node *op_new_plane(const char *name)
+{
+	int tot_vertex=4;
+	int tot_face=1;
+	int tot_quad=1;
+	int tot_tri=0;
+
+	float *verts=plane_verts; 	//u_volume
+	int *quads=plane_quads;		//u_volume
+	int *tris = NULL;
+		
+	t_node *plane = mesh_make(name,tot_vertex,tot_face,tot_quad,tot_tri,verts,quads,tris);
+
+	return plane;
+}
+
+// EMPTY MESH
+
+t_node *op_new_empty_mesh(const char *name)
+{
+	t_node *node = mesh_make(name,0,0,0,0,NULL,NULL,NULL);
+	return node;
 }
 
 void *op_new_set(const char *name)
@@ -100,10 +162,38 @@ void *op_new_camera(const char *name)
 	return node_object;
 }
 
+
 void *op_add_camera(t_brick *brick)
 {
 	t_node *node = op_new_camera("default");
 	return node;
+}
+
+void *op_add_object(const char *name)
+{
+	t_context *C = ctx_get();
+	scene_store(C->scene,1);
+	t_node *node_object=object_add("point",name);
+	t_object *object=node_object->data;
+	scene_store(C->scene,0);
+	return object;
+}
+
+void *op_add_mesh(const char *name)
+{
+	t_context *C = ctx_get();
+	scene_store(C->scene,1);
+
+
+		t_node *node_mesh=mesh_make_empty("mesh");
+		t_node *node_object=object_add("mesh","cube");
+
+		t_object *object=node_object->data;
+		object->cls->link(object,node_mesh);
+
+	scene_store(C->scene,0);
+
+	return object;
 }
 
 void* op_add_camera_main(void)
@@ -156,68 +246,29 @@ void *op_add_cube(t_brick *brick)
 	return NULL;
 }
 
-// default 
-void *op_add_default(t_brick *brick)
-{
-	op_add_light(NULL);
-	op_add_cube(NULL);
-	op_add_viewport(NULL);
-	return NULL;
-}
-
-void *op_add_uv_cube(t_brick *brick)
-{
+void *op_add_plane(t_brick *brick)
+{ 
 	t_context *C=ctx_get();
-	term_print(C->term,"+ uv cube");
+	term_print(C->term,"+ plane");
 
 	scene_store(C->scene,1);
 
-		t_node *node_mesh = op_new_cube("me_uv_cube");
-		t_node *node_object=object_add("mesh","ob_uvcube");
-
-		// add uvs
-		t_mesh *mesh = node_mesh->data;
-		set_name(mesh->texture_name,"image");
-		mesh->state.with_texture=1;
-		mesh_uv_add(mesh,uvlst,48);
+		t_node *node_mesh=op_new_plane("plane");
+		t_node *node_object=object_add("mesh","plane");
 
 		t_object *object=node_object->data;
 		object->cls->link(object,node_mesh);
 
 	scene_store(C->scene,0);
 	return NULL;
-}	
-
-t_node *op_add_new_wire_cube(t_node *n)
-{
-	t_context *C=ctx_get();
-
-	scene_store(C->scene,1);
-
-		t_node *node_mesh = op_new_cube("me_wire_cube");
-		t_node *node_object=object_add("mesh","ob_wire_cube");
-
-		t_mesh *mesh = node_mesh->data;
-
-		// set draw modes
-		mesh->state.with_line=1;
-		
-		// add lines
-		mesh_line_cube_add(mesh);
-
-		t_object *object = node_object->data;
-		object->cls->link(object,node_mesh);
-
-	scene_store(C->scene,0);
-
-	return node_object;
 }
 
-void *op_add_wire_cube(t_brick *brick)
+// default 
+void *op_add_default(t_brick *brick)
 {
-	t_context *C=ctx_get();
-	term_print(C->term,"+ wire cube");
-	op_add_new_wire_cube(NULL);
+	op_add_light(NULL);
+	op_add_cube(NULL);
+	op_add_viewport(NULL);
 	return NULL;
 }
 
@@ -247,6 +298,116 @@ void *op_add_mn(t_brick *brick)
 	t_context *C=ctx_get();
 	C->event->callback=add_mn;
 	screen_switch_by_name("screen_browser");
+
+	return NULL;
+}
+
+void *op_add_empty_object(t_brick *brick)
+{
+	t_context *C=ctx_get();
+	scene_store(C->scene,1);
+	t_node *node_object=object_add("mesh","cube");
+	(void) node_object;
+	scene_store(C->scene,0);
+	return NULL;
+}
+
+void *op_add_empty_mesh(t_brick *brick)
+{
+	t_context *C = ctx_get();
+	scene_store(C->scene,1);
+	op_new_empty_mesh("mesh");
+	scene_store(C->scene,0);
+	return NULL;
+}
+
+void op_mesh_add_brick_vertex(t_context *C,t_mesh *mesh)
+{
+	// New Block
+	t_node *_node_block=add_block(C,"vertex");
+	t_block *_block=_node_block->data;
+
+	// add vertex
+	scene_add_ref(C->scene,"struct_ref","mesh","vertex",&mesh->vertex,mesh);
+	add_part_vlst(C,_block,dt_vlst,"vertex",mesh->vertex);
+	t_brick *brick_count = block_brick_get(_block,"count:");
+
+	// Bind
+	brick_binding_add(brick_count, dt_int, &mesh->var.tot_vertex);
+
+	// Ref
+	scene_add_ref(C->scene,"struct_ref","mesh","tot vertex",&mesh->var.tot_vertex,mesh);
+
+	// Add Global offset
+	add_block_offset(C,_block);
+}
+
+void *op_add_empty_vlst(t_brick *brick)
+{
+	t_context *C = ctx_get();
+	scene_store(C->scene,1);
+	op_new_vlst("vlst", dt_float, 3);
+	scene_store(C->scene,0);
+
+	return NULL;
+}
+
+void *op_add_empty_float_vlst(t_brick *brick)
+{
+	t_context *C = ctx_get();
+	scene_store(C->scene,1);
+	op_new_vlst("vlst", dt_float, 3);
+	scene_store(C->scene,0);
+
+	return NULL;
+}
+
+void *op_add_empty_int_vlst(t_brick *brick)
+{
+	t_context *C = ctx_get();
+	scene_store(C->scene,1);
+	op_new_vlst("vlst", dt_int, 2);
+	scene_store(C->scene,0);
+
+	return NULL;
+}
+
+void *op_add_empty_geometry(t_brick *brick)
+{
+	t_context *C = ctx_get();
+	scene_store(C->scene,1);
+	op_new_geo( C, "geo");
+	scene_store(C->scene,0);
+
+	return NULL;
+}
+
+void *op_add_empty_geo_point(t_brick *brick)
+{
+	t_context *C = ctx_get();
+	scene_store(C->scene,1);
+	op_new_geo_point( C, "point");
+	scene_store(C->scene,0);
+
+	return NULL;
+}
+
+void *op_add_empty_geo_edge(t_brick *brick)
+{
+	t_context *C = ctx_get();
+	scene_store(C->scene,1);
+	op_new_geo_edge( C, "edge");
+	scene_store(C->scene,0);
+
+	return NULL;
+}
+
+void *op_add_geo_array(t_brick *brick)
+{
+	t_context *C = ctx_get();
+	scene_store(C->scene,1);
+	op_new_geo_array( C, "array");
+	scene_store(C->scene,0);
 
 	return NULL;
 }

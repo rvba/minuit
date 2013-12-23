@@ -32,6 +32,7 @@ t_scene *scene_get(void)
 
 void scene_store(t_scene *scene, int val)
 {
+	if( scene->debug_all) printf("scene_store %d\n", val);
 	if(val)
 	{
 		scene->store_stack++;
@@ -43,61 +44,8 @@ void scene_store(t_scene *scene, int val)
 		if(scene->store_stack ==  0)
 			scene->store = 0;
 	}
-}
 
-// LOG
-
-void scene_log_loop_var(t_lst *lst)
-{
-	t_link *l;
-	t_node *n;
-
-	ulog((LOG_SCENE_NODES,"lst:%s\n",lst->name));
-	for(l=lst->first;l;l=l->next)
-	{
-		n=l->data;
-		ulog((LOG_SCENE_NODES,"node id:%d cls:%s\n",n->id,node_name_get(n->type)));
-	}
-}
-
-void scene_log_loop(t_lst *lst)
-{
-	t_link *l;
-	t_node *n;
-	t_generic *g;
-
-	ulog((LOG_SCENE_NODES,"lst:%s\n",lst->name));
-	for(l=lst->first;l;l=l->next)
-	{
-		n=l->data;
-		g=(t_generic *)n->data;
-		ulog((LOG_SCENE_NODES,"node id:%d\tcls:%s\tname:%s\n",n->id,node_name_get(n->type),g->name));
-	}
-}
-
-void scene_log(t_scene *sc)
-{
-	//scene_log_loop(sc->nodes);
-	/*
-	scene_log_loop(sc->bricks);
-	scene_log_loop(sc->blocks);
-	scene_log_loop(sc->textures);
-	scene_log_loop(sc->materials);
-	scene_log_loop(sc->files);
-	scene_log_loop(sc->meshes);
-	scene_log_loop(sc->cameras);
-	scene_log_loop(sc->lights);
-	scene_log_loop(sc->objects);
-	scene_log_loop(sc->screens);
-	scene_log_loop(sc->lists);
-	scene_log_loop(sc->images);
-	scene_log_loop(sc->vlst);
-	scene_log_loop(sc->dicts);
-	scene_log_loop(sc->symbols);
-	*/
-
-	scene_log_loop(sc->datas);
-	scene_log_loop_var(sc->vars);
+	if( scene->debug_all) printf("scene_store store=%d\n", scene->store);
 }
 
 // get lst
@@ -122,7 +70,7 @@ t_lst *scene_lst_get(t_scene *sc,const char *type)
 	else if(is(type,"symbols"))  lst=sc->symbols; 
 	else if(is(type,"viewport"))  lst=sc->viewports; 
 	else if(is(type,"set"))  lst=sc->sets; 
-	else if(is(type,"graph"))  lst=sc->graphs; 
+	else if(is(type,"rhizome"))  lst=sc->rhizomes; 
 
 	if(lst)
 	{
@@ -152,7 +100,7 @@ t_node *scene_get_data(t_scene *sc,void *ptr)
 	return NULL;
 }
 
-// ptr was malloc'ed, find data var with ptr address
+// ptr was mem_malloc'ed, find data var with ptr address
 
 t_node *scene_get_var(t_scene *sc,void *ptr)
 {
@@ -169,64 +117,6 @@ t_node *scene_get_var(t_scene *sc,void *ptr)
 	return NULL;
 }
 
-t_node *scene_node_get_by_id_global(t_scene *sc,int id)
-{
-	t_link *l;
-	t_node *n;
-
-	t_node *node=NULL;
-
-	for(l=sc->nodes->first;l;l=l->next)
-	{
-		n=l->data;
-		if(n->id==id)
-		{
-			node=n;
-			break;
-		}
-	}
-
-	if(node)
-	{
-		return node;
-	}
-	else
-	{
-		printf("[ERROR scene_node_get_by_id_global] Node not found\n");
-		return NULL;
-	}
-}
-
-// get node by old id
-
-t_node *scene_node_get_by_id_old(t_scene *sc,const char *type,int id)
-{
-	t_lst *lst=(t_lst *)scene_lst_get(sc,type);
-
-	if(lst)
-	{
-		t_link *l;
-		t_node *n;
-		for(l=lst->first;l;l=l->next)
-		{
-			n=l->data;
-			if(n->id_old==id)
-			{
-				return n;
-			}
-		}
-		
-		printf("[ERROR scene_node_get_by_id_OLD] Node not found\n");
-		return NULL;
-	}
-	else
-	{
-		printf("[ERROR scene_node_get] Unknown type:%s\n",type);
-		return NULL;
-	}
-}
-
-
 // get node by type/name
 
 t_node *scene_node_get(t_scene *sc,const char *type,const char *name)
@@ -235,7 +125,7 @@ t_node *scene_node_get(t_scene *sc,const char *type,const char *name)
 
 	if(lst)
 	{
-		return lst_find_node_by_name(lst,name);
+		return list_find_node_by_name(lst,name);
 	}
 	else
 	{
@@ -249,6 +139,10 @@ t_node *scene_node_get(t_scene *sc,const char *type,const char *name)
 
 
 
+void scene_color_tmp_reset(t_scene *scene)
+{
+	bzero(COLOR,3);
+}
 
 // switch tmp mode
 
@@ -320,6 +214,19 @@ void scene_color_get(t_scene *sc,int *color)
 	scene_set_color(sc);
 }
 
+void scene_switch_edit_mode(t_scene *scene, int state)
+{
+	if(scene->edit_mode &&! state)
+	{
+		scene->edit_mode = 0;
+	}
+	else if(!scene->edit_mode && state)
+	{
+		scene->edit_mode = 1;
+	}
+
+	//scene_color_switch_mode(scene);
+}
 
 /***	 ID	***/
 
@@ -330,32 +237,21 @@ int scene_id_get(t_scene *sc)
 	return sc->id;
 }
 
-
-
-
 /***	 FREE	***/
 
-
-void scene_mem_remove(t_scene *sc,t_node *node)
+void scene_node_free( t_scene *sc, t_node *node)
 {
-	mem_remove(node->id_chunk);
-	mem_remove(node->id_chunk_self);
-}
+	if( sc->debug_all) printf("scene_node_free %s \n",data_name_get(node->cls->type));
 
-void scene_node_free(t_scene *sc,t_node *node)
-{
 	// Remove from Lst
-	lst_remove_node(node->cls->lst,node);
-	lst_remove_node(sc->nodes,node);
-
-	// Remove from Memory
-	scene_mem_remove(sc,node);
+	lst_link_delete_by_id( node->cls->lst, node->id);
+	lst_link_delete_by_id( sc->nodes, node->id);
 
 	// Free Struct
 	node->cls->free(sc,node);
 
 	// Free Node
-	free(node);
+	mem_free(node, sizeof(t_node));
 }
 
 
@@ -373,7 +269,6 @@ void scene_cleanup(t_scene *sc)
 		{
 			t_node *node = link->data;
 			scene_node_free(sc,node);
-			lst_remove_node(sc->stack,node);
 		}
 	}
 
@@ -389,7 +284,7 @@ int scene_node_delete(t_scene *sc,t_node *node)
 {
 	if(sc->is_ready)
 	{
-		lst_add(sc->stack,node,node_name_get(node->type));
+		lst_add(sc->stack,node,data_name_get(node->type));
 		return 1;
 	}
 	else
@@ -398,67 +293,18 @@ int scene_node_delete(t_scene *sc,t_node *node)
 	}
 }
 
-t_node *scene_struct_get(t_scene *sc,void *ptr)
+void scene_delete( t_scene *sc, void *data)
 {
-	//XXX!!! var is not generic
-	t_generic *g=(t_generic *)ptr;
-
-	t_link *l;
-	t_node *n;
-	t_node *node=NULL;
-
-	for(l=sc->nodes->first;l;l=l->next)
+	t_id *id = (t_id *) data;
+	if( ( id->id > 0)  && ( id->id <= sc->id))
 	{
-		n=l->data;
-		if(n->type!=nt_var)
-		{
-			if(n->id==g->id)
-			{
-				node=n;
-				break;
-			}
-		}
-	}
-
-	return node;
-}
-
-void scene_struct_delete(t_scene *sc,void *ptr)
-{
-	//XXX!!! var is not generic
-	t_generic *g=(t_generic *)ptr;
-
-	t_link *l;
-	t_node *n;
-	t_node *node=NULL;
-
-	for(l=sc->nodes->first;l;l=l->next)
-	{
-		n=l->data;
-		if(n->type!=nt_var)
-		{
-			if(n->id==g->id)
-			{
-				node=n;
-				break;
-			}
-		}
-	}
-
-	if(node)
-	{
-		scene_node_free(sc,node);
+		t_node *node = id->node;
+		if( node) scene_node_free( sc, node);
+		else printf("[WARNING] scene_delete: node is null\n");
 	}
 	else
 	{
-		if(!ptr)
-		{
-			printf("[ERROR scene_struct_delete] pointer is void\n");
-		}
-		else
-		{
-			printf("[ERROR scene_struct_delete] Can't find node of [%s]\n",g->name);
-		}
+		printf("[WARNING] scene_delete: id (%d) is wrong\n", id->id);
 	}
 }
 
@@ -472,43 +318,6 @@ void scene_free(t_scene *sc)
 
 /***	 LOAD	***/
 
-
-
-// get new id's for app_node
-void scene_data_load(t_scene *sc)
-{
-	t_link *l;
-	t_node *node;
-
-	for(l=sc->datas->first;l;l=l->next)
-	{
-		node=l->data;
-
-		if(node->type==nt_data)
-		{	
-			t_data *data=(t_data *)node->data;
-
-			if(is(data->type,"app_node"))
-			{
-				t_node *old=scene_node_get_by_id_old(sc,data->target,data->id_node);
-
-				printf(">> %s\n",data->name);
-
-				if(old)
-				{
-					//set new id
-					data->id_node=old->id;
-				}
-				else
-				{
-					printf("[ERROR scene_data_load]\n");
-				}
-			}
-		}
-	}
-}
-
-
 void scene_node_load(t_scene *sc,t_node *node)
 {
 	ulog((LOG_SCENE,"scene_node_load\n"));
@@ -516,18 +325,20 @@ void scene_node_load(t_scene *sc,t_node *node)
 	// INIT NODE && DATA
 	node->cls->init(node);
 
-	if(node->type==nt_var)
+	if(node->type==dt_var)
 	{
-		lst_add(node->cls->lst,node,node_name_get(node->type));
+		lst_add(node->cls->lst,node,data_name_get(node->type));
 		lst_add(sc->nodes,node,"var");
 	}
 	else
 	{
-		t_generic *g = (t_generic *) node->data;
-		lst_add(sc->nodes,node,g->name);
+		t_id *id = (t_id *) node->data;
+		lst_add(sc->nodes, node, id->name);
 		// option have no lst
 		if(node->cls->lst)
-			lst_add(node->cls->lst,node,node_name_get(node->type));
+		{
+			lst_add(node->cls->lst,node,data_name_get(node->type));
+		}
 	}
 }
 
@@ -540,8 +351,9 @@ void scene_node_load(t_scene *sc,t_node *node)
 
 // node
 
-t_node *scene_add_node(t_scene *sc,t_node_type type,const char *name)
+t_node *scene_add_node(t_scene *sc,t_data_type type,const char *name)
 {
+	if( sc->debug_all) printf("scene_add_node %s %s\n",data_name_get( type), name);
 	// new node
 	t_node *node = node_new(type);
 
@@ -550,8 +362,6 @@ t_node *scene_add_node(t_scene *sc,t_node_type type,const char *name)
 
 	// build data (allocate struct data (!var), add node->id=g->id (!var))
 	node->cls->build(node,name);
-	//[TODO]
-	//node->cls->init(node);
 
 	// add to local list
 	if(node->cls->lst) lst_add(node->cls->lst,node,name); 
@@ -560,35 +370,16 @@ t_node *scene_add_node(t_scene *sc,t_node_type type,const char *name)
 	lst_add(sc->nodes,node,name);
 
 	// store data
-	if(sc->store)
-	{
-		if(type==nt_var)
-		{
-			// stored by scene_add_data_var
-		}
-		else
-		{
-			// store node && get chunk indice
-			node->id_chunk_self=mem_store(ct_node,type,sizeof(t_node),1,node);
-
-			// store data && get chunk indice
-			node->id_chunk=mem_store(ct_data,node->type,node->cls->size,1,node->data);
-
-			// copy chunk indice to generic
-			t_generic *g=(t_generic *)node->data;
-			g->id_chunk=node->id_chunk;
-
-		}
-	}
+	if(sc->store) node->store = 1; 
 
 	return node;
 }
 
 // add regular struct
 
-t_node *scene_add(t_scene *sc,t_node_type type,const char *name)
+t_node *scene_add(t_scene *sc,t_data_type type,const char *name)
 {
-	ulog((LOG_SCENE,"scene_add %s %s \n",node_name_get(type),name));
+	ulog((LOG_SCENE,"scene_add %s %s \n",data_name_get(type),name));
 
 	t_node *node=scene_add_node(sc,type,name);
 
@@ -600,8 +391,9 @@ t_node *scene_add(t_scene *sc,t_node_type type,const char *name)
 t_node *scene_add_data(t_scene *sc,const char *type,const char *target,const char *name,void *ptr)
 {
 	ulog((LOG_SCENE,"scene_add_data %s %s %s\n",type,target,name));
+	//printf("scene_add_data %s %s %s\n",type,target,name);
 
-	t_node *node=scene_add_node(sc,nt_data,name);
+	t_node *node=scene_add_node(sc,dt_data,name);
 	t_data *data=node->data;
 
 	set_name(data->type,type);
@@ -619,7 +411,7 @@ t_node *scene_add_data_node(t_scene *sc,const char *type,const char *target,cons
 {
 	ulog((LOG_SCENE,"scene_add_node %s %s %s\n",type,target,name));
 
-	t_node *node=scene_add_node(sc,nt_data,name);
+	t_node *node=scene_add_node(sc,dt_data,name);
 	t_data *data=node->data;
 
 	set_name(data->type,type);
@@ -669,7 +461,7 @@ t_node *scene_add_ref(t_scene *sc,const char *type,const char *target,const char
 {
 	ulog((LOG_SCENE,"scene_add_ref %s %s %s\n",type,target,name));
 
-	t_node *node=scene_add_node(sc,nt_data,name);
+	t_node *node=scene_add_node(sc,dt_data,name);
 	t_data *data=node->data;
 
 	set_name(data->type,type); 
@@ -700,13 +492,10 @@ void scene_add_data_var(t_scene *sc,const char *name,const char *name_var,int si
 	data->size=size;
 
 	// VAR
-	t_node *node_var=scene_add(sc,nt_var,"var");
+	t_node *node_var=scene_add(sc,dt_var,"var");
 	node_var->data=ptr;
 	node_var->id_ptr=ptr;
-
-	// store 
-	node_var->id_chunk_self=mem_store(ct_node,nt_var,sizeof(t_node),1,node_var);
-	node_var->id_chunk=mem_store(ct_data,nt_var,size,1,ptr);
+	node_var->size = size;
 }
 
 /***	INIT	***/
@@ -714,7 +503,7 @@ void scene_add_data_var(t_scene *sc,const char *name,const char *name_var,int si
 t_scene *scene_new(void)
 {
 	// new scene
-	t_scene *sc = (t_scene *)malloc(sizeof(t_scene));
+	t_scene *sc = (t_scene *)mem_malloc(sizeof(t_scene));
 
 	// init
 	sc->id=1;
@@ -727,6 +516,8 @@ t_scene *scene_new(void)
 	sc->is_ready=1;
 	sc->has_generic_viewport = 0;
 	sc->store_stack = 0;
+	sc->edit_mode = 0;
+	sc->debug_all = 0;
 
 	// build lists
 	sc->nodes=lst_new("nodes");
@@ -754,7 +545,9 @@ t_scene *scene_new(void)
 	sc->viewports=lst_new("viewports");
 	sc->sets=lst_new("sets");
 	sc->bindings=lst_new("bindings");
+	sc->rhizomes=lst_new("rhizomes");
 	sc->graphs=lst_new("graphs");
+	sc->geos=lst_new("geos");
 
 	sc->tmp_colors=lst_new("tmp_colors");
 

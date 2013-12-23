@@ -7,6 +7,7 @@
  *
  */
 
+#include "node.h"
 #include "context.h"
 #include "scene.h"
 #include "action.h"
@@ -25,8 +26,7 @@
 #include "plug.h"
 #include "set.h"
 #include "screen.h"
-#include "graph.h"
-
+#include "rhizome.h"
 #include "op.h"
 
 void ctx_ui_freeze(t_context *C)
@@ -208,7 +208,7 @@ void ctx_ui_background(t_context *C)
 		// desselect current node
 		if (node)
 		{
-			node->cls->set_state_selected(node,0);
+			ctx_scene_selection(C, node, 0);
 			C->scene->selected=NULL; 
 		}
 
@@ -313,34 +313,35 @@ void ctx_block_set_update(t_context *C)
 		t_lst *lst = set->blocks;
 		t_link *l = lst->first;
 
-		if(l)
-		{
-			// For All Blocks
+		//if(!set->processing)
+		//{
+			if(l)
+			{
+				for(;l;l=l->next)
+				{
+					t_block *b;
+					b=l->data;
+					// Block Update
+					b->cls->update(b);
+				}
+			}
+
+			l = set->rhizomes->first;
+
 			for(;l;l=l->next)
 			{
-				t_block *b;
-				b=l->data;
-				// Block Update
-				b->cls->update(b);
+				t_rhizome *rhizome = l->data;
+				t_block *block;  
+				t_link *l_block = rhizome->blocks->first;
+
+				for(;l_block;l_block = l_block->next)
+				{
+					block = l_block->data;
+					// Block Update
+					block->cls->update(block);
+				}
 			}
-		}
-
-		l = set->graphs->first;
-
-		for(;l;l=l->next)
-		{
-			t_graph *graph = l->data;
-			t_block *block;  
-			t_link *l_block = graph->blocks->first;
-
-			// For All Graphs
-			for(;l_block;l_block = l_block->next)
-			{
-				block = l_block->data;
-				// Block Update
-				block->cls->update(block);
-			}
-		}
+		//}
 	}
 }
 
@@ -360,19 +361,37 @@ void ctx_ui_intro(t_context *C)
 
 t_lst *EXE=NULL;
 
+int action_check( t_action *action)
+{
+	t_brick *brick = action->brick;
+	t_set *set = brick->block->set;
+	if(set->processing) return 0;
+	else return 1;
+}
+
 void ctx_exe(t_context *C)
 {
 	t_link *l;
 	t_action *action;
 
-	for(l=EXE->first;l;l=l->next)
+	t_lst *tmp = lst_copy( EXE);
+	lst_cleanup(EXE);
+
+	for(l=tmp->first;l;l=l->next)
 	{
 		action = l->data;
-		action->act(action->args);
-		action_free(action);
+		if( action_check( action))
+		{
+			action->act(action);
+			action_free(action);
+		}
+		else
+		{
+			exe_add_action( action);
+		}
 	}
 
-	lst_cleanup(EXE);
+	lst_free( tmp);
 }
 
 void exe_init(void)
@@ -417,6 +436,9 @@ void ctx_ui(t_context *C)
 
 	// test background 
 	ctx_ui_background(C);
+
+	if(C->app->mouse->button_left == button_pressed) C->event->ui.typing_end = 1;
+	C->event->is_mouse_over_brick = 0;
 
 	// update blocks
 	ctx_block_mouse_update(C); 

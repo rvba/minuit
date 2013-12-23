@@ -30,7 +30,7 @@ void block_update_data(t_block *block)
 		// update txt
 		if(brick->state.draw_value)
 		{
-			if(is(brick->name,"camera_main")) printf("block:brick\n");
+			if(is(brick->id.name,"camera_main")) printf("block:brick\n");
 			brick_build_txt(brick);
 		}
 
@@ -149,9 +149,7 @@ void block_draw_outline(t_block *block)
 		float *pos=block->pos;
 		int line_width;
 
-		// set line width
-		if(block->state.is_mouse_over) line_width=2; 
-		else  line_width=1; 
+		line_width = 1;
 
 		float width=block->width;
 
@@ -176,9 +174,10 @@ void block_draw_outline(t_block *block)
 		points[10]=d[1];
 		points[11]=d[2];
 
-		if(block->state.is_root)
+		if(block->state.is_mouse_over)
 			line_width = 2;
 
+		// Rectangle
 		skt_closedline(points,tot,color,line_width);
 
 		if(C->ui->show_step)
@@ -187,10 +186,9 @@ void block_draw_outline(t_block *block)
 			float p[3] = {0,0,0};
 			float vv[3] = {-10,-10,0};
 			vadd(p,a,vv);
-			sprintf(order,"%d",block->graph_order);
+			sprintf(order,"%d",block->rhizome_order);
 
 			t_txt *txt = txt_new(order);
-			txt_init(txt,order);
 			glPushMatrix();
 				glTranslatef(p[0],p[1],p[2]);
 				txt->draw(txt);
@@ -198,22 +196,33 @@ void block_draw_outline(t_block *block)
 			txt_free(txt);
 		}
 
-		if(block->graph)
+		// Rhizome Position
+		if(C->ui->show_rhizome_order)
 		{
+			if(block->rhizome)
+			{
+				char order[3];
+				float p[3] = {0,0,0};
+				float vv[3] = {-10,-10,0};
+				vadd(p,a,vv);
+				sprintf(order,"%d",block->rhizome_pos);
 
-		char order[3];
-		float p[3] = {0,0,0};
-		float vv[3] = {-10,-10,0};
-		vadd(p,a,vv);
-		sprintf(order,"%d",block->graph_pos);
-
-		t_txt *txt = txt_new(order);
-		txt_init(txt,order);
-		glPushMatrix();
-			glTranslatef(p[0],p[1],p[2]);
-			txt->draw(txt);
-		glPopMatrix();
-		txt_free(txt);
+				glPushMatrix();
+					glTranslatef(p[0],p[1],p[2]);
+					if(block->state.is_root)
+					{
+						t_txt *root = txt_new("root");
+						root->draw(root);
+						txt_free(root);
+					}
+					else
+					{
+						t_txt *txt = txt_new(order);
+						txt->draw(txt);
+						txt_free(txt);
+					}
+				glPopMatrix();
+			}
 		}
 
 	}

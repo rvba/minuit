@@ -19,16 +19,14 @@
 
 typedef struct Image
 {
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
+	t_id id;
 
 	int width;
 	int height;
 	int bpp; 		//byte per pixel
 	GLenum format;
 
+	size_t size;
 	unsigned char *data;
 
 }t_image;

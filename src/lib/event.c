@@ -10,10 +10,11 @@
 #include "context.h"
 #include "event.h"
 #include "util.h"
+#include "memory.h"
 
 t_event *event_new(void)
 {
-	t_event *event=(t_event*)malloc(sizeof(t_event));
+	t_event *event=(t_event*)mem_malloc(sizeof(t_event));
 
 	bzero(&event->ui,sizeof(t_state_event_ui));
 
@@ -31,6 +32,7 @@ t_event *event_new(void)
 	event->ui.typing_start = 0;
 	event->ui.typing_end = 0;
 	event->ui.use_point_global_width = 1;
+	event->ui.use_line_global_width = 1;
 	event->ui.use_scale = 1;
 
 	event->ui.pan = 0;
@@ -55,6 +57,8 @@ t_event *event_new(void)
 	event->with_face=1;
 	event->with_face_outline=0;
 	event->with_point=0;
+	event->with_edge = 0;
+	event->with_edge_color = 0;
 	event->with_point_id=0;
 	event->with_highlight=WITH_HIGHLIGHT;
 	event->sketch_with_scale=SKETCH_WITH_SCALE;
@@ -78,6 +82,9 @@ t_event *event_new(void)
 	event->debug_terminal=DEBUG_TERMINAL;
 	event->debug_loop = DEBUG_LOOP;
 	event->debug_key = DEBUG_KEY;
+	event->debug_plug = DEBUG_PLUG;
+	event->debug_all = DEBUG_ALL;
+	event->debug_to_file = DEBUG_TO_FILE;
 
 	event->free_scene=FREE_SCENE;
 
@@ -130,9 +137,8 @@ t_event *event_new(void)
 	event->load_error = 0;
 
 	event->use_threading = 1;
-	event->graph_computing = 0;
-	event->graph_updated = 1;
-	event->graph_init = 0;
+	event->rhizome_updated = 1;
+	event->rhizome_init = 0;
 
 	event->color_transition = 0;
 	event->color_transition_use = 1;

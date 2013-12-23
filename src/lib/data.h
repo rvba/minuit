@@ -17,34 +17,15 @@
 struct Scene;
 struct Data;
 
-typedef enum Data_Type
-{
-	dt_null,
-	dt_int,
-	dt_uint,
-	dt_float,
-	dt_char,
-	dt_string,
-	dt_pointer,
-	dt_vertex,
-	dt_face,
-	dt_mesh,
-	dt_lst,
-	dt_vlst,
-	dt_camera,
-	dt_object,
-	dt_selector,
-	dt_trigger,
-	dt_operator,
-	dt_vector,
-	dt_viewport,
-	dt_binding,
-	dt_brick,
-	dt_block,
-	dt_graph,
-	dt_set,
 
-}t_data_type;
+typedef struct Datum
+{
+	t_id id;
+	t_data_type type;
+	int count;
+	size_t size;
+	void *data;
+}t_datum;
 
 typedef struct Data_Class
 {
@@ -55,10 +36,7 @@ typedef struct Data_Class
 
 typedef struct Data
 {
-	int id; 
-	int id_chunk;
-	short users;
-	char name[_NAME_];
+	t_id id;
 	t_data_cls *cls;
 
 	char type[_NAME_];
@@ -92,11 +70,24 @@ extern char name_trigger[];
 extern char name_operator[];
 extern char name_vector[];
 extern char name_viewport[];
-extern char name_graph[];
+extern char name_rhizome[];
 extern char name_brick[];
 extern char name_block[];
-extern char name_graph[];
 extern char name_set[];
+extern char name_geo_point[];
+extern char name_geo_edge[];
+extern char name_geo[];
+extern char name_dict[];
+extern char name_symbol[];
+extern char name_var[];
+extern char name_link[];
+extern char name_data[];
+extern char name_screen[];
+extern char name_option[];
+extern char name_binding[];
+extern char name_material[];
+extern char name_light[];
+
 
 char *		data_name_get(t_data_type);
 void		print_type(t_data_type type);
@@ -107,5 +98,7 @@ t_data *	data_rebind(struct Scene *sc,void *ptr);
 t_data *	data_new(const char *name);
 void		data_free(t_data *data);
 
+t_datum *datum_new(t_data_type type, int count, void *data);
+void datum_free(t_datum *datum);
 
 #endif

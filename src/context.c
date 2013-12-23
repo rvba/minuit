@@ -25,6 +25,7 @@
 #include "process.h"
 #include "list.h"
 #include "brick.h"
+#include "util.h"
 
 t_context *CONTEXT;
 
@@ -39,21 +40,26 @@ t_context *ctx_get(void)
 	return CONTEXT;
 }
 
+t_scene *ctx_scene_get(void)
+{
+	return CONTEXT->scene;
+}
+
 t_context *ctx_new(int argc,char **argv)
 {
-	t_context *C = (t_context *)malloc(sizeof(t_context));
+	t_context *C = (t_context *) mem_malloc(sizeof(t_context));
 
 	C->app = app_new(argc,argv);
-	C->event=event_new();
-	C->scene=scene_new(); 
-	C->engine=engine_new("engine");
-	C->draw=draw_new();
-	C->skt=skt_new();
-	C->ui=ui_new();
-	C->term=term_new("main");
-	C->terms = lst_new("terms");
-	C->mode=mode_new();
-	C->server=server_new();
+	C->event = event_new();
+	C->scene = scene_new(); 
+	C->engine = engine_new( "engine");
+	C->draw = draw_new();
+	C->skt = skt_new();
+	C->ui = ui_new();
+	C->term = term_new( "main");
+	C->terms = lst_new( "terms");
+	C->mode = mode_new( "mode");
+	C->server = server_new( "server");
 
 	return C;
 }
@@ -106,8 +112,6 @@ void ctx_app(t_context *C)
 	C->app->frame++;
 	// set timer
 	if(C->app->timer_count) C->app->timer += C->app->timer_add;
-	// engine
-	engine_cleanup(C->engine);
 }
 
 void ctx_mode(t_context *C)
@@ -153,10 +157,10 @@ void ctx_reset(t_context *C)
 void ctx_update(t_context *C)
 {
 	ctx_app(C);
-	ctx_camera(C);
 	ctx_keyboard(C);	
 	ctx_ui(C);
 	ctx_scene(C); 
+	ctx_camera(C);
 	ctx_mode(C);
 }
 
@@ -174,6 +178,8 @@ void ctx_handler(void)
 		ctx_compute(CONTEXT);
 		ctx_render(CONTEXT);
 		ctx_reset(CONTEXT);
+
+		engine_cleanup(CONTEXT->engine);
 	}
 }
 

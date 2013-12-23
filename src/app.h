@@ -123,7 +123,8 @@ struct App
 	int argc;
 	char **argv;
 	char name[_NAME_];
-
+	
+	char version[_NAME_];
 	char git[GIT];
 	char app_name[_NAME_];
 	

@@ -70,6 +70,8 @@ void ctx_render_set_full_pass(t_context *C)
 	C->draw->background_color[3]=C->ui->background_color[3];
 
 	C->draw->with_point=C->event->with_point;
+	C->draw->with_edge=C->event->with_edge;
+	C->draw->with_edge_color=C->event->with_edge_color;
 	C->draw->with_point_id=C->event->with_point_id;
 	C->draw->with_face=C->event->with_face;
 	C->draw->with_face_outline=C->event->with_face_outline;
@@ -78,12 +80,10 @@ void ctx_render_set_full_pass(t_context *C)
 void ctx_get_selection(t_context *C)
 {
 	// PIXEL
-	unsigned char pixel[3];
-	memset(pixel,3,0);
+	unsigned char pixel[]={0,0,0};
 
 	// VIEWPORT
-	GLint viewport[4];
-	memset(viewport,4,0);
+	GLint viewport[]={0,0,0,0};
 	glGetIntegerv(GL_VIEWPORT,viewport);
 
 	int x = C->app->mouse->x;

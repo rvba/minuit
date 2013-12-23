@@ -75,6 +75,7 @@ typedef struct State_Event_UI
 	int typing_end:1;
 
 	int use_point_global_width:1;
+	int use_line_global_width:1;
 	int use_scale:1;
 
 	int pan_x;
@@ -131,6 +132,8 @@ typedef struct Event
 	int with_depth;
 	int with_point;
 	int with_point_id;
+	int with_edge;
+	int with_edge_color;
 	int with_face;
 	int with_face_outline;
 	int with_highlight;
@@ -152,6 +155,9 @@ typedef struct Event
 	int debug_terminal;
 	int debug_loop;
 	int debug_key;
+	int debug_plug;
+	int debug_all;
+	int debug_to_file;
 
 	int free_scene;
 	int last_frame; //last recorded camera
@@ -199,9 +205,8 @@ typedef struct Event
 	int load_error;
 
 	int use_threading;
-	int graph_computing;
-	int graph_updated;
-	int graph_init;
+	int rhizome_updated;
+	int rhizome_init;
 
 	int color_transition;
 	int color_transition_use;

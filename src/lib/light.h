@@ -22,10 +22,7 @@ typedef struct Light t_light;
 
 struct Light
 {
-	int id; //prev id_gl
-	int id_chunk;
-	short users;
-	char name[_NAME_];
+	t_id id;
 
 	int idcol[3];
 	int id_gl;

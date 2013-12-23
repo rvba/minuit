@@ -8,6 +8,8 @@
  */
 
 #include "util.h"
+#include "node.h"
+#include "scene.h"
 #include "ui.h"
 #include "draw.h"
 #include "txt.h"
@@ -18,8 +20,16 @@
 #include "brick.h"
 #include "data.h"
 #include "object.h"
+#include "log.h"
 
+#include "app.h"
+#include "clock.h"
 #define _PRECISION "%-.4f"
+
+int brick_switch_value_get( t_brick *brick)
+{
+	return  *( (int *) brick->plug_intern.data);
+}
 
 int brick_get_width(t_brick *brick)
 {
@@ -69,7 +79,6 @@ void brick_build_width(t_brick *brick)
 		}
 	}
 
-//	brick->geom.width=tot;
 	brick->geom.width_txt=tot;
 	if(brick->state.draw_plugs) brick->geom.width = tot + brick->geom.height * 2; // add plugs
 	else brick->geom.width = tot;
@@ -92,7 +101,6 @@ void brick_build_txt(t_brick *brick)
 		switch(type)
 		{
 			case dt_float:
-				//snprintf(txt,30,_PRECISION,drf_float(plug_intern->data));
 				snprintf(txt,30,"%.2f",drf_float(plug_intern->data));
 				txt_data->data_change(txt_data,txt);
 				break;
@@ -290,6 +298,31 @@ void brick_draw_in(t_brick *brick)
 	}
 }
 
+void brick_outline_points( float *points, float *pos, float width, float height)
+{
+	float a[3]={pos[0],pos[1],0};
+	float b[3]={a[0],a[1]+height,0};
+	float c[3]={b[0]+width,b[1],0};
+	float d[3]={c[0],c[1]-height,0};
+
+	points[0]=a[0];
+	points[1]=a[1];
+	points[2]=a[2];
+
+	points[3]=b[0];
+	points[4]=b[1];
+	points[5]=b[2];
+
+	points[6]=c[0];
+	points[7]=c[1];
+	points[8]=c[2];
+
+	points[9]=d[0];
+	points[10]=d[1];
+	points[11]=d[2];
+}
+
+
 void brick_draw_outline(t_brick *brick)
 {
 	t_context *C=ctx_get();
@@ -305,12 +338,6 @@ void brick_draw_outline(t_brick *brick)
 		float height = brick->geom.height;
 		int line_width=1;
 
-		// add plugs width
-		if(brick->state.draw_plugs)
-		{
-		//	width+=((brick->geom.height)*2);
-		}
-
 		// set line width
 		if(brick->state.is_mouse_over)
 		{
@@ -318,32 +345,10 @@ void brick_draw_outline(t_brick *brick)
 		}
 
 		// build points
-
 		float points[tot*3];
-
-		float a[3]={pos[0],pos[1],0};
-		float b[3]={a[0],a[1]+height,0};
-		float c[3]={b[0]+width,b[1],0};
-		float d[3]={c[0],c[1]-height,0};
-
-		points[0]=a[0];
-		points[1]=a[1];
-		points[2]=a[2];
-
-		points[3]=b[0];
-		points[4]=b[1];
-		points[5]=b[2];
-
-		points[6]=c[0];
-		points[7]=c[1];
-		points[8]=c[2];
-
-		points[9]=d[0];
-		points[10]=d[1];
-		points[11]=d[2];
+		brick_outline_points( points, pos, width, height);
 
 		//  draw polyline
-
 		float *color;
 		float red[3] = {1,0,0};
 		float green[3] = {0,1,0};
@@ -369,14 +374,45 @@ void brick_draw_outline(t_brick *brick)
 		}
 		else
 		{
-			if(brick->state.is_mouse_over) 
+			if(brick->state.is_mouse_over && brick->type != bt_switch) 
 			{
 				skt_closedline(points,tot,C->ui->front_color,line_width);
 				skt_closedline_filled(points,tot,C->ui->back_color,line_width);
 			}
 			else
 			{
-				skt_closedline(points,tot,C->ui->front_color,line_width);
+
+				if(brick->type == bt_switch)
+				{
+					skt_closedline(points,tot,C->ui->front_color,line_width);
+
+					float offset = 2;
+					float voffset[3] = { offset, offset,0 };
+					int val = brick_switch_value_get( brick);
+					float *color;
+					float *color_line;
+					if( val) 
+					{
+						color = C->ui->front_color;
+						color_line = C->ui->back_color;
+					}
+					else
+					{
+						color = C->ui->back_color;
+						color_line = C->ui->front_color;
+					}
+					vadd( pos, pos, voffset);
+					width = width - ( offset * 2);
+					height = height - ( offset * 2);
+					brick_outline_points( points, pos, width, height);
+
+					skt_closedline(points, tot, color_line, 1);
+					skt_closedline_filled( points, tot, color, line_width);
+				}
+				else
+				{
+					skt_closedline(points,tot,C->ui->front_color,line_width);
+				}
 			}
 		}
 	}
@@ -461,15 +497,7 @@ void brick_draw_txt(t_brick *brick)
 				glTranslatef(brick->geom.height+1,0,0);
 			}
 
-			// switch
-			if(brick->cls->type==bt_switch)
-			{
-				brick_draw_switch_val(brick);
-				glTranslatef(25,0,0);
-			}
-
 			//margin
-
 			if(!brick->state.draw_plugs)
 			{
 				glTranslatef(brick->geom.margin,0,0);
@@ -481,15 +509,43 @@ void brick_draw_txt(t_brick *brick)
 			// draw NAME
 			if(brick->state.draw_name)
 			{
+				if( brick->type == bt_switch)
+				{
+					int val = brick_switch_value_get( brick);
+					if( val) brick->txt_name.use_front_color = 0;
+					else  brick->txt_name.use_front_color = 1;
+				}
+
 				brick->txt_name.draw(&brick->txt_name);
 				glTranslatef(brick->txt_name.width,0,0);
 				glTranslatef(5,0,0);
 			}
 
 			// draw DATA
-			if(brick->state.draw_value || C->ui->show_step)
+			if(brick->mode==bm_typing)
 			{
-				brick->txt_data.draw(&brick->txt_data);
+				t_txt *txt = txt_new("");
+				set_name_long(txt->name, C->event->buffer_char);
+				txt_draw( txt);
+				txt_free(txt);
+
+				unsigned int sec = C->app->clock->sec;
+				if( sec%2)
+				{
+					glTranslatef((C->event->buffer_char_counter)*5,0,0);
+					float a[] = {0,0,0};
+					float b[] = {8,0,0};
+					float c[] = {1,1,1};
+					skt_line(a,b,1,c);
+				}
+			}
+			else
+			{
+				// draw DATA
+				if(brick->state.draw_value || C->ui->show_step)
+				{
+					brick->txt_data.draw(&brick->txt_data);
+				}
 			}
 
 		glPopMatrix();
@@ -500,32 +556,24 @@ void brick_draw_check_context(t_brick *brick)
 {
 	t_context *C = ctx_get();
 	t_node *node = C->scene->selected;
-	t_node_type type; 
-	t_node_type context = brick->context;
-	t_object *object;
+	t_data_type type; 
+	t_data_type context = brick->context;
 
 	if(brick->state.is_contextual)
 	{
 		brick->state.draw = 0;
 
-		if(node)
+		if(brick->state.poll)
 		{
-			type = node->type;
-
-			if(context == nt_object)
+			brick->state.draw = brick->poll( brick);
+		}
+		else
+		{
+			if(node)
 			{
-				if(type == nt_object)
-					brick->state.draw = 1;
-			}
-			else
-			{
-				if(type == nt_object)
-				{
-					object = node->data;
+				type = node->type;
 
-					if((context == nt_mesh) && object->mesh)
-						brick->state.draw = 1;
-				}
+				if( context == type) brick->state.draw = 1;
 			}
 		}
 	}

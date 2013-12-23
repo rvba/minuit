@@ -21,6 +21,60 @@
 #include "sketch.h"
 #include "event.h"
 #include "ctx.h"
+#include "viewport.h"
+#include "camera.h"
+#include "memory.h"
+
+t_camera *screen_camera(t_screen *screen)
+{
+	t_lst *lst = screen->viewports;
+	t_link *link = lst->first;
+	t_viewport *viewport = link->data;
+	t_camera *camera = viewport->camera;
+
+	return camera;
+}
+
+t_screen *screen_default(const char *name, void (* draw)(t_screen *s))
+{
+	t_context *C=ctx_get();
+
+	t_node *node=scene_add(C->scene,dt_screen,name);
+	t_screen *screen=node->data;
+
+	screen->keymap=keymap_generic;
+	screen->draw=draw;
+
+	lst_add(C->ui->screens,node,name);
+
+	// Lst
+	t_node *node_lst = scene_add( C->scene, dt_list, "lst");
+	t_lst *lst = node_lst->data;
+
+	screen->viewports = lst;
+
+	// Viewport
+	t_node *node_viewport = scene_add( C->scene, dt_viewport, name);
+	t_viewport *viewport = node_viewport->data;
+
+	// Camera
+	t_node *node_camera = scene_add( C->scene, dt_camera, name);
+	t_camera *camera = node_camera->data;
+
+	viewport->camera = camera;
+
+	lst_add(screen->viewports, viewport, name);
+
+	return screen;
+}
+
+void screen_always(t_screen *screen)
+{
+	screen->is_active=1;
+	screen->is_visible=1;
+	screen->always_active=1;
+	screen->always_visible=1;
+}
 
 void screen_on(t_screen *screen)
 {
@@ -42,7 +96,7 @@ void screen_block_add(t_screen *screen, t_block *block)
 
 	if(screen->blocks)
 	{
-		list_add(screen->blocks, block);
+		list_add_data(screen->blocks, block);
 	}
 	else
 	{
@@ -60,7 +114,7 @@ void screen_switch_by_name(char *name)
 {
 	t_context *C=ctx_get();
 	// check if screen exists
-	t_node *node=lst_find_node_by_name(C->ui->screens,name);
+	t_node *node = list_find_node_by_name(C->ui->screens,name);
 
 	if(node)
 	{
@@ -72,7 +126,7 @@ void screen_switch_by_name(char *name)
 			t_screen *this_screen=this_node->data;
 
 			// enable screen
-			if(is(this_screen->name,name))
+			if(is(this_screen->id.name, name))
 			{
 				this_screen->is_visible=1;
 				this_screen->is_active=1;
@@ -115,12 +169,23 @@ void screen_generic(t_screen *screen)
 	float color[]={0,0,0,0};
 	glTranslatef(p[0],p[1],p[2]);
 	glScalef(scale,scale,scale);
-	txt_draw_direct_2d(screen->name,p,color,scale);
+	txt_draw_direct_2d(screen->id.name, p, color, scale);
 	glPopMatrix();
 
 	glPopMatrix();
 
 	op_camera_switch_3d(C, camera);
+}
+
+void ui_draw_status(void)
+{
+	t_context *C=ctx_get();
+	if(C->ui->show_status)
+	{
+		C->event->ui.use_scale = 0;
+
+
+	}
 }
 
 // SCREEN MAIN
@@ -139,6 +204,7 @@ void screen_main(t_screen *screen)
 	op_camera_switch_2d(C,camera);
 	ui_draw_status_bar();
 	ui_draw_term();
+	ui_draw_status();
 	ui_draw_grid();
 
 	ui_draw_menu();
@@ -170,7 +236,7 @@ void screen_sets(t_screen *screen)
 	ui_draw_status_bar();
 	ui_draw_term();
 	ui_draw_grid();
-	//ui_draw_graphs();
+	//ui_draw_rhizomes();
 
 	glPushMatrix();
 	glLoadIdentity();
@@ -230,7 +296,7 @@ t_screen *screen_clone(t_screen *screen)
 {
 	if(screen)
 	{
-		t_screen *clone = screen_new(screen->name);
+		t_screen *clone = screen_new(screen->id.name);
 
 		clone->is_active = screen->is_active;
 		clone->is_visible = screen->is_visible;
@@ -242,8 +308,8 @@ t_screen *screen_clone(t_screen *screen)
 		clone->pan_x = screen->pan_x;
 		clone->pan_y = screen->pan_y;
 
-		clone->blocks = lst_clone(screen->blocks, dt_block);
-		clone->viewports = lst_clone(screen->viewports, dt_viewport);
+		clone->blocks = list_clone(screen->blocks, dt_block);
+		clone->viewports = list_clone(screen->viewports, dt_viewport);
 
 		clone->draw = screen->draw;
 		clone->keymap = screen->keymap;
@@ -260,10 +326,10 @@ t_screen *screen_clone(t_screen *screen)
 
 void _screen_free(t_screen *screen)
 {
-	if(screen->blocks) _list_free(screen->blocks, dt_block);
-	if(screen->viewports) _list_free(screen->viewports,dt_viewport);
+	if(screen->blocks) list_free_data(screen->blocks, dt_block);
+	if(screen->viewports) list_free_data(screen->viewports,dt_viewport);
 
-	free(screen);
+	mem_free( screen, sizeof( t_screen));
 }
 
 void screen_free(t_screen *screen)
@@ -286,12 +352,9 @@ t_screen *screen_rebind(t_scene *scene, void *ptr)
 
 t_screen *screen_new(const char *name)
 {
-	t_screen *screen=(t_screen *)malloc(sizeof(t_screen));
+	t_screen *screen=(t_screen *)mem_malloc(sizeof(t_screen));
 
-	screen->id=0;
-	screen->id_chunk=0;
-	set_name(screen->name,name);
-	screen->users=0;
+	id_init(&screen->id, name);
 
 	screen->is_visible=0;
 	screen->is_active=0;
@@ -305,6 +368,7 @@ t_screen *screen_new(const char *name)
 
 	screen->blocks = NULL;
 	screen->viewports = NULL;
+	screen->data = NULL;
 	
 	return screen;
 }

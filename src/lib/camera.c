@@ -13,6 +13,7 @@
 #include "node.h"
 #include "op.h"
 #include "camera.h"
+#include "memory.h"
 
 void cls_camera_init(t_camera *camera)
 {
@@ -37,7 +38,7 @@ t_camera *camera_clone(t_camera *source)
 
 void camera_show(t_camera *camera)
 {
-	printf("Camera: %s\n",camera->name);
+	printf("Camera: %s\n",camera->id.name);
 	printf("frustum\n");
 	printf("left %f\n",camera->left);
 	printf("right %f\n",camera->right);
@@ -84,12 +85,12 @@ void camera_copy(t_camera *target,t_camera *source)
 
 void _camera_free(t_camera *camera)
 {
-	free(camera);
+	mem_free( camera, sizeof( t_camera));
 }
 
 void camera_free(t_camera *camera)
 {
-	free(camera);
+	mem_free( camera, sizeof( t_camera));
 }
 
 t_node *camera_add(const char *name)
@@ -101,7 +102,7 @@ t_node *camera_add(const char *name)
 t_node *camera_make(const char *name)
 {
 	t_context *C=ctx_get();
-	t_node *node_camera=scene_add(C->scene,nt_camera,name);
+	t_node *node_camera=scene_add(C->scene,dt_camera,name);
 	return node_camera;
 }
 
@@ -131,7 +132,7 @@ void *camera_get_ref(t_camera *camera, const char *ref)
 
 t_camera *camera_clone(t_camera *camera)
 {
-	t_camera *clone = camera_new(camera->name);
+	t_camera *clone = camera_new(camera->id.name);
 
 	clone->cls = camera->cls;
 	clone->is_moving = camera->is_moving;
@@ -176,14 +177,12 @@ t_camera *camera_rebind(t_scene *scene, void *ptr)
 	return ptr;
 }
 
+
 t_camera *camera_new(const char *name)
 {
-	t_camera *camera  = (t_camera *)malloc(sizeof(t_camera));
+	t_camera *camera  = (t_camera *)mem_malloc(sizeof(t_camera));
 
-	camera->id=0;
-	camera->id_chunk=0;
-	set_name(camera->name,name);
-	camera->users=0;
+	id_init(&camera->id, name);
 
 	camera->restrict_matrix=0;
 	camera->type = camera_frustum;

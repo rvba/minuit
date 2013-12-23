@@ -14,12 +14,20 @@
 #include "scene.h"
 #include "light.h"
 #include "list.h"
+#include "vlst.h"
 #include "object.h"
 
 #include "context.h"
 #include "op.h"
 #include "camera.h"
 #include "event.h"
+
+#include "sketch.h"
+#include "ui.h"
+#include "memory.h"
+#include "node.h"
+#include "material.h"
+#include "texture.h"
 
 t_draw *DRAW;
 
@@ -91,142 +99,286 @@ void draw_light(t_draw *draw, t_node *node)
 	}
 }
 
-void draw_mesh_line(t_draw *draw, t_mesh *mesh)
+void draw_points(t_draw *draw, int count, float *points, float *colors, float *color)
 {
-	/*
-	if(mesh->lines)
+	t_context *C = ctx_get();
+
+	if(colors) glEnableClientState(GL_COLOR_ARRAY);
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	float *c = C->ui->front_color;
+
+	if(C->skt->point_smooth) glEnable(GL_POINT_SMOOTH);
+	else glDisable(GL_POINT_SMOOTH);
+
+	float scale;
+	if(C->event->ui.use_point_global_width)
+		scale = C->skt->scale * C->skt->point_size;
+	else
+		scale = 1;
+
+	int width = 1;
+
+	glPointSize(width * scale);
+	glVertexPointer(3,GL_FLOAT,0,points);
+
+	if(draw->mode == mode_selection)
 	{
-		int i;
-		int pos=0;
-		for(i=0;i<mesh->var.totline;i+=2)
+		scale*=10;
+	}
+
+	if(colors)
+	{
+		glColorPointer(3,GL_FLOAT,0,colors);
+	}
+	else if(color)
+	{
+		glColor3f(color[0],color[1],color[2]);
+	}
+	else
+	{
+		glColor3f(c[0],c[1],c[2]);
+	}
+
+
+
+	glDrawArrays(GL_POINTS,0,count);
+
+	if(colors) glDisableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+}
+
+void draw_get_mesh_color(t_mesh *mesh, float *c)
+{
+	c[0] = (float)mesh->idcol[0]/255;
+	c[1] = (float)mesh->idcol[1]/255;
+	c[2] = (float)mesh->idcol[2]/255;
+}
+
+void build_color_index(float *c,int count)
+{
+	int i;
+	int j=0;
+	int cc[3]={0,0,0};
+
+	for(i=0;i<count;i++)
+	{
+		float ccc[3];
+		cconv(ccc,cc);
+
+		c[j+0] = ccc[0];
+		c[j+1] = ccc[1];
+		c[j+2] = ccc[2];
+
+		j+=3;
+		color_id(cc);
+	}
+}
+
+void draw_mesh_edges(t_draw *draw, t_mesh *mesh)
+{
+	t_vlst *edges = mesh->edges;
+	t_vlst *points = mesh->vertex;
+
+	if(edges)
+	{
+		if(draw->mode == mode_selection)
 		{
-			int id1 = mesh->lines[pos];
-			int id2 = mesh->lines[pos+1];
+		}
+		else
+		{
+			int count = edges->count;
+			int a,b;
+			float *x;
+			float *y;
+			int *v = edges->data;
+			float *p = points->data;
+			int l = points->length;
+			int i;
+			int j=0;
+			float *color;
+			int width = 1;
 
-			t_vertex *v1 = &mesh->verts[id1];
-			t_vertex *v2 = &mesh->verts[id2];
+			int limit = points->count * l;
 
-			float *ve1 = v1->co;
-			float *ve2 = v2->co;
-
-			// selection pass
-			if(draw->mode==mode_selection) 
+			for(i=0; i < count; i++)
 			{
-			}
-			// render pass
-			else
-			{
-				float *color=draw->front_color;
-				if(mesh->state.is_selected)
+				a = v[j];
+				b = v[j+1];
+
+				if((a >= limit || b >= limit) || (a < 0 || b < 0))
 				{
-					skt_line(ve1,ve2,2,color);
+					printf("[DRAW ERROR] EDGE IS OFF LIMIT\n");
 				}
 				else
 				{
-					skt_line(ve1,ve2,1,color);
+					x =  p + (a * l);
+					y = p + (b * l);
+
+					if(draw->with_edge_color && mesh->edges_color)
+					{
+						color = grf_float(mesh->edges_color->data,i*3);
+					}
+					else
+					{
+						t_context *C = ctx_get();
+						color = C->draw->front_color;
+					}
+
+					skt_line(x,y,width,color);
 				}
+
+				j+=2;
 			}
 
-			pos+=2;
 		}
 	}
-	*/
 }
 
-void draw_points(t_draw *draw,t_mesh *mesh)
+void draw_mesh_points(t_draw *draw, t_mesh *mesh)
 {
-	int i;
+	t_vlst *vlst_vertex = mesh->vertex;
 
-	float *v=mesh->vertex->data;
-
-	for(i=0;i<mesh->var.tot_vertex;i++)
+	if( vlst_vertex)
 	{
-		/*
-		if(draw->with_point_id && mesh->vertex)
+		t_vlst *vlst_colors = mesh->colors;
+		float *vertex = vlst_vertex->data;
+		float *colors = NULL;
+		float *color = NULL;
+		float selection_color[3];
+		float selected_color[3]={1,0,0};
+		float yellow[3] = {1,1,0};
+		float green[3] = {0,1,0};
+		float red[3] = {1,0,0};
+
+		int count = mesh->var.tot_vertex;
+		if(!count) count = 1;
+		float  ci[count*3];
+
+		if(draw->mode == mode_selection)
 		{
-			glEnable(GL_LIGHTING);
-
-				char text[5];
-				sprintf(text,"%d,",i);
-				float v[3];
-				float a[3]={.1,.1,.1};
-
-				vcp(v,mesh->verts[i].co);
-				vadd(v,v,a);
-				type_font_3d(text,mesh->verts[i].co);
-
-			glDisable(GL_LIGHTING);
+			if(mesh->state.is_edit_mode)
+			{
+				build_color_index(ci,count);
+				colors = ci;
+			}
+			else
+			{
+				draw_get_mesh_color(mesh,selection_color);
+				color = selection_color;
+			}
 		}
-		*/
-
-		float *color=draw->front_color;
-		//float *pos = mesh->verts[i].co;
+		else
+		{
+			if(mesh->state.is_edit_mode)
+			{
+				color = yellow;
+			}
+			else if(mesh->state.is_selected)
+			{
+				color = selected_color;
+			}
+			else if(vlst_colors)
+			{
+				colors = vlst_colors->data; 
+			}
+			else
+			{
+				color = draw->front_color;
+			}
+		}
 		
-		float pos[3];
-		pos[0]=v[0];
-		pos[1]=v[1];
-		pos[2]=v[2];
+		if(color || colors)
+		{
+			draw_points(draw,mesh->var.tot_vertex,vertex,colors,color);
+		}
 
-		skt_point(pos,1,color);
+		if(mesh->state.is_edit_mode && (mesh->state.selected_vertex >= 0))
+		{
+			int indice = mesh->state.selected_vertex;
+			if( indice >= 0 && indice < count)
+			{
+				t_vlst *vlst = mesh->vertex;
+				float *v = vlst->data;
+				int i = mesh->state.selected_vertex * 3;
+				skt_point(v+i,3,red);
+			}
+		}
 
-		v+=3;
+		if(mesh->state.is_edit_mode && (mesh->state.hover_vertex >= 0))
+		{
+			int indice = mesh->state.hover_vertex;
+			if( indice >= 0 && indice < count)
+			{
+				t_vlst *vlst = mesh->vertex;
+				float *v = vlst->data;
+				int i = mesh->state.hover_vertex * 3;
+				skt_point(v+i,3,green);
+			}
+		}
 	}
 }
 
 void draw_mesh_direct_faces(t_draw *draw, t_mesh *mesh)
 {
 	t_vlst *vertex=mesh->vertex;
-	GLfloat *v=vertex->data;	// vertices 
 	t_vlst *quads=mesh->quads;
-	int i,j,n;
-	// quads
-	if(quads)
+
+	if(vertex)
 	{
-		int *q=quads->data;		// quad indices
-		t_vlst *vlst_quad=mesh->quad_normal;
-		float *normals=vlst_quad->data;
-
-		float outline[4*3];
-
-		j=0;
-		for(i=0;i<quads->count;i++)
+		GLfloat *v=vertex->data;	// vertices 
+		int i,j,n;
+		// quads
+		if(quads)
 		{
-			glBegin(GL_QUADS);
-			for(n=0;n<4;n++)
-			{
-				// normal
-				if(draw->with_normal)
-					glNormal3f(normals[(i*3)+0],normals[(i*3)+1],normals[(i*3)+2]);
+			int *q=quads->data;		// quad indices
+			t_vlst *vlst_quad=mesh->quad_normal;
+			float *normals=vlst_quad->data;
 
-				if(draw->mode == mode_selection)
+			float outline[4*3];
+
+			j=0;
+			for(i=0;i<quads->count;i++)
+			{
+				glBegin(GL_QUADS);
+				for(n=0;n<4;n++)
 				{
-					float c[3];
-					c[0] = (float)mesh->idcol[0]/255;
-					c[1] = (float)mesh->idcol[1]/255;
-					c[2] = (float)mesh->idcol[2]/255;
-					glColor3f(c[0],c[1],c[2]);
+					// normal
+					if(draw->with_normal)
+						glNormal3f(normals[(i*3)+0],normals[(i*3)+1],normals[(i*3)+2]);
+
+					// selection
+					if(draw->mode == mode_selection)
+					{
+						float c[3];
+						c[0] = (float)mesh->idcol[0]/255;
+						c[1] = (float)mesh->idcol[1]/255;
+						c[2] = (float)mesh->idcol[2]/255;
+						glColor3f(c[0],c[1],c[2]);
+					}
+
+					// vertex
+					if(draw->with_face)
+						glVertex3f(v[(q[j]*3)],v[(q[j]*3)+1],v[(q[j]*3)+2]);
+
+					outline[(n*3)+0] = v[(q[j]*3)+0]; 
+					outline[(n*3)+1] = v[(q[j]*3)+1]; 
+					outline[(n*3)+2] = v[(q[j]*3)+2]; 
+
+					j++;
 				}
+				glEnd();
 
-				// vertex
-				if(draw->with_face)
-					glVertex3f(v[(q[j]*3)],v[(q[j]*3)+1],v[(q[j]*3)+2]);
-
-				outline[(n*3)+0] = v[(q[j]*3)+0]; 
-				outline[(n*3)+1] = v[(q[j]*3)+1]; 
-				outline[(n*3)+2] = v[(q[j]*3)+2]; 
-
-				j++;
-			}
-			glEnd();
-
-			if(draw->with_face_outline)
-			{
-				glDisable(GL_LIGHTING);
-				if(draw->with_face)
-					skt_closedline(outline,4,draw->back_color,1);
-				else
-					skt_closedline(outline,4,draw->front_color,1);
-				glEnable(GL_LIGHTING);
+				if(draw->with_face_outline)
+				{
+					glDisable(GL_LIGHTING);
+					if(draw->with_face)
+						skt_closedline(outline,4,draw->back_color,1);
+					else
+						skt_closedline(outline,4,draw->front_color,1);
+					glEnable(GL_LIGHTING);
+				}
 			}
 		}
 	}
@@ -299,17 +451,13 @@ void draw_mesh_direct_selection_stencil(t_draw *draw, t_mesh *mesh)
 
 void draw_mesh_direct(t_draw *draw,t_scene *scene,t_mesh *mesh)
 {
-	t_vlst *vertex=mesh->vertex;
-	GLfloat *v=vertex->data;	// vertices 
+	// Init Buffers
+	if(mesh->state.buffer_type!=buffer_direct)
+	{
+		mesh_init_buffers(mesh,buffer_direct); 
+	}
 
-	int i,j;
-
-	t_skt *skt=skt_get();
-
-	// BUFFERS
-
-	if(mesh->state.buffer_type!=buffer_direct) mesh_init_buffers(mesh,buffer_direct); 
-
+	// Material
 	if (draw->with_material && draw->mode != mode_selection)
 	{
 		t_material *material = mesh->material;
@@ -329,52 +477,21 @@ void draw_mesh_direct(t_draw *draw,t_scene *scene,t_mesh *mesh)
 		}
 	}
 
-	//points
+	// Points
 	if(draw->with_point)
 	{
-		t_vlst *vlst_color;
-		float *color;
+		draw_mesh_points(draw,mesh);
+	}
 
-		if(mesh->state.has_color) 
-		{
-			vlst_color=mesh->colors;
-			color=vlst_color->data;
-		}
-		else
-		{
-			color=draw->front_color;
-		}
-
-
-		glEnable(GL_POINT_SMOOTH);
-		glPointSize(1*skt->point_size*skt->scale);
-
-		if(!mesh->state.has_color)
-		{
-			glColor3f(color[0],color[1],color[2]);
-		}
-
-		glBegin(GL_POINTS);
-
-		j=0;
-		for(i=0;i<vertex->count;i++)
-		{
-			if(mesh->state.has_color)
-			{
-				glColor3f(color[0],color[1],color[2]);
-				//XXX
-				color+=3;
-			}
-
-			glVertex3f(v[j],v[j+1],v[j+2]);
-
-			j+=3;
-		}
-		glEnd();
+	// Edges
+	if(draw->with_edge)
+	{
+		draw_mesh_edges(draw,mesh);
 	}
 
 	glShadeModel(GL_FLAT);
 
+	// Light
 	if (draw->with_light && draw->mode != mode_selection)
 	{
 		glEnable(GL_LIGHTING);
@@ -567,8 +684,11 @@ void draw_mesh(t_draw *draw, t_scene *scene, t_mesh *mesh)
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_LIGHTING);
 
-	// points
-	if(draw->with_point) draw_points(draw,mesh);
+	// Points
+	if(draw->with_point)
+	{
+		draw_mesh_points(draw,mesh);
+	}
 }
 
 void draw_lights(t_draw *draw, t_scene *scene)
@@ -622,6 +742,7 @@ void draw_objects(t_draw *draw, t_scene *scene)
 		}
 		else
 		{
+			//printf("ob:%s\n",ob->name);
 			object->cls->draw(object);
 		}
 	}
@@ -661,7 +782,8 @@ void draw_init(t_draw *draw)
 	// clear
 	if(draw->with_clear)
 	{
-		draw_clear(c[0],c[1],c[2],c[3]);
+		//draw_clear(c[0],c[1],c[2],c[3]);
+		draw_clear(c[0],c[1],c[2],0);
 	}
 
 	// set depth
@@ -691,10 +813,17 @@ void draw_init(t_draw *draw)
 		glDisable(GL_BLEND);
 	}
 
+	t_context *C = ctx_get();
+	C->event->ui.use_line_global_width = 1;
+	skt_update( C);
+
 }
 
 void draw_scene(t_draw *draw, t_scene *scene)
 {
+	if(scene->edit_mode) draw->edit_mode = 1;
+	else draw->edit_mode = 0;
+
 	draw_lights(draw,scene);
 	draw_objects(draw,scene);
 	draw_axis_world(draw);
@@ -702,7 +831,7 @@ void draw_scene(t_draw *draw, t_scene *scene)
 
 t_draw *draw_new(void)
 {
-	t_draw *draw = (t_draw *)malloc(sizeof(t_draw));
+	t_draw *draw = (t_draw *)mem_malloc(sizeof(t_draw));
 
 	DRAW=draw;
 	
@@ -723,7 +852,7 @@ t_draw *draw_new(void)
 	draw->with_clear=DRAW_WITH_CLEAR;
 	draw->with_ui=DRAW_WITH_UI;
 
-	draw->with_restrict_matrix=1;
+	draw->with_restrict_matrix=0;
 
 	draw->mode_direct=1;
 
@@ -735,6 +864,8 @@ t_draw *draw_new(void)
 	draw->with_point_id=DRAW_WITH_POINT_ID;
 	draw->with_face=DRAW_WITH_FACE;
 	draw->with_face_outline=DRAW_WITH_FACE_OUTLINE;
+	draw->with_edge = DRAW_WITH_EDGE;
+	draw->with_edge_color = DRAW_WITH_EDGE_COLOR;
 	draw->with_highlight=DRAW_WITH_HIGHLIGHT;
 	draw->with_light=DRAW_WITH_LIGHT;
 	draw->with_depth=DRAW_WITH_DEPTH;
@@ -744,8 +875,11 @@ t_draw *draw_new(void)
 	draw->with_grid=0;
 	draw->divx=2;
 	draw->divy=2;
+	draw->usex=0;
+	draw->usey=0;
 
 	draw->draw_lights = 1;
+	draw->edit_mode = 0;
 
 	return draw;
 }

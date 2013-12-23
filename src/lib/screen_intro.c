@@ -22,6 +22,7 @@
 #include "event.h"
 #include "ctx.h"
 #include "viewport.h"
+#include "memory.h"
 
 t_txt *txt_intro;
 t_txt *txt_version;
@@ -33,11 +34,12 @@ int star_init=0;
 int star_count=10000;
 int *stars_chance=NULL;
 float *stars_velocity=NULL;
+int *stars_size = NULL;
 float intro_intensity=1;
 
 int get_sign(void)
 {
-	int i = u_randrange(0,2);
+	int i = rnd_range(0,1);
 	if(i>=1)
 		return -1;
 	else
@@ -48,7 +50,7 @@ int get_chance(void)
 {
 	int tot = 500;
 	int range = 400;
-	int i = u_randrange(0,tot);
+	int i = rnd_range(0,tot);
 	if(i>=range)
 		return 1;
 	else
@@ -119,7 +121,6 @@ void screen_intro(t_screen *screen)
 	float scale= 5;
 	float scv = .3;
 	float p[3]={(C->app->window->width)/4,(C->app->window->height)/2,0};
-	float offset = 10;
 	int dist = 500;
 	int color_factor = 100;
 
@@ -127,17 +128,18 @@ void screen_intro(t_screen *screen)
 	if(!star_init)
 	{
 		star_init = 1;
-		stars = malloc(sizeof(float)* star_count * 3);
-		stars_color = malloc(sizeof(float)* star_count * 3);
-		stars_chance = malloc(sizeof(int) * star_count);
-		stars_velocity = malloc(sizeof(float) * star_count);
+		stars = mem_malloc(sizeof(float)* star_count * 3);
+		stars_color = mem_malloc(sizeof(float)* star_count * 3);
+		stars_chance = mem_malloc(sizeof(int) * star_count);
+		stars_velocity = mem_malloc(sizeof(float) * star_count);
+		stars_size = mem_malloc(sizeof(int) * star_count);
 		for(i=0;i<star_count;i++)
 		{
-			stars[(i*3)+0] = u_randrange(0,dist)*get_sign();
-			stars[(i*3)+1] = u_randrange(0,dist)*get_sign();
-			stars[(i*3)+2] = u_randrange(0,dist)*get_sign();
+			stars[(i*3)+0] = rnd_range(0,dist)*get_sign();
+			stars[(i*3)+1] = rnd_range(0,dist)*get_sign();
+			stars[(i*3)+2] = rnd_range(0,dist)*get_sign();
 
-			float c = (float)u_randrange(50,color_factor)/color_factor;
+			float c = (float)rnd_range(50,color_factor)/color_factor;
 			stars_color[(i*3)+0] = c;
 			stars_color[(i*3)+1] = c;
 			stars_color[(i*3)+2] = c;
@@ -145,13 +147,16 @@ void screen_intro(t_screen *screen)
 			if(get_chance()) stars_chance[i] = 1;
 			else stars_chance[i] = 0;
 
-			stars_velocity[i] = (float)u_randrange(0,1000)/1000;
+			stars_velocity[i] = (float)rnd_range(0,1000)/1000;
+			int size = rnd_range(0,100);
+			if(size > 90) stars_size[i] = rnd_range(2,3);
+			else stars_size[i] = 1;
 		}
 
 		txt_intro=txt_new(C->app->app_name);
 		txt_intro->use_bitmap_font=0;
 
-		txt_version=txt_new("0.4");
+		txt_version=txt_new(C->app->version);
 		txt_version->use_bitmap_font=0;
 	}
 
@@ -173,11 +178,6 @@ void screen_intro(t_screen *screen)
 	if(C->ui->show_intro || C->ui->always_show_intro)
 	{
 		glPushMatrix();
-		glTranslatef(p[0]-offset,p[1]-offset,p[2]);
-
-		glPopMatrix();
-
-		glPushMatrix();
 		glLoadIdentity();
 		glTranslatef(p[0],p[1],p[2]);
 
@@ -186,6 +186,7 @@ void screen_intro(t_screen *screen)
 		C->ui->zoom = 5;
 
 		glPushMatrix();
+
 
 		if(C->ui->show_intro)
 		{
@@ -230,6 +231,7 @@ void screen_intro(t_screen *screen)
 			float *col=stars_color;
 			float col_var[3];
 			float iii = (float) C->app->frame / 100;
+			int size;
 			for(i=0;i<star_count;i++)
 			{
 				if(iii > 1) iii= 1;
@@ -237,7 +239,10 @@ void screen_intro(t_screen *screen)
 				vmul(col_var,iii*intro_intensity);
 
 				star_intensity(i);
-				skt_point(s,3,col_var);
+				C->event->ui.use_point_global_width = 0;
+				size = stars_size[i];
+				skt_point(s,size,col_var);
+				C->event->ui.use_point_global_width = 1;
 				star_mvt(i);
 				s+=3;
 				col+=3;

@@ -25,6 +25,12 @@
 #include "block.h"
 #include "brick.h"
 
+#include "mesh.h"
+#include "geometry.h"
+#include "vlst.h"
+
+int PLUG_DEBUG;
+
 void cls_plug_make_float(t_plug *plug);
 void cls_plug_make_int(t_plug *plug);
 void cls_plug_make_uint(t_plug *plug);
@@ -42,12 +48,36 @@ void cls_plug_make_selector(t_plug *plug);
 void cls_plug_make_trigger(t_plug *plug);
 void cls_plug_make_operator(t_plug *plug);
 void cls_plug_make_vector(t_plug *plug);
+void cls_plug_make_geo(t_plug *plug);
+void cls_plug_make_geo_point(t_plug *plug);
+void cls_plug_make_geo_edge(t_plug *plug);
+void cls_plug_make_geo_array(t_plug *plug);
 
 void cls_plug_connect_general(t_plug_mode mode, t_plug *self, t_plug *dst);
 void cls_plug_disconnect_general(t_plug_mode mode, t_plug *self);
 
 
 void close_vector(t_brick *brick, int open);
+
+
+void object_show(t_object *object)
+{
+	term_log("object");
+}
+
+void mesh_show(t_mesh *mesh)
+{
+
+	//term_log("mesh");
+	if(mesh->vertex)
+	{
+		vlst_show(mesh->vertex);
+	}
+	else
+	{
+		printf("MESH no vlst\n");
+	}
+}
 
 
 void plug_debug(t_plug *plug)
@@ -61,6 +91,8 @@ void plug_debug(t_plug *plug)
 		case dt_float: term_log("%f", drf_float(data)); break;
 		case dt_vector: vector_show(data); break;
 		case dt_vlst: vlst_show(data); break;
+		case dt_object: object_show(data);break;
+		case dt_mesh: mesh_show(data);break;
 		default:
 			term_log("unknown type %s", data_name_get(type));
 			break;
@@ -122,6 +154,16 @@ void plug_data_negate(t_plug *plug)
 	}
 }
 
+void plug_data_abs(t_plug *plug)
+{
+	switch (plug->data_type)
+	{
+		case (dt_int): abs_int(plug->data); break;
+		case (dt_float): abs_float(plug->data); break;
+		default: break;
+	}
+}
+
 // input: 	plug_intern 
 // return: 	plug_intern
 t_plug *plug_get_src(t_plug *plug)
@@ -167,15 +209,27 @@ t_plug *plug_get_dst(t_plug *plug)
 
 void plug_warning(t_plug *dst_plug,t_plug *src_plug)
 {
-	/*
 	t_context *C=ctx_get();
 	char msg[40];
 	char *src_plug_type=data_name_get(src_plug->data_type);
 	char *dst_plug_type=data_name_get(dst_plug->data_type);
 
-	sprintf(msg,"%d(%s)(%s)-(%s)(%s)",C->app->frame,src_plug->name,src_plug_type,dst_plug->name,dst_plug_type);
+	sprintf(msg,"(%s)(%s)-(%s)(%s)",src_plug->id.name,src_plug_type,dst_plug->id.name,dst_plug_type);
 	term_print(C->term,msg);
-	*/
+}
+
+void plug_debug_connect(const char *name, t_plug *dst_plug, t_plug *src_plug)
+{
+	if(PLUG_DEBUG)
+	{
+		t_context *C=ctx_get();
+		char msg[40];
+		char *src_plug_type=data_name_get(src_plug->data_type);
+		char *dst_plug_type=data_name_get(dst_plug->data_type);
+
+		sprintf(msg,"%s %s-%s",name,dst_plug_type,src_plug_type);
+		term_print(C->term,msg);
+	}
 }
 
 // FLOW
@@ -231,195 +285,6 @@ void _cls_flow_(t_plug *plug,void (* f)(t_plug_mode mode,t_plug *p1,t_plug *p2))
 }
 
 
-
-
-
-void cls_plug_connect_int(t_plug_mode mode, t_plug *self,t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_int(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_uint(t_plug_mode mode, t_plug *self,t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_uint(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_float(t_plug_mode mode, t_plug *self,t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_float(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_string(t_plug_mode mode, t_plug *self,t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_string(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_pointer(t_plug_mode mode, t_plug *self, t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_pointer(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_mesh(t_plug_mode mode, t_plug *self, t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_mesh(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_vertex(t_plug_mode mode, t_plug *self, t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_vertex(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_face(t_plug_mode mode, t_plug *self, t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_face(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_vlst(t_plug_mode mode, t_plug *self, t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_vlst(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_lst(t_plug_mode mode, t_plug *self, t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_lst(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_camera(t_plug_mode mode, t_plug *self, t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_camera(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_char(t_plug_mode mode, t_plug *self, t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_char(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_object(t_plug_mode mode, t_plug *self, t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_object(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_selector(t_plug_mode mode, t_plug *self, t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_selector(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_trigger(t_plug_mode mode, t_plug *self, t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
-void cls_plug_disconnect_trigger(t_plug_mode mode, t_plug *plug)
-{
-	// General
-	cls_plug_disconnect_general(mode,plug);
-}
-
-void cls_plug_connect_operator(t_plug_mode mode, t_plug *self, t_plug *dst)
-{
-	// General
-	cls_plug_connect_general(mode,self,dst);
-}
-
 // DISCONNECT FOR
 
 void cls_plug_disconnect_operator(t_plug_mode mode, t_plug *plug)
@@ -460,7 +325,8 @@ void cls_plug_disconnect_operator(t_plug_mode mode, t_plug *plug)
 					for(i=0; i < vector->length; i++)
 					{
 						// Get Brick Component
-						brick_component = block_brick_get_by_order(block_vector,i);
+						//brick_component = block_brick_get_by_order(block_vector,i);
+						brick_component = block_brick_get_by_position(block_vector,i);
 
 						// Get Plugs
 						plug_intern_component = &brick_component->plug_intern;
@@ -492,18 +358,20 @@ void cls_plug_connect_general(t_plug_mode mode, t_plug *self, t_plug *dst)
 	t_brick *brick_dst = dst->brick;
 	t_plug *plug_dst_in = &brick_dst->plug_in;
 	t_plug *plug_dst_out = &brick_dst->plug_out;
-	
+
+
 	// Mode In
 	if(mode == mode_in)
 	{
+
+		plug_debug_connect("connect",dst,self);
+
 		// Connect Plugs
 		plug_in->src = plug_dst_out;
 		plug_in->state.is_connected = 1;
 
-		// Add To Graph
-		t_block *block_self = brick->block;
-		t_block *block_dst = brick_dst->block;
-		block_graph_add(block_self,block_dst);
+		// Add To Rhizome
+		brick_rhizome_add(brick, brick_dst);
 
 		// If Versatil
 		if(brick->state.is_versatil)
@@ -552,6 +420,14 @@ void cls_plug_disconnect_general(t_plug_mode mode, t_plug *self)
 	t_brick *brick = self->brick;
 	t_plug *plug_in = &brick->plug_in;
 	t_plug *plug_out = &brick->plug_out;
+	t_plug *plug_src = plug_in->src;
+	t_plug *dst = NULL;
+	t_brick *brick_src;
+	if(plug_src)
+	{
+		brick_src = plug_src->brick;
+		dst = &brick_src->plug_intern;
+	}
 
  	// Swap Flow
  	if(self->state.swap_flow && (mode==mode_out))
@@ -568,6 +444,8 @@ void cls_plug_disconnect_general(t_plug_mode mode, t_plug *self)
 	// Mode In
 	if(mode == mode_in)
 	{
+		plug_debug_connect("disconnect",dst,self);
+
 		// Disconnect
 		plug_in->src = NULL;
 		plug_in->state.is_connected = 0;
@@ -587,176 +465,88 @@ void cls_plug_disconnect_general(t_plug_mode mode, t_plug *self)
 
 void cls_plug_connect_vector(t_plug_mode mode, t_plug *self, t_plug *dst)
 {
-	t_context *C = ctx_get();
-
 	t_brick *brick = self->brick;
 	t_block *block = brick->block;
 	t_plug *plug_in = &brick->plug_in;
 	t_plug *plug_out = &brick->plug_out;
 
-	// Connect General
-	cls_plug_connect_general(mode,self,dst);
-
-	// **********************************************
-	// Connect To **For Pointer**
-	// **********************************************
-
-	// If Dst Is Volatil [OUT] 
-	if(dst->state.is_volatil && mode == mode_out)
+	if(dst->data_type == dt_vector)
 	{
-		// If Is State Volatil (=> For Vector is Not)
-		if(self->state.is_state_volatil) 
-		{
-			// *****************
-			// {A} Reverse Flow 
-			// ****************
-			// Close Vector Flow In 
-			plug_in->state.flow_in = 0;
-			plug_in->state.open_in = 1;
-
-			// Open Dst Flow In (For Vector)
-			plug_out->state.open_out = 0;
-			plug_out->state.flow_out = 1;
-			plug_out->state.open_in = 1;
-		}
-			
-		// IF Vector Has Components
-		if(brick->state.has_components)
-		{
-			t_brick *brick_component;
-			t_plug *plug_in_component;
-			t_plug *plug_intern_component;
-
-			// For 4 (xyzw) XX
-			int i;
-			for(i = 0; i < 4; i++)
-			{
-				// Get Component
-				brick_component = block_brick_get_by_order(block, i); 
-				plug_in_component = &brick_component->plug_in;
-				plug_intern_component = &brick_component->plug_intern;
-
-				// **********************
-				// {B] Wait for For Loop
-				// **********************
-
-				// Close Flow In
-				plug_in_component->state.flow_in = 0;
-				// Reset Internal Pointer
-				plug_intern_component->data = NULL;
-				// Don't Store Pointer
-				plug_intern_component->state.store_data = 0;
-			}
-		}
-	}
-
-	// ***************************
-	// Reverse Parenting
-	// ***************************
-
-	// Normal: Vector is Child Of XYZ Components
-	// Pointer: XYZ are childs of Vector
-	if(
-		// If Vector Has Components
-		brick->state.has_components
-		&&
-		(
-		// And Dst is For Pointer [OUT] 
-			dst->state.is_parent 
-		||
-		// Or Dst is Vector [IN] 
-			(
-				(dst->data_type == dt_vector)
-				&&
-				(mode == mode_in)
-			)
-		)
-	)
-	{
-		// **************************
-		// Remove Vectors' XYZ Parents 
-		// *************************
-		plug_child_remove_all_parents(self);
-
-		// Store
-		scene_store(C->scene,1);
-
-		t_brick *brick_component;
-		t_plug *plug_intern_component;
+		t_vector *vector_src = self->data;
 		t_vector *vector_dst = dst->data;
-		int i;
 
-		// For All Components 
-		for(i = 0; i < 4; i++)
+		// If Vectors from same type
+		if(vector_src->length == vector_dst->length)
 		{
-			brick_component = block_brick_get_by_order(block, i); 
-			plug_intern_component = &brick_component->plug_intern;
+			// Connect General
+			cls_plug_connect_general(mode,self,dst);
 
-			// If i < Vector Length
-			if(i < vector_dst->length)
+			// **********************************************
+			// Connect To **For Pointer**
+			// **********************************************
 
-				// **************************
-				// Parent Component To Vector
-				// **************************
-				plug_add_parent(plug_intern_component,self);
-
-		}
-
-		scene_store(C->scene,0);
-	}
-
-	// ***********************
-	// Show Vector components
-	// **********************
-
-	if(brick->state.has_components)
-	{
-		if(dst->data_type == dt_vector)
-		{
-			t_vector *vector_dst = dst->data;
-
-			if(vector_dst)
+			// If Dst Is Volatil [OUT] 
+			if(dst->state.is_volatil && mode == mode_out)
 			{
-				t_vector *vector_src = self->data;
-				t_brick *brick_component;
-				int i;
-
-				for(i = 0; i < 4; i++)
+				// If Is State Volatil (=> For Vector is Not)
+				if(self->state.is_state_volatil) 
 				{
-					brick_component = block_brick_get_by_order(block, i); 
+					// *****************
+					// {A} Reverse Flow 
+					// ****************
+					// Close Vector Flow In 
+					plug_in->state.flow_in = 0;
+					plug_in->state.open_in = 1;
 
-					if(i < vector_dst->length)
-					{
-						brick_component->state.draw = 1;
-						if(vector_src->type != vector_dst->type)
+					// Open Dst Flow In (For Vector)
+					plug_out->state.open_out = 0;
+					plug_out->state.flow_out = 1;
+					plug_out->state.open_in = 1;
+				}
+			}
 
-							// *********************
-							// Change Component Type
-							// *********************
-							brick_change_type_by_name(brick_component,vector_dst->type);
-					}
-					else
+			// Get, For, ...
+			if(dst->state.is_volatil)
+			{
+				// IF Vector Has Components
+				if(brick->state.has_components)
+				{
+					t_brick *brick_component;
+					t_plug *plug_in_component;
+					t_plug *plug_intern_component;
+
+					int i;
+					for(i = 0; i < vector_src->length; i++)
 					{
-						brick_component->state.draw = 0;
+						// Get Component
+						//brick_component = block_brick_get_by_order(block, i); 
+						brick_component = block_brick_get_by_position(block, i); 
+						plug_in_component = &brick_component->plug_in;
+						plug_intern_component = &brick_component->plug_intern;
+
+						// **********************
+						// {B] Wait for For Loop
+						// **********************
+
+						// Close Flow In
+						plug_in_component->state.flow_in = 0;
+						// Reset Internal Pointer
+						plug_intern_component->data = NULL;
+						// Don't Store Pointer
+						plug_intern_component->state.store_data = 0;
 					}
 				}
 			}
-		}
 
-		// Update Geometry
-		block->state.update_geometry = 1;
+		}
 	}
 }
 
 void cls_plug_disconnect_vector(t_plug_mode mode, t_plug *plug)
 {
-	t_context *C = ctx_get();
-
 	t_brick *brick = plug->brick;
-	t_block *block = brick->block;
 	t_plug *plug_in = &brick->plug_in;
 	t_plug *plug_out = &brick->plug_out;
-	t_vector *vector = plug->data;
 
 	// Disconnect General
 	cls_plug_disconnect_general(mode,plug);
@@ -781,46 +571,6 @@ void cls_plug_disconnect_vector(t_plug_mode mode, t_plug *plug)
 		plug_in->state.flow_in = 0;
 		plug_in->state.open_in = 1;
 	}
-
-	// ******************
-	// Reverse Parenting
-	// ******************
-
-	if(brick->state.has_components)
-	{
-
-		t_brick *brick_component;
-		t_plug *plug_intern_component;
-
-		int i;
-
-		// For All Components
-		for(i = 0; i < 4; i++)
-		{
-			brick_component = block_brick_get_by_order(block, i);
-			plug_intern_component = &brick_component->plug_intern;
-
-			plug_intern_component->data = plug_intern_component->data_memory;
-			
-			// Show Value
-			brick_component->state.draw_value = 1;
-
-			// Remove Parenting
-			plug_child_remove_all_parents(plug_intern_component);
-
-			// Store
-			scene_store(C->scene,1);
-
-			// If i < Length
-			if(i < vector->length)
-			{
-				// Reverse Parenting
-				plug_add_parent(plug, plug_intern_component);
-			}
-
-			scene_store(C->scene,0);
-		}
-	}
 }
 
 void close_vector(t_brick *brick, int open)
@@ -843,7 +593,8 @@ void close_vector(t_brick *brick, int open)
 			for(i=0; i < vector->length; i++)
 			{
 				// Get Brick Component
-				brick_component = block_brick_get_by_order(block,i);
+				//brick_component = block_brick_get_by_order(block,i);
+				brick_component = block_brick_get_by_position(block,i);
 
 				// Get Plugs
 				plug_in_component = &brick_component->plug_in;
@@ -863,7 +614,8 @@ void close_vector(t_brick *brick, int open)
 			for(i=0; i < vector->length; i++)
 			{
 				// Get Brick Component
-				brick_component = block_brick_get_by_order(block,i);
+				//brick_component = block_brick_get_by_order(block,i);
+				brick_component = block_brick_get_by_position(block,i);
 
 				// Get Plugs
 				plug_in_component = &brick_component->plug_in;
@@ -1112,21 +864,9 @@ void __cls_plug_flow_operator_get(t_plug_mode mode,t_plug *plug,t_plug *plug_src
 					if(i >= vlst->count) set_int(plug_indice->data,vlst->count-1);
 
 					// Set Pointer
+					plug_result->state.is_volatil = 1;
 					vector = plug_result->data;
 					vector->pointer = vlst_get_pointer(vlst, vlst->length * i);
-
-					// Set Vlst Limit
-					if(vlst->has_limit_high)
-					{
-						vector->has_limit_high = 1;
-						vector->limit_int_high = vlst->count;
-					}
-
-					if(vlst->has_limit_low)
-					{
-						vector->has_limit_low = 1;
-						vector->limit_int_low = 0;
-					}
 				}
 
 				break;
@@ -1205,20 +945,8 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 						for(i=0; i < vector_self->length; i++)
 						{
 							// Get Brick Component
-							brick_component = block_brick_get_by_order(block,i);
-
-							// Set Brick Limit
-							if(vector_self->has_limit_high)
-							{
-								brick_component->state.has_limit_high = 1;
-								brick_component->var.limit_int_high = vector_self->limit_int_high;
-							}
-
-							if(vector_self->has_limit_low)
-							{
-								brick_component->state.has_limit_low = 1;
-								brick_component->var.limit_int_low = vector_self->limit_int_low;
-							}
+							//brick_component = block_brick_get_by_order(block,i);
+							brick_component = block_brick_get_by_position(block,i);
 
 							// Get Plugs
 							plug_intern_component = &brick_component->plug_intern;
@@ -1258,7 +986,8 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 						for(i=0; i < vector_self->length; i++)
 						{
 							// Get Component
-							brick_component = block_brick_get_by_order(block,i);
+							//brick_component = block_brick_get_by_order(block,i);
+							brick_component = block_brick_get_by_position(block,i);
 							plug_intern_component = &brick_component->plug_intern;
 
 							// Set Component Pointer
@@ -1298,7 +1027,8 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 				for(i=0; i < vector_self->length; i++)
 				{
 					// Get Componenent
-					brick_component = block_brick_get_by_order(block,i);
+					//brick_component = block_brick_get_by_order(block,i);
+					brick_component = block_brick_get_by_position(block,i);
 					plug_intern_component = &brick_component->plug_intern;
 
 					// If Componenent Has Data (Scalar)
@@ -1316,6 +1046,67 @@ void cls_plug_flow_vector(t_plug *plug)
 {
 	_cls_flow_(plug,__cls_plug_flow_vector);
 }
+
+// :GEO
+
+void __cls_plug_flow_geo(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
+{
+}
+
+void cls_plug_flow_geo(t_plug *plug)
+{
+	_cls_flow_(plug,__cls_plug_flow_geo);
+}
+
+void __cls_plug_flow_geo_array(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
+{
+}
+
+void cls_plug_flow_geo_array(t_plug *plug)
+{
+	_cls_flow_(plug,__cls_plug_flow_geo_array);
+}
+
+// GEO POINT
+
+void __cls_plug_flow_geo_point(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
+{
+	//t_context *C = ctx_get();
+	//t_brick *brick = plug->brick;
+	//t_block *block = brick->block;
+	//t_geo_point *point = plug->data;
+
+	// If Src or Dst
+	if(src_plug)
+	{
+		t_data_type type = src_plug->data_type;
+
+		switch(type)
+		{
+			// case VECTOR
+			case dt_geo_point:
+				plug->data = src_plug->data;
+				break;
+			default:
+				break;
+		}
+	}
+}
+
+void cls_plug_flow_geo_point(t_plug *plug)
+{
+	_cls_flow_(plug,__cls_plug_flow_geo_point);
+}
+
+void __cls_plug_flow_geo_edge(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
+{
+}
+
+void cls_plug_flow_geo_edge(t_plug *plug)
+{
+	_cls_flow_(plug,__cls_plug_flow_geo);
+}
+
 
 // TRIGGER
 
@@ -1536,7 +1327,7 @@ void cls_plug_flow_uint(t_plug *plug)
 	_cls_flow_(plug,__cls_plug_flow_int);
 }
 
-// LST
+// :LST
 
 void __cls_plug_flow_lst(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 {
@@ -1557,7 +1348,7 @@ void __cls_plug_flow_lst(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 			// +INT (REWIND)
 			case dt_int:
 
-				if(is(src_brick->name,"rewind"))
+				if(is(src_brick->id.name,"rewind"))
 				{
 					int *state = src_plug->data;
 
@@ -1582,13 +1373,16 @@ void cls_plug_flow_lst(t_plug *plug)
 	_cls_flow_(plug,__cls_plug_flow_lst);
 }
 
-// VLST
+// :VLST
 
 void __cls_plug_flow_vlst(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 {
 	if(src_plug)
 	{
 		t_data_type src_type=src_plug->data_type;
+		t_vlst *vlst = plug->data;
+		t_lst *lst = NULL;
+		t_data_type lst_type = dt_null;
 
 		switch(src_type)
 		{
@@ -1597,6 +1391,29 @@ void __cls_plug_flow_vlst(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 				//copy pointer
 				plug->data=src_plug->data;
 				break;
+			case dt_geo:
+				//geo_vlst_set(src_plug->data, plug->data);
+				break;
+			case dt_lst:
+				lst = src_plug->data;
+				if(lst)
+				{
+				lst_type = lst->type;
+				switch(lst_type)
+				{
+					case(dt_geo_point):
+						geo_vlst_points_set( plug->brick, lst, vlst);
+						break;
+					case(dt_geo_edge):
+						geo_vlst_edges_set( plug->brick, lst, vlst);
+						break;
+					default:
+						printf("?? %s\n", data_name_get( lst_type));
+						break;
+				}
+				}
+				break;
+				
 				
 			default:
 				plug_warning(plug,src_plug);
@@ -1644,16 +1461,41 @@ void cls_plug_flow_vertex(t_plug *plug)
 	_cls_flow_(plug,__cls_plug_flow_vertex);
 }
 
-// MESH
+// :MESH
 
 void __cls_plug_flow_mesh(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 {
 	if(src_plug)
 	{
+		t_mesh *mesh = plug->data;
+		t_vlst *vlst = NULL;
+
 		t_data_type src_type=src_plug->data_type;
 
 		switch(src_type)
 		{
+			case dt_mesh:
+				plug->data = src_plug->data;
+				break;
+
+			case dt_vlst:
+				vlst = src_plug->data;
+				if(vlst->data)
+				{
+					switch(vlst->type_target)
+					{
+						case(dt_vertex):
+							mesh->vertex = vlst;
+							mesh->var.tot_vertex = vlst->count;
+							break;
+						case(dt_edge):
+							mesh->edges = vlst;
+							break;
+						default:
+							break;
+					}
+				}
+				break;
 			default:
 				plug_warning(plug,src_plug);
 				break;
@@ -1688,11 +1530,15 @@ void __cls_plug_flow_object(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 		{
 			// + MESH
 			case dt_mesh:
+				object = plug->data;
 
-				if(is(object->type,"mesh"))
+				if(object)
 				{
-					mesh=src_plug->data;
-					object->mesh=mesh;
+					if(is(object->type,"mesh"))
+					{
+						mesh=src_plug->data;
+						object->mesh=mesh;
+					}
 				}
 
 				break;
@@ -1768,8 +1614,8 @@ t_plug_class plug_float ={
 	.type=dt_float,
 	.make=cls_plug_make_float,
 	.flow=cls_plug_flow_float,
-	.connect = cls_plug_connect_float,
-	.disconnect = cls_plug_disconnect_float,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // INT
@@ -1779,8 +1625,8 @@ t_plug_class plug_int ={
 	.type=dt_int,
 	.make=cls_plug_make_int,
 	.flow=cls_plug_flow_int,
-	.connect = cls_plug_connect_int,
-	.disconnect = cls_plug_disconnect_int,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // UINT
@@ -1790,8 +1636,8 @@ t_plug_class plug_uint ={
 	.type=dt_uint,
 	.make=cls_plug_make_uint,
 	.flow=cls_plug_flow_uint,
-	.connect = cls_plug_connect_uint,
-	.disconnect = cls_plug_disconnect_uint,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // STRING
@@ -1801,8 +1647,8 @@ t_plug_class plug_string ={
 	.type=dt_string,
 	.make=cls_plug_make_string,
 	.flow=cls_plug_flow_generic, //XXX
-	.connect = cls_plug_connect_string,
-	.disconnect = cls_plug_disconnect_string,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // POINTER
@@ -1812,8 +1658,8 @@ t_plug_class plug_pointer ={
 	.type=dt_pointer,
 	.make=cls_plug_make_string,
 	.flow=cls_plug_flow_pointer, //XXX
-	.connect = cls_plug_connect_pointer,
-	.disconnect = cls_plug_disconnect_pointer,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // MESH
@@ -1823,8 +1669,8 @@ t_plug_class plug_mesh ={
 	.type=dt_mesh,
 	.make=cls_plug_make_mesh,
 	.flow=cls_plug_flow_mesh, 
-	.connect = cls_plug_connect_mesh,
-	.disconnect = cls_plug_disconnect_mesh,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // VERTEX
@@ -1834,8 +1680,8 @@ t_plug_class plug_vertex ={
 	.type=dt_vertex,
 	.make=cls_plug_make_vertex,
 	.flow=cls_plug_flow_vertex, 
-	.connect = cls_plug_connect_vertex,
-	.disconnect = cls_plug_disconnect_vertex,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // FACE
@@ -1845,8 +1691,8 @@ t_plug_class plug_face ={
 	.type=dt_face,
 	.make=cls_plug_make_face,
 	.flow=cls_plug_flow_generic, //XXX
-	.connect = cls_plug_connect_face,
-	.disconnect = cls_plug_disconnect_face,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // VLST
@@ -1856,8 +1702,8 @@ t_plug_class plug_vlst ={
 	.type=dt_vlst,
 	.make=cls_plug_make_vlst,
 	.flow=cls_plug_flow_vlst, 
-	.connect = cls_plug_connect_vlst,
-	.disconnect = cls_plug_disconnect_vlst,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // LST
@@ -1867,8 +1713,8 @@ t_plug_class plug_lst ={
 	.type=dt_lst,
 	.make=cls_plug_make_lst,
 	.flow=cls_plug_flow_lst, 
-	.connect = cls_plug_connect_lst,
-	.disconnect = cls_plug_disconnect_lst,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // CAMERA
@@ -1878,8 +1724,8 @@ t_plug_class plug_camera ={
 	.type=dt_camera,
 	.make=cls_plug_make_camera,
 	.flow=cls_plug_flow_camera, 
-	.connect = cls_plug_connect_camera,
-	.disconnect = cls_plug_disconnect_camera,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // CHAR
@@ -1889,8 +1735,8 @@ t_plug_class plug_char ={
 	.type=dt_char,
 	.make=cls_plug_make_char,
 	.flow=cls_plug_flow_generic, //XXX
-	.connect = cls_plug_connect_char,
-	.disconnect = cls_plug_disconnect_char,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // OBJECT
@@ -1900,8 +1746,8 @@ t_plug_class plug_object ={
 	.type=dt_object,
 	.make=cls_plug_make_object,
 	.flow=cls_plug_flow_object, 
-	.connect = cls_plug_connect_object,
-	.disconnect = cls_plug_disconnect_object,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // SELECTOR
@@ -1911,8 +1757,8 @@ t_plug_class plug_selector ={
 	.type=dt_selector,
 	.make=cls_plug_make_selector,
 	.flow=cls_plug_flow_object, 
-	.connect = cls_plug_connect_selector,
-	.disconnect = cls_plug_disconnect_selector,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // TRIGGER
@@ -1922,8 +1768,8 @@ t_plug_class plug_trigger ={
 	.type=dt_trigger,
 	.make=cls_plug_make_trigger,
 	.flow=cls_plug_flow_trigger, 
-	.connect = cls_plug_connect_trigger,
-	.disconnect = cls_plug_disconnect_trigger,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // OPERATOR
@@ -1933,8 +1779,8 @@ t_plug_class plug_operator ={
 	.type=dt_operator,
 	.make=cls_plug_make_operator,
 	.flow=cls_plug_flow_operator, 
-	.connect = cls_plug_connect_operator,
-	.disconnect = cls_plug_disconnect_operator,
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 // VECTOR
@@ -1946,6 +1792,44 @@ t_plug_class plug_vector ={
 	.flow=cls_plug_flow_vector,  
 	.connect = cls_plug_connect_vector,
 	.disconnect = cls_plug_disconnect_vector,
+};
+
+// GEOMETRY
+
+t_plug_class plug_geo ={
+	.cls_type="geo",
+	.type=dt_geo,
+	.make=cls_plug_make_geo,
+	.flow=cls_plug_flow_geo,  
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
+};
+
+t_plug_class plug_geo_point ={
+	.cls_type="geo_point",
+	.type=dt_geo_point,
+	.make=cls_plug_make_geo_point,
+	.flow=cls_plug_flow_geo_point,  
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
+};
+
+t_plug_class plug_geo_edge ={
+	.cls_type="geo_edge",
+	.type=dt_geo_edge,
+	.make=cls_plug_make_geo_edge,
+	.flow=cls_plug_flow_geo_edge,  
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
+};
+
+t_plug_class plug_geo_array ={
+	.cls_type="geo_array",
+	.type=dt_geo_array,
+	.make=cls_plug_make_geo_array,
+	.flow=cls_plug_flow_geo_array,  
+	.connect = cls_plug_connect_general,
+	.disconnect = cls_plug_disconnect_general,
 };
 
 
@@ -2035,6 +1919,26 @@ void cls_plug_make_vector(t_plug *plug)
 	plug->cls=&plug_vector;
 }
 
+void cls_plug_make_geo(t_plug *plug)
+{
+	plug->cls=&plug_geo;
+}
+
+void cls_plug_make_geo_point(t_plug *plug)
+{
+	plug->cls=&plug_geo_point;
+}
+
+void cls_plug_make_geo_edge(t_plug *plug)
+{
+	plug->cls=&plug_geo_edge;
+}
+
+void cls_plug_make_geo_array(t_plug *plug)
+{
+	plug->cls=&plug_geo_array;
+}
+
 t_plug_class *plugs[] = {
 	&plug_float,
 	&plug_int,
@@ -2052,6 +1956,10 @@ t_plug_class *plugs[] = {
 	&plug_trigger,
 	&plug_operator,
 	&plug_vector,
+	&plug_geo,
+	&plug_geo_point,
+	&plug_geo_edge,
+	&plug_geo_array,
 	};
 
 

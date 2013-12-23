@@ -22,10 +22,7 @@ struct Link;
 
 typedef struct Term
 {
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
+	t_id id;
 
 	int tot_line;
 	int line;

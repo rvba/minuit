@@ -20,7 +20,6 @@
 #include "camera.h"
 #include "ui.h"
 #include "file.h"
-#include "system.h"
 
 #include "list.h"
 
@@ -67,7 +66,7 @@ void *browser_go_backward(t_brick *brick)
 
 void *browser_go_directory(t_brick *brick)
 {
-	file_go_directory(path,brick->name);
+	file_go_directory(path,brick->id.name);
 	is_built=0;
 	brick_release(brick);
 	return NULL;
@@ -83,7 +82,7 @@ void browser_delete_bricks(t_context *C,t_block *b)
 		for(;l;l=l->next)
 		{
 			t_brick *brick=l->data;
-			scene_struct_delete(C->scene,brick);
+			scene_delete(C->scene,brick);
 		}
 	}
 	
@@ -120,7 +119,7 @@ void *browser_return_filename(t_brick *brick)
 
 	pos=s_append(tmp,path->location,pos);
 	pos=s_append(tmp,"/",pos);
-	pos=s_append(tmp,brick->name,pos);
+	pos=s_append(tmp,brick->id.name,pos);
 	pos=s_append(tmp,NULL,pos);
 
 	C->event->standby_string=s_allocate(tmp);
@@ -265,7 +264,8 @@ void browser_init(void)
 		is_init=1;
 
 		// get current
-		getcwd(default_path,1024);
+		char *r = getcwd(default_path,1024);
+		if( !r ) printf("getcwd error\n");
 
 		BROWSER_BUTTONS=block_make("block_browser","block");
 		t_block *block = BROWSER_BUTTONS->data;
@@ -279,7 +279,7 @@ void screen_browser_make(void)
 {
 	t_context *C=ctx_get();
 
-	t_node *node=scene_add(C->scene,nt_screen,"screen_browser");
+	t_node *node=scene_add(C->scene,dt_screen,"screen_browser");
 	t_screen *screen=node->data;
 
 	screen->keymap=keymap_browser;

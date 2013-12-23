@@ -8,12 +8,14 @@
  */
 
 #include "util.h"
+#include "node.h"
 #include "op.h"
 #include "engine.h"
 #include "process.h"
 #include "list.h"
 #include "context.h"
 #include "app.h"
+#include "memory.h"
 
 t_engine_cls cls_engine=
 {
@@ -35,8 +37,6 @@ void engine_quit(t_engine *engine)
 			process=link->data;
 			process->exit=1;
 		}
-
-		engine_quit(engine);
 	}
 }
 
@@ -48,7 +48,7 @@ t_process *engine_process_get(t_engine *engine,const char *name)
 	for(link = engine->processes->first; link; link = link->next)
 	{
 		process = link->data;
-		if( is(process->name, name))
+		if( is(process->id.name, name))
 		{
 			return process;
 		}
@@ -76,19 +76,20 @@ t_process *engine_process_get_by_id(t_engine *engine, int id)
 
 void engine_show(t_engine *engine)
 {
-	printf("engine processes\n");
+	printf("[engine] show\n");
+	printf("[engine] processes\n");
 	t_link *link;
 	for(link=engine->processes->first;link;link=link->next)
 	{
 		t_process *process = link->data;
-		printf("%d %s\n",process->engine_id,process->name);
+		printf("%d %s\n",process->engine_id, process->id.name);
 	}
 
-	printf("engine garbage\n");
+	printf("[engine] garbage\n");
 	for(link=engine->garbage->first;link;link=link->next)
 	{
 		t_process *process = link->data;
-		printf("%d %s\n",process->engine_id,process->name);
+		printf("%d %s\n",process->engine_id, process->id.name);
 	}
 }
 
@@ -100,56 +101,54 @@ void engine_cleanup(t_engine *engine)
 
 	if(engine->garbage->first)
 	{
-		t_context *C = ctx_get();
-		printf("[engine] frame:%d garbage collector\n",C->app->frame);
-		engine_show(engine);
+		int do_loop = 0;
 		for(link = engine->garbage->first; link; link = link->next)
 		{
 			process = link->data;
 
 			if(process->done)
 			{
-				lst_link_delete(engine->garbage,link);
-				list_remove_by_name(engine->processes,process->name);
-				printf("[engine] process freed%d\n",process->engine_id);
-				//process_free(process);
+				lst_link_delete_by_id(engine->processes, process->id.id);
+				lst_link_delete_by_id(engine->garbage, process->id.id);
+				process_free(process);
 
+				do_loop = 1;
 				break;
 			}
 		}
 
-		engine_cleanup(engine);
+		if(do_loop) engine_cleanup(engine);
 	}
-
-	//engine_show(engine);
 }
+
+// REMOVE
 
 void engine_process_remove(t_engine *engine, t_process *process)
 {
 	process->exit = 1;
 	engine->process_count--;
-	lst_add(engine->garbage,process,process->name);
-
-	printf("[engine] remove process %d\n",process->engine_id);
+	lst_add(engine->garbage, process, process->id.name);
 }
+
+// ADD
 
 void engine_process_add(t_engine *engine, t_process *process)
 {
-	lst_add(engine->processes,process,process->name);
+	lst_add(engine->processes, process, process->id.name);
 	engine->process_count++;
 	engine->process_id++;
 	process->engine_id = engine->process_id;
-
-	printf("[engine] add process %d\n",process->engine_id);
+	process->id.id = engine->process_id;
 }
+
+// NEW
 
 t_engine *engine_new(const char *name)
 {
-	t_engine *engine = (t_engine *)malloc(sizeof(t_engine));
+	t_engine *engine = (t_engine *)mem_malloc(sizeof(t_engine));
 
-	engine->id=0;
-	engine->id_chunk=0;
-	set_name(engine->name,name);
+	id_init(&engine->id, name);
+
 	engine->processes=lst_new("lst");
 	engine->garbage = lst_new("lst");
 	engine->with_global_limit=ENGINE_WITH_GLOBAL_LIMIT;

@@ -9,6 +9,9 @@
 
 #include "op.h"
 #include "context.h"
+#include "scene.h"
+#include "node.h"
+#include "list.h"
 #include "ctx.h"
 #include "app.h"
 #include "process.h"
@@ -16,21 +19,19 @@
 #include "term.h"
 #include "object.h"
 #include "clock.h"
-#include "system.h"
 #include "event.h"
 #include "set.h"
+#include "memory.h"
 
-void *ctx_compute_graph(void *data)
+void *ctx_compute_rhizome(void *data)
 {
 	t_context *C=ctx_get();
 	t_process *process=(t_process *)data;
 
-	if(C->event->graph_computing)
-	{
-		process->busy=1;
-		ctx_set_exec(C);
-		process->busy=0;
-	}
+	process->busy=1;
+	ctx_set_exec(C);
+	process->exit = 1;
+	process->busy=0;
 
 	return NULL;
 }
@@ -152,7 +153,7 @@ void *process_loop(void *data)
 void process_launch(t_process *process)
 {
 	pthread_create(&process->thread,NULL,process->loop,process);
-	term_log("p %s", process->name);
+	//term_log("p %s", process->id.name);
 }
 
 void ctx_thread_init(t_context *C)
@@ -178,20 +179,16 @@ t_process *process_add(t_context *C, const char *name, void *(* f)(void *d))
 void process_free(t_process *process)
 {
 	clock_free(process->clock);
-	free(process);
+	mem_free( process, sizeof( t_process));
 }
 
 t_process *process_new(const char *name,void*(* func)(void *data))
 {
-	t_process *process = (t_process *)malloc(sizeof(t_process));
+	t_process *process = (t_process *)mem_malloc(sizeof(t_process));
 
-	process->id = 0;
-	process->id_chunk = 0;
-	process->users = 0;
-	
-	set_name(process->name,name);
+	id_init(&process->id, name);
 
-	process->clock=clock_new();
+	process->clock = clock_new( "clock");
 	process->limit=1;
 	process->play=1;
 	process->exit=0;

@@ -7,6 +7,7 @@
  *
  */
 
+#include "node.h"
 #include "util.h"
 #include "context.h"
 #include "op.h"
@@ -15,7 +16,15 @@
 #include "object.h"
 #include "camera.h"
 #include "list.h"
+#include "vlst.h"
 #include "set.h"
+#include "set.h"
+#include "block.h"
+#include "brick.h"
+#include "vector.h"
+#include "ui.h"
+#include "memory.h"
+#include "scene.h"
 
 void object_default(t_node *node){}
 void cls_object_link(t_object *self,t_node *target);
@@ -23,6 +32,16 @@ void cls_object_show(t_object *object);
 void cls_object_init(t_object *object)
 {
 }
+
+t_object_class object_point =
+{
+	.cls_type="object",
+	.init=cls_object_init,
+	.type="point",
+	.link=cls_object_link,
+	.show=cls_object_show,
+	.draw=cls_object_draw_point
+};
 
 t_object_class object_generic =
 {
@@ -57,7 +76,7 @@ t_object_class object_camera =
 void cls_object_show(t_object *object)
 {
 	printf("[OBJECT]\n");
-	printf("name:[%s]\n",object->name);
+	printf("name:[%s]\n",object->id.name);
 	printf("idcol:");vprint3i(object->idcol,'\n');
 	printf("loc:");vprint3f(object->loc,'\n');
 	printf("rot:");vprint3f(object->rot,'\n');
@@ -66,26 +85,26 @@ void cls_object_show(t_object *object)
 
 void cls_object_link(t_object *self,t_node *target)
 {
-	if(target->type==nt_mesh)
+	if(target->type==dt_mesh)
 	{
 		t_mesh *mesh=target->data;
 		self->mesh=mesh;
 		target->users++;
 
 	}
-	else if(target->type==nt_list)
+	else if(target->type==dt_list)
 	{
 		t_lst *lst=target->data;
 		self->blocks=lst;
 		target->users++;
 	}
-	else if(target->type==nt_camera)
+	else if(target->type==dt_camera)
 	{
 		t_camera *camera=target->data;
 		self->data=camera;
 		target->users++;
 	}
-	else printf("[ERROR:cls_object_link] Unknown node type %s",node_name_get(target->type));
+	else printf("[ERROR:cls_object_link] Unknown node type %s",data_name_get(target->type));
 }
 
 void object_build(t_object *object,const char *type)
@@ -101,6 +120,10 @@ void object_build(t_object *object,const char *type)
 	else if(is(type,"camera"))
 	{
 		object->cls=&object_camera;
+	}
+	else if(is(type,"point"))
+	{
+		object->cls=&object_point;
 	}
 	else
 	{
@@ -178,8 +201,7 @@ void object_free(t_object *object)
 	t_scene *sc=C->scene;
 
 	// free data
-	t_node *node=scene_node_get_by_id_global(sc,object->id);
-	scene_remove_data_node(sc,node);
+	scene_remove_data_node( sc, object->id.node);
 
 	// free ref block 
 	if(object->ref)
@@ -191,18 +213,18 @@ void object_free(t_object *object)
 
 		list_remove_by_ptr(lst,object->ref);
 		// free block
-		scene_struct_delete(sc,object->ref);
+		scene_delete(sc,object->ref);
 	}
 
-	if(object->mesh) scene_struct_delete(sc,object->mesh);
-	if(object->data) scene_struct_delete(sc,object->data);
+	if(object->mesh) scene_delete(sc,object->mesh);
+	if(object->data) scene_delete(sc,object->data);
 	if(object->blocks)
 	{
 		list_cleanup(object->blocks);
-		scene_struct_delete(sc,object->blocks);
+		scene_delete(sc,object->blocks);
 	}
 
-	free(object);
+	mem_free( object, sizeof( t_object));
 }
 
 
@@ -212,7 +234,7 @@ t_object *object_clone(t_object *object)
 {
 	if(object)
 	{
-		t_object *clone = object_new(object->name);
+		t_object *clone = object_new(object->id.name);
 
 		vcp3f(clone->loc,object->loc);
 		vcp3f(clone->rot,object->rot);
@@ -269,20 +291,24 @@ t_node *object_add(const char *type,const char *name)
 	t_node *node=object_make(type,name);
 	t_object *object=node->data;
 
-	// add data node
-	scene_add_data_node(C->scene,"app_node","object",name,node);
 
-	// New Block
-	t_node *node_block=add_block(C,name);
-	t_block *block=node_block->data;
+	if(C->ui->add_bricks)
+	{
+		// add data node
+		scene_add_data_node(C->scene,"app_node","object",name,node);
 
-	object->ref=block;
+		// New Block
+		t_node *node_block=add_block(C,name);
+		t_block *block=node_block->data;
 
-	// add selector
-	add_part_selector(C,block,name,node);
+		object->ref=block;
 
-	// Add Offset
-	add_block_offset(C,block);
+		// add selector
+		add_part_selector(C,block,name,node,dt_object);
+
+		// Add Offset
+		add_block_offset(C,block);
+	}
 
 	return node;
 }
@@ -292,19 +318,24 @@ t_node *object_add(const char *type,const char *name)
 t_node *object_make(const char *type,const char *name)
 {
 	t_context *C = ctx_get();
+	t_scene *sc = C->scene;
 
 	// new object
-	t_node *node = scene_add(C->scene,nt_object,name);
+	t_node *node = scene_add(C->scene,dt_object,name);
 	t_object *object=node->data;
 
 	// build cls
 	object_build(object,type);
 
 	// new list (bricks list)
-	t_node *list = scene_add(C->scene,nt_list,"object_blocks");
+	t_node *list = scene_add(C->scene,dt_list,"object_blocks");
 
 	// bind list
 	object->cls->link(object,list);
+
+	int col[3];
+	scene_color_get(sc,col);
+	vcp3i(object->idcol,col);
 
 	return node;
 }
@@ -313,12 +344,9 @@ t_node *object_make(const char *type,const char *name)
 
 t_object *object_new(const char *name)
 {
-	t_object *object = (t_object *)malloc(sizeof(t_object));
+	t_object *object = (t_object *)mem_malloc(sizeof(t_object));
 
-	object->id=0;
-	object->id_chunk=0;
-	set_name(object->name,name);
-	object->users=0;
+	id_init(&object->id, name);
 
 	vset(object->loc,0,0,0);
 	vset(object->rot,0,0,0);
@@ -330,7 +358,9 @@ t_object *object_new(const char *name)
 	object->blocks=NULL;
 	object->ref=NULL;
 
-	object->is_selected=0;
+	object->is_selected = 0;
+	object->hover = 0;
+	object->is_edit_mode = 0;
 
 	object->update=object_default;
 	object->action=NULL;

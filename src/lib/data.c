@@ -14,7 +14,11 @@
 #include "op.h"
 #include "data.h"
 #include "list.h"
+#include "vlst.h"
 #include "vector.h"
+#include "geometry.h"
+#include "ui.h"
+#include "memory.h"
 
 char name_null[] = "null";
 char name_int[] = "int";
@@ -36,11 +40,26 @@ char name_trigger[] = "trigger";
 char name_operator[] = "operator";
 char name_vector[] = "vector";
 char name_viewport[] = "viewport";
-
 char name_brick[] = "brick";
 char name_block[] = "block";
+char name_rhizome[] = "rhizome";
 char name_graph[] = "graph";
 char name_set[] = "set";
+char name_geo_point[] = "point";
+char name_geo_edge[] = "edge";
+char name_geo_array[] = "array";
+char name_geo[] = "geometry";
+char name_dict[] = "dict";
+char name_symbol[] = "symbol";
+char name_var[] = "var";
+char name_list[] = "list";
+char name_link[] = "link";
+char name_data[] = "data";
+char name_screen[] = "screen";
+char name_option[] = "option";
+char name_binding[] = "binding";
+char name_light[] = "light";
+char name_material[] = "material";
 
 void cls_data_init(t_data *data)
 {
@@ -78,8 +97,24 @@ char *data_name_get(t_data_type type)
 		case dt_brick: return name_brick; break;
 		case dt_block: return name_block; break;
 		case dt_set: return name_set; break;
-		case dt_graph: return name_graph; break;
-		default: return name_default; break;
+		case dt_rhizome: return name_rhizome; break;
+		case dt_graph:  return name_graph; break;
+		case dt_geo_point:  return name_geo_point; break;
+		case dt_geo_edge:  return name_geo_edge; break;
+		case dt_geo_array:  return name_geo_array; break;
+		case dt_geo:  return name_geo; break;
+		case dt_dict: return name_dict; break;
+		case dt_symbol: return name_symbol; break;
+		case dt_var: return name_var; break;
+		case dt_list: return name_list; break;
+		case dt_link: return name_link; break;
+		case dt_data: return name_data; break;
+		case dt_screen: return name_screen; break;
+		case dt_option: return name_option; break;
+		case dt_binding: return name_binding; break;
+		case dt_material: return name_material; break;
+		case dt_light: return name_light; break;
+		default: printf("data_name_get type not implemented %d\n", type);return name_default; break;
 	}
 }
 
@@ -95,12 +130,34 @@ void *data_add(t_data_type type,void *data)
 	t_vlst *_vlst;
 	t_vector *_vector;
 	t_node *node;
+	//t_geo_point *_point;
 
 	size_t size;
 
 
 	switch(type)
 	{
+
+		case dt_geo_point:
+
+			return data;
+			break;
+
+		case dt_geo_edge:
+
+			return data;
+			break;
+
+		case dt_geo_array:
+
+			return data;
+			break;
+
+		case dt_geo:
+
+			return data;
+			break;
+
 		case dt_vector:
 
 			node = vector_add("vector");
@@ -111,7 +168,7 @@ void *data_add(t_data_type type,void *data)
 			
 		case dt_int:
 
-			_int = (int *)malloc(sizeof(int));
+			_int = (int *)mem_malloc(sizeof(int));
 
 			if(C->scene->store)
 			{
@@ -128,7 +185,7 @@ void *data_add(t_data_type type,void *data)
 
 		case dt_uint:
 
-			_uint = (unsigned int *)malloc(sizeof(unsigned int));
+			_uint = (unsigned int *)mem_malloc(sizeof(unsigned int));
 
 			if(C->scene->store)
 			{
@@ -145,7 +202,7 @@ void *data_add(t_data_type type,void *data)
 
 		case dt_char:
 			
-			_char = (char *)malloc(sizeof(char));
+			_char = (char *)mem_malloc(sizeof(char));
 
 			if(C->scene->store)
 			{
@@ -163,7 +220,7 @@ void *data_add(t_data_type type,void *data)
 
 		case dt_float:
 
-			_float = (float *)malloc(sizeof(float));
+			_float = (float *)mem_malloc(sizeof(float));
 
 			if(C->scene->store)
 			{
@@ -182,7 +239,7 @@ void *data_add(t_data_type type,void *data)
 			if(data)
 			{
 				size=sizeof(char)*(strlen(data)+1);
-				_string = (char *)malloc(size);
+				_string = (char *)mem_malloc(size);
 				strcpy(_string,data);
 
 				if(C->scene->store)
@@ -231,6 +288,8 @@ void *data_add(t_data_type type,void *data)
 				return NULL;
 			}
 			break;
+			
+				
 
 		default:
 			printf("[ERROR data_add] Unknown data type:%s\n",data_name_get(type));
@@ -289,7 +348,7 @@ void *data_copy(t_data_type type,void *data)
 
 		case dt_char:
 			
-			_char = (char *)malloc(sizeof(char));
+			_char = (char *)mem_malloc(sizeof(char));
 
 			if(C->scene->store)
 			{
@@ -307,7 +366,7 @@ void *data_copy(t_data_type type,void *data)
 
 		case dt_float:
 
-			_float = (float *)malloc(sizeof(float));
+			_float = (float *)mem_malloc(sizeof(float));
 
 			if(C->scene->store)
 			{
@@ -326,7 +385,7 @@ void *data_copy(t_data_type type,void *data)
 			if(data)
 			{
 				size=sizeof(char)*(strlen(data)+1);
-				_string = (char *)malloc(size);
+				_string = (char *)mem_malloc(size);
 				strcpy(_string,data);
 
 				if(C->scene->store)
@@ -389,9 +448,53 @@ void data_init(t_data_type type,void *data_dst, void *data_src)
 	float *_float;
 	t_vlst *_vlst;
 	char *_char;
+	t_geo_point *_geo_point_src;
+	t_geo_point *_geo_point_dst;
+
+	t_geo_edge *_geo_edge_src;
+	t_geo_edge *_geo_edge_dst;
+
+	t_geo_array *_geo_array_src;
+	t_geo_array *_geo_array_dst;
+
+	t_geo *_geo_src;
+	t_geo *_geo_dst;
 
 	switch(type)
 	{
+
+		case dt_geo:
+			_geo_dst = (t_geo *) data_dst;
+			_geo_src = (t_geo *) data_src;
+
+			*_geo_dst = *_geo_src;
+			
+			break;
+
+		case dt_geo_array:
+			_geo_array_dst = (t_geo_array *) data_dst;
+			_geo_array_src = (t_geo_array *) data_src;
+
+			*_geo_array_dst = *_geo_array_src;
+			
+			break;
+
+		case dt_geo_point:
+			_geo_point_dst = (t_geo_point *) data_dst;
+			_geo_point_src = (t_geo_point *) data_src;
+
+			*_geo_point_dst = *_geo_point_src;
+			
+			break;
+
+		case dt_geo_edge:
+			_geo_edge_dst = (t_geo_edge *) data_dst;
+			_geo_edge_src = (t_geo_edge *) data_src;
+
+			*_geo_edge_dst = *_geo_edge_src;
+			
+			break;
+
 		case dt_int:
 
 			_int = (int*) data_dst;
@@ -489,11 +592,8 @@ t_data *data_rebind(t_scene *sc,void *ptr)
 
 t_data *data_new(const char *name)
 {
-	t_data *data = (t_data *)malloc(sizeof(t_data));
-	data->id=0;
-	data->id_chunk=0;
-	set_name(data->name,name);
-	data->users=0;
+	t_data *data = (t_data *)mem_malloc(sizeof(t_data));
+	id_init(&data->id, name);
 	bzero(data->type,_NAME_);
 	bzero(data->target,_NAME_);
 	data->size=0;
@@ -506,6 +606,72 @@ t_data *data_new(const char *name)
 
 void data_free(t_data *data)
 {
-	free(data);
+	mem_free( data, sizeof( t_data));
 }
+
+// DATUM
+
+void datum_free(t_datum *datum)
+{
+	/* **MEM** */
+	mem_free( datum->data, datum->size);
+	mem_free( datum, sizeof( t_datum));
+}
+
+t_datum *datum_new(t_data_type type, int count, void *data)
+{
+	t_datum *datum = (t_datum *) mem_malloc(sizeof(t_datum));
+	t_id *id = (t_id *) data;
+	id_init( &datum->id, id->name);
+	datum->type = type;
+	datum->count = count;
+	datum->size = 0;
+
+	int i;
+	switch(type)
+	{
+		case(dt_int):
+			datum->data = (int *)mem_malloc(sizeof(int) * count);
+			datum->size = sizeof(int) * count;
+			if(data)
+			{
+				for(i=0;i<count;i++)
+				{
+					cprf_int(datum->data, data, i);
+				}
+			}	
+			break;
+
+		case(dt_bool):
+			datum->data = (int *)mem_malloc(sizeof(int) * count);
+			datum->size = sizeof(int) * count;
+			if(data)
+			{
+				for(i=0;i<count;i++)
+				{
+					cprf_int(datum->data, data, i);
+				}
+			}	
+			break;
+
+		case(dt_float):
+			datum->data = (int *)mem_malloc(sizeof(float) * count);
+			datum->size = sizeof(float) * count;
+			if(data)
+			{
+				for(i=0;i<count;i++)
+				{
+					cprf_int(datum->data, data, i);
+				}
+			}	
+			break;
+		default:
+			printf("[ERROR datum_new] Unknown data type %s\n",data_name_get(type));
+			break;
+	}
+
+	return datum;
+}
+
+
 

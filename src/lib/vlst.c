@@ -19,8 +19,12 @@
 #include "list.h"
 #include "data.h"
 #include "dict.h"
+#include "ui.h"
+#include "block.h"
+#include "memory.h"
+#include "vlst.h"
+#include "brick.h"
 
-void __vlst_update_data(t_vlst *vlst,t_vlst *caller);
 
 void *vlst_get_pointer(t_vlst *vlst, int indice)
 {
@@ -45,29 +49,33 @@ void vlst_set_data(t_vlst *vlst, void *data, int indice)
 	{
 		case(dt_float): srf_float(ptr, data, indice); break;
 		case(dt_uint): srf_uint(ptr, data,  indice); break;
+		case(dt_int): srf_int(ptr, data,  indice); break;
 		default: 
 			printf("[ERR vlst_set_data] Unknown type %s\n",data_name_get(vlst->type));
 			break;
 	}
 }
 
-void exe_vlst(t_dict *args)
+void exe_vlst(t_action *action)
 {
+	t_dict *args = action->args;
 	t_vlst *vlst = dict_pop_data(args,"vlst");
 	t_vlst *caller = dict_pop_data(args,"caller");
 
-	__vlst_update_data(vlst,caller);
+	__vlst_update_data( action->brick, vlst, caller);
+
+	action->done = 1;
 }
 
-void vlst_update_data(t_vlst *vlst,t_vlst *caller)
+void vlst_update_data( t_brick *brick, t_vlst *vlst,t_vlst *caller)
 {
 	t_action *action = action_new("action");
 
 	action->act = exe_vlst;
 
-	t_node *node_dict = dict_add("args");
-	t_dict *dict = node_dict->data;
+	t_dict *dict = dict_make( "args");
 	action->args = dict;
+	action->brick = brick;
 
 	dict_symbol_add(action->args,"vlst",dt_null,vlst);
 	dict_symbol_add(action->args,"caller",dt_null,caller);
@@ -109,7 +117,7 @@ void vlst_data_init(t_vlst *vlst, int old_count)
 	}
 }
 	
-void __vlst_update_data(t_vlst *vlst,t_vlst *caller)
+void __vlst_update_data( t_brick *brick, t_vlst *vlst,t_vlst *caller)
 {
 	t_context *C=ctx_get();
 
@@ -117,22 +125,29 @@ void __vlst_update_data(t_vlst *vlst,t_vlst *caller)
 	{
 		void *old_ptr=vlst->data;
 
-		// get data,var
-		t_node *node_data=scene_get_data(C->scene,old_ptr);
-		t_node *node_var=scene_get_var(C->scene,old_ptr);
-
-		// remove data,var
-		scene_node_free(C->scene,node_data);
-		scene_node_free(C->scene,node_var);
-
-		int old_count = vlst->count;
-
 		// set count
+		int old_count = vlst->count;
 		vlst->count=vlst->count_new;
-
-		// realloc
 		int new_size=(vlst->size)*(vlst->length)*(vlst->count);
-		void *new_ptr=realloc(vlst->data,new_size);
+		void *new_ptr = NULL;
+
+		if(old_ptr)
+		{
+			// get data,var
+			t_node *node_data=scene_get_data(C->scene,old_ptr);
+			t_node *node_var=scene_get_var(C->scene,old_ptr);
+
+			// remove data,var
+			scene_node_free(C->scene,node_data);
+			scene_node_free(C->scene,node_var);
+
+			// realloc
+			new_ptr=realloc(vlst->data,new_size);
+		}
+		else
+		{
+			new_ptr = mem_malloc((vlst->size)*(vlst->length)*(vlst->count));
+		}
 
 		if(!new_ptr) printf("[ERROR vls_update_data]\n"); 
 
@@ -156,15 +171,15 @@ void __vlst_update_data(t_vlst *vlst,t_vlst *caller)
 			if(caller)
 			{
 				// prevent infinite loop
-				if(link_vlst->id != caller->id)
+				if(link_vlst->id.id != caller->id.id)
 				{
-					vlst_update_data(link_vlst,vlst);
+					vlst_update_data( brick, link_vlst,vlst);
 				}
 				
 			}
 			else
 			{
-				vlst_update_data(link_vlst,vlst);
+				vlst_update_data( brick, link_vlst, vlst);
 			}
 		}
 	}
@@ -240,9 +255,9 @@ void vlst_show(t_vlst *vlst)
 		void *dat=vlst->data;
 
 		if(C->event->debug_terminal)
-			printf("[VLST] type:%s name:%s count:%d length:%d\n",data_name_get(vlst->type), vlst->name, count, length);
+			printf("[VLST] type:%s name:%s count:%d length:%d\n", data_name_get(vlst->type), vlst->id.name, count, length);
 		if(C->event->debug_console)
-			term_log("[VLST] type:%s name:%s count:%d length:%d",data_name_get(vlst->type), vlst->name, count, length);
+			term_log("[VLST] type:%s name:%s count:%d length:%d", data_name_get(vlst->type), vlst->id.name, count, length);
 
 		if(dat)
 		{
@@ -318,6 +333,19 @@ void vlst_show(t_vlst *vlst)
 						d+=length;
 					}
 				}
+
+				else if(vlst->length == 2)
+				{
+					int *d=(int *)dat;
+					for(i=0;i<count;i++)
+					{
+						if(C->event->debug_terminal)
+							printf("[%d] %d %d \n",i,d[0],d[1]);
+						if(C->event->debug_console)
+							term_log("[%d] %d %d",i,d[0],d[1]);
+						d+=length;
+					}
+				}
 			}
 		}
 		else
@@ -378,10 +406,10 @@ void _loop_float(void *dst,void *src,int count,int size)
 
 		for(i=0;i<count;i++)
 		{
-			if(size>=1) d[p+0]+=u_randrange(0,100)*pp;
-			if(size>=2) d[p+1]+=u_randrange(0,100)*pp;
-			if(size>=3) d[p+2]+=u_randrange(0,100)*pp;
-			if(size>=4) d[p+3]+=u_randrange(0,100)*pp;
+			if(size>=1) d[p+0]+=rnd_range(0,100)*pp;
+			if(size>=2) d[p+1]+=rnd_range(0,100)*pp;
+			if(size>=3) d[p+2]+=rnd_range(0,100)*pp;
+			if(size>=4) d[p+3]+=rnd_range(0,100)*pp;
 
 			p+=size;
 		}
@@ -667,7 +695,7 @@ t_vlst *vlst_make(const char *name,t_data_type type, int length, int count)
 {
 	t_context *C=ctx_get();
 
-	t_node *node_vlst=scene_add(C->scene,nt_vlst,name);
+	t_node *node_vlst=scene_add(C->scene,dt_vlst,name);
 	t_vlst *vlst=node_vlst->data;
 
 	vlst->type = type;
@@ -680,12 +708,27 @@ t_vlst *vlst_make(const char *name,t_data_type type, int length, int count)
 	else if(type == dt_float) vlst->size = sizeof(float);
 	else printf("[ERROR vlst_make] Unknown type %s\n",data_name_get(type));
 
-	vlst->data=malloc((vlst->size)*(vlst->length)*(vlst->count));
-
-	if(C->scene->store)
+	if(length && count)
 	{
-		 scene_add_data_var(C->scene,"vlst_data","v_data",((vlst->size)*(vlst->length)*(vlst->count)),vlst->data);
+		vlst->data=mem_malloc((vlst->size)*(vlst->length)*(vlst->count));
+		if(C->scene->store)
+		{
+			 scene_add_data_var(C->scene,"vlst_data","v_data",((vlst->size)*(vlst->length)*(vlst->count)),vlst->data);
+		}
 	}
+	else
+	{
+		vlst->data = NULL;
+	}
+
+	if(C->ui->add_bricks)
+	{
+		t_node *node_block=add_block(C,"vlst");
+		t_block *block=node_block->data;
+		add_part_vlst(C,block,dt_vlst,"vlst",vlst);
+		vlst->ref = block;
+	}
+
 
 	return vlst;
 }
@@ -694,7 +737,7 @@ t_vlst *vlst_make(const char *name,t_data_type type, int length, int count)
 
 t_vlst *vlst_duplicate(t_vlst *vlst)
 {
-	t_vlst *vlst_new=vlst_make(vlst->name,vlst->type,vlst->length,vlst->count);
+	t_vlst *vlst_new = vlst_make(vlst->id.name, vlst->type, vlst->length, vlst->count);
 	vlst_copy(vlst_new,vlst->data);
 
 	return vlst_new;
@@ -714,7 +757,7 @@ t_vlst *vlst_clone(t_vlst *vlst)
 {
 	if(vlst)
 	{
-		t_vlst *clone = vlst_new(vlst->name);
+		t_vlst *clone = vlst_new(vlst->id.name);
 
 		clone->count = vlst->count;
 		clone->length = vlst->length;
@@ -722,16 +765,12 @@ t_vlst *vlst_clone(t_vlst *vlst)
 		clone->count_new = vlst->count_new;
 		clone->need_update = vlst->need_update;
 		clone->is_linked = vlst->is_linked;
-		clone->has_limit_high = vlst->has_limit_high;
-		clone->has_limit_low = vlst->has_limit_low;
-		clone->limit_high = vlst->limit_high;
-		clone->limit_low = vlst->limit_low;
 
 		clone->link = NULL; //XXX
 		clone->type = vlst->type;
 
 		size_t size = sizeof(vlst->type)*vlst->length*vlst->count;
-		clone->data = malloc(size);
+		clone->data = mem_malloc(size);
 		memcpy(clone->data,vlst->data,size);
 
 		return clone;
@@ -777,12 +816,10 @@ t_vlst *vlst_rebind(t_scene *sc,void *ptr)
 
 t_vlst *vlst_new(const char *name)
 {
-	t_vlst *vlst=(t_vlst *)malloc(sizeof(t_vlst));
+	t_vlst *vlst=(t_vlst *)mem_malloc(sizeof(t_vlst));
 
-	vlst->id=0;
-	vlst->id_chunk=0;
-	set_name(vlst->name,name);
-	vlst->users=0;
+	id_init(&vlst->id, name);
+
 	vlst->type=dt_null;
 	vlst->count=0;
 	vlst->count_new=0;
@@ -790,17 +827,24 @@ t_vlst *vlst_new(const char *name)
 	vlst->need_update=0;
 	vlst->is_linked=0;
 	vlst->link=NULL;
-	vlst->has_limit_high = 0;
-	vlst->has_limit_low = 0;
-	vlst->limit_low = -1;
-	vlst->limit_high = -1;
+	vlst->ref = NULL;
+	vlst->type = dt_null;
+	vlst->type_target = dt_null;
 
 	return vlst;
 }
 
 void vlst_free(t_vlst *vlst)
 {
-	if(vlst->data) free(vlst->data);
-	free(vlst);
+	int l = vlst->count * vlst->length * vlst->size;
+	if(vlst->data) mem_free(vlst->data, l);
+	mem_free( vlst, sizeof( t_vlst));
+}
+
+void vlst_delete( t_vlst *vlst)
+{
+	t_scene *sc = ctx_scene_get();
+	if( vlst->id.store)  scene_delete( sc, vlst); 
+	else  vlst_free( vlst); 
 }
 

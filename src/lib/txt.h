@@ -16,9 +16,8 @@ typedef struct Txt t_txt;
 
 struct Txt
 {
-	int id;
-	int id_chunk;
-	short users;
+	t_id id;
+
 	char name[_NAME_LONG_];
 
 	int icol[3];
@@ -44,6 +43,9 @@ struct Txt
 	float (* get_width)(t_txt *txt);
 
 	int use_bitmap_font;
+	int edit;
+	int use_front_color;
+
 };
 
 // TXT.C
@@ -52,6 +54,7 @@ float txt_get_width(t_txt *txt);
 void txt_alphabet_make(void);
 void txt_layout_init(void);
 
+void txt_draw(t_txt *txt);
 float txt_get_length(t_txt *txt);
 
 void txt_draw_direct_2d(char *string,float pos[3],float *color,float scale);

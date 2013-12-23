@@ -15,8 +15,8 @@
 #define CAM_ORTHO_NEAR -1
 #define CAM_ORTHO_FAR 1
 #define CAM_EYE 10
-#define CAM_FAR 8000
-#define CAM_NEAR .1
+#define CAM_FAR 80000
+#define CAM_NEAR .001
 #define CAM_FOVY 60 //60
 
 #define CAM_ORTHO_ZOOM 1000
@@ -53,10 +53,7 @@ struct Camera_Class
 
 struct Camera
 {
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
+	t_id id;
 	t_camera_cls *cls;
 
 	// Sate
@@ -144,6 +141,7 @@ char *		render_fbo;
 char *		render_tiled;
 
 void 		op_3d_orientation(void);
+void camera_free( t_camera *camera);
 
 
 

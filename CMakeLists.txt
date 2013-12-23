@@ -1,23 +1,11 @@
+# MINUIT
 cmake_minimum_required(VERSION 2.6) 
 
+if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
+		message(FATAL_ERROR "Don't build in SOURCE directory !")
+endif()
+
 project(Minuit)
-
-file(
-    GLOB_RECURSE
-    source_files
-    src/*
-    src/lib/*
-    src/util/*
-)
-
-add_library(MINUIT STATIC ${source_files})
-
-add_executable(
-    minuit
-    minuit.c
-)
-
-include_directories(src src/lib src/util)
 
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
@@ -25,12 +13,28 @@ find_package(PNG REQUIRED)
 find_package(JPEG REQUIRED)
 find_package(Threads)
 
-include_directories(${OPENGL_INCLUDE_DIRS}  ${GLUT_INCLUDE_DIRS} ${PNG_INCLUDE_DIR} ${JPEG_INCLUDE_DIRS})
+include_directories(
+	${CMAKE_SOURCE_DIR}/src/util
+	${CMAKE_SOURCE_DIR}/src/lib
+	${CMAKE_SOURCE_DIR}/src
+	)
 
-target_link_libraries(MINUIT ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${PNG_LIBRARY} ${JPEG_LIBRARY} pthread)
-target_link_libraries(minuit MINUIT)
+set(CMAKE_BUILD_TYPE debug)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DWITH_DEBUG -Wall ")
 
-LINK_DIRECTORIES(${OPENGL_LIBRARIES})
+add_subdirectory(src)
 
-set(CMAKE_C_FLAGS "-DWITH_DEBUG -g -Wall")
+add_executable(
+    minuit
+    minuit.c
+)
+
+target_link_libraries(minuit minuit-core minuit-lib minuit-util)
+target_link_libraries(minuit ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${PNG_LIBRARY} ${JPEG_LIBRARY} pthread m)
+
+
+
+
+
+
  

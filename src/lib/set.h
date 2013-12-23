@@ -15,19 +15,18 @@
 struct Scene;
 struct Lst;
 struct Block;
+struct Node;
 
 typedef struct Set
 {
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
+	t_id id;
 
 	struct Lst *blocks;
-	struct Lst *graphs;
+	struct Lst *rhizomes;
 
 	int frame_based;
 	int process;
+	int process_delay;
 	int process_id;
 	int processing;
 
@@ -39,11 +38,11 @@ void 		set_draw(t_set *set);
 void 		set_block_pop(t_set *set, struct Block *block);
 void 		set_block_push(t_set *set, struct Block *block);
 t_set *		set_rebind(struct Scene *sc, void **ptr);
-t_node *	set_add(const char *name);
+struct Node *	set_add(const char *name);
 t_set *		set_clone(t_set *set);
 void 		_set_free(t_set *set);
 void 		set_free(t_set *set);
-t_node *	set_make(const char *name);
+struct Node *	set_make(const char *name);
 t_set *		set_new(const char *name);
 
 

@@ -15,6 +15,7 @@
 #include "ctx.h"
 #include "dict.h"
 #include "list.h"
+#include "memory.h"
 
 void symbol_show(t_symbol *symbol)
 {
@@ -26,6 +27,7 @@ void symbol_show(t_symbol *symbol)
 		case dt_float:printf("(float\t)%s:(%f)\n",name,drf_float(symbol->data));break;
 		case dt_string:printf("(string\t)%s:(%s)\n",name,drf_string(symbol->data));break;
 		case dt_pointer:printf("(pointer\t)%s:(%p)\n",name,symbol->data);break;
+		case dt_lst:printf("(lst\t)%s\n",name);lst_show(symbol->data);break;
 		default: printf("[WARNING symbol_show] Unknown type\n");
 	}
 }
@@ -37,7 +39,8 @@ void dict_show(t_dict *dict)
 	t_link *l;
 	t_symbol *symbol;
 
-	printf("(dict\t)(%s)\n",dict->name);
+	printf("DICT\t(%s)\n", dict->id.name);
+	printf("count:%d\n", dict->count);
 	if(lst)
 	{
 		for(l=lst->first;l;l=l->next)
@@ -50,25 +53,30 @@ void dict_show(t_dict *dict)
 
 // ADD
 
-t_node *symbol_add(const char *name)
+t_symbol *symbol_make( const char *name)
 {
-	t_context *C=ctx_get();
-	t_node *node= scene_add(C->scene,nt_symbol,name);
+	t_scene *sc = ctx_scene_get();
+	t_symbol *symbol;
+	t_node *node= scene_add( sc, dt_symbol, name);
+	symbol = node->data;
 
-	return node;
+	return symbol;
 }
 
 // DICT SYMBOL ADD
 
-void dict_symbol_add(t_dict *dict,const char *name,t_data_type type,void *data)
+t_symbol *dict_symbol_add(t_dict *dict,const char *name,t_data_type type,void *data)
 {
-	t_node *symbol_node=symbol_add(name);
-	t_symbol *symbol=symbol_node->data;
+	t_symbol *symbol = symbol_make( name);
 
 	symbol->data_type=type;
 	symbol->data=data;
 
-	list_add(dict->symbols,symbol);
+	list_add_data(dict->symbols,symbol);
+
+	dict->count++;
+
+	return symbol;
 }
 
 t_symbol *dict_pop(t_dict *dict,const char *name)
@@ -80,8 +88,10 @@ t_symbol *dict_pop(t_dict *dict,const char *name)
 	for(l=lst->first;l;l=l->next)
 	{
 		symbol=l->data;
-
-		if(is(symbol->name,name)) return symbol;
+		if(is(symbol->name,name))
+		{
+			return symbol;
+		}
 	}
 	
 	return NULL;
@@ -92,22 +102,18 @@ void *dict_pop_data(t_dict *dict,const char *name)
 	t_symbol *symbol = dict_pop(dict,name);
 	return symbol->data;
 }
-	
 
-t_node *dict_add(const char *name)
+t_dict *dict_make( const char *name)
 {
-	t_context *C = ctx_get();
-	// new dict
-	t_node *node_dict = scene_add(C->scene,nt_dict,name);
-	t_dict *dict=node_dict->data;
+	t_scene *sc = ctx_scene_get();
+	t_dict *dict;
+	t_node *node_dict = scene_add( sc, dt_dict, name);
+	dict=node_dict->data;
 
 	// new list
-	t_node *node_list = scene_add(C->scene,nt_list,"dict_lst");
-	t_lst *lst=node_list->data;
+	dict->symbols = list_make( dt_dict, "dict");
 
-	dict->symbols=lst;
-
-	return node_dict;
+	return dict;
 }
 
 // REBIND
@@ -125,6 +131,8 @@ t_symbol *symbol_rebind(t_scene *sc,void *ptr)
 t_dict *dict_rebind(t_scene *sc,void *ptr)
 {
 	t_dict *dict=(t_dict *)ptr;
+	printf(":: %s\n", dict->id.name);
+	printf(":: %s\n", dict->symbols->id.name);
 
 	rebind(sc,"dict","symbols",(void **)&dict->symbols);
 
@@ -135,9 +143,9 @@ t_dict *dict_rebind(t_scene *sc,void *ptr)
 
 t_symbol *symbol_new(const char *name)
 {
-	t_symbol *symbol = (t_symbol *)malloc(sizeof(t_symbol));
+	t_symbol *symbol = (t_symbol *)mem_malloc(sizeof(t_symbol));
 
-	symbol->id=0;
+	id_init( &symbol->id, name);
 	symbol->id_chunk=0;
 	symbol->users=0;
 	set_name(symbol->name,name);
@@ -151,14 +159,12 @@ t_symbol *symbol_new(const char *name)
 
 t_dict *dict_new(const char *name)
 {
-	t_dict *dict = (t_dict *)malloc(sizeof(t_dict));
+	t_dict *dict = (t_dict *)mem_malloc(sizeof(t_dict));
 
-	dict->id=0;
-	dict->id_chunk=0;
-	dict->users=0;
-	set_name(dict->name,name);
+	id_init(&dict->id, name);
 
 	dict->symbols=NULL;
+	dict->count = 0;
 
 	return dict;
 }
@@ -167,7 +173,7 @@ t_dict *dict_new(const char *name)
 
 void symbol_free(t_symbol *symbol)
 {
-	free(symbol);
+	mem_free( symbol, sizeof( t_symbol));
 }
 
 void dict_free(t_dict *dict)
@@ -183,10 +189,10 @@ void dict_free(t_dict *dict)
 		for(l=dict->symbols->first;l;l=l->next)
 		{
 			s = l->data;
-			scene_struct_delete(sc,s);
+			scene_delete(sc,s);
 		}
 
 		// free list
-		scene_struct_delete(sc,dict->symbols);
+		scene_delete(sc,dict->symbols);
 	}
 }

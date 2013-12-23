@@ -23,13 +23,87 @@
 #include "event.h"
 #include "brick.h"
 #include "block.h"
-
-#include "graph.h"
+#include "binding.h"
+#include "rhizome.h"
 #include "set.h"
 
 int is_vec_stored=0;
 float v[3];
 float vec[3];
+
+int brick_check_viewport( t_brick *brick)
+{
+	t_context *C=ctx_get();
+	if(C->scene->has_generic_viewport) return 1;
+	else return 0;
+}
+
+int brick_check_loop(t_brick *brick)
+{
+	t_context *C = ctx_get();
+
+	int frame = C->app->frame;
+
+	if(brick->state.frame_loop != frame)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+int brick_pre_check_loop(t_brick *brick)
+{
+	t_context *C = ctx_get();
+
+	int frame = C->app->frame;
+
+	if(brick->state.frame_loop != frame)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+// SET UPDATED
+
+void brick_set_updated(t_brick *brick)
+{
+	t_plug *plug = &brick->plug_intern;
+
+	// Bindings
+	if(plug->bindings)
+	{
+		t_link *link;
+		for(link = plug->bindings->first; link; link = link->next)
+		{
+			t_binding *binding = link->data;
+			binding_update(binding,plug->data);
+		}
+	}
+
+	// Set Updated
+	brick->plug_in.state.is_updated = 1;
+	brick->plug_intern.state.is_updated = 1;
+	brick->plug_out.state.is_updated = 1;
+
+	// Set Setup
+	if(brick->mode == bm_triggering)
+	{
+		t_block *block = brick->block;
+		t_set *set = block->set;
+		if(set) set_setup(set);
+	}
+}
+
+/*
+	**************************	CONNECT / DISCONNECT   **************************** 
+*/
 
 // CONNECT
 
@@ -46,8 +120,10 @@ void _cls_brick_connect(t_brick *brick_in ,t_brick *brick_out)
 	t_plug *plug_brick_in = &brick_in->plug_intern;
 	t_plug *plug_brick_out = &brick_out->plug_intern;
 
-	plug_brick_in->cls->connect(mode_in, plug_brick_in, plug_brick_out);
+	// first Out
 	plug_brick_out->cls->connect(mode_out, plug_brick_out, plug_brick_in);
+	// Then In
+	plug_brick_in->cls->connect(mode_in, plug_brick_in, plug_brick_out);
 }
 
 // DISCONNECT
@@ -67,14 +143,11 @@ void _cls_brick_disconnect(t_brick *self)
 	t_plug *plug_intern_in = &brick_in->plug_intern;
 	t_plug *plug_intern_out = &brick_out->plug_intern;
 
-	plug_intern_in->cls->disconnect(mode_in , plug_intern_in);
 	plug_intern_out->cls->disconnect(mode_out ,plug_intern_out);
-
-	t_block *block_self = brick_in->block;
-	t_block *block_target = brick_out->block;
+	plug_intern_in->cls->disconnect(mode_in , plug_intern_in);
 
 	// Split Graph
-	block_graph_split(block_self,plug_in,block_target,plug_target);
+	brick_rhizome_split(brick_in, brick_out);
 
 	// change modes
 	self->mode=bm_idle;
@@ -116,9 +189,12 @@ int brick_start_cloning(t_context *C,int mouse_over)
 		return 0;
 }
 
-// TRIGGER
+/*
+	**************************	TRIGGER **************************** 
+*/
 
-void cls_brick_trigger_number(t_brick *brick)
+// SLIDER
+void cls_brick_trigger_slider( t_brick *brick)
 {
 	if(brick->state.use_loops == 0)
 	{
@@ -140,60 +216,31 @@ void cls_brick_trigger_number(t_brick *brick)
 
 }
 
+// SWITCH
 void cls_brick_trigger_switch(t_brick *brick)
 {
 	brick->action(brick);
 	brick_set_updated(brick);
 }
 
+// SELECTOR
 void cls_brick_trigger_selector(t_brick *brick)
 {
 	brick->action(brick);
 	brick_set_updated(brick);
 }
 
+// MENU
 void cls_brick_trigger_menu(t_brick *brick)
 {
 	brick->action(brick);
 	brick_set_updated(brick);
 }
 
-void cls_brick_trigger_operator(t_brick *brick)
-{
-	brick->action(brick);
-	if(brick->mode == bm_triggering)
-		brick_release(brick);
-	brick_set_updated(brick);
-}
-
-void cls_brick_trigger_vlst(t_brick *brick)
-{
-	brick->action(brick);
-	brick_set_updated(brick);
-}
-
-void cls_brick_trigger_lst(t_brick *brick)
-{
-	brick->action(brick);
-	brick_set_updated(brick);
-}
-
-
-void cls_brick_trigger_generic(t_brick *brick)
+// TRIGGER
+void cls_brick_trigger_trigger(t_brick *brick)
 {
 	t_context *C = ctx_get();
-
-	/*
-	if(brick->state.use_loops == 0)
-	{
-		int frame = C->app->frame;
-
-		if(brick->state.frame_loop != frame)
-		{
-			brick->state.frame_loop = frame;
-		}
-	}
-	*/
 
 	t_plug *plug_in=&brick->plug_in;
 	t_plug *plug_out = &brick->plug_out;
@@ -248,12 +295,6 @@ void cls_brick_trigger_generic(t_brick *brick)
 	brick_set_updated(brick);
 }
 
-void cls_brick_trigger_action_default(t_brick *brick)
-{
-	brick->action(brick);
-	brick_set_updated(brick);
-}
-
 // RELEASE
 
 void brick_release(t_brick *brick)
@@ -266,9 +307,10 @@ void brick_release(t_brick *brick)
 
 // REMOVE
 
-void brick_remove(t_dict *args)
+void brick_remove(t_action *action)
 {
 	t_context *C = ctx_get();
+	t_dict *args = action->args;
 
 	t_brick *brick = dict_pop_data(args,"brick");
 	t_block *block = brick->block;
@@ -280,7 +322,7 @@ void brick_remove(t_dict *args)
 		t_lst *lst = set->blocks;
 
 		list_remove_by_ptr(lst,block);
-		scene_struct_delete(C->scene,block);
+		scene_delete(C->scene,block);
 	}
 }
 
@@ -298,8 +340,17 @@ void cls_brick_update(t_brick *brick)
 
 	int button_left=C->app->mouse->button_left;
 	int button_right=C->app->mouse->button_right;
+	int button_middle=C->app->mouse->button_middle;
 	int mouse_over = is_mouse_over_brick(C,brick);
 	int brick_clic=0;
+
+	int edit = 0;
+	if(mouse_over && (button_middle == button_pressed))
+	{
+		edit = 1;
+		C->event->is_mouse_over_brick = 1;
+	}
+	
 
 	float mouse_pos[3];
 	vset(mouse_pos,0,0,0);
@@ -326,15 +377,13 @@ void cls_brick_update(t_brick *brick)
 
 	if(mouse_over && C->event->brick_delete) 
 	{
-		C->event->brick_delete = 0;
-
 		t_action *action = action_new("action");
 
 		action->act = brick_remove;
 
-		t_node *node_dict = dict_add("args");
-		t_dict *dict = node_dict->data;
+		t_dict *dict = dict_make("args");
 		action->args = dict;
+		action->brick = brick;
 
 		dict_symbol_add(action->args,"brick",dt_null,brick);
 
@@ -364,12 +413,12 @@ void cls_brick_update(t_brick *brick)
 		{
 			if(brick->state.debug)
 			{
-				term_log("%s: debug off",brick->name);
+				term_log("%s: debug off",brick->id.name);
 				brick->state.debug = 0;
 			}
 			else
 			{
-				term_log("%s: debug on",brick->name);
+				term_log("%s: debug on",brick->id.name);
 				brick->state.debug = 1;
 			}
 		}
@@ -380,10 +429,11 @@ void cls_brick_update(t_brick *brick)
 	if(brick->state.is_mouse_over && brick->state.debug)
 	{
 		t_plug *plug = &brick->plug_intern;
-		term_log("%d) brick %s",C->app->frame, brick->name);
+		term_log("%d) brick %s",C->app->frame, brick->id.name);
 		plug_debug(plug);
 	}
 
+	//printf("%d %d %d\n",C->event->ui.pan,C->event->camera_rotation,C->event->ui.zoom);
 
 	// MODES
 
@@ -473,12 +523,16 @@ void cls_brick_update(t_brick *brick)
 					}
 
 					// START TYPING
-					else if(mouse_over && (button_left == button_pressed) && C->app->keyboard->alt)
+					else if( edit)
 					{
 						C->event->is_brick_transformed=1;
 						C->ui->brick_selected=brick;
 						brick->mode=bm_typing;
 						C->event->ui.typing_start = 1;
+						C->event->is_typing=1;
+
+						set_name_long( C->event->buffer_char, brick->txt_data.name);
+						C->event->buffer_char_counter = strlen( brick->txt_data.name);
 					}
 
 					// START TRIGGER 
@@ -720,7 +774,12 @@ void cls_brick_update(t_brick *brick)
 			case bm_typing:
 
 				//release
-				if(C->event->ui.typing_start && C->event->ui.typing_end)
+
+				if(
+					(C->event->is_typing==0)
+					||
+					(C->event->ui.typing_start && C->event->ui.typing_end)
+					)
 				{
 					brick->mode=bm_idle;
 					C->event->is_brick_transformed=0;
@@ -729,6 +788,7 @@ void cls_brick_update(t_brick *brick)
 					C->event->buffer_char_counter=0;
 					C->event->ui.typing_start = 0;
 					C->event->ui.typing_end = 0;
+
 				}
 				// change data
 				else
@@ -745,6 +805,7 @@ void cls_brick_update(t_brick *brick)
 						float *dt=plug->data;
 						*dt=atof(C->event->buffer_char);
 					}
+					
 				}
 
 				break;

@@ -22,8 +22,6 @@
 #include "ui.h"
 #include "file.h"
 
-#include "system.h"
-#include "network.h"
 #include "server.h"
 
 #include "term.h"
@@ -104,9 +102,11 @@ void server_connect(t_server *server,int port)
 	process_launch(process);
 }
 
-t_server *server_new(void)
+t_server *server_new( const char *name)
 {
-	t_server *server = (t_server *)malloc(sizeof(t_server));
+	t_server *server = (t_server *)mem_malloc(sizeof(t_server));
+
+	id_init( &server->id, name);
 
 	server->socket=socket_new();
 	server->socket->print=server_print;

@@ -13,6 +13,7 @@
 #define APP_PLAY 1
 #define APP_WITH_GLUT 1
 #define APP_VIDEO_LIMIT 20
+#define VERSION "0.4"
 
 #include "opengl.h"
 #include "util.h"
@@ -20,7 +21,7 @@
 #include "list.h"
 #include "clock.h"
 #include "file.h"
-#include "system.h"
+#include "memory.h"
 
 // used for GL calls without args
 t_app *APP;
@@ -152,7 +153,7 @@ void app_launch(t_app *app)
 	}
 	else if(app->with_glut==0)
 	{
-		glx_main_loop();	
+		//glx_main_loop();	
 	}
 	else
 	{
@@ -199,10 +200,10 @@ void app_args_scan(t_app *app)
 
 int app_free(t_app *app)
 {
-	free(app->mouse);
-	free(app->keyboard);
-	free(app->window);
-	free(app->clock);
+	mem_free( app->mouse, sizeof( t_mouse));
+	mem_free( app->keyboard, sizeof( t_keyboard));
+	mem_free(app->window, sizeof( t_window));
+	mem_free(app->clock, sizeof( t_clock));
 
 	return 1;
 }
@@ -213,6 +214,9 @@ void app_init(t_app *app, const char *name)
 {
 	// Store Localy
 	APP = app;
+
+	// Set Version
+	set_name(app->version,VERSION);
 
 	// GL
 	if(app->off_screen)
@@ -236,7 +240,7 @@ void app_init(t_app *app, const char *name)
 			glutPassiveMotionFunc(app_gl_passive_motion);
 			glutIdleFunc(app_gl_idle);
 		}
-		else glx_win(app);
+		//else glx_win(app);
 	}
 
 	// Set Fullscreen
@@ -249,7 +253,7 @@ void app_init(t_app *app, const char *name)
 
 t_app *app_new(int argc,char **argv)
 {
-	t_app *app = (t_app *)malloc(sizeof(t_app));
+	t_app *app = (t_app *)mem_malloc(sizeof(t_app));
 
 	app->argc=argc;
 	app->argv=argv;
@@ -286,7 +290,7 @@ t_app *app_new(int argc,char **argv)
 	app->mouse=mouse_new();
 	app->window=window_new(app->with_glut);
 	app->keyboard=keyboard_new();
-	app->clock=clock_new();
+	app->clock=clock_new( "clock");
 
 	app->file = file_new("void");
 	file_init(app->file);

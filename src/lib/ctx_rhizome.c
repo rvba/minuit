@@ -7,6 +7,7 @@
  *
  */
 
+#include "node.h"
 #include "context.h"
 #include "scene.h"
 #include "ctx.h"
@@ -19,8 +20,7 @@
 #include "memory.h"
 #include "list.h"
 #include "set.h"
-
-#include "graph.h"
+#include "rhizome.h"
 
 void ctx_set_exec(struct Context *C)
 {
@@ -51,34 +51,18 @@ void ctx_set_exec(struct Context *C)
 				}
 			}
 
-			l = set->graphs->first;
+			l = set->rhizomes->first;
 
 			// For All Graphs
 			for(;l;l=l->next)
 			{
-				t_graph *graph = l->data;
+				t_rhizome *rhizome = l->data;
 
 				// Graph Exec
-				graph_exec(graph);
+				rhizome_exec(rhizome);
 
 			}
 		}
-
 	}
 }
 
-
-void ctx_graph_update(struct Context *C)
-{
-	// Freeze
-	if(C->ui->update_links)
-	{
-		t_link *link;
-		for(link=C->scene->graphs->first;link;link=link->next)
-		{
-			t_node *node = link->data;
-			t_graph *graph = node->data;
-			graph_exec(graph);
-		}
-	}
-}

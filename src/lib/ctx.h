@@ -28,6 +28,7 @@ void load_last(struct Context *C);
 
 // CTX_SAVE
 
+void save_to_file( struct Context *C);
 void save_file(struct Context *C);
 void save_file_increment(struct Context *C);
 
@@ -66,8 +67,9 @@ void ctx_ui(struct Context *C);
 
 // CTX_SCENE
 
+void ctx_scene_selection(struct Context *C, struct Node *node, int state);
 void ctx_scene_clear_selections(struct Context *C);
-void ctx_scene_set_selected(struct Context *C,void *data);
+void ctx_scene_set_selected(struct Context *C, struct Node *node);
 void ctx_scene(struct Context *C);
 
 

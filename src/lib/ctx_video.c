@@ -18,23 +18,31 @@
 #include "ui.h"
 #include "image.h"
 #include "list.h"
+#include "memory.h"
 
 #include <dirent.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 
+/* **MEM** */
+
 void ctx_switch_record_video(t_context *C)
 {
 	if(C->event->video_record)
 	{
-		C->event->video_stop_call = 1;
 		C->ui->show_mouse = 0;
+		C->event->video_stop_call = 1;
 		term_log("record stop");
+		
 	}
 	else
 	{
+		if(C->ui->visualize_mouse)
+		{
+			C->ui->show_mouse = 1;
+		}
+
 		C->event->video_record = 1;
-		C->ui->show_mouse = 1;
 		term_log("record start");
 	}
 }
@@ -131,9 +139,14 @@ void ctx_render_video(t_context *C)
 		{
 			engine_process_remove(C->engine,process);
 
+			char command[1024];
+			sprintf(command,"ffmpeg -f image2 -i video/f%%04d.jpg -r 25 -b %dk video/video.avi &",C->ui->bitrate);
+
 			if(C->app->video_build)
 			{
-				system("ffmpeg -f image2 -i video/f%04d.jpg -r 25 -b 5000k video/video.avi &");
+				//system("ffmpeg -f image2 -i video/f%04d.jpg -r 25 -b 5000k video/video.avi &");
+				int r = system(command);
+				(void) r; // unused value:)
 			}
 
 			C->event->video_stop = 0;
@@ -168,7 +181,7 @@ void ctx_render_video(t_context *C)
 				{
 					C->event->video_frame = C->app->frame;
 
-					unsigned char *buffer = (unsigned char *)malloc(sizeof(unsigned char *)*width*height*4);
+					unsigned char *buffer = (unsigned char *)mem_malloc(sizeof(unsigned char *)*width*height*4);
 
 					glPixelStorei(GL_PACK_ALIGNMENT, 1);
 					glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, buffer);

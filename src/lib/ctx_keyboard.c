@@ -22,6 +22,8 @@
 #include "draw.h"
 #include "list.h"
 
+#include "rhizome.h"
+
 int switch_init=0;
 int switch_frame=0;
 int switch_done=0;
@@ -102,6 +104,13 @@ void keymap_typing(unsigned char key)
 		// RETURN
 		case 13:
 			event->ui.typing_end = 1;
+			C->event->is_typing=0; 
+			break;
+
+		// BACKSPACE
+		case 8:
+			C->event->buffer_char[C->event->buffer_char_counter-1] = '\0';
+			C->event->buffer_char_counter--;
 			break;
 
 		default:
@@ -159,7 +168,6 @@ void keymap_command(unsigned char key)
 
 		case '*': draw_switch_axis_world(C->draw);break;
 
-		case 'a': ctx_switch_record_video(C); break;
 		case 'q': op_quit(NULL);break;
 		case '.': if(camera) op_camera_reset_pos(camera);break;
 		case '5': if(camera) op_camera_switch_type(camera);break;
@@ -169,10 +177,7 @@ void keymap_command(unsigned char key)
 		case '3': if(camera) op_camera_view_left(camera);break;
 		case '2': if(camera) op_camera_ortho_rotate(camera,-5,0,0);break;
 		case 'z': app_screen_switch_fullscreen(C->app);break;
-		case 'm': C->draw->with_draw_pass=0; break;
 		case 'x': op_switch_color(C);break;
-		case 't': switch_txt(C);break;
-		case 'l': scene_log(C->scene);break;
 		case 'n': C->ui->step = 1; break;
 		case 'r':
 			if(C->app->keyboard->alt)
@@ -197,6 +202,7 @@ void keymap_command(unsigned char key)
 			C->app->timer=0;
 
 			break;
+		case 'B': op_debug_all(C);break;
 
 		case 127:
 			printf("RESET\n");
@@ -208,15 +214,12 @@ void keymap_command(unsigned char key)
 			// reset key
 			C->app->keyboard->key_pressed=0;
 			break;
-		case 'c':
-			server_connect(C->server,9901);
-			break;
 	}
 
 	switch(C->app->keyboard->special)
 	{
 		case 1: load_last(C);break; 	//F1
-		case 2: save_file(C);break; 	//F2
+		case 2: save_to_file(C);break; 	//F2
 		case 3: save_file_increment(C);break; 		//F3
 	}
 }
@@ -252,10 +255,10 @@ void ctx_keyboard(t_context *C)
 			s=n->data;
 			if(s->is_active)
 			{
-				if(!C->event->is_typing)
-				{
+				//if(!C->event->is_typing)
+				//{
 					 s->keymap(C->app->keyboard->key_pressed);
-				}
+			//	}
 			}
 
 		}

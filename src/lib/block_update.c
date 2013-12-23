@@ -48,6 +48,7 @@ void block_unstore(t_block *block)
 	block->submenu=NULL;
 }
 
+// regular block
 void cls_block_block_update(t_block *block)
 {
 	t_context *C = ctx_get();
@@ -79,10 +80,17 @@ void cls_block_block_update(t_block *block)
 		brick->cls->update(brick);
 	}
 
-	if(is_mouse_over) block->state.is_mouse_over=1;
-	else block->state.is_mouse_over=0;
+	if(is_mouse_over)
+	{
+		block->state.is_mouse_over=1;
+	}
+	else 
+	{
+		block->state.is_mouse_over=0;
+	}
 }
 
+// menu block
 void cls_block_menu_update(t_block *block)
 {
 	t_context *C = ctx_get();
@@ -143,7 +151,7 @@ void cls_block_menu_update(t_block *block)
 							{
 								t_brick *brick_submenu=block->submenu;
 
-								if(!is(brick_submenu->name,brick->name))
+								if(!is(brick_submenu->id.name,brick->id.name))
 								{
 									block_unstore(block);
 									block_store(block,brick);
@@ -185,6 +193,7 @@ void cls_block_menu_update(t_block *block)
 }
 
 
+// Screen blocks
 void cls_block_generic_update(t_block *block)
 {
 	t_context *C = ctx_get();

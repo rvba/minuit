@@ -9,6 +9,7 @@
 
 #include "op.h"
 #include "node.h"
+#include "scene.h"
 #include "context.h"
 #include "brick.h"
 #include "obj.h"
@@ -19,6 +20,7 @@
 #include "ctx.h"
 #include "object.h"
 #include "screen.h"
+#include "memory.h"
 
 t_lst *OBJECTS;
 
@@ -89,6 +91,7 @@ void obj_show(t_obj *obj,int show_data)
 
 void obj_free(t_obj *obj)
 {
+	/* **MEM **/
 	free(obj->name);
 	if(obj->verts)free(obj->verts);
 	if(obj->tris) free(obj->tris);
@@ -97,8 +100,8 @@ void obj_free(t_obj *obj)
 
 t_obj *obj_new(const char *name)
 {
-	t_obj *obj = (t_obj *)malloc(sizeof(t_obj));
-	obj->name=(char *)malloc(sizeof(char)*(strlen(name)+1));
+	t_obj *obj = (t_obj *)mem_malloc(sizeof(t_obj));
+	obj->name=(char *)mem_malloc(sizeof(char)*(strlen(name)+1));
 	strcpy(obj->name,name);
 	obj->tot_vert=0;
 	obj->tot_face=0;
@@ -128,9 +131,9 @@ void obj_add(const char *object_name,int tot_vert,int tot_face,int tot_quad,int 
 	obj->tot_quad=tot_quad;
 	obj->tot_tri=tot_tri;
 
-	if(tot_vert) obj->verts=(float *)malloc(sizeof(float)*obj->tot_vert*3);
-	if(tot_tri) obj->tris=(int *)malloc(sizeof(int)*obj->tot_tri*3);
-	if(tot_quad) obj->quads=(int *)malloc(sizeof(int)*obj->tot_quad*4);
+	if(tot_vert) obj->verts=(float *)mem_malloc(sizeof(float)*obj->tot_vert*3);
+	if(tot_tri) obj->tris=(int *)mem_malloc(sizeof(int)*obj->tot_tri*3);
+	if(tot_quad) obj->quads=(int *)mem_malloc(sizeof(int)*obj->tot_quad*4);
 
 	lst_add(OBJECTS,obj,"obj");
 }
@@ -169,16 +172,16 @@ void _op_obj_import(void)
 
 		// parse tokens
 		int object_start;
-		int line_object;
+		int line_object = 0;
 		int is_face;
 		//int tot_object;
-		int tot_vert;
-		int tot_face;
-		int tot_tri;
-		int tot_quad;
-		int tot_indice;
+		int tot_vert = 0;
+		int tot_face = 0;
+		int tot_tri = 0;
+		int tot_quad = 0;
+		int tot_indice = 0;
 
-		char *object_name;
+		char *object_name = NULL;
 
 		//tot_object=0;
 		tot_face=0;
@@ -223,7 +226,7 @@ void _op_obj_import(void)
 				}
 				else if(line_object)
 				{
-					object_name=(char *)malloc(sizeof(char)*(strlen(word->data)+1));
+					object_name=(char *)mem_malloc(sizeof(char)*(strlen(word->data)+1));
 					strcpy(object_name,word->data);
 					line_object=0;
 				}
@@ -277,9 +280,9 @@ void _op_obj_import(void)
 
 		object_start=0;
 
-		t_token_type token;
+		t_token_type token = token_unknown;
 		t_link *link_object;
-		t_obj *obj;
+		t_obj *obj = NULL;
 
 		for(link=file->lines->first;link;link=link->next)
 		{
@@ -342,6 +345,7 @@ void _op_obj_import(void)
 				else
 				{
 					is_data=1;
+					token=token_unknown;
 				}
 
 				if(is_data)

@@ -16,10 +16,10 @@
 #include <time.h>
 #include <sys/time.h>
 
-
-
 typedef struct Clock
 {
+	t_id id;
+
 	float freq;
 	int factor;
 	double delta;
@@ -41,8 +41,8 @@ typedef struct Clock
 }t_clock;
 
 
-void clock_init(t_clock *clock);
-void clock_free(t_clock *clock);
-t_clock *clock_new(void);
+void 		clock_init( t_clock *clock);
+void 		clock_free( t_clock *clock);
+t_clock *	clock_new( const char *name);
 
 #endif

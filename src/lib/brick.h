@@ -13,7 +13,6 @@
 
 #include "txt.h"
 #include "plug.h"
-#include "node.h"
 
 struct Block;
 struct Brick;
@@ -24,6 +23,7 @@ enum Data_Type;
 struct Brick_State;
 struct Brick_Geometry;
 struct Brick_Var;
+struct Action;
 
 // BRICK TYPE
 
@@ -104,6 +104,7 @@ typedef struct Brick_State
 	int is_plug_update:1;
 	int always_trigger:1;
 	int is_contextual:1;
+	int poll:1;
 	int is_versatil:1;
 	int has_ref:1;
 	int use_dragging:1;
@@ -114,8 +115,6 @@ typedef struct Brick_State
 	int has_components:1;
 	int clone;
 	int frame_loop;
-	int has_limit_low:1;
-	int has_limit_high:1;
 
 }t_brick_state;
 
@@ -141,10 +140,6 @@ typedef struct Brick_Var
 	int selector;
 	int selector_length;
 	char selector_list[_LIST_*_NAME_LONG_];
-	int limit_int_low;
-	int limit_int_high;
-	float limit_float_low;
-	float limit_float_high;
 
 }t_brick_var;
 
@@ -152,19 +147,16 @@ typedef struct Brick_Var
 
 typedef struct Brick
 {
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];			
+	t_id id;
 	t_brick_class *cls;			// cls
 
 	enum Brick_Type type;
-	enum Node_Type context;			// contextual menus
+	t_data_type context;			// contextual menus
 
 	int idcol_right[3];			// col
 	int idcol_left[3];
 
-	int graph_order;			// Graph 
+	int rhizome_order;			// Graph 
 	int counter;				// For Loop
 	int block_order;			// Internal Block Id
 
@@ -188,16 +180,18 @@ typedef struct Brick
 
 	// action
 	void *(* action)(struct Brick *brick);	
+	int (* poll)(struct Brick *brick);	
 
 }t_brick;
 
 
-void 		brick_remove(struct Dict *args);
+void brick_rhizome_split(t_brick *brick_x, t_brick *brick_y);
+void brick_rhizome_add(t_brick *brick_x, t_brick *brick_y);
+void 		brick_remove(struct Action *action);
 
 int 		brick_is_different(struct Brick *dst, struct Brick *src);
 void 		brick_copy_data(struct Brick *dst, struct Brick *src);
 void 		brick_binding_add(struct Brick *brick, enum Data_Type type, void *data);
-void 		plug_child_remove_all_parents(struct Plug *child);
 struct Brick *	brick_copy(struct Block *block,struct Brick *brick);
 struct Brick *	brick_dupli(struct Block *block,struct Brick *brick);
 void 		plug_color_init(struct Plug *plug);
@@ -251,11 +245,20 @@ void *	 	op_add_camera_main(void);
 void *		op_add_default(struct Brick *brick);
 void *		op_add_light(struct Brick *brick);
 void *		op_add_cube(struct Brick *brick);
-void *		op_add_wire_cube(struct Brick *brick);
-void *		op_add_uv_cube(struct Brick *brick);
-void *		op_add_uv_plane(struct Brick *brick);
+void *		op_add_plane(struct Brick *brick);
 void *		op_add_triangle(struct Brick *brick);
 void *		op_add_quad(struct Brick *brick);
+void *		op_add_empty_object(t_brick *brick);
+void *		op_add_empty_mesh(struct Brick *brick);
+void *		op_add_object(const char *name);
+void *		op_add_mesh(const char *name);
+void *		op_add_empty_vlst(struct Brick *brick);
+void *		op_add_empty_float_vlst(struct Brick *brick);
+void *		op_add_empty_int_vlst(struct Brick *brick);
+void *		op_add_empty_geometry(struct Brick *brick);
+void *		op_add_empty_geo_point(struct Brick *brick);
+void *		op_add_empty_geo_edge( struct Brick *brick);
+void *		op_add_geo_array( struct Brick *brick);
 
 
 void *		op_camera_rotate_xy(struct Brick *brick);
@@ -264,7 +267,6 @@ void *		op_camera_rotate_z(struct Brick *brick);
 
 
 void *		op_brick_add(struct Brick *brick);
-void *		op_limit(struct Brick *brick);
 void *		op_selector(struct Brick *brick);
 void *		op_brick_node_action(struct Brick *brick);
 void *		op_void(struct Brick *brick);
@@ -277,6 +279,11 @@ void *		op_sin(struct Brick *brick);
 void *		op_cos(struct Brick *brick);
 void *		op_divide(struct Brick *brick);
 void *		op_add(struct Brick *brick);
+void *		op_geometry(struct Brick *brick);
+void *		op_geo(struct Brick *brick);
+void * 		op_geo_point(struct Brick *brick);
+void * 		op_geo_edge(struct Brick *brick);
+void *		op_geo_array( struct Brick *brick);
 void *		op_superior(struct Brick *brick);
 void *		op_inferior(struct Brick *brick);
 void *		op_plusplus(struct Brick *brick);
@@ -300,6 +307,7 @@ void *		op_set_vlst(struct Brick *brick);
 void *		op_set_colors(struct Brick *brick);
 void *		op_rnd(struct Brick *brick);
 void *		op_neg(struct Brick *brick);
+void *		op_abs(struct Brick *brick);
 void *		op_is_last(struct Brick *brick);
 void *		op_operator(struct Brick *brick);
 void *		op_vector(struct Brick *brick);
@@ -317,13 +325,15 @@ void 		brick_set_updated(struct Brick *brick);
 
 // BRICK_UPDATE
 
-void 		cls_brick_trigger_vlst(struct Brick *brick);
-void		cls_brick_trigger_lst(struct Brick *brick);
+int brick_check_viewport( t_brick *brick);
+int brick_pre_check_loop(t_brick *brick);
+
 void 		cls_brick_trigger_selector(struct Brick *brick);
-void 		cls_brick_trigger_number(struct Brick *brick);
+void 		cls_brick_trigger_slider(struct Brick *brick);
 void 		cls_brick_trigger_switch(struct Brick *brick);
 void 		cls_brick_trigger_menu(struct Brick *brick);
-void 		cls_brick_trigger_generic(struct Brick *brick);
+void 		cls_brick_trigger_trigger(struct Brick *brick);
+
 void 		cls_brick_trigger_operator(struct Brick *brick);
 void 		cls_brick_update(struct Brick *brick);
 void 		cls_brick_trigger_action_default(struct Brick *brick);

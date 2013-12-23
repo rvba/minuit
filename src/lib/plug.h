@@ -13,6 +13,8 @@
 
 #include "data.h"
 
+extern int PLUG_DEBUG;
+
 struct Brick;
 struct Lst;
 
@@ -56,13 +58,13 @@ struct Plug_State
 	int is_init:1;
 	int is_versatil:1;		// change plug type if connected
 	int store_data:1;		// for rebind
+	int store_data_memory:1;		// for rebind
 	int is_eval:1;
 	int is_volatil:1;		// stored data is volatil
 	int is_state_volatil:1;		// plug ports can change state when connected
 	int is_a_loop:1;
 	int close_flow_in:1;		// will close target's flow in
 	int use_flow:1;
-	int is_parent:1;
 	int swap_flow:1;
 
 	int flow_in:1;
@@ -80,10 +82,7 @@ struct Plug_State
 
 struct Plug
 {
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
+	t_id id;
 	t_plug_class *cls;
 
 	int idcol[3];
@@ -99,9 +98,7 @@ struct Plug
 
 	t_plug *src;
 	t_plug *dst;
-	t_plug *child;
 
-	struct Lst *parents;
 	struct Lst *bindings;
 
 	void *data;
@@ -112,12 +109,11 @@ void 		plug_get_data(t_plug *plug);
 
 void 		plug_data_reset(t_plug *plug);
 void 		plug_data_negate(t_plug *plug);
+void 		plug_data_abs(t_plug *plug);
 void 		plug_data_set(t_plug *plug,t_data_type type,void *data);
 
 void 		plug_debug(t_plug *plug);
 
-void 		plug_add_parent(t_plug *plug,t_plug *parent);
-void 		plug_remove_parent(t_plug *plug);
 
 t_plug *	plug_get_dst(t_plug *plug);
 t_plug *	plug_get_src(t_plug *plug);

@@ -21,8 +21,11 @@
 #define SKT_LINE_WIDTH_FRONT 1
 #define SKT_LINE_WIDTH_BACK 20
 #define SKT_INTENSITY 1
+#define SKT_POINT_RESOLUTION 8
+#define SKT_POINT_SMOOTH 1
 
 
+struct Context;
 typedef struct Sketch t_skt;
 
 struct Sketch
@@ -37,10 +40,15 @@ struct Sketch
 	int point_width;
 	float point_size;
 	float intensity;
+	int point_resolution;
+	int point_smooth;
 
 	//scale
 	int with_scale;
 	float scale;
+
+	int use_point_global_width;
+	int use_line_global_width;
 };
 
 // NEW
@@ -64,9 +72,11 @@ void skt_line(float *v1,float *v2,int width,float *color);
 void skt_polyline(float *points,int tot);
 void skt_closedline(float *points,int tot,float *color,int width);
 void skt_closedline_filled(float *points,int tot,float *color,int width);
+void _skt_rectangle(float *point, float *v1, float *v2, float *color, int width);
 
 // POINT
 
+void skt_circle(float *pos);
 void skt_point_size_set(float size) ;
 void skt_point(float *pos,int width,float *color);
 
@@ -90,6 +100,7 @@ void skt_msh_rectangle(float *p,float w,float h,float *color);
 
 void skt_sphere(float radius,float sx,float sy);
 
+void skt_update( struct Context *C);
 t_skt *skt_get(void);
 
 #endif
