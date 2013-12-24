@@ -76,7 +76,7 @@ void cls_block_block_update(t_block *block)
 			}
 		}
 
-		// update button 
+		// update brick 
 		brick->cls->update(brick);
 	}
 

@@ -96,7 +96,6 @@ typedef struct Brick_State
 	int is_moving:1;
 	int is_linking:1; 		// start linking state
 	int is_draging:1;		// clic & drag number but
-	int is_done:1;			// action (number) is done
 	int is_left_pressed:1;
 	int is_right_pressed:1;
 	int use_brick_blocking:1;	// one clic

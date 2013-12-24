@@ -31,10 +31,6 @@ t_context *CONTEXT;
 
 void ctx_handler(void);
 
-void ctx_test(void)
-{
-}
-
 t_context *ctx_get(void)
 {
 	return CONTEXT;
@@ -139,33 +135,19 @@ void ctx_reset(t_context *C)
 	event->switch_plug_out_follow_out = 0;
 
 	event->switch_brick_debug = 0;
-
-	// app special keys
-	t_app *app = C->app;
-
-	if(
-		   !(app->mouse->button_left == button_pressed) 
-		&& !(app->mouse->button_right == button_pressed)
-		)
-	{
-		app->keyboard->ctrl=0;
-		app->keyboard->shift=0;
-		app->keyboard->alt = 0;
-	}
 }
 
 void ctx_update(t_context *C)
 {
 	ctx_app(C);
 	ctx_keyboard(C);	
+	ctx_mouse( C);
 	ctx_event( C);
 	ctx_ui(C);
 	ctx_scene(C); 
 	ctx_camera(C);
 	ctx_mode(C);
 }
-
-/** the main callback C->app->main_func */
 
 void ctx_handler(void)
 {

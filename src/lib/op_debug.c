@@ -30,32 +30,6 @@
 #define DEBUG_SCALE 1 
 
 
-
-void debug_mouse_brick(t_mouse *mouse,const char brick[],char txt[])
-{
-	if(is(brick,"left"))
-	{
-		if(mouse->button_left==button_clic) strcpy(txt,"left clic");
-		else if(mouse->button_left==button_pressed) strcpy(txt,"left pressed");
-		else if(mouse->button_left==button_released) strcpy(txt,"left released");	
-		else if(mouse->button_left==button_idle) strcpy(txt,"left idle");	
-	}
-	else if(is(brick,"middle"))
-	{
-		if(mouse->button_middle==button_clic) strcpy(txt,"middle clic");	
-		else if(mouse->button_middle==button_pressed) strcpy(txt,"middle pressed");	
-		else if(mouse->button_middle==button_released) strcpy(txt,"middle released");	
-		else if(mouse->button_middle==button_idle) strcpy(txt,"middle idle");	
-	}
-	else if(is(brick,"right"))
-	{
-		if(mouse->button_right==button_clic) strcpy(txt,"right clic");	
-		else if(mouse->button_right==button_pressed) strcpy(txt,"right pressed");	
-		else if(mouse->button_right==button_released) strcpy(txt,"right released");	
-		else if(mouse->button_right==button_idle) strcpy(txt,"right idle");	
-	}
-}
-
 float get_framerate(t_context *C)
 {
 	gettimeofday(&C->app->clock->frame_now,NULL);

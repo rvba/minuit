@@ -25,9 +25,6 @@
 
 struct MINscreen;
 
-// a(97) z(122)
-
-
 #define AKEY		'a' 
 #define BKEY		'b'
 #define CKEY		'c'
@@ -117,7 +114,26 @@ struct MINscreen;
 #define PADEIGHT	56
 #define PADNINE		57
 
-#define EVENT_KEYBOARD( event) ( event >= 0 && event <= ZKEY)
+#define SHIFTKEY	200
+#define ALTKEY		201
+#define CTRLKEY		202
+
+#define KEYBOARD_STOP	203
+
+#define MOUSE_START 700
+#define MOUSE_STATIC 800
+#define MOUSE_MOTION_PASSIVE 801
+#define MOUSE_MOTION 802
+#define MOUSE_BUTTON_LEFT_PRESSED 803
+#define MOUSE_BUTTON_LEFT_RELEASED 840
+#define MOUSE_BUTTON_RIGHT_PRESSED 841
+#define MOUSE_BUTTON_RIGHT_RELEASED 842
+#define MOUSE_BUTTON_MIDDLE_PRESSED 843
+#define MOUSE_BUTTON_MIDDLE_RELEASED 844
+#define MOUSE_END 850
+
+#define EVENT_KEYBOARD( event) ( event >= 0 && event <= KEYBOARD_STOP)
+#define EVENT_MOUSE( event) ( event >= MOUSE_START && event <= MOUSE_END)
 
 
 typedef enum EventState

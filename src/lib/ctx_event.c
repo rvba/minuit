@@ -21,8 +21,14 @@ void ctx_event_exec( t_context *C, t_event *event)
 {
 	if( EVENT_KEYBOARD( event->type))
 	{
+		ui_keyboard_set( C->ui, event);
 		t_screen *screen = event->screen;
 		if( screen) screen->keymap( event->type);
+	}
+
+	if( EVENT_MOUSE( event->type))
+	{
+		ui_mouse_set( C->ui, event);
 	}
 }
 

@@ -27,7 +27,7 @@
 #include "data.h"
 #include "camera.h"
 #include "rhizome.h"
-#include "memory.h"
+#include "event.h"
 
 t_lst *sets = NULL;
 
@@ -307,39 +307,32 @@ void ui_navigation(t_context *C)
 {
 	if( !C->event->is_mouse_over_brick)
 	{
-		//printf("nav\n");
-	// Pan
-	if(C->app->mouse->button_right == button_pressed && C->app->keyboard->ctrl)
-	{
+		// Pan
+		if( C->ui->mouse_state == UI_RIGHT_PRESSED && C->ui->key_ctrl)
+		{
+			C->ui->pan_x = C->event->ui.pan_x + C->ui->mouse_delta_x;
+			C->ui->pan_y = C->event->ui.pan_y + C->ui->mouse_delta_y;
+			C->event->ui.pan = 1;
+		}
 
-		C->ui->pan_x = C->event->ui.pan_x + (C->app->mouse->x - C->app->mouse->last_x);
-		C->ui->pan_y = C->event->ui.pan_y + (C->app->mouse->y - C->app->mouse->last_y);
+		// Zoom
+		if( C->ui->mouse_state == UI_RIGHT_PRESSED && C->ui->key_alt)
+		{
+			C->event->ui.zoom = 1;
+			C->ui->zoom += ( C->ui->mouse_dy * 0.002);
+		}
 
-		C->event->ui.pan = 1;
-	}
+		// Release
+		if(
+			(C->event->ui.pan || C->event->ui.zoom)
+			&& C->ui->mouse_state == UI_RIGHT_RELEASED)
+		{
+			C->event->ui.pan = 0;
+			C->event->ui.zoom = 0;
 
-	// Zoom
-	if(C->app->mouse->button_right == button_pressed && C->app->keyboard->alt)
-	{
-		C->event->ui.zoom = 1;
-		float zoom = C->ui->zoom;
-		zoom += C->app->mouse->sign_y * C->app->mouse->dy * 0.01;
-
-		if(zoom  > 0.1)
-			C->ui->zoom+=(C->app->mouse->sign_y * C->app->mouse->dy * 0.01);
-	}
-
-	// Release
-	if(
-		(C->event->ui.pan || C->event->ui.zoom)
-		&& C->app->mouse->button_right == button_released)
-	{
-		C->event->ui.pan = 0;
-		C->event->ui.zoom = 0;
-
-		C->event->ui.pan_x = C->ui->pan_x;
-		C->event->ui.pan_y = C->ui->pan_y;
-	}
+			C->event->ui.pan_x = C->ui->pan_x;
+			C->event->ui.pan_y = C->ui->pan_y;
+		}
 	}
 }
 
@@ -435,6 +428,128 @@ void ui_init(void)
 	C->ui->camera = camera_new("camera_ui");
 }
 
+void ui_mouse_show( t_ui *ui)
+{
+	switch( ui->mouse_state)
+	{
+		case UI_MOUSE_IDLE:	 printf("UI_MOUSE_IDLE\n"); break;
+		case UI_LEFT_PRESSED:	 printf("UI_LEFT_PRESSED\n"); break;
+		case UI_LEFT_CLIC:	 printf("UI_LEFT_CLIC\n"); break;
+		case UI_LEFT_RELEASED:	 printf("UI_LEFT_RELEASED\n"); break;
+
+		case UI_RIGHT_PRESSED:	 printf("UI_RIGHT_PRESSED\n"); break;
+		case UI_RIGHT_CLIC:	 printf("UI_RIGHT_CLIC\n"); break;
+		case UI_RIGHT_RELEASED:	 printf("UI_RIGHT_RELEASED\n"); break;
+
+		case UI_MIDDLE_PRESSED:	 printf("UI_MIDDLE_PRESSED\n"); break;
+		case UI_MIDDLE_CLIC:	 printf("UI_MIDDLE_CLIC\n"); break;
+		case UI_MIDDLE_RELEASED: printf("UI_MIDDLE_RELEASED\n"); break;
+	}
+
+	switch( ui->mouse_motion)
+	{
+		case UI_MOUSE_STATIC:	printf("UI_MOUSE_STATIC\n"); break;
+		case UI_MOUSE_MOTION:	printf("UI_MOUSE_MOTION\n"); break;
+		case UI_MOUSE_MOTION_PASSIVE:	printf("UI_MOUSE_MOTION_PASSIVE\n"); break;
+	}
+
+	printf("x:%d y:%d dx:%d dy:%d delta_x:%d delta_y:%d\n",ui->mouse_x, ui->mouse_y, ui->mouse_dx, ui->mouse_dy, ui->mouse_delta_x, ui->mouse_delta_y);
+	
+}
+
+void ui_mouse_motion( t_ui *ui, int x, int y)
+{
+	ui->mouse_x = x;
+	ui->mouse_y = y;
+
+	int dx;
+	int dy;
+
+	int last_x = ui->mouse_last_x;
+	int last_y = ui->mouse_last_y;
+
+	dx = x - last_x;
+	dy = y - last_y;
+
+	ui->mouse_dx = dx;
+	ui->mouse_dy = dy;
+
+	ui->mouse_last_x = x;
+	ui->mouse_last_y = y;
+
+}
+
+inline int mouse_pressed( int state)
+{
+	if(
+		state == UI_LEFT_PRESSED ||
+		state == UI_RIGHT_PRESSED ||
+		state == UI_MIDDLE_PRESSED)
+		return 1;
+	else
+		return 0;
+}
+
+void ui_mouse_delta( t_ui *ui)
+{
+	if( mouse_pressed( ui->mouse_state))
+	{
+		if( ui->mouse_drag)
+		{
+			ui->mouse_delta_x = ui->mouse_x - ui->mouse_last_x_pressed;
+			ui->mouse_delta_y = ui->mouse_y - ui->mouse_last_y_pressed;
+		}
+		else
+		{
+			ui->mouse_last_x_pressed = ui->mouse_x;
+			ui->mouse_last_y_pressed = ui->mouse_y;
+		}
+	}
+	else
+	{
+		ui->mouse_delta_x = 0;
+		ui->mouse_delta_y = 0;
+		ui->mouse_last_x_pressed = 0;
+		ui->mouse_last_y_pressed = 0;
+	}
+}
+
+void ui_mouse_set( t_ui *ui, t_event *event)
+{
+	int type = event->type;
+	ui->mouse_motion = UI_MOUSE_STATIC;
+
+	switch( type)
+	{
+		case MOUSE_BUTTON_LEFT_PRESSED: ui->mouse_state = UI_LEFT_PRESSED; break;
+		case MOUSE_BUTTON_LEFT_RELEASED: ui->mouse_state = UI_LEFT_RELEASED; break;
+
+		case MOUSE_BUTTON_RIGHT_PRESSED: ui->mouse_state = UI_RIGHT_PRESSED; break;
+		case MOUSE_BUTTON_RIGHT_RELEASED: ui->mouse_state = UI_RIGHT_RELEASED; break;
+
+		case MOUSE_BUTTON_MIDDLE_PRESSED: ui->mouse_state = UI_MIDDLE_PRESSED; break;
+		case MOUSE_BUTTON_MIDDLE_RELEASED: ui->mouse_state = UI_MIDDLE_RELEASED; break;
+	}
+
+	if( type == MOUSE_MOTION)		ui->mouse_motion = UI_MOUSE_MOTION;
+	else if( type == MOUSE_MOTION_PASSIVE)	ui->mouse_motion = UI_MOUSE_MOTION_PASSIVE;
+	
+	if( mouse_pressed( ui->mouse_state) && ui->mouse_motion == UI_MOUSE_MOTION) ui->mouse_drag = 1;
+	else ui->mouse_drag = 0;
+
+	ui_mouse_delta( ui);
+}
+
+void ui_keyboard_set( t_ui *ui, t_event *event)
+{
+	switch( event->type)
+	{
+		case SHIFTKEY:	ui->key_shift = 1; break;
+		case ALTKEY: 	ui->key_alt = 1; break;
+		case CTRLKEY: 	ui->key_ctrl= 1; ;break;
+	}
+}
+
 // NEW
 
 t_ui *ui_new(void)
@@ -461,6 +576,24 @@ t_ui *ui_new(void)
 	ui->show_rhizome_bounding_box = UI_SHOW_RHIZOME_BOUNDING_BOX;
 	ui->show_rhizome_order = UI_SHOW_RHIZOME_ORDER;
 	ui->show_status = UI_SHOW_STATUS;
+
+	ui->mouse_state = UI_MOUSE_IDLE;
+	ui->mouse_motion = UI_MOUSE_STATIC;
+	ui->mouse_x = 0;
+	ui->mouse_y = 0;
+	ui->mouse_last_x = 0;
+	ui->mouse_last_y = 0;
+	ui->mouse_last_x_pressed = 0;
+	ui->mouse_last_y_pressed = 0;
+	ui->mouse_dx = 0;
+	ui->mouse_dy = 0;
+	ui->mouse_delta_x = 0;
+	ui->mouse_delta_y = 0;
+	ui->mouse_drag = 0;
+
+	ui->key_shift = 0;
+	ui->key_alt = 0;
+	ui->key_ctrl = 0;
 
 	ui->step = 0;
 	ui->step_reset = 0;

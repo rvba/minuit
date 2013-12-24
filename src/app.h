@@ -87,6 +87,11 @@ struct Mouse
 	int is_moving;
 	int button_left_is_ready;
 
+	int event;
+	int motion;
+	int motion_passive;
+	int button;
+
 	struct Clock *clic_clock;
 	struct Clock *release_clock;
 };
@@ -114,6 +119,7 @@ struct Keyboard
 	int ctrl;
 	int alt;
 	int special;
+	int modifier;
 };
 
 // APP

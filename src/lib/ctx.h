@@ -17,6 +17,7 @@ struct Brick;
 struct Block;
 struct Plug;
 struct Lst;
+struct Ui;
 
 // CTX_EVENT
 
@@ -56,6 +57,9 @@ int is_mouse_over_plug(struct Context *C,struct Plug *plug);
 int is_mouse_over(struct Context *C,int *c);
 void ctx_set_mouse_over(struct Context *C);
 void ctx_get_mouse_pos(struct Context *C,float *r);
+
+void ctx_mouse( struct Context *C);
+inline int ui_left_clic( struct Ui *ui);
 
 // CTX_UI
 

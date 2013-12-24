@@ -29,15 +29,60 @@
 #define UI_SHOW_STATUS 0
 #define UI_ADD_BRICKS 1
 
+#define UI_MOUSE_IDLE		 0
+#define UI_LEFT_PRESSED		 1
+#define UI_LEFT_CLIC		 2
+#define UI_LEFT_DBCLIC		 3
+#define UI_LEFT_RELEASED	 4
+
+#define UI_RIGHT_PRESSED	 5
+#define UI_RIGHT_CLIC 		 6
+#define UI_RIGHT_DBCLIC		 7
+#define UI_RIGHT_RELEASED	 8
+
+#define UI_MIDDLE_PRESSED	 9
+#define UI_MIDDLE_CLIC		 10
+#define UI_MIDDLE_DBCLIC	 11
+#define UI_MIDDLE_RELEASED	 12
+
+#define UI_MOUSE_STATIC		13
+#define UI_MOUSE_MOTION		14
+#define UI_MOUSE_MOTION_PASSIVE	15
+
 float intro_intensity;
 
 struct Context;
+struct Event;
 
 typedef struct Ui
 {
 	int draw; // draw the ui
 	int update_links;
 	int record_camera;
+
+	int mouse_state;
+	int mouse_motion;
+
+	int mouse_x;
+	int mouse_y;
+
+	int mouse_last_x;
+	int mouse_last_y;
+
+	int mouse_last_x_pressed;
+	int mouse_last_y_pressed;
+
+	int mouse_dx;
+	int mouse_dy;
+
+	int mouse_delta_x;
+	int mouse_delta_y;
+
+	int mouse_drag;
+
+	int key_shift;
+	int key_alt;
+	int key_ctrl;
 
 	char status_top[100];
 
@@ -163,6 +208,10 @@ int op_ui_alphabet_switch(struct Node *node);
 void op_screen_switch();
 void ui_draw_sets(void);
 void ui_draw_mouse(void);
+
+void ui_keyboard_set( t_ui *ui, struct Event *event);
+void ui_mouse_set( t_ui *ui, struct Event *event);
+void ui_mouse_motion( t_ui *ui, int x, int y);
 
 
 #endif

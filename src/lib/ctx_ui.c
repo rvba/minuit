@@ -53,12 +53,12 @@ void ctx_ui_menu_hide(t_context *C)
 
 	if(C->event->ui.is_menu_fixed)
 	{
-		if(C->app->mouse->button_right==button_pressed)	
+		if( C->ui->mouse_state == UI_RIGHT_PRESSED)
 		{
 			C->event->ui.is_menu_pressed=1;
 		}
 
-		if(C->app->mouse->button_right==button_released)	
+		if( C->ui->mouse_state == UI_RIGHT_RELEASED)
 		{
 			if(C->event->ui.is_menu_pressed)
 				C->event->ui.is_menu_released=1;
@@ -81,7 +81,7 @@ void ctx_ui_menu_hide(t_context *C)
 		if(C->app->keyboard->shift)
 		{
 			C->event->ui.is_menu_fixed = 1;
-			C->app->keyboard->shift = 0;
+			//C->app->keyboard->shift = 0;
 			release = 0;
 		}
 	}
@@ -136,13 +136,13 @@ void ctx_ui_show_hide_menu(t_context *C)
 			)
 		{
 			// Set Pressed
-			if(C->app->mouse->button_right==button_pressed)	
+			if( C->ui->mouse_state == UI_RIGHT_PRESSED)	
 			{
 				C->event->ui.is_menu_pressed=1;
 			}
 
 			// Set Released
-			if(C->app->mouse->button_right==button_released)	
+			if( C->ui->mouse_state == UI_RIGHT_RELEASED)	
 			{
 				if(C->event->ui.is_menu_pressed)
 					C->event->ui.is_menu_released=1;
@@ -173,18 +173,15 @@ void ctx_ui_background_button_left_test(t_context *C)
 {
 	if(is_mouse_over_background(C))
 	{
-		if(C->event->is_background_button_left_pressed)
+		if( C->ui->mouse_state == UI_LEFT_PRESSED)
 		{
-			if(C->app->mouse->button_left==button_released)
-			{
-				C->event->is_background_button_left_released=1;
-			}
+			C->event->is_background_button_left_pressed=1;
 		}
 		else
 		{
-			if(C->app->mouse->button_left==button_pressed)
+			if( C->ui->mouse_state == UI_LEFT_RELEASED)
 			{
-				C->event->is_background_button_left_pressed=1;
+				C->event->is_background_button_left_released=1;
 			}
 		}
 	}
@@ -349,11 +346,11 @@ void ctx_block_set_update(t_context *C)
 
 void ctx_ui_intro(t_context *C)
 {
-	t_mouse *mouse = C->app->mouse;
-
-	if(mouse->button_left==button_pressed 
-	|| mouse->button_right==button_pressed
-	|| mouse->button_middle==button_pressed)
+	if(
+		( C->ui->mouse_state == UI_LEFT_PRESSED)
+		|| ( C->ui->mouse_state == UI_RIGHT_PRESSED)
+		|| ( C->ui->mouse_state == UI_MIDDLE_PRESSED)
+		)
 		C->ui->show_intro=0;
 }
 
@@ -437,7 +434,7 @@ void ctx_ui(t_context *C)
 	// test background 
 	ctx_ui_background(C);
 
-	if(C->app->mouse->button_left == button_pressed) C->event->ui.typing_end = 1;
+	if( C->ui->mouse_state == UI_LEFT_PRESSED) C->event->ui.typing_end = 1;
 	C->event->is_mouse_over_brick = 0;
 
 	// update blocks

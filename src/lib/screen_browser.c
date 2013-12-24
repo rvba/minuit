@@ -133,8 +133,6 @@ void *browser_return_filename(t_brick *brick)
 void browser_build(void)
 {
 	t_context *C=ctx_get();
-	t_node *node_brick;
-	t_brick *brick;
 
 	if(!is_built)
 	{
@@ -196,15 +194,13 @@ void browser_build(void)
 
 						if(is(fff," directory"))
 						{
-							node_brick=add_brick_trigger(C,block,file_name,browser_go_directory);
+							add_brick_trigger(C,block,file_name,browser_go_directory);
 						}
 						else
 						{
-							node_brick=add_brick_trigger(C,block,file_name,browser_return_filename);
+							add_brick_trigger(C,block,file_name,browser_return_filename);
 						}
 
-						brick=node_brick->data;
-						brick->state.use_global_blocking=1;
 
 					}
 
@@ -213,9 +209,7 @@ void browser_build(void)
 
 			}
 
-			node_brick=add_brick_trigger(C,block,"..",browser_go_backward);
-			brick=node_brick->data;
-			brick->state.use_global_blocking=1;
+			add_brick_trigger(C,block,"..",browser_go_backward);
 		}
 
 		// tmp colors

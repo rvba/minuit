@@ -239,6 +239,20 @@ void event_print( int state)
 		case PADSEVEN: printf("PAD 7"); break;
 		case PADEIGHT: printf("PAD 8"); break;
 		case PADNINE: printf("PAD 9"); break;
+
+		case MOUSE_STATIC: printf("MOUSE STATIC"); break;
+		case MOUSE_MOTION_PASSIVE: printf("MOUSE MOTION PASSIVE"); break;
+		case MOUSE_MOTION: printf("MOUSE MOTION"); break;
+		case MOUSE_BUTTON_LEFT_PRESSED: printf("MOUSE BUTTON LEFT PRESSED"); break;
+		case MOUSE_BUTTON_LEFT_RELEASED: printf("MOUSE BUTTON LEFT RELEASED"); break;
+		case MOUSE_BUTTON_RIGHT_PRESSED: printf("MOUSE BUTTON RIGHT PRESSED"); break;
+		case MOUSE_BUTTON_RIGHT_RELEASED: printf("MOUSE BUTTON RIGHT RELEASED"); break;
+		case MOUSE_BUTTON_MIDDLE_PRESSED: printf("MOUSE BUTTON MIDDLE PRESSED"); break;
+		case MOUSE_BUTTON_MIDDLE_RELEASED: printf("MOUSE BUTTON MIDDLE RELEASED"); break;
+
+		case SHIFTKEY: printf("SHIFTKEY"); break;
+		case ALTKEY: printf("ALTKEY"); break;
+		case CTRLKEY: printf("CTRLKEY"); break;
 		default: printf("? %d", state); break;
 	}
 }

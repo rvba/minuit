@@ -222,7 +222,7 @@ void ctx_scene_update_lst(t_context *C, t_lst *lst)
 			//if(node->cls->is_mouse_over(node))
 			if(node_hover(C, node))
 			{
-				if(C->app->mouse->button_left==button_pressed)
+				if( C->ui->mouse_state == UI_LEFT_PRESSED)
 				{
 					// multi selection
 					if(C->app->keyboard->shift)
@@ -261,14 +261,12 @@ void ctx_scene(t_context *C)
 			// check for release
 			if(C->event->is_selection)
 			{
-				if(C->app->mouse->button_left==button_released)
-					C->event->is_selection=0;
-
+				if(C->ui->mouse_state == UI_LEFT_RELEASED) C->event->is_selection=0;
 			}
 			// check for selection
 			else
 			{
-				if(C->app->mouse->button_left==button_pressed)
+				if(C->ui->mouse_state == UI_LEFT_PRESSED)
 				{
 					C->event->is_selection=1;
 					ctx_scene_update_lst(C,C->scene->objects);

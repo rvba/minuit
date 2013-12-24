@@ -136,10 +136,7 @@ void *op_brick_add(t_brick *brick)
 void *op_slider(t_brick *brick)
 {
 	t_context *C = ctx_get();
-
-	float dx = C->app->mouse->dx;
-	int delta_x = C->app->mouse->delta_x;
-
+	float dx = (float) C->ui->mouse_dx; 
 	t_plug *plug_intern= &brick->plug_intern;
 
 	// flow
@@ -152,7 +149,7 @@ void *op_slider(t_brick *brick)
 		if(brick->state.is_draging)
 		{
 			// release
-			if(C->app->mouse->button_left==button_released)
+			if( C->ui->mouse_state == UI_LEFT_RELEASED)
 			{
 				brick->state.is_draging=0;
 				brick_release(brick);
@@ -164,21 +161,17 @@ void *op_slider(t_brick *brick)
 					if(brick->plug_intern.data_type==dt_int)
 					{
 						int *data=brick->plug_intern.data;
-						if(delta_x>0) *data 	+=  dx;
-						else *data 		-=  dx;
+						*data += dx;
 					}
-					if(brick->plug_intern.data_type==dt_uint)
+					else if(brick->plug_intern.data_type==dt_uint)
 					{
 						unsigned int *data=brick->plug_intern.data;
-						if(delta_x>0) *data 	+=  dx;
-						else *data 		-=  dx;
+						*data += dx;
 					}
 					else if(brick->plug_intern.data_type==dt_float)
 					{
-						float inc=.1;
 						float *data=brick->plug_intern.data;
-						if(delta_x>0) *data 	+= inc * dx;
-						else *data 		-= inc * dx;
+						*data += dx * .1;
 					}
 				}
 			}
@@ -187,23 +180,12 @@ void *op_slider(t_brick *brick)
 		else
 		{
 			// set dragging
-			if(
-				brick->state.use_dragging
-				&&
-				(C->app->mouse->button_left == button_pressed && C->app->mouse->is_moving)
-				
-				)
+			if( brick->state.use_dragging && C->ui->mouse_motion == UI_MOUSE_MOTION )
 			{
 					brick->state.is_draging=1;
 			}
-			else
+			else if ( C->ui->mouse_state == UI_LEFT_RELEASED)
 			{
-				// exec
-				if(!brick->state.is_done)
-				{
-					brick->state.is_done=1;
-
-
 					if(brick->plug_intern.data_type==dt_int)
 					{
 						int *data=brick->plug_intern.data;
@@ -223,16 +205,8 @@ void *op_slider(t_brick *brick)
 						if(brick->state.is_left_pressed)  	*data -= inc; 
 						else if(brick->state.is_right_pressed) 	*data += inc; 
 					}
-				}
-				// release
-				else
-				{
-					if(C->app->mouse->button_left==button_released)
-					{
-						brick->state.is_done=0;
-						brick_release(brick); 
-					}
-				}
+						
+					brick_release(brick); 
 			}
 		}
 	}
@@ -277,7 +251,7 @@ void *op_selector(t_brick *brick)
 
 	if(brick->state.is_mouse_over)
 	{
-		if(C->app->mouse->button_left==button_pressed)
+		if( C->ui->mouse_state == UI_LEFT_PRESSED)
 		{
 			// switch state when released
 			if(brick->state.is_released)
@@ -300,7 +274,7 @@ void *op_selector(t_brick *brick)
 	}
 
 	// release
-	if(!brick->state.is_released && C->app->mouse->button_left==button_released)
+	if(!brick->state.is_released && C->ui->mouse_state == UI_LEFT_RELEASED)
 	{
 		brick->state.is_released=1;
 		brick_release(brick);
@@ -326,7 +300,7 @@ void *op_switch(t_brick *brick)
 
 		if(brick->state.is_left_pressed || brick->state.is_right_pressed)
 		{
-			if(C->app->mouse->button_left==button_pressed)
+			if( C->ui->mouse_state == UI_LEFT_PRESSED)
 			{
 				// switch state when released
 				if(brick->state.is_released)
@@ -341,7 +315,7 @@ void *op_switch(t_brick *brick)
 	}
 
 	// release
-	if(!brick->state.is_released && C->app->mouse->button_left==button_released)
+	if(!brick->state.is_released && C->ui->mouse_state == UI_LEFT_RELEASED)
 	{
 		brick->state.is_released=1;
 		brick_release(brick);
@@ -1696,18 +1670,18 @@ void *op_set_vlst(t_brick *brick)
 		if(vlst)
 		{
 
-		if(C->app->mouse->button_left == button_pressed)
+		if( C->ui->mouse_state == UI_LEFT_PRESSED)
 		{
 			_pressed=1;
 		}
 		
-		if(_pressed== 1 && C->app->mouse->button_left == button_released)
+		if(_pressed== 1 && C->ui->mouse_state == UI_LEFT_RELEASED)
 		{
 			_pressed=0;
 			_released=1;
 		}
 		
-		if(C->app->mouse->button_left==button_released)
+		if( C->ui->mouse_state == UI_LEFT_RELEASED)
 		{
 			if(vlst->count != vlst->count_new) 
 			{

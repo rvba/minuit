@@ -171,7 +171,7 @@ void cls_brick_disconnect(t_brick *self)
 int brick_release_cloning(t_brick *brick)
 {
 	t_context *C=ctx_get();
-	if(C->app->mouse->button_left == button_released) return 1;
+	if( C->ui->mouse_state == UI_LEFT_RELEASED) return 1;
 	else return 0;
 }
 
@@ -180,7 +180,7 @@ int brick_start_cloning(t_context *C,int mouse_over)
 	if(
 		mouse_over
 		&& !C->event->ui.is_menu_show
-		&& (C->app->mouse->button_left == button_pressed)
+		&& (C->ui->mouse_state == UI_LEFT_PRESSED)
 		&& (C->app->keyboard->ctrl || C->app->keyboard->shift)
 		)
 
@@ -269,7 +269,7 @@ void cls_brick_trigger_trigger(t_brick *brick)
 			if(brick->state.is_mouse_over)
 			{
 				// brick pressed
-				if(C->app->mouse->button_left==button_pressed && brick->state.is_released)
+				if( C->ui->mouse_state == UI_LEFT_PRESSED && brick->state.is_released)
 				{
 					brick->state.is_released=0;
 					brick->action(brick);
@@ -277,7 +277,7 @@ void cls_brick_trigger_trigger(t_brick *brick)
 			}
 
 			// release
-			if(!brick->state.is_released && C->app->mouse->button_left==button_released)
+			if(!brick->state.is_released && C->ui->mouse_state == UI_LEFT_RELEASED)
 			{
 				// hide menu
 				if(C->event->ui.is_menu_mouse_show && !C->ui->fixed_menu)
@@ -338,14 +338,11 @@ void cls_brick_update(t_brick *brick)
 	t_plug *plug_in = &brick->plug_in;
 	t_plug *plug_out = &brick->plug_out;
 
-	int button_left=C->app->mouse->button_left;
-	int button_right=C->app->mouse->button_right;
-	int button_middle=C->app->mouse->button_middle;
 	int mouse_over = is_mouse_over_brick(C,brick);
 	int brick_clic=0;
 
 	int edit = 0;
-	if(mouse_over && (button_middle == button_pressed))
+	if(mouse_over && (C->ui->mouse_state == UI_MIDDLE_PRESSED))
 	{
 		edit = 1;
 		C->event->is_mouse_over_brick = 1;
@@ -355,19 +352,21 @@ void cls_brick_update(t_brick *brick)
 	float mouse_pos[3];
 	vset(mouse_pos,0,0,0);
 
-
-	if(	 mouse_over && button_left==button_pressed
+	if(	 mouse_over 
+		&& (C->ui->mouse_state == UI_LEFT_PRESSED)
 		&& (brick->state.is_mouse_over_plug_in==0)
 		&& (brick->state.is_mouse_over_plug_out==0)
 		)
+	{
 		
 		brick_clic=1;
+	}
 
 	// IDLE
 
 	if(!brick->state.is_idle)
 	{
-		if(C->app->mouse->button_left==button_released)
+		if( C->ui->mouse_state == UI_LEFT_RELEASED)
 		{
 			brick->state.is_idle=0;
 		}
@@ -447,7 +446,7 @@ void cls_brick_update(t_brick *brick)
 				if(C->event->is_brick_transformed)
 				{
 
-					if(is_mouse_over_plug(C,&brick->plug_in) && button_left==button_pressed)
+					if(is_mouse_over_plug(C,&brick->plug_in) && C->ui->mouse_state == UI_LEFT_PRESSED)
 					{
 						C->ui->brick_in=brick;
 					}
@@ -484,7 +483,7 @@ void cls_brick_update(t_brick *brick)
 						}
 					}
 					// START MOVING
-					else if(mouse_over && button_right==button_pressed) 
+					else if(mouse_over && C->ui->mouse_state == UI_RIGHT_PRESSED) 
 					{
 						if(!C->event->ui.is_menu_mouse_show)
 						{
@@ -495,7 +494,7 @@ void cls_brick_update(t_brick *brick)
 					}
 
 					// START LINKING
-					else if(is_mouse_over_plug(C,&brick->plug_out) && button_left==button_pressed)
+					else if(is_mouse_over_plug(C,&brick->plug_out) && C->ui->mouse_state == UI_LEFT_PRESSED)
 					{
 						if(!C->event->ui.is_menu_mouse_show)
 						{
@@ -507,7 +506,7 @@ void cls_brick_update(t_brick *brick)
 					}
 
 					// START UNLINKING
-					else if(is_mouse_over_plug(C,&brick->plug_in) && button_left==button_pressed)
+					else if(is_mouse_over_plug(C,&brick->plug_in) && C->ui->mouse_state == UI_LEFT_PRESSED)
 					{
 						C->ui->brick_in=brick;
 
@@ -556,7 +555,7 @@ void cls_brick_update(t_brick *brick)
 									trigger = 1;
 								}
 
-								if(trigger && brick->state.use_brick_blocking)
+								if(trigger)
 								{
 									if(brick->state.is_idle)
 									{
@@ -625,7 +624,7 @@ void cls_brick_update(t_brick *brick)
 				else
 				{
 					// release
-					if(button_right==button_released)
+					if( C->ui->mouse_state == UI_RIGHT_RELEASED)
 					{
 						is_vec_stored=0;
 						brick_release(brick);
@@ -687,7 +686,8 @@ void cls_brick_update(t_brick *brick)
 			case bm_linking:
 				
 				// release linking
-				if(button_left==button_released)
+				//if(button_left==button_released)
+				if( C->ui->mouse_state == UI_LEFT_RELEASED)
 				{
 					// connect
 					if(C->ui->brick_in)

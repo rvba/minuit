@@ -170,6 +170,13 @@ void keymap_command( int key)
 		case PADNINE: if(camera) op_camera_view_axo(camera);break;
 		case PADTHREE: if(camera) op_camera_view_left(camera);break;
 		case PADTWO: if(camera) op_camera_ortho_rotate(camera,-5,0,0);break;
+		case PADZERO: 
+				C->ui->zoom = 1;
+				C->ui->pan_x = 0;
+				C->ui->pan_y = 0;
+				C->event->ui.pan_x = 0;
+				C->event->ui.pan_y = 0;
+				break;
 
 		case QKEY: op_quit(NULL);break;
 		case ZKEY: app_screen_switch_fullscreen(C->app);break;
@@ -232,6 +239,10 @@ void ctx_keyboard(t_context *C)
 {
 	t_screen *s = C->ui->screen_active;
 
+	C->ui->key_shift = 0;
+	C->ui->key_alt = 0;
+	C->ui->key_ctrl = 0;
+
 	if( C->app->keyboard->key_pressed)
 	{
 		event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, C->app->keyboard->key_pressed);
@@ -240,7 +251,15 @@ void ctx_keyboard(t_context *C)
 
 	if( C->app->keyboard->special)
 	{
-		event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, C->app->keyboard->special);
+		 event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, C->app->keyboard->special);
 		C->app->keyboard->special=0;
+	}
+
+	if( C->app->keyboard->modifier)
+	{
+		 event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, SHIFTKEY);
+		if( C->app->keyboard->shift)	 event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, SHIFTKEY);
+		if( C->app->keyboard->alt)	 event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, ALTKEY);
+		if( C->app->keyboard->ctrl)	 event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, CTRLKEY);
 	}
 }
