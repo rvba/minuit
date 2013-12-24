@@ -11,78 +11,18 @@
 #include "context.h"
 #include "node.h"
 #include "scene.h"
-
 #include "op.h"
 #include "ctx.h"
 #include "app.h"
 #include "event.h"
 #include "screen.h"
-#include "memory.h"
 #include "camera.h"
 #include "ui.h"
 #include "file.h"
-
 #include "list.h"
-
 #include "block.h"
 #include "brick.h"
-
 #include "viewport.h"
-
-// NEW
-
-t_node *screen_new_generic(char *name)
-{
-	t_context *C=ctx_get();
-	t_node *node=scene_add(C->scene,dt_screen,name);
-	t_screen *screen=node->data;
-
-	screen->keymap=keymap_generic;
-	screen->draw=screen_generic;
-
-	screen->is_active=0;
-	screen->is_visible=0;
-
-	lst_add(C->ui->screens,node,"screen_generic");
-
-	return node;
-};
-
-// MAKE MAIN
-
-void screen_main_make(void)
-{
-	t_context *C=ctx_get();
-	t_node *node=scene_add(C->scene,dt_screen,"screen_main");
-	t_screen *screen=node->data;
-
-	screen->keymap=keymap_main;
-	screen->draw=screen_main;
-
-	screen->is_active=1;
-	screen->is_visible=1;
-
-	t_link *link=lst_add(C->ui->screens,node,"screen_main");
-	C->ui->screen_link_active=link;
-};
-
-// SCREEN DESK
-
-void screen_sets_make(void)
-{
-	t_context *C=ctx_get();
-	t_node *node=scene_add(C->scene,dt_screen,"screen_sets");
-	t_screen *screen=node->data;
-
-	screen->keymap=keymap_generic;
-	screen->draw=screen_sets;
-
-	screen->is_active=0;
-	screen->is_visible=0;
-
-	t_link *link=lst_add(C->ui->screens,node,"screen_sets");
-	C->ui->screen_link_active=link;
-};
 
 // SCREEN BRICKS
 
@@ -96,19 +36,76 @@ void screen_block_add_by_name(t_context *C, t_screen *screen, const char *name)
 	}
 }
 
-void screen_bricks_make(void)
+// NEW
+
+t_screen *screen_new_generic( t_context *C, char *name)
 {
-	t_context *C=ctx_get();
-	t_node *node=scene_add(C->scene,dt_screen,"screen_bricks");
-	t_screen *screen=node->data;
+	t_node *node = scene_add( C->scene, dt_screen, name);
+	t_screen *screen = node->data;
 
-	screen->keymap=keymap_generic;
-	screen->draw=screen_bricks;
+	screen->keymap = keymap_generic;
+	screen->draw = screen_generic;
 
-	screen->is_active=0;
-	screen->is_visible=0;
+	screen->is_active = 0;
+	screen->is_visible = 0;
 
-	lst_add(C->ui->screens,node,"screen_bricks");
+	lst_add( C->ui->screens, node, "screen_generic");
+
+	return screen;
+};
+
+// MAKE MAIN
+
+t_screen *screen_main_make( t_context *C)
+{
+	t_node *node = scene_add( C->scene, dt_screen, "screen_main");
+	t_screen *screen = node->data;
+
+	screen->keymap = keymap_main;
+	screen->draw = screen_main;
+
+	screen->is_active = 1;
+	screen->is_visible = 1;
+
+	t_link *link=lst_add( C->ui->screens, node, "screen_main");
+	C->ui->screen_link_active = link;
+
+	return screen;
+};
+
+// SCREEN DESK
+
+t_screen *screen_sets_make( t_context *C)
+{
+	t_node *node = scene_add( C->scene, dt_screen, "screen_sets");
+	t_screen *screen = node->data;
+
+	screen->keymap = keymap_generic;
+	screen->draw = screen_sets;
+
+	screen->is_active = 0;
+	screen->is_visible = 0;
+
+	t_link *link = lst_add( C->ui->screens, node, "screen_sets");
+	C->ui->screen_link_active = link;
+
+	return screen;
+};
+
+// SCREEN BRICKS
+
+t_screen *screen_bricks_make( t_context *C)
+{
+	t_node *node = scene_add( C->scene, dt_screen, "screen_bricks");
+	t_screen *screen = node->data;
+
+	screen->keymap = keymap_generic;
+	screen->draw = screen_bricks;
+
+	screen->is_active = 0;
+	screen->is_visible = 0;
+
+	lst_add( C->ui->screens, node, "screen_bricks");
 
 	screen_block_add_by_name(C, screen, "menu_scalar");
 	screen_block_add_by_name(C, screen, "menu_time");
@@ -116,30 +113,28 @@ void screen_bricks_make(void)
 	screen_block_add_by_name(C, screen, "menu_vector");
 	screen_block_add_by_name(C, screen, "menu_logic");
 	screen_block_add_by_name(C, screen, "menu_maths");
-	//screen_block_add_by_name(C, screen, "menu_lst");
+
+	return screen;
 };
 
-void screen_intro_make(void)
+t_screen *screen_intro_make( t_context *C)
 {
-	t_context *C=ctx_get();
+	t_node *node = scene_add( C->scene, dt_screen, "screen_intro");
+	t_screen *screen = node->data;
 
-	t_node *node=scene_add(C->scene,dt_screen,"screen_intro");
-	t_screen *screen=node->data;
+	screen->keymap = keymap_generic;
+	screen->draw = screen_intro;
 
-	screen->keymap=keymap_generic;
-	screen->draw=screen_intro;
+	screen->is_active = 1;
+	screen->is_visible = 1;
+	screen->always_active = 1;
+	screen->always_visible = 1;
 
-	screen->is_active=1;
-	screen->is_visible=1;
-	screen->always_active=1;
-	screen->always_visible=1;
-
-	lst_add(C->ui->screens,node,"screen_intro");
+	lst_add( C->ui->screens, node, "screen_intro");
 
 	// Lst
 	t_node *node_lst = scene_add( C->scene, dt_list, "lst");
 	t_lst *lst = node_lst->data;
-
 	screen->viewports = lst;
 
 	// Viewport
@@ -149,11 +144,10 @@ void screen_intro_make(void)
 	// Camera
 	t_node *node_camera = scene_add( C->scene, dt_camera, "viewport_camera");
 	t_camera *camera = node_camera->data;
-
 	viewport->camera = camera;
-
 	lst_add(screen->viewports, viewport, "viewport");
 
+	return screen;
 };
 
 // SCREEN SWITCH

@@ -501,6 +501,7 @@ t_ui *ui_new(void)
 	ui->is_max = 0;
 
 	ui->screens = lst_new("lst");
+	ui->screen_active = NULL;
 	ui->screen_link_active = NULL;
 	ui->screen_direction = 1;
 	ui->mouse_size = 9;

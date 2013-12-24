@@ -125,6 +125,7 @@ typedef struct Ui
 
 	// screens
 	struct Lst *screens;
+	struct MINscreen *screen_active;
 	struct Link *screen_link_active;
 	int screen_direction;
 

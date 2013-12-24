@@ -17,7 +17,10 @@ struct Brick;
 struct Block;
 struct Plug;
 struct Lst;
-struct Plug;
+
+// CTX_EVENT
+
+void 		ctx_event( struct Context *C);
 
 // CTX_LOAD
 
@@ -37,8 +40,8 @@ void save_file_increment(struct Context *C);
 
 void show_sets(struct Context *C);
 void switch_sets(struct Context *C);
-void keymap_main(unsigned char key);
-void keymap_generic(unsigned char key);
+void keymap_main( int key);
+void keymap_generic( int key);
 void ctx_keyboard(struct Context *C);
 
 // CTX_MOUSE

@@ -375,13 +375,15 @@ t_screen *screen_new(const char *name)
 
 // INIT
 
-void screen_init(void)
+void screen_init( t_context *C)
 {
-	screen_main_make();
-	screen_browser_make();
-	screen_sets_make();
-	screen_bricks_make();
-	screen_intro_make();
+	t_screen *screen_main = screen_main_make( C);
+	screen_browser_make( C);
+	screen_sets_make( C);
+	screen_bricks_make( C);
+	screen_intro_make( C);
+	C->ui->screen_active = screen_main;
+
 }
 
 

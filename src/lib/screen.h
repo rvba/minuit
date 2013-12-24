@@ -12,6 +12,7 @@
 
 #include "common.h"
 
+struct Context;
 struct Scene;
 struct Block;
 struct MINscreen;
@@ -37,22 +38,22 @@ typedef struct MINscreen
 	struct Lst *viewports;
 
 	void (* draw) (struct MINscreen *screen);
-	void (* keymap) (unsigned char key);
+	void (* keymap) (int key);
 	void *data;
 
 }t_screen;
 
 // SCREEN BROWSER.C
 
-void screen_browser_make(void);
+t_screen *	screen_browser_make( struct Context *C);
 
 // SCREEN_INIT.C
 
-struct Node *screen_new_generic(char *name);
-void screen_main_make(void);
-void screen_sets_make(void);
-void screen_bricks_make(void);
-void screen_intro_make(void);
+t_screen *	screen_new_generic( struct Context *C, char *name);
+t_screen *	screen_main_make( struct Context *C);
+t_screen *	screen_sets_make( struct Context *C);
+t_screen * 	screen_bricks_make( struct Context *C);
+t_screen * 	screen_intro_make( struct Context *C);
 
 void screen_sets(t_screen *screen);
 
@@ -82,6 +83,6 @@ t_screen *	screen_rebind(struct Scene *scene, void *ptr);
 void 		_screen_free(t_screen *screen);
 void 		screen_free(t_screen *screen);
 t_screen *	screen_new(const char *name);
-void 		screen_init(void);
+void 		screen_init( struct Context *C);
 
 #endif

@@ -50,7 +50,7 @@ t_context *ctx_new(int argc,char **argv)
 	t_context *C = (t_context *) mem_malloc(sizeof(t_context));
 
 	C->app = app_new(argc,argv);
-	C->event = event_new();
+	C->event = main_event_new();
 	C->scene = scene_new(); 
 	C->engine = engine_new( "engine");
 	C->draw = draw_new();
@@ -73,16 +73,16 @@ t_context *ctx_init(int argc,char **argv)
 	CONTEXT=C;
 
 	// Init
-	scene_init(C->scene);
-	app_init(C->app,"minuit");
+	scene_init( C->scene);
+	app_init( C->app, "minuit");
 	log_init();
 	mem_init();
 	ui_init();
 	term_init();
-	mode_init(C->mode);
-	ctx_thread_init(C);
-	op_init(C); 
-	screen_init();
+	mode_init( C->mode);
+	ctx_thread_init( C);
+	op_init( C); 
+	screen_init( C);
 	exe_init();
 
 	// Set GL Callback
@@ -158,6 +158,7 @@ void ctx_update(t_context *C)
 {
 	ctx_app(C);
 	ctx_keyboard(C);	
+	ctx_event( C);
 	ctx_ui(C);
 	ctx_scene(C); 
 	ctx_camera(C);
