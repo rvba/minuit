@@ -178,7 +178,7 @@ typedef struct Brick
 	struct Block *block; 			// block container
 
 	// action
-	void *(* exe)(struct Brick *brick);	
+	void *(* action)(struct Brick *brick);	
 	int (* poll)(struct Brick *brick);	
 
 }t_brick;

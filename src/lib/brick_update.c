@@ -204,12 +204,12 @@ void cls_brick_trigger_slider( t_brick *brick)
 		if(brick->state.frame_loop != frame)
 		{
 			brick->state.frame_loop = frame;
-			if(brick->exe) brick->exe(brick);
+			if(brick->action) brick->action(brick);
 		}
 	}
 	else
 	{
-		if(brick->exe) brick->exe(brick);
+		if(brick->action) brick->action(brick);
 	}
 
 	brick_set_updated(brick);
@@ -219,21 +219,21 @@ void cls_brick_trigger_slider( t_brick *brick)
 // SWITCH
 void cls_brick_trigger_switch(t_brick *brick)
 {
-	brick->exe(brick);
+	brick->action(brick);
 	brick_set_updated(brick);
 }
 
 // SELECTOR
 void cls_brick_trigger_selector(t_brick *brick)
 {
-	brick->exe(brick);
+	brick->action(brick);
 	brick_set_updated(brick);
 }
 
 // MENU
 void cls_brick_trigger_menu(t_brick *brick)
 {
-	brick->exe(brick);
+	brick->action(brick);
 	brick_set_updated(brick);
 }
 
@@ -248,7 +248,7 @@ void cls_brick_trigger_trigger(t_brick *brick)
 	// get data from parent 
 	if(plug_in->state.is_connected || plug_out->state.is_connected)
 	{
-		brick->exe(brick);
+		brick->action(brick);
 		if(brick->mode == bm_triggering)
 			brick_release(brick);
 	}
@@ -258,7 +258,7 @@ void cls_brick_trigger_trigger(t_brick *brick)
 		// always
 		if(brick->state.always_trigger)
 		{
-			brick->exe(brick);
+			brick->action(brick);
 
 			if(brick->mode == bm_triggering)
 				brick_release(brick);
@@ -272,7 +272,7 @@ void cls_brick_trigger_trigger(t_brick *brick)
 				if( C->ui->mouse_state == UI_LEFT_PRESSED && brick->state.is_released)
 				{
 					brick->state.is_released=0;
-					brick->exe(brick);
+					brick->action(brick);
 				}
 			}
 
