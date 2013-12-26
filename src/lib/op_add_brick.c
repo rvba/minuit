@@ -375,7 +375,7 @@ t_node *add_brick_trigger(t_context *C,t_block *block,const char *name,void *f(t
 	}
 	else
 	{
-		brick->exe = op_void;
+		brick->exe = op_void_exe;
 	}
 
 	// PLUG
@@ -399,7 +399,7 @@ t_node *add_brick_trigger_type(t_context *C,t_block *block,const char *name,void
 	}
 	else
 	{
-		brick->exe = op_void;
+		brick->exe = op_void_exe;
 	}
 	
 
@@ -526,7 +526,7 @@ t_node *add_brick_object(t_context *C,t_block *block,const char *name,void *data
 	t_node *node=brick_make(block,name,bt_trigger,type,data_target);
 	t_brick *brick=node->data;
 	
-	brick->exe=op_void;
+	brick->exe=op_void_exe;
 
 	// PLUG
 	set_plug_option(brick);
@@ -562,7 +562,7 @@ t_node *_add_brick_mesh(t_context *C,t_block *block,const char *name,void *data_
 	t_node *node=brick_make(block,name,bt_trigger,type,data_target);
 	t_brick *brick=node->data;
 	
-	brick->exe=op_void;
+	brick->exe=op_void_exe;
 
 	// PLUG
 	set_plug_option(brick);
@@ -1393,7 +1393,7 @@ void add_brick_geo_point_bare(t_context *C,t_block *block, const char *name, voi
 {
 	t_node *node = add_part_geo( C, block, name, data, dt_geo_point);
 	t_brick *brick = node->data;
-	brick->exe = op_void;
+	brick->exe = op_void_exe;
 	brick->block_order = order;
 }
 

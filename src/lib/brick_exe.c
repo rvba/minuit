@@ -989,7 +989,7 @@ void *op_menu(t_brick *brick)
 
 // VOID
 
-void *op_void(t_brick *brick)
+void *op_void_exe(t_brick *brick)
 {
 	t_plug *plug_intern = &brick->plug_intern;
 	// flow

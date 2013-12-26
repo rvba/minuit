@@ -421,7 +421,8 @@ void register_set(t_context *C)
 	scene_add_data(C->scene,"app_data","func","op_pointer",			op_pointer);
 	scene_add_data(C->scene,"app_data","func","op_camera_rotate_z",		op_camera_rotate_z);
 	scene_add_data(C->scene,"app_data","func","op_camera_rotate_xy",	op_camera_rotate_xy);
-	scene_add_data(C->scene,"app_data","func","op_void",			op_void);
+	scene_add_data(C->scene,"app_data","func","op_void_exe",		op_void_exe);
+	scene_add_data(C->scene,"app_data","func","op_void_act",		op_void_act);
 	scene_add_data(C->scene,"app_data","func","op_set_selected",		op_set_selected);
 	scene_add_data(C->scene,"app_data","func","op_rewind",			op_rewind);
 	scene_add_data(C->scene,"app_data","func","op_pipe",			op_pipe);
@@ -486,7 +487,8 @@ void register_set(t_context *C)
 	dict_symbol_add(dict_func,"op_pointer",dt_pointer,op_pointer);
 	dict_symbol_add(dict_func,"op_camera_rotate_z",dt_pointer,op_camera_rotate_z);
 	dict_symbol_add(dict_func,"op_camera_rotate_xy",dt_pointer,op_camera_rotate_xy);
-	dict_symbol_add(dict_func,"op_void",dt_pointer,op_void);
+	dict_symbol_add(dict_func,"op_void_exe",dt_pointer,op_void_exe);
+	dict_symbol_add(dict_func,"op_void_act",dt_pointer,op_void_act);
 	dict_symbol_add(dict_func,"op_set_selected",dt_pointer,op_set_selected);
 	dict_symbol_add(dict_func,"op_rewind",dt_pointer,op_rewind);
 	dict_symbol_add(dict_func,"op_pipe",dt_pointer,op_pipe);

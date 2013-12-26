@@ -179,6 +179,7 @@ typedef struct Brick
 
 	// action
 	void *(* exe)(struct Brick *brick);	
+	void *(* act)(struct Brick *brick);	
 	int (* poll)(struct Brick *brick);	
 
 }t_brick;
@@ -264,11 +265,12 @@ void *		op_camera_rotate_xy(struct Brick *brick);
 void *		op_camera_rotate_z(struct Brick *brick);
 
 
+void *		op_void_act(t_brick *brick);
 
 void *		op_brick_add(struct Brick *brick);
 void *		op_selector(struct Brick *brick);
 void *		op_brick_node_action(struct Brick *brick);
-void *		op_void(struct Brick *brick);
+void *		op_void_exe(struct Brick *brick);
 void *		op_clone(struct Brick *brick);
 void *		op_loop(struct Brick *brick);
 void *		op_loop_get(struct Brick *brick);
