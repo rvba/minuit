@@ -1128,7 +1128,7 @@ void __cls_plug_flow_trigger(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 
 				data=drf_int(src_plug->data);
 				if(data == 1)
-					brick->action(brick);
+					brick->exe(brick);
 				break;
 				
 			default:
