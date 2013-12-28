@@ -263,6 +263,11 @@ void event_show( t_event *event)
 	printf(" %d %d\n", event->x, event->y);
 }
 
+void event_free( t_event *event)
+{
+	mem_free( event, sizeof( t_event));
+}
+
 t_event *event_new( const char *name)
 {
 	t_event *event = mem_malloc( sizeof( t_event));

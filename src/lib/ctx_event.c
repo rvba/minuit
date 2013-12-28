@@ -37,6 +37,19 @@ void ctx_event_exec( t_context *C, t_event *event)
 	}
 }
 
+void ctx_event_cleanup( t_context *C)
+{
+	t_link *l;
+	t_event *event;
+	for(l=C->event->events->first;l;l=l->next)
+	{
+		event = l->data;
+		event_free( event);
+	}
+
+	lst_cleanup( C->event->events);
+}
+
 void ctx_event_dispatch( t_context *C)
 {
 	t_link *l;
@@ -50,7 +63,7 @@ void ctx_event_dispatch( t_context *C)
 		ctx_event_exec( C, event);
 	}
 
-	lst_cleanup( main_event->events);
+	ctx_event_cleanup( C);
 }
 
 void ctx_event( t_context *C)
