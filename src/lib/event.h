@@ -312,7 +312,6 @@ typedef struct Main_Event
 	int load_error;
 
 	int use_threading;
-	int rhizome_updated;
 	int rhizome_init;
 
 	int color_transition;

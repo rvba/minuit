@@ -197,30 +197,6 @@ void ui_draw_grid(void)
 	}
 }
 
-// STATUS BAR
-
-void ui_draw_status_bar(void)
-{
-	t_context *C=ctx_get();
-	float width = (float)(C->app->window->width); 
-	float height = (float)(C->app->window->height-1);
-	width++;
-
-	float d=20;
-	float x0=0;
-	float y0=height-d;
-
-	float color[]={0,0,0,0};
-
-	float scale=1;
-	float txt[3]={x0+20,y0+5,0};
-
-	glPushMatrix();
-	glTranslatef(txt[0],txt[1],txt[2]);
-	txt_draw_direct_2d(C->ui->status_top,txt,color,scale);
-	glPopMatrix();
-}
-
 // TERM
 
 void ui_draw_term(void)
@@ -556,17 +532,17 @@ t_ui *ui_new(void)
 {
 	t_ui *ui = (t_ui *)mem_malloc(sizeof(t_ui));
 
-	ui->draw_plug_state = 1;
+	ui->show_plug_state = 1;
 
 	ui->show_intro=UI_SHOW_INTRO;
-	ui->always_show_intro=0;
+	ui->show_intro_always=0;
 	ui->show_bricks = 0;
 	ui->show_menu = 0;
 	ui->show_nodes = 0;
 	ui->show_meshes = 0;
 	ui->show_objects = 0;
 	ui->show_mouse = UI_SHOW_MOUSE;
-	ui->visualize_mouse = 1;
+	ui->show_mouse_rec = 1;
 	ui->show_term = UI_SHOW_TERM;
 	ui->show_grid = 0;
 	ui->show_states = 0;
@@ -600,21 +576,15 @@ t_ui *ui_new(void)
 	ui->add_bricks = UI_ADD_BRICKS;
 
 	ui->update_links = 1;
-	ui->use_rhizomes = 1;
-	ui->threading_on = 0;
-	ui->rhizome_updated = 1;
 
 	ui->draw=UI_DRAW;
 	ui->font_width = 1;
 	ui->use_bitmap_font = 1;
 	ui->fixed_menu = UI_FIXED_MENU;
-	ui->flow_brick = 0;
 	ui->zoom = UI_ZOOM;
 	ui->pan_x = UI_PAN_X;
 	ui->pan_y = UI_PAN_Y;
 	ui->object_selection = 1;
-
-	memset(ui->status_top,0,100);
 
 	ui->brick_selected = NULL;
 	ui->link = NULL;
@@ -623,15 +593,9 @@ t_ui *ui_new(void)
 	ui->brick_in = NULL;
 	ui->brick_out = NULL;
 
-	ui->mouse_mode = 1;
-
-	ui->record_camera = 0;
-
 	vset4i(ui->background_color,255,255,255,255);
 	vset4f(ui->front_color,0,0,0,0);
 	vset4f(ui->back_color,1,1,1,0);
-	vset3f(ui->max,0,0,0);
-	ui->is_max = 0;
 
 	ui->screens = lst_new("lst");
 	ui->screen_active = NULL;
@@ -648,6 +612,7 @@ t_ui *ui_new(void)
 	ui->do_disconnect = 0;
 
 	ui->bitrate = 15000;
+
 
 	return ui;
 }

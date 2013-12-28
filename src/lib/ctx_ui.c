@@ -422,6 +422,13 @@ void ctx_do_connections(t_context *C)
 
 // CTX UI 
 
+void ctx_ui_dispatch( t_ui *ui)
+{
+
+
+
+}
+
 void ctx_ui(t_context *C)
 {
 	if(C->event->color_transition_use && C->event->color_transition)

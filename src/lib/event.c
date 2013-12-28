@@ -137,7 +137,6 @@ t_main_event *main_event_new(void)
 	event->load_error = 0;
 
 	event->use_threading = 1;
-	event->rhizome_updated = 1;
 	event->rhizome_init = 0;
 
 	event->color_transition = 0;

@@ -175,7 +175,7 @@ void screen_intro(t_screen *screen)
 	// 2d
 	op_camera_switch_2d(C,camera);
 
-	if(C->ui->show_intro || C->ui->always_show_intro)
+	if(C->ui->show_intro || C->ui->show_intro_always)
 	{
 		glPushMatrix();
 		glLoadIdentity();

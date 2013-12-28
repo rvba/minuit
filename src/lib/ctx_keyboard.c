@@ -31,10 +31,8 @@ int switch_done=0;
 
 void ctx_switch_intro(t_context *C)
 {
-	if(C->ui->always_show_intro)
-		C->ui->always_show_intro = 0;
-	else
-		C->ui->always_show_intro = 1;
+	if(C->ui->show_intro_always) C->ui->show_intro_always = 0;
+	else C->ui->show_intro_always = 1;
 }
 
 void keymap_generic( int key)

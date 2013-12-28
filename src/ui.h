@@ -56,35 +56,35 @@ struct Event;
 
 typedef struct Ui
 {
-	int draw; // draw the ui
-	int update_links;
-	int record_camera;
+	int draw; 		// draw the ui
+	int update_links;	// compte sets
+	int bitrate;
+	int do_connect;
+	int do_disconnect;
+	int add_bricks;
+	int step;
+	int step_reset;
+	int fixed_menu;
 
+	// MOUSE
 	int mouse_state;
 	int mouse_motion;
-
 	int mouse_x;
 	int mouse_y;
-
 	int mouse_last_x;
 	int mouse_last_y;
-
 	int mouse_last_x_pressed;
 	int mouse_last_y_pressed;
-
 	int mouse_dx;
 	int mouse_dy;
-
 	int mouse_delta_x;
 	int mouse_delta_y;
-
 	int mouse_drag;
 
+	// KEYBOARD
 	int key_shift;
 	int key_alt;
 	int key_ctrl;
-
-	char status_top[100];
 
 	// alphabet 
 	int alphabet[160]; 
@@ -98,8 +98,6 @@ typedef struct Ui
 	float font_width;
 	int use_bitmap_font;
 
-	int draw_plug_state;
-
 	// show
 	int show_bricks;
 	int show_menu;
@@ -107,32 +105,19 @@ typedef struct Ui
 	int show_meshes;
 	int show_objects;
 	int show_intro;
-	int always_show_intro;
+	int show_intro_always;
 	int show_mouse;
-	int visualize_mouse;
+	int show_mouse_rec;
 	int show_term;
 	int show_grid;
 	int show_states;
+	int show_plug_state;
 	int show_step;
 	int show_brick_step;
 	int show_sets;
-	int add_bricks;
 	int show_rhizome_bounding_box;
 	int show_rhizome_order;
 	int show_status;
-
-	int bitrate;
-
-	int step;
-	int step_reset;
-
-	int use_rhizomes;
-	int threading_on;
-	int rhizome_updated;
-
-	// brick flags
-	int fixed_menu;
-	int flow_brick;
 
 	// positions
 	float zoom;
@@ -140,33 +125,21 @@ typedef struct Ui
 	float pan_y;
 
 	float menu_pos[2];
-	float max[3];
-	int is_max;
-	int mouse_mode;
+	int mouse_size;
 
 	// object selection flag
 	int object_selection;
 
-	// debug flag
-	int debug;
-
 	// selections
-	struct Brick *brick_selected;
-
 	struct Node *link;
 	struct Node *link_node;
 
-	// selected plugs
-
+	// bricks
+	struct Brick *brick_selected;
 	struct Brick *brick_in;
 	struct Brick *brick_out;
-
 	struct Brick *connect_brick_in;
 	struct Brick *connect_brick_out;
-
-
-	int do_connect;
-	int do_disconnect;
 
 	// screens
 	struct Lst *screens;
@@ -174,10 +147,7 @@ typedef struct Ui
 	struct Link *screen_link_active;
 	int screen_direction;
 
-	int mouse_size;
-
 	struct Camera *camera;
-
 	struct Lst *sets;
 }t_ui;
 
@@ -195,7 +165,6 @@ void ui_draw_intro(void);
 void ui_draw_lines(void);
 void ui_draw_menu(void);
 void ui_draw_blocks(void);
-void ui_draw_status_bar(void);
 void ui_draw_debug(void);
 void ui_draw_term(void);
 void ui_draw_grid(void);
