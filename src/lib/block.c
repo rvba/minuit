@@ -37,17 +37,6 @@ void block_reset(t_block *block)
 	}
 }
 
-// Trigger Brick
-void block_brick_trigger(t_plug *plug)
-{
-	t_brick *brick = plug->brick;
-
-	if(!plug->state.is_updated)
-	{
-		brick->cls->trigger(brick);
-	}
-}
-
 // Open | Close Loop
 void block_set_loop_state(t_block *block, int state)
 {
@@ -79,7 +68,6 @@ void block_exec(t_block *block)
 {
 	t_link *link;
 	t_brick *brick;
-	t_plug *plug;
 
 	// Reset State
 	block_reset(block);
@@ -88,8 +76,7 @@ void block_exec(t_block *block)
 	for(link=block->bricks->first;link;link=link->next)
 	{
 		brick = link->data;
-		plug = &brick->plug_intern;
-		block_brick_trigger(plug);
+		brick->exe( brick);
 	}
 }
 

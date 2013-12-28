@@ -139,6 +139,7 @@ typedef struct Brick_Var
 	int selector;
 	int selector_length;
 	char selector_list[_LIST_*_NAME_LONG_];
+	int offset;
 
 }t_brick_var;
 
@@ -327,7 +328,6 @@ void 		brick_set_updated(struct Brick *brick);
 // BRICK_UPDATE
 
 int brick_check_viewport( t_brick *brick);
-int brick_pre_check_loop(t_brick *brick);
 
 void 		cls_brick_trigger_selector(struct Brick *brick);
 void 		cls_brick_trigger_slider(struct Brick *brick);
@@ -352,5 +352,7 @@ struct Plug *	brick_get_src(struct Brick *brick);
 
 int 		brick_get_width(struct Brick *brick);
 void _brick_free(t_brick *brick);
+
+void *_op_brick_add( struct Brick *brick);
 
 #endif

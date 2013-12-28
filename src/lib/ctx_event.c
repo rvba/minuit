@@ -19,6 +19,11 @@
 
 void ctx_event_exec( t_context *C, t_event *event)
 {
+	if(0)
+	{
+	printf("%d",C->app->frame);
+	event_show( event);
+	}
 	if( EVENT_KEYBOARD( event->type))
 	{
 		ui_keyboard_set( C->ui, event);

@@ -54,22 +54,6 @@ int brick_check_loop(t_brick *brick)
 	}
 }
 
-int brick_pre_check_loop(t_brick *brick)
-{
-	t_context *C = ctx_get();
-
-	int frame = C->app->frame;
-
-	if(brick->state.frame_loop != frame)
-	{
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
-}
-
 // SET UPDATED
 
 void brick_set_updated(t_brick *brick)
@@ -196,44 +180,30 @@ int brick_start_cloning(t_context *C,int mouse_over)
 // SLIDER
 void cls_brick_trigger_slider( t_brick *brick)
 {
-	if(brick->state.use_loops == 0)
-	{
-		t_context *C = ctx_get();
-		int frame = C->app->frame;
-
-		if(brick->state.frame_loop != frame)
-		{
-			brick->state.frame_loop = frame;
-			if(brick->exe) brick->exe(brick);
-		}
-	}
-	else
-	{
-		if(brick->exe) brick->exe(brick);
-	}
-
+	brick->act(brick);
 	brick_set_updated(brick);
-
 }
 
 // SWITCH
 void cls_brick_trigger_switch(t_brick *brick)
 {
-	brick->exe(brick);
-	brick_set_updated(brick);
+	if(brick->state.is_idle)
+	{
+		brick->act(brick);
+		brick_set_updated(brick);
+	}
 }
 
 // SELECTOR
 void cls_brick_trigger_selector(t_brick *brick)
 {
-	brick->exe(brick);
+	brick->act(brick);
 	brick_set_updated(brick);
 }
 
 // MENU
 void cls_brick_trigger_menu(t_brick *brick)
 {
-	brick->exe(brick);
 	brick_set_updated(brick);
 }
 
@@ -242,54 +212,32 @@ void cls_brick_trigger_trigger(t_brick *brick)
 {
 	t_context *C = ctx_get();
 
-	t_plug *plug_in=&brick->plug_in;
-	t_plug *plug_out = &brick->plug_out;
-
-	// get data from parent 
-	if(plug_in->state.is_connected || plug_out->state.is_connected)
+	// trigger
+	if(brick->state.is_mouse_over)
 	{
-		brick->exe(brick);
-		if(brick->mode == bm_triggering)
-			brick_release(brick);
+		// brick pressed
+		if( C->ui->mouse_state == UI_LEFT_PRESSED && brick->state.is_released)
+		{
+			if(!brick->state.is_idle)
+			{
+			brick->state.is_released=0;
+			brick->act(brick);
+			}
+		}
 	}
-	// or get user event
-	else
+
+	// release
+	if(!brick->state.is_released && C->ui->mouse_state == UI_LEFT_RELEASED)
 	{
-		// always
-		if(brick->state.always_trigger)
+		// hide menu
+		if(C->event->ui.is_menu_mouse_show && !C->ui->fixed_menu)
 		{
-			brick->exe(brick);
-
-			if(brick->mode == bm_triggering)
-				brick_release(brick);
+			ctx_ui_menu_hide(C);
 		}
-		else
-		{
-			// trigger
-			if(brick->state.is_mouse_over)
-			{
-				// brick pressed
-				if( C->ui->mouse_state == UI_LEFT_PRESSED && brick->state.is_released)
-				{
-					brick->state.is_released=0;
-					brick->exe(brick);
-				}
-			}
 
-			// release
-			if(!brick->state.is_released && C->ui->mouse_state == UI_LEFT_RELEASED)
-			{
-				// hide menu
-				if(C->event->ui.is_menu_mouse_show && !C->ui->fixed_menu)
-				{
-					ctx_ui_menu_hide(C);
-				}
-
-				// release brick
-				brick->state.is_released=1;
-				brick_release(brick);
-			}
-		}
+		// release brick
+		brick->state.is_released=1;
+		brick_release(brick);
 	}
 
 	brick_set_updated(brick);
@@ -368,7 +316,7 @@ void cls_brick_update(t_brick *brick)
 	{
 		if( C->ui->mouse_state == UI_LEFT_RELEASED)
 		{
-			brick->state.is_idle=0;
+			brick->state.is_idle=1;
 		}
 	}
 		
@@ -557,26 +505,7 @@ void cls_brick_update(t_brick *brick)
 
 								if(trigger)
 								{
-									if(brick->state.is_idle)
-									{
-										brick->state.is_idle=0;
-										C->event->is_brick_transformed=1;
-										C->ui->brick_selected=brick;
-										brick->mode=bm_triggering;
-									}
-								}
-								else if(brick->state.use_global_blocking)
-								{
-									if(C->app->mouse->button_left_is_ready)
-									{
-										C->app->mouse->button_left_is_ready=0;
-										C->event->is_brick_transformed=1;
-										C->ui->brick_selected=brick;
-										brick->mode=bm_triggering;
-									}
-								}
-								else
-								{
+									brick->state.is_idle=0;
 									C->event->is_brick_transformed=1;
 									C->ui->brick_selected=brick;
 									brick->mode=bm_triggering;
@@ -686,7 +615,6 @@ void cls_brick_update(t_brick *brick)
 			case bm_linking:
 				
 				// release linking
-				//if(button_left==button_released)
 				if( C->ui->mouse_state == UI_LEFT_RELEASED)
 				{
 					// connect

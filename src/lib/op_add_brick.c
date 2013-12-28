@@ -158,12 +158,22 @@ t_node *add_brick_slider_int(t_context *C,t_block *block,const char *name,void *
 	t_brick *brick=node_brick->data;
 	
 	// ACTION
-	brick->exe=op_slider;
+	brick->act=op_slider;
 
 	// PLUG
 	set_plug_option(brick);
 
 	return node_brick;
+}
+
+t_node *add_brick_slider_add_bricks(t_context *C,t_block *block,const char *name,int offset,void *data_target)
+{
+	t_node *node = add_brick_slider_int( C, block, name, data_target);
+	t_brick *brick = node->data;
+	brick->act = _op_brick_add;
+	brick->var.offset = offset;
+
+	return node;
 }
 
 // BRICK SLIDER CHAR
@@ -177,7 +187,7 @@ t_node *add_brick_slider_char(t_context *C,t_block *block,const char *name,void 
 	t_brick *brick=node_brick->data;
 	
 	// ACTION
-	brick->exe=op_slider;
+	brick->act=op_slider;
 
 	// PLUG
 	set_plug_option(brick);
@@ -196,7 +206,7 @@ t_node *add_brick_slider_float(t_context *C,t_block *block,const char *name,void
 	t_brick *brick=node_brick->data;
 	
 	// ACTION
-	brick->exe=op_slider;
+	brick->act=op_slider;
 
 	// PLUG
 	set_plug_option(brick);
@@ -329,7 +339,7 @@ t_node *add_brick_switch(t_context *C,t_block *block,const char *name,void *data
 	brick->state.draw_value = 0;
 	
 	// ACTION
-	brick->exe=op_switch;
+	brick->act=op_switch;
 
 	// PLUG
 	set_plug_option(brick);
@@ -371,11 +381,7 @@ t_node *add_brick_trigger(t_context *C,t_block *block,const char *name,void *f(t
 	// ACTION
 	if(f)
 	{
-		brick->exe = f;
-	}
-	else
-	{
-		brick->exe = op_void_exe;
+		brick->act = f;
 	}
 
 	// PLUG
@@ -395,13 +401,8 @@ t_node *add_brick_trigger_type(t_context *C,t_block *block,const char *name,void
 	// ACTION
 	if(f)
 	{
-		brick->exe = f;
+		brick->act = f;
 	}
-	else
-	{
-		brick->exe = op_void_exe;
-	}
-	
 
 	// PLUG
 	set_plug_option(brick);
@@ -510,7 +511,7 @@ t_node *add_brick_selector(t_context *C,t_block *block,const char *name,void *da
 	t_node *node=brick_make(block,name,bt_selector,dt_selector,data_target);
 	t_brick *brick=node->data;
 	
-	brick->exe=op_selector;
+	brick->act=op_selector;
 	brick->var.selector_length=length;
 
 	// PLUG
@@ -723,6 +724,14 @@ t_node *add_part_slider_int(t_context *C,t_block *block,const char *name,void *d
 	return node;
 }
 
+t_node *add_part_slider_add_bricks(t_context *C,t_block *block,const char *name, int offset, void *data_target)
+{
+	t_node *node = add_brick_slider_add_bricks(C,block,name, offset, data_target);
+	t_brick *brick=node->data;
+	brick->state.draw_outline=0;
+	return node;
+}
+
 // PART SLIDER ADD
 
 t_node *add_part_slider_add( t_context *C, t_block *block, const char *name, void *data_target)
@@ -804,8 +813,6 @@ t_node *add_part_selector(t_context *C, t_block *block, const char *name, t_node
 	t_plug *plug=&brick->plug_intern;
 	plug->data=node->data;
 	plug->state.store_data = 1;
-
-	
 
 	return node_brick;
 }
@@ -987,7 +994,7 @@ t_node *add_slider_int(t_context *C,const char *name,void *target_data)
 	t_brick *brick=node_brick->data;
 
 	// SET ACTION
-	brick->exe=op_slider;
+	brick->act=op_slider;
 
 	return node_block;
 }
@@ -1024,7 +1031,7 @@ t_node *add_slider_int_custom(t_context *C,const char *name,void *target_data,vo
 	t_brick *brick=node_brick->data;
 
 	// SET ACTION
-	brick->exe=f;
+	brick->act=f;
 	brick->state.is_versatil=1;
 
 	return node_block;
@@ -1044,7 +1051,7 @@ t_node *add_slider_float(t_context *C,const char *name,void *target_data)
 	t_brick *brick=node_brick->data;
 
 	// SET ACTION
-	brick->exe=op_slider;
+	brick->act=op_slider;
 
 	return node_block;
 }
@@ -1058,7 +1065,7 @@ t_node *add_slider_int_positive(t_context *C,const char *name,void *target_data)
 	t_brick *brick=get_block_first_brick(node_block);
 
 	// SET ACTION
-	brick->exe=op_slider_positive;
+	brick->act=op_slider_positive;
 
 	return node_block;
 }
@@ -1072,7 +1079,7 @@ t_node *add_slider_float_custom(t_context *C,const char *name,void *f(t_brick *b
 	t_brick *brick=get_block_first_brick(node_block);
 
 	// SET ACTION
-	brick->exe=f;
+	brick->exe = f;
 
 	return node_block;
 }
@@ -1086,7 +1093,7 @@ t_node *add_slider_float_special(t_context *C,const char *name,void *f(t_brick *
 	t_brick *brick=get_block_first_brick(node_block);
 
 	// SET ACTION
-	brick->exe=f;
+	brick->act=f;
 
 	return node_block;
 }
@@ -1100,7 +1107,7 @@ t_node *add_slider_int_special(t_context *C,const char *name,void *f(t_brick *br
 	t_brick *brick=get_block_first_brick(node_block);
 
 	// SET ACTION
-	brick->exe=f;
+	brick->act=f;
 
 	return node_block;
 }
@@ -1294,7 +1301,8 @@ t_node *add_clone(t_context *C)
 	plug_brick->state.swap_flow = 1;
 
 	// Add Clone
-	t_node *node_brick_clone=add_part_slider_add( C, block, "clone", NULL);
+	//t_node *node_brick_clone=add_part_slider_add( C, block, "clone", NULL);
+	t_node *node_brick_clone = add_part_slider_add_bricks( C, block, "clone", 2, NULL);
 	t_brick *brick_clone=node_brick_clone->data;
 
 	brick_clone->exe=op_clone;
@@ -1316,7 +1324,8 @@ t_node *add_pipe(t_context *C)
 	add_part_slider_int(C,block,"state",NULL);
 
 	// CLONE
-	t_node *node_brick_clone=add_part_slider_add( C, block, "pipe", NULL);
+	//t_node *node_brick_clone=add_part_slider_add( C, block, "pipe", NULL);
+	t_node *node_brick_clone = add_part_slider_add_bricks( C, block, "pipe", 2, NULL);
 	t_brick *brick_clone=node_brick_clone->data;
 
 	// re-init to float (old int data used by plug_out)
@@ -1338,14 +1347,16 @@ t_node *add_maths(t_context *C,const char *name)
 
 	// Brick Result
 	add_part_slider_int(C,block,"result",NULL);
+	//add_part_slider_add_bricks(C,block,"result", 2,NULL);
 
 	// CLONE
-	t_node *node_brick_clone = add_part_slider_add( C, block, name, NULL);
+	//t_node *node_brick_clone = add_part_slider_add( C, block, name, NULL);
+	t_node *node_brick_clone = add_part_slider_add_bricks( C, block, name, 2, NULL);
 	t_brick *brick_clone=node_brick_clone->data;
 
-	if(is(name,"+")) brick_clone->exe=op_add;
-	else if(is(name,"x")) brick_clone->exe=op_mult;
-	else if(is(name,"and")) brick_clone->exe=op_and;
+	if(is(name,"+")) 	brick_clone->exe = op_add;
+	else if(is(name,"x")) 	brick_clone->exe = op_mult;
+	else if(is(name,"and")) brick_clone->exe = op_and;
 	else printf("[WARNING add_maths] Unknown type %s\n",name);
 
 	return node_block;
@@ -1378,7 +1389,8 @@ t_node *add_brick_geometry(t_context *C,const char *name, void *data)
 
 
 	// CLONE
-	t_node *node_brick_clone = add_part_slider_int( C, block, "geometry", NULL);
+	//t_node *node_brick_clone = add_part_slider_int( C, block, "geometry", NULL);
+	t_node *node_brick_clone = add_part_slider_add_bricks( C, block, "geometry", 4,NULL);
 	t_brick *brick_clone = node_brick_clone->data;
 	brick_clone->plug_out.state.flow_out=0;
 	brick_clone->plug_out.state.open_out=0;

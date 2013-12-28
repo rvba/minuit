@@ -151,11 +151,7 @@ void rhizome_exec_block_loop(t_rhizome *rhizome)
 
 	if(brick)
 	{
-		t_plug *plug = &brick->plug_intern;
-		plug->state.is_updated = 0;
-
-		// Exec
-		block_brick_trigger(plug);
+		brick->exe( brick);
 	}
 }
 
