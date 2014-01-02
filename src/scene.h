@@ -65,6 +65,9 @@ typedef struct Scene
 
 	// selections
 	struct Node *selected;
+	struct Node *_selected;
+	struct Node *hover;
+	t_data_type hover_type;
 	struct Lst *selections;
 	struct Lst *stack; 			 
 

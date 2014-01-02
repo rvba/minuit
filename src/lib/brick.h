@@ -96,7 +96,6 @@ typedef struct Brick_State
 	int is_moving:1;
 	int is_linking:1; 		// start linking state
 	int is_draging:1;		// clic & drag number but
-	int is_done:1;			// action (number) is done
 	int is_left_pressed:1;
 	int is_right_pressed:1;
 	int use_brick_blocking:1;	// one clic
@@ -140,6 +139,7 @@ typedef struct Brick_Var
 	int selector;
 	int selector_length;
 	char selector_list[_LIST_*_NAME_LONG_];
+	int offset;
 
 }t_brick_var;
 
@@ -179,7 +179,8 @@ typedef struct Brick
 	struct Block *block; 			// block container
 
 	// action
-	void *(* action)(struct Brick *brick);	
+	void *(* exe)(struct Brick *brick);	
+	void *(* act)(struct Brick *brick);	
 	int (* poll)(struct Brick *brick);	
 
 }t_brick;
@@ -265,11 +266,12 @@ void *		op_camera_rotate_xy(struct Brick *brick);
 void *		op_camera_rotate_z(struct Brick *brick);
 
 
+void *		op_void_act(t_brick *brick);
 
 void *		op_brick_add(struct Brick *brick);
 void *		op_selector(struct Brick *brick);
 void *		op_brick_node_action(struct Brick *brick);
-void *		op_void(struct Brick *brick);
+void *		op_void_exe(struct Brick *brick);
 void *		op_clone(struct Brick *brick);
 void *		op_loop(struct Brick *brick);
 void *		op_loop_get(struct Brick *brick);
@@ -326,7 +328,6 @@ void 		brick_set_updated(struct Brick *brick);
 // BRICK_UPDATE
 
 int brick_check_viewport( t_brick *brick);
-int brick_pre_check_loop(t_brick *brick);
 
 void 		cls_brick_trigger_selector(struct Brick *brick);
 void 		cls_brick_trigger_slider(struct Brick *brick);
@@ -351,5 +352,7 @@ struct Plug *	brick_get_src(struct Brick *brick);
 
 int 		brick_get_width(struct Brick *brick);
 void _brick_free(t_brick *brick);
+
+void *_op_brick_add( struct Brick *brick);
 
 #endif

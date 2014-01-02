@@ -11,9 +11,14 @@
 #ifndef __BLOCK_H
 #define __BLOCK_H
 
-#define BRICK_MIN_WIDTH 130
-
 #include "common.h"
+
+#define BRICK_MIN_WIDTH 130
+#define BLOCK_STATE_DEFAULT 1
+#define BLOCK_STATE_HOVER_
+#define BLOCK_STATE_HOVER_MENU 2
+
+#define BLOCK_TRANS( block, st) ((block->state) = &(st)) 
 
 struct Dict;
 struct Scene;
@@ -22,6 +27,7 @@ struct Node;
 struct Lst;
 struct Plug;
 struct Dot;
+struct Event;
 
 typedef struct Block t_block;
 typedef struct Block_Class t_block_class;
@@ -45,6 +51,7 @@ struct Block_Class
 	void (* draw)(t_block *self);
 	void (* update)(t_block *self);
 	void (* init)(t_block *self);
+	void (* dispatch)(t_block *self);
 };
 
 struct Block_State
@@ -74,7 +81,7 @@ struct Block
 	float width;				// block width
 	float height;				// block height
 
-	t_block_state state;			// block state
+	t_block_state block_state;			// block state
 
 	int tot_bricks; 			// drawing plugs
 	int rhizome_order;			// unset > -1
@@ -86,10 +93,8 @@ struct Block
 
 	struct Rhizome *rhizome;
 	struct Set *set;
-	/*
-	struct Dot *dot;
-	struct Lst *dashes;
-	*/
+
+	void (* state)( t_block *block, struct Event *e);
 };
 
 
@@ -114,6 +119,12 @@ struct Node*		block_make(const char *name,const char *type);
 void 		block_free(t_block *block);
 t_block *	block_new(const char *name);
 t_block *	block_rebind(struct Scene *sc,void *ptr);
+
+void cls_block_dispatch_menu( t_block *block);
+void cls_block_dispatch_block( t_block *block);
+
+void cls_block_state_block_default( t_block *block, struct Event *e);
+void cls_block_state_menu_default( t_block *block, struct Event *e);
 
 
 // BLOCK DRAW

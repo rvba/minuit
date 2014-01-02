@@ -19,22 +19,129 @@
 #define CTX_DEBUG_SELECT 0
 
 #define WITH_HIGHLIGHT 0
-//#define GLFONT 1
 #define FREE_SCENE 0
 
 #include "common.h"
 
-/*
-typedef struct Event t_event;
-typedef enum EventState t_event_state;
-typedef struct State_Event_UI t_state_event_ui;
-*/
+struct MINscreen;
+
+#define AKEY		'a' 
+#define BKEY		'b'
+#define CKEY		'c'
+#define DKEY		'd'
+#define EKEY		'e'
+#define FKEY		'f'
+#define GKEY		'g'
+#define HKEY		'h'
+#define IKEY		'i'
+#define JKEY		'j'
+#define KKEY		'k'
+#define LKEY		'l'
+#define MKEY		'm'
+#define NKEY		'n'
+#define OKEY		'o'
+#define PKEY		'p'
+#define QKEY		'q'
+#define RKEY		'r'
+#define SKEY		's'
+#define TKEY		't'
+#define UKEY		'u'
+#define VKEY		'v'
+#define WKEY		'w'
+#define XKEY		'x'
+#define YKEY		'y'
+#define ZKEY		'z'
+
+#define ZEROKEY		'0'
+#define ONEKEY		'1'
+#define TWOKEY		'2'
+#define THREEKEY	'3'
+#define FOURKEY		'4'
+#define FIVEKEY		'5'
+#define SIXKEY		'6'
+#define SEVENKEY	'7'
+#define EIGHTKEY	'8'
+#define NINEKEY		'9'
+
+#define UP_AKEY		'A'
+#define UP_BKEY		'B'
+#define UP_CKEY		'C'
+#define UP_DKEY		'D'
+#define UP_EKEY		'E'
+#define UP_FKEY		'F'
+#define UP_GKEY		'G'
+#define UP_HKEY		'H'
+#define UP_IKEY		'I'
+#define UP_JKEY		'J'
+#define UP_KKEY		'K'
+#define UP_LKEY		'L'
+#define UP_MKEY		'M'
+#define UP_NKEY		'N'
+#define UP_OKEY		'O'
+#define UP_PKEY		'P'
+#define UP_QKEY		'Q'
+#define UP_RKEY		'R'
+#define UP_SKEY		'S'
+#define UP_TKEY		'T'
+#define UP_UKEY		'U'
+#define UP_VKEY		'V'
+#define UP_WKEY		'W'
+#define UP_XKEY		'X'
+#define UP_YKEY		'Y'
+#define UP_ZKEY		'Z'
+
+#define STARKEY		'*'
+#define DOTKEY		'.'
+
+#define ESCKEY		27
+#define TABKEY		9
+
+#define	F1KEY 		1
+#define	F2KEY 		2
+#define	F3KEY 		3
+
+#define RETURNKEY 	13
+#define BACKSPACEKEY	8
+
+#define PADZERO		48
+#define PADONE		49
+#define PADTWO		50
+#define PADTHREE	51
+#define PADFOUR		52
+#define PADFIVE		53
+#define PADSIX		54
+#define PADSEVEN	55
+#define PADEIGHT	56
+#define PADNINE		57
+
+#define SHIFTKEY	200
+#define ALTKEY		201
+#define CTRLKEY		202
+
+#define KEYBOARD_STOP	203
+
+#define MOUSE_START 700
+#define MOUSE_STATIC 800
+#define MOUSE_MOTION_PASSIVE 801
+#define MOUSE_MOTION 802
+#define MOUSE_LEFT_PRESSED 803
+#define MOUSE_LEFT_RELEASED 840
+#define MOUSE_RIGHT_PRESSED 841
+#define MOUSE_RIGHT_RELEASED 842
+#define MOUSE_MIDDLE_PRESSED 843
+#define MOUSE_MIDDLE_RELEASED 844
+#define MOUSE_END 850
+
+#define EVENT_KEYBOARD( event) ( event >= 0 && event <= KEYBOARD_STOP)
+#define EVENT_MOUSE( event) ( event >= MOUSE_START && event <= MOUSE_END)
+
 
 typedef enum EventState
 {
 	event_idle,
 	event_linking,
 	event_unlinking,
+
 }t_event_state;
 
 typedef struct State_Event_UI
@@ -80,9 +187,10 @@ typedef struct State_Event_UI
 
 	int pan_x;
 	int pan_y;
+
 }t_state_event_ui;
 
-typedef struct Event
+typedef struct Main_Event
 {
 	t_event_state state;
 
@@ -205,7 +313,6 @@ typedef struct Event
 	int load_error;
 
 	int use_threading;
-	int rhizome_updated;
 	int rhizome_init;
 
 	int color_transition;
@@ -213,8 +320,25 @@ typedef struct Event
 	int color_transition_set;
 	int color_transition_count;
 
+	struct Lst *events;
+
+}t_main_event;
+
+typedef struct Event
+{
+	t_id id;
+	struct MINscreen *screen;
+	int type;
+	int x;
+	int y;
+
 }t_event;
 
-t_event *event_new(void);
+void 		event_show( t_event *event);
+void 		event_free( t_event *event);
+void		event_add( t_main_event *main_event, struct MINscreen *screen, int x, int y, int type);
+void 		event_dispach( t_main_event *main_event);
+t_event *	event_new( const char *name);
+t_main_event *	main_event_new(void);
 
 #endif

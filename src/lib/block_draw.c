@@ -35,7 +35,7 @@ void block_update_data(t_block *block)
 		}
 
 		// build width (once)
-		if(block->state.update_geometry)
+		if(block->block_state.update_geometry)
 		{
 			brick_build_width(brick);
 		}
@@ -47,7 +47,7 @@ void block_update_data(t_block *block)
 
 void block_update_geometry(t_block *block)
 {
-	if(block->state.update_geometry)
+	if(block->block_state.update_geometry)
 	{
 		t_link *link;
 
@@ -55,7 +55,7 @@ void block_update_geometry(t_block *block)
 		float width=0;
 
 		// switch state
-		block->state.update_geometry=0;
+		block->block_state.update_geometry=0;
 
 		// reset block height
 		block->height=0;
@@ -72,7 +72,7 @@ void block_update_geometry(t_block *block)
 			// set draw plugs
 			if(brick->state.draw_plugs)
 			{
-				block->state.draw_plugs=1;
+				block->block_state.draw_plugs=1;
 			}
 
 			// find max width
@@ -141,7 +141,7 @@ void block_draw_outline(t_block *block)
 {
 	t_context *C=ctx_get();
 
-	if(block->state.draw_outline)
+	if(block->block_state.draw_outline)
 	{
 		int tot=4;
 		float *color=C->ui->front_color;
@@ -174,7 +174,7 @@ void block_draw_outline(t_block *block)
 		points[10]=d[1];
 		points[11]=d[2];
 
-		if(block->state.is_mouse_over)
+		if(block->block_state.is_mouse_over)
 			line_width = 2;
 
 		// Rectangle
@@ -209,7 +209,7 @@ void block_draw_outline(t_block *block)
 
 				glPushMatrix();
 					glTranslatef(p[0],p[1],p[2]);
-					if(block->state.is_root)
+					if(block->block_state.is_root)
 					{
 						t_txt *root = txt_new("root");
 						root->draw(root);
@@ -230,15 +230,9 @@ void block_draw_outline(t_block *block)
 
 void cls_block_draw_block(t_block *block)
 {
-	t_context *C = ctx_get();
-
-	C->event->ui.use_point_global_width = 0;
-
 	block_update_data(block);
 	block_update_geometry(block);
 	block_draw_bricks(block);
 	block_draw_outline(block);
-
-	C->event->ui.use_point_global_width = 1;
 }
 	

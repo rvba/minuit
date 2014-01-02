@@ -17,7 +17,7 @@ typedef struct Context
 	struct Engine *engine;
 	struct MNserver *server;
 	struct Scene *scene;
-	struct Event *event;
+	struct Main_Event *event;
 	struct Ui *ui;
 	struct Draw *draw;
 	struct Sketch *skt;

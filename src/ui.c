@@ -27,7 +27,8 @@
 #include "data.h"
 #include "camera.h"
 #include "rhizome.h"
-#include "memory.h"
+#include "event.h"
+#include "ctx.h"
 
 t_lst *sets = NULL;
 
@@ -197,30 +198,6 @@ void ui_draw_grid(void)
 	}
 }
 
-// STATUS BAR
-
-void ui_draw_status_bar(void)
-{
-	t_context *C=ctx_get();
-	float width = (float)(C->app->window->width); 
-	float height = (float)(C->app->window->height-1);
-	width++;
-
-	float d=20;
-	float x0=0;
-	float y0=height-d;
-
-	float color[]={0,0,0,0};
-
-	float scale=1;
-	float txt[3]={x0+20,y0+5,0};
-
-	glPushMatrix();
-	glTranslatef(txt[0],txt[1],txt[2]);
-	txt_draw_direct_2d(C->ui->status_top,txt,color,scale);
-	glPopMatrix();
-}
-
 // TERM
 
 void ui_draw_term(void)
@@ -307,39 +284,32 @@ void ui_navigation(t_context *C)
 {
 	if( !C->event->is_mouse_over_brick)
 	{
-		//printf("nav\n");
-	// Pan
-	if(C->app->mouse->button_right == button_pressed && C->app->keyboard->ctrl)
-	{
+		// Pan
+		if( C->ui->mouse_state == UI_RIGHT_PRESSED && C->ui->key_ctrl)
+		{
+			C->ui->pan_x = C->event->ui.pan_x + C->ui->mouse_delta_x;
+			C->ui->pan_y = C->event->ui.pan_y + C->ui->mouse_delta_y;
+			C->event->ui.pan = 1;
+		}
 
-		C->ui->pan_x = C->event->ui.pan_x + (C->app->mouse->x - C->app->mouse->last_x);
-		C->ui->pan_y = C->event->ui.pan_y + (C->app->mouse->y - C->app->mouse->last_y);
+		// Zoom
+		if( C->ui->mouse_state == UI_RIGHT_PRESSED && C->ui->key_alt)
+		{
+			C->event->ui.zoom = 1;
+			C->ui->zoom += ( C->ui->mouse_dy * 0.002);
+		}
 
-		C->event->ui.pan = 1;
-	}
+		// Release
+		if(
+			(C->event->ui.pan || C->event->ui.zoom)
+			&& C->ui->mouse_state == UI_RIGHT_RELEASED)
+		{
+			C->event->ui.pan = 0;
+			C->event->ui.zoom = 0;
 
-	// Zoom
-	if(C->app->mouse->button_right == button_pressed && C->app->keyboard->alt)
-	{
-		C->event->ui.zoom = 1;
-		float zoom = C->ui->zoom;
-		zoom += C->app->mouse->sign_y * C->app->mouse->dy * 0.01;
-
-		if(zoom  > 0.1)
-			C->ui->zoom+=(C->app->mouse->sign_y * C->app->mouse->dy * 0.01);
-	}
-
-	// Release
-	if(
-		(C->event->ui.pan || C->event->ui.zoom)
-		&& C->app->mouse->button_right == button_released)
-	{
-		C->event->ui.pan = 0;
-		C->event->ui.zoom = 0;
-
-		C->event->ui.pan_x = C->ui->pan_x;
-		C->event->ui.pan_y = C->ui->pan_y;
-	}
+			C->event->ui.pan_x = C->ui->pan_x;
+			C->event->ui.pan_y = C->ui->pan_y;
+		}
 	}
 }
 
@@ -398,6 +368,7 @@ void ui_draw(void)
 {
 	t_context *C = ctx_get();
 
+	C->event->ui.use_point_global_width = 0;
 	C->event->ui.use_line_global_width = 0;
 	C->event->ui.use_point_global_width = 0;
 
@@ -418,6 +389,37 @@ void ui_draw(void)
 
 	C->event->ui.use_point_global_width = 1;
 	C->event->ui.use_line_global_width = 1;
+	C->event->ui.use_point_global_width = 1;
+}
+
+
+void ui_mouse_show( t_ui *ui)
+{
+	switch( ui->mouse_state)
+	{
+		case UI_MOUSE_IDLE:	 printf("UI_MOUSE_IDLE\n"); break;
+		case UI_LEFT_PRESSED:	 printf("UI_LEFT_PRESSED\n"); break;
+		case UI_LEFT_CLIC:	 printf("UI_LEFT_CLIC\n"); break;
+		case UI_LEFT_RELEASED:	 printf("UI_LEFT_RELEASED\n"); break;
+
+		case UI_RIGHT_PRESSED:	 printf("UI_RIGHT_PRESSED\n"); break;
+		case UI_RIGHT_CLIC:	 printf("UI_RIGHT_CLIC\n"); break;
+		case UI_RIGHT_RELEASED:	 printf("UI_RIGHT_RELEASED\n"); break;
+
+		case UI_MIDDLE_PRESSED:	 printf("UI_MIDDLE_PRESSED\n"); break;
+		case UI_MIDDLE_CLIC:	 printf("UI_MIDDLE_CLIC\n"); break;
+		case UI_MIDDLE_RELEASED: printf("UI_MIDDLE_RELEASED\n"); break;
+	}
+
+	switch( ui->mouse_motion)
+	{
+		case UI_MOUSE_STATIC:	printf("UI_MOUSE_STATIC\n"); break;
+		case UI_MOUSE_MOTION:	printf("UI_MOUSE_MOTION\n"); break;
+		case UI_MOUSE_MOTION_PASSIVE:	printf("UI_MOUSE_MOTION_PASSIVE\n"); break;
+	}
+
+	printf("x:%d y:%d dx:%d dy:%d delta_x:%d delta_y:%d\n",ui->mouse_x, ui->mouse_y, ui->mouse_dx, ui->mouse_dy, ui->mouse_delta_x, ui->mouse_delta_y);
+	
 }
 
 // INIT
@@ -431,6 +433,7 @@ void ui_init(void)
 	op_set_color(C,C->draw->color);
 
 	C->ui->camera = camera_new("camera_ui");
+	ctx_ui_init( C);
 }
 
 // NEW
@@ -439,17 +442,17 @@ t_ui *ui_new(void)
 {
 	t_ui *ui = (t_ui *)mem_malloc(sizeof(t_ui));
 
-	ui->draw_plug_state = 1;
+	ui->show_plug_state = 1;
 
 	ui->show_intro=UI_SHOW_INTRO;
-	ui->always_show_intro=0;
+	ui->show_intro_always=0;
 	ui->show_bricks = 0;
 	ui->show_menu = 0;
 	ui->show_nodes = 0;
 	ui->show_meshes = 0;
 	ui->show_objects = 0;
 	ui->show_mouse = UI_SHOW_MOUSE;
-	ui->visualize_mouse = 1;
+	ui->show_mouse_rec = 1;
 	ui->show_term = UI_SHOW_TERM;
 	ui->show_grid = 0;
 	ui->show_states = 0;
@@ -460,26 +463,38 @@ t_ui *ui_new(void)
 	ui->show_rhizome_order = UI_SHOW_RHIZOME_ORDER;
 	ui->show_status = UI_SHOW_STATUS;
 
+	ui->mouse_state = UI_MOUSE_IDLE;
+	ui->mouse_motion = UI_MOUSE_STATIC;
+	ui->mouse_x = 0;
+	ui->mouse_y = 0;
+	ui->mouse_last_x = 0;
+	ui->mouse_last_y = 0;
+	ui->mouse_last_x_pressed = 0;
+	ui->mouse_last_y_pressed = 0;
+	ui->mouse_dx = 0;
+	ui->mouse_dy = 0;
+	ui->mouse_delta_x = 0;
+	ui->mouse_delta_y = 0;
+	ui->mouse_drag = 0;
+
+	ui->key_shift = 0;
+	ui->key_alt = 0;
+	ui->key_ctrl = 0;
+
 	ui->step = 0;
 	ui->step_reset = 0;
 	ui->add_bricks = UI_ADD_BRICKS;
 
 	ui->update_links = 1;
-	ui->use_rhizomes = 1;
-	ui->threading_on = 0;
-	ui->rhizome_updated = 1;
 
 	ui->draw=UI_DRAW;
 	ui->font_width = 1;
 	ui->use_bitmap_font = 1;
 	ui->fixed_menu = UI_FIXED_MENU;
-	ui->flow_brick = 0;
 	ui->zoom = UI_ZOOM;
 	ui->pan_x = UI_PAN_X;
 	ui->pan_y = UI_PAN_Y;
 	ui->object_selection = 1;
-
-	memset(ui->status_top,0,100);
 
 	ui->brick_selected = NULL;
 	ui->link = NULL;
@@ -488,17 +503,12 @@ t_ui *ui_new(void)
 	ui->brick_in = NULL;
 	ui->brick_out = NULL;
 
-	ui->mouse_mode = 1;
-
-	ui->record_camera = 0;
-
 	vset4i(ui->background_color,255,255,255,255);
 	vset4f(ui->front_color,0,0,0,0);
 	vset4f(ui->back_color,1,1,1,0);
-	vset3f(ui->max,0,0,0);
-	ui->is_max = 0;
 
 	ui->screens = lst_new("lst");
+	ui->screen_active = NULL;
 	ui->screen_link_active = NULL;
 	ui->screen_direction = 1;
 	ui->mouse_size = 9;
@@ -512,6 +522,7 @@ t_ui *ui_new(void)
 	ui->do_disconnect = 0;
 
 	ui->bitrate = 15000;
+	ui->state = NULL;
 
 	return ui;
 }

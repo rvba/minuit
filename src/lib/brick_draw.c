@@ -173,7 +173,7 @@ void brick_draw_link(t_brick *brick)
 			skt_line(v1,v2,width,color);
 
 			// draw plug state
-			if(C->ui->draw_plug_state)
+			if(C->ui->show_plug_state)
 			{
 				if(plug_out->state.flow_out)
 				{

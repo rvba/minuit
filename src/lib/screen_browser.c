@@ -43,7 +43,7 @@ void browser_abort(void)
 	screen_switch_to_main();
 }
 
-void keymap_browser(unsigned char key)
+void keymap_browser( int key)
 {
 	keymap_main(key);
 
@@ -133,8 +133,6 @@ void *browser_return_filename(t_brick *brick)
 void browser_build(void)
 {
 	t_context *C=ctx_get();
-	t_node *node_brick;
-	t_brick *brick;
 
 	if(!is_built)
 	{
@@ -196,15 +194,13 @@ void browser_build(void)
 
 						if(is(fff," directory"))
 						{
-							node_brick=add_brick_trigger(C,block,file_name,browser_go_directory);
+							add_brick_trigger(C,block,file_name,browser_go_directory);
 						}
 						else
 						{
-							node_brick=add_brick_trigger(C,block,file_name,browser_return_filename);
+							add_brick_trigger(C,block,file_name,browser_return_filename);
 						}
 
-						brick=node_brick->data;
-						brick->state.use_global_blocking=1;
 
 					}
 
@@ -213,9 +209,7 @@ void browser_build(void)
 
 			}
 
-			node_brick=add_brick_trigger(C,block,"..",browser_go_backward);
-			brick=node_brick->data;
-			brick->state.use_global_blocking=1;
+			add_brick_trigger(C,block,"..",browser_go_backward);
 		}
 
 		// tmp colors
@@ -235,7 +229,7 @@ void browser_draw(void)
 {
 	browser_build();
 	t_block *block=BROWSER_BUTTONS->data;
-	block->state.update_geometry=1;
+	block->block_state.update_geometry=1;
 	block->cls->draw(block);
 }
 
@@ -275,21 +269,21 @@ void browser_init(void)
 	}
 }
 
-void screen_browser_make(void)
+t_screen *screen_browser_make( t_context *C)
 {
-	t_context *C=ctx_get();
+	t_node *node = scene_add( C->scene, dt_screen, "screen_browser");
+	t_screen *screen = node->data;
 
-	t_node *node=scene_add(C->scene,dt_screen,"screen_browser");
-	t_screen *screen=node->data;
+	screen->keymap = keymap_browser;
+	screen->draw = screen_browser;
 
-	screen->keymap=keymap_browser;
-	screen->draw=screen_browser;
+	screen->is_active = 0;
+	screen->is_visible = 0;
 
-	screen->is_active=0;
-	screen->is_visible=0;
-
-	lst_add(C->ui->screens,node,"screen_browser");
+	lst_add( C->ui->screens, node, "screen_browser");
 
 	// init
 	browser_init();
+
+	return screen;
 };

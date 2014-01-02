@@ -10,11 +10,11 @@
 #include "context.h"
 #include "event.h"
 #include "util.h"
-#include "memory.h"
+#include "screen.h"
 
-t_event *event_new(void)
+t_main_event *main_event_new(void)
 {
-	t_event *event=(t_event*)mem_malloc(sizeof(t_event));
+	t_main_event *event = (t_main_event *) mem_malloc( sizeof( t_main_event));
 
 	bzero(&event->ui,sizeof(t_state_event_ui));
 
@@ -137,13 +137,145 @@ t_event *event_new(void)
 	event->load_error = 0;
 
 	event->use_threading = 1;
-	event->rhizome_updated = 1;
 	event->rhizome_init = 0;
 
 	event->color_transition = 0;
 	event->color_transition_use = 1;
 	event->color_transition_set = 0;
 	event->color_transition_count = 0;
-	
+
+	event->events = lst_new( "events");
+
+	return event;
+}
+
+void event_add( t_main_event *main_event, t_screen *screen, int x, int y, int type)
+{
+	t_event *event = event_new( "event");
+	event->screen = screen;
+	event->x = x;
+	event->y = y;
+	event->type = type;
+
+	lst_add( main_event->events, event, event->id.name);
+}
+
+void event_print( int state)
+{
+	switch( state)
+	{
+		case AKEY: printf("a"); break;
+		case BKEY: printf("b"); break;
+		case CKEY: printf("c"); break;
+		case DKEY: printf("d"); break;
+		case EKEY: printf("e"); break;
+		case FKEY: printf("f"); break;
+		case GKEY: printf("g"); break;
+		case HKEY: printf("h"); break;
+		case IKEY: printf("i"); break;
+		case JKEY: printf("j"); break;
+		case KKEY: printf("k"); break;
+		case LKEY: printf("l"); break;
+		case MKEY: printf("m"); break;
+		case NKEY: printf("n"); break;
+		case OKEY: printf("o"); break;
+		case PKEY: printf("p"); break;
+		case QKEY: printf("q"); break;
+		case RKEY: printf("r"); break;
+		case SKEY: printf("s"); break;
+		case TKEY: printf("t"); break;
+		case UKEY: printf("u"); break;
+		case VKEY: printf("v"); break;
+		case WKEY: printf("w"); break;
+		case XKEY: printf("x"); break;
+		case YKEY: printf("y"); break;
+		case ZKEY: printf("z"); break;
+
+		case UP_AKEY: printf("A"); break;
+		case UP_BKEY: printf("B"); break;
+		case UP_CKEY: printf("C"); break;
+		case UP_DKEY: printf("D"); break;
+		case UP_EKEY: printf("E"); break;
+		case UP_FKEY: printf("F"); break;
+		case UP_GKEY: printf("G"); break;
+		case UP_HKEY: printf("H"); break;
+		case UP_IKEY: printf("I"); break;
+		case UP_JKEY: printf("J"); break;
+		case UP_KKEY: printf("K"); break;
+		case UP_LKEY: printf("L"); break;
+		case UP_MKEY: printf("M"); break;
+		case UP_NKEY: printf("N"); break;
+		case UP_OKEY: printf("O"); break;
+		case UP_PKEY: printf("P"); break;
+		case UP_QKEY: printf("Q"); break;
+		case UP_RKEY: printf("R"); break;
+		case UP_SKEY: printf("S"); break;
+		case UP_TKEY: printf("T"); break;
+		case UP_UKEY: printf("U"); break;
+		case UP_VKEY: printf("V"); break;
+		case UP_WKEY: printf("W"); break;
+		case UP_XKEY: printf("X"); break;
+		case UP_YKEY: printf("Y"); break;
+		case UP_ZKEY: printf("Z"); break;
+
+		case STARKEY: printf("*"); break;
+		case DOTKEY: printf("."); break;
+		case F1KEY: printf("F1"); break;
+		case F2KEY: printf("F2"); break;
+		case F3KEY: printf("F3"); break;
+
+		case TABKEY: printf("TAB"); break;
+		case RETURNKEY: printf("RETURN"); break;
+		case BACKSPACEKEY: printf("BACKSPACE"); break;
+
+		case PADZERO: printf("PAD 0"); break;
+		case PADONE: printf("PAD 1"); break;
+		case PADTWO: printf("PAD 2"); break;
+		case PADTHREE: printf("PAD 3"); break;
+		case PADFOUR: printf("PAD 4"); break;
+		case PADFIVE: printf("PAD 5"); break;
+		case PADSIX: printf("PAD 6"); break;
+		case PADSEVEN: printf("PAD 7"); break;
+		case PADEIGHT: printf("PAD 8"); break;
+		case PADNINE: printf("PAD 9"); break;
+
+		case MOUSE_STATIC: printf("MOUSE STATIC"); break;
+		case MOUSE_MOTION_PASSIVE: printf("MOUSE MOTION PASSIVE"); break;
+		case MOUSE_MOTION: printf("MOUSE MOTION"); break;
+		case MOUSE_LEFT_PRESSED: printf("MOUSE BUTTON LEFT PRESSED"); break;
+		case MOUSE_LEFT_RELEASED: printf("MOUSE BUTTON LEFT RELEASED"); break;
+		case MOUSE_RIGHT_PRESSED: printf("MOUSE BUTTON RIGHT PRESSED"); break;
+		case MOUSE_RIGHT_RELEASED: printf("MOUSE BUTTON RIGHT RELEASED"); break;
+		case MOUSE_MIDDLE_PRESSED: printf("MOUSE BUTTON MIDDLE PRESSED"); break;
+		case MOUSE_MIDDLE_RELEASED: printf("MOUSE BUTTON MIDDLE RELEASED"); break;
+
+		case SHIFTKEY: printf("SHIFTKEY"); break;
+		case ALTKEY: printf("ALTKEY"); break;
+		case CTRLKEY: printf("CTRLKEY"); break;
+		default: printf("? %d", state); break;
+	}
+}
+
+void event_show( t_event *event)
+{
+	printf("event ");
+	event_print( event->type);
+	printf(" %d %d\n", event->x, event->y);
+}
+
+void event_free( t_event *event)
+{
+	mem_free( event, sizeof( t_event));
+}
+
+t_event *event_new( const char *name)
+{
+	t_event *event = mem_malloc( sizeof( t_event));
+	id_init( &event->id, name);
+
+	event->screen = NULL;
+	event->x = 0;
+	event->y = 0;
+
 	return event;
 }

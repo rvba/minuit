@@ -41,7 +41,7 @@ t_block *add_menu_block( t_context *C, const char *name)
 {
 	t_node *menu = block_make( name, "menu");
 	t_block *block = menu->data;
-	block->state.is_moveable = 0;
+	block->block_state.is_moveable = 0;
 	return block;
 }
 
@@ -421,7 +421,8 @@ void register_set(t_context *C)
 	scene_add_data(C->scene,"app_data","func","op_pointer",			op_pointer);
 	scene_add_data(C->scene,"app_data","func","op_camera_rotate_z",		op_camera_rotate_z);
 	scene_add_data(C->scene,"app_data","func","op_camera_rotate_xy",	op_camera_rotate_xy);
-	scene_add_data(C->scene,"app_data","func","op_void",			op_void);
+	scene_add_data(C->scene,"app_data","func","op_void_exe",		op_void_exe);
+	scene_add_data(C->scene,"app_data","func","op_void_act",		op_void_act);
 	scene_add_data(C->scene,"app_data","func","op_set_selected",		op_set_selected);
 	scene_add_data(C->scene,"app_data","func","op_rewind",			op_rewind);
 	scene_add_data(C->scene,"app_data","func","op_pipe",			op_pipe);
@@ -446,6 +447,7 @@ void register_set(t_context *C)
 	scene_add_data(C->scene,"app_data","func","op_geo_array",		op_geo_array);
 	scene_add_data(C->scene,"app_data","func","op_geometry",		op_geometry);
 	scene_add_data(C->scene,"app_data","func","op_geo",			op_geo);
+	scene_add_data(C->scene,"app_data","func","_op_brick_add",		_op_brick_add);
 
 	scene_add_data(C->scene,"app_data","func","viewport_draw_scene",	viewport_draw_scene);
 
@@ -486,7 +488,8 @@ void register_set(t_context *C)
 	dict_symbol_add(dict_func,"op_pointer",dt_pointer,op_pointer);
 	dict_symbol_add(dict_func,"op_camera_rotate_z",dt_pointer,op_camera_rotate_z);
 	dict_symbol_add(dict_func,"op_camera_rotate_xy",dt_pointer,op_camera_rotate_xy);
-	dict_symbol_add(dict_func,"op_void",dt_pointer,op_void);
+	dict_symbol_add(dict_func,"op_void_exe",dt_pointer,op_void_exe);
+	dict_symbol_add(dict_func,"op_void_act",dt_pointer,op_void_act);
 	dict_symbol_add(dict_func,"op_set_selected",dt_pointer,op_set_selected);
 	dict_symbol_add(dict_func,"op_rewind",dt_pointer,op_rewind);
 	dict_symbol_add(dict_func,"op_pipe",dt_pointer,op_pipe);
@@ -511,6 +514,7 @@ void register_set(t_context *C)
 	dict_symbol_add(dict_func,"op_geo_array",dt_pointer,op_geo_array);
 	dict_symbol_add(dict_func,"op_geometry",dt_pointer,op_geometry);
 	dict_symbol_add(dict_func,"op_geo",dt_pointer,op_geo);
+	dict_symbol_add(dict_func,"_op_brick_add",dt_pointer,_op_brick_add);
 
 	dict_symbol_add(dict_func,"viewport_draw_scene",dt_pointer,viewport_draw_scene);
 

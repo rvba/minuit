@@ -17,7 +17,12 @@ struct Brick;
 struct Block;
 struct Plug;
 struct Lst;
-struct Plug;
+struct Ui;
+struct Event;
+
+// CTX_EVENT
+
+void 		ctx_event( struct Context *C);
 
 // CTX_LOAD
 
@@ -37,8 +42,8 @@ void save_file_increment(struct Context *C);
 
 void show_sets(struct Context *C);
 void switch_sets(struct Context *C);
-void keymap_main(unsigned char key);
-void keymap_generic(unsigned char key);
+void keymap_main( int key);
+void keymap_generic( int key);
 void ctx_keyboard(struct Context *C);
 
 // CTX_MOUSE
@@ -54,6 +59,9 @@ int is_mouse_over(struct Context *C,int *c);
 void ctx_set_mouse_over(struct Context *C);
 void ctx_get_mouse_pos(struct Context *C,float *r);
 
+void ctx_mouse( struct Context *C);
+inline int ui_left_clic( struct Ui *ui);
+
 // CTX_UI
 
 void ctx_ui_freeze(struct Context *C);
@@ -63,7 +71,13 @@ void ctx_block_store(struct Context *C,struct Node *node);
 void ctx_ui_exec(struct Context *C);
 void ctx_ui_menu_hide(struct Context *C);
 void ctx_ui_links_update(struct Context *C);
-void ctx_ui(struct Context *C);
+
+
+void ctx_ui_keyboard_set( struct Context *C, struct Event *event);
+void ctx_ui_mouse_set( struct Context *C, struct Event *event);
+void ctx_ui_mouse_motion( struct Context *C, int x, int y);
+void ctx_ui( struct Context *C);
+void ctx_ui_init( struct Context *C);
 
 // CTX_SCENE
 
@@ -71,6 +85,7 @@ void ctx_scene_selection(struct Context *C, struct Node *node, int state);
 void ctx_scene_clear_selections(struct Context *C);
 void ctx_scene_set_selected(struct Context *C, struct Node *node);
 void ctx_scene(struct Context *C);
+struct Node *ctx_scene_hover( struct Context *C, t_data_type type);
 
 
 // CTX_RENDER
@@ -123,5 +138,6 @@ void ctx_set_exec(struct Context *C);
 void ctx_compute(struct Context *C);
 
 void *ctx_set_compute(void *data);
+void ctx_event_cleanup( struct Context *C);
 
 #endif 

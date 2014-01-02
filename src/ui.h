@@ -29,17 +29,70 @@
 #define UI_SHOW_STATUS 0
 #define UI_ADD_BRICKS 1
 
+#define UI_MOUSE_IDLE		 0
+
+#define UI_LEFT_PRESSED		 1
+#define UI_LEFT_CLIC		 2
+#define UI_LEFT_DBCLIC		 3
+#define UI_LEFT_RELEASED	 4
+
+#define UI_RIGHT_PRESSED	 5
+#define UI_RIGHT_CLIC 		 6
+#define UI_RIGHT_DBCLIC		 7
+#define UI_RIGHT_RELEASED	 8
+
+#define UI_MIDDLE_PRESSED	 9
+#define UI_MIDDLE_CLIC		 10
+#define UI_MIDDLE_DBCLIC	 11
+#define UI_MIDDLE_RELEASED	 12
+
+#define UI_MOUSE_STATIC		13
+#define UI_MOUSE_MOTION		14
+#define UI_MOUSE_MOTION_PASSIVE	15
+
+#define UI_TRANS(C, st) ((C->ui->state) = &(st)) 
+
+#define UI_HOVER_BACKGROUND 1
+#define UI_HOVER_OBJECT 2
+#define UI_HOVER_BRICK 3
+#define UI_HOVER_NOTHING 4
+
 float intro_intensity;
 
 struct Context;
+struct Event;
 
 typedef struct Ui
 {
-	int draw; // draw the ui
-	int update_links;
-	int record_camera;
+	int draw; 		// draw the ui
+	int update_links;	// compte sets
+	int bitrate;
+	int do_connect;
+	int do_disconnect;
+	int add_bricks;
+	int step;
+	int step_reset;
+	int fixed_menu;
 
-	char status_top[100];
+	// MOUSE
+	int mouse_state;
+	int mouse_motion;
+	int mouse_x;
+	int mouse_y;
+	int mouse_last_x;
+	int mouse_last_y;
+	int mouse_last_x_pressed;
+	int mouse_last_y_pressed;
+	int mouse_dx;
+	int mouse_dy;
+	int mouse_delta_x;
+	int mouse_delta_y;
+	int mouse_drag;
+
+	// KEYBOARD
+	int key_shift;
+	int key_alt;
+	int key_ctrl;
 
 	// alphabet 
 	int alphabet[160]; 
@@ -53,8 +106,6 @@ typedef struct Ui
 	float font_width;
 	int use_bitmap_font;
 
-	int draw_plug_state;
-
 	// show
 	int show_bricks;
 	int show_menu;
@@ -62,32 +113,19 @@ typedef struct Ui
 	int show_meshes;
 	int show_objects;
 	int show_intro;
-	int always_show_intro;
+	int show_intro_always;
 	int show_mouse;
-	int visualize_mouse;
+	int show_mouse_rec;
 	int show_term;
 	int show_grid;
 	int show_states;
+	int show_plug_state;
 	int show_step;
 	int show_brick_step;
 	int show_sets;
-	int add_bricks;
 	int show_rhizome_bounding_box;
 	int show_rhizome_order;
 	int show_status;
-
-	int bitrate;
-
-	int step;
-	int step_reset;
-
-	int use_rhizomes;
-	int threading_on;
-	int rhizome_updated;
-
-	// brick flags
-	int fixed_menu;
-	int flow_brick;
 
 	// positions
 	float zoom;
@@ -95,44 +133,32 @@ typedef struct Ui
 	float pan_y;
 
 	float menu_pos[2];
-	float max[3];
-	int is_max;
-	int mouse_mode;
+	int mouse_size;
 
 	// object selection flag
 	int object_selection;
 
-	// debug flag
-	int debug;
-
 	// selections
-	struct Brick *brick_selected;
-
 	struct Node *link;
 	struct Node *link_node;
 
-	// selected plugs
-
+	// bricks
+	struct Brick *brick_selected;
 	struct Brick *brick_in;
 	struct Brick *brick_out;
-
 	struct Brick *connect_brick_in;
 	struct Brick *connect_brick_out;
 
-
-	int do_connect;
-	int do_disconnect;
-
 	// screens
 	struct Lst *screens;
+	struct MINscreen *screen_active;
 	struct Link *screen_link_active;
 	int screen_direction;
 
-	int mouse_size;
-
 	struct Camera *camera;
-
 	struct Lst *sets;
+
+	void (* state)( struct Context *C, struct Event *event);
 }t_ui;
 
 // UI.C
@@ -149,7 +175,6 @@ void ui_draw_intro(void);
 void ui_draw_lines(void);
 void ui_draw_menu(void);
 void ui_draw_blocks(void);
-void ui_draw_status_bar(void);
 void ui_draw_debug(void);
 void ui_draw_term(void);
 void ui_draw_grid(void);
@@ -162,6 +187,7 @@ int op_ui_alphabet_switch(struct Node *node);
 void op_screen_switch();
 void ui_draw_sets(void);
 void ui_draw_mouse(void);
+
 
 
 #endif

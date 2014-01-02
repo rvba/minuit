@@ -37,11 +37,7 @@ void ctx_switch_record_video(t_context *C)
 	}
 	else
 	{
-		if(C->ui->visualize_mouse)
-		{
-			C->ui->show_mouse = 1;
-		}
-
+		if(C->ui->show_mouse_rec)  C->ui->show_mouse = 1; 
 		C->event->video_record = 1;
 		term_log("record start");
 	}

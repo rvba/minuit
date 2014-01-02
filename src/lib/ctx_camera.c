@@ -21,8 +21,9 @@
 void ctx_camera_movment(t_context *C, t_camera *camera)
 {
 	t_app *app=C->app;
-	int dx = -app->mouse->sign_x * app->mouse->dx;
-	int dy = app->mouse->sign_y * app->mouse->dy; 
+
+	float dx = (float) -C->ui->mouse_dx * .1;
+	float dy = (float) C->ui->mouse_dy * .1;
 
 	// When No UI event
 	if(!C->event->is_brick_transformed && !C->event->is_mouse_over_brick)
@@ -30,23 +31,18 @@ void ctx_camera_movment(t_context *C, t_camera *camera)
 		// Release Camera Rotation
 		if(C->event->camera_rotation)
 		{
-			if(
-				(app->mouse->button_right == button_released)
-			&&	!(app->mouse->button_middle == button_pressed)
-				
-				)
-				C->event->camera_rotation = 0;
+			if( C->ui->mouse_state == UI_MIDDLE_RELEASED) C->event->camera_rotation = 0;
 		}
 		// Start Camera Rotation 
 		else
 		{
 			if(
 				(
-				app->mouse->button_right == button_pressed
+				C->ui->mouse_state == UI_RIGHT_PRESSED
 			&&	app->keyboard->shift
 				)
 				||
-				app->mouse->button_middle == button_pressed
+				C->ui->mouse_state == UI_MIDDLE_PRESSED
 			)
 			{
 				C->event->camera_rotation = 1;
@@ -57,12 +53,12 @@ void ctx_camera_movment(t_context *C, t_camera *camera)
 		if (camera->type == camera_frustum)
 		{
 			if(C->event->camera_rotation)
-		
 			{
+				if( C->ui->mouse_motion == UI_MOUSE_MOTION)
 				// camera rotate
 				op_camera_rotate(C, camera, (float)dx,(float)dy);
 			}
-			else if ((app->mouse->button_middle == button_pressed) && (app->keyboard->shift==1))	
+			else if (( C->ui->mouse_state == UI_MIDDLE_PRESSED) && (app->keyboard->shift==1))	
 			{
 				// camera translate	
 				op_camera_translate(C, camera);
@@ -96,7 +92,7 @@ void ctx_camera_movment(t_context *C, t_camera *camera)
 			{
 				op_camera_set_ortho_zoom(C,camera,1);
 			}
-			if (app->mouse->button_left == button_pressed && app->keyboard->shift)
+			if ( C->ui->mouse_state == UI_LEFT_PRESSED && app->keyboard->shift)
 			{
 				op_camera_set_ortho_pan(C, camera);
 			}

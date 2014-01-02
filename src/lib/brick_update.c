@@ -54,22 +54,6 @@ int brick_check_loop(t_brick *brick)
 	}
 }
 
-int brick_pre_check_loop(t_brick *brick)
-{
-	t_context *C = ctx_get();
-
-	int frame = C->app->frame;
-
-	if(brick->state.frame_loop != frame)
-	{
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
-}
-
 // SET UPDATED
 
 void brick_set_updated(t_brick *brick)
@@ -171,7 +155,7 @@ void cls_brick_disconnect(t_brick *self)
 int brick_release_cloning(t_brick *brick)
 {
 	t_context *C=ctx_get();
-	if(C->app->mouse->button_left == button_released) return 1;
+	if( C->ui->mouse_state == UI_LEFT_RELEASED) return 1;
 	else return 0;
 }
 
@@ -180,7 +164,7 @@ int brick_start_cloning(t_context *C,int mouse_over)
 	if(
 		mouse_over
 		&& !C->event->ui.is_menu_show
-		&& (C->app->mouse->button_left == button_pressed)
+		&& (C->ui->mouse_state == UI_LEFT_PRESSED)
 		&& (C->app->keyboard->ctrl || C->app->keyboard->shift)
 		)
 
@@ -196,44 +180,30 @@ int brick_start_cloning(t_context *C,int mouse_over)
 // SLIDER
 void cls_brick_trigger_slider( t_brick *brick)
 {
-	if(brick->state.use_loops == 0)
-	{
-		t_context *C = ctx_get();
-		int frame = C->app->frame;
-
-		if(brick->state.frame_loop != frame)
-		{
-			brick->state.frame_loop = frame;
-			if(brick->action) brick->action(brick);
-		}
-	}
-	else
-	{
-		if(brick->action) brick->action(brick);
-	}
-
+	brick->act(brick);
 	brick_set_updated(brick);
-
 }
 
 // SWITCH
 void cls_brick_trigger_switch(t_brick *brick)
 {
-	brick->action(brick);
-	brick_set_updated(brick);
+	if(brick->state.is_idle)
+	{
+		brick->act(brick);
+		brick_set_updated(brick);
+	}
 }
 
 // SELECTOR
 void cls_brick_trigger_selector(t_brick *brick)
 {
-	brick->action(brick);
+	brick->act(brick);
 	brick_set_updated(brick);
 }
 
 // MENU
 void cls_brick_trigger_menu(t_brick *brick)
 {
-	brick->action(brick);
 	brick_set_updated(brick);
 }
 
@@ -242,54 +212,32 @@ void cls_brick_trigger_trigger(t_brick *brick)
 {
 	t_context *C = ctx_get();
 
-	t_plug *plug_in=&brick->plug_in;
-	t_plug *plug_out = &brick->plug_out;
-
-	// get data from parent 
-	if(plug_in->state.is_connected || plug_out->state.is_connected)
+	// trigger
+	if(brick->state.is_mouse_over)
 	{
-		brick->action(brick);
-		if(brick->mode == bm_triggering)
-			brick_release(brick);
+		// brick pressed
+		if( C->ui->mouse_state == UI_LEFT_PRESSED && brick->state.is_released)
+		{
+			if(!brick->state.is_idle)
+			{
+			brick->state.is_released=0;
+			brick->act(brick);
+			}
+		}
 	}
-	// or get user event
-	else
+
+	// release
+	if(!brick->state.is_released && C->ui->mouse_state == UI_LEFT_RELEASED)
 	{
-		// always
-		if(brick->state.always_trigger)
+		// hide menu
+		if(C->event->ui.is_menu_mouse_show && !C->ui->fixed_menu)
 		{
-			brick->action(brick);
-
-			if(brick->mode == bm_triggering)
-				brick_release(brick);
+			ctx_ui_menu_hide(C);
 		}
-		else
-		{
-			// trigger
-			if(brick->state.is_mouse_over)
-			{
-				// brick pressed
-				if(C->app->mouse->button_left==button_pressed && brick->state.is_released)
-				{
-					brick->state.is_released=0;
-					brick->action(brick);
-				}
-			}
 
-			// release
-			if(!brick->state.is_released && C->app->mouse->button_left==button_released)
-			{
-				// hide menu
-				if(C->event->ui.is_menu_mouse_show && !C->ui->fixed_menu)
-				{
-					ctx_ui_menu_hide(C);
-				}
-
-				// release brick
-				brick->state.is_released=1;
-				brick_release(brick);
-			}
-		}
+		// release brick
+		brick->state.is_released=1;
+		brick_release(brick);
 	}
 
 	brick_set_updated(brick);
@@ -338,14 +286,11 @@ void cls_brick_update(t_brick *brick)
 	t_plug *plug_in = &brick->plug_in;
 	t_plug *plug_out = &brick->plug_out;
 
-	int button_left=C->app->mouse->button_left;
-	int button_right=C->app->mouse->button_right;
-	int button_middle=C->app->mouse->button_middle;
 	int mouse_over = is_mouse_over_brick(C,brick);
 	int brick_clic=0;
 
 	int edit = 0;
-	if(mouse_over && (button_middle == button_pressed))
+	if(mouse_over && (C->ui->mouse_state == UI_MIDDLE_PRESSED))
 	{
 		edit = 1;
 		C->event->is_mouse_over_brick = 1;
@@ -355,21 +300,22 @@ void cls_brick_update(t_brick *brick)
 	float mouse_pos[3];
 	vset(mouse_pos,0,0,0);
 
-
-	if(	 mouse_over && button_left==button_pressed
+	if(	 mouse_over 
+		&& (C->ui->mouse_state == UI_LEFT_PRESSED)
 		&& (brick->state.is_mouse_over_plug_in==0)
 		&& (brick->state.is_mouse_over_plug_out==0)
 		)
-		
+	{
 		brick_clic=1;
+	}
 
 	// IDLE
 
 	if(!brick->state.is_idle)
 	{
-		if(C->app->mouse->button_left==button_released)
+		if( C->ui->mouse_state == UI_LEFT_RELEASED)
 		{
-			brick->state.is_idle=0;
+			brick->state.is_idle=1;
 		}
 	}
 		
@@ -391,7 +337,7 @@ void cls_brick_update(t_brick *brick)
 	}
 
 	// PLUGS
-	t_event *event = C->event;
+	t_main_event *event = C->event;
 
 	if(mouse_over)
 	{
@@ -447,7 +393,7 @@ void cls_brick_update(t_brick *brick)
 				if(C->event->is_brick_transformed)
 				{
 
-					if(is_mouse_over_plug(C,&brick->plug_in) && button_left==button_pressed)
+					if(is_mouse_over_plug(C,&brick->plug_in) && C->ui->mouse_state == UI_LEFT_PRESSED)
 					{
 						C->ui->brick_in=brick;
 					}
@@ -484,7 +430,7 @@ void cls_brick_update(t_brick *brick)
 						}
 					}
 					// START MOVING
-					else if(mouse_over && button_right==button_pressed) 
+					else if(mouse_over && C->ui->mouse_state == UI_RIGHT_PRESSED) 
 					{
 						if(!C->event->ui.is_menu_mouse_show)
 						{
@@ -495,7 +441,7 @@ void cls_brick_update(t_brick *brick)
 					}
 
 					// START LINKING
-					else if(is_mouse_over_plug(C,&brick->plug_out) && button_left==button_pressed)
+					else if(is_mouse_over_plug(C,&brick->plug_out) && C->ui->mouse_state == UI_LEFT_PRESSED)
 					{
 						if(!C->event->ui.is_menu_mouse_show)
 						{
@@ -507,7 +453,7 @@ void cls_brick_update(t_brick *brick)
 					}
 
 					// START UNLINKING
-					else if(is_mouse_over_plug(C,&brick->plug_in) && button_left==button_pressed)
+					else if(is_mouse_over_plug(C,&brick->plug_in) && C->ui->mouse_state == UI_LEFT_PRESSED)
 					{
 						C->ui->brick_in=brick;
 
@@ -556,28 +502,9 @@ void cls_brick_update(t_brick *brick)
 									trigger = 1;
 								}
 
-								if(trigger && brick->state.use_brick_blocking)
+								if(trigger)
 								{
-									if(brick->state.is_idle)
-									{
-										brick->state.is_idle=0;
-										C->event->is_brick_transformed=1;
-										C->ui->brick_selected=brick;
-										brick->mode=bm_triggering;
-									}
-								}
-								else if(brick->state.use_global_blocking)
-								{
-									if(C->app->mouse->button_left_is_ready)
-									{
-										C->app->mouse->button_left_is_ready=0;
-										C->event->is_brick_transformed=1;
-										C->ui->brick_selected=brick;
-										brick->mode=bm_triggering;
-									}
-								}
-								else
-								{
+									brick->state.is_idle=0;
 									C->event->is_brick_transformed=1;
 									C->ui->brick_selected=brick;
 									brick->mode=bm_triggering;
@@ -625,7 +552,7 @@ void cls_brick_update(t_brick *brick)
 				else
 				{
 					// release
-					if(button_right==button_released)
+					if( C->ui->mouse_state == UI_RIGHT_RELEASED)
 					{
 						is_vec_stored=0;
 						brick_release(brick);
@@ -635,7 +562,7 @@ void cls_brick_update(t_brick *brick)
 					{
 						t_block *block=brick->block;
 
-						if(block->state.is_moveable)
+						if(block->block_state.is_moveable)
 						{
 							float *block_pos=block->pos;
 							ctx_get_mouse_pos(C,mouse_pos);
@@ -672,7 +599,7 @@ void cls_brick_update(t_brick *brick)
 					t_brick *clone_brick=clone_block->bricks->first->data;
 
 					clone_brick->state.is_mouse_over=1;
-					clone_block->state.is_mouse_over=0;
+					clone_block->block_state.is_mouse_over=0;
 					clone_brick->mode=bm_moving;
 
 					brick_release(brick);
@@ -687,7 +614,7 @@ void cls_brick_update(t_brick *brick)
 			case bm_linking:
 				
 				// release linking
-				if(button_left==button_released)
+				if( C->ui->mouse_state == UI_LEFT_RELEASED)
 				{
 					// connect
 					if(C->ui->brick_in)

@@ -27,8 +27,8 @@ void brick_rhizome_split(t_brick *brick_x, t_brick *brick_y)
 	t_block *block_x = brick_x->block;
 	t_block *block_y = brick_y->block;
 
-	block_x->state.is_root = 0;
-	block_y->state.is_root = 0;
+	block_x->block_state.is_root = 0;
+	block_y->block_state.is_root = 0;
 
 	rhizome_graph_split(block_x->rhizome, brick_x, brick_y);
 }
@@ -169,7 +169,8 @@ t_brick *brick_dupli(t_block *block,t_brick *brick)
 
 	t_brick *clone_brick=clone_node->data;
 
-	clone_brick->action=brick->action;
+	clone_brick->exe=brick->exe;
+	clone_brick->act=brick->act;
 	clone_brick->state.draw_name=brick->state.draw_name;
 	clone_brick->state.draw_value=brick->state.draw_value;
 	clone_brick->state.draw_outline=brick->state.draw_outline;
@@ -210,7 +211,8 @@ t_brick *brick_copy(t_block *block,t_brick *brick)
 
 	t_brick *clone_brick=clone_node->data;
 
-	clone_brick->action=brick->action;
+	clone_brick->exe=brick->exe;
+	clone_brick->act=brick->act;
 	clone_brick->state.draw_name=brick->state.draw_name;
 	clone_brick->state.draw_value=brick->state.draw_value;
 	clone_brick->state.draw_outline=brick->state.draw_outline;
@@ -462,7 +464,8 @@ t_brick *brick_rebind(t_scene *sc,void *ptr)
 
 
 	rebind(sc,"brick","plug_out_dst",(void **)&brick->plug_out.dst);
-	rebind(sc,"brick action",brick->id.name,(void **)&brick->action);
+	rebind(sc,"brick exe",brick->id.name,(void **)&brick->exe);
+	rebind(sc,"brick act",brick->id.name,(void **)&brick->act);
 
 	rebind(sc,"brick","plug binding",(void **)&brick->plug_intern.bindings);
 
@@ -542,7 +545,8 @@ t_node *brick_make(t_block *block,const char *name,t_brick_type brick_type,t_dat
 	block_brick_add(block,node_brick);
 
 	// DEFAULT ACTION
-	brick->action=op_void;
+	brick->exe=op_void_exe;
+	brick->act=op_void_act;
 
 	// PLUG INIT 
 	plug_init(&brick->plug_intern,data_type,brick,data_target,0);
@@ -564,7 +568,7 @@ t_node *brick_make(t_block *block,const char *name,t_brick_type brick_type,t_dat
 	// Frame Based
 	if(is(name,"frame"))
 	{
-		block->state.frame_based  =1;
+		block->block_state.frame_based  =1;
 	}
 
 	return node_brick;
@@ -666,7 +670,8 @@ t_brick *brick_new(const char *name)
 	brick->var.selector_length=0;
 
 	brick->cls=NULL;
-	brick->action=NULL;
+	brick->exe=NULL;
+	brick->act=NULL;
 	brick->poll = NULL;
 	brick->menu=NULL;
 

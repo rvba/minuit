@@ -11,8 +11,9 @@ set(SRC
 	block_draw.c
 	block.h
 	block_update.c
-	brick_act.c
+	brick_exe.c
 	brick.c
+	brick_act.c
 	brick_cls.c
 	brick_draw.c
 	brick.h
@@ -25,6 +26,7 @@ set(SRC
 	ctx_camera.c
 	ctx_compute.c
 	ctx.h
+	ctx_event.c
 	ctx_keyboard.c
 	ctx_load.c
 	ctx_mouse.c

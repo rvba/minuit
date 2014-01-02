@@ -14,6 +14,7 @@
 #include "camera.h"
 #include "viewport.h"
 #include "util.h"
+#include "ui.h"
 
 #define OP_CAM_SPEED 50
 #define OP_CAM_ORTHO_ZOOM_FAC 100
@@ -325,8 +326,6 @@ void op_camera_rotate(t_context *C, t_camera *camera, float dx,float dy)
 
 void op_camera_translate(t_context *C, t_camera *camera)
 {
-	t_app *app=C->app;
-
 	float speed = -camera->speed / OP_CAM_SPEED;
 	float delta = 0.0001;
 	float left[3];
@@ -335,9 +334,9 @@ void op_camera_translate(t_context *C, t_camera *camera)
 	
 	vcp(left,camera->cross);
 	vcp(front,camera->eye);
-	vmul(left,(app->mouse->delta_x*delta*speed));
+	vmul( left, ( C->ui->mouse_dx * delta *speed));
 	front[1]=0;
-	vmul(front,(app->mouse->delta_y*(delta)*speed));
+	vmul(front,(C->ui->mouse_dy * delta * speed));
 	vadd(vec,left,front);
 	vadd(camera->pos,camera->pos,vec);
 
