@@ -123,7 +123,7 @@ t_node *add_block(t_context *C,const char *name)
 	t_block *block=node_block->data;
 
 	// Draw Outline
-	block->state.draw_outline = 1;
+	block->block_state.draw_outline = 1;
 
 	// Add to Set
 	set_block_push(set,block);
@@ -464,7 +464,7 @@ t_node *add_brick_submenu( t_context *C, t_block *menu, t_block *submenu, const 
 	t_node *node=brick_make( menu, name, bt_menu, dt_string, NULL);
 	t_brick *brick=node->data;
 
-	submenu->state.is_root=0;
+	submenu->block_state.is_root=0;
 	brick->menu = submenu;
 
 	// PLUG
@@ -943,7 +943,7 @@ t_node *add_operator_double(t_context *C,const char *type)
 	// BLOCK
 	t_node *node_block = add_block(C,type);
 	t_block *block=node_block->data;
-	block->state.draw_outline=1;
+	block->block_state.draw_outline=1;
 
 	// OPERANDS
 	t_node *node_op_1 = add_brick_operand(C,block,"a");
@@ -1044,7 +1044,7 @@ t_node *add_slider_float(t_context *C,const char *name,void *target_data)
 	// NEW BLOCK
 	t_node *node_block = add_block(C,name);
 	t_block *block=node_block->data;
-	block->state.draw_outline = 1;
+	block->block_state.draw_outline = 1;
 
 	// NEW BRICK
 	t_node *node_brick=add_part_slider_float(C,block,name,target_data);
@@ -1174,7 +1174,7 @@ void add_slider_target(t_context *C,t_object *object,const char *name)
 	else if(is(name,"faces") && mesh) 	mesh_add_brick_faces(mesh); 
 	else if(is(name,"mesh")) 		add_part_object(C,block,"mesh",object,dt_object); 
 
-	block->state.update_geometry = 1;
+	block->block_state.update_geometry = 1;
 
 }
 
@@ -1207,7 +1207,7 @@ void add_target_mesh( t_context *C, t_mesh *mesh, const char *name)
 		t_block *block = mesh->ref;
 		if( is( name, "vertex")) 	add_part_mesh( C, block, "vertex", mesh, dt_mesh);
 		else if( is( name, "edges")) 	add_part_mesh( C, block, "edges", mesh, dt_mesh);
-		block->state.update_geometry = 1;
+		block->block_state.update_geometry = 1;
 	}
 }
 
@@ -1291,7 +1291,7 @@ t_node *add_clone(t_context *C)
 	// NEW BLOCK
 	t_node *node_block = add_block(C,"clone");
 	t_block *block=node_block->data;
-	block->state.draw_outline=1;
+	block->block_state.draw_outline=1;
 
 	// Add Brick
 	t_node *node_brick = add_part_slider_float(C,block,"brick",NULL);
@@ -1318,7 +1318,7 @@ t_node *add_pipe(t_context *C)
 	// NEW BLOCK
 	t_node *node_block = add_block(C,"pipe");
 	t_block *block=node_block->data;
-	block->state.draw_outline=1;
+	block->block_state.draw_outline=1;
 
 	// INT
 	add_part_slider_int(C,block,"state",NULL);
@@ -1343,7 +1343,7 @@ t_node *add_maths(t_context *C,const char *name)
 	// NEW BLOCK
 	t_node *node_block = add_block(C,name);
 	t_block *block=node_block->data;
-	block->state.draw_outline = 1;
+	block->block_state.draw_outline = 1;
 
 	// Brick Result
 	add_part_slider_int(C,block,"result",NULL);
@@ -1371,7 +1371,7 @@ t_node *add_brick_geometry(t_context *C,const char *name, void *data)
 	// NEW BLOCK
 	t_node *node_block = add_block(C,name);
 	t_block *block = node_block->data;
-	block->state.draw_outline = 1;
+	block->block_state.draw_outline = 1;
 
 
 	// GEO 
@@ -1414,7 +1414,7 @@ t_node *add_brick_geo_edge(t_context *C,const char *name, void *data)
 	// NEW BLOCK
 	t_node *node_block = add_block(C,name);
 	t_block *block=node_block->data;
-	block->state.draw_outline = 1;
+	block->block_state.draw_outline = 1;
 
 	// GEO POINT
 	add_brick_geo_point_bare(C,block,"point",NULL,1);
@@ -1433,7 +1433,7 @@ t_node *add_brick_geo_array( t_context *C, const char *name , void *data)
 	// NEW BLOCK
 	t_node *node_block = add_block(C,name);
 	t_block *block = node_block->data;
-	block->state.draw_outline = 1;
+	block->block_state.draw_outline = 1;
 
 	// VECTOR
 	C->ui->add_bricks = 0;
@@ -1460,7 +1460,7 @@ t_node *add_brick_geo_point(t_context *C,const char *name, void *data)
 	// NEW BLOCK
 	t_node *node_block = add_block(C,name);
 	t_block *block=node_block->data;
-	block->state.draw_outline = 1;
+	block->block_state.draw_outline = 1;
 
 	// ADD X Y Z
 	add_part_slider_float(C,block,"x",NULL);
@@ -1488,7 +1488,7 @@ t_node *add_get(t_context *C)
 	// new block
 	t_node *node_block = add_block(C,"get");
 	t_block *block=node_block->data;
-	block->state.draw_outline=1;
+	block->block_state.draw_outline=1;
 
 	// get
 	t_node *node_get = add_part_trigger_type(C,block,"get",op_operator,dt_operator);
@@ -1517,7 +1517,7 @@ t_node *add_for(t_context *C)
 	// new block
 	t_node *node_block = add_block(C,"for");
 	t_block *block=node_block->data;
-	block->state.draw_outline=1;
+	block->block_state.draw_outline=1;
 
 	// add for
 	t_node *node_for = add_part_trigger_type(C,block,"for",op_operator,dt_operator);
@@ -1548,7 +1548,7 @@ t_node *add_for(t_context *C)
 
 	C->ui->add_bricks = 1;
 
-	block->state.is_a_loop = 1;
+	block->block_state.is_a_loop = 1;
 
 	return node_block;
 }
@@ -1563,7 +1563,7 @@ t_node *add_vector(t_context *C, int length)
 	// NEW BLOCK
 	t_node *node_block = add_block(C,"vector");
 	t_block *block=node_block->data;
-	block->state.draw_outline=1;
+	block->block_state.draw_outline=1;
 
 
 	// ADD X Y Z
@@ -1616,7 +1616,7 @@ t_node *add_const(t_context *C)
 	// NEW BLOCK
 	t_node *node_block = add_block(C,"vector");
 	t_block *block=node_block->data;
-	block->state.draw_outline=1;
+	block->block_state.draw_outline=1;
 
 	// i
 	add_part_slider_int(C,block,"i",NULL);
@@ -1637,7 +1637,7 @@ t_node *add_stack(t_context *C)
 	// NEW BLOCK
 	t_node *node_block = add_block(C,"stack");
 	t_block *block=node_block->data;
-	block->state.draw_outline=1;
+	block->block_state.draw_outline=1;
 
 	// counter
 	add_part_slider_int(C,block,"counter",NULL);
@@ -1678,7 +1678,7 @@ t_node *add_if(t_context *C)
 	// NEW BLOCK
 	t_node *node_block = add_block(C,"if");
 	t_block *block=node_block->data;
-	block->state.draw_outline=1;
+	block->block_state.draw_outline=1;
 
 	// true
 	t_node *node_true = add_part_slider_int(C,block,"true",NULL);

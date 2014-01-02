@@ -135,6 +135,10 @@ void ctx_reset(t_context *C)
 	event->switch_plug_out_follow_out = 0;
 
 	event->switch_brick_debug = 0;
+
+	//
+
+	ctx_event_cleanup( C);
 }
 
 void ctx_update(t_context *C)

@@ -277,7 +277,7 @@ void exe_remove_brick(t_action *action)
 			list_link_remove( bricks, first);
 			brick_rhizome_setup(brick);
 			block->tot_bricks--;
-			block->state.update_geometry=1;
+			block->block_state.update_geometry=1;
 			block_brick_set_order( block);
 			block->pos[1] += brick->geom.height;
 		}
@@ -318,7 +318,7 @@ void exe_add_brick(t_action *action)
 	
 	p_in->state.follow_in=1;
 
-	block->state.update_geometry=1;
+	block->block_state.update_geometry=1;
 
 	scene_store(C->scene,0);
 }

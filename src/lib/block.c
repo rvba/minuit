@@ -230,7 +230,7 @@ t_block *block_copy(t_block *block)
 	t_node *clone_node = block_make(block->id.name,block->type);
 	t_block *clone_block = clone_node->data;
 
-	clone_block->state.draw_outline = block->state.draw_outline;
+	clone_block->block_state.draw_outline = block->block_state.draw_outline;
 
 	_add_block(C,clone_block);
 
@@ -286,6 +286,7 @@ t_block_class block_menu =
 	.draw=cls_block_draw_block,
 	.update=cls_block_menu_update,
 	.init=_block_init,
+	.dispatch = cls_block_dispatch_menu,
 };
 
 // block
@@ -298,6 +299,7 @@ t_block_class block_block =
 	.draw=cls_block_draw_block,
 	.update=cls_block_block_update,
 	.init=_block_init,
+	.dispatch = cls_block_dispatch_block,
 };
 
 void cls_block_make_block(t_block *block)
@@ -330,6 +332,14 @@ void block_cls_init(t_block *block)
 		}
 	}
 
+	if( is(block->cls->type, "menu"))
+	{
+		block->state = cls_block_state_menu_default;
+	}
+	else
+	{
+		block->state = cls_block_state_block_default;
+	}
 
 	if(!found)printf("[ERROR:cls_block_init] Unknown block type %s\n",block->type);
 }
@@ -427,7 +437,7 @@ t_block *block_clone(t_block *block)
 		vcp3f(clone->pos,block->pos);
 		clone->width = block->width;
 		clone->height = block->height;
-		clone->state = block->state;
+		clone->block_state = block->block_state;
 		clone->tot_bricks = block->tot_bricks;
 		clone->rhizome_order = block->rhizome_order;
 		clone->rhizome_pos = block->rhizome_pos;
@@ -555,16 +565,16 @@ t_block *block_new(const char *name)
 	block->submenu=NULL;
 	block->selected=NULL;
 
-	block->state.is_root=0;
-	block->state.is_show=0;
-	block->state.draw_outline=0;
-	block->state.draw_plugs=0;
-	block->state.is_mouse_over=0;
-	block->state.update_geometry=1;
-	block->state.is_moveable = 1;
-	block->state.is_a_loop = 0;
-	block->state.is_in_rhizome = 0;
-	block->state.frame_based = 0;
+	block->block_state.is_root=0;
+	block->block_state.is_show=0;
+	block->block_state.draw_outline=0;
+	block->block_state.draw_plugs=0;
+	block->block_state.is_mouse_over=0;
+	block->block_state.update_geometry=1;
+	block->block_state.is_moveable = 1;
+	block->block_state.is_a_loop = 0;
+	block->block_state.is_in_rhizome = 0;
+	block->block_state.frame_based = 0;
 
 	block->tot_bricks=0;
 	block->width=0;

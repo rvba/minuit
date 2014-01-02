@@ -16,6 +16,7 @@
 #include "ui.h"
 #include "draw.h"
 #include "screen.h"
+#include "ctx.h"
 
 int is_mouse_over_background(t_context *C)
 {
@@ -152,29 +153,29 @@ void ctx_mouse( t_context *C)
 		{
 			if( mouse->button_left == button_pressed)
 			{
-				event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, MOUSE_BUTTON_LEFT_PRESSED);
+				event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, MOUSE_LEFT_PRESSED);
 			}
 			else if( mouse->button_left == button_released)
 			{
-				event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, MOUSE_BUTTON_LEFT_RELEASED);
+				event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, MOUSE_LEFT_RELEASED);
 			}
 
 			if( mouse->button_right == button_pressed)
 			{
-				event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, MOUSE_BUTTON_RIGHT_PRESSED);
+				event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, MOUSE_RIGHT_PRESSED);
 			}
 			else if( mouse->button_right == button_released)
 			{
-				event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, MOUSE_BUTTON_RIGHT_RELEASED);
+				event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, MOUSE_RIGHT_RELEASED);
 			}
 
 			if( mouse->button_middle == button_pressed)
 			{
-				event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, MOUSE_BUTTON_MIDDLE_PRESSED);
+				event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, MOUSE_MIDDLE_PRESSED);
 			}
 			else if( mouse->button_middle == button_released)
 			{
-				event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, MOUSE_BUTTON_MIDDLE_RELEASED);
+				event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, MOUSE_MIDDLE_RELEASED);
 			}
 
 			mouse->button_left = button_idle;
@@ -191,5 +192,5 @@ void ctx_mouse( t_context *C)
 		event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, C->app->keyboard->special);
 	}
 
-	ui_mouse_motion( C->ui, C->app->mouse->x, C->app->mouse->y);
+	ctx_ui_mouse_motion( C, C->app->mouse->x, C->app->mouse->y);
 }

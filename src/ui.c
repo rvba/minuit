@@ -28,6 +28,7 @@
 #include "camera.h"
 #include "rhizome.h"
 #include "event.h"
+#include "ctx.h"
 
 t_lst *sets = NULL;
 
@@ -391,18 +392,6 @@ void ui_draw(void)
 	C->event->ui.use_point_global_width = 1;
 }
 
-// INIT
-
-void ui_init(void)
-{
-	txt_alphabet_make();
-	txt_layout_init();
-
-	t_context *C=ctx_get();
-	op_set_color(C,C->draw->color);
-
-	C->ui->camera = camera_new("camera_ui");
-}
 
 void ui_mouse_show( t_ui *ui)
 {
@@ -433,97 +422,18 @@ void ui_mouse_show( t_ui *ui)
 	
 }
 
-void ui_mouse_motion( t_ui *ui, int x, int y)
+// INIT
+
+void ui_init(void)
 {
-	ui->mouse_x = x;
-	ui->mouse_y = y;
+	txt_alphabet_make();
+	txt_layout_init();
 
-	int dx;
-	int dy;
+	t_context *C=ctx_get();
+	op_set_color(C,C->draw->color);
 
-	int last_x = ui->mouse_last_x;
-	int last_y = ui->mouse_last_y;
-
-	dx = x - last_x;
-	dy = y - last_y;
-
-	ui->mouse_dx = dx;
-	ui->mouse_dy = dy;
-
-	ui->mouse_last_x = x;
-	ui->mouse_last_y = y;
-
-}
-
-inline int mouse_pressed( int state)
-{
-	if(
-		state == UI_LEFT_PRESSED ||
-		state == UI_RIGHT_PRESSED ||
-		state == UI_MIDDLE_PRESSED)
-		return 1;
-	else
-		return 0;
-}
-
-void ui_mouse_delta( t_ui *ui)
-{
-	if( mouse_pressed( ui->mouse_state))
-	{
-		if( ui->mouse_drag)
-		{
-			ui->mouse_delta_x = ui->mouse_x - ui->mouse_last_x_pressed;
-			ui->mouse_delta_y = ui->mouse_y - ui->mouse_last_y_pressed;
-		}
-		else
-		{
-			ui->mouse_last_x_pressed = ui->mouse_x;
-			ui->mouse_last_y_pressed = ui->mouse_y;
-		}
-	}
-	else
-	{
-		ui->mouse_delta_x = 0;
-		ui->mouse_delta_y = 0;
-		ui->mouse_last_x_pressed = 0;
-		ui->mouse_last_y_pressed = 0;
-	}
-}
-
-void ui_mouse_set( t_ui *ui, t_event *event)
-{
-	int type = event->type;
-	ui->mouse_motion = UI_MOUSE_STATIC;
-
-	switch( type)
-	{
-		case MOUSE_BUTTON_LEFT_PRESSED: ui->mouse_state = UI_LEFT_PRESSED; break;
-		case MOUSE_BUTTON_LEFT_RELEASED: ui->mouse_state = UI_LEFT_RELEASED; break;
-
-		case MOUSE_BUTTON_RIGHT_PRESSED: ui->mouse_state = UI_RIGHT_PRESSED; break;
-		case MOUSE_BUTTON_RIGHT_RELEASED: ui->mouse_state = UI_RIGHT_RELEASED; break;
-
-		case MOUSE_BUTTON_MIDDLE_PRESSED: ui->mouse_state = UI_MIDDLE_PRESSED; break;
-		case MOUSE_BUTTON_MIDDLE_RELEASED: ui->mouse_state = UI_MIDDLE_RELEASED; break;
-	}
-
-	if( type == MOUSE_MOTION)		ui->mouse_motion = UI_MOUSE_MOTION;
-	else if( type == MOUSE_MOTION_PASSIVE)	ui->mouse_motion = UI_MOUSE_MOTION_PASSIVE;
-	
-	if( mouse_pressed( ui->mouse_state) && ui->mouse_motion == UI_MOUSE_MOTION) ui->mouse_drag = 1;
-	else ui->mouse_drag = 0;
-
-	ui_mouse_delta( ui);
-}
-
-void ui_keyboard_set( t_ui *ui, t_event *event)
-{
-	switch( event->type)
-	{
-		case SHIFTKEY:	ui->key_shift = 1; break;
-		case ALTKEY: 	ui->key_alt = 1; break;
-		case CTRLKEY: 	ui->key_ctrl= 1; ;break;
-	}
+	C->ui->camera = camera_new("camera_ui");
+	ctx_ui_init( C);
 }
 
 // NEW
@@ -612,7 +522,7 @@ t_ui *ui_new(void)
 	ui->do_disconnect = 0;
 
 	ui->bitrate = 15000;
-
+	ui->state = NULL;
 
 	return ui;
 }

@@ -306,7 +306,6 @@ void cls_brick_update(t_brick *brick)
 		&& (brick->state.is_mouse_over_plug_out==0)
 		)
 	{
-		
 		brick_clic=1;
 	}
 
@@ -563,7 +562,7 @@ void cls_brick_update(t_brick *brick)
 					{
 						t_block *block=brick->block;
 
-						if(block->state.is_moveable)
+						if(block->block_state.is_moveable)
 						{
 							float *block_pos=block->pos;
 							ctx_get_mouse_pos(C,mouse_pos);
@@ -600,7 +599,7 @@ void cls_brick_update(t_brick *brick)
 					t_brick *clone_brick=clone_block->bricks->first->data;
 
 					clone_brick->state.is_mouse_over=1;
-					clone_block->state.is_mouse_over=0;
+					clone_block->block_state.is_mouse_over=0;
 					clone_brick->mode=bm_moving;
 
 					brick_release(brick);

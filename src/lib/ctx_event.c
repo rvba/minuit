@@ -16,24 +16,20 @@
 #include "list.h"
 #include "util.h"
 #include "screen.h"
+#include "ctx.h"
 
 void ctx_event_exec( t_context *C, t_event *event)
 {
-	if(0)
-	{
-	printf("%d",C->app->frame);
-	event_show( event);
-	}
 	if( EVENT_KEYBOARD( event->type))
 	{
-		ui_keyboard_set( C->ui, event);
+		ctx_ui_keyboard_set( C, event);
 		t_screen *screen = event->screen;
 		if( screen) screen->keymap( event->type);
 	}
 
 	if( EVENT_MOUSE( event->type))
 	{
-		ui_mouse_set( C->ui, event);
+		ctx_ui_mouse_set( C, event);
 	}
 }
 
@@ -63,7 +59,6 @@ void ctx_event_dispatch( t_context *C)
 		ctx_event_exec( C, event);
 	}
 
-	ctx_event_cleanup( C);
 }
 
 void ctx_event( t_context *C)

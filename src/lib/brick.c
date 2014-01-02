@@ -27,8 +27,8 @@ void brick_rhizome_split(t_brick *brick_x, t_brick *brick_y)
 	t_block *block_x = brick_x->block;
 	t_block *block_y = brick_y->block;
 
-	block_x->state.is_root = 0;
-	block_y->state.is_root = 0;
+	block_x->block_state.is_root = 0;
+	block_y->block_state.is_root = 0;
 
 	rhizome_graph_split(block_x->rhizome, brick_x, brick_y);
 }
@@ -568,7 +568,7 @@ t_node *brick_make(t_block *block,const char *name,t_brick_type brick_type,t_dat
 	// Frame Based
 	if(is(name,"frame"))
 	{
-		block->state.frame_based  =1;
+		block->block_state.frame_based  =1;
 	}
 
 	return node_brick;

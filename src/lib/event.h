@@ -124,12 +124,12 @@ struct MINscreen;
 #define MOUSE_STATIC 800
 #define MOUSE_MOTION_PASSIVE 801
 #define MOUSE_MOTION 802
-#define MOUSE_BUTTON_LEFT_PRESSED 803
-#define MOUSE_BUTTON_LEFT_RELEASED 840
-#define MOUSE_BUTTON_RIGHT_PRESSED 841
-#define MOUSE_BUTTON_RIGHT_RELEASED 842
-#define MOUSE_BUTTON_MIDDLE_PRESSED 843
-#define MOUSE_BUTTON_MIDDLE_RELEASED 844
+#define MOUSE_LEFT_PRESSED 803
+#define MOUSE_LEFT_RELEASED 840
+#define MOUSE_RIGHT_PRESSED 841
+#define MOUSE_RIGHT_RELEASED 842
+#define MOUSE_MIDDLE_PRESSED 843
+#define MOUSE_MIDDLE_RELEASED 844
 #define MOUSE_END 850
 
 #define EVENT_KEYBOARD( event) ( event >= 0 && event <= KEYBOARD_STOP)
@@ -141,6 +141,7 @@ typedef enum EventState
 	event_idle,
 	event_linking,
 	event_unlinking,
+
 }t_event_state;
 
 typedef struct State_Event_UI

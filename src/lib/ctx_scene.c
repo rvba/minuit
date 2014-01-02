@@ -202,10 +202,35 @@ int node_hover(t_context *C, t_node *node)
 	{
 		case(dt_brick): return node_hover_brick(C,node); break;
 		case(dt_object): return node_hover_object(C,node); break;
+		default: return 0; break;
+	}
+}
+
+t_node *ctx_scene_hover( t_context *C, t_data_type type)
+{
+	t_link *l;
+	t_lst *lst = NULL;
+	t_node *node = NULL;
+	int hover = 0;
+
+	switch( type)
+	{
+		case dt_object: lst = C->scene->objects; break;
+		case dt_brick: lst = C->scene->bricks; break;
 		default: break;
 	}
 
-	return 0;
+	if( lst)
+	{
+		for(l=lst->first;l;l=l->next)
+		{
+			node = l->data;
+			hover = node_hover( C, node);
+			if( hover) break;
+		}
+	}
+
+	return node;
 }
 
 

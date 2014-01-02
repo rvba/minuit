@@ -41,7 +41,7 @@ t_block *add_menu_block( t_context *C, const char *name)
 {
 	t_node *menu = block_make( name, "menu");
 	t_block *block = menu->data;
-	block->state.is_moveable = 0;
+	block->block_state.is_moveable = 0;
 	return block;
 }
 

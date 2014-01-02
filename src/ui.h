@@ -30,6 +30,7 @@
 #define UI_ADD_BRICKS 1
 
 #define UI_MOUSE_IDLE		 0
+
 #define UI_LEFT_PRESSED		 1
 #define UI_LEFT_CLIC		 2
 #define UI_LEFT_DBCLIC		 3
@@ -48,6 +49,13 @@
 #define UI_MOUSE_STATIC		13
 #define UI_MOUSE_MOTION		14
 #define UI_MOUSE_MOTION_PASSIVE	15
+
+#define UI_TRANS(C, st) ((C->ui->state) = &(st)) 
+
+#define UI_HOVER_BACKGROUND 1
+#define UI_HOVER_OBJECT 2
+#define UI_HOVER_BRICK 3
+#define UI_HOVER_NOTHING 4
 
 float intro_intensity;
 
@@ -149,6 +157,8 @@ typedef struct Ui
 
 	struct Camera *camera;
 	struct Lst *sets;
+
+	void (* state)( struct Context *C, struct Event *event);
 }t_ui;
 
 // UI.C
@@ -178,9 +188,6 @@ void op_screen_switch();
 void ui_draw_sets(void);
 void ui_draw_mouse(void);
 
-void ui_keyboard_set( t_ui *ui, struct Event *event);
-void ui_mouse_set( t_ui *ui, struct Event *event);
-void ui_mouse_motion( t_ui *ui, int x, int y);
 
 
 #endif

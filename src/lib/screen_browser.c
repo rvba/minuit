@@ -229,7 +229,7 @@ void browser_draw(void)
 {
 	browser_build();
 	t_block *block=BROWSER_BUTTONS->data;
-	block->state.update_geometry=1;
+	block->block_state.update_geometry=1;
 	block->cls->draw(block);
 }
 

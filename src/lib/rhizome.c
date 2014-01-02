@@ -134,7 +134,7 @@ t_block *rhizome_block_loop_get(t_rhizome *rhizome)
 	for(link=rhizome->blocks->first;link;link=link->next)
 	{
 		block = link->data;
-		if(block->state.is_a_loop)
+		if(block->block_state.is_a_loop)
 			return block;
 	}
 	return NULL;
@@ -346,12 +346,12 @@ void rhizome_get_roots(t_rhizome *rhizome)
 
 		if(add_to_roots)
 		{
-			block->state.is_root = 1;
+			block->block_state.is_root = 1;
 			list_add_data(roots,block);
 		}
 		else
 		{
-			block->state.is_root = 0;
+			block->block_state.is_root = 0;
 		}
 	}
 }
@@ -369,8 +369,8 @@ void rhizome_setup(t_rhizome *rhizome)
 	for(link=rhizome->blocks->first;link;link=link->next)
 	{
 		block = link->data;
-		if(block->state.is_a_loop) has_loop = 1;
-		if(block->state.frame_based) frame_based = 1;
+		if(block->block_state.is_a_loop) has_loop = 1;
+		if(block->block_state.frame_based) frame_based = 1;
 	}
 
 	rhizome->has_loop = has_loop;
@@ -414,7 +414,7 @@ void rhizome_block_reset(t_block *block)
 {
 	// Reset Block State
 	block->rhizome=NULL;
-	block->state.is_in_rhizome = 0;
+	block->block_state.is_in_rhizome = 0;
 
 	// Add To Set
 	set_block_push(block->set, block);
@@ -424,7 +424,7 @@ void rhizome_block_remove(t_rhizome *rhizome, t_block *block)
 {
 	// Reset Block State
 	block->rhizome=NULL;
-	block->state.is_in_rhizome = 0;
+	block->block_state.is_in_rhizome = 0;
 
 	// Add To Set
 	set_block_push(block->set, block);
@@ -720,10 +720,10 @@ void rhizome_block_add(t_rhizome *rhizome, t_block *block)
 	scene_store(C->scene,0);
 
 	// Pop from Set Blocks
-	if(!block->state.is_in_rhizome) set_block_pop(block->set,block);
+	if(!block->block_state.is_in_rhizome) set_block_pop(block->set,block);
 
 	// Set In Rhizome
-	block->state.is_in_rhizome = 1;
+	block->block_state.is_in_rhizome = 1;
 
 	// Add To Graph
 	rhizome_graph_dot_add(rhizome, block);
