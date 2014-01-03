@@ -66,9 +66,9 @@ t_main_event *main_event_new(void)
 
 	event->is_drawing=0;
 
-	event->color[0] = 0;
-	event->color[1] = 0;
-	event->color[2] = 0;
+	event->color[0] = 255;
+	event->color[1] = 255;
+	event->color[2] = 255;
 
 	event->rec=0;
 	event->rec_save=0;
