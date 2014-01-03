@@ -139,12 +139,12 @@ void *op_slider(t_brick *brick)
 	float dx = (float) C->ui->mouse_dx; 
 
 	// dragging
-	if(brick->state.is_draging)
+	if(brick->brick_state.is_draging)
 	{
 		// release
 		if( C->ui->mouse_state == UI_LEFT_RELEASED)
 		{
-			brick->state.is_draging=0;
+			brick->brick_state.is_draging=0;
 			brick_release(brick);
 		}
 		else
@@ -173,30 +173,30 @@ void *op_slider(t_brick *brick)
 	else
 	{
 		// set dragging
-		if( brick->state.use_dragging && C->ui->mouse_motion == UI_MOUSE_MOTION )
+		if( brick->brick_state.use_dragging && C->ui->mouse_motion == UI_MOUSE_MOTION )
 		{
-				brick->state.is_draging=1;
+				brick->brick_state.is_draging=1;
 		}
 		else if ( C->ui->mouse_state == UI_LEFT_RELEASED)
 		{
 				if(brick->plug_intern.data_type==dt_int)
 				{
 					int *data=brick->plug_intern.data;
-					if(brick->state.is_left_pressed) 	*data -= 1; 
-					else if(brick->state.is_right_pressed) 	*data += 1; 
+					if(brick->brick_state.is_left_pressed) 	*data -= 1; 
+					else if(brick->brick_state.is_right_pressed) 	*data += 1; 
 				}
 				else if(brick->plug_intern.data_type==dt_uint)
 				{
 					unsigned int *data=brick->plug_intern.data;
-					if(brick->state.is_left_pressed) 	*data -= 1; 
-					else if(brick->state.is_right_pressed) 	*data += 1; 
+					if(brick->brick_state.is_left_pressed) 	*data -= 1; 
+					else if(brick->brick_state.is_right_pressed) 	*data += 1; 
 				}
 				else if(brick->plug_intern.data_type==dt_float)
 				{
 					float inc=.1;
 					float *data=brick->plug_intern.data;
-					if(brick->state.is_left_pressed)  	*data -= inc; 
-					else if(brick->state.is_right_pressed) 	*data += inc; 
+					if(brick->brick_state.is_left_pressed)  	*data -= inc; 
+					else if(brick->brick_state.is_right_pressed) 	*data += inc; 
 				}
 					
 				brick_release(brick); 
@@ -255,7 +255,7 @@ void exe_remove_brick(t_action *action)
 	t_brick *_brick = dict_pop_data(args,"brick");
 	t_block *block = _brick->block;
 
-	int remove_connected = _brick->state.remove_connected;
+	int remove_connected = _brick->brick_state.remove_connected;
 
 	t_plug *plug_intern = &_brick->plug_intern;
 	int *slider = plug_intern->data;
@@ -305,7 +305,7 @@ void exe_add_brick(t_action *action)
 
 	t_node *n=add_part_slider_float(C,block,".",NULL);
 	t_brick *b=n->data;
-	b->state.is_versatil=1;
+	b->brick_state.is_versatil=1;
 
 	lst_lifo( block->bricks);
 	block_brick_set_order( block);
@@ -407,14 +407,14 @@ void *op_selector(t_brick *brick)
 	t_context *C = ctx_get();
 	int *target = brick->plug_intern.data;
 
-	if(brick->state.is_mouse_over)
+	if(brick->brick_state.is_mouse_over)
 	{
 		if( C->ui->mouse_state == UI_LEFT_PRESSED)
 		{
 			// switch state when released
-			if(brick->state.is_released)
+			if(brick->brick_state.is_released)
 			{
-				brick->state.is_released=0;
+				brick->brick_state.is_released=0;
 				// switch value
 
 				if(brick->var.selector<brick->var.selector_length)
@@ -432,9 +432,9 @@ void *op_selector(t_brick *brick)
 	}
 
 	// release
-	if(!brick->state.is_released && C->ui->mouse_state == UI_LEFT_RELEASED)
+	if(!brick->brick_state.is_released && C->ui->mouse_state == UI_LEFT_RELEASED)
 	{
-		brick->state.is_released=1;
+		brick->brick_state.is_released=1;
 		brick_release(brick);
 	}
 

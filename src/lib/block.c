@@ -412,15 +412,15 @@ t_brick *block_brick_get_by_position(t_block *block, int pos)
 void block_brick_init(t_node *node_brick)
 {
 	t_brick *brick=node_brick->data;
-	brick->state.draw_plugs=1;
+	brick->brick_state.draw_plugs=1;
 }
 
 void block_operator_brick_init(t_node *node_brick)
 {
 	t_brick *brick=node_brick->data;
-	brick->state.draw_plugs=1;
-	brick->state.draw_outline=0;
-	brick->state.draw_name=0;
+	brick->brick_state.draw_plugs=1;
+	brick->brick_state.draw_outline=0;
+	brick->brick_state.draw_name=0;
 }
 
 

@@ -61,7 +61,7 @@ void ctx_ui_hover_reset( t_context *C)
 		if( node->cls->type == dt_brick)
 		{
 			t_brick *brick = node->data;
-			brick->state.is_mouse_over = 0;
+			brick->brick_state.is_mouse_over = 0;
 		}
 	}
 };
@@ -699,7 +699,7 @@ void ctx_ui_dispatch( t_context *C)
 
 void ctx_ui(t_context *C)
 {
-	if(1)
+	if(0)
 	{
 	if(C->event->color_transition_use && C->event->color_transition)
 	{

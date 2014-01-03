@@ -1402,9 +1402,9 @@ void *op_const(t_brick *brick)
 
 	t_context *C = ctx_get();
 
-	if(brick->state.frame_loop != C->app->frame)
+	if(brick->brick_state.frame_loop != C->app->frame)
 	{
-		brick->state.frame_loop = C->app->frame;
+		brick->brick_state.frame_loop = C->app->frame;
 		*_const = *_i;
 	}
 
@@ -1434,9 +1434,9 @@ void *op_stack(t_brick *brick)
 
 	// reset by frame
 
-	if(brick->state.frame_loop != C->app->frame)
+	if(brick->brick_state.frame_loop != C->app->frame)
 	{
-		brick->state.frame_loop = C->app->frame;
+		brick->brick_state.frame_loop = C->app->frame;
 		*counter = 0;
 		*i = 0;
 	}

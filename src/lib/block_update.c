@@ -21,7 +21,7 @@
 
 void block_store(t_block *block,t_brick *brick)
 {
-	brick->state.show_menu=1;
+	brick->brick_state.show_menu=1;
 	block->selected=brick;
 	block->submenu=brick; //???
 }
@@ -38,7 +38,7 @@ void block_unstore(t_block *block)
 		if(brick->cls->type==bt_menu)
 		{
 			// HIDE
-			brick->state.show_menu=0;
+			brick->brick_state.show_menu=0;
 
 			// recusrive
 			if(brick->menu)
@@ -71,12 +71,12 @@ void cls_block_block_update(t_block *block)
 			// mouse over
 			if(is_mouse_over_brick(C,brick))
 			{
-				brick->state.is_mouse_over=1;
+				brick->brick_state.is_mouse_over=1;
 				is_mouse_over=1;
 			}
 			else
 			{
-				brick->state.is_mouse_over=0;
+				brick->brick_state.is_mouse_over=0;
 			}
 		}
 
@@ -125,12 +125,12 @@ void cls_block_menu_update(t_block *block)
 				brick=link->data;
 				if(is_mouse_over_brick(C,brick))
 				{
-					 brick->state.is_mouse_over=1;
+					 brick->brick_state.is_mouse_over=1;
 					is_mouse_over=1;
 				}
 				else 
 				{
-					brick->state.is_mouse_over=0;
+					brick->brick_state.is_mouse_over=0;
 				}
 
 				// UPDATE BRICK 
@@ -140,7 +140,7 @@ void cls_block_menu_update(t_block *block)
 				if(brick->cls->type == bt_menu)
 				{
 					// if mouse over
-					if(brick->state.is_mouse_over)
+					if(brick->brick_state.is_mouse_over)
 					{
 						// check STORED menu
 
@@ -211,11 +211,11 @@ void cls_block_generic_update(t_block *block)
 		brick=link->data;
 		if(is_mouse_over_brick(C,brick))
 		{
-			 brick->state.is_mouse_over=1;
+			 brick->brick_state.is_mouse_over=1;
 		}
 		else 
 		{
-			brick->state.is_mouse_over=0;
+			brick->brick_state.is_mouse_over=0;
 		}
 
 		// UPDATE BRICK 
@@ -232,9 +232,6 @@ void cls_block_dispatch_block( t_block *block)
 {
 }
 
-void cls_block_state_menu_hover_brick( t_block *block, t_event *e)
-{
-}
 
 void cls_block_state_menu_default( t_block *block, t_event *e);
 void cls_block_state_menu_hover_menu( t_block *block, t_event *e);
@@ -250,7 +247,7 @@ void cls_block_menu_close( t_block *block)
 	{
 		t_brick *selected = block->selected;
 
-		block->selected->state.show_menu = 0;
+		block->selected->brick_state.show_menu = 0;
 		block->selected=NULL;
 
 		t_block *submenu = selected->menu;
@@ -263,8 +260,22 @@ void cls_block_menu_close( t_block *block)
 
 void cls_block_menu_open( t_block *block, t_brick *brick)
 {
-	brick->state.show_menu=1;
+	brick->brick_state.show_menu=1;
 	block->selected=brick;
+}
+
+t_brick *block_brick_hover( t_context *C)
+{
+	if( C->scene->hover_type == dt_brick)
+	{
+		t_node *node = C->scene->hover;
+		t_brick *brick = node->data;
+		return brick;
+	}
+	else
+	{
+		return NULL;
+	}
 }
 
 void cls_block_submenu_update( t_block *block)
@@ -308,6 +319,17 @@ void cls_block_submenu_update( t_block *block)
 			else cls_block_menu_open( block_hover, brick_hover);
 		}
 	}
+	else
+	{
+		if( block_hover)
+		{
+			if( !hover_submenu)
+			{
+				cls_block_menu_close( block_hover);
+				BLOCK_TRANS( block, cls_block_state_menu_default);
+			}
+		}
+	}
 }
 
 void cls_block_state_menu_hover_menu( t_block *block, t_event *e)
@@ -316,6 +338,25 @@ void cls_block_state_menu_hover_menu( t_block *block, t_event *e)
 	{
 		case MOUSE_MOTION_PASSIVE:
 			cls_block_submenu_update( block);
+			break;
+	}
+}
+
+void cls_block_state_menu_hover_brick( t_block *block, t_event *e)
+{
+	t_context *C = ctx_get();
+	t_brick *brick;
+	switch( e->type)
+	{
+		case MOUSE_LEFT_PRESSED:
+			brick = block_brick_hover( C);
+			printf("%s\n",brick->id.name);
+			break;
+		case MOUSE_MOTION_PASSIVE:
+			cls_block_submenu_update( block);
+			break;
+			
+		default:
 			break;
 	}
 }
@@ -329,11 +370,13 @@ void cls_block_state_menu_default( t_block *block, t_event *e)
 		t_brick *brick = node->data;
 		if(brick->cls->type == bt_menu)
 		{
+			printf("menu\n");
 			cls_block_submenu_update( block);
 			BLOCK_TRANS( block, cls_block_state_menu_hover_menu);
 		}
 		else
 		{
+			printf("brick\n");
 			BLOCK_TRANS( block, cls_block_state_menu_hover_brick);
 		}
 	}

@@ -68,11 +68,11 @@ int is_mouse_over_brick(t_context *C,t_brick *brick)
 		C->event->color[2] == brick->idcol_left[2] 
 	)
 	{
-		brick->state.is_left_pressed=1;
-		brick->state.is_right_pressed=0;
+		brick->brick_state.is_left_pressed=1;
+		brick->brick_state.is_right_pressed=0;
 
-		brick->state.is_mouse_over_plug_in=0;
-		brick->state.is_mouse_over_plug_out=0;
+		brick->brick_state.is_mouse_over_plug_in=0;
+		brick->brick_state.is_mouse_over_plug_out=0;
 		return 1;
 	}
 	else if
@@ -83,30 +83,30 @@ int is_mouse_over_brick(t_context *C,t_brick *brick)
 		)
 	{
 
-		brick->state.is_left_pressed=0;
-		brick->state.is_right_pressed=1;
+		brick->brick_state.is_left_pressed=0;
+		brick->brick_state.is_right_pressed=1;
 
-		brick->state.is_mouse_over_plug_in=0;
-		brick->state.is_mouse_over_plug_out=0;
+		brick->brick_state.is_mouse_over_plug_in=0;
+		brick->brick_state.is_mouse_over_plug_out=0;
 		return 1;
 	}
 	else
 	{
-		brick->state.is_left_pressed=0;
-		brick->state.is_right_pressed=0;
+		brick->brick_state.is_left_pressed=0;
+		brick->brick_state.is_right_pressed=0;
 
-		if(brick->state.draw_plugs)
+		if(brick->brick_state.draw_plugs)
 		{
 			if(is_mouse_over_plug(C,&brick->plug_in))
 			{
-				brick->state.is_mouse_over_plug_in=1;
-				brick->state.is_mouse_over_plug_out=0;
+				brick->brick_state.is_mouse_over_plug_in=1;
+				brick->brick_state.is_mouse_over_plug_out=0;
 				return 1;
 			}
 			else if(is_mouse_over_plug(C,&brick->plug_out))
 			{
-				brick->state.is_mouse_over_plug_in=0;
-				brick->state.is_mouse_over_plug_out=1;
+				brick->brick_state.is_mouse_over_plug_in=0;
+				brick->brick_state.is_mouse_over_plug_out=1;
 				return 1;
 			}
 			else

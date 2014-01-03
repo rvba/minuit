@@ -24,6 +24,7 @@ struct Brick_State;
 struct Brick_Geometry;
 struct Brick_Var;
 struct Action;
+struct Event;
 
 // BRICK TYPE
 
@@ -161,7 +162,7 @@ typedef struct Brick
 	int block_order;			// Internal Block Id
 
 	enum Brick_Mode mode;			// unique mode
-	struct Brick_State state;			// multiple states
+	struct Brick_State brick_state;			// multiple states
 	struct Brick_Geometry geom;			// geometry
 	struct Brick_Var var;			// attributes
 
@@ -182,6 +183,8 @@ typedef struct Brick
 	void *(* exe)(struct Brick *brick);	
 	void *(* act)(struct Brick *brick);	
 	int (* poll)(struct Brick *brick);	
+
+	void (* state)( struct Brick *brick, struct Event *e);
 
 }t_brick;
 

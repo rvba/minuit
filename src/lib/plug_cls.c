@@ -315,7 +315,7 @@ void cls_plug_disconnect_operator(t_plug_mode mode, t_plug *plug)
 				t_block *block_vector = brick_dst->block;
 				t_vlst *vlst_dst = vector->vector;
 
-				if(brick_dst->state.has_components)
+				if(brick_dst->brick_state.has_components)
 				{
 					// For Vector Length
 					int i;
@@ -374,7 +374,7 @@ void cls_plug_connect_general(t_plug_mode mode, t_plug *self, t_plug *dst)
 		brick_rhizome_add(brick, brick_dst);
 
 		// If Versatil
-		if(brick->state.is_versatil)
+		if(brick->brick_state.is_versatil)
 		{
 			if(self->data_type != dst->data_type)
 			{
@@ -401,7 +401,7 @@ void cls_plug_connect_general(t_plug_mode mode, t_plug *self, t_plug *dst)
 			plug_dst_in->state.open_in = 1;
 
 			// If Versatil
-			if(brick->state.is_versatil)
+			if(brick->brick_state.is_versatil)
 			{
 				if(self->data_type != dst->data_type)
 				{
@@ -509,7 +509,7 @@ void cls_plug_connect_vector(t_plug_mode mode, t_plug *self, t_plug *dst)
 			if(dst->state.is_volatil)
 			{
 				// IF Vector Has Components
-				if(brick->state.has_components)
+				if(brick->brick_state.has_components)
 				{
 					t_brick *brick_component;
 					t_plug *plug_in_component;
@@ -586,7 +586,7 @@ void close_vector(t_brick *brick, int open)
 	// Open
 	if(open)
 	{
-		if(brick->state.has_components)
+		if(brick->brick_state.has_components)
 		{
 			// For Vector Length
 			int i;
@@ -607,7 +607,7 @@ void close_vector(t_brick *brick, int open)
 	// Close
 	else
 	{
-		if(brick->state.has_components)
+		if(brick->brick_state.has_components)
 		{
 			// For Vector Length
 			int i;
@@ -934,7 +934,7 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 					vector_copy_pointer(vector_self, vector_src);
 
 					// If Brick Vector Has Components
-					if(brick->state.has_components)
+					if(brick->brick_state.has_components)
 					{
 						int i;
 						t_brick *brick_component;
@@ -976,7 +976,7 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 					vlst_copy(vlst_dst, vlst_src);
 
 					// If Vector Has Components
-					if(brick->state.has_components)
+					if(brick->brick_state.has_components)
 					{
 						int i;
 						t_brick *brick_component;
@@ -1014,7 +1014,7 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 		if(mode == mode_in)
 		{
 			// If Vector Has Components
-			if(brick->state.has_components)
+			if(brick->brick_state.has_components)
 			{
 				int i;
 				t_brick *brick_component;

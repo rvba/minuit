@@ -186,12 +186,12 @@ int node_hover_brick(t_context *C, t_node *node)
 
 	if(is_mouse_over_brick(C,brick))
 	{
-		brick->state.is_mouse_over=1;
+		brick->brick_state.is_mouse_over=1;
 		return 1;
 	}
 	else
 	{
-		brick->state.is_mouse_over=0;
+		brick->brick_state.is_mouse_over=0;
 		return 0;
 	}
 }

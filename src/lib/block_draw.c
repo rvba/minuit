@@ -28,7 +28,7 @@ void block_update_data(t_block *block)
 		brick = link->data;
 
 		// update txt
-		if(brick->state.draw_value)
+		if(brick->brick_state.draw_value)
 		{
 			if(is(brick->id.name,"camera_main")) printf("block:brick\n");
 			brick_build_txt(brick);
@@ -66,11 +66,11 @@ void block_update_geometry(t_block *block)
 			t_brick *brick = link->data;
 
 			// Height
-			if(brick->state.draw)
+			if(brick->brick_state.draw)
 				block->height += brick->geom.height;
 
 			// set draw plugs
-			if(brick->state.draw_plugs)
+			if(brick->brick_state.draw_plugs)
 			{
 				block->block_state.draw_plugs=1;
 			}
@@ -114,7 +114,7 @@ void block_draw_bricks(t_block *block)
 		// If Sub-menu
 		if(brick->cls->type==bt_menu)
 		{
-			if(brick->state.show_menu)
+			if(brick->brick_state.show_menu)
 			{
 				glPushMatrix();
 
@@ -130,7 +130,7 @@ void block_draw_bricks(t_block *block)
 		}
 
 		// Translate Up
-		if(brick->state.draw) glTranslatef(0,brick->geom.height,0);
+		if(brick->brick_state.draw) glTranslatef(0,brick->geom.height,0);
 	}
 
 	glPopMatrix();
