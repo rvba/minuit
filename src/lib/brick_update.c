@@ -26,6 +26,7 @@
 #include "binding.h"
 #include "rhizome.h"
 #include "set.h"
+#include "event.h"
 
 int is_vec_stored=0;
 float v[3];
@@ -740,3 +741,25 @@ void cls_brick_update(t_brick *brick)
 	}
 }
 
+void cls_brick_state_default( t_brick *brick, t_event *e)
+{
+	switch( e->type)
+	{
+		case MOUSE_LEFT_PRESSED:
+			brick->act(brick);
+			ui_event_add( UI_MENU_DOWN);
+			break;
+	}
+}
+
+void cls_brick_dispatch( t_brick *brick)
+{
+	t_context *C = ctx_get();
+	t_link *l;
+	t_event *e;
+	for(l=C->event->events->first;l;l=l->next)
+	{
+		e = l->data;
+		brick->state( brick, e);
+	}
+}

@@ -38,6 +38,7 @@ t_brick_class brick_trigger = {
 	.init=cls_brick_init,
 	.connect=cls_brick_connect,
 	.disconnect=cls_brick_disconnect,
+	.dispatch=cls_brick_dispatch,
 	};
 
 // SLIDER
@@ -52,6 +53,7 @@ t_brick_class brick_slider = {
 	.init=cls_brick_init,
 	.connect=cls_brick_connect,
 	.disconnect=cls_brick_disconnect,
+	.dispatch=cls_brick_dispatch,
 	};
 
 // MENU
@@ -66,6 +68,7 @@ t_brick_class brick_menu = {
 	.init=cls_brick_init,
 	.connect=cls_brick_connect,
 	.disconnect=cls_brick_disconnect,
+	.dispatch=cls_brick_dispatch,
 	};
 
 // SELECTOR
@@ -80,6 +83,7 @@ t_brick_class brick_selector = {
 	.init=cls_brick_init,
 	.connect=cls_brick_connect,
 	.disconnect=cls_brick_disconnect,
+	.dispatch=cls_brick_dispatch,
 	};
 
 // SWITCH
@@ -94,6 +98,7 @@ t_brick_class brick_switch = {
 	.init=cls_brick_init,
 	.connect=cls_brick_connect,
 	.disconnect=cls_brick_disconnect,
+	.dispatch=cls_brick_dispatch,
 	};
 
 

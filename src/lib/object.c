@@ -291,7 +291,6 @@ t_node *object_add(const char *type,const char *name)
 	t_node *node=object_make(type,name);
 	t_object *object=node->data;
 
-
 	if(C->ui->add_bricks)
 	{
 		// add data node

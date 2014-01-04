@@ -509,8 +509,6 @@ void brick_init(t_scene *sc,t_brick *brick)
 	t_plug *plug_intern=&brick->plug_intern;
 	t_plug *plug_out=&brick->plug_out;
 
-	//XXX
-
 	plug_in->brick = brick;
 	plug_intern->brick = brick;
 	plug_out->brick = brick;
@@ -521,10 +519,7 @@ void brick_init(t_scene *sc,t_brick *brick)
 	plug_intern->dst = plug_out;
 	plug_out->src = plug_intern;
 
-	/*
-	plug_intern->bang = 0;
-	plug_intern->is_init = 0;
-	*/
+	brick->state = cls_brick_state_default;
 }
 
 

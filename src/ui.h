@@ -57,6 +57,8 @@
 #define UI_HOVER_BRICK 3
 #define UI_HOVER_NOTHING 4
 
+#define UI_MENU_DOWN 1000
+
 float intro_intensity;
 
 struct Context;
@@ -189,5 +191,6 @@ void ui_draw_sets(void);
 void ui_draw_mouse(void);
 
 
+void ui_event_add( int type);
 
 #endif

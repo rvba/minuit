@@ -65,6 +65,7 @@ typedef struct BrickClass
 	void (* init)(struct Brick *brick);
 	void (* connect)(struct Brick *self,struct Brick *target);
 	void (* disconnect)(struct Brick *self);
+	void (* dispatch)(struct Brick *brick);
 
 }t_brick_class;
 
@@ -357,5 +358,8 @@ int 		brick_get_width(struct Brick *brick);
 void _brick_free(t_brick *brick);
 
 void *_op_brick_add( struct Brick *brick);
+
+void cls_brick_state_default( t_brick *brick, struct Event *e);
+void cls_brick_dispatch( t_brick *brick);
 
 #endif

@@ -350,7 +350,10 @@ void cls_block_state_menu_hover_brick( t_block *block, t_event *e)
 	{
 		case MOUSE_LEFT_PRESSED:
 			brick = block_brick_hover( C);
-			printf("%s\n",brick->id.name);
+			if( brick)
+			{
+				brick->cls->dispatch( brick);
+			}
 			break;
 		case MOUSE_MOTION_PASSIVE:
 			cls_block_submenu_update( block);
@@ -370,13 +373,13 @@ void cls_block_state_menu_default( t_block *block, t_event *e)
 		t_brick *brick = node->data;
 		if(brick->cls->type == bt_menu)
 		{
-			printf("menu\n");
+		//	printf("menu\n");
 			cls_block_submenu_update( block);
 			BLOCK_TRANS( block, cls_block_state_menu_hover_menu);
 		}
 		else
 		{
-			printf("brick\n");
+		//	printf("brick\n");
 			BLOCK_TRANS( block, cls_block_state_menu_hover_brick);
 		}
 	}

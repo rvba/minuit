@@ -642,6 +642,10 @@ void ctx_ui_state_menu( t_context *C, t_event *e)
 			_ctx_ui_menu_hide( C);
 			UI_TRANS( C, ctx_ui_state_default);
 			break;
+		case UI_MENU_DOWN:
+			_ctx_ui_menu_hide( C);
+			UI_TRANS( C, ctx_ui_state_default);
+			break;
 	}
 }
 
@@ -699,7 +703,7 @@ void ctx_ui_dispatch( t_context *C)
 
 void ctx_ui(t_context *C)
 {
-	if(0)
+	if(1)
 	{
 	if(C->event->color_transition_use && C->event->color_transition)
 	{
@@ -742,3 +746,12 @@ void ctx_ui_init( t_context *C)
 {
 	C->ui->state = ctx_ui_state_intro;
 }
+
+void ui_event_add( int type)
+{
+	t_context *C = ctx_get();
+	t_screen *s = C->ui->screen_active;
+	event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, type);
+}
+
+	
