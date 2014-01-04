@@ -741,6 +741,7 @@ void cls_brick_update(t_brick *brick)
 	}
 }
 
+
 void cls_brick_state_default( t_brick *brick, t_event *e)
 {
 	switch( e->type)

@@ -342,6 +342,18 @@ void cls_block_state_menu_hover_menu( t_block *block, t_event *e)
 	}
 }
 
+void cls_block_brick_type( t_context *C, t_block *block)
+{
+	t_brick *brick_hover = NULL;
+
+	if( C->scene->hover_type == dt_brick)
+	{
+		t_node *node = C->scene->hover;
+		brick_hover = node->data;
+		if( brick_hover->cls->type == bt_menu) BLOCK_TRANS( block, cls_block_state_menu_default);
+	}
+}
+
 void cls_block_state_menu_hover_brick( t_block *block, t_event *e)
 {
 	t_context *C = ctx_get();
@@ -356,7 +368,8 @@ void cls_block_state_menu_hover_brick( t_block *block, t_event *e)
 			}
 			break;
 		case MOUSE_MOTION_PASSIVE:
-			cls_block_submenu_update( block);
+			//cls_block_submenu_update( block);
+			cls_block_brick_type( C, block);
 			break;
 			
 		default:
@@ -373,13 +386,11 @@ void cls_block_state_menu_default( t_block *block, t_event *e)
 		t_brick *brick = node->data;
 		if(brick->cls->type == bt_menu)
 		{
-		//	printf("menu\n");
 			cls_block_submenu_update( block);
 			BLOCK_TRANS( block, cls_block_state_menu_hover_menu);
 		}
 		else
 		{
-		//	printf("brick\n");
 			BLOCK_TRANS( block, cls_block_state_menu_hover_brick);
 		}
 	}

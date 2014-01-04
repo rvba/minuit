@@ -631,6 +631,8 @@ void _ctx_ui_menu_hide( t_context *C)
 
 void ctx_ui_state_menu( t_context *C, t_event *e)
 {
+	ctx_ui_hover( C);
+
 	t_node *node = scene_node_get( C->scene, "block", "menu_mouse");
 	t_block *block = node->data;
 
@@ -659,18 +661,6 @@ void ctx_ui_state_hover_background( t_context *C, t_event *e)
 	}
 }
 
-void ctx_ui_state_default( t_context *C, t_event *e)
-{
-	switch( e->type)
-	{
-		case MOUSE_RIGHT_PRESSED: 
-			_ctx_ui_menu_show( C);
-			UI_TRANS( C, ctx_ui_state_menu);
-			break;
-
-		default: break;
-	}
-}
 
 void ctx_ui_state_intro( t_context *C, t_event *e)
 {
@@ -688,13 +678,84 @@ void ctx_ui_state_intro( t_context *C, t_event *e)
 	}
 }
 
+int _is_vec_stored=0;
+float v[3];
+float vec[3];
+
+void *ctx_ui_selection( t_context *C)
+{
+	return C->scene->hover->data;
+}
+
+void ctx_ui_brick_move( t_context *C)
+{
+	t_brick *brick = (t_brick *) ctx_ui_selection( C);
+	t_block *block = brick->block;
+	float mouse_pos[2];
+
+	float *block_pos=block->pos;
+	ctx_get_mouse_pos(C,mouse_pos);
+
+	if(!_is_vec_stored)
+	{
+		_is_vec_stored=1;
+		vsub(vec,block_pos,mouse_pos);
+	}
+	else
+	{
+		vadd(v,mouse_pos,vec);
+		vcp(block_pos,v);
+	}
+}
+
+void ctx_ui_state_block( t_context *C, t_event *e)
+{
+	switch( e->type)
+	{
+		case MOUSE_MOTION:
+			ctx_ui_brick_move( C);
+			break;
+		case MOUSE_RIGHT_RELEASED:
+			UI_TRANS( C, ctx_ui_state_default); 
+			break;
+	}
+}
+
+void ctx_ui_state_default( t_context *C, t_event *e)
+{
+	ctx_ui_hover( C);
+
+	if( C->scene->hover_type == dt_brick)
+	{
+		switch( e->type)
+		{
+			case MOUSE_RIGHT_PRESSED: 
+				UI_TRANS( C, ctx_ui_state_block);
+				break;
+
+			default: break;
+		}
+	}
+	else
+	{
+		switch( e->type)
+		{
+			case MOUSE_RIGHT_PRESSED: 
+				_ctx_ui_menu_show( C);
+				UI_TRANS( C, ctx_ui_state_menu);
+				break;
+
+			default: break;
+		}
+	}
+}
+
 void ctx_ui_dispatch( t_context *C)
 {
 	t_link *l;
 	t_event *e;
 	for(l=C->event->events->first;l;l=l->next)
 	{
-		ctx_ui_hover( C);
 
 		e = l->data;
 		C->ui->state( C, e);
@@ -703,7 +764,7 @@ void ctx_ui_dispatch( t_context *C)
 
 void ctx_ui(t_context *C)
 {
-	if(1)
+	if(0)
 	{
 	if(C->event->color_transition_use && C->event->color_transition)
 	{
