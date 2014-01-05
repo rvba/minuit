@@ -303,6 +303,16 @@ t_lst *lst_copy(t_lst *lst)
 	return copy;
 }
 
+void lst_dupli(t_lst *dst, t_lst *src)
+{
+	t_link *link;
+	for(link=src->first;link;link=link->next)
+	{
+		void *data = link->data;
+		lst_add( dst, data, link->id.name);
+	}
+}
+
 // REMOVE DOUBLE
 
 void lst_remove_double(t_lst *lst, t_link *current)

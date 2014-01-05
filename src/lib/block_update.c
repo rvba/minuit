@@ -19,6 +19,48 @@
 #include "node.h"
 #include "app.h"
 
+// [block] brick->menu 		=> pointing to another block-menu 
+// [brick] block->submenu 	=> submenu selection
+// [brick] block->selected	=> brick selection
+
+void state_block_menu_default( t_block *block, t_event *e);
+void state_block_menu_hover_menu( t_block *block, t_event *e);
+void state_block_menu_brick_trigger( t_block *block, t_event *e);
+void state_block_brick_trigger( t_block *block, t_event *e);
+
+
+t_brick *block_brick_hover( t_context *C)
+{
+	if( C->scene->hover_type == dt_brick)
+	{
+		t_node *node = C->scene->hover;
+		t_brick *brick = node->data;
+		return brick;
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
+void block_menu_hover( t_context *C, t_block *block)
+{
+	t_brick *brick_hover = ctx_ui_hover_get( C, dt_brick);
+
+	if( brick_hover)
+	{
+		if( brick_hover->cls->type == bt_menu) BLOCK_SWAP( block, state_block_menu_default);
+	}
+	else
+	{
+		BLOCK_SWAP( block, state_block_menu_default);
+	}
+}
+
+/*	**********************************
+	OPERATORS MENU 
+	**********************************	*/
+
 void block_store(t_block *block,t_brick *brick)
 {
 	brick->brick_state.show_menu=1;
@@ -52,196 +94,16 @@ void block_unstore(t_block *block)
 	block->selected=NULL;
 }
 
-// regular block
-void cls_block_block_update(t_block *block)
+void block_menu_close( t_block *block)
 {
-	t_context *C = ctx_get();
-	t_brick *brick;
-	t_link *link;
-
-	int is_mouse_over=0;
-
-	// loop over all bricks
-	for(link=block->bricks->first;link;link=link->next)
-	{
-		brick=link->data;
-
-		if(!C->event->is_brick_transformed)
-		{
-			// mouse over
-			if(is_mouse_over_brick(C,brick))
-			{
-				brick->brick_state.is_mouse_over=1;
-				is_mouse_over=1;
-			}
-			else
-			{
-				brick->brick_state.is_mouse_over=0;
-			}
-		}
-
-		// update brick 
-		brick->cls->update(brick);
-	}
-
-	if(is_mouse_over)
-	{
-		block->block_state.is_mouse_over=1;
-	}
-	else 
-	{
-		block->block_state.is_mouse_over=0;
-	}
+	t_context *C= ctx_get();
+	C->ui->show_menu = 0;
+	block_unstore( block);
+	ctx_event_add( UI_BLOCK_RELEASED);
+	BLOCK_SWAP( block, state_block_menu_default);
 }
 
-// menu block
-void cls_block_menu_update(t_block *block)
-{
-	t_context *C = ctx_get();
-
-
-	if(C->ui->show_menu)  block->block_state.is_show=1; 
-	if(block->block_state.is_show)
-	{
-		t_brick *brick;
-		t_link *link;
-
-		int is_mouse_over=0;
-
-		// hide previous menu
-		if(block->block_state.is_show && !C->ui->show_menu)
-		{
-			block_unstore(block);
-			block->selected=NULL;
-			block->block_state.is_show=0;
-			C->event->is_brick_transformed=0;
-		}
-		// OR update
-		else
-		{
-			// loop over all bricks
-			for(link=block->bricks->first;link;link=link->next)
-			{
-				brick=link->data;
-				if(is_mouse_over_brick(C,brick))
-				{
-					 brick->brick_state.is_mouse_over=1;
-					is_mouse_over=1;
-				}
-				else 
-				{
-					brick->brick_state.is_mouse_over=0;
-				}
-
-				// UPDATE BRICK 
-				brick->cls->update(brick);
-
-				// if BRICK is a MENU 
-				if(brick->cls->type == bt_menu)
-				{
-					// if mouse over
-					if(brick->brick_state.is_mouse_over)
-					{
-						// check STORED menu
-
-						t_brick *brick_menu=block->selected;
-
-						if(brick_menu)
-						{
-							t_block *block_menu=brick->menu;
-
-							// if a submenu is stored
-							if(block->submenu)
-							{
-								t_brick *brick_submenu=block->submenu;
-
-								if(!is(brick_submenu->id.name,brick->id.name))
-								{
-									block_unstore(block);
-									block_store(block,brick);
-								}
-							}
-							else
-							{
-								block_store(block,brick);
-							}
-
-							// update block_menu
-							if(block_menu)
-							{
-								block_menu->cls->update(block_menu);
-							}
-								
-						}
-						// no previous selected_menu
-						else
-						{
-							block_store(block,brick);
-						}
-					}
-
-					// mouse not over
-					else
-					{
-						// Update Menu
-						t_block *m=brick->menu;
-						if(m) m->cls->update(m);
-					}
-				}
-			}
-
-			if(is_mouse_over) block->block_state.is_mouse_over=1;
-			else block->block_state.is_mouse_over=0;
-		}
-	}
-}
-
-
-// Screen blocks
-void cls_block_generic_update(t_block *block)
-{
-	t_context *C = ctx_get();
-
-	t_brick *brick;
-	t_link *link;
-
-	// loop over all bricks
-	for(link=block->bricks->first;link;link=link->next)
-	{
-		brick=link->data;
-		if(is_mouse_over_brick(C,brick))
-		{
-			 brick->brick_state.is_mouse_over=1;
-		}
-		else 
-		{
-			brick->brick_state.is_mouse_over=0;
-		}
-
-		// UPDATE BRICK 
-		brick->cls->update(brick);
-	}
-}
-
-
-void cls_block_state_block_default( t_block *block, t_event *e)
-{
-}
-
-void cls_block_dispatch_block( t_block *block)
-{
-}
-
-
-void cls_block_state_menu_default( t_block *block, t_event *e);
-void cls_block_state_menu_hover_menu( t_block *block, t_event *e);
-
-
-// [block] brick->menu 		=> pointing to another block-menu 
-// [brick] block->submenu 	=> 
-// [brick] block->selected	=>
-
-void cls_block_menu_close( t_block *block)
+void block_submenu_close( t_block *block)
 {
 	if( block->selected)
 	{
@@ -253,32 +115,18 @@ void cls_block_menu_close( t_block *block)
 		t_block *submenu = selected->menu;
 		if( submenu) // ????
 		{
-			cls_block_menu_close( submenu);
+			block_submenu_close( submenu);
 		}
 	}
 }
 
-void cls_block_menu_open( t_block *block, t_brick *brick)
+void block_submenu_open( t_block *block, t_brick *brick)
 {
 	brick->brick_state.show_menu=1;
 	block->selected=brick;
 }
 
-t_brick *block_brick_hover( t_context *C)
-{
-	if( C->scene->hover_type == dt_brick)
-	{
-		t_node *node = C->scene->hover;
-		t_brick *brick = node->data;
-		return brick;
-	}
-	else
-	{
-		return NULL;
-	}
-}
-
-void cls_block_submenu_update( t_block *block)
+void block_submenu_update( t_block *block)
 {
 	t_context *C = ctx_get();
 
@@ -287,36 +135,44 @@ void cls_block_submenu_update( t_block *block)
 	int hover = 1;
 	int hover_submenu = 0;
 
+	// Get Current Brick
 	if( C->scene->hover_type == dt_brick)
 	{
 		t_node *node = C->scene->hover;
 		brick_hover = node->data;
 	}
 	
+	// If Brick Hover
 	if( brick_hover)
 	{
 		block_hover = brick_hover->block;
 		if( brick_hover->cls->type == bt_menu) hover_submenu = 1;
+
+		// If Submenu open
 		if( block_hover->selected)
 		{
+			// Check if menu the same
 			if( hover_submenu)
 			{
+				// If not 
 				if( brick_hover->id.id != block_hover->selected->id.id) hover = 0;
 			}
 		}
+		// Open it
 		else
 		{
-			cls_block_menu_open( block_hover, brick_hover);
+			block_submenu_open( block_hover, brick_hover);
 		}
 	}
 
+	// Close Submenu
 	if( !hover)
 	{
 		if( block_hover)
 		{
-			cls_block_menu_close( block_hover);
-			if( !hover_submenu) BLOCK_TRANS( block, cls_block_state_menu_default);
-			else cls_block_menu_open( block_hover, brick_hover);
+			block_submenu_close( block_hover);
+			if( !hover_submenu) BLOCK_SWAP( block, state_block_menu_default);
+			else block_submenu_open( block_hover, brick_hover);
 		}
 	}
 	else
@@ -325,83 +181,213 @@ void cls_block_submenu_update( t_block *block)
 		{
 			if( !hover_submenu)
 			{
-				cls_block_menu_close( block_hover);
-				BLOCK_TRANS( block, cls_block_state_menu_default);
+				block_submenu_close( block_hover);
+				BLOCK_SWAP( block, state_block_menu_default);
 			}
 		}
 	}
 }
 
-void cls_block_state_menu_hover_menu( t_block *block, t_event *e)
+/*	**********************************
+	TRIGGER 
+	**********************************	*/
+
+void block_menu_trigger( t_context *C, t_block *block)
+{
+	t_brick *brick = block_brick_hover( C);
+	block->_selected = brick;
+	brick->cls->dispatch( brick); 
+	BLOCK_SWAP( block, state_block_menu_brick_trigger);
+}
+
+void block_brick_trigger( t_context *C, t_block *block)
+{
+	t_brick *brick = block_brick_hover( C);
+	block->_selected = brick;
+	brick->cls->dispatch( brick); 
+	BLOCK_SWAP( block, state_block_brick_trigger);
+}
+
+
+/*	**********************************
+	STATES 
+	**********************************	*/
+
+// EXIT
+
+void state_block_exit( t_block *block, t_event *e)
+{
+	if( e->type == MOUSE_RIGHT_RELEASED)
+	{
+		block_menu_close( block);
+	}
+}
+
+
+/*	**********************************
+	STATES DEFAULT
+	**********************************	*/
+
+
+// BRICK TRIGGER
+
+void state_block_brick_trigger( t_block *block, t_event *e)
+{
+	t_brick *brick = block->_selected;
+	if( e->type == UI_BRICK_RELEASED)
+	{
+		ctx_event_add( UI_BLOCK_RELEASED);
+		BLOCK_SWAP( block, state_block_default);
+	}
+	else
+	{
+		brick->cls->dispatch( brick); 
+	}
+}
+
+void state_brick_linking( t_block *block, t_event *e)
 {
 	switch( e->type)
 	{
-		case MOUSE_MOTION_PASSIVE:
-			cls_block_submenu_update( block);
+		case MOUSE_LEFT_RELEASED:
+			BLOCK_SWAP( block, state_block_default);
+			ctx_event_add( UI_BLOCK_RELEASED);
 			break;
 	}
 }
 
-void cls_block_brick_type( t_context *C, t_block *block)
-{
-	t_brick *brick_hover = NULL;
+// DEFAULT
 
-	if( C->scene->hover_type == dt_brick)
-	{
-		t_node *node = C->scene->hover;
-		brick_hover = node->data;
-		if( brick_hover->cls->type == bt_menu) BLOCK_TRANS( block, cls_block_state_menu_default);
-	}
-}
-
-void cls_block_state_menu_hover_brick( t_block *block, t_event *e)
+void state_block_default( t_block *block, t_event *e)
 {
 	t_context *C = ctx_get();
-	t_brick *brick;
-	switch( e->type)
-	{
-		case MOUSE_LEFT_PRESSED:
-			brick = block_brick_hover( C);
-			if( brick)
-			{
-				brick->cls->dispatch( brick);
-			}
-			break;
-		case MOUSE_MOTION_PASSIVE:
-			//cls_block_submenu_update( block);
-			cls_block_brick_type( C, block);
-			break;
-			
-		default:
-			break;
-	}
-}
 
-void cls_block_state_menu_default( t_block *block, t_event *e)
-{
-	t_context *C = ctx_get();
-	if( C->scene->hover_type == dt_brick)
+	t_brick *brick = ctx_ui_hover_get( C, dt_brick);
+	if( brick)
 	{
-		t_node *node = C->scene->hover;
-		t_brick *brick = node->data;
-		if(brick->cls->type == bt_menu)
+		if( ctx_mouse_hover_brick_plug_out( C, brick))
 		{
-			cls_block_submenu_update( block);
-			BLOCK_TRANS( block, cls_block_state_menu_hover_menu);
+			if( e->type == MOUSE_LEFT_PRESSED)
+			{
+				BLOCK_SWAP( block, state_brick_linking);
+			}
 		}
 		else
 		{
-			BLOCK_TRANS( block, cls_block_state_menu_hover_brick);
+			switch( e->type)
+			{
+				case MOUSE_LEFT_PRESSED:
+					block_brick_trigger( C, block);
+					break;
+
+				default:
+					break;
+			}
 		}
 	}
 }
 
-void cls_block_dispatch_menu( t_block *block)
+/*	**********************************
+	STATES MENU
+	**********************************	*/
+
+
+// MENU BRICK TRIGGER
+
+void state_block_menu_brick_trigger( t_block *block, t_event *e)
+{
+	t_brick *brick = block->_selected;
+	if( e->type == UI_BRICK_RELEASED)
+	{
+		if( brick->type == bt_trigger) block_menu_close( block);
+		else BLOCK_SWAP( block, state_block_menu_default);
+	}
+	else
+	{
+		brick->cls->dispatch( brick); 
+	}
+}
+
+// MENU HOVER BRICK
+
+void state_block_menu_hover_brick( t_block *block, t_event *e)
+{
+	t_context *C = ctx_get();
+	switch( e->type)
+	{
+		case MOUSE_LEFT_PRESSED:
+			block_menu_trigger( C, block);
+			break;
+
+		case MOUSE_MOTION_PASSIVE:
+			block_menu_hover( C, block);
+			break;
+
+		case MOUSE_RIGHT_PRESSED:
+			BLOCK_SWAP( block, state_block_exit);
+			break;
+
+			
+		default: 
+			break;
+	}
+}
+
+// MENU HOVER MENU
+
+void state_block_menu_hover_menu( t_block *block, t_event *e)
+{
+	switch( e->type)
+	{
+		case MOUSE_MOTION_PASSIVE:
+			block_submenu_update( block);
+			break;
+		case MOUSE_RIGHT_PRESSED:
+			BLOCK_SWAP( block, state_block_exit);
+			break;
+	}
+}
+
+// MENU DEFAULT
+
+void state_block_menu_default( t_block *block, t_event *e)
+{
+	t_context *C = ctx_get();
+
+	if( e->type == MOUSE_RIGHT_PRESSED)
+	{
+		BLOCK_SWAP( block, state_block_exit);
+	}
+	else
+	{
+		t_brick *brick = ctx_ui_hover_get( C, dt_brick);
+
+		if( brick)
+		{
+			if(brick->cls->type == bt_menu)
+			{
+				block_submenu_update( block);
+				BLOCK_SWAP( block, state_block_menu_hover_menu);
+			}
+			else
+			{
+				BLOCK_SWAP( block, state_block_menu_hover_brick);
+			}
+		}
+	}
+}
+
+/*	**********************************
+	DISPATCH
+	**********************************	*/
+
+void cls_block_dispatch( t_block *block)
 {
 	t_context *C = ctx_get();
 	t_link *l;
 	t_event *e;
-	for(l=C->event->events->first;l;l=l->next)
+
+	for(l=C->event->events_swap->first;l;l=l->next)
 	{
 		e = l->data;
 		block->state( block, e);

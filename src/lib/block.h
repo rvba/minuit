@@ -18,7 +18,7 @@
 #define BLOCK_STATE_HOVER_
 #define BLOCK_STATE_HOVER_MENU 2
 
-#define BLOCK_TRANS( block, st) ((block->state) = &(st)) 
+#define BLOCK_SWAP( block, st) ((block->state) = &(st)) 
 
 struct Dict;
 struct Scene;
@@ -49,7 +49,6 @@ struct Block_Class
 	void (* make)(t_block *self);
 	void (* link)(t_block *self,struct Node *target);
 	void (* draw)(t_block *self);
-	void (* update)(t_block *self);
 	void (* init)(t_block *self);
 	void (* dispatch)(t_block *self);
 };
@@ -90,6 +89,7 @@ struct Block
 	struct Lst *bricks;
 	struct Brick *submenu;
 	struct Brick *selected;			// submenu
+	struct Brick *_selected;			// submenu
 
 	struct Rhizome *rhizome;
 	struct Set *set;
@@ -120,11 +120,14 @@ void 		block_free(t_block *block);
 t_block *	block_new(const char *name);
 t_block *	block_rebind(struct Scene *sc,void *ptr);
 
-void cls_block_dispatch_menu( t_block *block);
-void cls_block_dispatch_block( t_block *block);
+void cls_block_dispatch( t_block *block);
+void cls_block_dispatch( t_block *block);
 
 void cls_block_state_block_default( t_block *block, struct Event *e);
-void cls_block_state_menu_default( t_block *block, struct Event *e);
+void state_block_menu_default( t_block *block, struct Event *e);
+void state_block_default( t_block *block, struct Event *e);
+
+
 
 
 // BLOCK DRAW
@@ -154,12 +157,12 @@ void 		cls_block_generic_update(t_block *block);
 void 		block_rhizome_split(struct Block *block_self, struct Plug *plug_self, struct Block *block_dst, struct Plug *plug_dst);
 void 		block_rhizome_add(t_block *self, t_block *dst);
 
-void block_set_loop_state(t_block *block, int state);
+void 		block_set_loop_state(t_block *block, int state);
 void 		block_exec(t_block *block);
 
-void block_brick_trigger(struct Plug *plug);
+//void 		block_brick_trigger(struct Plug *plug);
 
-void _block_free(t_block *block);
+void 		_block_free(t_block *block);
 
 #endif
 

@@ -493,8 +493,6 @@ void brick_init(t_scene *sc,t_brick *brick)
 	scene_color_get(sc,col);
 	vseti(brick->idcol_left,col[0],col[1],col[2]);
 
-	// brick cls
-	brick_cls_init(brick);
 
 	// plug cls
 	plug_cls_init(&brick->plug_in);
@@ -519,7 +517,8 @@ void brick_init(t_scene *sc,t_brick *brick)
 	plug_intern->dst = plug_out;
 	plug_out->src = plug_intern;
 
-	brick->state = cls_brick_state_default;
+	// State
+	brick->state = state_brick_default;
 }
 
 
@@ -535,6 +534,9 @@ t_node *brick_make(t_block *block,const char *name,t_brick_type brick_type,t_dat
 
 	// TYPE
 	brick->type=brick_type;
+
+	// brick cls
+	brick_cls_init(brick);
 
 	// ADD TO BLOCK 
 	block_brick_add(block,node_brick);
@@ -558,7 +560,8 @@ t_node *brick_make(t_block *block,const char *name,t_brick_type brick_type,t_dat
 	}
 
 	// BRICK INIT
-	brick_init(C->scene,brick);
+	//brick_init(C->scene,brick);
+	brick->cls->init( brick);
 
 	// Frame Based
 	if(is(name,"frame"))
@@ -590,7 +593,6 @@ void _brick_free(t_brick *brick)
 	// that simple !
 	mem_free(brick, sizeof( t_brick));
 }
-
 
 // FREE
 
@@ -683,6 +685,7 @@ t_brick *brick_new(const char *name)
 
 	brick->counter = 0;
 	brick->state = NULL;
+	brick->state_pressed = BRICK_NULL;
 
 	return brick;
 }

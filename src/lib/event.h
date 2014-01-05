@@ -321,6 +321,7 @@ typedef struct Main_Event
 	int color_transition_count;
 
 	struct Lst *events;
+	struct Lst *events_swap;
 
 }t_main_event;
 

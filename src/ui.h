@@ -50,14 +50,15 @@
 #define UI_MOUSE_MOTION		14
 #define UI_MOUSE_MOTION_PASSIVE	15
 
-#define UI_TRANS(C, st) ((C->ui->state) = &(st)) 
+#define UI_SWAP(C, st) ((C->ui->state) = &(st)) 
 
 #define UI_HOVER_BACKGROUND 1
 #define UI_HOVER_OBJECT 2
 #define UI_HOVER_BRICK 3
 #define UI_HOVER_NOTHING 4
 
-#define UI_MENU_DOWN 1000
+#define UI_BRICK_RELEASED 1100
+#define UI_BLOCK_RELEASED 1200
 
 float intro_intensity;
 
@@ -89,6 +90,8 @@ typedef struct Ui
 	int mouse_dy;
 	int mouse_delta_x;
 	int mouse_delta_y;
+	int mouse_delta_x_last;
+	int mouse_delta_y_last;
 	int mouse_drag;
 
 	// KEYBOARD
@@ -192,5 +195,6 @@ void ui_draw_mouse(void);
 
 
 void ui_event_add( int type);
+void ctx_ui_old( struct Context *C);
 
 #endif

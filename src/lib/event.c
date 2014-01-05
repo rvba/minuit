@@ -145,6 +145,7 @@ t_main_event *main_event_new(void)
 	event->color_transition_count = 0;
 
 	event->events = lst_new( "events");
+	event->events_swap = lst_new( "events_swap");
 
 	return event;
 }

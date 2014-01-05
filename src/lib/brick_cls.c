@@ -20,6 +20,18 @@ void cls_brick_init(t_brick *brick)
 	brick_init(C->scene,brick);
 }
 
+void cls_brick_init_switch( t_brick *brick)
+{
+	cls_brick_init( brick);
+	brick->state = state_brick_switch_default;
+}
+
+void cls_brick_init_slider( t_brick *brick)
+{
+	cls_brick_init( brick);
+	brick->state = state_brick_slider_default;
+}
+
 void brick_make_trigger(t_brick *brick);
 void brick_make_slider(t_brick *brick);
 void brick_make_menu(t_brick *brick);
@@ -50,7 +62,7 @@ t_brick_class brick_slider = {
 	.draw=brick_draw,
 	.update=cls_brick_update,
 	.trigger=cls_brick_trigger_slider,
-	.init=cls_brick_init,
+	.init=cls_brick_init_slider,
 	.connect=cls_brick_connect,
 	.disconnect=cls_brick_disconnect,
 	.dispatch=cls_brick_dispatch,
@@ -95,7 +107,7 @@ t_brick_class brick_switch = {
 	.draw=brick_draw,
 	.update=cls_brick_update,
 	.trigger=cls_brick_trigger_switch,
-	.init=cls_brick_init,
+	.init=cls_brick_init_switch,
 	.connect=cls_brick_connect,
 	.disconnect=cls_brick_disconnect,
 	.dispatch=cls_brick_dispatch,

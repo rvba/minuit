@@ -32,6 +32,9 @@ int is_vec_stored=0;
 float v[3];
 float vec[3];
 
+void state_brick_slider_default( t_brick *brick, t_event *e);
+void state_brick_default( t_brick *brick, t_event *e);
+
 int brick_check_viewport( t_brick *brick)
 {
 	t_context *C=ctx_get();
@@ -281,13 +284,14 @@ void brick_remove(t_action *action)
 
 void cls_brick_update(t_brick *brick)
 {
+#if 0
 	t_context *C = ctx_get();
 	t_brick_mode mode = brick->mode;
 
 	t_plug *plug_in = &brick->plug_in;
 	t_plug *plug_out = &brick->plug_out;
 
-	int mouse_over = is_mouse_over_brick(C,brick);
+	int mouse_over = ctx_mouse_hover_brick(C,brick);
 	int brick_clic=0;
 
 	int edit = 0;
@@ -739,26 +743,114 @@ void cls_brick_update(t_brick *brick)
 				break;
 		}
 	}
+#endif
 }
 
 
-void cls_brick_state_default( t_brick *brick, t_event *e)
+
+
+
+void brick_hover_set( t_brick *brick)
+{
+	t_context *C = ctx_get();
+	if( ctx_mouse_hover_brick_left( C, brick))	 	brick->state_pressed = BRICK_LEFT;
+	else if( ctx_mouse_hover_brick_right( C, brick)) 	brick->state_pressed = BRICK_RIGHT;
+	else if( ctx_mouse_hover_brick_plug_in( C, brick))	brick->state_pressed = BRICK_PLUG_IN;
+	else if( ctx_mouse_hover_brick_plug_out( C, brick))	brick->state_pressed = BRICK_PLUG_OUT;
+	else							brick->state_pressed = BRICK_NULL;
+}
+
+/*	**********************************
+	SLIDER
+	**********************************	*/
+
+void state_brick_slider_drag( t_brick *brick, t_event *e)
+{
+	t_context *C = ctx_get();
+	if( e->type == MOUSE_LEFT_RELEASED)
+	{
+		ctx_event_add( UI_BRICK_RELEASED);
+		BRICK_SWAP( brick, state_brick_slider_default);
+	}
+	else
+	{
+		if( C->ui->mouse_delta_x >= 0) brick->state_pressed = BRICK_RIGHT;
+		else brick->state_pressed = BRICK_LEFT;
+		brick->act( brick);
+	}
+}
+
+void state_brick_slider_trigger( t_brick *brick, t_event *e)
+{
+	switch( e->type)
+	{
+		case MOUSE_LEFT_RELEASED:
+			brick->act( brick);
+			ctx_event_add( UI_BRICK_RELEASED);
+			BRICK_SWAP( brick, state_brick_slider_default);
+			break;
+
+		case MOUSE_MOTION:
+			BRICK_SWAP( brick, state_brick_slider_drag);
+			break;
+	}
+}
+
+void state_brick_slider_default( t_brick *brick, t_event *e)
 {
 	switch( e->type)
 	{
 		case MOUSE_LEFT_PRESSED:
-			brick->act(brick);
-			ui_event_add( UI_MENU_DOWN);
+			brick_hover_set( brick);
+			BRICK_SWAP( brick, state_brick_slider_trigger);
 			break;
 	}
 }
+
+/*	**********************************
+	SWITCH
+	**********************************	*/
+
+
+void state_brick_switch_default( t_brick *brick, t_event *e)
+{
+	switch( e->type)
+	{
+		case MOUSE_LEFT_PRESSED:
+			brick->act( brick);
+			break;
+
+		case MOUSE_LEFT_RELEASED:
+			ctx_event_add( UI_BRICK_RELEASED); 
+			BRICK_SWAP( brick, state_brick_switch_default);
+			break;
+	}
+}
+
+void state_brick_default( t_brick *brick, t_event *e)
+{
+	switch( e->type)
+	{
+		case MOUSE_LEFT_PRESSED:
+			brick->act( brick);
+			break;
+
+		case MOUSE_LEFT_RELEASED:
+			ctx_event_add( UI_BRICK_RELEASED); 
+			break;
+	}
+}
+
+/*	**********************************
+	DISPATCH
+	**********************************	*/
 
 void cls_brick_dispatch( t_brick *brick)
 {
 	t_context *C = ctx_get();
 	t_link *l;
 	t_event *e;
-	for(l=C->event->events->first;l;l=l->next)
+	for(l=C->event->events_swap->first;l;l=l->next)
 	{
 		e = l->data;
 		brick->state( brick, e);

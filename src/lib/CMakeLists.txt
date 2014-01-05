@@ -1,5 +1,6 @@
 # LIB
 set(SRC
+	ui_old.c
 	action.c
 	action.h
 	app_keyboard.c

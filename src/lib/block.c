@@ -284,9 +284,8 @@ t_block_class block_menu =
 	.make=cls_block_make_menu,
 	.link=cls_block_link,
 	.draw=cls_block_draw_block,
-	.update=cls_block_menu_update,
 	.init=_block_init,
-	.dispatch = cls_block_dispatch_menu,
+	.dispatch = cls_block_dispatch,
 };
 
 // block
@@ -297,9 +296,8 @@ t_block_class block_block =
 	.make=cls_block_make_block,
 	.link=cls_block_link,
 	.draw=cls_block_draw_block,
-	.update=cls_block_block_update,
 	.init=_block_init,
-	.dispatch = cls_block_dispatch_block,
+	.dispatch = cls_block_dispatch,
 };
 
 void cls_block_make_block(t_block *block)
@@ -334,11 +332,11 @@ void block_cls_init(t_block *block)
 
 	if( is(block->cls->type, "menu"))
 	{
-		block->state = cls_block_state_menu_default;
+		block->state = state_block_menu_default;
 	}
 	else
 	{
-		block->state = cls_block_state_block_default;
+		block->state = state_block_default;
 	}
 
 	if(!found)printf("[ERROR:cls_block_init] Unknown block type %s\n",block->type);
@@ -564,6 +562,7 @@ t_block *block_new(const char *name)
 
 	block->submenu=NULL;
 	block->selected=NULL;
+	block->_selected=NULL;
 
 	block->block_state.is_root=0;
 	block->block_state.is_show=0;

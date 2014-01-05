@@ -475,6 +475,8 @@ t_ui *ui_new(void)
 	ui->mouse_dy = 0;
 	ui->mouse_delta_x = 0;
 	ui->mouse_delta_y = 0;
+	ui->mouse_delta_x_last = 0;
+	ui->mouse_delta_y_last = 0;
 	ui->mouse_drag = 0;
 
 	ui->key_shift = 0;

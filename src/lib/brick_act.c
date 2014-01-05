@@ -135,74 +135,31 @@ void *op_brick_add(t_brick *brick)
 
 void *op_slider(t_brick *brick)
 {
-	t_context *C = ctx_get();
-	float dx = (float) C->ui->mouse_dx; 
-
-	// dragging
-	if(brick->brick_state.is_draging)
+	void *data = brick->plug_intern.data;
+	t_data_type type = brick->plug_intern.data_type;
+	switch( brick->state_pressed)
 	{
-		// release
-		if( C->ui->mouse_state == UI_LEFT_RELEASED)
-		{
-			brick->brick_state.is_draging=0;
-			brick_release(brick);
-		}
-		else
-		{
-			if(C->event->loop_step == 0)
+		case BRICK_LEFT:
+			switch( type)
 			{
-				if(brick->plug_intern.data_type==dt_int)
-				{
-					int *data=brick->plug_intern.data;
-					*data += dx;
-				}
-				else if(brick->plug_intern.data_type==dt_uint)
-				{
-					unsigned int *data=brick->plug_intern.data;
-					*data += dx;
-				}
-				else if(brick->plug_intern.data_type==dt_float)
-				{
-					float *data=brick->plug_intern.data;
-					*data += dx * .1;
-				}
+				case dt_int: 	set_int( data, drf_int( data) - 1); break;
+				case dt_float:	set_float( data, drf_float( data) - .1); break;
+				default: break;
 			}
-		}
-	}
-	// simple clic
-	else
-	{
-		// set dragging
-		if( brick->brick_state.use_dragging && C->ui->mouse_motion == UI_MOUSE_MOTION )
-		{
-				brick->brick_state.is_draging=1;
-		}
-		else if ( C->ui->mouse_state == UI_LEFT_RELEASED)
-		{
-				if(brick->plug_intern.data_type==dt_int)
-				{
-					int *data=brick->plug_intern.data;
-					if(brick->brick_state.is_left_pressed) 	*data -= 1; 
-					else if(brick->brick_state.is_right_pressed) 	*data += 1; 
-				}
-				else if(brick->plug_intern.data_type==dt_uint)
-				{
-					unsigned int *data=brick->plug_intern.data;
-					if(brick->brick_state.is_left_pressed) 	*data -= 1; 
-					else if(brick->brick_state.is_right_pressed) 	*data += 1; 
-				}
-				else if(brick->plug_intern.data_type==dt_float)
-				{
-					float inc=.1;
-					float *data=brick->plug_intern.data;
-					if(brick->brick_state.is_left_pressed)  	*data -= inc; 
-					else if(brick->brick_state.is_right_pressed) 	*data += inc; 
-				}
-					
-				brick_release(brick); 
-		}
-	}
+			break;
 
+		case BRICK_RIGHT:
+			switch( type)
+			{
+				case dt_int: 	set_int( data, drf_int( data) + 1); break;
+				case dt_float:	set_float( data, drf_float( data) + .1); break;
+				default: break;
+			}
+			break;
+		default:
+			break;
+
+	}
 	return NULL;
 }
 

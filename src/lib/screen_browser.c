@@ -221,8 +221,8 @@ void browser_build(void)
 
 void browser_update(void)
 {
-	t_block *block=BROWSER_BUTTONS->data;
-	block->cls->update(block);
+	//t_block *block=BROWSER_BUTTONS->data;
+	//block->cls->update(block);
 }
 
 void browser_draw(void)

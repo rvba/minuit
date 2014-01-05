@@ -14,6 +14,14 @@
 #include "txt.h"
 #include "plug.h"
 
+#define BRICK_SWAP( brick, st) ((brick->state) = &(st)) 
+
+#define BRICK_NULL 		0
+#define BRICK_LEFT 		1
+#define BRICK_RIGHT 		2
+#define BRICK_PLUG_IN 		3
+#define BRICK_PLUG_OUT 		4
+
 struct Block;
 struct Brick;
 struct Dict;
@@ -145,6 +153,7 @@ typedef struct Brick_Var
 
 }t_brick_var;
 
+
 // BRICK
 
 typedef struct Brick
@@ -154,6 +163,7 @@ typedef struct Brick
 
 	enum Brick_Type type;
 	t_data_type context;			// contextual menus
+	int state_pressed;
 
 	int idcol_right[3];			// col
 	int idcol_left[3];
@@ -359,7 +369,10 @@ void _brick_free(t_brick *brick);
 
 void *_op_brick_add( struct Brick *brick);
 
-void cls_brick_state_default( t_brick *brick, struct Event *e);
+void state_brick_default( t_brick *brick, struct Event *e);
 void cls_brick_dispatch( t_brick *brick);
+
+void state_brick_switch_default( t_brick *brick, struct Event *e);
+void state_brick_slider_default( t_brick *brick, struct Event *e);;
 
 #endif

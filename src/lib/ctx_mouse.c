@@ -18,116 +18,133 @@
 #include "screen.h"
 #include "ctx.h"
 
-int is_mouse_over_background(t_context *C)
+int ctx_mouse_hover_brick_left( t_context *C, t_brick *brick)
 {
-	if(
-		C->event->color[0]==255 && // == backgound_color[0]
-		C->event->color[1]==255 &&
-		C->event->color[2]==255 
-		)
-		return 1;
-	else
-		return 0;
+	if( COLOR_MATCH( C->event->color, brick->idcol_left)) return 1;
+	else return 0;
 }
 
-int is_mouse_over_plug(t_context *C,t_plug *plug)
+int ctx_mouse_hover_brick_right( t_context *C, t_brick *brick)
 {
-	if(
-		C->event->color[0] == plug->idcol[0] &&
-		C->event->color[1] == plug->idcol[1] &&
-		C->event->color[2] == plug->idcol[2] 
-	)	
-	{
-		return 1;
-	}
-
-	return 0;
+	if( COLOR_MATCH( C->event->color, brick->idcol_right)) return 1;
+	else return 0;
 }
 
-int is_mouse_over(t_context *C,int *c)
+int ctx_mouse_hover_brick_plug_in( t_context *C, t_brick *brick)
 {
-	if(
-		C->event->color[0] == c[0] &&
-		C->event->color[1] == c[1] &&
-		C->event->color[2] == c[2] 
-	)
-	{
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
+	if( COLOR_MATCH( C->event->color, brick->plug_in.idcol)) return 1;
+	else return 0;
 }
 
-int is_mouse_over_brick(t_context *C,t_brick *brick)
+int ctx_mouse_hover_brick_plug_out( t_context *C, t_brick *brick)
 {
-	if(
-		C->event->color[0] == brick->idcol_left[0] &&
-		C->event->color[1] == brick->idcol_left[1] &&
-		C->event->color[2] == brick->idcol_left[2] 
-	)
-	{
-		brick->brick_state.is_left_pressed=1;
-		brick->brick_state.is_right_pressed=0;
+	if( COLOR_MATCH( C->event->color, brick->plug_out.idcol)) return 1;
+	else return 0;
+}
 
-		brick->brick_state.is_mouse_over_plug_in=0;
-		brick->brick_state.is_mouse_over_plug_out=0;
-		return 1;
-	}
-	else if
-		(
-		C->event->color[0] == brick->idcol_right[0] &&
-		C->event->color[1] == brick->idcol_right[1] &&
-		C->event->color[2] == brick->idcol_right[2] 
-		)
-	{
-
-		brick->brick_state.is_left_pressed=0;
-		brick->brick_state.is_right_pressed=1;
-
-		brick->brick_state.is_mouse_over_plug_in=0;
-		brick->brick_state.is_mouse_over_plug_out=0;
-		return 1;
-	}
-	else
-	{
-		brick->brick_state.is_left_pressed=0;
-		brick->brick_state.is_right_pressed=0;
-
-		if(brick->brick_state.draw_plugs)
-		{
-			if(is_mouse_over_plug(C,&brick->plug_in))
-			{
-				brick->brick_state.is_mouse_over_plug_in=1;
-				brick->brick_state.is_mouse_over_plug_out=0;
-				return 1;
-			}
-			else if(is_mouse_over_plug(C,&brick->plug_out))
-			{
-				brick->brick_state.is_mouse_over_plug_in=0;
-				brick->brick_state.is_mouse_over_plug_out=1;
-				return 1;
-			}
-			else
-			{
-				return 0;
-			}
-		}
-		else
-		{
-			return 0;
-		}
-	}
+int ctx_mouse_hover_brick( t_context *C, t_brick *brick)
+{
+	if	( ctx_mouse_hover_brick_right( C, brick)) return 1;
+	else if	( ctx_mouse_hover_brick_left( C, brick)) return 1;
+	else if	( ctx_mouse_hover_brick_plug_in( C, brick)) return 1;
+	else if	( ctx_mouse_hover_brick_plug_out( C, brick)) return 1;
+	else return 0;
 }
 
 void ctx_get_mouse_pos(t_context *C,float *r)
 {
-	float x = (float)(C->app->mouse->x-C->ui->pan_x)/C->ui->zoom;
-	float y = (float)(C->app->mouse->y-C->ui->pan_y)/C->ui->zoom;
+	float x = (float)( C->app->mouse->x - C->ui->pan_x) / C->ui->zoom;
+	float y = (float)( C->app->mouse->y - C->ui->pan_y) / C->ui->zoom;
 
 	r[0]=x;
 	r[1]=y;
+}
+
+void ctx_ui_mouse_motion( t_context *C, int x, int y)
+{
+	t_ui *ui = C->ui;
+	ui->mouse_x = x;
+	ui->mouse_y = y;
+
+	int dx;
+	int dy;
+
+	int last_x = ui->mouse_last_x;
+	int last_y = ui->mouse_last_y;
+
+	dx = x - last_x;
+	dy = y - last_y;
+
+	ui->mouse_dx = dx;
+	ui->mouse_dy = dy;
+
+	ui->mouse_last_x = x;
+	ui->mouse_last_y = y;
+
+}
+
+inline int mouse_pressed( int state)
+{
+	if(
+		state == UI_LEFT_PRESSED ||
+		state == UI_RIGHT_PRESSED ||
+		state == UI_MIDDLE_PRESSED)
+		return 1;
+	else
+		return 0;
+}
+
+void ctx_ui_mouse_delta( t_ui *ui)
+{
+	if( mouse_pressed( ui->mouse_state))
+	{
+		if( ui->mouse_drag)
+		{
+			ui->mouse_delta_x = ui->mouse_x - ui->mouse_last_x_pressed;
+			ui->mouse_delta_y = ui->mouse_y - ui->mouse_last_y_pressed;
+		}
+		else
+		{
+			ui->mouse_last_x_pressed = ui->mouse_x;
+			ui->mouse_last_y_pressed = ui->mouse_y;
+		}
+	}
+	else
+	{
+		ui->mouse_delta_x_last = ui->mouse_delta_x;
+		ui->mouse_delta_y_last = ui->mouse_delta_y;
+		ui->mouse_delta_x = 0;
+		ui->mouse_delta_y = 0;
+		ui->mouse_last_x_pressed = 0;
+		ui->mouse_last_y_pressed = 0;
+	}
+}
+
+
+void ctx_ui_mouse_set( t_context *C, t_event *event)
+{
+	int type = event->type;
+	C->ui->mouse_motion = UI_MOUSE_STATIC;
+
+	switch( type)
+	{
+		case MOUSE_LEFT_PRESSED: C->ui->mouse_state = UI_LEFT_PRESSED; break;
+		case MOUSE_LEFT_RELEASED: C->ui->mouse_state = UI_LEFT_RELEASED; break;
+
+		case MOUSE_RIGHT_PRESSED: C->ui->mouse_state = UI_RIGHT_PRESSED; break;
+		case MOUSE_RIGHT_RELEASED: C->ui->mouse_state = UI_RIGHT_RELEASED; break;
+
+		case MOUSE_MIDDLE_PRESSED: C->ui->mouse_state = UI_MIDDLE_PRESSED; break;
+		case MOUSE_MIDDLE_RELEASED: C->ui->mouse_state = UI_MIDDLE_RELEASED; break;
+	}
+
+	if( type == MOUSE_MOTION)		C->ui->mouse_motion = UI_MOUSE_MOTION;
+	else if( type == MOUSE_MOTION_PASSIVE)	C->ui->mouse_motion = UI_MOUSE_MOTION_PASSIVE;
+	
+	if( mouse_pressed( C->ui->mouse_state) && C->ui->mouse_motion == UI_MOUSE_MOTION) C->ui->mouse_drag = 1;
+	else C->ui->mouse_drag = 0;
+
+	ctx_ui_mouse_delta( C->ui);
 }
 
 void ctx_mouse( t_context *C)

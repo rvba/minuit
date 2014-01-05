@@ -233,6 +233,17 @@ void keymap_main( int key)
 	}
 }
 
+
+void ctx_ui_keyboard_set( t_context *C, t_event *event)
+{
+	switch( event->type)
+	{
+		case SHIFTKEY:	C->ui->key_shift = 1; break;
+		case ALTKEY: 	C->ui->key_alt = 1; break;
+		case CTRLKEY: 	C->ui->key_ctrl= 1; ;break;
+	}
+}
+
 void ctx_keyboard(t_context *C)
 {
 	t_screen *s = C->ui->screen_active;
