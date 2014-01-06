@@ -341,5 +341,6 @@ void		event_add( t_main_event *main_event, struct MINscreen *screen, int x, int 
 void 		event_dispach( t_main_event *main_event);
 t_event *	event_new( const char *name);
 t_main_event *	main_event_new(void);
+void event_log( t_event *e);
 
 #endif

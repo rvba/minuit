@@ -378,6 +378,7 @@ void ctx_events_swap( t_context *C)
 	lst_dupli( C->event->events_swap, C->event->events);
 }
 
+
 void ctx_ui_dispatch( t_context *C)
 {
 	t_link *l;
@@ -389,6 +390,7 @@ void ctx_ui_dispatch( t_context *C)
 	for(l=C->event->events_swap->first;l;l=l->next)
 	{
 		e = l->data;
+		event_log( e);
 		C->ui->state( C, e);
 	}
 }

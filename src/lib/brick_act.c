@@ -118,6 +118,8 @@ void *op_brick_add(t_brick *brick)
 	// Store
 	scene_store(C->scene,0);
 
+	term_print(C->term,"+ brick");
+
 	// Switch Desk
 	if(!C->ui->show_sets) show_sets(C);
 

@@ -203,6 +203,9 @@ void ui_draw_grid(void)
 void ui_draw_term(void)
 {
 	t_context *C=ctx_get();
+	glPushMatrix();
+	glTranslatef( 50, C->app->window->height - 100, 0);
+
 	if(C->ui->show_term)
 	{
 		C->event->ui.use_scale = 0;
@@ -215,11 +218,13 @@ void ui_draw_term(void)
 			{
 				t = l->data;
 				t->draw(t);
+				glTranslatef(t->width + 30, 0, 0);
 			}
 		}
 
 		C->event->ui.use_scale = 1;
 	}
+	glPopMatrix();
 }
 
 // DRAW MENU 

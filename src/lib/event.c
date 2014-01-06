@@ -11,6 +11,8 @@
 #include "event.h"
 #include "util.h"
 #include "screen.h"
+#include "term.h"
+#include "app.h"
 
 t_main_event *main_event_new(void)
 {
@@ -267,6 +269,40 @@ void event_show( t_event *event)
 void event_free( t_event *event)
 {
 	mem_free( event, sizeof( t_event));
+}
+
+char *event_echo_name( t_event *e)
+{
+	switch( e->type)
+	{
+		case MOUSE_STATIC: 		return("MOUSE STATIC"); break;
+		case MOUSE_MOTION_PASSIVE: 	return("MOUSE MOTION PASSIVE"); break;
+		case MOUSE_MOTION: 		return("MOUSE MOTION"); break;
+		case MOUSE_LEFT_PRESSED: 	return("MOUSE BUTTON LEFT PRESSED"); break;
+		case MOUSE_LEFT_RELEASED: 	return("MOUSE BUTTON LEFT RELEASED"); break;
+		case MOUSE_RIGHT_PRESSED: 	return("MOUSE BUTTON RIGHT PRESSED"); break;
+		case MOUSE_RIGHT_RELEASED: 	return("MOUSE BUTTON RIGHT RELEASED"); break;
+		case MOUSE_MIDDLE_PRESSED: 	return("MOUSE BUTTON MIDDLE PRESSED"); break;
+		case MOUSE_MIDDLE_RELEASED: 	return("MOUSE BUTTON MIDDLE RELEASED"); break;
+
+		default: return("..");
+	}
+}
+
+void event_log( t_event *e)
+{
+	char msg[128];
+
+	t_context *C = ctx_get();
+	t_term *term = term_get( "term_event");
+
+	char *name = event_echo_name( e);
+	snprintf( msg, 128,"%d %s", C->app->frame, name);
+
+	if( term)
+	{
+		term_print( term, msg);
+	}
 }
 
 t_event *event_new( const char *name)

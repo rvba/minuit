@@ -678,6 +678,7 @@ int txt_letter_draw(char letter,float factor_x,float factor_y, int line_width)
 void txt_data_change(t_txt *txt,const char *name)
 {
 	strncpy(txt->name, name, _NAME_LONG_);
+	txt_get_width(txt);
 }
 
 void txt_draw(t_txt *txt)
