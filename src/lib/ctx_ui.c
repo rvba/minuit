@@ -29,11 +29,29 @@
 #include "rhizome.h"
 #include "op.h"
 #include "clock.h"
-
 #include "action.h"
 #include "dict.h"
 #include "set.h"
 #include "op.h"
+
+
+t_lst *EXE=NULL;
+
+
+/*	**********************************
+	DECLARATIONS
+	*********************************	*/
+
+void state_ui_block_trigger( t_context *C, t_event *e);
+void state_ui_default( t_context *C, t_event *e);
+void state_ui_motion( t_context *C, t_event *e);
+
+void ctx_ui_block_trigger( t_context *C);
+
+
+/*	**********************************
+	:DELETE
+	*********************************	*/
 
 void block_delete(t_action *action)
 {
@@ -43,9 +61,10 @@ void block_delete(t_action *action)
 	t_brick *brick = dict_pop_data(args,"brick");
 	t_block *block = brick->block;
 
-	if(!block_is_connected("in",block) && !block_is_connected("out",block))
+	if(
+		   !block_is_connected("in",block)
+		&& !block_is_connected("out",block))
 	{
-		//t_lst *lst = get_target_list(C);
 		t_set *set = get_current_set(C);
 		t_lst *lst = set->blocks;
 
@@ -70,9 +89,6 @@ void block_do_delete( t_block *block)
 	exe_add_action(action);
 }
 
-// EXE
-
-t_lst *EXE=NULL;
 
 int action_check( t_action *action)
 {
@@ -117,18 +133,6 @@ void exe_add_action(t_action *action)
 	lst_add(EXE,action,"action");
 }
 
-
-/*	**********************************
-	DECLARATIONS
-	*********************************	*/
-
-
-void state_ui_block_trigger( t_context *C, t_event *e);
-void state_ui_default( t_context *C, t_event *e);
-void state_ui_motion( t_context *C, t_event *e);
-
-void ctx_ui_block_trigger( t_context *C);
-
 void ctx_ui_buffer_clear( t_context *C)
 {
 	bzero(&C->event->buffer_char[0],20);
@@ -156,10 +160,6 @@ void ctx_ui_freeze(t_context *C)
 {
 	if(C->ui->update_links) C->ui->update_links = 0;
 	else C->ui->update_links = 1;
-}
-
-void ctx_ui_switch_show_step(t_context *C)
-{
 }
 
 void ctx_ui_switch_show_states(t_context *C)
@@ -247,7 +247,7 @@ void ctx_ui_hover_set_selection( t_context *C, t_data_type type)
 
 int ctx_ui_hover_background( t_context *C)
 {
-	int color[3] = { 255, 255, 255};
+	int color[] = { 255, 255, 255};
 	int *c = color;
 	return COLOR_MATCH( C->event->color, c);
 }
@@ -361,7 +361,7 @@ void ctx_ui_mouse( t_context *C)
 	}
 }
 
-void CTX_ui_menu_show( t_context *C)
+void ctx_ui_menu_show( t_context *C)
 {
 	t_node *node = scene_node_get( C->scene, "block", "menu_mouse");
 	t_block *block = node->data;
@@ -386,7 +386,7 @@ void ctx_ui_block_select( t_context *C)
 	}
 }
 
-void CTX_ui_menu_hide( t_context *C)
+void ctx_ui_menu_hide( t_context *C)
 {
 	t_node *node = scene_node_get( C->scene, "block", "menu_mouse");
 	t_block *block = node->data;
@@ -528,7 +528,7 @@ void state_ui_mouse_right( t_context *C, t_event *e)
 				UI_SWAP( C, state_ui_mouse_right_motion);
 				break;
 			case MOUSE_RIGHT_RELEASED:
-				CTX_ui_menu_show( C);
+				ctx_ui_menu_show( C);
 				UI_SWAP( C, state_ui_block_trigger); 
 				break;
 		}
@@ -557,7 +557,7 @@ void state_ui_intro( t_context *C, t_event *e)
 			break;
 		case MOUSE_RIGHT_PRESSED:
 			ctx_ui_intro_stop( C);
-			CTX_ui_menu_show( C);
+			ctx_ui_menu_show( C);
 			UI_SWAP( C, state_ui_block_trigger); 
 			break;
 	}

@@ -189,7 +189,6 @@ void keymap_command( int key)
 				C->ui->step_reset = 1;
 			break;
 		case DKEY: C->event->brick_delete = 1; break;
-		case KKEY: ctx_ui_switch_show_step(C); break;
 		case JKEY: ctx_ui_switch_show_states(C); break;
 		case FKEY: ctx_ui_freeze(C); break;
 		case WKEY: ctx_switch_intro(C);
