@@ -135,6 +135,9 @@ struct MINscreen;
 #define EVENT_KEYBOARD( event) ( event >= 0 && event <= KEYBOARD_STOP)
 #define EVENT_MOUSE( event) ( event >= MOUSE_START && event <= MOUSE_END)
 
+#define UI_BRICK_RELEASED 1100
+#define UI_BLOCK_RELEASED 1200
+
 
 typedef enum EventState
 {
@@ -342,5 +345,7 @@ void 		event_dispach( t_main_event *main_event);
 t_event *	event_new( const char *name);
 t_main_event *	main_event_new(void);
 void event_log( t_event *e);
+
+char *event_name( t_event *e);
 
 #endif

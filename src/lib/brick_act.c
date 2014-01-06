@@ -29,6 +29,7 @@
 #include "set.h"
 #include "rhizome.h"
 #include "geometry.h"
+#include "term.h"
 
 // BRICK ADD
 

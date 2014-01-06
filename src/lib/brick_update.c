@@ -10,7 +10,6 @@
 #include "context.h"
 #include "node.h"
 #include "scene.h"
-
 #include "op.h"
 #include "action.h"
 #include "ctx.h"
@@ -34,6 +33,7 @@ float vec[3];
 
 void state_brick_slider_default( t_brick *brick, t_event *e);
 void state_brick_default( t_brick *brick, t_event *e);
+void state_brick_edit( t_brick *brick, t_event *e);
 
 int brick_check_viewport( t_brick *brick)
 {
@@ -747,9 +747,6 @@ void cls_brick_update(t_brick *brick)
 }
 
 
-
-
-
 void brick_hover_set( t_brick *brick)
 {
 	t_context *C = ctx_get();
@@ -761,11 +758,76 @@ void brick_hover_set( t_brick *brick)
 }
 
 /*	**********************************
+	:EDIT
+	**********************************	*/
+
+
+void brick_edit_name( t_context *C, t_brick *brick)
+{
+	t_plug *plug = &brick->plug_intern;
+
+	if(plug->data_type==dt_int)
+	{
+		int *dt=plug->data;
+		*dt=atoi(C->event->buffer_char);
+	}
+	else if(plug->data_type==dt_float)
+	{
+		float *dt=plug->data;
+		*dt=atof(C->event->buffer_char);
+	}
+}
+
+
+typedef void (* State_Func) (struct Brick *, struct Event *);
+State_Func brick_state_set_default( t_brick *brick)
+{
+	switch( brick->type)
+	{
+		case bt_switch: return 		&state_brick_switch_default; break;
+		case bt_slider: return 		&state_brick_slider_default; break;
+		default: return 		&state_brick_default; break;
+	}
+}
+
+void brick_edit_start( t_context *C, t_brick *brick)
+{
+	C->event->ui.typing_start = 1;
+	BRICK_SWAP( brick, state_brick_edit);
+}
+
+void brick_edit_stop( t_context *C, t_brick *brick)
+{
+	C->event->ui.typing_start = 0;
+	brick->state = brick_state_set_default( brick );
+	ctx_event_add( UI_BRICK_RELEASED);
+}
+
+void state_brick_edit( t_brick *brick, t_event *e)
+{
+	ctx_ui_log( "brick_default");
+	t_context *C = ctx_get();
+	switch( e->type)
+	{
+		case RETURNKEY:
+			C->event->ui.typing_start = 0;
+			ctx_ui_buffer_clear( C);
+			brick_edit_stop( C, brick);
+			break;
+		default:
+			brick_edit_name( C, brick);
+			break;
+	}
+}
+
+
+/*	**********************************
 	SLIDER
 	**********************************	*/
 
 void state_brick_slider_drag( t_brick *brick, t_event *e)
 {
+	ctx_ui_log( "brick_slider_drag");
 	t_context *C = ctx_get();
 	if( e->type == MOUSE_LEFT_RELEASED)
 	{
@@ -782,6 +844,7 @@ void state_brick_slider_drag( t_brick *brick, t_event *e)
 
 void state_brick_slider_trigger( t_brick *brick, t_event *e)
 {
+	ctx_ui_log( "brick_slider_trigger");
 	switch( e->type)
 	{
 		case MOUSE_LEFT_RELEASED:
@@ -798,9 +861,16 @@ void state_brick_slider_trigger( t_brick *brick, t_event *e)
 
 void state_brick_slider_default( t_brick *brick, t_event *e)
 {
+	ctx_ui_log( "brick_slider_default");
 	switch( e->type)
 	{
 		case MOUSE_LEFT_PRESSED:
+			brick_hover_set( brick);
+			BRICK_SWAP( brick, state_brick_slider_trigger);
+			brick->cls->dispatch( brick);
+			break;
+
+		case MOUSE_MIDDLE_PRESSED:
 			brick_hover_set( brick);
 			BRICK_SWAP( brick, state_brick_slider_trigger);
 			break;
@@ -814,6 +884,7 @@ void state_brick_slider_default( t_brick *brick, t_event *e)
 
 void state_brick_switch_default( t_brick *brick, t_event *e)
 {
+	ctx_ui_log( "brick_switch_default");
 	switch( e->type)
 	{
 		case MOUSE_LEFT_PRESSED:
@@ -826,9 +897,10 @@ void state_brick_switch_default( t_brick *brick, t_event *e)
 			break;
 	}
 }
-
+					
 void state_brick_default( t_brick *brick, t_event *e)
 {
+	ctx_ui_log( "brick_default");
 	switch( e->type)
 	{
 		case MOUSE_LEFT_PRESSED:
@@ -837,6 +909,9 @@ void state_brick_default( t_brick *brick, t_event *e)
 
 		case MOUSE_LEFT_RELEASED:
 			ctx_event_add( UI_BRICK_RELEASED); 
+			break;
+
+		case MOUSE_MIDDLE_PRESSED:
 			break;
 	}
 }

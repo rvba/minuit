@@ -42,6 +42,29 @@ void state_ui_block_trigger( t_context *C, t_event *e);
 void state_ui_default( t_context *C, t_event *e);
 void state_ui_motion( t_context *C, t_event *e);
 
+void ctx_ui_buffer_clear( t_context *C)
+{
+	bzero(&C->event->buffer_char[0],20);
+	C->event->buffer_char_counter=0;
+	C->event->ui.typing_start = 0;
+	C->event->ui.typing_end = 0;
+}
+
+void ctx_ui_log( const char *name)
+{
+	char msg[128];
+
+	t_context *C = ctx_get();
+	t_term *term = term_get( "term_state");
+
+	snprintf( msg, 128,"%d %s", C->app->frame, name);
+
+	if( term)
+	{
+		term_print( term, msg);
+	}
+}
+
 /*	**********************************
 	SELECTION
 	*********************************	*/
@@ -150,6 +173,7 @@ void ctx_ui_hover( t_context *C)
 	else
 	{
 		t_node *node = NULL;
+		/*
 		node = ctx_scene_hover( C, dt_object);
 		if( node)
 		{
@@ -158,6 +182,7 @@ void ctx_ui_hover( t_context *C)
 		}
 		else
 		{
+			*/
 			node = ctx_scene_hover( C, dt_brick);
 			if( node)
 			{
@@ -169,7 +194,9 @@ void ctx_ui_hover( t_context *C)
 				C->scene->hover = NULL;
 				C->scene->hover_type = dt_null;
 			}
+			/*
 		}
+		*/
 	}
 }
 
@@ -240,16 +267,17 @@ void ctx_ui_intro_stop( t_context *C)
 	C->ui->show_intro=0;
 }
 
-
 /*	**********************************
 	STATES
 	*********************************	*/
+
 
 
 // BLOCK MOTION
 
 void state_ui_block_motion( t_context *C, t_event *e)
 {
+	ctx_ui_log( "ui_block_motion");
 	t_brick *brick = ctx_ui_selection_get( C, dt_brick);
 
 	switch( e->type)
@@ -269,6 +297,7 @@ void state_ui_block_motion( t_context *C, t_event *e)
 
 void state_ui_block_trigger( t_context *C, t_event *e)
 {
+	ctx_ui_log( "ui_block_trigger");
 	if( e->type == UI_BLOCK_RELEASED)
 	{
 		ctx_ui_selection_release( C);
@@ -281,10 +310,47 @@ void state_ui_block_trigger( t_context *C, t_event *e)
 	}
 }
 
-// MOUSE RIGHT
+/*	**********************************
+	:LEFT
+	**********************************	*/
 
-void state_ui_mouse_right( t_context *C, t_event *e)
+void ctx_ui_brick_trigger( t_context *C)
 {
+	ctx_ui_block_select( C);
+	t_block *block = ctx_ui_selection_get( C, dt_block);
+	block->cls->dispatch( block);
+	UI_SWAP( C, state_ui_block_trigger);
+}
+
+void state_ui_mouse_left( t_context *C, t_event *e)
+{
+	ctx_ui_log( "ui_mouse_left");
+	if( !C->scene->selection)
+	{
+		switch( C->scene->hover_type)
+		{
+			case dt_brick: ctx_ui_brick_trigger( C); break;
+			default: UI_SWAP( C, state_ui_default); break;
+		}
+	}
+}
+
+void ctx_ui_left( t_context *C, t_event *e)
+{
+	UI_SWAP( C, state_ui_mouse_left);
+	C->ui->state( C, e);
+}
+
+
+/*	**********************************
+	:RIGHT
+	**********************************	*/
+
+
+void state_ui_mouse_right_motion( t_context *C, t_event *e)
+{
+	ctx_ui_log( "ui_mouse_right_motion");
+
 	if( C->scene->hover_type == dt_brick)
 	{
 		ctx_ui_hover_set_selection( C, dt_brick);
@@ -292,28 +358,48 @@ void state_ui_mouse_right( t_context *C, t_event *e)
 	}
 	else
 	{
-		if( e->type == MOUSE_RIGHT_RELEASED)
+		switch( e->type)
 		{
-			if(
-					( abs( C->ui->mouse_delta_x_last) < 5)
-				&& 	( abs( C->ui->mouse_delta_y_last) < 5)
-				)
-			{
-					CTX_ui_menu_show( C);
-					UI_SWAP( C, state_ui_block_trigger);
-			}
-			else
-			{
+			case MOUSE_RIGHT_RELEASED:
 				UI_SWAP( C, state_ui_default);
-			}
+				break;
 		}
 	}
 }
 
-// MOUSE LEFT
+// MOUSE RIGHT
 
-void state_ui_mouse_left( t_context *C, t_event *e)
+void state_ui_mouse_right( t_context *C, t_event *e)
 {
+	ctx_ui_log( "ui_mouse_right");
+	switch( e->type)
+	{
+		case MOUSE_MOTION: 
+			UI_SWAP( C, state_ui_mouse_right_motion);
+			break;
+
+		case MOUSE_RIGHT_RELEASED: 
+			CTX_ui_menu_show( C);
+			UI_SWAP( C, state_ui_block_trigger);
+			break;
+	}
+}
+
+void ctx_ui_right( t_context *C, t_event *e)
+{
+	UI_SWAP( C, state_ui_mouse_right);
+	C->ui->state( C, e);
+}
+
+
+
+
+
+// MOUSE MIDDLE
+
+void state_ui_mouse_middle( t_context *C, t_event *e)
+{
+	ctx_ui_log( "ui_mouse_middle");
 	switch( C->scene->hover_type)
 	{
 		case dt_brick:
@@ -334,6 +420,7 @@ void state_ui_mouse_left( t_context *C, t_event *e)
 
 void state_ui_intro( t_context *C, t_event *e)
 {
+	ctx_ui_log( "ui_intro");
 	switch( e->type)
 	{
 		case MOUSE_LEFT_PRESSED:
@@ -348,18 +435,25 @@ void state_ui_intro( t_context *C, t_event *e)
 	}
 }
 
+
 // DEFAULT
 
 void state_ui_default( t_context *C, t_event *e)
 {
+	ctx_ui_log( "ui_default");
 	switch( e->type)
 	{
 		case MOUSE_RIGHT_PRESSED: 
-			UI_SWAP( C, state_ui_mouse_right);
+			//UI_SWAP( C, state_ui_mouse_right);
+			ctx_ui_right( C, e);
 			break;
 
 		case MOUSE_LEFT_PRESSED: 
-			UI_SWAP( C, state_ui_mouse_left);
+			ctx_ui_left( C, e);
+			break;
+
+		case MOUSE_MIDDLE_PRESSED: 
+			UI_SWAP( C, state_ui_mouse_middle);
 			break;
 
 		default: break;

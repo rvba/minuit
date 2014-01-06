@@ -163,118 +163,84 @@ void event_add( t_main_event *main_event, t_screen *screen, int x, int y, int ty
 	lst_add( main_event->events, event, event->id.name);
 }
 
-void event_print( int state)
-{
-	switch( state)
-	{
-		case AKEY: printf("a"); break;
-		case BKEY: printf("b"); break;
-		case CKEY: printf("c"); break;
-		case DKEY: printf("d"); break;
-		case EKEY: printf("e"); break;
-		case FKEY: printf("f"); break;
-		case GKEY: printf("g"); break;
-		case HKEY: printf("h"); break;
-		case IKEY: printf("i"); break;
-		case JKEY: printf("j"); break;
-		case KKEY: printf("k"); break;
-		case LKEY: printf("l"); break;
-		case MKEY: printf("m"); break;
-		case NKEY: printf("n"); break;
-		case OKEY: printf("o"); break;
-		case PKEY: printf("p"); break;
-		case QKEY: printf("q"); break;
-		case RKEY: printf("r"); break;
-		case SKEY: printf("s"); break;
-		case TKEY: printf("t"); break;
-		case UKEY: printf("u"); break;
-		case VKEY: printf("v"); break;
-		case WKEY: printf("w"); break;
-		case XKEY: printf("x"); break;
-		case YKEY: printf("y"); break;
-		case ZKEY: printf("z"); break;
-
-		case UP_AKEY: printf("A"); break;
-		case UP_BKEY: printf("B"); break;
-		case UP_CKEY: printf("C"); break;
-		case UP_DKEY: printf("D"); break;
-		case UP_EKEY: printf("E"); break;
-		case UP_FKEY: printf("F"); break;
-		case UP_GKEY: printf("G"); break;
-		case UP_HKEY: printf("H"); break;
-		case UP_IKEY: printf("I"); break;
-		case UP_JKEY: printf("J"); break;
-		case UP_KKEY: printf("K"); break;
-		case UP_LKEY: printf("L"); break;
-		case UP_MKEY: printf("M"); break;
-		case UP_NKEY: printf("N"); break;
-		case UP_OKEY: printf("O"); break;
-		case UP_PKEY: printf("P"); break;
-		case UP_QKEY: printf("Q"); break;
-		case UP_RKEY: printf("R"); break;
-		case UP_SKEY: printf("S"); break;
-		case UP_TKEY: printf("T"); break;
-		case UP_UKEY: printf("U"); break;
-		case UP_VKEY: printf("V"); break;
-		case UP_WKEY: printf("W"); break;
-		case UP_XKEY: printf("X"); break;
-		case UP_YKEY: printf("Y"); break;
-		case UP_ZKEY: printf("Z"); break;
-
-		case STARKEY: printf("*"); break;
-		case DOTKEY: printf("."); break;
-		case F1KEY: printf("F1"); break;
-		case F2KEY: printf("F2"); break;
-		case F3KEY: printf("F3"); break;
-
-		case TABKEY: printf("TAB"); break;
-		case RETURNKEY: printf("RETURN"); break;
-		case BACKSPACEKEY: printf("BACKSPACE"); break;
-
-		case PADZERO: printf("PAD 0"); break;
-		case PADONE: printf("PAD 1"); break;
-		case PADTWO: printf("PAD 2"); break;
-		case PADTHREE: printf("PAD 3"); break;
-		case PADFOUR: printf("PAD 4"); break;
-		case PADFIVE: printf("PAD 5"); break;
-		case PADSIX: printf("PAD 6"); break;
-		case PADSEVEN: printf("PAD 7"); break;
-		case PADEIGHT: printf("PAD 8"); break;
-		case PADNINE: printf("PAD 9"); break;
-
-		case MOUSE_STATIC: printf("MOUSE STATIC"); break;
-		case MOUSE_MOTION_PASSIVE: printf("MOUSE MOTION PASSIVE"); break;
-		case MOUSE_MOTION: printf("MOUSE MOTION"); break;
-		case MOUSE_LEFT_PRESSED: printf("MOUSE BUTTON LEFT PRESSED"); break;
-		case MOUSE_LEFT_RELEASED: printf("MOUSE BUTTON LEFT RELEASED"); break;
-		case MOUSE_RIGHT_PRESSED: printf("MOUSE BUTTON RIGHT PRESSED"); break;
-		case MOUSE_RIGHT_RELEASED: printf("MOUSE BUTTON RIGHT RELEASED"); break;
-		case MOUSE_MIDDLE_PRESSED: printf("MOUSE BUTTON MIDDLE PRESSED"); break;
-		case MOUSE_MIDDLE_RELEASED: printf("MOUSE BUTTON MIDDLE RELEASED"); break;
-
-		case SHIFTKEY: printf("SHIFTKEY"); break;
-		case ALTKEY: printf("ALTKEY"); break;
-		case CTRLKEY: printf("CTRLKEY"); break;
-		default: printf("? %d", state); break;
-	}
-}
-
-void event_show( t_event *event)
-{
-	printf("event ");
-	event_print( event->type);
-	printf(" %d %d\n", event->x, event->y);
-}
-
-void event_free( t_event *event)
-{
-	mem_free( event, sizeof( t_event));
-}
-
-char *event_echo_name( t_event *e)
+char *event_name( t_event *e)
 {
 	switch( e->type)
 	{
+		case AKEY: return("a"); break;
+		case BKEY: return("b"); break;
+		case CKEY: return("c"); break;
+		case DKEY: return("d"); break;
+		case EKEY: return("e"); break;
+		case FKEY: return("f"); break;
+		case GKEY: return("g"); break;
+		case HKEY: return("h"); break;
+		case IKEY: return("i"); break;
+		case JKEY: return("j"); break;
+		case KKEY: return("k"); break;
+		case LKEY: return("l"); break;
+		case MKEY: return("m"); break;
+		case NKEY: return("n"); break;
+		case OKEY: return("o"); break;
+		case PKEY: return("p"); break;
+		case QKEY: return("q"); break;
+		case RKEY: return("r"); break;
+		case SKEY: return("s"); break;
+		case TKEY: return("t"); break;
+		case UKEY: return("u"); break;
+		case VKEY: return("v"); break;
+		case WKEY: return("w"); break;
+		case XKEY: return("x"); break;
+		case YKEY: return("y"); break;
+		case ZKEY: return("z"); break;
+
+		case UP_AKEY: return("A"); break;
+		case UP_BKEY: return("B"); break;
+		case UP_CKEY: return("C"); break;
+		case UP_DKEY: return("D"); break;
+		case UP_EKEY: return("E"); break;
+		case UP_FKEY: return("F"); break;
+		case UP_GKEY: return("G"); break;
+		case UP_HKEY: return("H"); break;
+		case UP_IKEY: return("I"); break;
+		case UP_JKEY: return("J"); break;
+		case UP_KKEY: return("K"); break;
+		case UP_LKEY: return("L"); break;
+		case UP_MKEY: return("M"); break;
+		case UP_NKEY: return("N"); break;
+		case UP_OKEY: return("O"); break;
+		case UP_PKEY: return("P"); break;
+		case UP_QKEY: return("Q"); break;
+		case UP_RKEY: return("R"); break;
+		case UP_SKEY: return("S"); break;
+		case UP_TKEY: return("T"); break;
+		case UP_UKEY: return("U"); break;
+		case UP_VKEY: return("V"); break;
+		case UP_WKEY: return("W"); break;
+		case UP_XKEY: return("X"); break;
+		case UP_YKEY: return("Y"); break;
+		case UP_ZKEY: return("Z"); break;
+
+		case STARKEY: return("*"); break;
+		case DOTKEY: return("."); break;
+		case F1KEY: return("F1"); break;
+		case F2KEY: return("F2"); break;
+		case F3KEY: return("F3"); break;
+
+		case TABKEY: return("TAB"); break;
+		case RETURNKEY: return("RETURN"); break;
+		case BACKSPACEKEY: return("BACKSPACE"); break;
+
+		case PADZERO: return("PAD 0"); break;
+		case PADONE: return("PAD 1"); break;
+		case PADTWO: return("PAD 2"); break;
+		case PADTHREE: return("PAD 3"); break;
+		case PADFOUR: return("PAD 4"); break;
+		case PADFIVE: return("PAD 5"); break;
+		case PADSIX: return("PAD 6"); break;
+		case PADSEVEN: return("PAD 7"); break;
+		case PADEIGHT: return("PAD 8"); break;
+		case PADNINE: return("PAD 9"); break;
 		case MOUSE_STATIC: 		return("MOUSE STATIC"); break;
 		case MOUSE_MOTION_PASSIVE: 	return("MOUSE MOTION PASSIVE"); break;
 		case MOUSE_MOTION: 		return("MOUSE MOTION"); break;
@@ -285,8 +251,25 @@ char *event_echo_name( t_event *e)
 		case MOUSE_MIDDLE_PRESSED: 	return("MOUSE BUTTON MIDDLE PRESSED"); break;
 		case MOUSE_MIDDLE_RELEASED: 	return("MOUSE BUTTON MIDDLE RELEASED"); break;
 
-		default: return("..");
+		case SHIFTKEY: return("SHIFTKEY"); break;
+		case ALTKEY: return("ALTKEY"); break;
+		case CTRLKEY: return("CTRLKEY"); break;
+
+		case UI_BRICK_RELEASED: return("UI_BRICK_RELEASED"); break;
+		case UI_BLOCK_RELEASED: return("UI_BLOCK_RELEASED"); break;
+
+		default: return("?");
 	}
+}
+
+void event_show( t_event *event)
+{
+	printf("%s %d %d\n", event_name( event), event->x, event->y);
+}
+
+void event_free( t_event *event)
+{
+	mem_free( event, sizeof( t_event));
 }
 
 void event_log( t_event *e)
@@ -296,7 +279,7 @@ void event_log( t_event *e)
 	t_context *C = ctx_get();
 	t_term *term = term_get( "term_event");
 
-	char *name = event_echo_name( e);
+	char *name = event_name( e);
 	snprintf( msg, 128,"%d %s", C->app->frame, name);
 
 	if( term)

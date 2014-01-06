@@ -159,4 +159,8 @@ int ctx_mouse_hover_brick_plug_in( struct Context *C, struct Brick *brick);
 int ctx_mouse_hover_brick_plug_out( struct Context *C, struct Brick *brick);
 int ctx_mouse_hover_brick( struct Context *C, struct Brick *brick);
 
+void ctx_ui_log( const char *name);
+
+void ctx_ui_buffer_clear( struct Context *C);
+
 #endif 

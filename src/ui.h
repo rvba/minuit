@@ -57,8 +57,6 @@
 #define UI_HOVER_BRICK 3
 #define UI_HOVER_NOTHING 4
 
-#define UI_BRICK_RELEASED 1100
-#define UI_BLOCK_RELEASED 1200
 
 float intro_intensity;
 
