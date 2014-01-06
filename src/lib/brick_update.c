@@ -735,9 +735,11 @@ void cls_brick_update(t_brick *brick)
 
 
 
-
-
-
+void brick_do_delete( t_brick *brick)
+{
+	ctx_event_add( BLOCK_DELETE);
+	BRICK_SWAP( brick, state_brick_default);
+}
 
 void brick_hover_set( t_brick *brick)
 {
@@ -877,6 +879,9 @@ void state_brick_slider_default( t_brick *brick, t_event *e)
 		case MOUSE_MIDDLE_PRESSED:
 			brick_hover_set( brick);
 			BRICK_SWAP( brick, state_brick_slider_trigger);
+			break;
+		case DKEY:
+			brick_do_delete( brick);
 			break;
 	}
 }

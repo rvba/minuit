@@ -18,6 +18,10 @@
 #include "scene.h"
 #include "node.h"
 #include "app.h"
+#include "action.h"
+#include "dict.h"
+#include "set.h"
+#include "op.h"
 
 // [block] brick->menu 		=> pointing to another block-menu 
 // [brick] block->submenu 	=> submenu selection
@@ -193,21 +197,6 @@ void block_submenu_update( t_block *block)
 	TRIGGER 
 	**********************************	*/
 
-void block_menu_trigger( t_context *C, t_block *block)
-{
-	t_brick *brick = block_brick_hover( C);
-	block->_selected = brick;
-	brick->cls->dispatch( brick); 
-	BLOCK_SWAP( block, state_block_menu_brick_trigger);
-}
-
-void block_brick_trigger( t_context *C, t_block *block)
-{
-	t_brick *brick = block_brick_hover( C);
-	block->_selected = brick;
-	brick->cls->dispatch( brick); 
-	BLOCK_SWAP( block, state_block_brick_trigger);
-}
 
 void state_block_brick_trigger( t_block *block, t_event *e)
 {
@@ -222,6 +211,22 @@ void state_block_brick_trigger( t_block *block, t_event *e)
 	{
 		brick->cls->dispatch( brick); 
 	}
+}
+
+void block_menu_trigger( t_context *C, t_block *block)
+{
+	t_brick *brick = block_brick_hover( C);
+	block->_selected = brick;
+	brick->cls->dispatch( brick); 
+	BLOCK_SWAP( block, state_block_menu_brick_trigger);
+}
+
+void block_brick_trigger( t_context *C, t_block *block)
+{
+	t_brick *brick = block_brick_hover( C);
+	block->_selected = brick;
+	brick->cls->dispatch( brick); 
+	BLOCK_SWAP( block, state_block_brick_trigger);
 }
 
 /*	**********************************
@@ -379,9 +384,31 @@ void state_block_move( t_block *block, t_event *e)
 	}
 }
 
+void ctx_ui_plug_out( t_context *C, t_block *block, t_brick *brick, t_event *e)
+{
+	t_plug *plug = &brick->plug_out;
+	switch( e->type)
+	{
+		case	OKEY:
+		    	plug->state.flow_out = switch_int(plug->state.flow_out);
+			BLOCK_SWAP( block, state_block_default);
+			ctx_event_add( UI_BLOCK_RELEASED);
+			break;
+	}
+
+}
+
 /*	**********************************
 	:DEFAULT
 	**********************************	*/
+
+void block_brick_delete( t_block *block, t_brick *brick)
+{
+	t_context *C = ctx_get();
+
+	block->_selected = brick;
+	 block_brick_trigger( C, block);
+}
 
 void state_block_default( t_block *block, t_event *e)
 {
@@ -401,6 +428,11 @@ void state_block_default( t_block *block, t_event *e)
 		t_brick *brick = ctx_ui_hover_get( C, dt_brick);
 		if( brick)
 		{
+			if( e->type == DKEY)
+			{
+				block_brick_delete( block, brick);
+			}
+
 			if( e->type == MOUSE_RIGHT_PRESSED)
 			{
 				BLOCK_SWAP( block, state_block_move);
@@ -412,6 +444,11 @@ void state_block_default( t_block *block, t_event *e)
 					if(  e->type == MOUSE_LEFT_PRESSED)
 					{
 						block_connect_start( C, block, brick, e);
+					}
+
+					if( EVENT_KEYBOARD( e->type))
+					{
+						ctx_ui_plug_out( C, block, brick, e);
 					}
 				}
 				else if( ctx_mouse_hover_brick_plug_in( C, brick))

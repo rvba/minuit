@@ -30,6 +30,94 @@
 #include "op.h"
 #include "clock.h"
 
+#include "action.h"
+#include "dict.h"
+#include "set.h"
+#include "op.h"
+
+void block_delete(t_action *action)
+{
+	t_context *C = ctx_get();
+	t_dict *args = action->args;
+
+	t_brick *brick = dict_pop_data(args,"brick");
+	t_block *block = brick->block;
+
+	if(!block_is_connected("in",block) && !block_is_connected("out",block))
+	{
+		//t_lst *lst = get_target_list(C);
+		t_set *set = get_current_set(C);
+		t_lst *lst = set->blocks;
+
+		list_remove_by_ptr(lst,block);
+		scene_delete(C->scene,block);
+	}
+}
+
+void block_do_delete( t_block *block)
+{
+	t_action *action = action_new("action");
+	t_brick *brick = block->_selected;
+
+	action->act = block_delete;
+
+	t_dict *dict = dict_make("args");
+	action->args = dict;
+	action->brick = brick;
+
+	dict_symbol_add( action->args, "brick", dt_null, brick);
+
+	exe_add_action(action);
+}
+
+// EXE
+
+t_lst *EXE=NULL;
+
+int action_check( t_action *action)
+{
+	t_brick *brick = action->brick;
+	t_set *set = brick->block->set;
+	if(set->processing) return 0;
+	else return 1;
+}
+
+void ctx_ui_exe(t_context *C)
+{
+	t_link *l;
+	t_action *action;
+
+	t_lst *tmp = lst_copy( EXE);
+	lst_cleanup(EXE);
+
+	for(l=tmp->first;l;l=l->next)
+	{
+		action = l->data;
+		if( action_check( action))
+		{
+			action->act(action);
+			action_free(action);
+		}
+		else
+		{
+			exe_add_action( action);
+		}
+	}
+
+	lst_free( tmp);
+}
+
+void exe_init( void)
+{
+	EXE=lst_new("exe");
+}
+
+void exe_add_action(t_action *action)
+{
+	lst_add(EXE,action,"action");
+}
+
+
 /*	**********************************
 	DECLARATIONS
 	*********************************	*/
@@ -325,6 +413,13 @@ void state_ui_block_trigger( t_context *C, t_event *e)
 		ctx_ui_selection_release( C);
 		UI_SWAP( C, state_ui_default);
 	}
+	else if( e->type == BLOCK_DELETE)
+	{
+		t_block *block = ctx_ui_selection_get( C, dt_block);
+		block_do_delete( block);
+		ctx_ui_selection_release( C);
+		UI_SWAP( C, state_ui_default);
+	}
 	else
 	{
 		t_block *block = ctx_ui_selection_get( C, dt_block);
@@ -469,6 +564,21 @@ void state_ui_intro( t_context *C, t_event *e)
 }
 
 /*	**********************************
+	:KEYBOARD
+	**********************************	*/
+
+void ctx_ui_keyboard( t_context *C, t_event *e)
+{
+	ctx_ui_log( "ui_keyboard");
+	if( C->scene->hover_type == dt_brick)
+	{
+		ctx_ui_block_trigger( C);
+	}
+}
+
+
+
+/*	**********************************
 	:DEFAULT
 	*********************************	*/
 
@@ -490,6 +600,11 @@ void state_ui_default( t_context *C, t_event *e)
 			break;
 
 		default: break;
+	}
+
+	if( EVENT_KEYBOARD( e->type))
+	{
+		ctx_ui_keyboard( C, e);
 	}
 }
 
@@ -534,11 +649,13 @@ void ctx_ui(t_context *C)
 	ctx_ui_mouse( C);
 	ctx_ui_hover( C);
 	ctx_ui_dispatch( C);
+	ctx_ui_exe( C);
 }
 
 void ctx_ui_init( t_context *C)
 {
 	C->ui->state = state_ui_intro;
+	exe_init();
 }
 
 
