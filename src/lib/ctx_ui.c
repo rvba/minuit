@@ -574,6 +574,7 @@ void ctx_ui_keyboard( t_context *C, t_event *e)
 	{
 		ctx_ui_block_trigger( C);
 	}
+
 }
 
 
@@ -650,6 +651,11 @@ void ctx_ui(t_context *C)
 	ctx_ui_hover( C);
 	ctx_ui_dispatch( C);
 	ctx_ui_exe( C);
+
+	if(C->event->color_transition_use && C->event->color_transition)
+	{
+		op_set_color(C,2);
+	}
 }
 
 void ctx_ui_init( t_context *C)
