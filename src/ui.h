@@ -91,6 +91,7 @@ typedef struct Ui
 	int mouse_delta_x_last;
 	int mouse_delta_y_last;
 	int mouse_drag;
+	int mouse_right_pressed;
 
 	// KEYBOARD
 	int key_shift;

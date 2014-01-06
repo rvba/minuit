@@ -22,6 +22,13 @@
 #include "graph.h"
 #include "memory.h"
 
+void block_get_center( t_block *block, float *v)
+{
+	float width = block->width;
+	float height = block->height;
+	vset( v, width / 2, height / 2, 0);
+}
+
 // Reset Update State
 void block_reset(t_block *block)
 {

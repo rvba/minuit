@@ -208,29 +208,6 @@ void block_brick_trigger( t_context *C, t_block *block)
 	BLOCK_SWAP( block, state_block_brick_trigger);
 }
 
-
-/*	**********************************
-	STATES 
-	**********************************	*/
-
-// EXIT
-
-void state_block_exit( t_block *block, t_event *e)
-{
-	if( e->type == MOUSE_RIGHT_RELEASED)
-	{
-		block_menu_close( block);
-	}
-}
-
-
-/*	**********************************
-	STATES DEFAULT
-	**********************************	*/
-
-
-// BRICK TRIGGER
-
 void state_block_brick_trigger( t_block *block, t_event *e)
 {
 	ctx_ui_log( "block_brick_trigger");
@@ -246,6 +223,23 @@ void state_block_brick_trigger( t_block *block, t_event *e)
 	}
 }
 
+/*	**********************************
+	:EXIT 
+	**********************************	*/
+
+void state_block_exit( t_block *block, t_event *e)
+{
+	if( e->type == MOUSE_RIGHT_RELEASED)
+	{
+		block_menu_close( block);
+	}
+}
+
+/*	**********************************
+	:LINKING
+	**********************************	*/
+
+
 void state_brick_linking( t_block *block, t_event *e)
 {
 	ctx_ui_log( "block_brick_linking");
@@ -258,46 +252,97 @@ void state_brick_linking( t_block *block, t_event *e)
 	}
 }
 
-// DEFAULT
+/*	**********************************
+	:MOVE
+	**********************************	*/
+
+void state_block_move( t_block *block, t_event *e)
+{
+	ctx_ui_log( "block_move");
+
+	float mouse[3];
+	float center[3];
+	float vector[3];
+
+	t_context *C = ctx_get();
+
+	ctx_get_mouse_pos(C,mouse);
+	block_get_center( block, center);
+
+	vsub( vector, mouse, center);
+
+	vcp( block->pos, vector);
+
+	switch( e->type)
+	{
+		case MOUSE_RIGHT_RELEASED:
+			BLOCK_SWAP( block, state_block_default);
+			ctx_event_add( UI_BLOCK_RELEASED);
+			break;
+	}
+}
+
+/*	**********************************
+	:DEFAULT
+	**********************************	*/
 
 void state_block_default( t_block *block, t_event *e)
 {
 	ctx_ui_log( "block_default");
 	t_context *C = ctx_get();
 
-	t_brick *brick = ctx_ui_hover_get( C, dt_brick);
-	if( brick)
+	if( e->type == MOUSE_RIGHT_PRESSED)
 	{
-		if( ctx_mouse_hover_brick_plug_out( C, brick))
+		BLOCK_SWAP( block, state_block_move);
+	}
+	else if( e->type == UI_BLOCK_MOVE)
+	{
+		BLOCK_SWAP( block, state_block_move);
+	}
+	else
+	{
+		t_brick *brick = ctx_ui_hover_get( C, dt_brick);
+		if( brick)
 		{
-			if( e->type == MOUSE_LEFT_PRESSED)
+			if( e->type == MOUSE_RIGHT_PRESSED)
 			{
-				BLOCK_SWAP( block, state_brick_linking);
+				BLOCK_SWAP( block, state_block_move);
 			}
-		}
-		else
-		{
-			switch( e->type)
+			else
 			{
-				case MOUSE_LEFT_PRESSED:
-					block_brick_trigger( C, block);
-					break;
+				if( ctx_mouse_hover_brick_plug_out( C, brick))
+				{
+					switch( e->type)
+					{
+						case MOUSE_LEFT_PRESSED:
+							BLOCK_SWAP( block, state_brick_linking);
+							break;
+					}
+				}
+				else
+				{
+					switch( e->type)
+					{
+						case MOUSE_LEFT_PRESSED:
+							block_brick_trigger( C, block);
+							break;
 
-				case MOUSE_MIDDLE_PRESSED:
-					block_brick_trigger( C, block);
-					break;
+						case MOUSE_MIDDLE_PRESSED:
+							block_brick_trigger( C, block);
+							break;
 
-				default:
-					break;
+						default:
+							break;
+					}
+				}
 			}
 		}
 	}
 }
 
 /*	**********************************
-	STATES MENU
+	:MENU
 	**********************************	*/
-
 
 // MENU BRICK TRIGGER
 

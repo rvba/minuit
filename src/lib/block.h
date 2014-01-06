@@ -163,6 +163,7 @@ void 		block_exec(t_block *block);
 //void 		block_brick_trigger(struct Plug *plug);
 
 void 		_block_free(t_block *block);
+void block_get_center( t_block *block, float *v);
 
 #endif
 

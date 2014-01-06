@@ -136,7 +136,8 @@ struct MINscreen;
 #define EVENT_MOUSE( event) ( event >= MOUSE_START && event <= MOUSE_END)
 
 #define UI_BRICK_RELEASED 1100
-#define UI_BLOCK_RELEASED 1200
+#define UI_BLOCK_MOVE 		1101
+#define UI_BLOCK_RELEASED 	1200
 
 
 typedef enum EventState

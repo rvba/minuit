@@ -29,10 +29,6 @@
 #include "rhizome.h"
 #include "op.h"
 
-int _is_vec_stored=0;
-float v[3];
-float vec[3];
-
 /*	**********************************
 	DECLARATIONS
 	*********************************	*/
@@ -41,6 +37,8 @@ float vec[3];
 void state_ui_block_trigger( t_context *C, t_event *e);
 void state_ui_default( t_context *C, t_event *e);
 void state_ui_motion( t_context *C, t_event *e);
+
+void ctx_ui_block_trigger( t_context *C);
 
 void ctx_ui_buffer_clear( t_context *C)
 {
@@ -201,31 +199,34 @@ void ctx_ui_hover( t_context *C)
 }
 
 /*	**********************************
-	OPERATORS
+	:OPERATORS
 	*********************************	*/
 
-
-void ctx_ui_brick_move( t_context *C, t_brick *brick)
+void ctx_events_swap( t_context *C)
 {
-	t_block *block = brick->block;
-	float mouse_pos[2];
+	ctx_event_cleanup( C->event->events_swap);
+	lst_dupli( C->event->events_swap, C->event->events);
+}
 
-	float *block_pos=block->pos;
-	ctx_get_mouse_pos(C,mouse_pos);
+void ctx_ui_mouse( t_context *C)
+{
+	t_link *l;
+	t_event *e;
+	t_ui *ui = C->ui;
 
-	if(!_is_vec_stored)
+	for(l=C->event->events->first;l;l=l->next)
 	{
-		_is_vec_stored=1;
-		vsub(vec,block_pos,mouse_pos);
+		e = l->data;
+		switch( e->type)
+		{
+			case MOUSE_RIGHT_PRESSED:
+				ui->mouse_right_pressed = 1;
+				break;
+			case MOUSE_RIGHT_RELEASED:
+				ui->mouse_right_pressed = 0;
+				break;
+		}
 	}
-	else
-	{
-		vadd(v,mouse_pos,vec);
-		vcp(block_pos,v);
-	}
-
-	vadd(v,mouse_pos,vec);
-	vcp(block_pos,v);
 }
 
 void CTX_ui_menu_show( t_context *C)
@@ -268,32 +269,9 @@ void ctx_ui_intro_stop( t_context *C)
 }
 
 /*	**********************************
-	STATES
+	:TRIGGER
 	*********************************	*/
 
-
-
-// BLOCK MOTION
-
-void state_ui_block_motion( t_context *C, t_event *e)
-{
-	ctx_ui_log( "ui_block_motion");
-	t_brick *brick = ctx_ui_selection_get( C, dt_brick);
-
-	switch( e->type)
-	{
-		case MOUSE_MOTION:
-			ctx_ui_brick_move( C, brick);
-			break;
-		case MOUSE_RIGHT_RELEASED:
-			ctx_ui_selection_release( C);
-			_is_vec_stored = 0;
-			UI_SWAP( C, state_ui_default); 
-			break;
-	}
-}
-
-// TRIGGER
 
 void state_ui_block_trigger( t_context *C, t_event *e)
 {
@@ -310,11 +288,7 @@ void state_ui_block_trigger( t_context *C, t_event *e)
 	}
 }
 
-/*	**********************************
-	:LEFT
-	**********************************	*/
-
-void ctx_ui_brick_trigger( t_context *C)
+void ctx_ui_block_trigger( t_context *C)
 {
 	ctx_ui_block_select( C);
 	t_block *block = ctx_ui_selection_get( C, dt_block);
@@ -322,80 +296,9 @@ void ctx_ui_brick_trigger( t_context *C)
 	UI_SWAP( C, state_ui_block_trigger);
 }
 
-void state_ui_mouse_left( t_context *C, t_event *e)
-{
-	ctx_ui_log( "ui_mouse_left");
-	if( !C->scene->selection)
-	{
-		switch( C->scene->hover_type)
-		{
-			case dt_brick: ctx_ui_brick_trigger( C); break;
-			default: UI_SWAP( C, state_ui_default); break;
-		}
-	}
-}
-
-void ctx_ui_left( t_context *C, t_event *e)
-{
-	UI_SWAP( C, state_ui_mouse_left);
-	C->ui->state( C, e);
-}
-
-
 /*	**********************************
-	:RIGHT
+	:MIDDLE
 	**********************************	*/
-
-
-void state_ui_mouse_right_motion( t_context *C, t_event *e)
-{
-	ctx_ui_log( "ui_mouse_right_motion");
-
-	if( C->scene->hover_type == dt_brick)
-	{
-		ctx_ui_hover_set_selection( C, dt_brick);
-		UI_SWAP( C, state_ui_block_motion);
-	}
-	else
-	{
-		switch( e->type)
-		{
-			case MOUSE_RIGHT_RELEASED:
-				UI_SWAP( C, state_ui_default);
-				break;
-		}
-	}
-}
-
-// MOUSE RIGHT
-
-void state_ui_mouse_right( t_context *C, t_event *e)
-{
-	ctx_ui_log( "ui_mouse_right");
-	switch( e->type)
-	{
-		case MOUSE_MOTION: 
-			UI_SWAP( C, state_ui_mouse_right_motion);
-			break;
-
-		case MOUSE_RIGHT_RELEASED: 
-			CTX_ui_menu_show( C);
-			UI_SWAP( C, state_ui_block_trigger);
-			break;
-	}
-}
-
-void ctx_ui_right( t_context *C, t_event *e)
-{
-	UI_SWAP( C, state_ui_mouse_right);
-	C->ui->state( C, e);
-}
-
-
-
-
-
-// MOUSE MIDDLE
 
 void state_ui_mouse_middle( t_context *C, t_event *e)
 {
@@ -416,7 +319,93 @@ void state_ui_mouse_middle( t_context *C, t_event *e)
 	}
 }
 
-// INTRO
+void ctx_ui_middle( t_context *C, t_event *e)
+{
+	UI_SWAP( C, state_ui_mouse_middle);
+	C->ui->state( C, e);
+}
+
+/*	**********************************
+	:LEFT
+	**********************************	*/
+
+void state_ui_mouse_left( t_context *C, t_event *e)
+{
+	ctx_ui_log( "ui_mouse_left");
+	if( !C->scene->selection)
+	{
+		switch( C->scene->hover_type)
+		{
+			case dt_brick: ctx_ui_block_trigger( C); break;
+			default: UI_SWAP( C, state_ui_default); break;
+		}
+	}
+}
+
+void ctx_ui_left( t_context *C, t_event *e)
+{
+	UI_SWAP( C, state_ui_mouse_left);
+	C->ui->state( C, e);
+}
+
+
+/*	**********************************
+	:RIGHT
+	**********************************	*/
+
+void state_ui_mouse_right_motion( t_context *C, t_event *e)
+{
+	ctx_ui_log( "ui_mouse_right_motion");
+
+	if( C->scene->hover_type == dt_brick)
+	{
+		ctx_event_add( UI_BLOCK_MOVE);
+		ctx_ui_block_trigger( C);
+	}
+	else
+	{
+		switch( e->type)
+		{
+			case MOUSE_RIGHT_RELEASED:
+				UI_SWAP( C, state_ui_default);
+				break;
+		}
+	}
+}
+
+void state_ui_mouse_right( t_context *C, t_event *e)
+{
+	ctx_ui_log( "ui_mouse_right");
+
+	if( C->scene->hover_type == dt_brick)
+	{
+		ctx_ui_block_trigger( C);
+	}
+	else
+	{
+		switch( e->type)
+		{
+			case MOUSE_MOTION: 
+				UI_SWAP( C, state_ui_mouse_right_motion);
+				break;
+			case MOUSE_RIGHT_RELEASED:
+				CTX_ui_menu_show( C);
+				UI_SWAP( C, state_ui_block_trigger); 
+				break;
+		}
+				
+	}
+}
+
+void ctx_ui_right( t_context *C, t_event *e)
+{
+	UI_SWAP( C, state_ui_mouse_right);
+	C->ui->state( C, e);
+}
+
+/*	**********************************
+	:RIGHT
+	**********************************	*/
 
 void state_ui_intro( t_context *C, t_event *e)
 {
@@ -435,8 +424,9 @@ void state_ui_intro( t_context *C, t_event *e)
 	}
 }
 
-
-// DEFAULT
+/*	**********************************
+	:DEFAULT
+	*********************************	*/
 
 void state_ui_default( t_context *C, t_event *e)
 {
@@ -444,7 +434,6 @@ void state_ui_default( t_context *C, t_event *e)
 	switch( e->type)
 	{
 		case MOUSE_RIGHT_PRESSED: 
-			//UI_SWAP( C, state_ui_mouse_right);
 			ctx_ui_right( C, e);
 			break;
 
@@ -453,25 +442,16 @@ void state_ui_default( t_context *C, t_event *e)
 			break;
 
 		case MOUSE_MIDDLE_PRESSED: 
-			UI_SWAP( C, state_ui_mouse_middle);
+			ctx_ui_middle( C, e);
 			break;
 
 		default: break;
 	}
 }
 
-
 /*	**********************************
-	DISPATCH
+	:DISPATCH
 	*********************************	*/
-
-
-void ctx_events_swap( t_context *C)
-{
-	ctx_event_cleanup( C->event->events_swap);
-	lst_dupli( C->event->events_swap, C->event->events);
-}
-
 
 void ctx_ui_dispatch( t_context *C)
 {
@@ -489,8 +469,13 @@ void ctx_ui_dispatch( t_context *C)
 	}
 }
 
+/*	**********************************
+	:CTX_UI
+	*********************************	*/
+
 void ctx_ui(t_context *C)
 {
+	ctx_ui_mouse( C);
 	ctx_ui_hover( C);
 	ctx_ui_dispatch( C);
 }
@@ -498,6 +483,7 @@ void ctx_ui(t_context *C)
 void ctx_ui_init( t_context *C)
 {
 	C->ui->state = state_ui_intro;
+	C->ui->show_term = 1;
 }
 
 
