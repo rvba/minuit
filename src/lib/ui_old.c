@@ -29,23 +29,6 @@
 #include "rhizome.h"
 #include "op.h"
 
-void ctx_ui_freeze(t_context *C)
-{
-	if(C->ui->update_links) C->ui->update_links = 0;
-	else C->ui->update_links = 1;
-}
-
-void ctx_ui_switch_show_step(t_context *C)
-{
-}
-
-void ctx_ui_switch_show_states(t_context *C)
-{
-	if(C->ui->show_states)
-		C->ui->show_states = 0;
-	else
-		C->ui->show_states = 1;
-}
 
 void ctx_ui_menu_hide(t_context *C)
 {

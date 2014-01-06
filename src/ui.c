@@ -85,28 +85,34 @@ void ui_draw_mouse(void)
 
 // LINES
 
-void ui_draw_lines(void)
+void ui_draw_lines( t_context *C)
 {
-	t_context *C=ctx_get();
-	if(C->event->is_drawing && C->draw->mode==mode_draw)
-	{
-		C->event->ui.use_line_global_width = 0;
-		float start[3] = {
-				(float)C->event->start_x,
-				(float)C->event->start_y,
-				0
-				};
+	C->event->ui.use_line_global_width = 0;
 
-		float end[3] = {
-				(float)C->event->end_x ,
-				(float)C->event->end_y ,
-				0
-				};
+	op_camera_switch_2d(C,C->ui->camera);
 
-		float *color=C->ui->front_color;
-		skt_line(start,end,1,color);
-		C->event->ui.use_line_global_width = 1;
-	}
+	glPushMatrix();
+	glLoadIdentity();
+
+	float start[3] = {
+			(float)C->event->start_x,
+			(float)C->event->start_y,
+			0
+			};
+
+	float end[3] = {
+			(float)C->event->end_x ,
+			(float)C->event->end_y ,
+			0
+			};
+
+	float *color=C->ui->front_color;
+	//float color[3] = {1,1,1};
+	skt_line(start,end,1,color);
+	C->event->ui.use_line_global_width = 1;
+
+
+	glPopMatrix();
 }
 
 // GRID
@@ -392,6 +398,9 @@ void ui_draw(void)
 		ui_draw_icon_freeze(C);
 	}
 
+	// Link
+	if( C->ui->draw_link) ui_draw_lines( C); 
+
 	C->event->ui.use_point_global_width = 1;
 	C->event->ui.use_line_global_width = 1;
 	C->event->ui.use_point_global_width = 1;
@@ -448,6 +457,8 @@ t_ui *ui_new(void)
 	t_ui *ui = (t_ui *)mem_malloc(sizeof(t_ui));
 
 	ui->show_plug_state = 1;
+
+	ui->draw_link = 0;
 
 	ui->show_intro=UI_SHOW_INTRO;
 	ui->show_intro_always=0;

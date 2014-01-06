@@ -27,6 +27,7 @@ void state_block_menu_default( t_block *block, t_event *e);
 void state_block_menu_hover_menu( t_block *block, t_event *e);
 void state_block_menu_brick_trigger( t_block *block, t_event *e);
 void state_block_brick_trigger( t_block *block, t_event *e);
+void state_block_disconnect( t_block *block, t_event *e);
 
 
 t_brick *block_brick_hover( t_context *C)
@@ -240,15 +241,111 @@ void state_block_exit( t_block *block, t_event *e)
 	**********************************	*/
 
 
+void block_linking_stop( t_context *C, t_block *block)
+{
+	C->ui->draw_link = 0;
+	BLOCK_SWAP( block, state_block_default);
+	block->_selected = NULL;
+	ctx_event_add( UI_BLOCK_RELEASED);
+}
+
+void block_connect( t_context *C, t_block *block, t_brick *brick)
+{
+	if( ctx_mouse_hover_brick_plug_in( C, brick))
+	{
+		_cls_brick_connect( brick, block->_selected);
+	}
+
+	block_linking_stop( C, block);
+}
+
 void state_brick_linking( t_block *block, t_event *e)
 {
 	ctx_ui_log( "block_brick_linking");
+	t_context *C = ctx_get();
+
+	C->event->end_x = e->x;
+	C->event->end_y = e->y;
+
+	t_brick *brick = ctx_ui_hover_get( C, dt_brick);
+
+	if( brick)
+	{
+		switch( e->type)
+		{
+			case MOUSE_LEFT_RELEASED:
+				block_connect( C, block, brick);
+				break;
+		}
+	}
+	else
+	{
+		switch( e->type)
+		{
+			case MOUSE_LEFT_RELEASED:
+				block_linking_stop( C, block);
+				break;
+		}
+	}
+}
+
+void block_connect_start( t_context *C, t_block *block, t_brick *brick, t_event *e)
+{
+	C->ui->draw_link = 1;
+	C->event->start_x = e->x;
+	C->event->start_y = e->y;
+	C->event->end_x = e->x;
+	C->event->end_y = e->y;
+
+	block->_selected = brick;
+	BLOCK_SWAP( block, state_brick_linking);
+}
+
+/*	**********************************
+	:DISCONNECT
+	**********************************	*/
+
+void state_block_disconnect( t_block *block, t_event *e)
+{
+	ctx_ui_log( "block_disconnect");
+
+	t_context *C = ctx_get();
+
+	C->event->start_x = e->x;
+	C->event->start_y = e->y;
+
 	switch( e->type)
 	{
 		case MOUSE_LEFT_RELEASED:
-			BLOCK_SWAP( block, state_block_default);
-			ctx_event_add( UI_BLOCK_RELEASED);
+			block_linking_stop( C, block);
 			break;
+	}
+}
+
+
+void block_disconnect( t_context *C, t_block *block, t_brick *brick, t_event *e)
+{
+	t_brick *brick_target = brick->plug_in.src->brick;
+
+	if( brick_target)
+	{
+		float plug_pos[3];
+		t_block *block_target = brick_target->block;
+		block_get_pos_plug_out( block_target, brick_target, plug_pos);
+
+		C->ui->draw_link = 1;
+
+		C->event->start_x = e->x;
+		C->event->start_y = e->y;
+
+		C->event->end_x = plug_pos[0];
+		C->event->end_y = plug_pos[1];
+
+		block->_selected = brick;
+
+		_cls_brick_disconnect( brick);
+
+		BLOCK_SWAP( block, state_block_disconnect);
 	}
 }
 
@@ -312,11 +409,16 @@ void state_block_default( t_block *block, t_event *e)
 			{
 				if( ctx_mouse_hover_brick_plug_out( C, brick))
 				{
-					switch( e->type)
+					if(  e->type == MOUSE_LEFT_PRESSED)
 					{
-						case MOUSE_LEFT_PRESSED:
-							BLOCK_SWAP( block, state_brick_linking);
-							break;
+						block_connect_start( C, block, brick, e);
+					}
+				}
+				else if( ctx_mouse_hover_brick_plug_in( C, brick))
+				{
+					if(  e->type == MOUSE_LEFT_PRESSED)
+					{
+						block_disconnect( C, block, brick, e);
 					}
 				}
 				else

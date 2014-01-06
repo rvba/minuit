@@ -218,7 +218,7 @@ void screen_sets(t_screen *screen)
 
 	ui_draw_mouse();
 	op_camera_switch_2d(C,camera);
-	ui_draw_lines();
+	//ui_draw_lines();
 	ui_draw_term();
 	ui_draw_grid();
 

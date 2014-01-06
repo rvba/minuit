@@ -118,33 +118,20 @@ void _cls_brick_connect(t_brick *brick_in ,t_brick *brick_out)
 
 void _cls_brick_disconnect(t_brick *self)
 {
-	t_context *C=ctx_get();
+	t_brick *brick_in = self;
+	t_plug *plug_target = brick_in->plug_in.src;
+	if( plug_target)
+	{
+		t_brick *brick_out = plug_target->brick;
+		t_plug *plug_out = &brick_out->plug_intern;
+		t_plug *plug_in = &brick_in->plug_intern;
 
-	C->event->state=event_unlinking;
+		plug_out->cls->disconnect(mode_out ,plug_out);
+		plug_in->cls->disconnect(mode_in , plug_in);
 
-	t_brick *brick_in=C->ui->brick_in;
-
-	t_plug *plug_in=&brick_in->plug_in;
-	t_plug *plug_target=plug_in->src;
-	t_brick *brick_out=plug_target->brick;
-
-	t_plug *plug_intern_in = &brick_in->plug_intern;
-	t_plug *plug_intern_out = &brick_out->plug_intern;
-
-	plug_intern_out->cls->disconnect(mode_out ,plug_intern_out);
-	plug_intern_in->cls->disconnect(mode_in , plug_intern_in);
-
-	// Split Graph
-	brick_rhizome_split(brick_in, brick_out);
-
-	// change modes
-	self->mode=bm_idle;
-	brick_out->mode=bm_linking;
-
-	// keep out
-	C->ui->brick_out=brick_out;
-	// remove in
-	C->ui->brick_in=NULL;
+		// Split Graph
+		brick_rhizome_split(brick_in, brick_out);
+	}
 }
 
 void cls_brick_disconnect(t_brick *self)

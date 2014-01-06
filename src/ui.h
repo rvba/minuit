@@ -66,6 +66,7 @@ struct Event;
 typedef struct Ui
 {
 	int draw; 		// draw the ui
+	int draw_link;
 	int update_links;	// compte sets
 	int bitrate;
 	int do_connect;
@@ -176,7 +177,6 @@ void ui_reboot(void);
 
 void ui_draw_rhizomes(void);
 void ui_draw_intro(void);
-void ui_draw_lines(void);
 void ui_draw_menu(void);
 void ui_draw_blocks(void);
 void ui_draw_debug(void);

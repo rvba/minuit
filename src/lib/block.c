@@ -22,6 +22,24 @@
 #include "graph.h"
 #include "memory.h"
 
+void block_get_pos_plug_out( t_block *block, t_brick *brick, float *v)
+{
+	float pos_x = block->pos[0];
+	float pos_y = block->pos[1];
+
+	float plug_width = brick->geom.height;
+	float brick_width = brick->geom.width;
+	int pos = brick->geom.block_pos;
+
+	float x = pos_x + brick_width ;
+	float y = pos_y + ((pos + 1) * plug_width) - ( plug_width / 2);
+	float z = 0;
+
+	v[0] = x;
+	v[1] = y;
+	v[2] = z;
+}
+
 void block_get_center( t_block *block, float *v)
 {
 	float width = block->width;
