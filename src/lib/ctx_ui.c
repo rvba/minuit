@@ -32,8 +32,6 @@
 #include "action.h"
 #include "dict.h"
 #include "set.h"
-#include "op.h"
-
 
 t_lst *EXE=NULL;
 
