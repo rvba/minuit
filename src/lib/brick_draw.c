@@ -522,7 +522,7 @@ void brick_draw_txt(t_brick *brick)
 			}
 
 			// draw DATA
-			if(brick->mode==bm_typing)
+			if(brick->typing)
 			{
 				t_txt *txt = txt_new("");
 				set_name_long(txt->name, C->event->buffer_char);

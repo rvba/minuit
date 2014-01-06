@@ -675,7 +675,7 @@ t_brick *brick_new(const char *name)
 	brick->rhizome_order = -1;
 	brick->block_order = -1;
 
-	brick->mode=bm_idle;
+	//brick->mode=bm_idle;
 
 	plug_reset(&brick->plug_in,name);
 	plug_reset(&brick->plug_intern,name);
@@ -685,7 +685,8 @@ t_brick *brick_new(const char *name)
 
 	brick->counter = 0;
 	brick->state = NULL;
-	brick->state_pressed = BRICK_NULL;
+	//brick->state_pressed = BRICK_NULL;
+	brick->typing = 0;
 
 	return brick;
 }

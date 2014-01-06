@@ -329,27 +329,24 @@ void op_add_bricks( t_brick *brick, t_brick *brick_target, int offset)
 	// slide
 	op_slider_positive(brick);
 
-	if( brick->mode == bm_idle)
+	t_block *block=brick->block;
+	t_plug *plug_intern=&brick->plug_intern;
+	int tot_bricks=block->tot_bricks;
+	int *slider = plug_intern->data;
+
+	if(slider==0)
 	{
-		t_block *block=brick->block;
-		t_plug *plug_intern=&brick->plug_intern;
-		int tot_bricks=block->tot_bricks;
-		int *slider = plug_intern->data;
+	}
 
-		if(slider==0)
-		{
-		}
-
-		// add brick
-		else if( *slider > tot_bricks - offset) 
-		{
-			add_exe_add_brick( brick, brick_target, exe_add_brick);
-		}
-		// remove brick
-		else if(*slider < tot_bricks - offset)
-		{
-			add_exe_remove_brick(brick);
-		}
+	// add brick
+	else if( *slider > tot_bricks - offset) 
+	{
+		add_exe_add_brick( brick, brick_target, exe_add_brick);
+	}
+	// remove brick
+	else if(*slider < tot_bricks - offset)
+	{
+		add_exe_remove_brick(brick);
 	}
 }
 

@@ -132,7 +132,7 @@ void state_block_default( t_block *block, struct Event *e);
 
 // BLOCK DRAW
 
-void block_draw_outline(t_block *block);
+void 		block_draw_outline(t_block *block);
 void 		block_draw(t_block *block);
 void		cls_block_draw_generic(t_block *self);
 void		cls_block_draw_menu(t_block *self);
@@ -159,13 +159,9 @@ void 		block_rhizome_add(t_block *self, t_block *dst);
 
 void 		block_set_loop_state(t_block *block, int state);
 void 		block_exec(t_block *block);
-
-//void 		block_brick_trigger(struct Plug *plug);
-
 void 		_block_free(t_block *block);
-void block_get_center( t_block *block, float *v);
-
-void block_get_pos_plug_out( t_block *block, struct Brick *brick, float *v);
+void 		block_get_center( t_block *block, float *v);
+void 		block_get_pos_plug_out( t_block *block, struct Brick *brick, float *v);
 
 #endif
 

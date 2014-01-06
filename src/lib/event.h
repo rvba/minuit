@@ -143,6 +143,12 @@ struct MINscreen;
 #define UI_BLOCK_RELEASED 	1200
 #define BLOCK_DELETE		 	1201
 
+#define BRICK_NULL 		0
+#define BRICK_LEFT 		1
+#define BRICK_RIGHT 		2
+#define BRICK_PLUG_IN 		3
+#define BRICK_PLUG_OUT 		4
+
 
 typedef enum EventState
 {

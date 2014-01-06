@@ -16,12 +16,6 @@
 
 #define BRICK_SWAP( brick, st) ((brick->state) = &(st)) 
 
-#define BRICK_NULL 		0
-#define BRICK_LEFT 		1
-#define BRICK_RIGHT 		2
-#define BRICK_PLUG_IN 		3
-#define BRICK_PLUG_OUT 		4
-
 struct Block;
 struct Brick;
 struct Dict;
@@ -45,20 +39,6 @@ typedef enum Brick_Type
 	bt_switch,
 
 }t_brick_type;
-
-// BRICK MODE
-
-typedef enum Brick_Mode
-{
-	bm_idle,
-	bm_triggering,
-	bm_linking,
-	bm_unlinking,
-	bm_moving,
-	bm_typing,
-	bm_cloning,
-
-}t_brick_mode;
 
 // BRICK CLASS
 
@@ -163,6 +143,8 @@ typedef struct Brick
 	t_data_type context;			// contextual menus
 	int state_pressed;
 
+	int typing;
+
 	int idcol_right[3];			// col
 	int idcol_left[3];
 
@@ -170,7 +152,6 @@ typedef struct Brick
 	int counter;				// For Loop
 	int block_order;			// Internal Block Id
 
-	enum Brick_Mode mode;			// unique mode
 	struct Brick_State brick_state;			// multiple states
 	struct Brick_Geometry geom;			// geometry
 	struct Brick_Var var;			// attributes
@@ -198,8 +179,8 @@ typedef struct Brick
 }t_brick;
 
 
-void brick_rhizome_split(t_brick *brick_x, t_brick *brick_y);
-void brick_rhizome_add(t_brick *brick_x, t_brick *brick_y);
+void 		brick_rhizome_split(t_brick *brick_x, t_brick *brick_y);
+void 		brick_rhizome_add(t_brick *brick_x, t_brick *brick_y);
 void 		brick_remove(struct Action *action);
 
 int 		brick_is_different(struct Brick *dst, struct Brick *src);
