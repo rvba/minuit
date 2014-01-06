@@ -271,7 +271,7 @@ void ctx_scene_update_lst(t_context *C, t_lst *lst)
 
 void scene_debug( t_context *C)
 {
-	printf( "%d scene_debug\n", C->app->frame);
+	//printf( "%d scene_debug\n", C->app->frame);
 }
 
 // update selction status for meshes and lights

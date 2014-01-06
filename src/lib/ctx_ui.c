@@ -501,7 +501,6 @@ void ctx_ui(t_context *C)
 void ctx_ui_init( t_context *C)
 {
 	C->ui->state = state_ui_intro;
-	C->ui->show_term = 1;
 }
 
 
