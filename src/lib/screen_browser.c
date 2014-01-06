@@ -60,7 +60,6 @@ void *browser_go_backward(t_brick *brick)
 {
 	file_go_backward(path);
 	is_built=0;
-	brick_release(brick);
 	return NULL;
 }
 
@@ -68,7 +67,6 @@ void *browser_go_directory(t_brick *brick)
 {
 	file_go_directory(path,brick->id.name);
 	is_built=0;
-	brick_release(brick);
 	return NULL;
 }
 
@@ -126,7 +124,6 @@ void *browser_return_filename(t_brick *brick)
 
 	screen_switch_by_name("screen_main");
 	C->event->callback();
-	brick_release(brick);
 	return NULL;
 }
 

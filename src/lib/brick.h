@@ -68,8 +68,6 @@ typedef struct BrickClass
 	enum Brick_Type type;
 	void (* make)(struct Brick *brick);
 	void (* draw)(struct Brick *brick);
-	void (* update)(struct Brick *brick);  
-	void (* trigger)(struct Brick *brick); 
 	void (* init)(struct Brick *brick);
 	void (* connect)(struct Brick *self,struct Brick *target);
 	void (* disconnect)(struct Brick *self);

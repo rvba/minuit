@@ -391,13 +391,6 @@ void *op_selector(t_brick *brick)
 		}
 	}
 
-	// release
-	if(!brick->brick_state.is_released && C->ui->mouse_state == UI_LEFT_RELEASED)
-	{
-		brick->brick_state.is_released=1;
-		brick_release(brick);
-	}
-
 	return NULL;
 }
 
@@ -414,8 +407,6 @@ void *op_set_selected(t_brick *brick)
 		ctx_scene_set_selected( C, id->node);
 	}
 
-	brick_release(brick);
-
 	return NULL;
 }
 
@@ -428,8 +419,6 @@ void *op_switch(t_brick *brick)
 	if(*target == 0)  *target=1; 
 	else  *target=0; 
 
-	brick_release(brick);
-
 	return NULL;
 }
 
@@ -437,7 +426,5 @@ void *op_switch(t_brick *brick)
 
 void *op_void_act(t_brick *brick)
 {
-	brick_release(brick);
-
 	return NULL;
 }
