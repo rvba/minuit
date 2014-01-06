@@ -29,6 +29,7 @@
 #include "rhizome.h"
 #include "event.h"
 #include "ctx.h"
+#include "clock.h"
 
 t_lst *sets = NULL;
 
@@ -448,6 +449,9 @@ void ui_init(void)
 
 	C->ui->camera = camera_new("camera_ui");
 	ctx_ui_init( C);
+
+	C->ui->clock = clock_new( "clock");
+	clock_init( C->ui->clock);
 }
 
 // NEW
@@ -495,6 +499,7 @@ t_ui *ui_new(void)
 	ui->mouse_delta_y_last = 0;
 	ui->mouse_drag = 0;
 	ui->mouse_right_pressed = 0;
+	ui->mouse_left_pressed = 0;
 
 	ui->key_shift = 0;
 	ui->key_alt = 0;
@@ -542,6 +547,7 @@ t_ui *ui_new(void)
 
 	ui->bitrate = 15000;
 	ui->state = NULL;
+	ui->clock = NULL;
 
 	return ui;
 }

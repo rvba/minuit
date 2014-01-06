@@ -10,7 +10,39 @@
 
 #include "clock.h"
 #include "util.h"
-//#include "memory.h"
+
+int clock_to_sec( unsigned int time)
+{
+	return time / 1000;
+}
+
+unsigned int clock_now_msec( void)
+{
+	struct timeval time;
+	gettimeofday( &time, NULL);
+	return( ( time.tv_sec * 1000) + ( time.tv_usec / 1000));
+}
+
+int clock_now_sec( void)
+{
+	struct timeval time;
+	gettimeofday( &time, NULL);
+	return(  time.tv_sec );
+}
+
+int clock_get_second( t_clock *clock)
+{
+	return clock->start.tv_sec;
+}
+
+int clock_get_delta( t_clock *clock)
+{
+	int past = clock_get_second( clock);
+	int now =  clock_now_sec();
+	int delta = now - past;
+
+	return delta;
+}
 
 void clock_init(t_clock *clock)
 {
@@ -19,6 +51,14 @@ void clock_init(t_clock *clock)
 	gettimeofday(&tv,NULL);
 	clock->start_time=tv.tv_sec * 1000 + tv.tv_usec/1000;
 	clock->limit=0.05;
+}
+
+void clock_time_set(t_clock *clock)
+{
+	struct timeval tv;
+	gettimeofday(&clock->start,NULL);
+	gettimeofday(&tv,NULL);
+	clock->start_time = tv.tv_sec * 1000 + tv.tv_usec/1000;
 }
 
 void clock_free(t_clock *clock)

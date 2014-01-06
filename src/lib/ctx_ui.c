@@ -28,6 +28,7 @@
 #include "screen.h"
 #include "rhizome.h"
 #include "op.h"
+#include "clock.h"
 
 /*	**********************************
 	DECLARATIONS
@@ -220,6 +221,16 @@ void ctx_ui_hover( t_context *C)
 	:OPERATORS
 	*********************************	*/
 
+void ctx_clock_test( t_context *C)
+{
+	int delta = clock_get_delta( C->ui->clock);
+	if(delta >= 1)
+	{
+		ctx_event_add( MOUSE_LEFT_LONG);
+		clock_time_set( C->ui->clock);
+	}
+}
+
 void ctx_events_swap( t_context *C)
 {
 	ctx_event_cleanup( C->event->events_swap);
@@ -240,10 +251,25 @@ void ctx_ui_mouse( t_context *C)
 			case MOUSE_RIGHT_PRESSED:
 				ui->mouse_right_pressed = 1;
 				break;
+
 			case MOUSE_RIGHT_RELEASED:
 				ui->mouse_right_pressed = 0;
 				break;
+
+			case MOUSE_LEFT_PRESSED:
+				clock_time_set( C->ui->clock);
+				ui->mouse_left_pressed = 1;
+				break;
+
+			case MOUSE_LEFT_RELEASED:
+				ui->mouse_left_pressed = 0;
+				break;
 		}
+	}
+
+	if( ui->mouse_left_pressed)
+	{
+		ctx_clock_test( C);
 	}
 }
 
@@ -481,9 +507,21 @@ void ctx_ui_dispatch( t_context *C)
 
 	for(l=C->event->events_swap->first;l;l=l->next)
 	{
-		e = l->data;
-		event_log( e);
-		C->ui->state( C, e);
+		if( C->event->ui.typing_start)
+		{
+			if( e->type != SHIFTKEY)
+			{
+				e = l->data;
+				event_log( e);
+				C->ui->state( C, e);
+			}
+		}
+		else
+		{
+			e = l->data;
+			event_log( e);
+			C->ui->state( C, e);
+		}
 	}
 }
 

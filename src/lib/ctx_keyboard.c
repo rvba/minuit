@@ -106,6 +106,8 @@ void keymap_typing( int key)
 			C->event->buffer_char[C->event->buffer_char_counter-1] = '\0';
 			C->event->buffer_char_counter--;
 			break;
+		case SHIFTKEY:
+			break;
 
 		default:
 			char_key = (char)key;

@@ -121,6 +121,7 @@ struct MINscreen;
 #define KEYBOARD_STOP	203
 
 #define MOUSE_START 700
+
 #define MOUSE_STATIC 800
 #define MOUSE_MOTION_PASSIVE 801
 #define MOUSE_MOTION 802
@@ -130,6 +131,8 @@ struct MINscreen;
 #define MOUSE_RIGHT_RELEASED 842
 #define MOUSE_MIDDLE_PRESSED 843
 #define MOUSE_MIDDLE_RELEASED 844
+
+#define MOUSE_LEFT_LONG		845
 #define MOUSE_END 850
 
 #define EVENT_KEYBOARD( event) ( event >= 0 && event <= KEYBOARD_STOP)

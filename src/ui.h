@@ -62,6 +62,7 @@ float intro_intensity;
 
 struct Context;
 struct Event;
+struct Clock;
 
 typedef struct Ui
 {
@@ -93,6 +94,7 @@ typedef struct Ui
 	int mouse_delta_y_last;
 	int mouse_drag;
 	int mouse_right_pressed;
+	int mouse_left_pressed;
 
 	// KEYBOARD
 	int key_shift;
@@ -164,6 +166,8 @@ typedef struct Ui
 	struct Lst *sets;
 
 	void (* state)( struct Context *C, struct Event *event);
+
+	struct Clock *clock;
 }t_ui;
 
 // UI.C
