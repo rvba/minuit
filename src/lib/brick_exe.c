@@ -489,7 +489,6 @@ void *op_delete(t_brick *brick)
 
 		node->cls->del(node);
 
-		ctx_ui_menu_hide(C);
 		C->scene->selected=NULL;
 	}
 
