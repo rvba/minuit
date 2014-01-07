@@ -121,6 +121,7 @@ struct MINscreen;
 #define KEYBOARD_STOP	203
 
 #define MOUSE_START 700
+
 #define MOUSE_STATIC 800
 #define MOUSE_MOTION_PASSIVE 801
 #define MOUSE_MOTION 802
@@ -130,10 +131,23 @@ struct MINscreen;
 #define MOUSE_RIGHT_RELEASED 842
 #define MOUSE_MIDDLE_PRESSED 843
 #define MOUSE_MIDDLE_RELEASED 844
+
+#define MOUSE_LEFT_LONG		845
 #define MOUSE_END 850
 
 #define EVENT_KEYBOARD( event) ( event >= 0 && event <= KEYBOARD_STOP)
 #define EVENT_MOUSE( event) ( event >= MOUSE_START && event <= MOUSE_END)
+
+#define UI_BRICK_RELEASED 1100
+#define UI_BLOCK_MOVE 		1101
+#define UI_BLOCK_RELEASED 	1200
+#define BLOCK_DELETE		 	1201
+
+#define BRICK_NULL 		0
+#define BRICK_LEFT 		1
+#define BRICK_RIGHT 		2
+#define BRICK_PLUG_IN 		3
+#define BRICK_PLUG_OUT 		4
 
 
 typedef enum EventState
@@ -321,6 +335,7 @@ typedef struct Main_Event
 	int color_transition_count;
 
 	struct Lst *events;
+	struct Lst *events_swap;
 
 }t_main_event;
 
@@ -340,5 +355,8 @@ void		event_add( t_main_event *main_event, struct MINscreen *screen, int x, int 
 void 		event_dispach( t_main_event *main_event);
 t_event *	event_new( const char *name);
 t_main_event *	main_event_new(void);
+void event_log( t_event *e);
+
+char *event_name( t_event *e);
 
 #endif

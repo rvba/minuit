@@ -32,7 +32,7 @@ t_scene *scene_get(void)
 
 void scene_store(t_scene *scene, int val)
 {
-	if( scene->debug_all) printf("scene_store %d\n", val);
+	//if( scene->debug_all) printf("scene_store %d\n", val);
 	if(val)
 	{
 		scene->store_stack++;
@@ -45,7 +45,7 @@ void scene_store(t_scene *scene, int val)
 			scene->store = 0;
 	}
 
-	if( scene->debug_all) printf("scene_store store=%d\n", scene->store);
+	//if( scene->debug_all) printf("scene_store store=%d\n", scene->store);
 }
 
 // get lst
@@ -241,7 +241,7 @@ int scene_id_get(t_scene *sc)
 
 void scene_node_free( t_scene *sc, t_node *node)
 {
-	if( sc->debug_all) printf("scene_node_free %s \n",data_name_get(node->cls->type));
+	//if( sc->debug_all) printf("scene_node_free %s \n",data_name_get(node->cls->type));
 
 	// Remove from Lst
 	lst_link_delete_by_id( node->cls->lst, node->id);
@@ -353,7 +353,7 @@ void scene_node_load(t_scene *sc,t_node *node)
 
 t_node *scene_add_node(t_scene *sc,t_data_type type,const char *name)
 {
-	if( sc->debug_all) printf("scene_add_node %s %s\n",data_name_get( type), name);
+	//if( sc->debug_all) printf("scene_add_node %s %s\n",data_name_get( type), name);
 	// new node
 	t_node *node = node_new(type);
 
@@ -514,6 +514,7 @@ t_scene *scene_new(void)
 	sc->use_tmp_colors=0;
 	sc->selected=NULL;
 	sc->_selected=NULL;
+	sc->selection = NULL;
 	sc->hover=NULL;
 	sc->hover_type = dt_null;
 	sc->is_ready=1;

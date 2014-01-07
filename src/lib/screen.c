@@ -218,7 +218,7 @@ void screen_sets(t_screen *screen)
 
 	ui_draw_mouse();
 	op_camera_switch_2d(C,camera);
-	ui_draw_lines();
+	//ui_draw_lines();
 	ui_draw_term();
 	ui_draw_grid();
 
@@ -357,18 +357,6 @@ t_screen *screen_new(const char *name)
 	return screen;
 }
 
-// INIT
-
-void screen_init( t_context *C)
-{
-	t_screen *screen_main = screen_main_make( C);
-	screen_browser_make( C);
-	screen_sets_make( C);
-	screen_bricks_make( C);
-	screen_intro_make( C);
-	C->ui->screen_active = screen_main;
-
-}
 
 
 

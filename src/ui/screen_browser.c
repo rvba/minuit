@@ -60,7 +60,6 @@ void *browser_go_backward(t_brick *brick)
 {
 	file_go_backward(path);
 	is_built=0;
-	brick_release(brick);
 	return NULL;
 }
 
@@ -68,7 +67,6 @@ void *browser_go_directory(t_brick *brick)
 {
 	file_go_directory(path,brick->id.name);
 	is_built=0;
-	brick_release(brick);
 	return NULL;
 }
 
@@ -126,7 +124,6 @@ void *browser_return_filename(t_brick *brick)
 
 	screen_switch_by_name("screen_main");
 	C->event->callback();
-	brick_release(brick);
 	return NULL;
 }
 
@@ -221,8 +218,8 @@ void browser_build(void)
 
 void browser_update(void)
 {
-	t_block *block=BROWSER_BUTTONS->data;
-	block->cls->update(block);
+	//t_block *block=BROWSER_BUTTONS->data;
+	//block->cls->update(block);
 }
 
 void browser_draw(void)
@@ -261,7 +258,9 @@ void browser_init(void)
 		char *r = getcwd(default_path,1024);
 		if( !r ) printf("getcwd error\n");
 
-		BROWSER_BUTTONS=block_make("block_browser","block");
+
+		BROWSER_BUTTONS = block_make("block_browser","block");
+
 		t_block *block = BROWSER_BUTTONS->data;
 		vset(block->pos,0,0,0);
 		path=file_new(default_path);

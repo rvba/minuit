@@ -71,6 +71,8 @@ typedef struct Scene
 	struct Lst *selections;
 	struct Lst *stack; 			 
 
+	struct Node *selection;
+
 	// tmp
 	struct Lst *tmp_colors;
 	struct Lst *tmp_node;

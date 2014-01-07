@@ -11,9 +11,7 @@
 #include "context.h"
 #include "node.h"
 #include "scene.h"
-
 #include "app.h"
-
 #include "op.h"
 #include "ctx.h"
 #include "event.h"
@@ -24,78 +22,47 @@
 #include "vector.h"
 #include "data.h"
 #include "ui.h"
-
 #include "block.h"
 #include "brick.h"
-#include "memory.h"
+#include "sketch.h"
 
-#define CTX_TERM_TOT_LINE 50
-#define CTX_TERM_LINE_LENGTH 30
+#define TERM_TOT_LINE 20
+#define TERM_LINE_LENGTH 30
 
-
-void term_line_add(t_term *term,char *data)
+void term_line_add( t_term *term, char *data)
 {
-	t_txt *line=txt_new(data);
-	lst_add(term->lines,line,"line");
+	t_txt *line = txt_new(data);
+	lst_add( term->lines, line, "line");
+	term->height += 20;
 }
 
-void term_line_cpy(t_txt *target,t_txt *source)
+void term_push(t_term *term, t_link *l, const char *name)
 {
-	char *name = source->id.name;
-	target->data_change(target,name);
-}
-
-void term_offset(t_term *term)
-{
-	t_link *l;
-	t_txt *next_line;
-
-	for(l=term->lines->first;l;l=l->next)
-	{
-		t_link *next=l->next;
-
-		if(next)
-		{
-			next_line=next->data;
-			term_line_cpy(l->data,next_line);
-		}
-	}
-}
-
-void term_loop(t_term *term)
-{
-	t_link *l;
 	t_txt *t;
-	for(l=term->lines->first;l;l=l->next)
+	t=l->data;
+	if( l->prev)
 	{
-		t=l->data;
-		if(l->next)
-		{
-			t_txt *target=l->next->data;
-			char *name = target->id.name;
-			t->data_change(t,name);
-		}
+		term_push( term, l->prev, t->name);
+		t->data_change( t, name);
+	}
+	else
+	{
+		t->data_change( t, name);
 	}
 }
 
-void term_print(t_term *term,char *data)
+void term_print( t_term *term, char *data)
 {
+	// Add New Line
 	if(term->line < term->tot_line -1)
 	{
 		term_line_add(term,data);
 		term->line++;
 	}
+	// Or Push
 	else 
 	{
-		if(!term->is_init)
-		{
-			term->cursor=term->lines->last;
-			term->is_init=1;
-		}
-
-		term_loop(term);
-		t_txt *target=term->cursor->data;
-		target->data_change(target,data);
+		term_push( term, term->lines->last, data);
 	}
 }
 
@@ -111,7 +78,7 @@ void term_log(char *fmt, ...)
 	term_print(C->term,msg);
 }
 
-void term_echo(t_term *term,char *fmt, ...)
+void term_echo( t_term *term, char *fmt, ...)
 {
 	char msg[400];
 	va_list ap;
@@ -129,19 +96,33 @@ void term_draw(t_term *term)
 	t_link *l;
 	t_txt *t;
 
+	float col[] = { 1,1,1};
+	float a[] = { 0, 0, 0};
+	float c[] = { 0, -term->height, 0, 0};
+
+
+	float width = term->width;
 	glPushMatrix();
-	glLoadIdentity();
-	glTranslatef(term->loc_x,term->loc_y,0);
 
-	for(l=term->lines->first;l;l=l->next)
-	{
-		t=l->data;
-		t->draw(t);
 		glTranslatef(0,-20,0);
-	}
-	glPopMatrix();
-}
+		for(l=term->lines->first;l;l=l->next)
+		{
+			t=l->data;
+			t->draw(t);
+			if(t->width > width) width = t->width;
+			glTranslatef(0,-20,0);
+		}
 
+	glPopMatrix();
+
+	float h[3] = { width + 15 , 0, 0};
+	float h2[3] = { width + 15 , -term->height, 0};
+
+	skt_line( a, h, 1, col);
+	skt_line( c, h2, 1, col);
+
+	term->width = width;
+}
 
 // RESET
 
@@ -185,45 +166,52 @@ void term_free(t_term *term)
 	mem_free( term, sizeof( t_term));
 }
 
-// INIT
-
-void _term_init(t_term *term)
-{
-	t_context *C=ctx_get();
-
-	term->loc_x=20;
-	term->loc_y=C->app->window->height*.9;
-}
-
 // NEW
 
-t_term *term_new(const char *name)
+t_term *term_new( const char *name)
 {
 	t_term *term  = (t_term *)mem_malloc(sizeof(t_term));
 
-	id_init(&term->id, name);
+	id_init( &term->id, name);
 
-	term->tot_line=CTX_TERM_TOT_LINE;
-	term->line=0;
-	term->line_length=CTX_TERM_LINE_LENGTH;
-	term->offset=0;
-	term->cursor=NULL;
-	term->lines=lst_new("lst");
-	term->is_init=0;
-	term->loc_x=0;
-	term->loc_y=0;
-
-	term->draw=term_draw;
-	term->init=_term_init;
+	term->tot_line = TERM_TOT_LINE;
+	term->line = 0;
+	term->line_length = TERM_LINE_LENGTH;
+	term->offset = 0;
+	term->cursor = NULL;
+	term->lines = lst_new("lst");
+	term->is_init = 0;
+	term->loc_x = 0;
+	term->loc_y = 0;
+	term->draw = term_draw;
+	term->width = 250;
+	term->height = 20;
 
 	return term;
 };
 
+// INIT
+
 void term_init(void)
 {
 	t_context *C = ctx_get();
-	lst_add(C->terms,C->term,"main term");
-	C->term->init(C->term);
+	lst_add( C->terms, C->term, "term_main");
+
+	t_term *term_event = term_new( "term_event");
+	lst_add( C->terms, term_event, "term_event");
+
+	t_term *term_state = term_new( "term_state");
+	lst_add( C->terms, term_state, "term_state");
+}
+
+// GET
+
+t_term *term_get( const char *name)
+{
+	t_context *C = ctx_get();
+	t_link *l = lst_link_find_by_name( C->terms, name);
+	if( l) return l->data;
+	else return NULL;
 }
 
 

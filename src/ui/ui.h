@@ -50,21 +50,24 @@
 #define UI_MOUSE_MOTION		14
 #define UI_MOUSE_MOTION_PASSIVE	15
 
-#define UI_TRANS(C, st) ((C->ui->state) = &(st)) 
+#define UI_SWAP(C, st) ((C->ui->state) = &(st)) 
 
 #define UI_HOVER_BACKGROUND 1
 #define UI_HOVER_OBJECT 2
 #define UI_HOVER_BRICK 3
 #define UI_HOVER_NOTHING 4
 
+
 float intro_intensity;
 
 struct Context;
 struct Event;
+struct Clock;
 
 typedef struct Ui
 {
 	int draw; 		// draw the ui
+	int draw_link;
 	int update_links;	// compte sets
 	int bitrate;
 	int do_connect;
@@ -87,7 +90,11 @@ typedef struct Ui
 	int mouse_dy;
 	int mouse_delta_x;
 	int mouse_delta_y;
+	int mouse_delta_x_last;
+	int mouse_delta_y_last;
 	int mouse_drag;
+	int mouse_right_pressed;
+	int mouse_left_pressed;
 
 	// KEYBOARD
 	int key_shift;
@@ -159,6 +166,8 @@ typedef struct Ui
 	struct Lst *sets;
 
 	void (* state)( struct Context *C, struct Event *event);
+
+	struct Clock *clock;
 }t_ui;
 
 // UI.C
@@ -172,7 +181,6 @@ void ui_reboot(void);
 
 void ui_draw_rhizomes(void);
 void ui_draw_intro(void);
-void ui_draw_lines(void);
 void ui_draw_menu(void);
 void ui_draw_blocks(void);
 void ui_draw_debug(void);
@@ -189,5 +197,7 @@ void ui_draw_sets(void);
 void ui_draw_mouse(void);
 
 
+void ui_event_add( int type);
+void ctx_ui_old( struct Context *C);
 
 #endif

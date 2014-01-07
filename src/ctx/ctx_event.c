@@ -33,17 +33,17 @@ void ctx_event_exec( t_context *C, t_event *event)
 	}
 }
 
-void ctx_event_cleanup( t_context *C)
+void ctx_event_cleanup( t_lst *lst)
 {
 	t_link *l;
 	t_event *event;
-	for(l=C->event->events->first;l;l=l->next)
+	for(l=lst->first;l;l=l->next)
 	{
 		event = l->data;
 		event_free( event);
 	}
 
-	lst_cleanup( C->event->events);
+	lst_cleanup( lst);
 }
 
 void ctx_event_dispatch( t_context *C)
@@ -59,6 +59,13 @@ void ctx_event_dispatch( t_context *C)
 		ctx_event_exec( C, event);
 	}
 
+}
+
+void ctx_event_add( int type)
+{
+	t_context *C = ctx_get();
+	t_screen *s = C->ui->screen_active;
+	event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, type);
 }
 
 void ctx_event( t_context *C)

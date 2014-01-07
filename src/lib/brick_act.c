@@ -29,6 +29,7 @@
 #include "set.h"
 #include "rhizome.h"
 #include "geometry.h"
+#include "term.h"
 
 // BRICK ADD
 
@@ -118,6 +119,8 @@ void *op_brick_add(t_brick *brick)
 	// Store
 	scene_store(C->scene,0);
 
+	term_print(C->term,"+ brick");
+
 	// Switch Desk
 	if(!C->ui->show_sets) show_sets(C);
 
@@ -135,74 +138,31 @@ void *op_brick_add(t_brick *brick)
 
 void *op_slider(t_brick *brick)
 {
-	t_context *C = ctx_get();
-	float dx = (float) C->ui->mouse_dx; 
-
-	// dragging
-	if(brick->state.is_draging)
+	void *data = brick->plug_intern.data;
+	t_data_type type = brick->plug_intern.data_type;
+	switch( brick->state_pressed)
 	{
-		// release
-		if( C->ui->mouse_state == UI_LEFT_RELEASED)
-		{
-			brick->state.is_draging=0;
-			brick_release(brick);
-		}
-		else
-		{
-			if(C->event->loop_step == 0)
+		case BRICK_LEFT:
+			switch( type)
 			{
-				if(brick->plug_intern.data_type==dt_int)
-				{
-					int *data=brick->plug_intern.data;
-					*data += dx;
-				}
-				else if(brick->plug_intern.data_type==dt_uint)
-				{
-					unsigned int *data=brick->plug_intern.data;
-					*data += dx;
-				}
-				else if(brick->plug_intern.data_type==dt_float)
-				{
-					float *data=brick->plug_intern.data;
-					*data += dx * .1;
-				}
+				case dt_int: 	set_int( data, drf_int( data) - 1); break;
+				case dt_float:	set_float( data, drf_float( data) - .1); break;
+				default: break;
 			}
-		}
-	}
-	// simple clic
-	else
-	{
-		// set dragging
-		if( brick->state.use_dragging && C->ui->mouse_motion == UI_MOUSE_MOTION )
-		{
-				brick->state.is_draging=1;
-		}
-		else if ( C->ui->mouse_state == UI_LEFT_RELEASED)
-		{
-				if(brick->plug_intern.data_type==dt_int)
-				{
-					int *data=brick->plug_intern.data;
-					if(brick->state.is_left_pressed) 	*data -= 1; 
-					else if(brick->state.is_right_pressed) 	*data += 1; 
-				}
-				else if(brick->plug_intern.data_type==dt_uint)
-				{
-					unsigned int *data=brick->plug_intern.data;
-					if(brick->state.is_left_pressed) 	*data -= 1; 
-					else if(brick->state.is_right_pressed) 	*data += 1; 
-				}
-				else if(brick->plug_intern.data_type==dt_float)
-				{
-					float inc=.1;
-					float *data=brick->plug_intern.data;
-					if(brick->state.is_left_pressed)  	*data -= inc; 
-					else if(brick->state.is_right_pressed) 	*data += inc; 
-				}
-					
-				brick_release(brick); 
-		}
-	}
+			break;
 
+		case BRICK_RIGHT:
+			switch( type)
+			{
+				case dt_int: 	set_int( data, drf_int( data) + 1); break;
+				case dt_float:	set_float( data, drf_float( data) + .1); break;
+				default: break;
+			}
+			break;
+		default:
+			break;
+
+	}
 	return NULL;
 }
 
@@ -255,7 +215,7 @@ void exe_remove_brick(t_action *action)
 	t_brick *_brick = dict_pop_data(args,"brick");
 	t_block *block = _brick->block;
 
-	int remove_connected = _brick->state.remove_connected;
+	int remove_connected = _brick->brick_state.remove_connected;
 
 	t_plug *plug_intern = &_brick->plug_intern;
 	int *slider = plug_intern->data;
@@ -305,7 +265,7 @@ void exe_add_brick(t_action *action)
 
 	t_node *n=add_part_slider_float(C,block,".",NULL);
 	t_brick *b=n->data;
-	b->state.is_versatil=1;
+	b->brick_state.is_versatil=1;
 
 	lst_lifo( block->bricks);
 	block_brick_set_order( block);
@@ -369,27 +329,24 @@ void op_add_bricks( t_brick *brick, t_brick *brick_target, int offset)
 	// slide
 	op_slider_positive(brick);
 
-	if( brick->mode == bm_idle)
+	t_block *block=brick->block;
+	t_plug *plug_intern=&brick->plug_intern;
+	int tot_bricks=block->tot_bricks;
+	int *slider = plug_intern->data;
+
+	if(slider==0)
 	{
-		t_block *block=brick->block;
-		t_plug *plug_intern=&brick->plug_intern;
-		int tot_bricks=block->tot_bricks;
-		int *slider = plug_intern->data;
+	}
 
-		if(slider==0)
-		{
-		}
-
-		// add brick
-		else if( *slider > tot_bricks - offset) 
-		{
-			add_exe_add_brick( brick, brick_target, exe_add_brick);
-		}
-		// remove brick
-		else if(*slider < tot_bricks - offset)
-		{
-			add_exe_remove_brick(brick);
-		}
+	// add brick
+	else if( *slider > tot_bricks - offset) 
+	{
+		add_exe_add_brick( brick, brick_target, exe_add_brick);
+	}
+	// remove brick
+	else if(*slider < tot_bricks - offset)
+	{
+		add_exe_remove_brick(brick);
 	}
 }
 
@@ -407,14 +364,14 @@ void *op_selector(t_brick *brick)
 	t_context *C = ctx_get();
 	int *target = brick->plug_intern.data;
 
-	if(brick->state.is_mouse_over)
+	if(brick->brick_state.is_mouse_over)
 	{
 		if( C->ui->mouse_state == UI_LEFT_PRESSED)
 		{
 			// switch state when released
-			if(brick->state.is_released)
+			if(brick->brick_state.is_released)
 			{
-				brick->state.is_released=0;
+				brick->brick_state.is_released=0;
 				// switch value
 
 				if(brick->var.selector<brick->var.selector_length)
@@ -429,13 +386,6 @@ void *op_selector(t_brick *brick)
 				}
 			}
 		}
-	}
-
-	// release
-	if(!brick->state.is_released && C->ui->mouse_state == UI_LEFT_RELEASED)
-	{
-		brick->state.is_released=1;
-		brick_release(brick);
 	}
 
 	return NULL;
@@ -454,8 +404,6 @@ void *op_set_selected(t_brick *brick)
 		ctx_scene_set_selected( C, id->node);
 	}
 
-	brick_release(brick);
-
 	return NULL;
 }
 
@@ -468,8 +416,6 @@ void *op_switch(t_brick *brick)
 	if(*target == 0)  *target=1; 
 	else  *target=0; 
 
-	brick_release(brick);
-
 	return NULL;
 }
 
@@ -477,7 +423,5 @@ void *op_switch(t_brick *brick)
 
 void *op_void_act(t_brick *brick)
 {
-	brick_release(brick);
-
 	return NULL;
 }

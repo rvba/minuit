@@ -19,6 +19,9 @@ struct Plug;
 struct Lst;
 struct Ui;
 struct Event;
+struct Lst;
+
+#define COLOR_MATCH( C, c) ( ( (C)[0] == (c)[0]) && ( (C)[1] == (c)[1]) && ( (C)[2] == (c)[2]))
 
 // CTX_EVENT
 
@@ -48,7 +51,7 @@ void ctx_keyboard(struct Context *C);
 
 // CTX_MOUSE
 
-int is_mouse_over_brick(struct Context *C,struct Brick *brick);
+//int is_mouse_over_brick(struct Context *C,struct Brick *brick);
 
 int is_mouse_over_background(struct Context *C);
 int is_mouse_over_link_out(struct Context *C,struct Brick *brick);
@@ -138,6 +141,26 @@ void ctx_set_exec(struct Context *C);
 void ctx_compute(struct Context *C);
 
 void *ctx_set_compute(void *data);
-void ctx_event_cleanup( struct Context *C);
+void ctx_event_cleanup( struct Lst *lst);
+
+
+void ctx_ui_hover( struct Context *C);
+void *ctx_ui_get_hover( struct Context *C, t_data_type type);
+void *ctx_ui_get_selected( struct Context *C, t_data_type type);
+void *ctx_ui_hover_get( struct Context *C, t_data_type type);
+
+void state_ui_default( struct Context *C, struct Event *e);
+
+void ctx_event_add( int type);
+
+int ctx_mouse_hover_brick_left( struct Context *C, struct Brick *brick);
+int ctx_mouse_hover_brick_right( struct Context *C, struct Brick *brick);
+int ctx_mouse_hover_brick_plug_in( struct Context *C, struct Brick *brick);
+int ctx_mouse_hover_brick_plug_out( struct Context *C, struct Brick *brick);
+int ctx_mouse_hover_brick( struct Context *C, struct Brick *brick);
+
+void ctx_ui_log( const char *name);
+
+void ctx_ui_buffer_clear( struct Context *C);
 
 #endif 

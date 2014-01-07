@@ -62,7 +62,6 @@ t_context *ctx_new(int argc,char **argv)
 
 t_context *ctx_init(int argc,char **argv)
 {
-	// New Context
 	t_context *C = ctx_new(argc,argv);
 
 	// Store Local
@@ -73,11 +72,11 @@ t_context *ctx_init(int argc,char **argv)
 	app_init( C->app, "minuit");
 	log_init();
 	mem_init();
+	op_init( C); 
 	ui_init();
 	term_init();
 	mode_init( C->mode);
 	ctx_thread_init( C);
-	op_init( C); 
 	screen_init( C);
 	exe_init();
 
@@ -102,43 +101,14 @@ void ctx_load_file(t_context *C)
 void ctx_app(t_context *C)
 {
 	ctx_load_file(C);
-	// set time
 	app_clock(C->app);
-	// frame++
 	C->app->frame++;
-	// set timer
 	if(C->app->timer_count) C->app->timer += C->app->timer_add;
 }
 
 void ctx_mode(t_context *C)
 {
 	C->mode->update(C->mode);
-}
-
-void ctx_reset(t_context *C)
-{
-	// event
-	t_main_event *event = C->event;
-
-	event->switch_plug_in_flow_in = 0;
-	event->switch_plug_in_flow_out = 0;
-	event->switch_plug_in_open_in = 0;
-	event->switch_plug_in_open_out = 0;
-	event->switch_plug_in_follow_in = 0;
-	event->switch_plug_in_follow_out = 0;
-
-	event->switch_plug_out_flow_in = 0;
-	event->switch_plug_out_flow_out = 0;
-	event->switch_plug_out_open_in = 0;
-	event->switch_plug_out_open_out = 0;
-	event->switch_plug_out_follow_in = 0;
-	event->switch_plug_out_follow_out = 0;
-
-	event->switch_brick_debug = 0;
-
-	//
-
-	ctx_event_cleanup( C);
 }
 
 void ctx_update(t_context *C)
@@ -164,7 +134,6 @@ void ctx_handler(void)
 		ctx_update(CONTEXT);
 		ctx_compute(CONTEXT);
 		ctx_render(CONTEXT);
-		ctx_reset(CONTEXT);
 
 		engine_cleanup(CONTEXT->engine);
 	}

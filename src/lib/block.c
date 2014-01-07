@@ -22,6 +22,31 @@
 #include "graph.h"
 #include "memory.h"
 
+void block_get_pos_plug_out( t_block *block, t_brick *brick, float *v)
+{
+	float pos_x = block->pos[0];
+	float pos_y = block->pos[1];
+
+	float plug_width = brick->geom.height;
+	float brick_width = brick->geom.width;
+	int pos = brick->geom.block_pos;
+
+	float x = pos_x + brick_width ;
+	float y = pos_y + ((pos + 1) * plug_width) - ( plug_width / 2);
+	float z = 0;
+
+	v[0] = x;
+	v[1] = y;
+	v[2] = z;
+}
+
+void block_get_center( t_block *block, float *v)
+{
+	float width = block->width;
+	float height = block->height;
+	vset( v, width / 2, height / 2, 0);
+}
+
 // Reset Update State
 void block_reset(t_block *block)
 {
@@ -284,9 +309,8 @@ t_block_class block_menu =
 	.make=cls_block_make_menu,
 	.link=cls_block_link,
 	.draw=cls_block_draw_block,
-	.update=cls_block_menu_update,
 	.init=_block_init,
-	.dispatch = cls_block_dispatch_menu,
+	.dispatch = cls_block_dispatch,
 };
 
 // block
@@ -297,9 +321,8 @@ t_block_class block_block =
 	.make=cls_block_make_block,
 	.link=cls_block_link,
 	.draw=cls_block_draw_block,
-	.update=cls_block_block_update,
 	.init=_block_init,
-	.dispatch = cls_block_dispatch_block,
+	.dispatch = cls_block_dispatch,
 };
 
 void cls_block_make_block(t_block *block)
@@ -334,11 +357,11 @@ void block_cls_init(t_block *block)
 
 	if( is(block->cls->type, "menu"))
 	{
-		block->state = cls_block_state_menu_default;
+		block->state = state_block_menu_default;
 	}
 	else
 	{
-		block->state = cls_block_state_block_default;
+		block->state = state_block_default;
 	}
 
 	if(!found)printf("[ERROR:cls_block_init] Unknown block type %s\n",block->type);
@@ -412,15 +435,15 @@ t_brick *block_brick_get_by_position(t_block *block, int pos)
 void block_brick_init(t_node *node_brick)
 {
 	t_brick *brick=node_brick->data;
-	brick->state.draw_plugs=1;
+	brick->brick_state.draw_plugs=1;
 }
 
 void block_operator_brick_init(t_node *node_brick)
 {
 	t_brick *brick=node_brick->data;
-	brick->state.draw_plugs=1;
-	brick->state.draw_outline=0;
-	brick->state.draw_name=0;
+	brick->brick_state.draw_plugs=1;
+	brick->brick_state.draw_outline=0;
+	brick->brick_state.draw_name=0;
 }
 
 
@@ -492,10 +515,10 @@ t_node *block_make(const char *name,const char *type)
 {
 	t_context *C=ctx_get();
 
-	t_node *n_block=scene_add(C->scene,dt_block,name);
-	t_node *n_list=scene_add(C->scene,dt_list,name);
+	t_node *n_block = scene_add(C->scene,dt_block,name);
+	t_node *n_list = scene_add(C->scene,dt_list,name);
 
-	t_block *block=n_block->data;
+	t_block *block = n_block->data;
 
 	set_name(block->type,type);
 
@@ -564,6 +587,7 @@ t_block *block_new(const char *name)
 
 	block->submenu=NULL;
 	block->selected=NULL;
+	block->_selected=NULL;
 
 	block->block_state.is_root=0;
 	block->block_state.is_show=0;

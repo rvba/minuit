@@ -33,7 +33,7 @@ int brick_switch_value_get( t_brick *brick)
 
 int brick_get_width(t_brick *brick)
 {
-	if(brick->state.use_block_width)
+	if(brick->brick_state.use_block_width)
 	{
 		t_block *block=brick->block;
 		return block->width;
@@ -55,12 +55,12 @@ void brick_build_width(t_brick *brick)
 	float tot=0;
 
 	// if with value, add value width
-	if(brick->state.draw_value)
+	if(brick->brick_state.draw_value)
 	{
 		tot=width_data;
 	}
 
-	if(brick->state.draw_name)
+	if(brick->brick_state.draw_name)
 	{
 		tot+=width_name;
 	}
@@ -71,7 +71,7 @@ void brick_build_width(t_brick *brick)
 		tot+=20;
 	}
 
-	if(brick->state.use_min_width)
+	if(brick->brick_state.use_min_width)
 	{
 		if(tot<brick->geom.min_width)
 		{
@@ -80,7 +80,7 @@ void brick_build_width(t_brick *brick)
 	}
 
 	brick->geom.width_txt=tot;
-	if(brick->state.draw_plugs) brick->geom.width = tot + brick->geom.height * 2; // add plugs
+	if(brick->brick_state.draw_plugs) brick->geom.width = tot + brick->geom.height * 2; // add plugs
 	else brick->geom.width = tot;
 
 }
@@ -138,7 +138,7 @@ void brick_draw_link(t_brick *brick)
 
 	float width = brick->geom.width;
 
-	if(brick->state.draw_plugs)
+	if(brick->brick_state.draw_plugs)
 	{
 		// draw line from plug_out
 		t_plug *plug_out = &brick->plug_out;
@@ -284,7 +284,7 @@ void brick_draw_plug(t_brick *brick,int is_out)
 
 void brick_draw_out(t_brick *brick)
 {
-	if(brick->state.draw_plugs)
+	if(brick->brick_state.draw_plugs)
 	{
 		brick_draw_plug(brick,1);
 	}
@@ -292,7 +292,7 @@ void brick_draw_out(t_brick *brick)
 
 void brick_draw_in(t_brick *brick)
 {
-	if(brick->state.draw_plugs)
+	if(brick->brick_state.draw_plugs)
 	{
 		brick_draw_plug(brick,0);
 	}
@@ -328,7 +328,7 @@ void brick_draw_outline(t_brick *brick)
 	t_context *C=ctx_get();
 
 	if(
-		(brick->state.draw_outline && C->draw->mode==mode_draw)
+		(brick->brick_state.draw_outline && C->draw->mode==mode_draw)
 		|| C->ui->show_brick_step
 		) 
 	{
@@ -339,7 +339,7 @@ void brick_draw_outline(t_brick *brick)
 		int line_width=1;
 
 		// set line width
-		if(brick->state.is_mouse_over)
+		if(brick->brick_state.is_mouse_over)
 		{
 			 line_width=2; 
 		}
@@ -356,9 +356,9 @@ void brick_draw_outline(t_brick *brick)
 
 		if(C->ui->show_brick_step)
 		{
-			if(brick->state.is_root) line_width = 4;
+			if(brick->brick_state.is_root) line_width = 4;
 
-			if(brick->state.is_current)
+			if(brick->brick_state.is_current)
 			{
 				color=yellow;
 				line_width=4;
@@ -374,7 +374,7 @@ void brick_draw_outline(t_brick *brick)
 		}
 		else
 		{
-			if(brick->state.is_mouse_over && brick->type != bt_switch) 
+			if(brick->brick_state.is_mouse_over && brick->type != bt_switch) 
 			{
 				skt_closedline(points,tot,C->ui->front_color,line_width);
 				skt_closedline_filled(points,tot,C->ui->back_color,line_width);
@@ -443,7 +443,7 @@ void brick_draw_body(t_brick *brick)
 		a[2]=0;
 
 		// if plug : translate left
-		if(brick->state.draw_plugs)
+		if(brick->brick_state.draw_plugs)
 		{
 			a[0]=brick->geom.height;
 		}
@@ -492,13 +492,13 @@ void brick_draw_txt(t_brick *brick)
 		glPushMatrix();
 
 			// margin
-			if(brick->state.draw_plugs)
+			if(brick->brick_state.draw_plugs)
 			{
 				glTranslatef(brick->geom.height+1,0,0);
 			}
 
 			//margin
-			if(!brick->state.draw_plugs)
+			if(!brick->brick_state.draw_plugs)
 			{
 				glTranslatef(brick->geom.margin,0,0);
 			}
@@ -507,7 +507,7 @@ void brick_draw_txt(t_brick *brick)
 			glTranslatef(0,5,0);
 
 			// draw NAME
-			if(brick->state.draw_name)
+			if(brick->brick_state.draw_name)
 			{
 				if( brick->type == bt_switch)
 				{
@@ -522,7 +522,7 @@ void brick_draw_txt(t_brick *brick)
 			}
 
 			// draw DATA
-			if(brick->mode==bm_typing)
+			if(brick->typing)
 			{
 				t_txt *txt = txt_new("");
 				set_name_long(txt->name, C->event->buffer_char);
@@ -542,7 +542,7 @@ void brick_draw_txt(t_brick *brick)
 			else
 			{
 				// draw DATA
-				if(brick->state.draw_value || C->ui->show_step)
+				if(brick->brick_state.draw_value || C->ui->show_step)
 				{
 					brick->txt_data.draw(&brick->txt_data);
 				}
@@ -559,13 +559,13 @@ void brick_draw_check_context(t_brick *brick)
 	t_data_type type; 
 	t_data_type context = brick->context;
 
-	if(brick->state.is_contextual)
+	if(brick->brick_state.is_contextual)
 	{
-		brick->state.draw = 0;
+		brick->brick_state.draw = 0;
 
-		if(brick->state.poll)
+		if(brick->brick_state.poll)
 		{
-			brick->state.draw = brick->poll( brick);
+			brick->brick_state.draw = brick->poll( brick);
 		}
 		else
 		{
@@ -573,7 +573,7 @@ void brick_draw_check_context(t_brick *brick)
 			{
 				type = node->type;
 
-				if( context == type) brick->state.draw = 1;
+				if( context == type) brick->brick_state.draw = 1;
 			}
 		}
 	}
@@ -583,7 +583,7 @@ void brick_draw(t_brick *brick)
 {
 	brick_draw_check_context(brick);
 
-	if(brick->state.draw)
+	if(brick->brick_state.draw)
 	{
 		brick_draw_txt(brick);
 		brick_draw_in(brick);

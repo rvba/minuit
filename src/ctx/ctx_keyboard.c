@@ -106,6 +106,8 @@ void keymap_typing( int key)
 			C->event->buffer_char[C->event->buffer_char_counter-1] = '\0';
 			C->event->buffer_char_counter--;
 			break;
+		case SHIFTKEY:
+			break;
 
 		default:
 			char_key = (char)key;
@@ -187,7 +189,6 @@ void keymap_command( int key)
 				C->ui->step_reset = 1;
 			break;
 		case DKEY: C->event->brick_delete = 1; break;
-		case KKEY: ctx_ui_switch_show_step(C); break;
 		case JKEY: ctx_ui_switch_show_states(C); break;
 		case FKEY: ctx_ui_freeze(C); break;
 		case WKEY: ctx_switch_intro(C);
@@ -230,6 +231,17 @@ void keymap_main( int key)
 	else
 	{
 		keymap_command(key);
+	}
+}
+
+
+void ctx_ui_keyboard_set( t_context *C, t_event *event)
+{
+	switch( event->type)
+	{
+		case SHIFTKEY:	C->ui->key_shift = 1; break;
+		case ALTKEY: 	C->ui->key_alt = 1; break;
+		case CTRLKEY: 	C->ui->key_ctrl= 1; ;break;
 	}
 }
 

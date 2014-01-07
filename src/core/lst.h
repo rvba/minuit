@@ -43,7 +43,7 @@ typedef struct Lst
 
 }t_lst;
 
-
+void 		lst_dupli(t_lst *dst, t_lst *src);
 void 		lst_lifo( t_lst *lst);
 void 		lst_link_delete(t_lst *lst,t_link *link);
 void 		lst_link_remove(t_lst *lst,t_link *link);

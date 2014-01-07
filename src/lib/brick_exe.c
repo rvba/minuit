@@ -489,8 +489,6 @@ void *op_delete(t_brick *brick)
 
 		node->cls->del(node);
 
-		ctx_ui_menu_hide(C);
-		brick_release(brick);
 		C->scene->selected=NULL;
 	}
 
@@ -501,7 +499,6 @@ void *op_delete(t_brick *brick)
 
 void *op_menu(t_brick *brick)
 {
-	brick_release(brick);
 	return NULL;
 }
 
@@ -642,11 +639,11 @@ void op_maths_plug(t_operation operation,t_plug *dst,t_plug *src)
 					{
 
 						C->event->update_connections=1;
-
 						t_plug *plug_source=plug_get_src(src);
-						t_brick *brick_source=plug_source->brick;
 
-						brick_source->cls->trigger(brick_source);
+						//XXX!!!
+						//t_brick *brick_source=plug_source->brick;
+						//brick_source->cls->trigger(brick_source);
 
 						data=plug_source->data;
 						type=plug_source->data_type;
@@ -1105,11 +1102,6 @@ void *op_not(t_brick *brick)
 		default:printf("op_not need an int\n");break;
 	}
 
-	if(brick->mode==bm_triggering) // (see:plug_update)
-	{
-		brick_release(brick); 
-	}
-
 	return NULL;
 }
 
@@ -1183,11 +1175,6 @@ void *op_rnd(t_brick *brick)
 	int *data=plug_intern->data;
 	*data=rnd_range(0,100);
 
-	if(brick->mode==bm_triggering) // (see:plug_update)
-	{
-		brick_release(brick); 
-	}
-
 	return NULL;
 }
 
@@ -1205,11 +1192,6 @@ void *op_neg(t_brick *brick)
 	if(plug_in->state.is_connected)
 		plug_data_negate(plug_intern);
 
-	if(brick->mode==bm_triggering) // (see:plug_update)
-	{
-		brick_release(brick); 
-	}
-
 	return NULL;
 }
 
@@ -1226,11 +1208,6 @@ void *op_abs(t_brick *brick)
 	// negate
 	if(plug_in->state.is_connected)
 		plug_data_abs(plug_intern);
-
-	if(brick->mode==bm_triggering) // (see:plug_update)
-	{
-		brick_release(brick); 
-	}
 
 	return NULL;
 }
@@ -1340,11 +1317,6 @@ void *op_bang(t_brick *brick)
 		*state=0;
 	}
 
-	if(brick->mode==bm_triggering) // (see:plug_update)
-	{
-		brick_release(brick); 
-	}
-
 	return NULL;
 }
 
@@ -1355,7 +1327,6 @@ void *op_float(t_brick *brick)
 	// flow
 	plug_intern->cls->flow(plug_intern);
 
-	if(brick->mode == bm_triggering)	brick_release(brick);
 	return NULL;
 }
 
@@ -1367,7 +1338,6 @@ void *op_int(t_brick *brick)
 	// flow
 	plug_intern->cls->flow(plug_intern);
 
-	if(brick->mode == bm_triggering)	brick_release(brick);
 	return NULL;
 }
 
@@ -1402,14 +1372,11 @@ void *op_const(t_brick *brick)
 
 	t_context *C = ctx_get();
 
-	if(brick->state.frame_loop != C->app->frame)
+	if(brick->brick_state.frame_loop != C->app->frame)
 	{
-		brick->state.frame_loop = C->app->frame;
+		brick->brick_state.frame_loop = C->app->frame;
 		*_const = *_i;
 	}
-
-	if(brick->mode == bm_triggering)
-		brick_release(brick);
 
 	return NULL;
 }
@@ -1434,9 +1401,9 @@ void *op_stack(t_brick *brick)
 
 	// reset by frame
 
-	if(brick->state.frame_loop != C->app->frame)
+	if(brick->brick_state.frame_loop != C->app->frame)
 	{
-		brick->state.frame_loop = C->app->frame;
+		brick->brick_state.frame_loop = C->app->frame;
 		*counter = 0;
 		*i = 0;
 	}
@@ -1452,8 +1419,6 @@ void *op_stack(t_brick *brick)
 		*counter = 0;
 		(*i)++;
 	}
-
-	if(brick->mode == bm_triggering) brick_release(brick);
 
 	return NULL;
 }

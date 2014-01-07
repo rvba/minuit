@@ -135,7 +135,7 @@ int node_hover_object(t_context *C, t_node *node)
 
 	if(is(object->type,"point"))
 	{
-		if(is_mouse_over(C,object->idcol))
+		if(COLOR_MATCH( C->event->color, object->idcol))
 		{
 			object->hover=1;
 			return 1;
@@ -162,7 +162,7 @@ int node_hover_object(t_context *C, t_node *node)
 		}
 		else
 		{
-			if(is_mouse_over(C,mesh->idcol))
+			if(COLOR_MATCH( C->event->color, mesh->idcol))
 			{
 				object->hover=1;
 				return 1;
@@ -184,14 +184,14 @@ int node_hover_brick(t_context *C, t_node *node)
 {
 	t_brick *brick=node->data;
 
-	if(is_mouse_over_brick(C,brick))
+	if(ctx_mouse_hover_brick(C,brick))
 	{
-		brick->state.is_mouse_over=1;
+		brick->brick_state.is_mouse_over=1;
 		return 1;
 	}
 	else
 	{
-		brick->state.is_mouse_over=0;
+		brick->brick_state.is_mouse_over=0;
 		return 0;
 	}
 }
@@ -271,7 +271,7 @@ void ctx_scene_update_lst(t_context *C, t_lst *lst)
 
 void scene_debug( t_context *C)
 {
-	printf( "%d scene_debug\n", C->app->frame);
+	//printf( "%d scene_debug\n", C->app->frame);
 }
 
 // update selction status for meshes and lights

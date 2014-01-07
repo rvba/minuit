@@ -29,6 +29,7 @@
 #include "rhizome.h"
 #include "event.h"
 #include "ctx.h"
+#include "clock.h"
 
 t_lst *sets = NULL;
 
@@ -85,28 +86,34 @@ void ui_draw_mouse(void)
 
 // LINES
 
-void ui_draw_lines(void)
+void ui_draw_lines( t_context *C)
 {
-	t_context *C=ctx_get();
-	if(C->event->is_drawing && C->draw->mode==mode_draw)
-	{
-		C->event->ui.use_line_global_width = 0;
-		float start[3] = {
-				(float)C->event->start_x,
-				(float)C->event->start_y,
-				0
-				};
+	C->event->ui.use_line_global_width = 0;
 
-		float end[3] = {
-				(float)C->event->end_x ,
-				(float)C->event->end_y ,
-				0
-				};
+	op_camera_switch_2d(C,C->ui->camera);
 
-		float *color=C->ui->front_color;
-		skt_line(start,end,1,color);
-		C->event->ui.use_line_global_width = 1;
-	}
+	glPushMatrix();
+	glLoadIdentity();
+
+	float start[3] = {
+			(float)C->event->start_x,
+			(float)C->event->start_y,
+			0
+			};
+
+	float end[3] = {
+			(float)C->event->end_x ,
+			(float)C->event->end_y ,
+			0
+			};
+
+	float *color=C->ui->front_color;
+	//float color[3] = {1,1,1};
+	skt_line(start,end,1,color);
+	C->event->ui.use_line_global_width = 1;
+
+
+	glPopMatrix();
 }
 
 // GRID
@@ -203,6 +210,9 @@ void ui_draw_grid(void)
 void ui_draw_term(void)
 {
 	t_context *C=ctx_get();
+	glPushMatrix();
+	glTranslatef( 50, C->app->window->height - 100, 0);
+
 	if(C->ui->show_term)
 	{
 		C->event->ui.use_scale = 0;
@@ -215,11 +225,13 @@ void ui_draw_term(void)
 			{
 				t = l->data;
 				t->draw(t);
+				glTranslatef(t->width + 30, 0, 0);
 			}
 		}
 
 		C->event->ui.use_scale = 1;
 	}
+	glPopMatrix();
 }
 
 // DRAW MENU 
@@ -387,6 +399,9 @@ void ui_draw(void)
 		ui_draw_icon_freeze(C);
 	}
 
+	// Link
+	if( C->ui->draw_link) ui_draw_lines( C); 
+
 	C->event->ui.use_point_global_width = 1;
 	C->event->ui.use_line_global_width = 1;
 	C->event->ui.use_point_global_width = 1;
@@ -424,6 +439,19 @@ void ui_mouse_show( t_ui *ui)
 
 // INIT
 
+void screen_init( t_context *C)
+{
+	t_screen *screen_main = screen_main_make( C);
+	screen_browser_make( C);
+	screen_sets_make( C);
+	screen_bricks_make( C);
+	screen_intro_make( C);
+	C->ui->screen_active = screen_main;
+
+}
+
+// INIT
+
 void ui_init(void)
 {
 	txt_alphabet_make();
@@ -434,6 +462,10 @@ void ui_init(void)
 
 	C->ui->camera = camera_new("camera_ui");
 	ctx_ui_init( C);
+
+	C->ui->clock = clock_new( "clock");
+	clock_init( C->ui->clock);
+	screen_init( C);
 }
 
 // NEW
@@ -443,6 +475,8 @@ t_ui *ui_new(void)
 	t_ui *ui = (t_ui *)mem_malloc(sizeof(t_ui));
 
 	ui->show_plug_state = 1;
+
+	ui->draw_link = 0;
 
 	ui->show_intro=UI_SHOW_INTRO;
 	ui->show_intro_always=0;
@@ -475,7 +509,11 @@ t_ui *ui_new(void)
 	ui->mouse_dy = 0;
 	ui->mouse_delta_x = 0;
 	ui->mouse_delta_y = 0;
+	ui->mouse_delta_x_last = 0;
+	ui->mouse_delta_y_last = 0;
 	ui->mouse_drag = 0;
+	ui->mouse_right_pressed = 0;
+	ui->mouse_left_pressed = 0;
 
 	ui->key_shift = 0;
 	ui->key_alt = 0;
@@ -523,6 +561,7 @@ t_ui *ui_new(void)
 
 	ui->bitrate = 15000;
 	ui->state = NULL;
+	ui->clock = NULL;
 
 	return ui;
 }
