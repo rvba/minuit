@@ -28,7 +28,6 @@
 #include "camera.h"
 #include "rhizome.h"
 #include "event.h"
-#include "ctx.h"
 #include "clock.h"
 
 t_lst *sets = NULL;

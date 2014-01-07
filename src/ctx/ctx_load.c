@@ -52,7 +52,6 @@
 #include "material.h"
 #include "texture.h"
 
-#include "ctx.h"
 #include "op.h"
 
 // LISTS

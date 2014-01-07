@@ -18,7 +18,6 @@
 
 #include "sketch.h"
 #include "ui.h"
-#include "ctx.h"
 
 #include "rhizome.h"
 #include "set.h"

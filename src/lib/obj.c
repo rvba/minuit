@@ -17,7 +17,6 @@
 #include "term.h"
 #include "file.h"
 #include "mesh.h"
-#include "ctx.h"
 #include "object.h"
 #include "screen.h"
 #include "memory.h"

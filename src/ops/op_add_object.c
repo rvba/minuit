@@ -12,7 +12,6 @@
 #include "node.h"
 #include "scene.h"
 #include "vlst.h"
-#include "ctx.h"
 #include "event.h"
 #include "term.h"
 #include "mesh.h"

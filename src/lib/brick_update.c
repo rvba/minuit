@@ -12,7 +12,6 @@
 #include "scene.h"
 #include "op.h"
 #include "action.h"
-#include "ctx.h"
 #include "app.h"
 #include "event.h"
 #include "term.h"

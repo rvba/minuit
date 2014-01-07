@@ -16,7 +16,6 @@
 #include "ui.h"
 #include "mesh.h"
 #include "object.h"
-#include "ctx.h"
 #include "mesh.h"
 #include "object.h"
 #include "brick.h"

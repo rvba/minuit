@@ -4,7 +4,6 @@ set(SRC
 	context.h
 	ctx_camera.c
 	ctx_compute.c
-	ctx.h
 	ctx_event.c
 	ctx_keyboard.c
 	ctx_load.c

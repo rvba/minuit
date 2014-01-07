@@ -16,7 +16,6 @@
 #include "vlst.h"
 #include "block.h"
 #include "brick.h"
-#include "ctx.h"
 #include "op.h"
 #include "list.h"
 #include "ui.h"

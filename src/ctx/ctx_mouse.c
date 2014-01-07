@@ -16,7 +16,6 @@
 #include "ui.h"
 #include "draw.h"
 #include "screen.h"
-#include "ctx.h"
 
 int ctx_mouse_hover_brick_left( t_context *C, t_brick *brick)
 {

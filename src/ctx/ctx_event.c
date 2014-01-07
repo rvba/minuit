@@ -16,7 +16,6 @@
 #include "list.h"
 #include "util.h"
 #include "screen.h"
-#include "ctx.h"
 
 void ctx_event_exec( t_context *C, t_event *event)
 {

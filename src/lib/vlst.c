@@ -13,7 +13,6 @@
 
 #include "op.h"
 #include "action.h"
-#include "ctx.h"
 #include "event.h"
 #include "term.h"
 #include "list.h"

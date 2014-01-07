@@ -11,7 +11,6 @@
 #include "util.h"
 #include "context.h"
 #include "op.h"
-#include "ctx.h"
 #include "mesh.h"
 #include "object.h"
 #include "camera.h"

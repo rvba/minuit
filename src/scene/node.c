@@ -40,7 +40,6 @@
 #include "geometry.h"
 #include "memory.h"
 
-#include "ctx.h"
 
 int node_equal(t_node *m, t_node *n)
 {
