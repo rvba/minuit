@@ -1,5 +1,7 @@
 # CTX
 set(SRC
+	context.c
+	context.h
 	ctx_camera.c
 	ctx_compute.c
 	ctx.h
@@ -15,7 +17,6 @@ set(SRC
 	ctx_scene.c
 	ctx_ui.c
 	ctx_video.c
-
 )
 
 add_library(minuit-ctx STATIC ${SRC})

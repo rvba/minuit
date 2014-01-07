@@ -1,25 +1,12 @@
 # SRC
 
-add_subdirectory(util)
-add_subdirectory(lib)
+add_subdirectory(ops)
 add_subdirectory(ctx)
-
-set(SRC 
-	app.c
-	app.h
-	context.c
-	context.h
-	draw.c
-	draw.h
-	node.c
-	node.h
-	opengl.h
-	scene.c
-	scene.h
-	ui.c
-	ui.h
-)
-
-add_library(minuit-core STATIC ${SRC})
+add_subdirectory(ui)
+add_subdirectory(draw)
+add_subdirectory(scene)
+add_subdirectory(lib)
+add_subdirectory(app)
+add_subdirectory(core)
 
 

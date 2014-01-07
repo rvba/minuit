@@ -439,6 +439,19 @@ void ui_mouse_show( t_ui *ui)
 
 // INIT
 
+void screen_init( t_context *C)
+{
+	t_screen *screen_main = screen_main_make( C);
+	screen_browser_make( C);
+	screen_sets_make( C);
+	screen_bricks_make( C);
+	screen_intro_make( C);
+	C->ui->screen_active = screen_main;
+
+}
+
+// INIT
+
 void ui_init(void)
 {
 	txt_alphabet_make();
@@ -452,6 +465,7 @@ void ui_init(void)
 
 	C->ui->clock = clock_new( "clock");
 	clock_init( C->ui->clock);
+	screen_init( C);
 }
 
 // NEW

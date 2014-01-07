@@ -14,8 +14,13 @@ find_package(JPEG REQUIRED)
 find_package(Threads)
 
 include_directories(
+	${CMAKE_SOURCE_DIR}/src/ops
+	${CMAKE_SOURCE_DIR}/src/draw
+	${CMAKE_SOURCE_DIR}/src/ui
+	${CMAKE_SOURCE_DIR}/src/scene
+	${CMAKE_SOURCE_DIR}/src/app
 	${CMAKE_SOURCE_DIR}/src/ctx
-	${CMAKE_SOURCE_DIR}/src/util
+	${CMAKE_SOURCE_DIR}/src/core
 	${CMAKE_SOURCE_DIR}/src/lib
 	${CMAKE_SOURCE_DIR}/src
 	)
@@ -27,10 +32,10 @@ add_subdirectory(src)
 
 add_executable(
     minuit
-    minuit.c
+    src/minuit.c
 )
 
-target_link_libraries(minuit minuit-core minuit-lib minuit-util minuit-ctx)
+target_link_libraries(minuit minuit-ctx minuit-ops minuit-ui minuit-draw minuit-scene minuit-lib minuit-app minuit-core)
 target_link_libraries(minuit ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${PNG_LIBRARY} ${JPEG_LIBRARY} pthread m)
 
 

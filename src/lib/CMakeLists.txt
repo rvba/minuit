@@ -3,9 +3,6 @@
 set(SRC
 	action.c
 	action.h
-	app_keyboard.c
-	app_mouse.c
-	app_window.c
 	binding.c
 	binding.h
 	block.c
@@ -63,31 +60,18 @@ set(SRC
 	object_draw.c
 	object.h
 	obj.h
-	op_action.c
-	op_add_brick.c
-	op_add_object.c
-	op.c
-	op_camera.c
-	op_debug.c
-	op.h
-	op_texture.c
 	option.h
 	plug_cls.c
 	plug.h
 	process.h
 	rhizome.c
 	rhizome.h
-	screen_browser.c
 	screen.c
 	screen.h
-	screen_init.c
-	screen_intro.c
 	server.c
 	server.h
 	set.c
 	set.h
-	sketch.c
-	sketch.h
 	term.c
 	term.h
 	texture.c
