@@ -267,6 +267,20 @@ void state_brick_switch_default( t_brick *brick, t_event *e)
 			break;
 	}
 }
+
+void state_brick_trigger( t_brick *brick, t_event *e)
+{
+	ctx_ui_log( "brick_trigger");
+	switch( e->type)
+	{
+		case MOUSE_LEFT_RELEASED:
+			brick->act( brick);
+			ctx_event_add( UI_BRICK_RELEASED); 
+			BRICK_SWAP( brick, state_brick_default);
+			break;
+	}
+}
+
 					
 void state_brick_default( t_brick *brick, t_event *e)
 {
@@ -274,14 +288,7 @@ void state_brick_default( t_brick *brick, t_event *e)
 	switch( e->type)
 	{
 		case MOUSE_LEFT_PRESSED:
-			brick->act( brick);
-			break;
-
-		case MOUSE_LEFT_RELEASED:
-			ctx_event_add( UI_BRICK_RELEASED); 
-			break;
-
-		case MOUSE_MIDDLE_PRESSED:
+			BRICK_SWAP( brick, state_brick_trigger);
 			break;
 	}
 }
