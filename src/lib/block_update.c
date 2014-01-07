@@ -330,10 +330,11 @@ void state_block_disconnect( t_block *block, t_event *e)
 
 void block_disconnect( t_context *C, t_block *block, t_brick *brick, t_event *e)
 {
-	t_brick *brick_target = brick->plug_in.src->brick;
-
-	if( brick_target)
+	t_plug *plug_target = brick->plug_in.src;
+	if( plug_target)
 	{
+		t_brick *brick_target = plug_target->brick;
+
 		float plug_pos[3];
 		t_block *block_target = brick_target->block;
 		block_get_pos_plug_out( block_target, brick_target, plug_pos);
