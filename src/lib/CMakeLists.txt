@@ -1,4 +1,5 @@
 # LIB
+
 set(SRC
 	action.c
 	action.h
@@ -23,21 +24,6 @@ set(SRC
 	clock.c
 	clock.h
 	CMakeLists.txt
-	ctx_camera.c
-	ctx_compute.c
-	ctx.h
-	ctx_event.c
-	ctx_keyboard.c
-	ctx_load.c
-	ctx_mouse.c
-	ctx_option.c
-	ctx_process.c
-	ctx_render.c
-	ctx_rhizome.c
-	ctx_save.c
-	ctx_scene.c
-	ctx_ui.c
-	ctx_video.c
 	data.c
 	data.h
 	dict.c

@@ -170,30 +170,6 @@ void op_debug_process(void)
 	glPopMatrix();
 }
 
-void op_debug_all(t_context *C)
-{
-	// OFF
-	if(C->event->debug_all)
-	{
-		C->event->debug_all = 0;
-		C->ui->show_term = 0;
-		C->ui->show_rhizome_bounding_box = 0;
-		C->ui->show_rhizome_order = 0;
-		C->scene->debug_all = 0;
-		PLUG_DEBUG = 0;
-	}
-	// ON
-	else
-	{
-		C->event->debug_all = 1;
-		C->ui->show_term = 1;
-		C->ui->show_rhizome_bounding_box = 1;
-		C->ui->show_rhizome_order = 1;
-		C->scene->debug_all = 1;
-		PLUG_DEBUG = 1;
-	}
-}
-
 	
 
 
