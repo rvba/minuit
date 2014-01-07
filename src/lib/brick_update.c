@@ -175,7 +175,6 @@ void state_brick_edit( t_brick *brick, t_event *e)
 		case SHIFTKEY:
 			break;
 		default:
-			event_show( e);
 			brick_edit_name( C, brick);
 			break;
 	}

@@ -204,6 +204,7 @@ void state_block_brick_trigger( t_block *block, t_event *e)
 	if( e->type == UI_BRICK_RELEASED)
 	{
 		ctx_event_add( UI_BLOCK_RELEASED);
+		if( block->rhizome) rhizome_setup( block->rhizome);
 		BLOCK_SWAP( block, state_block_default);
 	}
 	else
@@ -225,6 +226,7 @@ void block_brick_trigger( t_context *C, t_block *block)
 	t_brick *brick = block_brick_hover( C);
 	block->_selected = brick;
 	brick->cls->dispatch( brick); 
+
 	BLOCK_SWAP( block, state_block_brick_trigger);
 }
 
