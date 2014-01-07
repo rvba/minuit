@@ -62,7 +62,6 @@ t_context *ctx_new(int argc,char **argv)
 
 t_context *ctx_init(int argc,char **argv)
 {
-	// New Context
 	t_context *C = ctx_new(argc,argv);
 
 	// Store Local
@@ -73,11 +72,11 @@ t_context *ctx_init(int argc,char **argv)
 	app_init( C->app, "minuit");
 	log_init();
 	mem_init();
+	op_init( C); 
 	ui_init();
 	term_init();
 	mode_init( C->mode);
 	ctx_thread_init( C);
-	op_init( C); 
 	screen_init( C);
 	exe_init();
 

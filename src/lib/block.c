@@ -515,10 +515,10 @@ t_node *block_make(const char *name,const char *type)
 {
 	t_context *C=ctx_get();
 
-	t_node *n_block=scene_add(C->scene,dt_block,name);
-	t_node *n_list=scene_add(C->scene,dt_list,name);
+	t_node *n_block = scene_add(C->scene,dt_block,name);
+	t_node *n_list = scene_add(C->scene,dt_list,name);
 
-	t_block *block=n_block->data;
+	t_block *block = n_block->data;
 
 	set_name(block->type,type);
 

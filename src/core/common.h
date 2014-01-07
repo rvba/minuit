@@ -17,6 +17,8 @@
 #include <math.h>
 #include <ctype.h>
 
+#define APP_VERSION "0.5"
+
 #define _NAME_ 64
 #define _NAME_LONG_ 128
 #define _PATH_ 150
