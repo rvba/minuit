@@ -1,4 +1,4 @@
-# CORE
+# BASE
 set(SRC
 	opengl.h
 	common.h
@@ -26,4 +26,4 @@ set(SRC
 	util.h
 	)
 
-add_library(minuit-core STATIC ${SRC})
+add_library(minuit-base STATIC ${SRC})

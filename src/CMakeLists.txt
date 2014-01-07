@@ -7,6 +7,6 @@ add_subdirectory(draw)
 add_subdirectory(scene)
 add_subdirectory(lib)
 add_subdirectory(app)
-add_subdirectory(core)
+add_subdirectory(base)
 
 
