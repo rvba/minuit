@@ -29,6 +29,9 @@ typedef struct Term
 	int line_length;
 	int offset;
 
+	float width;
+	float height;
+
 	struct Lst *lines;
 	struct Link *cursor;
 
@@ -47,5 +50,7 @@ void term_init(void);
 void term_print(t_term *term,char *data);
 void term_log(char *fmt, ...);
 void term_echo(t_term *term,char *fmt, ...);
+
+t_term *term_get( const char *name);
 
 #endif

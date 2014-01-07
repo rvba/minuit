@@ -22,6 +22,31 @@
 #include "graph.h"
 #include "memory.h"
 
+void block_get_pos_plug_out( t_block *block, t_brick *brick, float *v)
+{
+	float pos_x = block->pos[0];
+	float pos_y = block->pos[1];
+
+	float plug_width = brick->geom.height;
+	float brick_width = brick->geom.width;
+	int pos = brick->geom.block_pos;
+
+	float x = pos_x + brick_width ;
+	float y = pos_y + ((pos + 1) * plug_width) - ( plug_width / 2);
+	float z = 0;
+
+	v[0] = x;
+	v[1] = y;
+	v[2] = z;
+}
+
+void block_get_center( t_block *block, float *v)
+{
+	float width = block->width;
+	float height = block->height;
+	vset( v, width / 2, height / 2, 0);
+}
+
 // Reset Update State
 void block_reset(t_block *block)
 {
@@ -34,17 +59,6 @@ void block_reset(t_block *block)
 		brick = link->data;
 		plug = &brick->plug_intern;
 		plug->state.is_updated = 0;
-	}
-}
-
-// Trigger Brick
-void block_brick_trigger(t_plug *plug)
-{
-	t_brick *brick = plug->brick;
-
-	if(!plug->state.is_updated)
-	{
-		brick->cls->trigger(brick);
 	}
 }
 
@@ -79,7 +93,6 @@ void block_exec(t_block *block)
 {
 	t_link *link;
 	t_brick *brick;
-	t_plug *plug;
 
 	// Reset State
 	block_reset(block);
@@ -88,8 +101,7 @@ void block_exec(t_block *block)
 	for(link=block->bricks->first;link;link=link->next)
 	{
 		brick = link->data;
-		plug = &brick->plug_intern;
-		block_brick_trigger(plug);
+		brick->exe( brick);
 	}
 }
 
@@ -243,7 +255,7 @@ t_block *block_copy(t_block *block)
 	t_node *clone_node = block_make(block->id.name,block->type);
 	t_block *clone_block = clone_node->data;
 
-	clone_block->state.draw_outline = block->state.draw_outline;
+	clone_block->block_state.draw_outline = block->block_state.draw_outline;
 
 	_add_block(C,clone_block);
 
@@ -297,8 +309,8 @@ t_block_class block_menu =
 	.make=cls_block_make_menu,
 	.link=cls_block_link,
 	.draw=cls_block_draw_block,
-	.update=cls_block_menu_update,
 	.init=_block_init,
+	.dispatch = cls_block_dispatch,
 };
 
 // block
@@ -309,8 +321,8 @@ t_block_class block_block =
 	.make=cls_block_make_block,
 	.link=cls_block_link,
 	.draw=cls_block_draw_block,
-	.update=cls_block_block_update,
 	.init=_block_init,
+	.dispatch = cls_block_dispatch,
 };
 
 void cls_block_make_block(t_block *block)
@@ -343,6 +355,14 @@ void block_cls_init(t_block *block)
 		}
 	}
 
+	if( is(block->cls->type, "menu"))
+	{
+		block->state = state_block_menu_default;
+	}
+	else
+	{
+		block->state = state_block_default;
+	}
 
 	if(!found)printf("[ERROR:cls_block_init] Unknown block type %s\n",block->type);
 }
@@ -415,15 +435,15 @@ t_brick *block_brick_get_by_position(t_block *block, int pos)
 void block_brick_init(t_node *node_brick)
 {
 	t_brick *brick=node_brick->data;
-	brick->state.draw_plugs=1;
+	brick->brick_state.draw_plugs=1;
 }
 
 void block_operator_brick_init(t_node *node_brick)
 {
 	t_brick *brick=node_brick->data;
-	brick->state.draw_plugs=1;
-	brick->state.draw_outline=0;
-	brick->state.draw_name=0;
+	brick->brick_state.draw_plugs=1;
+	brick->brick_state.draw_outline=0;
+	brick->brick_state.draw_name=0;
 }
 
 
@@ -440,7 +460,7 @@ t_block *block_clone(t_block *block)
 		vcp3f(clone->pos,block->pos);
 		clone->width = block->width;
 		clone->height = block->height;
-		clone->state = block->state;
+		clone->block_state = block->block_state;
 		clone->tot_bricks = block->tot_bricks;
 		clone->rhizome_order = block->rhizome_order;
 		clone->rhizome_pos = block->rhizome_pos;
@@ -495,10 +515,10 @@ t_node *block_make(const char *name,const char *type)
 {
 	t_context *C=ctx_get();
 
-	t_node *n_block=scene_add(C->scene,dt_block,name);
-	t_node *n_list=scene_add(C->scene,dt_list,name);
+	t_node *n_block = scene_add(C->scene,dt_block,name);
+	t_node *n_list = scene_add(C->scene,dt_list,name);
 
-	t_block *block=n_block->data;
+	t_block *block = n_block->data;
 
 	set_name(block->type,type);
 
@@ -567,17 +587,18 @@ t_block *block_new(const char *name)
 
 	block->submenu=NULL;
 	block->selected=NULL;
+	block->_selected=NULL;
 
-	block->state.is_root=0;
-	block->state.is_show=0;
-	block->state.draw_outline=0;
-	block->state.draw_plugs=0;
-	block->state.is_mouse_over=0;
-	block->state.update_geometry=1;
-	block->state.is_moveable = 1;
-	block->state.is_a_loop = 0;
-	block->state.is_in_rhizome = 0;
-	block->state.frame_based = 0;
+	block->block_state.is_root=0;
+	block->block_state.is_show=0;
+	block->block_state.draw_outline=0;
+	block->block_state.draw_plugs=0;
+	block->block_state.is_mouse_over=0;
+	block->block_state.update_geometry=1;
+	block->block_state.is_moveable = 1;
+	block->block_state.is_a_loop = 0;
+	block->block_state.is_in_rhizome = 0;
+	block->block_state.frame_based = 0;
 
 	block->tot_bricks=0;
 	block->width=0;

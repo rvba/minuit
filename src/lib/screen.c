@@ -177,17 +177,6 @@ void screen_generic(t_screen *screen)
 	op_camera_switch_3d(C, camera);
 }
 
-void ui_draw_status(void)
-{
-	t_context *C=ctx_get();
-	if(C->ui->show_status)
-	{
-		C->event->ui.use_scale = 0;
-
-
-	}
-}
-
 // SCREEN MAIN
 
 void screen_main(t_screen *screen)
@@ -202,9 +191,7 @@ void screen_main(t_screen *screen)
 
 	ui_draw_mouse();
 	op_camera_switch_2d(C,camera);
-	ui_draw_status_bar();
 	ui_draw_term();
-	ui_draw_status();
 	ui_draw_grid();
 
 	ui_draw_menu();
@@ -229,14 +216,11 @@ void screen_sets(t_screen *screen)
 	float zoom = C->ui->zoom;
 	glScalef(zoom,zoom,zoom);
 
-
 	ui_draw_mouse();
 	op_camera_switch_2d(C,camera);
-	ui_draw_lines();
-	ui_draw_status_bar();
+	//ui_draw_lines();
 	ui_draw_term();
 	ui_draw_grid();
-	//ui_draw_rhizomes();
 
 	glPushMatrix();
 	glLoadIdentity();
@@ -373,16 +357,6 @@ t_screen *screen_new(const char *name)
 	return screen;
 }
 
-// INIT
-
-void screen_init(void)
-{
-	screen_main_make();
-	screen_browser_make();
-	screen_sets_make();
-	screen_bricks_make();
-	screen_intro_make();
-}
 
 
 

@@ -43,7 +43,7 @@ void set_setup(t_set *set)
 		for(link=set->blocks->first;link;link=link->next)
 		{
 			block = link->data;
-			if(block->state.frame_based) frame_based = 1;
+			if(block->block_state.frame_based) frame_based = 1;
 		}
 	}
 

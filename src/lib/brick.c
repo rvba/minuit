@@ -27,8 +27,8 @@ void brick_rhizome_split(t_brick *brick_x, t_brick *brick_y)
 	t_block *block_x = brick_x->block;
 	t_block *block_y = brick_y->block;
 
-	block_x->state.is_root = 0;
-	block_y->state.is_root = 0;
+	block_x->block_state.is_root = 0;
+	block_y->block_state.is_root = 0;
 
 	rhizome_graph_split(block_x->rhizome, brick_x, brick_y);
 }
@@ -147,7 +147,7 @@ void brick_clone_change_name(t_brick *brick)
 
 	n = s_append(name,s,n);
 
-	sprintf(s,"%d",brick->state.clone);
+	sprintf(s,"%d",brick->brick_state.clone);
 
 	n = s_append(name,s,n);
 
@@ -169,22 +169,23 @@ t_brick *brick_dupli(t_block *block,t_brick *brick)
 
 	t_brick *clone_brick=clone_node->data;
 
-	clone_brick->action=brick->action;
-	clone_brick->state.draw_name=brick->state.draw_name;
-	clone_brick->state.draw_value=brick->state.draw_value;
-	clone_brick->state.draw_outline=brick->state.draw_outline;
+	clone_brick->exe=brick->exe;
+	clone_brick->act=brick->act;
+	clone_brick->brick_state.draw_name=brick->brick_state.draw_name;
+	clone_brick->brick_state.draw_value=brick->brick_state.draw_value;
+	clone_brick->brick_state.draw_outline=brick->brick_state.draw_outline;
 
 	scene_store(C->scene,0);
 
-	if(brick->state.clone)
+	if(brick->brick_state.clone)
 	{
-		clone_brick->state.clone = brick->state.clone;
+		clone_brick->brick_state.clone = brick->brick_state.clone;
 		brick_clone_change_name(clone_brick);
 	}
 	else
 	{
-		brick->state.clone = brick->id.id;
-		clone_brick->state.clone = brick->id.id;
+		brick->brick_state.clone = brick->id.id;
+		clone_brick->brick_state.clone = brick->id.id;
 		brick_clone_change_name(brick);
 		brick_clone_change_name(clone_brick);
 		brick_build_width(brick);
@@ -210,10 +211,11 @@ t_brick *brick_copy(t_block *block,t_brick *brick)
 
 	t_brick *clone_brick=clone_node->data;
 
-	clone_brick->action=brick->action;
-	clone_brick->state.draw_name=brick->state.draw_name;
-	clone_brick->state.draw_value=brick->state.draw_value;
-	clone_brick->state.draw_outline=brick->state.draw_outline;
+	clone_brick->exe=brick->exe;
+	clone_brick->act=brick->act;
+	clone_brick->brick_state.draw_name=brick->brick_state.draw_name;
+	clone_brick->brick_state.draw_value=brick->brick_state.draw_value;
+	clone_brick->brick_state.draw_outline=brick->brick_state.draw_outline;
 
 	scene_store(C->scene,0);
 
@@ -462,14 +464,15 @@ t_brick *brick_rebind(t_scene *sc,void *ptr)
 
 
 	rebind(sc,"brick","plug_out_dst",(void **)&brick->plug_out.dst);
-	rebind(sc,"brick action",brick->id.name,(void **)&brick->action);
+	rebind(sc,"brick exe",brick->id.name,(void **)&brick->exe);
+	rebind(sc,"brick act",brick->id.name,(void **)&brick->act);
 
 	rebind(sc,"brick","plug binding",(void **)&brick->plug_intern.bindings);
 
 	txt_init(&brick->txt_name,brick->id.name);
 	txt_init(&brick->txt_data,NULL);
 
-	if(brick->state.clone)
+	if(brick->brick_state.clone)
 	{
 		brick_clone_change_name(brick);
 		brick_build_width(brick);
@@ -490,8 +493,6 @@ void brick_init(t_scene *sc,t_brick *brick)
 	scene_color_get(sc,col);
 	vseti(brick->idcol_left,col[0],col[1],col[2]);
 
-	// brick cls
-	brick_cls_init(brick);
 
 	// plug cls
 	plug_cls_init(&brick->plug_in);
@@ -506,8 +507,6 @@ void brick_init(t_scene *sc,t_brick *brick)
 	t_plug *plug_intern=&brick->plug_intern;
 	t_plug *plug_out=&brick->plug_out;
 
-	//XXX
-
 	plug_in->brick = brick;
 	plug_intern->brick = brick;
 	plug_out->brick = brick;
@@ -518,10 +517,8 @@ void brick_init(t_scene *sc,t_brick *brick)
 	plug_intern->dst = plug_out;
 	plug_out->src = plug_intern;
 
-	/*
-	plug_intern->bang = 0;
-	plug_intern->is_init = 0;
-	*/
+	// State
+	brick->state = state_brick_default;
 }
 
 
@@ -538,11 +535,15 @@ t_node *brick_make(t_block *block,const char *name,t_brick_type brick_type,t_dat
 	// TYPE
 	brick->type=brick_type;
 
+	// brick cls
+	brick_cls_init(brick);
+
 	// ADD TO BLOCK 
 	block_brick_add(block,node_brick);
 
 	// DEFAULT ACTION
-	brick->action=op_void;
+	brick->exe=op_void_exe;
+	brick->act=op_void_act;
 
 	// PLUG INIT 
 	plug_init(&brick->plug_intern,data_type,brick,data_target,0);
@@ -555,16 +556,17 @@ t_node *brick_make(t_block *block,const char *name,t_brick_type brick_type,t_dat
 		scene_add_ref(C->scene,"struct_ref","plug","in",&brick->plug_in,brick);
 		scene_add_ref(C->scene,"struct_ref","plug","out",&brick->plug_out,brick);
 		scene_add_ref(C->scene,"struct_ref","plug","intern",&brick->plug_intern,brick);
-		brick->state.has_ref=1;
+		brick->brick_state.has_ref=1;
 	}
 
 	// BRICK INIT
-	brick_init(C->scene,brick);
+	//brick_init(C->scene,brick);
+	brick->cls->init( brick);
 
 	// Frame Based
 	if(is(name,"frame"))
 	{
-		block->state.frame_based  =1;
+		block->block_state.frame_based  =1;
 	}
 
 	return node_brick;
@@ -592,7 +594,6 @@ void _brick_free(t_brick *brick)
 	mem_free(brick, sizeof( t_brick));
 }
 
-
 // FREE
 
 void brick_free(t_brick *brick)
@@ -607,7 +608,7 @@ void brick_free(t_brick *brick)
 		scene_delete(C->scene, plug_intern->bindings);
 	}
 
-	if(brick->state.has_ref)
+	if(brick->brick_state.has_ref)
 	{
 		scene_remove_ref(sc,&brick->plug_in);
 		scene_remove_ref(sc,&brick->plug_out);
@@ -628,33 +629,33 @@ t_brick *brick_new(const char *name)
 
 	brick->context=dt_null;
 
-	bzero(&brick->state,sizeof(t_brick_state));
+	bzero(&brick->brick_state,sizeof(t_brick_state));
 
-	brick->state.is_idle=1;
-	brick->state.is_released=1;
-	brick->state.draw_outline=1;
-	brick->state.draw_plugs=1;
-	brick->state.draw_name=1;
-	brick->state.is_clicable=1;
-	brick->state.use_min_width=1;
-	brick->state.use_block_width=1;
-	brick->state.is_mouse_mode=1;
-	brick->state.is_contextual=0;
-	brick->state.poll=0;
-	brick->state.is_versatil=0;
-	brick->state.has_ref=0;
-	brick->state.is_current=0;
-	brick->state.always_trigger=0;
-	brick->state.use_dragging = 1;
-	brick->state.use_loops = 1;
-	brick->state.frame_loop = 0;
-	brick->state.remove_connected = 0;
-	brick->state.clone = 0;
-	brick->state.draw_value = 1;
-	brick->state.is_root = 0;
-	brick->state.debug = 0;
-	brick->state.draw = 1;
-	brick->state.has_components = 0;
+	brick->brick_state.is_idle=1;
+	brick->brick_state.is_released=1;
+	brick->brick_state.draw_outline=1;
+	brick->brick_state.draw_plugs=1;
+	brick->brick_state.draw_name=1;
+	brick->brick_state.is_clicable=1;
+	brick->brick_state.use_min_width=1;
+	brick->brick_state.use_block_width=1;
+	brick->brick_state.is_mouse_mode=1;
+	brick->brick_state.is_contextual=0;
+	brick->brick_state.poll=0;
+	brick->brick_state.is_versatil=0;
+	brick->brick_state.has_ref=0;
+	brick->brick_state.is_current=0;
+	brick->brick_state.always_trigger=0;
+	brick->brick_state.use_dragging = 1;
+	brick->brick_state.use_loops = 1;
+	brick->brick_state.frame_loop = 0;
+	brick->brick_state.remove_connected = 0;
+	brick->brick_state.clone = 0;
+	brick->brick_state.draw_value = 1;
+	brick->brick_state.is_root = 0;
+	brick->brick_state.debug = 0;
+	brick->brick_state.draw = 1;
+	brick->brick_state.has_components = 0;
 
 	brick->geom.block_pos=0;
 	brick->geom.height=20;
@@ -666,14 +667,15 @@ t_brick *brick_new(const char *name)
 	brick->var.selector_length=0;
 
 	brick->cls=NULL;
-	brick->action=NULL;
+	brick->exe=NULL;
+	brick->act=NULL;
 	brick->poll = NULL;
 	brick->menu=NULL;
 
 	brick->rhizome_order = -1;
 	brick->block_order = -1;
 
-	brick->mode=bm_idle;
+	//brick->mode=bm_idle;
 
 	plug_reset(&brick->plug_in,name);
 	plug_reset(&brick->plug_intern,name);
@@ -682,6 +684,9 @@ t_brick *brick_new(const char *name)
 	bzero(&brick->var.selector_list,_LIST_*_NAME_LONG_);
 
 	brick->counter = 0;
+	brick->state = NULL;
+	//brick->state_pressed = BRICK_NULL;
+	brick->typing = 0;
 
 	return brick;
 }

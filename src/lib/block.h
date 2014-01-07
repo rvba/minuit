@@ -11,9 +11,14 @@
 #ifndef __BLOCK_H
 #define __BLOCK_H
 
-#define BRICK_MIN_WIDTH 130
-
 #include "common.h"
+
+#define BRICK_MIN_WIDTH 130
+#define BLOCK_STATE_DEFAULT 1
+#define BLOCK_STATE_HOVER_
+#define BLOCK_STATE_HOVER_MENU 2
+
+#define BLOCK_SWAP( block, st) ((block->state) = &(st)) 
 
 struct Dict;
 struct Scene;
@@ -22,6 +27,7 @@ struct Node;
 struct Lst;
 struct Plug;
 struct Dot;
+struct Event;
 
 typedef struct Block t_block;
 typedef struct Block_Class t_block_class;
@@ -43,8 +49,8 @@ struct Block_Class
 	void (* make)(t_block *self);
 	void (* link)(t_block *self,struct Node *target);
 	void (* draw)(t_block *self);
-	void (* update)(t_block *self);
 	void (* init)(t_block *self);
+	void (* dispatch)(t_block *self);
 };
 
 struct Block_State
@@ -74,7 +80,7 @@ struct Block
 	float width;				// block width
 	float height;				// block height
 
-	t_block_state state;			// block state
+	t_block_state block_state;			// block state
 
 	int tot_bricks; 			// drawing plugs
 	int rhizome_order;			// unset > -1
@@ -83,13 +89,12 @@ struct Block
 	struct Lst *bricks;
 	struct Brick *submenu;
 	struct Brick *selected;			// submenu
+	struct Brick *_selected;			// submenu
 
 	struct Rhizome *rhizome;
 	struct Set *set;
-	/*
-	struct Dot *dot;
-	struct Lst *dashes;
-	*/
+
+	void (* state)( t_block *block, struct Event *e);
 };
 
 
@@ -115,10 +120,19 @@ void 		block_free(t_block *block);
 t_block *	block_new(const char *name);
 t_block *	block_rebind(struct Scene *sc,void *ptr);
 
+void cls_block_dispatch( t_block *block);
+void cls_block_dispatch( t_block *block);
+
+void cls_block_state_block_default( t_block *block, struct Event *e);
+void state_block_menu_default( t_block *block, struct Event *e);
+void state_block_default( t_block *block, struct Event *e);
+
+
+
 
 // BLOCK DRAW
 
-void block_draw_outline(t_block *block);
+void 		block_draw_outline(t_block *block);
 void 		block_draw(t_block *block);
 void		cls_block_draw_generic(t_block *self);
 void		cls_block_draw_menu(t_block *self);
@@ -143,12 +157,11 @@ void 		cls_block_generic_update(t_block *block);
 void 		block_rhizome_split(struct Block *block_self, struct Plug *plug_self, struct Block *block_dst, struct Plug *plug_dst);
 void 		block_rhizome_add(t_block *self, t_block *dst);
 
-void block_set_loop_state(t_block *block, int state);
+void 		block_set_loop_state(t_block *block, int state);
 void 		block_exec(t_block *block);
-
-void block_brick_trigger(struct Plug *plug);
-
-void _block_free(t_block *block);
+void 		_block_free(t_block *block);
+void 		block_get_center( t_block *block, float *v);
+void 		block_get_pos_plug_out( t_block *block, struct Brick *brick, float *v);
 
 #endif
 

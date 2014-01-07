@@ -20,6 +20,18 @@ void cls_brick_init(t_brick *brick)
 	brick_init(C->scene,brick);
 }
 
+void cls_brick_init_switch( t_brick *brick)
+{
+	cls_brick_init( brick);
+	brick->state = state_brick_switch_default;
+}
+
+void cls_brick_init_slider( t_brick *brick)
+{
+	cls_brick_init( brick);
+	brick->state = state_brick_slider_default;
+}
+
 void brick_make_trigger(t_brick *brick);
 void brick_make_slider(t_brick *brick);
 void brick_make_menu(t_brick *brick);
@@ -33,11 +45,10 @@ t_brick_class brick_trigger = {
 	.type=bt_trigger,
 	.make=brick_make_trigger,
 	.draw=brick_draw,
-	.update=cls_brick_update,
-	.trigger=cls_brick_trigger_trigger,
 	.init=cls_brick_init,
 	.connect=cls_brick_connect,
 	.disconnect=cls_brick_disconnect,
+	.dispatch=cls_brick_dispatch,
 	};
 
 // SLIDER
@@ -47,11 +58,10 @@ t_brick_class brick_slider = {
 	.type=bt_slider,
 	.make=brick_make_slider,
 	.draw=brick_draw,
-	.update=cls_brick_update,
-	.trigger=cls_brick_trigger_slider,
-	.init=cls_brick_init,
+	.init=cls_brick_init_slider,
 	.connect=cls_brick_connect,
 	.disconnect=cls_brick_disconnect,
+	.dispatch=cls_brick_dispatch,
 	};
 
 // MENU
@@ -61,11 +71,10 @@ t_brick_class brick_menu = {
 	.type=bt_menu,
 	.make=brick_make_menu,
 	.draw=brick_draw,
-	.update=cls_brick_update,
-	.trigger=cls_brick_trigger_menu,
 	.init=cls_brick_init,
 	.connect=cls_brick_connect,
 	.disconnect=cls_brick_disconnect,
+	.dispatch=cls_brick_dispatch,
 	};
 
 // SELECTOR
@@ -75,11 +84,10 @@ t_brick_class brick_selector = {
 	.type=bt_selector,
 	.make=brick_make_selector,
 	.draw=brick_draw,
-	.update=cls_brick_update,
-	.trigger=cls_brick_trigger_selector,
 	.init=cls_brick_init,
 	.connect=cls_brick_connect,
 	.disconnect=cls_brick_disconnect,
+	.dispatch=cls_brick_dispatch,
 	};
 
 // SWITCH
@@ -89,11 +97,10 @@ t_brick_class brick_switch = {
 	.type=bt_switch,
 	.make=brick_make_switch,
 	.draw=brick_draw,
-	.update=cls_brick_update,
-	.trigger=cls_brick_trigger_switch,
-	.init=cls_brick_init,
+	.init=cls_brick_init_switch,
 	.connect=cls_brick_connect,
 	.disconnect=cls_brick_disconnect,
+	.dispatch=cls_brick_dispatch,
 	};
 
 
