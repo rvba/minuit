@@ -21,6 +21,7 @@
 #include "dict.h"
 #include "set.h"
 #include "op.h"
+#include "rhizome.h"
 
 // [block] brick->menu 		=> pointing to another block-menu 
 // [brick] block->submenu 	=> submenu selection
@@ -28,6 +29,7 @@
 
 void state_block_menu_default( t_block *block, t_event *e);
 void state_block_menu_hover_menu( t_block *block, t_event *e);
+void state_block_menu_hover_brick( t_block *block, t_event *e);
 void state_block_menu_brick_trigger( t_block *block, t_event *e);
 void state_block_brick_trigger( t_block *block, t_event *e);
 void state_block_disconnect( t_block *block, t_event *e);
@@ -356,6 +358,13 @@ void block_disconnect( t_context *C, t_block *block, t_brick *brick, t_event *e)
 	}
 }
 
+void block_hover_brick( t_context *C, t_block *block, t_brick *brick)
+{
+		block->_selected = brick;
+		brick->cls->dispatch( brick);
+		BLOCK_SWAP( block, state_block_menu_brick_trigger);
+}
+
 /*	**********************************
 	:MOVE
 	**********************************	*/
@@ -496,6 +505,10 @@ void state_block_menu_brick_trigger( t_block *block, t_event *e)
 		if( brick->type == bt_trigger) block_menu_close( block);
 		else BLOCK_SWAP( block, state_block_menu_default);
 	}
+	else if( e->type == MOUSE_RIGHT_PRESSED)
+	{
+		BLOCK_SWAP( block, state_block_exit);
+	}
 	else
 	{
 		brick->cls->dispatch( brick); 
@@ -568,7 +581,7 @@ void state_block_menu_default( t_block *block, t_event *e)
 			}
 			else
 			{
-				BLOCK_SWAP( block, state_block_menu_hover_brick);
+				block_hover_brick( C, block, brick);
 			}
 		}
 	}
