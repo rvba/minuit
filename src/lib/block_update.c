@@ -358,11 +358,16 @@ void block_disconnect( t_context *C, t_block *block, t_brick *brick, t_event *e)
 	}
 }
 
-void block_hover_brick( t_context *C, t_block *block, t_brick *brick)
+void block_hover_brick( t_context *C, t_block *block, t_brick *brick, t_event *e)
 {
 		block->_selected = brick;
-		brick->cls->dispatch( brick);
-		BLOCK_SWAP( block, state_block_menu_brick_trigger);
+		switch( e->type)
+		{
+			case MOUSE_LEFT_PRESSED:
+				brick->cls->dispatch( brick);
+				BLOCK_SWAP( block, state_block_menu_brick_trigger);
+				break;
+		}
 }
 
 /*	**********************************
@@ -502,8 +507,10 @@ void state_block_menu_brick_trigger( t_block *block, t_event *e)
 	t_brick *brick = block->_selected;
 	if( e->type == UI_BRICK_RELEASED)
 	{
-		if( brick->type == bt_trigger) block_menu_close( block);
-		else BLOCK_SWAP( block, state_block_menu_default);
+		ctx_ui_log( "RECEVED");
+
+		if( brick->type == bt_trigger) { ctx_ui_log("111");block_menu_close( block);}
+		else { ctx_ui_log("2222");BLOCK_SWAP( block, state_block_menu_default);}
 	}
 	else if( e->type == MOUSE_RIGHT_PRESSED)
 	{
@@ -581,7 +588,7 @@ void state_block_menu_default( t_block *block, t_event *e)
 			}
 			else
 			{
-				block_hover_brick( C, block, brick);
+				block_hover_brick( C, block, brick, e);
 			}
 		}
 	}
