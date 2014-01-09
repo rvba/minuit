@@ -231,8 +231,17 @@ void state_brick_slider_default( t_brick *brick, t_event *e)
 	{
 		case MOUSE_LEFT_PRESSED:
 			brick_hover_set( brick);
-			BRICK_SWAP( brick, state_brick_slider_trigger);
-			brick->cls->dispatch( brick);
+			if( !brick->plug_in.src)
+			{
+				BRICK_SWAP( brick, state_brick_slider_trigger);
+				brick->cls->dispatch( brick);
+			}
+			else
+			{
+				ctx_event_add( UI_BRICK_RELEASED);
+				BRICK_SWAP( brick, state_brick_slider_default);
+			}
+
 			break;
 
 		case MOUSE_MIDDLE_PRESSED:
