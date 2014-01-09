@@ -272,7 +272,6 @@ void state_brick_linking( t_block *block, t_event *e)
 	ctx_ui_log( "block_brick_linking");
 	t_context *C = ctx_get();
 	t_brick *brick = ctx_ui_hover_get( C, dt_brick);
-	//t_brick *brick = block->_selected;
 
 	C->event->end_x = e->x;
 	C->event->end_y = e->y;
@@ -297,6 +296,12 @@ void state_brick_linking( t_block *block, t_event *e)
 	}
 }
 
+void block_linking_start( t_context *C, t_block *block, t_brick *brick)
+{
+	block->_selected = brick;
+	BLOCK_SWAP( block, state_brick_linking);
+}
+
 void block_connect_start( t_context *C, t_block *block, t_brick *brick, t_event *e)
 {
 	if( !brick->plug_out.dst)
@@ -312,15 +317,7 @@ void block_connect_start( t_context *C, t_block *block, t_brick *brick, t_event 
 		C->event->start_x = v[0];
 		C->event->start_y = v[1];
 
-		/*
-		C->event->start_x = e->x;
-		C->event->start_y = e->y;
-		C->event->end_x = e->x;
-		C->event->end_y = e->y;
-		*/
-
-		block->_selected = brick;
-		BLOCK_SWAP( block, state_brick_linking);
+		block_linking_start( C, block, brick);
 	}
 }
 
@@ -359,17 +356,16 @@ void block_disconnect( t_context *C, t_block *block, t_brick *brick, t_event *e)
 
 		C->ui->draw_link = 1;
 
-		C->event->start_x = e->x;
-		C->event->start_y = e->y;
+		C->event->end_x = e->x;
+		C->event->end_y = e->y;
 
-		C->event->end_x = plug_pos[0];
-		C->event->end_y = plug_pos[1];
+		C->event->start_x = plug_pos[0];
+		C->event->start_y = plug_pos[1];
 
-		block->_selected = brick;
 
 		_cls_brick_disconnect( brick);
 
-		BLOCK_SWAP( block, state_block_disconnect);
+		block_linking_start( C, block, brick_target);
 	}
 }
 
