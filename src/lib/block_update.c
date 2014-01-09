@@ -509,8 +509,8 @@ void state_block_menu_brick_trigger( t_block *block, t_event *e)
 	{
 		ctx_ui_log( "RECEVED");
 
-		if( brick->type == bt_trigger) { ctx_ui_log("111");block_menu_close( block);}
-		else { ctx_ui_log("2222");BLOCK_SWAP( block, state_block_menu_default);}
+		if( brick->type == bt_trigger) block_menu_close( block);
+		else BLOCK_SWAP( block, state_block_menu_default);
 	}
 	else if( e->type == MOUSE_RIGHT_PRESSED)
 	{
