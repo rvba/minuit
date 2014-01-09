@@ -383,6 +383,15 @@ void ctx_ui_mouse( t_context *C)
 	}
 }
 
+void ctx_ui_reset( t_context *C)
+{
+	C->ui->key_shift = 0;
+	C->ui->key_alt = 0; 
+	C->ui->key_ctrl= 0; 
+	C->app->keyboard->shift =0;
+	C->app->keyboard->modifier = 0;
+}
+
 void ctx_ui_menu_show( t_context *C)
 {
 	t_node *node = scene_node_get( C->scene, "block", "menu_mouse");
@@ -678,6 +687,8 @@ void ctx_ui(t_context *C)
 	{
 		op_set_color(C,2);
 	}
+
+	ctx_ui_reset( C);
 }
 
 void ctx_ui_init( t_context *C)
