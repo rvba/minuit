@@ -327,11 +327,11 @@ void op_camera_rotate(t_context *C, t_camera *camera, float dx,float dy)
 void op_camera_translate(t_context *C, t_camera *camera)
 {
 	float speed = -camera->speed / OP_CAM_SPEED;
-	float delta = 0.0001;
+	float delta = .5;
 	float left[3];
 	float front[3];
 	float vec[3];
-	
+
 	vcp(left,camera->cross);
 	vcp(front,camera->eye);
 	vmul( left, ( C->ui->mouse_dx * delta *speed));

@@ -133,10 +133,13 @@ struct MINscreen;
 #define MOUSE_MIDDLE_RELEASED 844
 
 #define MOUSE_LEFT_LONG		845
+#define MOUSE_WHEEL_UP		846
+#define MOUSE_WHEEL_DOWN	847
 #define MOUSE_END 850
 
 #define EVENT_KEYBOARD( event) ( event >= 0 && event <= KEYBOARD_STOP)
 #define EVENT_MOUSE( event) ( event >= MOUSE_START && event <= MOUSE_END)
+#define EVENT_MOUSE_WHEEL( event) ( ((event) == MOUSE_WHEEL_UP) || ((event) == MOUSE_WHEEL_DOWN))
 
 #define UI_BRICK_RELEASED 1100
 #define UI_BLOCK_MOVE 		1101

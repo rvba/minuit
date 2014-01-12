@@ -203,6 +203,9 @@ void ctx_mouse( t_context *C)
 		mouse->event = 0;
 	}
 
+	if( C->app->mouse->wheel == wheel_up) event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, MOUSE_WHEEL_UP);
+	else if( C->app->mouse->wheel == wheel_down) event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, MOUSE_WHEEL_DOWN);
+
 	if( C->app->keyboard->special)
 	{
 		event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, C->app->keyboard->special);

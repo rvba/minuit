@@ -100,12 +100,6 @@ void ctx_camera_movment(t_context *C, t_camera *camera)
 	}
 }
 
-void op_check_window(t_context *C, t_camera *camera)
-{
-	op_camera_frustum_init(camera);
-	C->app->window->change=0;
-}
-
 void ctx_camera(t_context *C)
 {
 	t_link *link;
@@ -119,7 +113,6 @@ void ctx_camera(t_context *C)
 
 		camera->is_moving = 0;
 
-		op_check_window(C, camera);
 		op_camera_change_speed(camera);
 		ctx_camera_movment(C, camera);
 	}

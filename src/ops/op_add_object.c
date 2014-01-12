@@ -150,12 +150,14 @@ void *op_new_camera(const char *name)
 
 	scene_store(C->scene,1);
 
+	t_node *node_camera=camera_make(name);
+	t_camera *camera = node_camera->data;
+	op_camera_frustum_init(camera);
+
 	t_node *node_object=object_add("camera",name);
 	t_object *object=node_object->data;
-
-	t_node *node_camera=camera_make(name);
-
 	object->cls->link(object,node_camera);
+
 
 	scene_store(C->scene,0);
 	return node_object;

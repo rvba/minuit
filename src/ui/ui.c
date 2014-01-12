@@ -97,9 +97,6 @@ void ui_draw_lines( t_context *C)
 	float start[3] = { (float)C->event->start_x, (float)C->event->start_y, 0 };
 	float end[3] = { (float)C->event->end_x , (float)C->event->end_y , 0 };
 
-	float pan[3] = { C->ui->pan_x, C->ui->pan_y, 0};
-
-
 	float *color=C->ui->front_color;
 	skt_line( start, end, 1, color);
 	C->event->ui.use_line_global_width = 1;

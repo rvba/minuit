@@ -63,10 +63,8 @@ t_context *ctx_init(int argc,char **argv)
 {
 	t_context *C = ctx_new(argc,argv);
 
-	// Store Local
 	CONTEXT=C;
 
-	// Init
 	scene_init( C->scene);
 	app_init( C->app, "minuit");
 	log_init();
@@ -117,8 +115,6 @@ void ctx_update(t_context *C)
 	ctx_mouse( C);
 	ctx_event( C);
 	ctx_ui(C);
-	//ctx_scene(C); 
-	ctx_camera(C);
 	ctx_mode(C);
 }
 

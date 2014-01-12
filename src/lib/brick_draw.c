@@ -529,7 +529,6 @@ void brick_draw_txt(t_brick *brick)
 				txt_draw( txt);
 				txt_free(txt);
 
-				unsigned int sec = C->app->clock->sec;
 				static unsigned long last;
 				unsigned long msec = C->app->clock->msec;
 				unsigned long d = msec - last;

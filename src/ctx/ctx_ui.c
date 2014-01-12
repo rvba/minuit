@@ -32,6 +32,8 @@
 #include "dict.h"
 #include "set.h"
 #include "object.h"
+#include "camera.h"
+#include "viewport.h"
 
 t_lst *EXE=NULL;
 
@@ -401,6 +403,7 @@ void ctx_ui_reset( t_context *C)
 	C->ui->key_ctrl= 0; 
 	C->app->keyboard->shift =0;
 	C->app->keyboard->modifier = 0;
+	C->app->mouse->wheel = wheel_idle;
 }
 
 void ctx_ui_menu_show( t_context *C)
@@ -447,7 +450,6 @@ void ctx_ui_intro_stop( t_context *C)
 	*********************************	*/
 void ctx_ui_deselect( t_context *C, t_event *e)
 {
-	printf("deselect\n");
 	t_node *node = C->scene->selected;
 	if( node)
 	{
@@ -483,16 +485,7 @@ void state_ui_block_trigger( t_context *C, t_event *e)
 void state_ui_object_trigger( t_context *C, t_event *e)
 {
 	ctx_ui_log( "ui_object_trigger");
-	/*
-	if( e->type == MOUSE_LEFT_PRESSED)
-	{
-		ctx_ui_deselect( C, e); 
-		ctx_ui_selection_release( C);
-		*/
-		UI_SWAP( C, state_ui_default);
-		/*
-	}
-	*/
+	UI_SWAP( C, state_ui_default);
 }
 
 void ctx_ui_block_trigger( t_context *C)
@@ -508,10 +501,6 @@ void ctx_ui_object_trigger( t_context *C)
 	t_object *object = ctx_ui_hover_get( C, dt_object);
 	if( object)
 	{
-		/*
-		C->scene->selected = object->id.node;
-		object->is_selected = 1;
-		*/
 		ctx_scene_set_selected( C, object->id.node);
 		UI_SWAP( C, state_ui_object_trigger);
 	}
@@ -521,17 +510,120 @@ void ctx_ui_object_trigger( t_context *C)
 	:MIDDLE
 	**********************************	*/
 
+
+t_camera *ctx_ui_camera_get( t_context *C)
+{
+	t_camera *camera = NULL;
+
+	if(C->scene->has_generic_viewport)
+	{
+		// Get default Viewport
+		t_node *node_viewport = scene_node_get(C->scene,"viewport","viewport");
+		t_viewport *viewport = NULL;
+
+		if(node_viewport)
+		{
+			viewport = node_viewport->data;
+			camera = viewport->camera;
+		}
+	}
+
+	return camera;
+}
+
+
+void ctx_ui_camera_rotate( t_context *C, t_camera *camera, t_event *e)
+{
+	float dx = (float) -C->ui->mouse_dx * .1;
+	float dy = (float) C->ui->mouse_dy * .1;
+
+	op_camera_rotate(C, camera, (float)dx,(float)dy);
+}
+
+void ctx_ui_camera_translate( t_context *C, t_camera *camera, t_event *e)
+{
+	op_camera_translate(C, camera);
+}
+
+void ctx_ui_camera_zoom( t_context *C, t_camera *camera, t_event *e)
+{
+	if(C->app->keyboard->shift) C->ui->zoom-=.1;
+	if (camera->type == camera_frustum)
+	{
+		switch( e->type)
+		{
+			case MOUSE_WHEEL_UP: 	op_camera_zoom(C, camera, -1); break;
+			case MOUSE_WHEEL_DOWN: 	op_camera_zoom(C, camera, 1); break;
+		}
+	}
+	else
+	{
+		switch( e->type)
+		{
+			case MOUSE_WHEEL_UP:	op_camera_set_ortho_zoom(C, camera,-1); 
+			case MOUSE_WHEEL_DOWN:	op_camera_set_ortho_zoom(C, camera,1); 
+		}
+	}
+}
+
+void state_ui_space_zoom( t_context *C, t_event *e)
+{
+	ctx_ui_log( "ui_space_zoom");
+	t_camera *camera = ctx_ui_camera_get( C);
+	if( camera)
+	{
+		op_camera_change_speed(camera);
+		ctx_ui_camera_zoom(C, camera, e);
+	}
+
+	UI_SWAP( C, state_ui_default);
+
+}
+
+void state_ui_space_rotate( t_context *C, t_event *e)
+{
+	ctx_ui_log( "ui_space_rotate");
+	t_camera *camera = ctx_ui_camera_get( C);
+	if( camera)
+	{
+		op_camera_change_speed(camera);
+		ctx_ui_camera_rotate(C, camera, e);
+	}
+
+	switch( e->type)
+	{
+		case MOUSE_RIGHT_RELEASED:
+			UI_SWAP( C, state_ui_default);
+			break;
+	}
+}
+
+void state_ui_space_translate( t_context *C, t_event *e)
+{
+	ctx_ui_log( "ui_space_translate");
+	t_camera *camera = ctx_ui_camera_get( C);
+	if( camera)
+	{
+		op_camera_change_speed(camera);
+		ctx_ui_camera_translate(C, camera, e);
+	}
+
+	switch( e->type)
+	{
+		case MOUSE_RIGHT_RELEASED:
+			UI_SWAP( C, state_ui_default);
+			break;
+	}
+}
+
 void state_ui_mouse_middle( t_context *C, t_event *e)
 {
 	ctx_ui_log( "ui_mouse_middle");
 	switch( C->scene->hover_type)
 	{
-		case dt_brick:
-			if( !C->scene->selection)
-			{
-				ctx_ui_block_select( C);
-				UI_SWAP( C, state_ui_block_trigger);
-			}
+		case dt_null:
+			UI_SWAP( C, state_ui_space_zoom);
+			C->ui->state( C, e);
 			break;
 
 		default:
@@ -543,6 +635,12 @@ void state_ui_mouse_middle( t_context *C, t_event *e)
 void ctx_ui_middle( t_context *C, t_event *e)
 {
 	UI_SWAP( C, state_ui_mouse_middle);
+	C->ui->state( C, e);
+}
+
+void ctx_ui_space_rotate( t_context *C, t_event *e)
+{
+	UI_SWAP( C, state_ui_space_rotate);
 	C->ui->state( C, e);
 }
 
@@ -645,6 +743,8 @@ void state_ui_mouse_right( t_context *C, t_event *e)
 	{
 		switch( e->type)
 		{
+			case SHIFTKEY: UI_SWAP( C, state_ui_space_rotate); break;
+			case CTRLKEY: UI_SWAP( C, state_ui_space_translate); break;
 			case MOUSE_MOTION: 
 				UI_SWAP( C, state_ui_mouse_right_motion);
 				break;
@@ -664,7 +764,7 @@ void ctx_ui_right( t_context *C, t_event *e)
 }
 
 /*	**********************************
-	:RIGHT
+	:INTRO
 	**********************************	*/
 
 void state_ui_intro( t_context *C, t_event *e)
@@ -709,7 +809,10 @@ void state_ui_default( t_context *C, t_event *e)
 	{
 		case MOUSE_RIGHT_PRESSED: 	ctx_ui_right( C, e); break;
 		case MOUSE_LEFT_PRESSED: 	ctx_ui_left( C, e); break;
-		case MOUSE_MIDDLE_PRESSED: 	ctx_ui_middle( C, e); break;
+		case MOUSE_WHEEL_UP:
+		case MOUSE_WHEEL_DOWN:
+		 				ctx_ui_middle( C, e); 
+						break;
 
 		default: break;
 	}

@@ -24,6 +24,7 @@ struct Lst;
 struct Ui;
 struct Event;
 struct Lst;
+struct Camera;
 
 typedef struct Context
 {
@@ -186,6 +187,7 @@ void ctx_ui_log( const char *name);
 
 void ctx_ui_buffer_clear( struct Context *C);
 
+void op_check_window(t_context *C, struct Camera *camera);
 
 
 #endif

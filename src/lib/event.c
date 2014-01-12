@@ -250,6 +250,8 @@ char *event_name( t_event *e)
 		case MOUSE_RIGHT_RELEASED: 	return("MOUSE BUTTON RIGHT RELEASED"); break;
 		case MOUSE_MIDDLE_PRESSED: 	return("MOUSE BUTTON MIDDLE PRESSED"); break;
 		case MOUSE_MIDDLE_RELEASED: 	return("MOUSE BUTTON MIDDLE RELEASED"); break;
+		case MOUSE_WHEEL_UP: 		return("MOUSE WHEEL UP"); break;
+		case MOUSE_WHEEL_DOWN: 		return("MOUSE WHEEL DOWN"); break;
 
 		case MOUSE_LEFT_LONG: return("MOUSE_LEFT_LONG"); break;
 
