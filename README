@@ -1,4 +1,3 @@
-+ Minuit +
 
 Minuit, pronounced me-nu-e [minyi], 
 is a Minimalistic User Interface Toolkit
@@ -9,7 +8,7 @@ dedicated to interactive real time graphics.
 
 Ubuntu/Debian
 
-+ dependencies +
++ Dependencies +
 
 build-essential 
 cmake
@@ -19,6 +18,10 @@ libjpeg62-dev
 libpng12-dev
 libxmu-dev
 libxi-dev
+
++ Licence +
+
+GPL v2
 
 + home +
 
