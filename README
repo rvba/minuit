@@ -1,14 +1,26 @@
-minuit
-======
++ minuit +
 
-(M)inuit
-(I)s
-(N)ot a
-(U)ser
-(I)nterface
-(T)oolkit
+Minuit, pronounced me-nu-e [minyui], 
+is a Minimalistic User Interface Toolkit.
 
-@ http://rvba.fr/minuit
++ Platform +
+
+Ubuntu/Debian
+
++ dependencies +
+
+build-essential 
+cmake
+libgl1-mesa-dev
+freeglut3-dev
+libjpeg62-dev
+libpng12-dev
+libxmu-dev
+libxi-dev
+
++ home +
+
+http://rvba.fr/minuit
 
 
 
