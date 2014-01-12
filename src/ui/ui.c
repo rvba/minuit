@@ -375,9 +375,6 @@ void ui_draw(void)
 	// Skt
 	skt_update( C);
 
-	// Navigation
-	//ui_navigation(C);
-
 	// Draw Screens
 	if(C->ui->draw) ui_draw_screens(C);
 
@@ -393,36 +390,6 @@ void ui_draw(void)
 	C->event->ui.use_point_global_width = 1;
 	C->event->ui.use_line_global_width = 1;
 	C->event->ui.use_point_global_width = 1;
-}
-
-
-void ui_mouse_show( t_ui *ui)
-{
-	switch( ui->mouse_state)
-	{
-		case UI_MOUSE_IDLE:	 printf("UI_MOUSE_IDLE\n"); break;
-		case UI_LEFT_PRESSED:	 printf("UI_LEFT_PRESSED\n"); break;
-		case UI_LEFT_CLIC:	 printf("UI_LEFT_CLIC\n"); break;
-		case UI_LEFT_RELEASED:	 printf("UI_LEFT_RELEASED\n"); break;
-
-		case UI_RIGHT_PRESSED:	 printf("UI_RIGHT_PRESSED\n"); break;
-		case UI_RIGHT_CLIC:	 printf("UI_RIGHT_CLIC\n"); break;
-		case UI_RIGHT_RELEASED:	 printf("UI_RIGHT_RELEASED\n"); break;
-
-		case UI_MIDDLE_PRESSED:	 printf("UI_MIDDLE_PRESSED\n"); break;
-		case UI_MIDDLE_CLIC:	 printf("UI_MIDDLE_CLIC\n"); break;
-		case UI_MIDDLE_RELEASED: printf("UI_MIDDLE_RELEASED\n"); break;
-	}
-
-	switch( ui->mouse_motion)
-	{
-		case UI_MOUSE_STATIC:	printf("UI_MOUSE_STATIC\n"); break;
-		case UI_MOUSE_MOTION:	printf("UI_MOUSE_MOTION\n"); break;
-		case UI_MOUSE_MOTION_PASSIVE:	printf("UI_MOUSE_MOTION_PASSIVE\n"); break;
-	}
-
-	printf("x:%d y:%d dx:%d dy:%d delta_x:%d delta_y:%d\n",ui->mouse_x, ui->mouse_y, ui->mouse_dx, ui->mouse_dy, ui->mouse_delta_x, ui->mouse_delta_y);
-	
 }
 
 // INIT
