@@ -117,7 +117,7 @@ void ctx_update(t_context *C)
 	ctx_mouse( C);
 	ctx_event( C);
 	ctx_ui(C);
-	ctx_scene(C); 
+	//ctx_scene(C); 
 	ctx_camera(C);
 	ctx_mode(C);
 }

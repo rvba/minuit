@@ -445,6 +445,17 @@ void ctx_ui_intro_stop( t_context *C)
 /*	**********************************
 	:TRIGGER
 	*********************************	*/
+void ctx_ui_deselect( t_context *C, t_event *e)
+{
+	printf("deselect\n");
+	t_node *node = C->scene->selected;
+	if( node)
+	{
+		ctx_scene_selection( C, node, 0);
+		C->scene->selected = NULL;
+	}
+}
+
 
 
 void state_ui_block_trigger( t_context *C, t_event *e)
@@ -469,12 +480,41 @@ void state_ui_block_trigger( t_context *C, t_event *e)
 	}
 }
 
+void state_ui_object_trigger( t_context *C, t_event *e)
+{
+	ctx_ui_log( "ui_object_trigger");
+	/*
+	if( e->type == MOUSE_LEFT_PRESSED)
+	{
+		ctx_ui_deselect( C, e); 
+		ctx_ui_selection_release( C);
+		*/
+		UI_SWAP( C, state_ui_default);
+		/*
+	}
+	*/
+}
+
 void ctx_ui_block_trigger( t_context *C)
 {
 	ctx_ui_block_select( C);
 	t_block *block = ctx_ui_selection_get( C, dt_block);
 	block->cls->dispatch( block);
 	UI_SWAP( C, state_ui_block_trigger);
+}
+
+void ctx_ui_object_trigger( t_context *C)
+{
+	t_object *object = ctx_ui_hover_get( C, dt_object);
+	if( object)
+	{
+		/*
+		C->scene->selected = object->id.node;
+		object->is_selected = 1;
+		*/
+		ctx_scene_set_selected( C, object->id.node);
+		UI_SWAP( C, state_ui_object_trigger);
+	}
 }
 
 /*	**********************************
@@ -510,16 +550,19 @@ void ctx_ui_middle( t_context *C, t_event *e)
 	:LEFT
 	**********************************	*/
 
+
 void state_ui_mouse_left( t_context *C, t_event *e)
 {
 	ctx_ui_log( "ui_mouse_left");
-	if( !C->scene->selection)
+
+	switch( C->scene->hover_type)
 	{
-		switch( C->scene->hover_type)
-		{
-			case dt_brick: ctx_ui_block_trigger( C); break;
-			default: UI_SWAP( C, state_ui_default); break;
-		}
+		case dt_brick: ctx_ui_block_trigger( C); break;
+		case dt_object: ctx_ui_object_trigger( C); break;
+		default: 
+			UI_SWAP( C, state_ui_default);
+			ctx_ui_deselect( C, e); 
+			break;
 	}
 }
 
@@ -664,9 +707,9 @@ void state_ui_default( t_context *C, t_event *e)
 	ctx_ui_log( "ui_default");
 	switch( e->type)
 	{
-		case MOUSE_RIGHT_PRESSED: ctx_ui_right( C, e); break;
-		case MOUSE_LEFT_PRESSED: ctx_ui_left( C, e); break;
-		case MOUSE_MIDDLE_PRESSED: ctx_ui_middle( C, e); break;
+		case MOUSE_RIGHT_PRESSED: 	ctx_ui_right( C, e); break;
+		case MOUSE_LEFT_PRESSED: 	ctx_ui_left( C, e); break;
+		case MOUSE_MIDDLE_PRESSED: 	ctx_ui_middle( C, e); break;
 
 		default: break;
 	}
