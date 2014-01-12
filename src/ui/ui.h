@@ -168,6 +168,9 @@ typedef struct Ui
 	void (* state)( struct Context *C, struct Event *event);
 
 	struct Clock *clock;
+
+	float last_clic[3];
+	float last_pan[3];
 }t_ui;
 
 // UI.C

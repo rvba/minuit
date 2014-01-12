@@ -347,6 +347,11 @@ void ctx_events_swap( t_context *C)
 	lst_dupli( C->event->events_swap, C->event->events);
 }
 
+void ctx_ui_mouse_store( t_context *C, t_event *e)
+{
+	vset3f(C->ui->last_clic, (float) e->x, (float) e->y, 0);
+}
+
 void ctx_ui_mouse( t_context *C)
 {
 	t_link *l;
@@ -360,6 +365,7 @@ void ctx_ui_mouse( t_context *C)
 		{
 			case MOUSE_RIGHT_PRESSED:
 				ui->mouse_right_pressed = 1;
+				ctx_ui_mouse_store( C, e);
 				break;
 
 			case MOUSE_RIGHT_RELEASED:
@@ -368,6 +374,7 @@ void ctx_ui_mouse( t_context *C)
 
 			case MOUSE_LEFT_PRESSED:
 				clock_time_set( C->ui->clock);
+				ctx_ui_mouse_store( C, e);
 				ui->mouse_left_pressed = 1;
 				break;
 
@@ -518,10 +525,42 @@ void ctx_ui_left( t_context *C, t_event *e)
 	C->ui->state( C, e);
 }
 
+void ctx_ui_pan_set( t_context *C, t_event *e)
+{
+	float *a = C->ui->last_clic;
+	float b[3] = { e->x, e->y, 0};
+	float *p = C->ui->last_pan;
+	float z[3];
+	float r[3];
+
+	vsub(z, b, a);
+	vadd(r, p, z);
+
+	C->ui->pan_x = r[0];
+	C->ui->pan_y = r[1];
+} 
 
 /*	**********************************
 	:RIGHT
 	**********************************	*/
+
+void state_ui_pan( t_context *C, t_event *e)
+{
+	ctx_ui_log( "ui_pan");
+
+
+	switch( e->type)
+	{
+		case MOUSE_RIGHT_RELEASED:
+			vset3f( C->ui->last_pan,  C->ui->pan_x, C->ui->pan_y, 0);
+			UI_SWAP( C, state_ui_default);
+			break;
+		default:
+			ctx_ui_pan_set( C, e);
+			break;
+
+	}
+}
 
 void state_ui_mouse_right_motion( t_context *C, t_event *e)
 {
@@ -538,6 +577,10 @@ void state_ui_mouse_right_motion( t_context *C, t_event *e)
 		{
 			case MOUSE_RIGHT_RELEASED:
 				UI_SWAP( C, state_ui_default);
+				break;
+
+			case SHIFTKEY:
+				UI_SWAP( C, state_ui_pan);
 				break;
 		}
 	}

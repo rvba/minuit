@@ -315,7 +315,7 @@ void ui_navigation(t_context *C)
 			(C->event->ui.pan || C->event->ui.zoom)
 			&& C->ui->mouse_state == UI_RIGHT_RELEASED)
 		{
-			C->event->ui.pan = 0;
+			//C->event->ui.pan = 0;
 			C->event->ui.zoom = 0;
 
 			C->event->ui.pan_x = C->ui->pan_x;
@@ -387,7 +387,7 @@ void ui_draw(void)
 	skt_update( C);
 
 	// Navigation
-	ui_navigation(C);
+	//ui_navigation(C);
 
 	// Draw Screens
 	if(C->ui->draw) ui_draw_screens(C);
@@ -561,6 +561,8 @@ t_ui *ui_new(void)
 	ui->bitrate = 15000;
 	ui->state = NULL;
 	ui->clock = NULL;
+
+	vset3f( ui->last_pan, 0, 0, 0);
 
 	return ui;
 }

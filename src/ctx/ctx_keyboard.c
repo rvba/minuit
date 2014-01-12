@@ -170,6 +170,7 @@ void keymap_command( int key)
 		case PADTHREE: if(camera) op_camera_view_left(camera);break;
 		case PADTWO: if(camera) op_camera_ortho_rotate(camera,-5,0,0);break;
 		case PADZERO: 
+				printf("RESET\n");
 				C->ui->zoom = 1;
 				C->ui->pan_x = 0;
 				C->ui->pan_y = 0;
@@ -266,7 +267,6 @@ void ctx_keyboard(t_context *C)
 
 	if( C->app->keyboard->modifier)
 	{
-		 event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, SHIFTKEY);
 		if( C->app->keyboard->shift)	 event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, SHIFTKEY);
 		if( C->app->keyboard->alt)	 event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, ALTKEY);
 		if( C->app->keyboard->ctrl)	 event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, CTRLKEY);
