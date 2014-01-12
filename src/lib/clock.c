@@ -16,11 +16,11 @@ int clock_to_sec( unsigned int time)
 	return time / 1000;
 }
 
-unsigned int clock_now_msec( void)
+unsigned int clock_now_usec( void)
 {
 	struct timeval time;
 	gettimeofday( &time, NULL);
-	return( ( time.tv_sec * 1000) + ( time.tv_usec / 1000));
+	return(  (time.tv_sec * 1000000) + time.tv_usec );
 }
 
 int clock_now_sec( void)
@@ -35,10 +35,24 @@ int clock_get_second( t_clock *clock)
 	return clock->start.tv_sec;
 }
 
-int clock_get_delta( t_clock *clock)
+int clock_get_usec( t_clock *clock)
+{
+	return ( (clock->start.tv_sec * 1000000) + ( clock->start.tv_usec));
+}
+
+int clock_get_delta_sec( t_clock *clock)
 {
 	int past = clock_get_second( clock);
 	int now =  clock_now_sec();
+	int delta = now - past;
+
+	return delta;
+}
+
+int clock_get_delta_usec( t_clock *clock)
+{
+	int past = clock_get_usec( clock);
+	int now =  clock_now_usec();
 	int delta = now - past;
 
 	return delta;

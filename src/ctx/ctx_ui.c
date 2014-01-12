@@ -334,8 +334,9 @@ void ctx_ui_hover( t_context *C)
 
 void ctx_clock_test( t_context *C)
 {
-	int delta = clock_get_delta( C->ui->clock);
-	if(delta >= 1)
+	int udelta = clock_get_delta_usec( C->ui->clock);
+
+	if( udelta >= 700000)
 	{
 		ctx_event_add( MOUSE_LEFT_LONG);
 		clock_time_set( C->ui->clock);

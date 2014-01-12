@@ -155,6 +155,10 @@ void brick_edit_start( t_context *C, t_brick *brick)
 void brick_edit_stop( t_context *C, t_brick *brick)
 {
 	C->event->ui.typing_start = 0;
+	C->event->is_typing=0;
+	ctx_ui_buffer_clear( C);
+
+	C->event->ui.typing_start = 0;
 	brick->state = brick_state_set_default( brick);
 	brick->typing = 0;
 	ctx_event_add( UI_BRICK_RELEASED);
@@ -167,9 +171,8 @@ void state_brick_edit( t_brick *brick, t_event *e)
 	switch( e->type)
 	{
 		case RETURNKEY:
-			C->event->ui.typing_start = 0;
-			C->event->is_typing=0;
-			ctx_ui_buffer_clear( C);
+		case MOUSE_LEFT_PRESSED:
+		case MOUSE_RIGHT_PRESSED:
 			brick_edit_stop( C, brick);
 			break;
 		case SHIFTKEY:

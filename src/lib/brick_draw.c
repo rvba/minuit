@@ -530,8 +530,12 @@ void brick_draw_txt(t_brick *brick)
 				txt_free(txt);
 
 				unsigned int sec = C->app->clock->sec;
-				if( sec%2)
+				static unsigned long last;
+				unsigned long msec = C->app->clock->msec;
+				unsigned long d = msec - last;
+				if( d%2 )
 				{
+					last = msec;
 					glTranslatef((C->event->buffer_char_counter)*5,0,0);
 					float a[] = {0,0,0};
 					float b[] = {8,0,0};
