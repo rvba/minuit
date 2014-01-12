@@ -221,7 +221,6 @@ void screen_sets(t_screen *screen)
 
 	glPushMatrix();
 	glLoadIdentity();
-	ui_draw_menu();
 	glPopMatrix();
 
 	ui_draw_sets();

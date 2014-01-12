@@ -284,6 +284,7 @@ void ctx_ui_hover_reset( t_context *C)
 		{
 			t_brick *brick = node->data;
 			brick->brick_state.is_mouse_over = 0;
+			brick->block->block_state.is_mouse_over = 0;
 		}
 	}
 };

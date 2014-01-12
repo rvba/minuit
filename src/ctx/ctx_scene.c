@@ -21,6 +21,7 @@
 #include "brick.h"
 #include "util.h"
 #include "term.h"
+#include "block.h"
 
 // Selections and updates
 
@@ -186,11 +187,13 @@ int node_hover_brick(t_context *C, t_node *node)
 	if(ctx_mouse_hover_brick(C,brick))
 	{
 		brick->brick_state.is_mouse_over=1;
+		brick->block->block_state.is_mouse_over = 1;
 		return 1;
 	}
 	else
 	{
 		brick->brick_state.is_mouse_over=0;
+		brick->block->block_state.is_mouse_over = 0;
 		return 0;
 	}
 }
