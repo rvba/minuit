@@ -22,17 +22,9 @@ t_main_event *main_event_new(void)
 
 	event->update_connections=0;
 
-	event->state=event_idle;
-	event->is_background_button_left_pressed=0;
-	event->is_background_button_left_released=0;
-
-	event->ui.is_menu_pressed=0;
-	event->ui.is_menu_released=0;
-	event->ui.is_menu_show=0;
-	event->ui.is_menu_mouse_show=0;
-	event->ui.is_menu_fixed = 0;
 	event->ui.typing_start = 0;
 	event->ui.typing_end = 0;
+
 	event->ui.use_point_global_width = 1;
 	event->ui.use_line_global_width = 1;
 	event->ui.use_scale = 1;
@@ -44,11 +36,8 @@ t_main_event *main_event_new(void)
 
 	event->is_selection=0;
 
-	event->is_brick_transformed=0;
-	event->is_brick_pressed=0;
-	event->is_brick_moving=0;
-	event->is_mouse_over_brick=0;
 	event->is_typing=0;
+
 	event->action=NULL;
 	event->with_texture=1;
 	event->with_polygon_offset=EVENT_WITH_POLYGON_OFFSET;
@@ -65,8 +54,6 @@ t_main_event *main_event_new(void)
 	event->with_highlight=WITH_HIGHLIGHT;
 	event->sketch_with_scale=SKETCH_WITH_SCALE;
 	event->with_blend=1;
-
-	event->is_drawing=0;
 
 	event->color[0] = 255;
 	event->color[1] = 255;
@@ -114,26 +101,7 @@ t_main_event *main_event_new(void)
 
 	event->brick_delete = 0;
 
-	event->switch_plug_in_flow_in = 0;
-	event->switch_plug_in_flow_out = 0;
-	event->switch_plug_in_open_in = 0;
-	event->switch_plug_in_open_out = 0;
-	event->switch_plug_in_follow_in = 0;
-	event->switch_plug_in_follow_out = 0;
-
-	event->switch_plug_out_flow_in = 0;
-	event->switch_plug_out_flow_out = 0;
-	event->switch_plug_out_open_in = 0;
-	event->switch_plug_out_open_out = 0;
-	event->switch_plug_out_follow_in = 0;
-	event->switch_plug_out_follow_out = 0;
-
 	event->switch_brick_debug = 0;
-
-	event->camera_rotation = 0;
-	event->brick_copying = 0;
-	event->brick_cloning = 0;
-	event->brick_cloning_start = 0;
 
 	event->loop_step = 0;
 	event->load_error = 0;

@@ -64,7 +64,6 @@ void save_to_file( struct Context *C);
 void save_file(struct Context *C);
 void save_file_increment(struct Context *C);
 
-
 // CTX_KEYBOARD
 
 void show_sets(struct Context *C);
@@ -74,8 +73,6 @@ void keymap_generic( int key);
 void ctx_keyboard(struct Context *C);
 
 // CTX_MOUSE
-
-//int is_mouse_over_brick(struct Context *C,struct Brick *brick);
 
 int is_mouse_over_background(struct Context *C);
 int is_mouse_over_link_out(struct Context *C,struct Brick *brick);
@@ -111,7 +108,6 @@ void ctx_ui_init( struct Context *C);
 void ctx_scene_selection(struct Context *C, struct Node *node, int state);
 void ctx_scene_clear_selections(struct Context *C);
 void ctx_scene_set_selected(struct Context *C, struct Node *node);
-void ctx_scene(struct Context *C);
 struct Node *ctx_scene_hover( struct Context *C, t_data_type type);
 
 
@@ -186,8 +182,6 @@ int ctx_mouse_hover_brick( struct Context *C, struct Brick *brick);
 void ctx_ui_log( const char *name);
 
 void ctx_ui_buffer_clear( struct Context *C);
-
-void op_check_window(t_context *C, struct Camera *camera);
 
 
 #endif

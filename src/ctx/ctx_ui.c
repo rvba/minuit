@@ -693,7 +693,6 @@ void state_ui_pan( t_context *C, t_event *e)
 {
 	ctx_ui_log( "ui_pan");
 
-
 	switch( e->type)
 	{
 		case MOUSE_RIGHT_RELEASED:
@@ -703,7 +702,6 @@ void state_ui_pan( t_context *C, t_event *e)
 		default:
 			ctx_ui_pan_set( C, e);
 			break;
-
 	}
 }
 

@@ -139,6 +139,7 @@ void keymap_command( int key)
 	{
 		// plugs
 
+		/*
 		case UP_AKEY: event->switch_plug_in_flow_in = 1; break;
 		case UP_QKEY: event->switch_plug_in_open_in = 1; break;
 		case UP_WKEY: event->switch_plug_in_follow_in = 1; break;
@@ -154,6 +155,7 @@ void keymap_command( int key)
 		case UP_RKEY: event->switch_plug_out_flow_out = 1; break;
 		case UP_FKEY: event->switch_plug_out_open_out = 1; break;
 		case UP_VKEY: event->switch_plug_out_follow_out = 1; break;
+		*/
 
 		case UP_BKEY: op_debug_all(C);break;
 

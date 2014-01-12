@@ -154,20 +154,8 @@ struct MINscreen;
 #define BRICK_PLUG_OUT 		4
 
 
-typedef enum EventState
-{
-	event_idle,
-	event_linking,
-	event_unlinking,
-
-}t_event_state;
-
 typedef struct State_Event_UI
 {
-	// mouse
-	int is_mouse_left_pressed:1;
-	int is_mouse_left_released:1;
-	int is_mouse_over_brick:1;
 	int start_x:1;
 	int start_y:1;
 	int end_x:1;
@@ -175,27 +163,9 @@ typedef struct State_Event_UI
 
 	int pan:1;
 	int zoom:1;
-
-	// background
-
-	int is_background_button_left_pressed:1;
-	int is_background_button_left_released:1;
-	
-	int is_menu_show:1;
-	int is_menu_mouse_show:1;
-	int is_menu_pressed:1;
-	int is_menu_released:1;
-	int is_menu_fixed:1;
 	
 	int is_selection:1;
 
-	// brick
-	int is_brick_transformed:1;
-	int is_brick_pressed:1;
-	int is_brick_moving:1;
-	int is_drawing:1;
-	int is_linking:1;
-	int is_linking_released:1;
 	int typing_start:1;
 	int typing_end:1;
 
@@ -210,8 +180,6 @@ typedef struct State_Event_UI
 
 typedef struct Main_Event
 {
-	t_event_state state;
-
 	t_state_event_ui ui;
 
 	int update_connections;
@@ -238,13 +206,6 @@ typedef struct Main_Event
 
 	int is_selection;
 
-	// brick
-	int is_brick_transformed;
-	int is_brick_pressed;
-	int is_brick_moving;
-	int is_drawing;
-	int is_linking;
-	int is_linking_released;
 	int is_typing;
 
 	char *action;
@@ -306,26 +267,7 @@ typedef struct Main_Event
 
 	int brick_delete;
 
-	int switch_plug_in_flow_in;
-	int switch_plug_in_flow_out;
-	int switch_plug_in_open_in;
-	int switch_plug_in_open_out;
-	int switch_plug_in_follow_in;
-	int switch_plug_in_follow_out;
-
-	int switch_plug_out_flow_in;
-	int switch_plug_out_flow_out;
-	int switch_plug_out_open_in;
-	int switch_plug_out_open_out;
-	int switch_plug_out_follow_in;
-	int switch_plug_out_follow_out;
-
 	int switch_brick_debug;
-
-	int camera_rotation;
-	int brick_copying;
-	int brick_cloning;
-	int brick_cloning_start;
 
 	int loop_step;
 	int load_error;
@@ -359,8 +301,7 @@ void		event_add( t_main_event *main_event, struct MINscreen *screen, int x, int 
 void 		event_dispach( t_main_event *main_event);
 t_event *	event_new( const char *name);
 t_main_event *	main_event_new(void);
-void event_log( t_event *e);
-
-char *event_name( t_event *e);
+void 		event_log( t_event *e);
+char *		event_name( t_event *e);
 
 #endif

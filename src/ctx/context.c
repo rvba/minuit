@@ -129,6 +129,7 @@ void ctx_update(t_context *C)
 	ctx_compute( C);
 	ctx_render( C);
 	ctx_engine( C);
+	scene_cleanup(C->scene);
 
 }
 
