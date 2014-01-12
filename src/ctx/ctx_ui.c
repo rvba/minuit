@@ -31,6 +31,7 @@
 #include "action.h"
 #include "dict.h"
 #include "set.h"
+#include "object.h"
 
 t_lst *EXE=NULL;
 
@@ -286,6 +287,11 @@ void ctx_ui_hover_reset( t_context *C)
 			brick->brick_state.is_mouse_over = 0;
 			brick->block->block_state.is_mouse_over = 0;
 		}
+		else if( node->cls->type == dt_object)
+		{
+			t_object *object = node->data;
+			object->hover = 0;
+		}
 	}
 };
 
@@ -301,7 +307,6 @@ void ctx_ui_hover( t_context *C)
 	else
 	{
 		t_node *node = NULL;
-		/*
 		node = ctx_scene_hover( C, dt_object);
 		if( node)
 		{
@@ -310,7 +315,6 @@ void ctx_ui_hover( t_context *C)
 		}
 		else
 		{
-			*/
 			node = ctx_scene_hover( C, dt_brick);
 			if( node)
 			{
@@ -322,9 +326,7 @@ void ctx_ui_hover( t_context *C)
 				C->scene->hover = NULL;
 				C->scene->hover_type = dt_null;
 			}
-			/*
 		}
-		*/
 	}
 }
 
@@ -653,8 +655,6 @@ void ctx_ui_keyboard( t_context *C, t_event *e)
 
 }
 
-
-
 /*	**********************************
 	:DEFAULT
 	*********************************	*/
@@ -664,17 +664,9 @@ void state_ui_default( t_context *C, t_event *e)
 	ctx_ui_log( "ui_default");
 	switch( e->type)
 	{
-		case MOUSE_RIGHT_PRESSED: 
-			ctx_ui_right( C, e);
-			break;
-
-		case MOUSE_LEFT_PRESSED: 
-			ctx_ui_left( C, e);
-			break;
-
-		case MOUSE_MIDDLE_PRESSED: 
-			ctx_ui_middle( C, e);
-			break;
+		case MOUSE_RIGHT_PRESSED: ctx_ui_right( C, e); break;
+		case MOUSE_LEFT_PRESSED: ctx_ui_left( C, e); break;
+		case MOUSE_MIDDLE_PRESSED: ctx_ui_middle( C, e); break;
 
 		default: break;
 	}

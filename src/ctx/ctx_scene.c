@@ -229,6 +229,7 @@ t_node *ctx_scene_hover( t_context *C, t_data_type type)
 			node = l->data;
 			hover = node_hover( C, node);
 			if( hover) break;
+			else node = NULL;
 		}
 	}
 

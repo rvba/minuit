@@ -543,19 +543,9 @@ void state_block_menu_hover_brick( t_block *block, t_event *e)
 	t_context *C = ctx_get();
 	switch( e->type)
 	{
-		case MOUSE_LEFT_PRESSED:
-			block_menu_trigger( C, block);
-			break;
-
-		case MOUSE_MOTION_PASSIVE:
-			block_menu_hover( C, block);
-			break;
-
-		case MOUSE_RIGHT_PRESSED:
-			BLOCK_SWAP( block, state_block_exit);
-			break;
-
-			
+		case MOUSE_LEFT_PRESSED: block_menu_trigger( C, block); break;
+		case MOUSE_MOTION_PASSIVE: block_menu_hover( C, block); break;
+		case MOUSE_RIGHT_PRESSED: BLOCK_SWAP( block, state_block_exit); break;
 		default: 
 			break;
 	}
