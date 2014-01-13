@@ -514,14 +514,34 @@ void state_block_default( t_block *block, t_event *e)
 
 // MENU BRICK TRIGGER
 
+void state_block_menu_brick_trigger_fixed( t_block *block, t_event *e)
+{
+	ctx_ui_log( "block_menu_brick_trigger_fixed");
+	t_brick *brick = block->_selected;
+	if( e->type == UI_BRICK_RELEASED)
+	{
+		BLOCK_SWAP( block, state_block_menu_default);
+	}
+	else if( e->type == MOUSE_RIGHT_PRESSED)
+	{
+		BLOCK_SWAP( block, state_block_exit);
+	}
+	else if( e->type == SHIFTKEY)
+	{
+		BLOCK_SWAP( block, state_block_menu_brick_trigger_fixed);
+	}
+	else
+	{
+		brick->cls->dispatch( brick); 
+	}
+}
+
 void state_block_menu_brick_trigger( t_block *block, t_event *e)
 {
 	ctx_ui_log( "block_menu_brick_trigger");
 	t_brick *brick = block->_selected;
 	if( e->type == UI_BRICK_RELEASED)
 	{
-		ctx_ui_log( "RECEVED");
-
 		if( brick->type == bt_trigger) block_menu_close( block);
 		else BLOCK_SWAP( block, state_block_menu_default);
 	}
@@ -529,7 +549,11 @@ void state_block_menu_brick_trigger( t_block *block, t_event *e)
 	{
 		BLOCK_SWAP( block, state_block_exit);
 	}
-	else
+	else if( e->type == SHIFTKEY)
+	{
+		BLOCK_SWAP( block, state_block_menu_brick_trigger_fixed);
+	}
+	else 
 	{
 		brick->cls->dispatch( brick); 
 	}
