@@ -11,33 +11,6 @@
 #include "util.h"
 #include <time.h>
 
-
-/*
-int u_randn(int density)
-{
-	int num = rand()%density;
-
-	return num;
-}
-
-int u_randrange(int start,int end)
-{
-	int n;
-	if (start != end)  n = rand()%(end-start) + start;
-	else n =start;
-	return n;
-}
-
-int u_randrange_relative(int start,int end)
-{
-	int n;
-
-	if (start != end)  n = rand()%(end-start) -((end-start)/2);
-	else n =start;
-	return n;
-}
-*/
-
 void rnd_init(void)
 {
 	srand(time(NULL));
