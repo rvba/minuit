@@ -683,6 +683,12 @@ void ctx_ui_pan_set( t_context *C, t_event *e)
 	C->ui->pan_y = r[1];
 } 
 
+void ctx_ui_zoom_set( t_context *C, t_event *e)
+{
+
+	C->ui->zoom += ( C->ui->mouse_dy * 0.002);
+} 
+
 /*	**********************************
 	:RIGHT
 	**********************************	*/
@@ -699,6 +705,21 @@ void state_ui_pan( t_context *C, t_event *e)
 			break;
 		default:
 			ctx_ui_pan_set( C, e);
+			break;
+	}
+}
+
+void state_ui_zoom( t_context *C, t_event *e)
+{
+	ctx_ui_log( "ui_zoom");
+
+	switch( e->type)
+	{
+		case MOUSE_RIGHT_RELEASED:
+			UI_SWAP( C, state_ui_default);
+			break;
+		default:
+			ctx_ui_zoom_set( C, e);
 			break;
 	}
 }
@@ -722,6 +743,10 @@ void state_ui_mouse_right_motion( t_context *C, t_event *e)
 
 			case SHIFTKEY:
 				UI_SWAP( C, state_ui_pan);
+				break;
+
+			case CTRLKEY:
+				UI_SWAP( C, state_ui_zoom);
 				break;
 		}
 	}
