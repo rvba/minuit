@@ -160,10 +160,8 @@ void exe_add_action(t_action *action)
 
 void ctx_ui_buffer_clear( t_context *C)
 {
-	bzero(&C->event->buffer_char[0],20);
+	bzero(&C->event->buffer_char[0],_NAME_LONG_);
 	C->event->buffer_char_counter=0;
-	C->event->ui.typing_start = 0;
-	C->event->ui.typing_end = 0;
 }
 
 void ctx_ui_log( const char *name)
@@ -835,21 +833,9 @@ void ctx_ui_dispatch( t_context *C)
 
 	for(l=C->event->events_swap->first;l;l=l->next)
 	{
-		if( C->event->ui.typing_start)
-		{
-			if( e->type != SHIFTKEY)
-			{
-				e = l->data;
-				event_log( e);
-				C->ui->state( C, e);
-			}
-		}
-		else
-		{
-			e = l->data;
-			event_log( e);
-			C->ui->state( C, e);
-		}
+		e = l->data;
+		event_log( e);
+		C->ui->state( C, e);
 	}
 }
 
