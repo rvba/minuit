@@ -166,9 +166,6 @@ typedef struct State_Event_UI
 	
 	int is_selection:1;
 
-	int typing_start:1;
-	int typing_end:1;
-
 	int use_point_global_width:1;
 	int use_line_global_width:1;
 	int use_scale:1;
@@ -249,7 +246,7 @@ typedef struct Main_Event
 	int free_scene;
 	int last_frame; //last recorded camera
 
-	char buffer_char[20];
+	char buffer_char[ _NAME_LONG_];
 	int buffer_char_counter;
 
 	void (* callback)(void);

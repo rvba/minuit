@@ -147,18 +147,16 @@ void brick_edit_start( t_context *C, t_brick *brick)
 {
 	set_name_long( C->event->buffer_char, brick->txt_data.name);
 	C->event->buffer_char_counter = strlen( brick->txt_data.name);
-	C->event->ui.typing_start = 1;
 	brick->typing = 1;
+	C->event->is_typing = 1;
 	BRICK_SWAP( brick, state_brick_edit);
 }
 
 void brick_edit_stop( t_context *C, t_brick *brick)
 {
-	C->event->ui.typing_start = 0;
 	C->event->is_typing=0;
 	ctx_ui_buffer_clear( C);
 
-	C->event->ui.typing_start = 0;
 	brick->state = brick_state_set_default( brick);
 	brick->typing = 0;
 	ctx_event_add( UI_BRICK_RELEASED);

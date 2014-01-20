@@ -97,7 +97,6 @@ void keymap_typing( int key)
 	switch(key)
 	{
 		case RETURNKEY:
-			event->ui.typing_end = 1;
 			C->event->is_typing=0; 
 			break;
 
@@ -226,7 +225,7 @@ void keymap_main( int key)
 	t_context *C=ctx_get();
 	t_main_event *event = C->event;
 
-	if(event->ui.typing_start)
+	if(event->is_typing)
 	{
 		keymap_typing(key);
 	}
