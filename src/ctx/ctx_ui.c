@@ -101,7 +101,7 @@ void block_delete(t_action *action)
 void block_do_delete( t_block *block)
 {
 	t_action *action = action_new("action");
-	t_brick *brick = block->_selected;
+	t_brick *brick = block->selected;
 
 	action->act = block_delete;
 
@@ -757,8 +757,6 @@ void state_ui_mouse_right( t_context *C, t_event *e)
 	ctx_ui_log( "ui_mouse_right");
 
 	int D = 30;
-
-	printf("%d\n",C->app->mouse->delta_x);
 
 	if( C->scene->hover_type == dt_brick)
 	{

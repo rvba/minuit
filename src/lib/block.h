@@ -88,8 +88,8 @@ struct Block
 
 	struct Lst *bricks;
 	struct Brick *submenu;
+	struct Brick *hover;			// submenu
 	struct Brick *selected;			// submenu
-	struct Brick *_selected;			// submenu
 
 	struct Rhizome *rhizome;
 	struct Set *set;

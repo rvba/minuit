@@ -466,7 +466,7 @@ t_block *block_clone(t_block *block)
 		clone->bricks = list_clone(block->bricks,dt_brick);
 
 		clone->submenu = NULL;
-		clone->selected = NULL; 
+		clone->hover = NULL; 
 		clone->rhizome = NULL; 
 		
 		//XXX init cls ???
@@ -499,7 +499,7 @@ t_block *block_rebind(t_scene *sc,void *ptr)
 	rebind(sc,"block","set",(void **)&block->set);
 
 	// reset
-	block->selected=NULL;
+	block->hover=NULL;
 	block->submenu=NULL;
 
 	t_context *C=ctx_get();
@@ -584,9 +584,9 @@ t_block *block_new(const char *name)
 
 	block->bricks=NULL;
 
-	block->submenu=NULL;
-	block->selected=NULL;
-	block->_selected=NULL;
+	block->submenu = NULL;
+	block->hover = NULL;
+	block->selected = NULL;
 
 	block->block_state.is_root=0;
 	block->block_state.is_show=0;
