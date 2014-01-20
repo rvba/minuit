@@ -589,12 +589,10 @@ t_block *block_new(const char *name)
 	block->selected = NULL;
 
 	block->block_state.is_root=0;
-	block->block_state.is_show=0;
 	block->block_state.draw_outline=0;
 	block->block_state.draw_plugs=0;
 	block->block_state.is_mouse_over=0;
 	block->block_state.update_geometry=1;
-	block->block_state.is_moveable = 1;
 	block->block_state.is_a_loop = 0;
 	block->block_state.is_in_rhizome = 0;
 	block->block_state.frame_based = 0;

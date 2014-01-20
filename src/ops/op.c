@@ -21,17 +21,6 @@
 #include "clock.h"
 #include "obj.h"
 #include "viewport.h"
-/*
-#include "node.h"
-#include "obj.h"
-#include "process.h"
-#include "engine.h"
-#include "ui.h"
-#include "list.h"
-#include "set.h"
-#include "memory.h"
-#include "util.h"
-*/
 
 // store menu
 
@@ -41,7 +30,6 @@ t_block *add_menu_block( t_context *C, const char *name)
 {
 	t_node *menu = block_make( name, "menu");
 	t_block *block = menu->data;
-	block->block_state.is_moveable = 0;
 	return block;
 }
 

@@ -56,12 +56,10 @@ struct Block_Class
 struct Block_State
 {	
 	int is_root:1;
-	int is_show:1;	
 	int draw_outline:1;
 	int draw_plugs:1;
 	int is_mouse_over:1;
 	int update_geometry:1;
-	int is_moveable:1;
 	int is_a_loop:1;
 	int is_in_rhizome:1;
 	int frame_based:1;
