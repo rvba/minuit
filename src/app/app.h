@@ -21,8 +21,6 @@
 #define APP_DEBUG 0
 #define SET_FULLSCREEN  1
 
-#define GIT 128
-
 struct Lst;
 struct Clock;
 struct File;
@@ -131,7 +129,6 @@ struct App
 	char name[_NAME_];
 	
 	char version[_NAME_];
-	char git[GIT];
 	char app_name[_NAME_];
 	
 	void (*main_func)(void);

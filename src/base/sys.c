@@ -83,34 +83,3 @@ void get_log(char *dst,char *msg)
 	dst[i+1]='\0';
 }
 
-//void sys_git_get(const char *version,const char *date)
-/*
-void sys_git_get(void)
-{
-	FILE *fp;
-	char input[2024];
-	char log[50];
-
-	bzero(log,50);
-	bzero(input,2024);
-
-	fp = popen("git log -n 1","r");
-
-	int n=0;
-
-	if(fp)
-	{
-		printf("GIT\n");
-		while (fgets(input, sizeof(input)-1, fp) != NULL)
-		{
-			printf(">%s",input);
-			if(n==0) get_log(log,input);
-			n++;
-		}
-		printf("DONE\n");
-	}
-
-	pclose(fp);
-}
-*/
-	

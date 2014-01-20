@@ -93,11 +93,6 @@ void mem_write(const char *path)
 	ulog((LOG_SAVE,"[0]\n"));
 
 	t_context *C=ctx_get();
-	fwrite(":",sizeof(char),1,file);
-	fwrite(C->app->git,sizeof(char)*GIT,1,file);
-
-	check_size+=sizeof(char);
-	check_size+=sizeof(char)*GIT;
 
 	for(l=MEMORY->first;l;l=l->next)
 	{

@@ -655,8 +655,6 @@ void load_node(t_scene *sc)
 
 void load_read(t_scene *sc,const char *path)
 {
-	t_context *C=ctx_get();
-
 	void *data; 		// struct memory allocation
 	char magic;		// read magic
 	int limit=0;		// max size
@@ -682,8 +680,6 @@ void load_read(t_scene *sc,const char *path)
 	ulog((LOG_READ,"File size:%d\n",file_size));
 	ulog((LOG_READ,"[0]\n",file_size));
 
-	char version[GIT];
-
 	size_t rsize;
 
 	// READ FILE
@@ -705,48 +701,30 @@ void load_read(t_scene *sc,const char *path)
 		// BREAK EOF
 		if(magic=='&') break;
 
-		// GIT VERSION
-		if(magic==':')
-		{
-			rsize = fread(version,sizeof(char)*GIT,1,file);
-			//if(rsize != (sizeof(char) * GIT)) printf("read error 2\n");
-			(void) rsize;
-			if(!is(C->app->git,version))
-			{
-				/*
-				printf("[WARNING] Git versions differs\n");
-				printf("[WARNING] file:%s\n",version);
-				printf("[WARNING] current:%s\n",C->app->git);
-				*/
-			}
-		}
-		else
-		{
-			// READ CHUNK
-			rsize = fread(c,sizeof(t_chunk),1,file);
-			(void) rsize;
-			//if( rsize != (sizeof(t_chunk) * 1)) printf("read error 3\n");
-			ulog((LOG_READ,"[%d]\t(+%d)\tchunk",(int)ftell(file),(int)sizeof(t_chunk)));
-			ulog((LOG_READ," %s:%s:%d:%d\n",chunk_type_get(c->chunk_type),data_name_get(c->type),c->size,c->tot));
+		// READ CHUNK
+		rsize = fread(c,sizeof(t_chunk),1,file);
+		(void) rsize;
+		//if( rsize != (sizeof(t_chunk) * 1)) printf("read error 3\n");
+		ulog((LOG_READ,"[%d]\t(+%d)\tchunk",(int)ftell(file),(int)sizeof(t_chunk)));
+		ulog((LOG_READ," %s:%s:%d:%d\n",chunk_type_get(c->chunk_type),data_name_get(c->type),c->size,c->tot));
 
-			// READ DATA
+		// READ DATA
 
-			// MALLOC
-			data=mem_malloc(c->size*c->tot);
+		// MALLOC
+		data=mem_malloc(c->size*c->tot);
 
-			// READ
-			rsize = fread(data,c->size,c->tot,file);
-			(void) rsize;
-			//if(rsize != c->size * c->tot) printf("read error 4\n");
+		// READ
+		rsize = fread(data,c->size,c->tot,file);
+		(void) rsize;
+		//if(rsize != c->size * c->tot) printf("read error 4\n");
 
-			ulog((LOG_READ,"[%d]\t(+%d)\tstruct %s:%s\n",(int)ftell(file),c->size,chunk_type_get(c->chunk_type),c->type));
+		ulog((LOG_READ,"[%d]\t(+%d)\tstruct %s:%s\n",(int)ftell(file),c->size,chunk_type_get(c->chunk_type),c->type));
 
-			// STORE  Nodes + Structs
-			id_store(sc,c,data);
+		// STORE  Nodes + Structs
+		id_store(sc,c,data);
 
-			// LIMIT++
-			limit++;
-		}
+		// LIMIT++
+		limit++;
 	}
 
 	// CLOSE FILE
