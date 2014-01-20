@@ -196,11 +196,6 @@ typedef struct Main_Event
 	int end_x;
 	int end_y;
 
-	// background
-
-	int is_background_button_left_pressed;
-	int is_background_button_left_released;
-
 	int is_selection;
 
 	int is_typing;

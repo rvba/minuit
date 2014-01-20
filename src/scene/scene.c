@@ -78,7 +78,7 @@ t_lst *scene_lst_get(t_scene *sc,const char *type)
 	}
 	else
 	{
-		printf("[ERROR scene_node_get] Unknown type:%s\n",type);
+		printf("[ERROR scene_lst_get] Unknown type:%s\n",type);
 		return NULL;
 	}
 }
