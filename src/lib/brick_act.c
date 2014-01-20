@@ -360,31 +360,17 @@ void *_op_brick_add( t_brick *brick)
 
 void *op_selector(t_brick *brick)
 {
-	t_context *C = ctx_get();
 	int *target = brick->plug_intern.data;
 
-	if(brick->brick_state.is_mouse_over)
+	if( brick->var.selector < brick->var.selector_length)
 	{
-		if( C->ui->mouse_state == UI_LEFT_PRESSED)
-		{
-			// switch state when released
-			if(brick->brick_state.is_released)
-			{
-				brick->brick_state.is_released=0;
-				// switch value
-
-				if(brick->var.selector<brick->var.selector_length)
-				{
-					brick->var.selector++;
-					(*target)++;
-				}
-				else
-				{
-					brick->var.selector=0;
-					*target=0;
-				}
-			}
-		}
+		brick->var.selector++;
+		(*target)++;
+	}
+	else
+	{
+		brick->var.selector=0;
+		*target=0;
 	}
 
 	return NULL;

@@ -61,14 +61,10 @@ typedef struct Brick_State
 {
 	// ON
 
-	int is_idle:1;
-	int is_released:1;
 	int draw_outline:1;
 	int draw_name:1;
-	int is_clicable:1;
 	int use_min_width:1;
 	int use_block_width:1;
-	int is_mouse_mode:1;
 	int draw:1;
 
 	// OFF
@@ -76,25 +72,15 @@ typedef struct Brick_State
 	int draw_plugs:1;
 	int draw_value:1;
 	int show_menu:1;
-	int is_pressed:1;
 	int is_current:1;
 	int is_mouse_over:1;		
 	int is_mouse_over_plug_out:1;		
 	int is_mouse_over_plug_in:1;		
-	int is_moving:1;
-	int is_linking:1; 		// start linking state
-	int is_draging:1;		// clic & drag number but
-	int is_left_pressed:1;
-	int is_right_pressed:1;
-	int use_brick_blocking:1;	// one clic
-	int use_global_blocking:1;	// one clic per screen
-	int is_plug_update:1;
 	int always_trigger:1;
 	int is_contextual:1;
 	int poll:1;
 	int is_versatil:1;
 	int has_ref:1;
-	int use_dragging:1;
 	int use_loops:1;
 	int remove_connected:1;
 	int is_root:1;
@@ -170,9 +156,9 @@ typedef struct Brick
 	struct Block *block; 			// block container
 
 	// action
-	void *(* exe)(struct Brick *brick);	
-	void *(* act)(struct Brick *brick);	
-	int (* poll)(struct Brick *brick);	
+	void 	*(* exe)(struct Brick *brick);	
+	void 	*(* act)(struct Brick *brick);	
+	int 	(* poll)(struct Brick *brick);	
 
 	void (* state)( struct Brick *brick, struct Event *e);
 
@@ -219,9 +205,6 @@ void 		cls_plug_update(struct Plug *plug);
 void		brick_draw(struct Brick *brick);
 void		cls_brick_build_width(struct Brick *brick);
 void 		cls_brick_build_txt(struct Brick *brick);
-
-// BRICK_ACT
-
 
 
 // OP_ADD_OBJECT

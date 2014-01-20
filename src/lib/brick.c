@@ -630,22 +630,17 @@ t_brick *brick_new(const char *name)
 
 	bzero(&brick->brick_state,sizeof(t_brick_state));
 
-	brick->brick_state.is_idle=1;
-	brick->brick_state.is_released=1;
 	brick->brick_state.draw_outline=1;
 	brick->brick_state.draw_plugs=1;
 	brick->brick_state.draw_name=1;
-	brick->brick_state.is_clicable=1;
 	brick->brick_state.use_min_width=1;
 	brick->brick_state.use_block_width=1;
-	brick->brick_state.is_mouse_mode=1;
 	brick->brick_state.is_contextual=0;
 	brick->brick_state.poll=0;
 	brick->brick_state.is_versatil=0;
 	brick->brick_state.has_ref=0;
 	brick->brick_state.is_current=0;
 	brick->brick_state.always_trigger=0;
-	brick->brick_state.use_dragging = 1;
 	brick->brick_state.use_loops = 1;
 	brick->brick_state.frame_loop = 0;
 	brick->brick_state.remove_connected = 0;

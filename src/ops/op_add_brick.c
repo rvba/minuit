@@ -432,7 +432,6 @@ t_node *add_brick_operator(t_context *C,t_block *block,const char *name)
 	t_node *node_brick=add_brick_slider_int(C,block,name,NULL);
 	t_brick *brick=node_brick->data;
 
-	brick->brick_state.is_clicable=0;
 	brick->brick_state.draw_name=1;
 	brick->brick_state.draw_outline=0;
 
@@ -741,7 +740,6 @@ t_node *add_part_slider_add( t_context *C, t_block *block, const char *name, voi
 	brick->plug_out.state.open_out = 0;
 	brick->plug_in.state.open_in = 0;
 	brick->plug_in.state.flow_in = 0;
-	brick->brick_state.use_dragging = 0;
 	return node;
 }
 
@@ -1304,7 +1302,6 @@ t_node *add_clone(t_context *C)
 	t_brick *brick_clone=node_brick_clone->data;
 
 	brick_clone->exe=op_clone;
-	brick_clone->brick_state.use_dragging = 0;
 
 	return node_block;
 }
@@ -1392,7 +1389,6 @@ t_node *add_brick_geometry(t_context *C,const char *name, void *data)
 	t_brick *brick_clone = node_brick_clone->data;
 	brick_clone->plug_out.state.flow_out=0;
 	brick_clone->plug_out.state.open_out=0;
-	brick_clone->brick_state.use_dragging = 0;
 
 	brick_clone->exe=op_geometry;
 
