@@ -769,7 +769,7 @@ void state_ui_mouse_right( t_context *C, t_event *e)
 			case SHIFTKEY: UI_SWAP( C, state_ui_space_rotate); break;
 			case CTRLKEY: UI_SWAP( C, state_ui_space_translate); break;
 			case MOUSE_MOTION: 
-				if( C->ui->mouse_delta_x > D || C->ui->mouse_delta_y > D)
+				if( ( abs( C->ui->mouse_delta_x) > D) || ( abs( C->ui->mouse_delta_y) > D))
 				UI_SWAP( C, state_ui_mouse_right_motion);
 				break;
 			case MOUSE_RIGHT_RELEASED:

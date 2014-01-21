@@ -36,26 +36,26 @@ t_lst *sets = NULL;
 
 void ui_draw_icon_freeze(t_context *C)
 {
-		float *color = C->ui->front_color;
-		int width = 1;
+	float *color = C->ui->front_color;
+	int width = 1;
 
-		op_camera_switch_2d(C,C->ui->camera);
+	op_camera_switch_2d(C,C->ui->camera);
 
-		glPushMatrix();
-		glLoadIdentity();
+	glPushMatrix();
+	glLoadIdentity();
 
-			float o[]={0,0,0};
-			float w=200;
-			float h=200;
-			float size = .2;
+		float o[]={0,0,0};
+		float w=200;
+		float h=200;
+		float size = .2;
 
-			glTranslatef((float)C->app->window->width - 200,50,0);
-			glRotatef(45,0,0,1);
-			glScalef(size,size,size);
+		glTranslatef((float)C->app->window->width - 200,50,0);
+		glRotatef(45,0,0,1);
+		glScalef(size,size,size);
 
-			skt_line_rectangle(o,w,h,width,color);
+		skt_line_rectangle(o,w,h,width,color);
 
-		glPopMatrix();
+	glPopMatrix();
 }
 
 // MOUSE
@@ -278,41 +278,6 @@ void ui_draw_screens(t_context *C)
 	}
 }
 
-// NAVIGATION
-
-void ui_navigation(t_context *C)
-{
-	if( !C->event->is_mouse_over_brick)
-	{
-		// Pan
-		if( C->ui->mouse_state == UI_RIGHT_PRESSED && C->ui->key_ctrl)
-		{
-			C->ui->pan_x = C->event->ui.pan_x + C->ui->mouse_delta_x;
-			C->ui->pan_y = C->event->ui.pan_y + C->ui->mouse_delta_y;
-			C->event->ui.pan = 1;
-		}
-
-		// Zoom
-		if( C->ui->mouse_state == UI_RIGHT_PRESSED && C->ui->key_alt)
-		{
-			C->event->ui.zoom = 1;
-			C->ui->zoom += ( C->ui->mouse_dy * 0.002);
-		}
-
-		// Release
-		if(
-			(C->event->ui.pan || C->event->ui.zoom)
-			&& C->ui->mouse_state == UI_RIGHT_RELEASED)
-		{
-			//C->event->ui.pan = 0;
-			C->event->ui.zoom = 0;
-
-			C->event->ui.pan_x = C->ui->pan_x;
-			C->event->ui.pan_y = C->ui->pan_y;
-		}
-	}
-}
-
 // CLONE
 
 void ui_clone_make(t_context *C)
@@ -333,33 +298,6 @@ void ui_clone_make(t_context *C)
 		clone = set_clone(set);
 		lst_add(sets, clone, "set");
 	}
-}
-
-void ui_clone_free(t_context *C)
-{
-	t_link *link;
-	t_set *set;
-
-	// Free Sets
-	for(link = sets->first;link;link=link->next)
-	{
-		set = link->data;
-		_set_free(set);
-	}
-
-	lst_cleanup(sets);
-}
-
-// START/STOP
-
-void ui_draw_start(t_context *C)
-{
-	ui_clone_make(C);
-}
-
-void ui_draw_stop(t_context *C)
-{
-	ui_clone_free(C);
 }
 
 // DRAW

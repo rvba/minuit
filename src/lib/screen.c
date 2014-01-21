@@ -159,7 +159,6 @@ void screen_generic(t_screen *screen)
 	glPushMatrix();
 	glLoadIdentity();
 
-	ui_draw_mouse();
 	ui_draw_menu();
 
 	glPushMatrix();
