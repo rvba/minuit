@@ -278,28 +278,6 @@ void ui_draw_screens(t_context *C)
 	}
 }
 
-// CLONE
-
-void ui_clone_make(t_context *C)
-{
-	t_node *node;
-	t_set *set;
-	t_set *clone;
-
-	// Init : Build List
-	if(!sets) sets = lst_new("lst");
-
-	// Clone Sets
-	t_link *link;
-	for(link = C->scene->sets->first; link; link = link->next)
-	{
-		node = link->data;
-		set = node->data;
-		clone = set_clone(set);
-		lst_add(sets, clone, "set");
-	}
-}
-
 // DRAW
 
 void ui_draw(void)
