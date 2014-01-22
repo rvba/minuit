@@ -298,6 +298,7 @@ void cls_block_link(t_block *self,t_node *target);
 void cls_block_make(t_block *block);
 void cls_block_make_block(t_block *block);
 void cls_block_make_menu(t_block *block);
+void cls_block_make_bar(t_block *block);
 void cls_block_make_ref(t_block *block);
 
 // menu
@@ -307,7 +308,7 @@ t_block_class block_menu =
 	.type="menu",
 	.make=cls_block_make_menu,
 	.link=cls_block_link,
-	.draw=cls_block_draw_block,
+	.draw=cls_block_draw_menu,
 	.init=_block_init,
 	.dispatch = cls_block_dispatch,
 };
@@ -324,6 +325,18 @@ t_block_class block_block =
 	.dispatch = cls_block_dispatch,
 };
 
+// bar
+t_block_class block_bar =
+{
+	.cls_type="block",
+	.type="bar",
+	.make=cls_block_make_bar,
+	.link=cls_block_link,
+	.draw=cls_block_draw_bar,
+	.init=_block_init,
+	.dispatch = cls_block_dispatch,
+};
+
 void cls_block_make_block(t_block *block)
 {
 	block->cls=&block_block;
@@ -334,9 +347,15 @@ void cls_block_make_menu(t_block *block)
 	block->cls=&block_menu;
 }
 
+void cls_block_make_bar(t_block *block)
+{
+	block->cls=&block_bar;
+}
+
 t_block_class *blocks[] = {
 	&block_menu,
 	&block_block,
+	&block_bar,
 	};
 
 void block_cls_init(t_block *block)

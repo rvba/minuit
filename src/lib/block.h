@@ -125,6 +125,9 @@ void cls_block_state_block_default( t_block *block, struct Event *e);
 void state_block_menu_default( t_block *block, struct Event *e);
 void state_block_default( t_block *block, struct Event *e);
 
+void cls_block_draw_menu(t_block *block);
+void cls_block_draw_bar(t_block *block);
+
 
 
 

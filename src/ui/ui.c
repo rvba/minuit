@@ -32,6 +32,16 @@
 
 t_lst *sets = NULL;
 
+int ui_get_window_width( t_context *C)
+{
+	return C->app->window->width;
+}
+
+int ui_get_window_height( t_context *C)
+{
+	return C->app->window->height;
+}
+
 // FREEZE ICON
 
 void ui_draw_icon_freeze(t_context *C)
@@ -240,6 +250,27 @@ void ui_draw_menu(void)
 	}
 }
 
+// DRAW BAR 
+
+void ui_draw_bar(void)
+{
+	t_context *C=ctx_get();
+	t_node *node=C->scene->selected;
+	t_block *menu=NULL;
+
+	glPushMatrix();
+	if(C->ui->show_intro)
+	{
+		glTranslatef(0,2,0);
+		C->event->ui.use_scale = 0;
+		node=scene_node_get(C->scene,"block","bar");
+		menu=node->data;
+		menu->cls->draw(menu);
+		C->event->ui.use_scale = 1;
+	}
+	glPopMatrix();
+}
+
 // DRAW SETS
 
 void ui_draw_sets(void)
@@ -367,6 +398,7 @@ t_ui *ui_new(void)
 	ui->show_rhizome_bounding_box = UI_SHOW_RHIZOME_BOUNDING_BOX;
 	ui->show_rhizome_order = UI_SHOW_RHIZOME_ORDER;
 	ui->show_status = UI_SHOW_STATUS;
+	ui->show_bar = UI_SHOW_BAR;
 
 	ui->mouse_state = UI_MOUSE_IDLE;
 	ui->mouse_motion = UI_MOUSE_STATIC;

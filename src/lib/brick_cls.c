@@ -37,6 +37,7 @@ void brick_make_slider(t_brick *brick);
 void brick_make_menu(t_brick *brick);
 void brick_make_selector(t_brick *brick);
 void brick_make_switch(t_brick *brick);
+void brick_make_bar(t_brick *brick);
 
 // TRIGGER
 
@@ -103,6 +104,19 @@ t_brick_class brick_switch = {
 	.dispatch=cls_brick_dispatch,
 	};
 
+// BAR
+
+t_brick_class brick_bar = {
+	.cls_type="brick",
+	.type=bt_bar,
+	.make=brick_make_bar,
+	.draw=brick_draw_bar,
+	.init=cls_brick_init_switch,
+	.connect=cls_brick_connect,
+	.disconnect=cls_brick_disconnect,
+	.dispatch=cls_brick_dispatch,
+	};
+
 
 // CLS
 
@@ -112,6 +126,7 @@ t_brick_class *bricks[] = {
 	&brick_menu,
 	&brick_selector,
 	&brick_switch,
+	&brick_bar,
 	};
 
 void brick_make_trigger(t_brick *brick)
@@ -137,6 +152,11 @@ void brick_make_selector(t_brick *brick)
 void brick_make_switch(t_brick *brick)
 {
 	brick->cls=&brick_switch;
+}
+
+void brick_make_bar(t_brick *brick)
+{
+	brick->cls=&brick_bar;
 }
 
 // INIT

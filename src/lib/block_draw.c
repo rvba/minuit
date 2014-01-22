@@ -96,6 +96,49 @@ void block_draw_bricks(t_block *block)
 	t_link *link;
 	t_brick *brick;
 
+	glPushMatrix();
+
+	// Translate to Block Pos
+	glTranslatef(block->pos[0],block->pos[1],0);
+
+	// Loop over Bricks
+	for(link=block->bricks->first;link;link=link->next)
+	{
+		brick = link->data;
+
+		// Draw brick
+		brick->cls->draw(brick);
+
+		// Translate Up
+		if(brick->brick_state.draw) glTranslatef(0,brick->geom.height,0);
+	}
+
+	glPopMatrix();
+
+}
+
+void block_draw_bar(t_block *block)
+{
+	t_link *link;
+	t_brick *brick;
+	float offset = 5;
+
+	glPushMatrix();
+	glTranslatef(block->pos[0],block->pos[1],0);
+	for(link=block->bricks->first;link;link=link->next)
+	{
+		brick = link->data;
+		brick->cls->draw(brick);
+		if(brick->brick_state.draw) glTranslatef(brick->geom.width + offset,0,0);
+	}
+	glPopMatrix();
+}
+
+void block_menu_draw_bricks(t_block *block)
+{
+	t_link *link;
+	t_brick *brick;
+
 	int offset=2;
 
 	glPushMatrix();
@@ -228,11 +271,27 @@ void block_draw_outline(t_block *block)
 	}
 }
 
+void cls_block_draw_menu(t_block *block)
+{
+	block_update_data(block);
+	block_update_geometry(block);
+	block_menu_draw_bricks(block);
+	block_draw_outline(block);
+}
+
 void cls_block_draw_block(t_block *block)
 {
 	block_update_data(block);
 	block_update_geometry(block);
 	block_draw_bricks(block);
+	block_draw_outline(block);
+}
+
+void cls_block_draw_bar(t_block *block)
+{
+	block_update_data(block);
+	block_update_geometry(block);
+	block_draw_bar(block);
 	block_draw_outline(block);
 }
 	

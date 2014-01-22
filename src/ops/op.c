@@ -339,11 +339,25 @@ void make_menu_mouse( t_context *C)
 	add_brick_submenu(C, menu, draw, "draw");
 }
 
+// BAR
+
+void make_bar( t_context *C)
+{
+	char name[64];
+	//snprintf(name, 64, "%s    %s", "m  i  n  u  i  t", APP_VERSION);
+	snprintf(name, 64, "%s    %s", "M I N U I T", APP_VERSION);
+	//char *name = "m  i  n  u  i  t";
+	t_node *node_block = block_make( "bar", "bar");
+	t_block *block = node_block->data;
+	add_brick_bar( C, block, name, op_void_act);
+}
+
 // MAKE
 
 void op_menu_init(t_context *C)
 {
 	make_menu_mouse( C);
+	make_bar( C);
 }
 
 // REGISTER GET
