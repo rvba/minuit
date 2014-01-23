@@ -37,6 +37,7 @@ typedef enum Brick_Type
 	bt_menu,
 	bt_selector,
 	bt_switch,
+	bt_bar,
 
 }t_brick_type;
 
@@ -203,6 +204,7 @@ void 		cls_plug_update(struct Plug *plug);
 // BRICK_DRAW
 
 void		brick_draw(struct Brick *brick);
+void 		brick_draw_bar(t_brick *brick);
 void		cls_brick_build_width(struct Brick *brick);
 void 		cls_brick_build_txt(struct Brick *brick);
 

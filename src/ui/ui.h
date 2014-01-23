@@ -27,6 +27,7 @@
 #define UI_SHOW_RHIZOME_BOUNDING_BOX 0
 #define UI_SHOW_RHIZOME_ORDER 0
 #define UI_SHOW_STATUS 0
+#define UI_SHOW_BAR 1
 #define UI_ADD_BRICKS 1
 
 #define UI_MOUSE_IDLE		 0
@@ -133,6 +134,7 @@ typedef struct Ui
 	int show_rhizome_bounding_box;
 	int show_rhizome_order;
 	int show_status;
+	int show_bar;
 
 	// positions
 	float zoom;
@@ -185,6 +187,7 @@ void ui_reboot(void);
 void ui_draw_rhizomes(void);
 void ui_draw_intro(void);
 void ui_draw_menu(void);
+void ui_draw_bar(void);
 void ui_draw_blocks(void);
 void ui_draw_debug(void);
 void ui_draw_term(void);
@@ -202,5 +205,8 @@ void ui_draw_mouse(void);
 
 void ui_event_add( int type);
 void ctx_ui_old( struct Context *C);
+
+int ui_get_window_width( struct Context *C);
+int ui_get_window_height( struct Context *C);
 
 #endif

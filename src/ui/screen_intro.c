@@ -118,7 +118,6 @@ void screen_intro(t_screen *screen)
 	int time_limit = 25;
 
 	float scale= 5;
-	float scv = .3;
 	float p[3]={(C->app->window->width)/4,(C->app->window->height)/2,0};
 	int dist = 500;
 	int color_factor = 100;
@@ -187,6 +186,7 @@ void screen_intro(t_screen *screen)
 		glPushMatrix();
 
 
+		/*
 		if(C->ui->show_intro)
 		{
 			// Minuit
@@ -198,6 +198,7 @@ void screen_intro(t_screen *screen)
 			glScalef(scv,scv,scv);
 			txt_version->draw(txt_version);
 		}
+		*/
 
 		C->ui->zoom = z;
 

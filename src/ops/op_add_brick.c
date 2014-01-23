@@ -380,6 +380,27 @@ t_node *add_brick_trigger(t_context *C,t_block *block,const char *name,void *f(t
 	return node_brick;
 }
 
+// BRICK BAR
+
+t_node *add_brick_bar( t_context *C, t_block *block, const char *name, void *f(t_brick *b))
+{
+	void *ptr=add_brick_data(dt_int,NULL);
+
+	// NEW BRICK
+	t_node *node_brick = brick_make( block, name, bt_bar, dt_int, ptr);
+	t_brick *brick = node_brick->data;
+	// Dont Draw Value
+	brick->brick_state.draw_value = 0;
+
+	// ACTION
+	if(f)  brick->act = f; 
+
+	// PLUG
+	set_plug_option(brick);
+
+	return node_brick;
+}
+
 // BRICK TRIGGER TYPE
 
 t_node *add_brick_trigger_type(t_context *C,t_block *block,const char *name,void *f(t_brick *b),t_data_type type)

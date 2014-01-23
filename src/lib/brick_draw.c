@@ -418,6 +418,26 @@ void brick_draw_outline(t_brick *brick)
 	}
 }
 
+void brick_draw_bar_outline(t_brick *brick)
+{
+	t_context *C=ctx_get();
+
+	float height = brick->geom.height;
+	float width = ui_get_window_width( C);
+
+	float a[3] = { 0, 0, 0};
+	float b[3] = { a[0] + width, a[1], a[2]};
+	float c[3] = { a[0] , a[1] + height, a[2]};
+	float d[3] = { c[0] + width, c[1], c[2]};
+
+	float color[3];
+	vcp( color, C->ui->front_color);
+	vmul( color, .5);
+
+	skt_line( a, b , 1, color);
+	skt_line( c, d , 1, color);
+}
+
 void brick_draw_body(t_brick *brick)
 {
 	t_context *C = ctx_get();
@@ -595,4 +615,11 @@ void brick_draw(t_brick *brick)
 		brick_draw_link(brick);
 		brick_draw_outline(brick);
 	}
+}
+
+void brick_draw_bar(t_brick *brick)
+{
+	brick_draw_txt(brick);
+	brick_draw_body(brick);
+	brick_draw_bar_outline(brick);
 }

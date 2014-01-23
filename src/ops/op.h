@@ -109,5 +109,7 @@ void 		add_block_offset(struct Context *C, struct Block *block);
 int 		op_post_quit(struct Node *node);
 struct Block *	add_menu_block( struct Context *C, const char *name);
 
+struct Node *	add_brick_bar( struct Context *C, struct Block *block, const char *name, void *f(struct Brick *b));
+
 
 #endif
