@@ -10,19 +10,22 @@
 #ifndef __SERVER_H_
 #define __SERVER_H_
 
-#include "net.h"
+struct Socket;
+struct Process;
 
-typedef struct MNserver t_server;
-
-struct MNserver
+typedef struct MNserver
 {
 	t_id id;
+	int init;
+	struct Process *process;
+	struct MN_Socket *socket;
 
-	t_socket *socket;
-};
+}t_server;
 
-void 		server_connect( t_server *server, int port);
+void 		server_start( t_server *server, int port);
+void 		server_stop( t_server *server);
 t_server *	server_new( const char *name);
+void 		server_free( t_server *server);
 
 
 #endif

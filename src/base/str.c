@@ -28,18 +28,6 @@ char *s_allocate(const char *data)
 	return string;
 }
 
-/** format time in yy/mm/hh/ss with a char[30] **/
-/*
-void s_write_time(char *string)
-{
-	time_t tim=time(NULL);
-	struct tm *now=localtime(&tim);
-	snprintf(string,30,"./%d%02d%02d%02d%02d%02d.png",now->tm_year+1900, now->tm_mon+1,now->tm_mday,now->tm_hour,now->tm_min,now->tm_sec);
-}
-*/
-
-// work with cursor
-
 int s_append(char *dest,char *src,int pos)
 {
 	if(src)
@@ -60,13 +48,16 @@ int s_append(char *dest,char *src,int pos)
 	return pos;
 }
 
-void s_remove_newline(char *target,char *src)
+void s_remove_newline( char *target, char *src, int size)
 {
-	while(*src!='\n')
+	int s = 0;
+	bzero( target, size);
+	while( *src != '\n' && s <= size)
 	{
-		*target=*src;
+		*target = *src;
 		target++;
 		src++;
+		s++;
 	}
 }
 

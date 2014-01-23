@@ -46,6 +46,8 @@ void state_ui_block_trigger( t_context *C, t_event *e);
 void state_ui_default( t_context *C, t_event *e);
 void state_ui_motion( t_context *C, t_event *e);
 
+void ctx_ui_space_rotate( t_context *C, t_event *e);
+
 void ctx_ui_block_trigger( t_context *C);
 
 void op_debug_all(t_context *C)

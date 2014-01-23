@@ -14,6 +14,8 @@ set(SRC
 	ptr.c
 	rnd.c
 	rnd.h
+	sock.h
+	sock.c
 	sys.h
 	sys.c
 	str.h

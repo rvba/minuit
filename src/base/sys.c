@@ -29,23 +29,21 @@ void sys_get_cd(const char *cmd)
 	}
 }
 
-int sys_get_hostname(char* data)
+int sys_get_hostname( char* name, int size)
 {
 	FILE *fp;
-	char input[1024];
+	char input[ size];
 
 	fp = popen("hostname", "r");
 
 	if(fp)
 	{
-		while (fgets(input, sizeof(input)-1, fp) != NULL)
+		while ( fgets ( input, sizeof( input) - 1, fp) != NULL)
 		{
 		}
 
-		s_remove_newline(data,input);
-		
+		s_remove_newline( name, input, size);
 		pclose(fp);
-
 		return 1;
 	}
 	else

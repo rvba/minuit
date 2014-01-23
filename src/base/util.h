@@ -22,6 +22,7 @@
 #include "sys.h"
 #include "lst.h"
 #include "ptr.h"
+#include "sock.h"
 
 extern int db;
 void color_id(int *color);

@@ -127,7 +127,7 @@ void engine_process_remove(t_engine *engine, t_process *process)
 {
 	process->exit = 1;
 	engine->process_count--;
-	lst_add(engine->garbage, process, process->id.name);
+	lst_add( engine->garbage, process, process->id.name);
 }
 
 // ADD
