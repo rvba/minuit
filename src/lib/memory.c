@@ -92,8 +92,6 @@ void mem_write(const char *path)
 
 	ulog((LOG_SAVE,"[0]\n"));
 
-	t_context *C=ctx_get();
-
 	for(l=MEMORY->first;l;l=l->next)
 	{
 		c=l->data;

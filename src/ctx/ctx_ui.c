@@ -590,6 +590,7 @@ void state_ui_space_rotate( t_context *C, t_event *e)
 
 	switch( e->type)
 	{
+		case MOUSE_MIDDLE_RELEASED:
 		case MOUSE_RIGHT_RELEASED:
 			UI_SWAP( C, state_ui_default);
 			break;
@@ -617,16 +618,15 @@ void state_ui_space_translate( t_context *C, t_event *e)
 void state_ui_mouse_middle( t_context *C, t_event *e)
 {
 	ctx_ui_log( "ui_mouse_middle");
-	switch( C->scene->hover_type)
-	{
-		case dt_null:
-			UI_SWAP( C, state_ui_space_zoom);
-			C->ui->state( C, e);
-			break;
 
-		default:
-			UI_SWAP( C, state_ui_default);
-			break;
+	switch( e->type)
+	{
+		case MOUSE_MIDDLE_PRESSED: ctx_ui_space_rotate( C, e); break;
+		case MOUSE_WHEEL_UP:
+		case MOUSE_WHEEL_DOWN:
+				UI_SWAP( C, state_ui_space_zoom);
+				C->ui->state( C, e);
+				break;
 	}
 }
 
@@ -750,6 +750,7 @@ void state_ui_mouse_right_motion( t_context *C, t_event *e)
 				break;
 		}
 	}
+
 }
 
 void state_ui_mouse_right( t_context *C, t_event *e)
@@ -833,6 +834,7 @@ void state_ui_default( t_context *C, t_event *e)
 	{
 		case MOUSE_RIGHT_PRESSED: 	ctx_ui_right( C, e); break;
 		case MOUSE_LEFT_PRESSED: 	ctx_ui_left( C, e); break;
+		case MOUSE_MIDDLE_PRESSED:
 		case MOUSE_WHEEL_UP:
 		case MOUSE_WHEEL_DOWN:
 		 				ctx_ui_middle( C, e); 
