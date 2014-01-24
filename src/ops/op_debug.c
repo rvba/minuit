@@ -10,20 +10,17 @@
 #include "context.h"
 #include "node.h"
 #include "scene.h"
-
 #include "opengl.h"
 #include "op.h"
 #include "app.h"
-#include "process.h"
-#include "engine.h"
 #include "util.h"
 #include "clock.h"
 #include "list.h"
-
 #include "txt.h"
 #include "ui.h"
 #include "event.h"
 #include "plug.h"
+#include "util.h"
 
 #define DEBUG_LINE_HEIGHT 20
 #define DEBUG_OFFSET 600

@@ -17,6 +17,11 @@
 #include <math.h>
 #include <ctype.h>
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define APP_VERSION "0.6.1"
 
 #define _NAME_ 64
@@ -105,6 +110,9 @@ typedef enum Data_Type
 
 }t_data_type;
 
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif

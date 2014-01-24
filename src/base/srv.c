@@ -7,29 +7,11 @@
  *
  */
 
-
-#include "context.h"
-#include "node.h"
-#include "scene.h"
-#include "op.h"
-#include "app.h"
-#include "event.h"
-#include "screen.h"
-#include "memory.h"
-#include "camera.h"
-#include "ui.h"
-#include "file.h"
-#include "server.h"
-#include "term.h"
-#include "process.h"
-#include "list.h"
-#include "block.h"
-#include "brick.h"
-#include "clock.h"
-#include "engine.h"
+#include "util.h"
 
 void slave(void)
 {
+	/*
 	t_context *C=ctx_get();
 	t_app *app = C->app;
 
@@ -43,34 +25,39 @@ void slave(void)
 		app_sleep(app);
 		printf("[%d] hello\n",app->frame);
 	}
+	*/
 }
 
 void server_print(char *msg)
 {
+	/*
 	t_context *C=ctx_get();
 	t_term *term = C->term;
 	term_print(term,msg);
+	*/
 }
 
 void *server_daemon( void *ptr)
 {
-	t_context *C=ctx_get();
+	//t_context *C=ctx_get();
 	t_process *process = (t_process *) ptr;
 	t_server *server = process->data;
 
-	char msg[30];
+	//char msg[30];
 
 	if( !server->init)
 	{
 		server->init = 1;
 		socket_connect( server->socket, 9901);
-		sprintf(msg,"listening on port %d", server->socket->port);
-		term_print(C->term,msg);
+		//sprintf(msg,"listening on port %d", server->socket->port);
+		//term_print(C->term,msg);
 
+		/*
 		if(C->app->off_screen)
 		{
 			printf("listening on port %d\n",C->server->socket->port);
 		}
+		*/
 	}
 	else
 	{
@@ -78,32 +65,33 @@ void *server_daemon( void *ptr)
 		{
 			socket_listen( server->socket);
 
+			/*
 			if(C->app->off_screen)
 			{
 				printf("waiting for connection");
 			}
+			*/
 		}
 	}
 
 	return NULL;
 }
 
-void server_start( t_server *server, int port)
+void server_start( t_server *server, t_engine *engine, int port)
 {
-	t_context *C=ctx_get();
+	//t_context *C=ctx_get();
 
-	t_process *process = process_add( C, "server", server_daemon);
+	t_process *process = process_add( engine, "server", server_daemon);
 	process->clock->limit = 1;
 	server->process = process;
 	process->data = server;
 	process_launch( process);
 }
 
-void server_stop( t_server *server)
+void server_stop( t_server *server, t_engine *engine)
 {
-	t_context *C=ctx_get();
 	socket_disconnect( server->socket);
-	engine_process_remove( C->engine, server->process);
+	engine_process_remove( engine, server->process);
 }
 
 void server_free( t_server *server)

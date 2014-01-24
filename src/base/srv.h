@@ -10,8 +10,15 @@
 #ifndef __SERVER_H_
 #define __SERVER_H_
 
+#include "common.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct Socket;
 struct Process;
+struct Engine;
 
 typedef struct MNserver
 {
@@ -22,10 +29,14 @@ typedef struct MNserver
 
 }t_server;
 
-void 		server_start( t_server *server, int port);
-void 		server_stop( t_server *server);
+void 		server_start( t_server *server, struct Engine *engine, int port);
+void 		server_stop( t_server *server, struct Engine *engine);
 t_server *	server_new( const char *name);
 void 		server_free( t_server *server);
+
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif

@@ -7,11 +7,11 @@
  *
  */
 
+#include "util.h"
 #include "op.h"
 #include "context.h"
 #include "scene.h"
 #include "app.h"
-#include "server.h"
 #include "event.h"
 #include "term.h"
 #include "viewport.h"
@@ -21,7 +21,6 @@
 #include "draw.h"
 #include "list.h"
 #include "event.h"
-
 #include "rhizome.h"
 
 int switch_init=0;

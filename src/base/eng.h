@@ -8,8 +8,8 @@
  */
 
 
-#ifndef __ENGINE_H
-#define __ENGINE_H
+#ifndef __ENG_H
+#define __ENG_H
 
 #define ENGINE_WITH_GLOBAL_LIMIT 1
 #define ENGINE_GLOBAL_FREQ 1.0f

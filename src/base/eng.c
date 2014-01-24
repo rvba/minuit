@@ -19,7 +19,7 @@
 #include "memory.h"
 */
 
-#include "engine.h"
+#include "util.h"
 
 t_engine_cls cls_engine=
 {

@@ -7,13 +7,14 @@
  *
  */
 
-#ifndef _PROCESS_H
-#define _PROCESS_H
+#ifndef __PROC_H_
+#define __PROC_H_
 
+#include "common.h"
 #include <pthread.h>
 
-struct Context;
 struct Clock;
+struct Engine;
 
 typedef struct Process
 {
@@ -39,16 +40,12 @@ typedef struct Process
 
 }t_process;
 
-
-void *		ctx_compute_rhizome(void *data);
-void *		ctx_compute_objects(void *data);
-void *		ctx_thread_main(void *data);
-void 		ctx_thread_init(struct Context *C);
-
-void 		process_remove(t_process *process);
+void *		process_loop(void *data);
+void 		process_remove( t_process *process, struct Engine *engine);
 t_process *	process_new(const char *name,void*(* func)(void *data));
-t_process *	process_add(struct Context *C, const char *name, void *(* f)(void *d));
+t_process *	process_add( struct Engine *engine, const char *name, void *(* f)(void *d));
 void 		process_launch(t_process *process);
 void 		process_free(t_process *process);
+
 
 #endif

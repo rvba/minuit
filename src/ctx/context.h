@@ -183,5 +183,7 @@ void ctx_ui_log( const char *name);
 
 void ctx_ui_buffer_clear( struct Context *C);
 
+void ctx_thread_init( struct Context *C);
+
 
 #endif

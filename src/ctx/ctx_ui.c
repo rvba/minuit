@@ -7,13 +7,12 @@
  *
  */
 
+#include "util.h"
 #include "node.h"
 #include "context.h"
 #include "scene.h"
 #include "action.h"
 #include "app.h"
-#include "process.h"
-#include "engine.h"
 #include "event.h"
 #include "term.h"
 #include "draw.h"
@@ -27,7 +26,6 @@
 #include "screen.h"
 #include "rhizome.h"
 #include "op.h"
-#include "clock.h"
 #include "action.h"
 #include "dict.h"
 #include "set.h"

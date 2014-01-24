@@ -18,15 +18,10 @@ set(SRC
 	brick_update.c
 	camera.c
 	camera.h
-	clock.c
-	clock.h
-	CMakeLists.txt
 	data.c
 	data.h
 	dict.c
 	dict.h
-	engine.c
-	engine.h
 	event.c
 	event.h
 	file.c
@@ -63,13 +58,10 @@ set(SRC
 	option.h
 	plug_cls.c
 	plug.h
-	process.h
 	rhizome.c
 	rhizome.h
 	screen.c
 	screen.h
-	server.c
-	server.h
 	set.c
 	set.h
 	term.c

@@ -7,11 +7,10 @@
  *
  */
 
+#include "util.h"
 #include "op.h"
 #include "context.h"
 #include "app.h"
-#include "process.h"
-#include "engine.h"
 #include "event.h"
 #include "term.h"
 #include "ui.h"
@@ -124,7 +123,7 @@ void ctx_render_video(t_context *C)
 
 		C->event->video_frames_in_memory = 0;
 
-		t_process *process=process_add(C,"record",ctx_record_process);
+		t_process *process = process_add( C->engine, "record", ctx_record_process);
 		process_launch(process);
 	}
 

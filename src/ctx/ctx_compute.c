@@ -13,8 +13,6 @@
 #include "node.h"
 #include "list.h"
 #include "app.h"
-#include "process.h"
-#include "engine.h"
 #include "term.h"
 #include "object.h"
 #include "clock.h"
@@ -22,6 +20,7 @@
 #include "set.h"
 #include "ui.h"
 #include "plug.h"
+#include "util.h"
 
 
 void ctx_compute(t_context *C)
@@ -69,7 +68,7 @@ void ctx_compute(t_context *C)
 
 					if(!process->busy)
 					{
-						process_remove(process);
+						process_remove( process, C->engine);
 						set->processing = 0;
 						set->process = 0;
 					}
@@ -77,7 +76,7 @@ void ctx_compute(t_context *C)
 				// Do Processing
 				else if(set->process)
 				{
-					process = process_add(C,"set",ctx_set_compute);
+					process = process_add( C->engine ,"set", ctx_set_compute);
 					process->data = set;
 					set->process_id = process->engine_id;
 					set->processing = 1;

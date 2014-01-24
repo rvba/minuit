@@ -23,6 +23,10 @@
 #include "lst.h"
 #include "ptr.h"
 #include "sock.h"
+#include "eng.h"
+#include "srv.h"
+#include "proc.h"
+#include "clock.h"
 
 extern int db;
 void color_id(int *color);

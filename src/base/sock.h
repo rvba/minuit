@@ -19,6 +19,10 @@
 #include <netdb.h> 
 #include <unistd.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define SOCKET_BUFFER 2024
 
 typedef struct MN_Socket
@@ -47,5 +51,9 @@ void 		socket_disconnect( t_socket *sock);
 t_socket *	socket_new( void);
 void 		socket_free( t_socket *socket);
 
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
