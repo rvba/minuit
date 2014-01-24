@@ -38,16 +38,21 @@ typedef struct MN_Socket
 	struct hostent *server;
 	socklen_t clilen;
 
-	void (* connect)( struct MN_Socket *socket, int port);
-	void (* print)(char *msg);
+	void (* bind)( struct MN_Socket *socket, int port);
+	void (* print)(const char *msg);
 
 	int read;
+	int connected;
+	int accept;
 
 }t_socket;
 
+void 		socket_read( t_socket *sock);
+void 		socket_send( t_socket *socket, const char *msg);
 int 		socket_listen( t_socket *sock);
 void 		socket_connect( t_socket *socket, int port);
-void 		socket_disconnect( t_socket *sock);
+void 		socket_bind( t_socket *socket, int port);
+void 		socket_unbind( t_socket *sock);
 t_socket *	socket_new( void);
 void 		socket_free( t_socket *socket);
 

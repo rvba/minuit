@@ -38,6 +38,7 @@ void id_init(t_id *id, const char *name);
 void set_name(char *dst,const char *src);
 void set_name_long(char *dst,const char *src);
 void set_path(char *dst,const char *src);
+void rest( float sec);
 
 #ifdef __cplusplus
 }

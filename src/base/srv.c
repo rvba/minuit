@@ -28,7 +28,7 @@ void slave(void)
 	*/
 }
 
-void server_print(char *msg)
+void server_print(const char *msg)
 {
 	/*
 	t_context *C=ctx_get();
@@ -39,38 +39,44 @@ void server_print(char *msg)
 
 void *server_daemon( void *ptr)
 {
-	//t_context *C=ctx_get();
 	t_process *process = (t_process *) ptr;
 	t_server *server = (t_server *) process->data;
 
-	//char msg[30];
-
 	if( !server->init)
 	{
-		server->init = 1;
-		socket_connect( server->socket, 9901);
-		//sprintf(msg,"listening on port %d", server->socket->port);
-		//term_print(C->term,msg);
-
-		/*
-		if(C->app->off_screen)
+		if( server->binded)
 		{
-			printf("listening on port %d\n",C->server->socket->port);
+			server->init = 1;
+			socket_bind( server->socket, server->port);
 		}
-		*/
+		else
+		{
+			server->init = 1;
+			socket_connect( server->socket, server->port);
+		}
 	}
 	else
 	{
-		if( !server->socket->read)
+		if( server->binded)
 		{
-			socket_listen( server->socket);
-
 			/*
-			if(C->app->off_screen)
+			if( !server->socket->read && server->binded)
 			{
-				printf("waiting for connection");
+				socket_listen( server->socket);
 			}
 			*/
+
+			if( server->socket->accept)
+			{
+				if( !server->socket->read)
+				{
+					socket_read( server->socket);
+				}
+			}
+			else
+			{
+				socket_listen( server->socket);
+			}
 		}
 	}
 
@@ -79,10 +85,9 @@ void *server_daemon( void *ptr)
 
 void server_start( t_server *server, t_engine *engine, int port)
 {
-	//t_context *C=ctx_get();
-
 	t_process *process = process_add( engine, "server", server_daemon);
 	process->clock->limit = 1;
+	server->port = port;
 	server->process = process;
 	process->data = server;
 	process_launch( process);
@@ -90,7 +95,7 @@ void server_start( t_server *server, t_engine *engine, int port)
 
 void server_stop( t_server *server, t_engine *engine)
 {
-	socket_disconnect( server->socket);
+	socket_unbind( server->socket);
 	engine_process_remove( engine, server->process);
 }
 
@@ -110,6 +115,8 @@ t_server *server_new( const char *name)
 	server->socket->print = server_print;
 	server->init = 0;
 	server->process = NULL;
+	server->port = 0;
+	server->binded = 0;
 
 	return server;
 }

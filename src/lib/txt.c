@@ -744,8 +744,6 @@ void txt_draw(t_txt *txt)
 
 		//void * font = GLUT_BITMAP_HELVETICA_10;
 
-		if(db) printf(">%s\n",letter);
-
 		while(*letter)
 		{
 			glutBitmapCharacter(font,*letter);

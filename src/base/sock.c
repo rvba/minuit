@@ -9,116 +9,157 @@
  
 #include "util.h"
 
-void socket_print(char *msg)
+void socket_print(const char *msg)
 {
-	printf("%s",msg);
+	printf("%s\n",msg);
+}
+
+void socket_read( t_socket *sock)
+{
+	int status;
+
+	bzero( sock->buffer, SOCKET_BUFFER);
+	status = read( sock->newsockfd, sock->buffer, SOCKET_BUFFER);
+
+	if( status < 0)	sock->print( "SOCKET ERROR reading from socket"); 
+	if( status > 0)	sock->read = 1; 
 }
 
 int socket_listen( t_socket *sock)
 {
-	char msg[100];
-	int n;
+	sock->clilen = sizeof( sock->cli_addr);
+	sock->newsockfd = accept( sock->sockfd, (struct sockaddr *) &sock->cli_addr, &sock->clilen);
 
-	sock->clilen = sizeof(sock->cli_addr);
-	sock->newsockfd = accept(sock->sockfd, (struct sockaddr *) &sock->cli_addr, &sock->clilen);
-
-	if (sock->newsockfd < 0) 
+	if (sock->newsockfd < 0)
 	{
-		sprintf(msg,"error on accept");
-		sock->print(msg);
-	}
-
-	// READ
-
-	bzero( sock->buffer, SOCKET_BUFFER);
-	n = read( sock->newsockfd, sock->buffer, SOCKET_BUFFER);
-
-	if (n < 0)
-	{
-		sprintf(msg,"error reading from socket");
-		sock->print(msg);
-	}
-
-	if( n > 0)
-	{
-		sock->read = 1;
-	}
-
-	// WRITE
-
-	n = write(sock->newsockfd,"I got your message",18);
-
-	if (n < 0)
-	{
-		sprintf(msg,"error writin to socket");
-		sock->print(msg);
+		sock->print("SOCKET ERROR on accept"); 
 	}
 	else
-	{ 
-		sprintf(msg,"msg sent");
-		sock->print(msg);
+	{
+		sock->print( "SOCKET ACCEPTED");
+		sock->accept = 1;
 	}
-	
-	//sock->print(msg);
 
 	return 1;
 }
 
-void socket_connect( t_socket *sock, int port)
+int socket_init( t_socket *s, int port)
 {
-	int host_size = 64;
-	char msg[100];
-	char hostname[host_size];
+	int size = 64;
+	char hostname[size];
+	char msg[size];
+
+	s->port = port;
 		
-	if( sys_get_hostname( hostname, host_size))
+	if( sys_get_hostname( hostname, size))
 	{
-		sock->port = port;
+		s->sockfd = socket( AF_INET, SOCK_STREAM, 0);
 
-		// SOCKET
-		sock->sockfd = socket(AF_INET, SOCK_STREAM, 0);
+		if (s->sockfd < 0) s->print("SOCKET ERROR opening socket"); 
 
-		if (sock->sockfd < 0) 
+		s->server = gethostbyname( hostname);
+
+		if ( s->server == NULL) 
 		{
-			sprintf(msg,"error opening socket");
-			sock->print(msg);
-		}
-
-		sock->server = gethostbyname(hostname);
-
-		if (sock->server == NULL)
-		{
-			sprintf(msg,"error no such host %s\n",hostname);
-			sock->print(msg);
+			s->print("SOCKET error on host");
+			return 0;
 		}
 		else
 		{
-			sprintf( msg, "server start");
-			sock->print( msg);
+			snprintf( msg, size, "SOCKET INIT on port %d", s->port);
+			s->print(msg);
 
-			bzero((char *) &sock->serv_addr, sizeof(sock->serv_addr));
-			sock->serv_addr.sin_family = AF_INET;
-			sock->serv_addr.sin_addr.s_addr = INADDR_ANY;
-			sock->serv_addr.sin_port = htons(sock->port);
+			bzero((char *) &s->serv_addr, sizeof(s->serv_addr));
+			s->serv_addr.sin_family = AF_INET;
+			s->serv_addr.sin_addr.s_addr = INADDR_ANY;
+			s->serv_addr.sin_port = htons(s->port);
 
-			// BIND
-			if (bind(sock->sockfd, (struct sockaddr *) &sock->serv_addr,sizeof(sock->serv_addr)) < 0) 
-			{
-				sprintf(msg,"error on binding");
-				sock->print(msg);
-			}
-			else
-			{
-				sprintf(msg,"binding ok");
-				sock->print(msg);
-			}
+			return 1;
+		}
+	}
+	else
+	{
+		s->print("SOCKET ERROR hostname");
+		return 0;
+	}
+}
 
-			// LISTEN
-			listen(sock->sockfd,5);
+void socket_bind( t_socket *socket, int port)
+{
+	int size = 64;
+	char msg[size];
+	if( socket_init( socket, port))
+	{
+		// Bind
+		if(
+			bind( 	socket->sockfd,
+				(struct sockaddr *) &socket->serv_addr,
+				sizeof(socket->serv_addr))
+			< 0) 
+		{
+			socket->print( "SOCKET ERROR on binding\n");
+		}
+		else
+		{
+			snprintf( msg, size, "SOCKET BINDED on port %d", port);
+			socket->print( msg);
+		}
+
+		// Listen
+		listen( socket->sockfd, 5);
+	}
+}
+
+void socket_send( t_socket *socket, const char *msg)
+{
+	int status;
+
+	if( socket->connected)
+	{
+		// Write
+		status = write( socket->sockfd, msg, strlen( msg));
+
+		if (status < 0) socket->print("SOCKET ERROR writing to socket"); 
+		if (status > 0)	socket->print("SOCKET send msg");
+	}
+	else
+	{
+		socket->print("SOCKET ERROR no connection");
+	}
+}
+
+void socket_connect( t_socket *socket, int port)
+{
+	if( socket_init( socket, port))
+	{
+		bzero((char *) &socket->serv_addr, sizeof(socket->serv_addr));
+		socket->serv_addr.sin_family = AF_INET;
+
+		bcopy(
+			(char *) socket->server->h_addr, 
+			(char *) &socket->serv_addr.sin_addr.s_addr,
+			socket->server->h_length);
+
+		socket->serv_addr.sin_port = htons( socket->port);
+
+		if(
+			connect(
+				socket->sockfd,
+				(struct sockaddr *) &socket->serv_addr,
+				sizeof(socket->serv_addr))
+			< 0)
+		{
+			socket->print("SOCKET ERROR connecting");
+		}
+		else
+		{
+			socket->print("SOCKET CONNECT OK");
+			socket->connected = 1;
 		}
 	}
 }
 
-void socket_disconnect(t_socket *sock)
+void socket_unbind(t_socket *sock)
 {
 	close(sock->newsockfd);
 	close(sock->sockfd);
@@ -132,9 +173,11 @@ void socket_free( t_socket *socket)
 t_socket *socket_new( void)
 {
 	t_socket *socket = (t_socket *) mem_malloc( sizeof( t_socket));
-	socket->connect = socket_connect;
+	socket->bind = socket_bind;
 	socket->print = socket_print;
 	socket->read = 0;
+	socket->connected = 0;
+	socket->accept = 0;
 
 	return socket;
 }

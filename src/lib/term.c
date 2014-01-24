@@ -28,7 +28,7 @@
 #define TERM_TOT_LINE 20
 #define TERM_LINE_LENGTH 30
 
-void term_line_add( t_term *term, char *data)
+void term_line_add( t_term *term, const char *data)
 {
 	t_txt *line = txt_new(data);
 	lst_add( term->lines, line, "line");
@@ -50,18 +50,18 @@ void term_push(t_term *term, t_link *l, const char *name)
 	}
 }
 
-void term_print( t_term *term, char *data)
+void term_print( t_term *term, const char *msg)
 {
 	// Add New Line
 	if(term->line < term->tot_line -1)
 	{
-		term_line_add(term,data);
+		term_line_add( term, msg);
 		term->line++;
 	}
 	// Or Push
 	else 
 	{
-		term_push( term, term->lines->last, data);
+		term_push( term, term->lines->last, msg);
 	}
 }
 

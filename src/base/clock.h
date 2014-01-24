@@ -44,13 +44,12 @@ typedef struct Clock
 
 }t_clock;
 
-
 void 		clock_init( t_clock *clock);
 void 		clock_free( t_clock *clock);
 int 		clock_get_delta_sec( t_clock *clock);
 void 		clock_time_set(t_clock *clock);
 int 		clock_get_second( t_clock *clock);
-int		 clock_get_delta_usec( t_clock *clock);
+int		clock_get_delta_usec( t_clock *clock);
 int 		clock_convert_usec_to_millisec( int usec);
 
 t_clock *	clock_new( const char *name);

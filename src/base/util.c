@@ -18,6 +18,11 @@ size_t get_memory_peak(void)
 }
 */
 
+void rest( float sec)
+{
+	usleep( (int)( sec * MILLION));
+}
+
 size_t get_memory_usage(void)
 {
     long rss = 0L;

@@ -24,6 +24,8 @@ typedef struct MNserver
 {
 	t_id id;
 	int init;
+	int port;
+	int binded;
 	struct Process *process;
 	struct MN_Socket *socket;
 

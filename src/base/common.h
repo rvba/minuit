@@ -22,6 +22,8 @@
 extern "C" {
 #endif
 
+#define MILLION 1000000
+
 #define APP_VERSION "0.6.1"
 
 #define _NAME_ 64
