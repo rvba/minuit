@@ -25,6 +25,7 @@
 #include "srv.h"
 #include "proc.h"
 #include "clock.h"
+#include "shm.h"
 
 #ifdef __cplusplus
 extern "C" {

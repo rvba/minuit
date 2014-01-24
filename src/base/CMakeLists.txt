@@ -22,6 +22,8 @@ set(SRC
 	rnd.h
 	srv.c
 	srv.h
+	shm.h
+	shm.c
 	sock.h
 	sock.c
 	sys.h
