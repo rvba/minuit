@@ -7,9 +7,7 @@
  *
  */
 
-#include "common.h"
 #include "util.h"
-#include "memory.h"
 
 void s_raw_cp(char *src,char *dst) 
 {

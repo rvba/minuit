@@ -7,14 +7,22 @@
  *
  */
 
-#ifndef __MEM_H
-#define __MEM_H
+#ifndef __MEM_H_
+#define __MEM_H_
 
 #include "common.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 extern size_t MEM_SIZE;
 
 void *mem_malloc(size_t size);
 void mem_free( void *ptr, size_t size);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

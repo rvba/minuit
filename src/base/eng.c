@@ -21,10 +21,12 @@
 
 #include "util.h"
 
+/*
 t_engine_cls cls_engine=
 {
 	.cls_type="engine",
 };
+*/
 
 void engine_quit(t_engine *engine)
 {
@@ -38,7 +40,7 @@ void engine_quit(t_engine *engine)
 
 		for(link=engine->processes->first;link;link=link->next)
 		{
-			process=link->data;
+			process = (t_process *) link->data;
 			process->exit=1;
 		}
 	}
@@ -51,7 +53,7 @@ t_process *engine_process_get(t_engine *engine,const char *name)
 
 	for(link = engine->processes->first; link; link = link->next)
 	{
-		process = link->data;
+		process = (t_process * ) link->data;
 		if( is(process->id.name, name))
 		{
 			return process;
@@ -68,7 +70,7 @@ t_process *engine_process_get_by_id(t_engine *engine, int id)
 
 	for(link = engine->processes->first; link; link = link->next)
 	{
-		process = link->data;
+		process = (t_process * ) link->data;
 		if(process->engine_id == id)
 		{
 			return process;
@@ -85,14 +87,14 @@ void engine_show(t_engine *engine)
 	t_link *link;
 	for(link=engine->processes->first;link;link=link->next)
 	{
-		t_process *process = link->data;
+		t_process *process = (t_process * ) link->data;
 		printf("%d %s\n",process->engine_id, process->id.name);
 	}
 
 	printf("[engine] garbage\n");
 	for(link=engine->garbage->first;link;link=link->next)
 	{
-		t_process *process = link->data;
+		t_process *process = (t_process *) link->data;
 		printf("%d %s\n",process->engine_id, process->id.name);
 	}
 }
@@ -108,7 +110,7 @@ void engine_cleanup(t_engine *engine)
 		int do_loop = 0;
 		for(link = engine->garbage->first; link; link = link->next)
 		{
-			process = link->data;
+			process = (t_process * ) link->data;
 
 			if(process->done)
 			{

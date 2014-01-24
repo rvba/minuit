@@ -7,10 +7,15 @@
  *
  */
 
-#include "common.h"
 
 #ifndef __PTR_H
 #define __PTR_H
+
+#include "common.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 inline int switch_int(int i);
 
@@ -46,6 +51,9 @@ inline float drf_float(void *ptr);
 inline char drf_char(void *ptr);
 inline char *drf_string(void *ptr);
 
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif

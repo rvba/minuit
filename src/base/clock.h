@@ -16,6 +16,10 @@
 #include <time.h>
 #include <sys/time.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct Clock
 {
 	t_id id;
@@ -50,5 +54,9 @@ int		 clock_get_delta_usec( t_clock *clock);
 int 		clock_convert_usec_to_millisec( int usec);
 
 t_clock *	clock_new( const char *name);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

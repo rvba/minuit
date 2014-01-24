@@ -41,7 +41,7 @@ void *server_daemon( void *ptr)
 {
 	//t_context *C=ctx_get();
 	t_process *process = (t_process *) ptr;
-	t_server *server = process->data;
+	t_server *server = (t_server *) process->data;
 
 	//char msg[30];
 

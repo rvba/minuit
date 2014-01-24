@@ -15,9 +15,17 @@
 #include <sys/resource.h>
 #include <unistd.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 size_t 	get_memory_usage( void);
 void 	sys_get_cd( const char *cmd);
 int 	sys_get_hostname( char* name, int size);
 void 	sys_git_get( void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

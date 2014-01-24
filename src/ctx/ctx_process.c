@@ -87,14 +87,6 @@ void *ctx_compute_objects(void *data)
 }
 
 
-// PROCESS
-
-
-void process_launch(t_process *process)
-{
-	pthread_create(&process->thread,NULL,process->loop,process);
-	//term_log("p %s", process->id.name);
-}
 
 void ctx_thread_init(t_context *C)
 {

@@ -7,10 +7,14 @@
  *
  */
 
-#include "common.h"
-
 #ifndef __LST_H
 #define __LST_H
+
+#include "common.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 // LINK
 
@@ -67,5 +71,9 @@ void 		link_free(t_link *link);
 int 		lst_sort_bubble(struct Lst *lst);
 int 		lst_sort_quick(struct Lst *lst);
 void 		lst_link_insert(struct Lst *lst, struct Link *link, struct Link *prev);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

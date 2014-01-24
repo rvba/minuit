@@ -10,6 +10,10 @@
 #ifndef __STR_H
 #define __STR_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void 	s_raw_cp( char *src, char *dst);
 char *	s_allocate( const char *data);
 void 	s_truncate_after( char letter, char *target, char *src);
@@ -19,5 +23,8 @@ void 	s_write_time( char *string);
 int 	s_append( char *dest, char *src, int pos);
 void 	s_store( char *target, char source, int pos);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif

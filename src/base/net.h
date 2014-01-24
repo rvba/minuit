@@ -10,9 +10,17 @@
 #ifndef __NETWORK_H
 #define __NETWORK_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void 		slave(void);
 int 		tcp_client(void);
 //int 		net_connect(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

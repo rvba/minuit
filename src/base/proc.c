@@ -67,6 +67,11 @@ void *process_loop(void *data)
 	return NULL;
 }
 
+void process_launch( t_process *process)
+{
+	pthread_create( &process->thread, NULL, process->loop, process);
+}
+
 void process_remove( t_process *process, t_engine *engine)
 {
 	engine_process_remove( engine, process);

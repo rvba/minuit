@@ -167,29 +167,7 @@ inline char *drf_string(void *ptr)
 	return (char *)ptr;
 }
 
-void set_name(char *dst,const char *src)
-{
-	strncpy(dst,src,_NAME_);
-	dst[_NAME_-1]='\0';
-}
 
-void set_name_long(char *dst,const char *src)
-{
-	strncpy(dst,src,_NAME_LONG_);
-	dst[_NAME_LONG_-1]='\0';
-}
-
-void set_path(char *dst,const char *src)
-{
-	strncpy(dst,src,_PATH_);
-	dst[_PATH_-1]='\0';
-}
-
-inline int is(const char a[],const char b[])
-{
-	if(strcmp(a,b)==0) return 1;
-	else return 0;
-}
 
 
 

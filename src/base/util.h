@@ -10,8 +10,6 @@
 #ifndef __UTIL_H
 #define __UTIL_H
 
-#define SQ(x) ((x) *(x))
-
 #include "mem.h"
 #include "vec.h"
 #include "rnd.h"
@@ -28,15 +26,22 @@
 #include "proc.h"
 #include "clock.h"
 
-extern int db;
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#define SQ(x) ((x) *(x))
+#define is( a, b) ( !( strcmp( (a), (b))))  
+
 void color_id(int *color);
 void id_init(t_id *id, const char *name);
-
 void set_name(char *dst,const char *src);
 void set_name_long(char *dst,const char *src);
 void set_path(char *dst,const char *src);
-inline int is(const char a[],const char b[]);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

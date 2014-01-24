@@ -9,7 +9,6 @@
  
 #include "util.h"
 
-
 void socket_print(char *msg)
 {
 	printf("%s",msg);
@@ -93,7 +92,8 @@ void socket_connect( t_socket *sock, int port)
 		}
 		else
 		{
-			sock->print("server start");
+			sprintf( msg, "server start");
+			sock->print( msg);
 
 			bzero((char *) &sock->serv_addr, sizeof(sock->serv_addr));
 			sock->serv_addr.sin_family = AF_INET;

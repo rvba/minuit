@@ -11,11 +11,15 @@
 #ifndef __ENG_H
 #define __ENG_H
 
+#include "common.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define ENGINE_WITH_GLOBAL_LIMIT 1
 #define ENGINE_GLOBAL_FREQ 1.0f
 #define ENGINE_GLOBAL_LIMIT 0.01f
-
-#include "common.h"
 
 struct Lst;
 struct Process;
@@ -60,5 +64,9 @@ struct Process*	engine_process_get_by_id(t_engine *engine, int id);
 
 void 		engine_cleanup(t_engine *engine);
 void		engine_show(t_engine *engine);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

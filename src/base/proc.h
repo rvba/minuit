@@ -13,6 +13,10 @@
 #include "common.h"
 #include <pthread.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct Clock;
 struct Engine;
 
@@ -46,6 +50,10 @@ t_process *	process_new(const char *name,void*(* func)(void *data));
 t_process *	process_add( struct Engine *engine, const char *name, void *(* f)(void *d));
 void 		process_launch(t_process *process);
 void 		process_free(t_process *process);
+
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif

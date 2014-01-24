@@ -10,6 +10,10 @@
 #ifndef __VEC_H
 #define __VEC_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 inline float deg_to_rad(int deg);
 void calc_normals(float *v1,float *v2,float *v3,float *result);
 inline void vprint3i(int *v,char end);
@@ -43,5 +47,9 @@ inline float vnorm3f(float v[3]);
 void vrot2d3f(float *v, int angle);
 void vcenter3f( float *r, float *a, float *b);
 void vinverse3f( float *v);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
