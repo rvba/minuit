@@ -50,7 +50,7 @@ void *shm_attach( int id)
 
 	if ( ptr == (char *)(-1))
 	{
-		//printf("SHM ERROR attach\n");
+		printf("SHM ERROR attach\n");
 		return NULL;
 	}
 	else

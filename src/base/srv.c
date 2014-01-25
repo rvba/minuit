@@ -46,37 +46,15 @@ void *server_daemon( void *ptr)
 	{
 		if( server->binded)
 		{
-			server->init = 1;
+			// Bind & Listen
 			socket_bind( server->socket, server->port);
+			server->init = 1;
 		}
 		else
 		{
-			server->init = 1;
+			// Connect
 			socket_connect( server->socket, server->port);
-		}
-	}
-	else
-	{
-		if( server->binded)
-		{
-			/*
-			if( !server->socket->read && server->binded)
-			{
-				socket_listen( server->socket);
-			}
-			*/
-
-			if( server->socket->accept)
-			{
-				if( !server->socket->read)
-				{
-					socket_read( server->socket);
-				}
-			}
-			else
-			{
-				socket_listen( server->socket);
-			}
+			server->init = 1;
 		}
 	}
 

@@ -42,15 +42,17 @@ typedef struct MN_Socket
 	void (* print)(const char *msg);
 
 	int read;
+	int write;
 	int connected;
 	int accept;
+	int binded;
 
 }t_socket;
 
 void 		socket_read( t_socket *sock);
-void 		socket_send( t_socket *socket, const char *msg);
-int 		socket_listen( t_socket *sock);
-void 		socket_connect( t_socket *socket, int port);
+int 		socket_write( t_socket *socket, const char *msg);
+int 		socket_accept( t_socket *sock);
+int 		socket_connect( t_socket *socket, int port);
 void 		socket_bind( t_socket *socket, int port);
 void 		socket_unbind( t_socket *sock);
 t_socket *	socket_new( void);

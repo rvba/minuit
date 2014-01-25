@@ -17,37 +17,75 @@ void socket_print(const char *msg)
 void socket_read( t_socket *sock)
 {
 	int status;
+	if( sock->accept)
+	{
+		bzero( sock->buffer, SOCKET_BUFFER);
+		status = read( sock->newsockfd, sock->buffer, SOCKET_BUFFER);
 
-	bzero( sock->buffer, SOCKET_BUFFER);
-	status = read( sock->newsockfd, sock->buffer, SOCKET_BUFFER);
-
-	if( status < 0)	sock->print( "SOCKET ERROR reading from socket"); 
-	if( status > 0)	sock->read = 1; 
+		if( status < 0)	sock->print( "[SOCKET READ] Error reading from socket"); 
+		if( status > 0)	sock->read = 1; 
+	}
+	else
+	{
+		//sock->print( "[SOCKET READ] Error no accept"); 
+	}
 }
 
-int socket_listen( t_socket *sock)
+int socket_write( t_socket *socket, const char *msg)
+{
+	int status;
+	if( socket->connected)
+	{
+		bzero( socket->buffer, SOCKET_BUFFER);
+		status = write( socket->sockfd, msg, strlen( msg));
+
+		if (status < 0)
+		{
+			socket->print("[SOCKET WRITE] Error writing to socket"); 
+			return 0;
+		}
+		else if( status == 0)
+		{
+			socket->print("[SOCKET WRITE] Error writing 0"); 
+			return 0;
+		}
+		else if(status > 0)
+		{
+		//	socket->print("[SOCKET WRITE] Send OK");
+			return 1;
+		}
+	}
+	else
+	{
+		socket->print("[SOCKET WRITE] Error no connection");
+		return 0;
+	}
+
+	return 0;
+}
+
+int socket_accept( t_socket *sock)
 {
 	sock->clilen = sizeof( sock->cli_addr);
 	sock->newsockfd = accept( sock->sockfd, (struct sockaddr *) &sock->cli_addr, &sock->clilen);
 
 	if (sock->newsockfd < 0)
 	{
-		sock->print("SOCKET ERROR on accept"); 
+		sock->print("[SOCKET ACCEPT] Error on accept"); 
+		return 0;
 	}
 	else
 	{
-		sock->print( "SOCKET ACCEPTED");
+		sock->print( "[SOCKET ACCEPT] OK");
 		sock->accept = 1;
+		return 1;
 	}
-
-	return 1;
 }
 
 int socket_init( t_socket *s, int port)
 {
 	int size = 64;
 	char hostname[size];
-	char msg[size];
 
 	s->port = port;
 		
@@ -55,19 +93,22 @@ int socket_init( t_socket *s, int port)
 	{
 		s->sockfd = socket( AF_INET, SOCK_STREAM, 0);
 
-		if (s->sockfd < 0) s->print("SOCKET ERROR opening socket"); 
+		if (s->sockfd < 0) s->print("[SOCKET INIT] ERROR opening socket"); 
 
 		s->server = gethostbyname( hostname);
 
 		if ( s->server == NULL) 
 		{
-			s->print("SOCKET error on host");
+			s->print("[SOCKET INIT] Error on host");
 			return 0;
 		}
 		else
 		{
-			snprintf( msg, size, "SOCKET INIT on port %d", s->port);
+			/*
+			char msg[size];
+			snprintf( msg, size, "[SOCKET INIT] Init on port %d", s->port);
 			s->print(msg);
+			*/
 
 			bzero((char *) &s->serv_addr, sizeof(s->serv_addr));
 			s->serv_addr.sin_family = AF_INET;
@@ -97,38 +138,26 @@ void socket_bind( t_socket *socket, int port)
 				sizeof(socket->serv_addr))
 			< 0) 
 		{
-			socket->print( "SOCKET ERROR on binding\n");
+			socket->print( "[SOCKET BIND] Error on binding\n");
 		}
 		else
 		{
-			snprintf( msg, size, "SOCKET BINDED on port %d", port);
+			// Listen
+			listen( socket->sockfd, 5);
+
+			snprintf( msg, size, "[SOCKET BIND] Binding on port %d", port);
+			socket->binded = 1;
 			socket->print( msg);
+
+			// Accept
+			socket_accept( socket);
 		}
 
-		// Listen
-		listen( socket->sockfd, 5);
 	}
 }
 
-void socket_send( t_socket *socket, const char *msg)
-{
-	int status;
 
-	if( socket->connected)
-	{
-		// Write
-		status = write( socket->sockfd, msg, strlen( msg));
-
-		if (status < 0) socket->print("SOCKET ERROR writing to socket"); 
-		if (status > 0)	socket->print("SOCKET send msg");
-	}
-	else
-	{
-		socket->print("SOCKET ERROR no connection");
-	}
-}
-
-void socket_connect( t_socket *socket, int port)
+int socket_connect( t_socket *socket, int port)
 {
 	if( socket_init( socket, port))
 	{
@@ -149,13 +178,20 @@ void socket_connect( t_socket *socket, int port)
 				sizeof(socket->serv_addr))
 			< 0)
 		{
-			socket->print("SOCKET ERROR connecting");
+			socket->print("[SOCKET CONNECT] Error connecting");
+			return 0;
 		}
 		else
 		{
-			socket->print("SOCKET CONNECT OK");
+			socket->print("[SOCKET CONNECT] Connection OK");
 			socket->connected = 1;
+			return 1;
 		}
+	}
+	else
+	{
+		socket->print("[SOCKET CONNECT] Error on init");
+		return 0;
 	}
 }
 
@@ -176,8 +212,10 @@ t_socket *socket_new( void)
 	socket->bind = socket_bind;
 	socket->print = socket_print;
 	socket->read = 0;
+	socket->write = 0;
 	socket->connected = 0;
 	socket->accept = 0;
+	socket->binded = 0;
 
 	return socket;
 }
