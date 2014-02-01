@@ -32,8 +32,8 @@ void ctx_set_exec(struct Context *C)
 		// For All Sets
 		for(link = C->scene->sets->first; link; link = link->next)
 		{
-			t_node *node = link->data;
-			t_set *set = node->data;
+			t_node *node = ( t_node *) link->data;
+			t_set *set = ( t_set *) node->data;
 			t_lst *lst = set->blocks;
 			t_link *l = lst->first;
 
@@ -43,7 +43,7 @@ void ctx_set_exec(struct Context *C)
 				for(;l;l=l->next)
 				{
 					t_block *b;
-					b=l->data;
+					b = ( t_block *) l->data;
 
 					// Block Exec
 					block_exec(b);
@@ -55,7 +55,7 @@ void ctx_set_exec(struct Context *C)
 			// For All Graphs
 			for(;l;l=l->next)
 			{
-				t_rhizome *rhizome = l->data;
+				t_rhizome *rhizome = ( t_rhizome *) l->data;
 
 				// Graph Exec
 				rhizome_exec(rhizome);

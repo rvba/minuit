@@ -11,6 +11,10 @@
 #ifndef __MESH_H_
 #define __MESH_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define MESH_LENGTH_TYPE 20
 
 struct Node;
@@ -24,14 +28,12 @@ typedef struct Mesh_Class t_mesh_cls;
 typedef struct Mesh_Var t_mesh_var;
 typedef struct Mesh_State t_mesh_state;
 
-typedef enum Mesh_Buffer_Type t_mesh_buffer_type;
-
-enum Mesh_Buffer_Type
+typedef enum Mesh_Buffer_Type
 {
 	buffer_empty,
 	buffer_direct,
 	buffer_vbo
-};
+}t_mesh_buffer_type;
 
 struct Mesh_Var
 {
@@ -173,5 +175,9 @@ void 		mesh_show_colors(t_mesh *mesh);
 void 		mesh_show_faces(t_mesh *mesh);
 void 		mesh_show_uv(t_mesh *mesh);
 void 		mesh_show(t_mesh *mesh);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

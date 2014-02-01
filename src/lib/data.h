@@ -10,13 +10,16 @@
 #ifndef __DATA_H
 #define __DATA_H
 
-#define DATA_NAME 64
-
 #include "common.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#define DATA_NAME 64
 
 struct Scene;
 struct Data;
-
 
 typedef struct Datum
 {
@@ -100,5 +103,12 @@ void		data_free(t_data *data);
 
 t_datum *datum_new(t_data_type type, int count, void *data);
 void datum_free(t_datum *datum);
+
+#ifdef __cplusplus
+}
+#endif
+
+
+
 
 #endif

@@ -46,7 +46,7 @@ void switch_txt(t_context *C)
 void switch_sets(t_context *C)
 {
 	t_node *node_screen_sets = scene_node_get(C->scene,"screen","screen_sets");
-	t_screen *screen_set = node_screen_sets->data;
+	t_screen *screen_set = ( t_screen *) node_screen_sets->data;
 
 	if(C->ui->show_sets)
 	{
@@ -63,7 +63,7 @@ void switch_sets(t_context *C)
 void show_sets(t_context *C)
 {
 	t_node *node_screen_sets = scene_node_get(C->scene,"screen","screen_sets");
-	t_screen *screen_set = node_screen_sets->data;
+	t_screen *screen_set = ( t_screen *) node_screen_sets->data;
 
 	screen_set->is_active = 1;
 	screen_set->is_visible = 1;
@@ -72,7 +72,7 @@ void show_sets(t_context *C)
 void switch_bricks(t_context *C)
 {
 	t_node *node = scene_node_get(C->scene,"screen","screen_bricks");
-	t_screen *screen = node->data;
+	t_screen *screen = ( t_screen *) node->data;
 
 	if(C->ui->show_bricks)
 	{
@@ -126,8 +126,8 @@ void keymap_command( int key)
 
 		if(node_viewport)
 		{
-			viewport = node_viewport->data;
-			camera = viewport->camera;
+			viewport = ( t_viewport *) node_viewport->data;
+			camera = ( t_camera *) viewport->camera;
 		}
 	}
 

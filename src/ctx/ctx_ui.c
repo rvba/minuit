@@ -83,7 +83,7 @@ void block_delete(t_action *action)
 	t_context *C = ctx_get();
 	t_dict *args = action->args;
 
-	t_brick *brick = dict_pop_data(args,"brick");
+	t_brick *brick = ( t_brick *) dict_pop_data(args,"brick");
 	t_block *block = brick->block;
 
 	if(
@@ -133,7 +133,7 @@ void ctx_ui_exe(t_context *C)
 
 	for(l=tmp->first;l;l=l->next)
 	{
-		action = l->data;
+		action = ( t_action *) l->data;
 		if( action_check( action))
 		{
 			action->act(action);
@@ -283,13 +283,13 @@ void ctx_ui_hover_reset( t_context *C)
 		node = C->scene->hover;
 		if( node->cls->type == dt_brick)
 		{
-			t_brick *brick = node->data;
+			t_brick *brick = ( t_brick *) node->data;
 			brick->brick_state.is_mouse_over = 0;
 			brick->block->block_state.is_mouse_over = 0;
 		}
 		else if( node->cls->type == dt_object)
 		{
-			t_object *object = node->data;
+			t_object *object = ( t_object *) node->data;
 			object->hover = 0;
 		}
 	}
@@ -364,7 +364,7 @@ void ctx_ui_mouse( t_context *C)
 
 	for(l=C->event->events->first;l;l=l->next)
 	{
-		e = l->data;
+		e = ( t_event *) l->data;
 		switch( e->type)
 		{
 			case MOUSE_RIGHT_PRESSED:
@@ -407,7 +407,7 @@ void ctx_ui_reset( t_context *C)
 void ctx_ui_menu_show( t_context *C)
 {
 	t_node *node = scene_node_get( C->scene, "block", "menu_mouse");
-	t_block *block = node->data;
+	t_block *block = ( t_block *) node->data;
 
 	block->pos[0] = C->app->mouse->x + 10;
 	block->pos[1] = C->app->mouse->y + 10;
@@ -419,7 +419,7 @@ void ctx_ui_menu_show( t_context *C)
 
 void ctx_ui_block_select( t_context *C)
 {
-	t_brick *brick = ctx_ui_hover_get( C, dt_brick);
+	t_brick *brick = ( t_brick *) ctx_ui_hover_get( C, dt_brick);
 	if( brick)
 	{
 		t_block *block = brick->block;
@@ -432,7 +432,7 @@ void ctx_ui_block_select( t_context *C)
 void ctx_ui_menu_hide( t_context *C)
 {
 	t_node *node = scene_node_get( C->scene, "block", "menu_mouse");
-	t_block *block = node->data;
+	t_block *block = ( t_block *) node->data;
 
 	C->ui->show_menu = 0;
 	block_unstore( block);
@@ -468,14 +468,14 @@ void state_ui_block_trigger( t_context *C, t_event *e)
 	}
 	else if( e->type == BLOCK_DELETE)
 	{
-		t_block *block = ctx_ui_selection_get( C, dt_block);
+		t_block *block = ( t_block *) ctx_ui_selection_get( C, dt_block);
 		block_do_delete( block);
 		ctx_ui_selection_release( C);
 		UI_SWAP( C, state_ui_default);
 	}
 	else
 	{
-		t_block *block = ctx_ui_selection_get( C, dt_block);
+		t_block *block = ( t_block *) ctx_ui_selection_get( C, dt_block);
 		block->cls->dispatch( block);
 	}
 }
@@ -489,14 +489,14 @@ void state_ui_object_trigger( t_context *C, t_event *e)
 void ctx_ui_block_trigger( t_context *C)
 {
 	ctx_ui_block_select( C);
-	t_block *block = ctx_ui_selection_get( C, dt_block);
+	t_block *block = ( t_block *) ctx_ui_selection_get( C, dt_block);
 	block->cls->dispatch( block);
 	UI_SWAP( C, state_ui_block_trigger);
 }
 
 void ctx_ui_object_trigger( t_context *C)
 {
-	t_object *object = ctx_ui_hover_get( C, dt_object);
+	t_object *object = ( t_object *) ctx_ui_hover_get( C, dt_object);
 	if( object)
 	{
 		ctx_scene_set_selected( C, object->id.node);
@@ -521,7 +521,7 @@ t_camera *ctx_ui_camera_get( t_context *C)
 
 		if(node_viewport)
 		{
-			viewport = node_viewport->data;
+			viewport = ( t_viewport *) node_viewport->data;
 			camera = viewport->camera;
 		}
 	}
@@ -863,7 +863,7 @@ void ctx_ui_dispatch( t_context *C)
 
 	for(l=C->event->events_swap->first;l;l=l->next)
 	{
-		e = l->data;
+		e = ( t_event *) l->data;
 		event_log( e);
 		C->ui->state( C, e);
 	}

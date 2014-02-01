@@ -37,7 +37,7 @@ void *ctx_compute_rhizome(void *data)
 void *ctx_set_compute(void *data)
 {
 	t_process *process=(t_process *)data;
-	t_set *set = process->data;
+	t_set *set = ( t_set *) process->data;
 
 	process->busy=1;
 	set_exec(set);
@@ -64,8 +64,8 @@ void *ctx_compute_objects(void *data)
 	{
 		for(link_object=C->scene->objects->first;link_object;link_object=link_object->next)
 		{
-			node_object=link_object->data;
-			t_object *object = node_object->data;
+			node_object = ( t_node *) link_object->data;
+			t_object *object = ( t_object *) node_object->data;
 			if(!object)
 			{
 				printf("[ERROR ctx_compute] No data\n");

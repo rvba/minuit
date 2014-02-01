@@ -12,6 +12,10 @@
 
 #include "opengl.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define PRECISION "%-.2f"
 #define UI_ALPHABET 0
 #define UI_GL_FONT 1
@@ -58,8 +62,6 @@
 #define UI_HOVER_BRICK 3
 #define UI_HOVER_NOTHING 4
 
-
-float intro_intensity;
 
 struct Context;
 struct Event;
@@ -208,5 +210,9 @@ void ctx_ui_old( struct Context *C);
 
 int ui_get_window_width( struct Context *C);
 int ui_get_window_height( struct Context *C);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

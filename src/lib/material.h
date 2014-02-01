@@ -13,6 +13,10 @@
 
 #include "common.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct Scene;
 
 typedef struct Material t_material;
@@ -36,5 +40,9 @@ void 		material_free(t_material *material);
 void		 _material_free(t_material *material);
 t_material*	material_new(const char *name);
 t_material*	material_rebind(struct Scene *sc,void *ptr);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

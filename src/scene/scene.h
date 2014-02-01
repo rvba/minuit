@@ -14,7 +14,7 @@
 
 struct Node;
 struct Lst;
-enum Node_Type;
+//enum Node_Type;
 
 typedef struct Scene 
 {

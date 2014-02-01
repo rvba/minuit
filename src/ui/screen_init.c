@@ -30,7 +30,7 @@ void screen_block_add_by_name(t_context *C, t_screen *screen, const char *name)
 	t_node *node = scene_node_get(C->scene,"block",name);
 	if( node)
 	{
-		t_block *block = node->data;
+		t_block *block = ( t_block *) node->data;
 		screen_block_add(screen, block);
 	}
 }
@@ -40,7 +40,7 @@ void screen_block_add_by_name(t_context *C, t_screen *screen, const char *name)
 t_screen *screen_new_generic( t_context *C, char *name)
 {
 	t_node *node = scene_add( C->scene, dt_screen, name);
-	t_screen *screen = node->data;
+	t_screen *screen = ( t_screen *) node->data;
 
 	screen->keymap = keymap_generic;
 	screen->draw = screen_generic;
@@ -58,7 +58,7 @@ t_screen *screen_new_generic( t_context *C, char *name)
 t_screen *screen_main_make( t_context *C)
 {
 	t_node *node = scene_add( C->scene, dt_screen, "screen_main");
-	t_screen *screen = node->data;
+	t_screen *screen = ( t_screen *) node->data;
 
 	screen->keymap = keymap_main;
 	screen->draw = screen_main;
@@ -77,7 +77,7 @@ t_screen *screen_main_make( t_context *C)
 t_screen *screen_sets_make( t_context *C)
 {
 	t_node *node = scene_add( C->scene, dt_screen, "screen_sets");
-	t_screen *screen = node->data;
+	t_screen *screen = ( t_screen *) node->data;
 
 	screen->keymap = keymap_generic;
 	screen->draw = screen_sets;
@@ -96,7 +96,7 @@ t_screen *screen_sets_make( t_context *C)
 t_screen *screen_bricks_make( t_context *C)
 {
 	t_node *node = scene_add( C->scene, dt_screen, "screen_bricks");
-	t_screen *screen = node->data;
+	t_screen *screen = ( t_screen *) node->data;
 
 	screen->keymap = keymap_generic;
 	screen->draw = screen_bricks;
@@ -119,7 +119,7 @@ t_screen *screen_bricks_make( t_context *C)
 t_screen *screen_intro_make( t_context *C)
 {
 	t_node *node = scene_add( C->scene, dt_screen, "screen_intro");
-	t_screen *screen = node->data;
+	t_screen *screen = ( t_screen *) node->data;
 
 	screen->keymap = keymap_generic;
 	screen->draw = screen_intro;
@@ -133,16 +133,16 @@ t_screen *screen_intro_make( t_context *C)
 
 	// Lst
 	t_node *node_lst = scene_add( C->scene, dt_list, "lst");
-	t_lst *lst = node_lst->data;
+	t_lst *lst = ( t_lst *) node_lst->data;
 	screen->viewports = lst;
 
 	// Viewport
 	t_node *node_viewport = scene_add( C->scene, dt_viewport, "viewport_intro");
-	t_viewport *viewport = node_viewport->data;
+	t_viewport *viewport = ( t_viewport *) node_viewport->data;
 
 	// Camera
 	t_node *node_camera = scene_add( C->scene, dt_camera, "viewport_camera");
-	t_camera *camera = node_camera->data;
+	t_camera *camera = ( t_camera *) node_camera->data;
 	viewport->camera = camera;
 	lst_add(screen->viewports, viewport, "viewport");
 
@@ -183,18 +183,18 @@ void op_screen_switch()
 		{
 			for(l=C->scene->screens->first;l;l=l->next)
 			{
-				n=C->ui->screen_link_active->data;
+				n = ( t_node *) C->ui->screen_link_active->data;
 				int id=n->id;
-				t_node *this_node=l->data;
+				t_node *this_node = ( t_node *) l->data;
 				if(this_node->id==id)
 				{
-					t_screen *this_screen=this_node->data;
+					t_screen *this_screen = ( t_screen *) this_node->data;
 					this_screen->is_visible=1;
 					this_screen->is_active=1;
 				}
 				else
 				{
-					t_screen *this_screen=this_node->data;
+					t_screen *this_screen = ( t_screen *) this_node->data;
 					this_screen->is_visible=0;
 					this_screen->is_active=0;
 				}

@@ -12,6 +12,11 @@
 
 #include "common.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 struct Scene;
 
 typedef struct Option
@@ -79,5 +84,9 @@ t_option *option_rebind(struct Scene *scene, void *ptr);
 void option_free(t_option *option);
 t_option *option_new(const char *name);
 t_option *option_rebind(struct Scene *scene, void *ptr);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

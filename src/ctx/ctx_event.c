@@ -38,7 +38,7 @@ void ctx_event_cleanup( t_lst *lst)
 	t_event *event;
 	for(l=lst->first;l;l=l->next)
 	{
-		event = l->data;
+		event = ( t_event *) l->data;
 		event_free( event);
 	}
 
@@ -54,7 +54,7 @@ void ctx_event_dispatch( t_context *C)
 
 	for(l=lst->first;l;l=l->next)
 	{
-		event = l->data;
+		event =  (t_event *) l->data;
 		ctx_event_exec( C, event);
 	}
 

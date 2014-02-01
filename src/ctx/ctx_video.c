@@ -84,7 +84,7 @@ void ctx_render_free_frames(t_context *C, t_lst *lst)
 
 	for(link = lst->first; link; link = link->next)
 	{
-		frame = link->data;
+		frame = ( unsigned char *) link->data;
 		free(frame);
 	}
 

@@ -14,6 +14,10 @@
 #include "txt.h"
 #include "plug.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define BRICK_SWAP( brick, st) ((brick->state) = &(st)) 
 
 struct Block;
@@ -338,5 +342,9 @@ void cls_brick_dispatch( t_brick *brick);
 
 void state_brick_switch_default( t_brick *brick, struct Event *e);
 void state_brick_slider_default( t_brick *brick, struct Event *e);;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

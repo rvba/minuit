@@ -10,6 +10,10 @@
 #ifndef _CAMERA_H
 #define _CAMERA_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 #define CAM_SPEED 50
 #define CAM_ORTHO_NEAR -1
@@ -146,6 +150,9 @@ void camera_free( t_camera *camera);
 
 
 
+#ifdef __cplusplus
+}
+#endif
 
 
 

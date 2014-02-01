@@ -10,6 +10,10 @@
 #ifndef __VECTOR_H
 #define __VECTOR_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct VLst;
 struct Scene;
 
@@ -49,5 +53,8 @@ void vector_show(t_vector *vector);
 
 t_vector *vector_rebind( struct Scene *sc,void *ptr);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif

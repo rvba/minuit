@@ -12,6 +12,10 @@
 
 #include "common.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct Block;
 struct Scene;
 struct Node;
@@ -40,5 +44,8 @@ t_light*	light_new(const char *name);
 t_light*	light_rebind(struct Scene *sc,void *ptr);
 struct Node*		light_make(const char *name);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif

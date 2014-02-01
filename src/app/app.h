@@ -12,6 +12,10 @@
 
 #include "common.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define APP_KEY_ESC  27
 #define APP_KEY_ENTER 13
 #define APP_KEY_TAB 9
@@ -24,11 +28,6 @@
 struct Lst;
 struct Clock;
 struct File;
-
-typedef struct App t_app;
-typedef struct Mouse t_mouse;
-typedef struct Window t_window;
-typedef struct Keyboard t_keyboard;
 
 enum BUT
 {
@@ -57,7 +56,7 @@ typedef enum MouseButton
 
 // MOUSE
 	
-struct Mouse
+typedef struct Mouse
 {
 	int x; // current x 
 	int y; // curent y
@@ -92,11 +91,11 @@ struct Mouse
 
 	struct Clock *clic_clock;
 	struct Clock *release_clock;
-};
+}t_mouse;
 
 // WINDOW
 
-struct Window
+typedef struct MNWindow
 {
 	int change;
 	int width;
@@ -106,11 +105,11 @@ struct Window
 	int height_def;
 	int viewport_width;
 	int viewport_height;
-};
+}t_window;
 
 // KEYBOARD
 
-struct Keyboard
+typedef struct Keyboard
 {
 	unsigned char key_pressed;
 	int shift;
@@ -118,11 +117,11 @@ struct Keyboard
 	int alt;
 	int special;
 	int modifier;
-};
+}t_keyboard;
 
 // APP
 
-struct App
+typedef struct App
 {
 	int argc;
 	char **argv;
@@ -166,7 +165,7 @@ struct App
 	int video_limit;
 
 	int quit;
-};
+}t_app;
 
 int app_get_frame(void);
 
@@ -223,6 +222,10 @@ t_app *app_get(void);
 
 #ifdef WITH_GIT
 extern const char *git;
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 

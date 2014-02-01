@@ -13,6 +13,10 @@
 
 #include "common.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define BRICK_MIN_WIDTH 130
 #define BLOCK_STATE_DEFAULT 1
 #define BLOCK_STATE_HOVER_
@@ -163,6 +167,10 @@ void 		block_exec(t_block *block);
 void 		_block_free(t_block *block);
 void 		block_get_center( t_block *block, float *v);
 void 		block_get_pos_plug_out( t_block *block, struct Brick *brick, float *v);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

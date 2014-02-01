@@ -43,7 +43,8 @@ void ctx_scene_selection(t_context *C, t_node *node, int state)
 	switch(node->cls->type)
 	{
 		case(dt_object):
-			object = node->data;
+
+			object = ( t_object *) node->data;
 			if(state)
 			{
 				if(object->is_selected)
@@ -121,7 +122,7 @@ void ctx_scene_clear_selections(t_context *C)
 	t_link *link;
 	for(link=C->scene->selections->first;link;link=link->next)
 	{
-		t_node *node=link->data;
+		t_node *node = ( t_node *) link->data;
 		ctx_scene_selection(C, node, 0);
 
 	}
@@ -130,7 +131,7 @@ void ctx_scene_clear_selections(t_context *C)
 
 int node_hover_object(t_context *C, t_node *node)
 {
-	t_object *object=node->data;
+	t_object *object = ( t_object *) node->data;
 	t_mesh *mesh=object->mesh;
 
 	if(is(object->type,"point"))
@@ -182,7 +183,7 @@ int node_hover_object(t_context *C, t_node *node)
 
 int node_hover_brick(t_context *C, t_node *node)
 {
-	t_brick *brick=node->data;
+	t_brick *brick = ( t_brick *) node->data;
 
 	if(ctx_mouse_hover_brick(C,brick))
 	{
@@ -226,7 +227,7 @@ t_node *ctx_scene_hover( t_context *C, t_data_type type)
 	{
 		for(l=lst->first;l;l=l->next)
 		{
-			node = l->data;
+			node = ( t_node *) l->data;
 			hover = node_hover( C, node);
 			if( hover) break;
 			else node = NULL;

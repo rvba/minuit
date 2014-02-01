@@ -12,20 +12,21 @@
 
 #include "data.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct Context;
 struct Node;
 struct Block;
 struct Brick;
 struct Lst;
-enum Node_Type;
-enum Data_Type;
-
 
 // OP_DEBUG
 
 void op_debug_all(struct Context *C);
 
-int set_draw_plug;
+extern int set_draw_plug;
 
 // OP_ACTION
 
@@ -110,6 +111,10 @@ int 		op_post_quit(struct Node *node);
 struct Block *	add_menu_block( struct Context *C, const char *name);
 
 struct Node *	add_brick_bar( struct Context *C, struct Block *block, const char *name, void *f(struct Brick *b));
+
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif

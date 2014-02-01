@@ -22,7 +22,7 @@ void log_init(void)
 	LOG_FILE=file;
 }
 
-void __log__(int status,char *fmt, ...)
+void __log__( int status, const char *fmt, ...)
 {
 	if(status)
 	{

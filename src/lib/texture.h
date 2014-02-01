@@ -14,6 +14,10 @@
 
 #include <GL/gl.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct Scene;
 struct Image;
 
@@ -44,5 +48,8 @@ void 		_texture_free(t_texture *texture);
 void 		texture_free(t_texture *texture);
 void 		texture_image_bind(t_texture *texture,struct Image *image);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif

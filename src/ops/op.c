@@ -29,7 +29,7 @@ t_block *menu_node=NULL;
 t_block *add_menu_block( t_context *C, const char *name)
 {
 	t_node *menu = block_make( name, "menu");
-	t_block *block = menu->data;
+	t_block *block = ( t_block *) menu->data;
 	return block;
 }
 
@@ -348,7 +348,7 @@ void make_bar( t_context *C)
 	snprintf(name, 64, "%s    %s", "M I N U I T", APP_VERSION);
 	//char *name = "m  i  n  u  i  t";
 	t_node *node_block = block_make( "bar", "bar");
-	t_block *block = node_block->data;
+	t_block *block = ( t_block *) node_block->data;
 	add_brick_bar( C, block, name, op_void_act);
 }
 
@@ -370,7 +370,7 @@ void *find_register(const char *target,const char *name)
 
 	if(node_dict)
 	{
-		t_dict *dict_register=node_dict->data;
+		t_dict *dict_register = ( t_dict *) node_dict->data;
 		t_symbol *symbol=dict_pop(dict_register,name);
 		if(symbol)
 		{
@@ -407,51 +407,51 @@ void register_set(t_context *C)
 	scene_store(C->scene,1);
 
 	// func
-	scene_add_data(C->scene,"app_data","func","op_slider",			op_slider);
-	scene_add_data(C->scene,"app_data","func","op_slider_positive",		op_slider_positive);
-	scene_add_data(C->scene,"app_data","func","op_slider_positive_non_zero",		op_slider_positive_non_zero);
-	scene_add_data(C->scene,"app_data","func","op_cos",			op_cos);
-	scene_add_data(C->scene,"app_data","func","op_sin",			op_sin);
-	scene_add_data(C->scene,"app_data","func","op_add",			op_add);
-	scene_add_data(C->scene,"app_data","func","op_mult",			op_mult);
-	scene_add_data(C->scene,"app_data","func","op_equal",			op_equal);
-	scene_add_data(C->scene,"app_data","func","op_superior",		op_superior);
-	scene_add_data(C->scene,"app_data","func","op_inferior",		op_inferior);
-	scene_add_data(C->scene,"app_data","func","op_clone",			op_clone);
-	scene_add_data(C->scene,"app_data","func","op_plusplus",		op_plusplus);
-	scene_add_data(C->scene,"app_data","func","op_switch",			op_switch);
-	scene_add_data(C->scene,"app_data","func","op_pointer",			op_pointer);
-	scene_add_data(C->scene,"app_data","func","op_camera_rotate_z",		op_camera_rotate_z);
-	scene_add_data(C->scene,"app_data","func","op_camera_rotate_xy",	op_camera_rotate_xy);
-	scene_add_data(C->scene,"app_data","func","op_void_exe",		op_void_exe);
-	scene_add_data(C->scene,"app_data","func","op_void_act",		op_void_act);
-	scene_add_data(C->scene,"app_data","func","op_set_selected",		op_set_selected);
-	scene_add_data(C->scene,"app_data","func","op_rewind",			op_rewind);
-	scene_add_data(C->scene,"app_data","func","op_pipe",			op_pipe);
-	scene_add_data(C->scene,"app_data","func","op_not",			op_not);
-	scene_add_data(C->scene,"app_data","func","op_set_vlst",		op_set_vlst);
-	scene_add_data(C->scene,"app_data","func","op_rnd",			op_rnd);
-	scene_add_data(C->scene,"app_data","func","op_neg",			op_neg);
-	scene_add_data(C->scene,"app_data","func","op_is_last",			op_is_last);
-	scene_add_data(C->scene,"app_data","func","op_vector",			op_vector);
-	scene_add_data(C->scene,"app_data","func","op_bang",			op_bang);
-	scene_add_data(C->scene,"app_data","func","op_do_quit",			op_do_quit);
-	scene_add_data(C->scene,"app_data","func","op_operator",		op_operator);
-	scene_add_data(C->scene,"app_data","func","op_float",			op_float);
-	scene_add_data(C->scene,"app_data","func","op_int",			op_int);
-	scene_add_data(C->scene,"app_data","func","op_const",			op_const);
-	scene_add_data(C->scene,"app_data","func","op_and",			op_and);
-	scene_add_data(C->scene,"app_data","func","op_mod",			op_mod);
-	scene_add_data(C->scene,"app_data","func","op_stack",			op_stack);
-	scene_add_data(C->scene,"app_data","func","op_if",			op_if);
-	scene_add_data(C->scene,"app_data","func","op_geo_point",		op_geo_point);
-	scene_add_data(C->scene,"app_data","func","op_geo_edge",		op_geo_edge);
-	scene_add_data(C->scene,"app_data","func","op_geo_array",		op_geo_array);
-	scene_add_data(C->scene,"app_data","func","op_geometry",		op_geometry);
-	scene_add_data(C->scene,"app_data","func","op_geo",			op_geo);
-	scene_add_data(C->scene,"app_data","func","_op_brick_add",		_op_brick_add);
+	scene_add_data(C->scene,"app_data","func","op_slider",			(void *) op_slider);
+	scene_add_data(C->scene,"app_data","func","op_slider_positive",		(void *) op_slider_positive);
+	scene_add_data(C->scene,"app_data","func","op_slider_positive_non_zero",		(void *) op_slider_positive_non_zero);
+	scene_add_data(C->scene,"app_data","func","op_cos",			(void *) op_cos);
+	scene_add_data(C->scene,"app_data","func","op_sin",			(void *) op_sin);
+	scene_add_data(C->scene,"app_data","func","op_add",			(void *) op_add);
+	scene_add_data(C->scene,"app_data","func","op_mult",			(void *) op_mult);
+	scene_add_data(C->scene,"app_data","func","op_equal",			(void *) op_equal);
+	scene_add_data(C->scene,"app_data","func","op_superior",		(void *) op_superior);
+	scene_add_data(C->scene,"app_data","func","op_inferior",		(void *) op_inferior);
+	scene_add_data(C->scene,"app_data","func","op_clone",			(void *) op_clone);
+	scene_add_data(C->scene,"app_data","func","op_plusplus",		(void *) op_plusplus);
+	scene_add_data(C->scene,"app_data","func","op_switch",			(void *) op_switch);
+	scene_add_data(C->scene,"app_data","func","op_pointer",			(void *) op_pointer);
+	scene_add_data(C->scene,"app_data","func","op_camera_rotate_z",		(void *) op_camera_rotate_z);
+	scene_add_data(C->scene,"app_data","func","op_camera_rotate_xy",	(void *) op_camera_rotate_xy);
+	scene_add_data(C->scene,"app_data","func","op_void_exe",		(void *) op_void_exe);
+	scene_add_data(C->scene,"app_data","func","op_void_act",		(void *) op_void_act);
+	scene_add_data(C->scene,"app_data","func","op_set_selected",		(void *) op_set_selected);
+	scene_add_data(C->scene,"app_data","func","op_rewind",			(void *) op_rewind);
+	scene_add_data(C->scene,"app_data","func","op_pipe",			(void *) op_pipe);
+	scene_add_data(C->scene,"app_data","func","op_not",			(void *) op_not);
+	scene_add_data(C->scene,"app_data","func","op_set_vlst",		(void *) op_set_vlst);
+	scene_add_data(C->scene,"app_data","func","op_rnd",			(void *) op_rnd);
+	scene_add_data(C->scene,"app_data","func","op_neg",			(void *) op_neg);
+	scene_add_data(C->scene,"app_data","func","op_is_last",			(void *) op_is_last);
+	scene_add_data(C->scene,"app_data","func","op_vector",			(void *) op_vector);
+	scene_add_data(C->scene,"app_data","func","op_bang",			(void *) op_bang);
+	scene_add_data(C->scene,"app_data","func","op_do_quit",			(void *) op_do_quit);
+	scene_add_data(C->scene,"app_data","func","op_operator",		(void *) op_operator);
+	scene_add_data(C->scene,"app_data","func","op_float",			(void *) op_float);
+	scene_add_data(C->scene,"app_data","func","op_int",			(void *) op_int);
+	scene_add_data(C->scene,"app_data","func","op_const",			(void *) op_const);
+	scene_add_data(C->scene,"app_data","func","op_and",			(void *) op_and);
+	scene_add_data(C->scene,"app_data","func","op_mod",			(void *) op_mod);
+	scene_add_data(C->scene,"app_data","func","op_stack",			(void *) op_stack);
+	scene_add_data(C->scene,"app_data","func","op_if",			(void *) op_if);
+	scene_add_data(C->scene,"app_data","func","op_geo_point",		(void *) op_geo_point);
+	scene_add_data(C->scene,"app_data","func","op_geo_edge",		(void *) op_geo_edge);
+	scene_add_data(C->scene,"app_data","func","op_geo_array",		(void *) op_geo_array);
+	scene_add_data(C->scene,"app_data","func","op_geometry",		(void *) op_geometry);
+	scene_add_data(C->scene,"app_data","func","op_geo",			(void *) op_geo);
+	scene_add_data(C->scene,"app_data","func","_op_brick_add",		(void *) _op_brick_add);
 
-	scene_add_data(C->scene,"app_data","func","viewport_draw_scene",	viewport_draw_scene);
+	scene_add_data(C->scene,"app_data","func","viewport_draw_scene",	(void *) viewport_draw_scene);
 
 
 	// data
@@ -474,51 +474,50 @@ void register_set(t_context *C)
 
 	t_dict *dict_func = dict_make( "func");
 
-	dict_symbol_add(dict_func,"op_slider",dt_pointer,op_slider);
-	dict_symbol_add(dict_func,"op_slider_positive",dt_pointer,op_slider_positive);
-	dict_symbol_add(dict_func,"op_slider_positive_non_zero",dt_pointer,op_slider_positive_non_zero);
-	dict_symbol_add(dict_func,"op_cos",dt_pointer,op_cos);
-	dict_symbol_add(dict_func,"op_sin",dt_pointer,op_sin);
-	dict_symbol_add(dict_func,"op_add",dt_pointer,op_add);
-	dict_symbol_add(dict_func,"op_mult",dt_pointer,op_mult);
-	dict_symbol_add(dict_func,"op_equal",dt_pointer,op_equal);
-	dict_symbol_add(dict_func,"op_superior",dt_pointer,op_superior);
-	dict_symbol_add(dict_func,"op_inferior",dt_pointer,op_inferior);
-	dict_symbol_add(dict_func,"op_clone",dt_pointer,op_clone);
-	dict_symbol_add(dict_func,"op_plusplus",dt_pointer,op_plusplus);
-	dict_symbol_add(dict_func,"op_switch",dt_pointer,op_switch);
-	dict_symbol_add(dict_func,"op_pointer",dt_pointer,op_pointer);
-	dict_symbol_add(dict_func,"op_camera_rotate_z",dt_pointer,op_camera_rotate_z);
-	dict_symbol_add(dict_func,"op_camera_rotate_xy",dt_pointer,op_camera_rotate_xy);
-	dict_symbol_add(dict_func,"op_void_exe",dt_pointer,op_void_exe);
-	dict_symbol_add(dict_func,"op_void_act",dt_pointer,op_void_act);
-	dict_symbol_add(dict_func,"op_set_selected",dt_pointer,op_set_selected);
-	dict_symbol_add(dict_func,"op_rewind",dt_pointer,op_rewind);
-	dict_symbol_add(dict_func,"op_pipe",dt_pointer,op_pipe);
-	dict_symbol_add(dict_func,"op_not",dt_pointer,op_not);
-	dict_symbol_add(dict_func,"op_set_vlst",dt_pointer,op_set_vlst);
-	dict_symbol_add(dict_func,"op_rnd",dt_pointer,op_rnd);
-	dict_symbol_add(dict_func,"op_neg",dt_pointer,op_neg);
-	dict_symbol_add(dict_func,"op_is_last",dt_pointer,op_is_last);
-	dict_symbol_add(dict_func,"op_vector",dt_pointer,op_vector);
-	dict_symbol_add(dict_func,"op_bang",dt_pointer,op_bang);
-	dict_symbol_add(dict_func,"op_operator",dt_pointer,op_operator);
-	dict_symbol_add(dict_func,"op_float",dt_pointer,op_float);
-	dict_symbol_add(dict_func,"op_int",dt_pointer,op_int);
-	dict_symbol_add(dict_func,"op_do_quit",dt_pointer,op_do_quit);
-	dict_symbol_add(dict_func,"op_const",dt_pointer,op_const);
-	dict_symbol_add(dict_func,"op_and",dt_pointer,op_and);
-	dict_symbol_add(dict_func,"op_mod",dt_pointer,op_mod);
-	dict_symbol_add(dict_func,"op_stack",dt_pointer,op_stack);
-	dict_symbol_add(dict_func,"op_if",dt_pointer,op_if);
-	dict_symbol_add(dict_func,"op_geo_point",dt_pointer,op_geo_point);
-	dict_symbol_add(dict_func,"op_geo_edge",dt_pointer,op_geo_edge);
-	dict_symbol_add(dict_func,"op_geo_array",dt_pointer,op_geo_array);
-	dict_symbol_add(dict_func,"op_geometry",dt_pointer,op_geometry);
-	dict_symbol_add(dict_func,"op_geo",dt_pointer,op_geo);
-	dict_symbol_add(dict_func,"_op_brick_add",dt_pointer,_op_brick_add);
-
-	dict_symbol_add(dict_func,"viewport_draw_scene",dt_pointer,viewport_draw_scene);
+	dict_symbol_add(dict_func,"op_slider",dt_pointer, (void *) op_slider);
+	dict_symbol_add(dict_func,"op_slider_positive",dt_pointer, (void *) op_slider_positive);
+	dict_symbol_add(dict_func,"op_slider_positive_non_zero",dt_pointer, (void *) op_slider_positive_non_zero);
+	dict_symbol_add(dict_func,"op_cos",dt_pointer, (void *) op_cos);
+	dict_symbol_add(dict_func,"op_sin",dt_pointer, (void *) op_sin);
+	dict_symbol_add(dict_func,"op_add",dt_pointer, (void *) op_add);
+	dict_symbol_add(dict_func,"op_mult",dt_pointer, (void *) op_mult);
+	dict_symbol_add(dict_func,"op_equal",dt_pointer,(void *)  op_equal);
+	dict_symbol_add(dict_func,"op_superior",dt_pointer, (void *) op_superior);
+	dict_symbol_add(dict_func,"op_inferior",dt_pointer, (void *) op_inferior);
+	dict_symbol_add(dict_func,"op_clone",dt_pointer, (void *) op_clone);
+	dict_symbol_add(dict_func,"op_plusplus",dt_pointer, (void *) op_plusplus);
+	dict_symbol_add(dict_func,"op_switch",dt_pointer, (void *) op_switch);
+	dict_symbol_add(dict_func,"op_pointer",dt_pointer, (void *) op_pointer);
+	dict_symbol_add(dict_func,"op_camera_rotate_z",dt_pointer, (void *) op_camera_rotate_z);
+	dict_symbol_add(dict_func,"op_camera_rotate_xy",dt_pointer,(void *) op_camera_rotate_xy);
+	dict_symbol_add(dict_func,"op_void_exe",dt_pointer, (void *) op_void_exe);
+	dict_symbol_add(dict_func,"op_void_act",dt_pointer, (void *) op_void_act);
+	dict_symbol_add(dict_func,"op_set_selected",dt_pointer, (void *) op_set_selected);
+	dict_symbol_add(dict_func,"op_rewind",dt_pointer, (void *) op_rewind);
+	dict_symbol_add(dict_func,"op_pipe",dt_pointer, (void *) op_pipe);
+	dict_symbol_add(dict_func,"op_not",dt_pointer, (void *) op_not);
+	dict_symbol_add(dict_func,"op_set_vlst",dt_pointer, (void *) op_set_vlst);
+	dict_symbol_add(dict_func,"op_rnd",dt_pointer, (void *) op_rnd);
+	dict_symbol_add(dict_func,"op_neg",dt_pointer, (void *) op_neg);
+	dict_symbol_add(dict_func,"op_is_last",dt_pointer, (void *) op_is_last);
+	dict_symbol_add(dict_func,"op_vector",dt_pointer,(void *)  op_vector);
+	dict_symbol_add(dict_func,"op_bang",dt_pointer, (void *) op_bang);
+	dict_symbol_add(dict_func,"op_operator",dt_pointer, (void *) op_operator);
+	dict_symbol_add(dict_func,"op_float",dt_pointer, (void *) op_float);
+	dict_symbol_add(dict_func,"op_int",dt_pointer,(void *) op_int);
+	dict_symbol_add(dict_func,"op_do_quit",dt_pointer, (void *) op_do_quit);
+	dict_symbol_add(dict_func,"op_const",dt_pointer,(void *) op_const);
+	dict_symbol_add(dict_func,"op_and",dt_pointer, (void *) op_and);
+	dict_symbol_add(dict_func,"op_mod",dt_pointer, (void *) op_mod);
+	dict_symbol_add(dict_func,"op_stack",dt_pointer, (void *) op_stack);
+	dict_symbol_add(dict_func,"op_if",dt_pointer, (void *) op_if);
+	dict_symbol_add(dict_func,"op_geo_point",dt_pointer, (void *) op_geo_point);
+	dict_symbol_add(dict_func,"op_geo_edge",dt_pointer, (void *) op_geo_edge);
+	dict_symbol_add(dict_func,"op_geo_array",dt_pointer, (void *) op_geo_array);
+	dict_symbol_add(dict_func,"op_geometry",dt_pointer, (void *) op_geometry);
+	dict_symbol_add(dict_func,"op_geo",dt_pointer, (void *) op_geo);
+	dict_symbol_add(dict_func,"_op_brick_add",dt_pointer, (void *) _op_brick_add);
+	dict_symbol_add(dict_func,"viewport_draw_scene",dt_pointer, (void *) viewport_draw_scene);
 
 
 	// APP

@@ -77,7 +77,7 @@ void id_store(t_scene *sc,t_chunk *c,void *data)
 		// var node: store tmp node
 		if(c->type==dt_var)
 		{
-			tmp_node=data;
+			tmp_node = ( t_node *) data;
 		}
 	}
 	// store struct
@@ -90,7 +90,7 @@ void id_store(t_scene *sc,t_chunk *c,void *data)
 		{
 			if(tmp_node)
 			{
-				tmp_node->data=data;
+				tmp_node->data = data;
 				tmp_node=NULL;
 			}
 		}
@@ -129,10 +129,10 @@ t_node *find_new(t_scene *sc,void *ptr)
 	// loop over NODES
 	for(l=sc->tmp_node->first;l;l=l->next)
 	{
-		n=l->data;
+		n = ( t_node *) l->data;
 
 		// id->ptr match old address ptr
-		if(n->data==ptr) 
+		if( n->data == ptr) 
 		{
 			// return node
 			return n;
@@ -152,7 +152,7 @@ t_node *find_by_id(t_scene *sc,int _id)
 	// loop over tmp_node
 	for(l=sc->tmp_node->first;l;l=l->next)
 	{
-		n=l->data;
+		n = ( t_node *) l->data;
 
 		if(n->id==_id)
 		{
@@ -173,12 +173,12 @@ t_node *find_by_ptr(t_scene *sc,void *ptr)
 	// loop over tmp_node
 	for(l=sc->tmp_node->first;l;l=l->next)
 	{
-		n=l->data;
+		n = ( t_node *) l->data;
 
 		// data->pointer 
 		if(n->type==dt_data)
 		{
-			t_data *data=n->data;
+			t_data *data = ( t_data *) n->data;
 
 			if(
 				is(data->type,"app_struct")	||
@@ -231,7 +231,7 @@ void *find_struct(const char *target,const char *name)
 	{
 		load_error = 1;
 		printf("[ERROR app_get] Unknown target %s\n",name);
-		ulog((LOG_REBIND,"[ERROR app_get] Unknown target %s\n",name));
+		ulog((LOG_REBIND,"[ERROR app_get] Unknown target %s\n", name));
 	}
 
 	return NULL;
@@ -287,7 +287,7 @@ void load_scene(t_context *C,t_scene *sc)
 	for(l=sc->tmp_node->first;l;l=l->next)
 	{
 		// node
-		n=l->data;	
+		n = ( t_node *) l->data;	
 
 		// add to scene
 		scene_node_load(C->scene,n);
@@ -299,8 +299,8 @@ void load_scene(t_context *C,t_scene *sc)
 	// Build Graphs
 	for(l=C->scene->rhizomes->first;l;l=l->next)
 	{
-		t_node *node = l->data;
-		t_rhizome *rhizome = node->data;
+		t_node *node = ( t_node *) l->data;
+		t_rhizome *rhizome = ( t_rhizome *) node->data;
 		rhizome_graph_build(rhizome);
 	}
 }
@@ -318,14 +318,14 @@ void load_store(t_scene *sc)
 
 	for(l=sc->tmp_node->first;l;l=l->next)
 	{
-		n=l->data;
-		d=n->data;
+		n = ( t_node *) l->data;
+		d = ( t_data *) n->data;
 		t_id *id = (t_id *) d;
 
 		// DATA
 		if(n->type==dt_data)
 		{
-			d=n->data;
+			d = ( t_data *) n->data;
 
 			if(is(d->type,"dynamic"))
 			{
@@ -334,8 +334,8 @@ void load_store(t_scene *sc)
 
 				if(var)
 				{
-					void *var_data=var->data;
-					n->id_ptr=n->data;
+					void *var_data = var->data;
+					n->id_ptr = n->data;
 					id->id_chunk = n->id_chunk;
 					var->id_ptr=var_data;
 					d->pointer=var_data;
@@ -352,7 +352,7 @@ void load_store(t_scene *sc)
 				t_node *node=find_by_id(sc,d->id_node);
 				d->pointer=node;
 
-				n->id_ptr=n->data;
+				n->id_ptr = n->data;
 
 				id->id_chunk = n->id_chunk;
 			}
@@ -426,7 +426,7 @@ void rebind(t_scene *sc,const char *type,const char *name,void **ptr)
 			// [INDIRECT DATA]
 			if(node->type==dt_data)
 			{
-				t_data *data=node->data;
+				t_data *data = ( t_data *) node->data;
 
 				if(is(data->type,"dynamic"))
 				{
@@ -463,7 +463,7 @@ void rebind(t_scene *sc,const char *type,const char *name,void **ptr)
 			// [DIRECT DATA] t_struct
 			else
 			{
-				*ptr=node->data;
+				*ptr = node->data;
 			}
 		}
 		else
@@ -489,8 +489,8 @@ void load_rebind(t_scene *sc)
 	// Loop over tmp_data
 	for(l=sc->tmp_node->first;l;l=l->next)
 	{
-		t_node *node=l->data;
-		void *ptr=node->data;
+		t_node *node = ( t_node *) l->data;
+		void *ptr = node->data;
 
 		switch(node->type)
 		{
@@ -542,12 +542,12 @@ void load_var(t_scene *sc)
 	// Loop over tmp_node
 	for(l=sc->tmp_node->first;l;l=l->next)
 	{
-		n=l->data;
+		n = ( t_node *) l->data;
 
 		// data
 		if(n->type==dt_data)
 		{
-			d=n->data;
+			d = ( t_data *) n->data;
 
 			// dynamic
 			if(is(d->type,"dynamic"))
@@ -557,7 +557,7 @@ void load_var(t_scene *sc)
 
 				if(var)
 				{
-					void  *var_data=var->data;
+					void  *var_data = var->data;
 
 					// get new ptr
 					d->pointer=var_data;
@@ -588,7 +588,7 @@ void load_node(t_scene *sc)
 	// Loop over tmp_node
 	for(l=sc->tmp_node->first;l;l=l->next)
 	{
-		n=l->data;	// node
+		n = ( t_node *) l->data;	// node
 
 		// 0) BIND NODE CLS (MAKE NODE)
 
@@ -622,7 +622,7 @@ void load_node(t_scene *sc)
 				n->id_ptr_old=n->id_ptr;
 
 				// bind
-				n->data=ptr;
+				n->data = ( t_node *) ptr;
 
 				t_id *id = (t_id *) n->data;
 				id->node = n;

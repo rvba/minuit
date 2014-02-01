@@ -116,8 +116,8 @@ void ctx_render_scene(t_context *C)
 	// Draw Viewports
 	for(link = scene->viewports->first; link; link = link->next)
 	{
-		node = link->data;
-		viewport = node->data;
+		node = ( t_node *) link->data;
+		viewport = ( t_viewport *) node->data;
 		if(viewport->draw) viewport->draw(viewport);
 	}
 }

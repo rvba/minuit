@@ -12,6 +12,11 @@
 
 #include "common.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 #define COLOR_MATCH( C, c) ( ( (C)[0] == (c)[0]) && ( (C)[1] == (c)[1]) && ( (C)[2] == (c)[2]))
 
 struct Context;
@@ -184,6 +189,10 @@ void ctx_ui_log( const char *name);
 void ctx_ui_buffer_clear( struct Context *C);
 
 void ctx_thread_init( struct Context *C);
+
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif

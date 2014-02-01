@@ -49,7 +49,7 @@ void op_debug_process(void)
 {
 	t_context *C = ctx_get();
 	t_app *app = C->app;
-	t_process *process = C->engine->processes->first->data;
+	t_process *process = ( t_process *) C->engine->processes->first->data;
 	t_clock *clock = process->clock;
 
 	float width = (float)C->app->window->width;

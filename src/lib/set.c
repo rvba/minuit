@@ -151,7 +151,7 @@ void set_block_push(t_set *set, t_block *block)
 	set_setup(set);
 }
 
-t_set *set_rebind(t_scene *sc, void **ptr)
+t_set *set_rebind(t_scene *sc, void *ptr)
 {
 	t_set *set=(t_set *)ptr;
 

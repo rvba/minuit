@@ -12,6 +12,10 @@
 
 #include "common.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct Node;
 struct Mesh;
 struct Block;
@@ -87,6 +91,10 @@ t_object*	object_new(const char *name);
 
 void 		_object_free(t_object *object);
 void 		object_free(t_object *object);
+
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif

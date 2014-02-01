@@ -33,12 +33,12 @@ void load_last(t_context *C)
 		if(file->lines->first)
 		{
 			link = file->lines->first;
-			t_line *line = link->data;
+			t_line *line = ( t_line *) link->data;
 			line_read_words(line);
 			t_link *l = line->words->first;
 			if(l)
 			{
-				t_word *word = l->data;
+				t_word *word = ( t_word *) l->data;
 				char *name = word->data;
 				if(is(name,"void"))
 				{
@@ -46,7 +46,7 @@ void load_last(t_context *C)
 				}
 				else
 				{
-					load_file(C,word->data);
+					load_file( C, word->data);
 				}
 			}
 		}
@@ -82,7 +82,7 @@ void save_to_file( t_context *C)
 
 	for(l=C->scene->nodes->first;l;l=l->next)
 	{
-		node = l->data;
+		node = ( t_node *) l->data;
 		if( node->store)
 		{
 			if( node->type==dt_var)

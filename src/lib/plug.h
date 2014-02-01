@@ -13,12 +13,14 @@
 
 #include "data.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern int PLUG_DEBUG;
 
 struct Brick;
 struct Lst;
-
-enum Type_Operator;
 
 typedef struct Plug t_plug;
 typedef struct Plug_State t_plug_state;
@@ -117,5 +119,9 @@ void 		plug_debug(t_plug *plug);
 
 t_plug *	plug_get_dst(t_plug *plug);
 t_plug *	plug_get_src(t_plug *plug);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

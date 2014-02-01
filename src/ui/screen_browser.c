@@ -78,7 +78,7 @@ void browser_delete_bricks(t_context *C,t_block *b)
 	{
 		for(;l;l=l->next)
 		{
-			t_brick *brick=l->data;
+			t_brick *brick = ( t_brick *) l->data;
 			scene_delete(C->scene,brick);
 		}
 	}
@@ -90,7 +90,7 @@ void browser_delete_bricks(t_context *C,t_block *b)
 void browser_reset(void)
 {
 	t_context *C=ctx_get();
-	t_block *block=BROWSER_BUTTONS->data;
+	t_block *block = ( t_block *) BROWSER_BUTTONS->data;
 	C->scene->use_tmp_colors=1;
 	browser_delete_bricks(C,block);
 	C->scene->use_tmp_colors=0;
@@ -149,7 +149,7 @@ void browser_build(void)
 		// tmp colors
 		scene_color_switch_mode(C->scene);
 
-		t_block *block=BROWSER_BUTTONS->data;
+		t_block *block = ( t_block *) BROWSER_BUTTONS->data;
 
 		if(fp)
 		{
@@ -224,7 +224,7 @@ void browser_update(void)
 void browser_draw(void)
 {
 	browser_build();
-	t_block *block=BROWSER_BUTTONS->data;
+	t_block *block = ( t_block *) BROWSER_BUTTONS->data;
 	block->block_state.update_geometry=1;
 	block->cls->draw(block);
 }
@@ -260,7 +260,7 @@ void browser_init(void)
 
 		BROWSER_BUTTONS = block_make("block_browser","block");
 
-		t_block *block = BROWSER_BUTTONS->data;
+		t_block *block = ( t_block *) BROWSER_BUTTONS->data;
 		vset(block->pos,0,0,0);
 		path=file_new(default_path);
 		file_init(path);
@@ -270,7 +270,7 @@ void browser_init(void)
 t_screen *screen_browser_make( t_context *C)
 {
 	t_node *node = scene_add( C->scene, dt_screen, "screen_browser");
-	t_screen *screen = node->data;
+	t_screen *screen = ( t_screen *) node->data;
 
 	screen->keymap = keymap_browser;
 	screen->draw = screen_browser;

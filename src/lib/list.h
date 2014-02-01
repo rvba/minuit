@@ -12,6 +12,10 @@
 
 #include "data.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct Context;
 struct Scene;
 struct Node;
@@ -43,5 +47,9 @@ struct Lst *	list_clone(struct Lst *lst, t_data_type type);
 struct Lst *	list_make( t_data_type type,  const char *name);
 void 		cls_list_delete( void *data);
 void 		list_link_remove( struct Lst *lst, struct Link *link);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

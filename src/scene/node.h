@@ -12,12 +12,13 @@
 
 #include "common.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct Scene;
 struct Lst;
 struct Node;
-
-
-// NODE CLASS
 
 typedef struct NodeClass
 {
@@ -33,8 +34,6 @@ typedef struct NodeClass
 	void *(* get_ref)(struct Node *node, const char *ref);
 
 }t_node_class;
-
-// NODE
 
 typedef struct Node
 {
@@ -62,6 +61,10 @@ t_node *	node_new(t_data_type type);
 t_node *	node_clone(t_node *src);
 
 void id_init	(t_id *id, const char *name);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

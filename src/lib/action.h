@@ -12,6 +12,10 @@
 
 #include "common.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct Dict;
 
 typedef struct Action t_action;
@@ -32,6 +36,10 @@ struct Action
 void action_free(t_action *action);
 t_action *action_new(const char *name);
 void exe_add_action(t_action *action);
+
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif

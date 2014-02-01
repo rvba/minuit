@@ -12,6 +12,10 @@
 
 #include "common.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct Context;
 struct Scene;
 struct Block;
@@ -59,30 +63,27 @@ void screen_sets(t_screen *screen);
 
 // SCREEN.C
 
-struct Camera *screen_camera(t_screen *screen);
-t_screen *screen_default(const char *name, void (* draw)(t_screen *s));
-
-void screen_always(t_screen *screen);
-void screen_on(t_screen *screen);
-void screen_off(t_screen *screen);
-
-void screen_block_add(t_screen *screen, struct Block *block);
-
-void screen_switch_by_name(char *name);
-void screen_switch_to_main(void);
-
-
-void screen_intro(t_screen *screen);
-void screen_bricks(t_screen *screen);
-void screen_generic(t_screen *screen);
-void screen_main(t_screen *screen);
-
-
+struct Camera *	screen_camera(t_screen *screen);
+t_screen *	screen_default(const char *name, void (* draw)(t_screen *s));
+void 		screen_always(t_screen *screen);
+void 		screen_on(t_screen *screen);
+void 		screen_off(t_screen *screen);
+void 		screen_block_add(t_screen *screen, struct Block *block);
+void 		screen_switch_by_name( const char *name);
+void 		screen_switch_to_main( void);
+void 		screen_intro(t_screen *screen);
+void 		screen_bricks(t_screen *screen);
+void 		screen_generic(t_screen *screen);
+void 		screen_main(t_screen *screen);
 t_screen *	screen_clone(t_screen *screen);
 t_screen *	screen_rebind(struct Scene *scene, void *ptr);
 void 		_screen_free(t_screen *screen);
 void 		screen_free(t_screen *screen);
 t_screen *	screen_new(const char *name);
 void 		screen_init( struct Context *C);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

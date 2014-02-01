@@ -87,7 +87,7 @@ void op_set_color(t_context *C,int color)
 	}
 	else
 	{
-		C->draw->color = color;
+		//C->draw->color = color;
 
 		if(C->draw->color==color_black)
 		{

@@ -36,8 +36,8 @@ void ctx_compute(t_context *C)
 	// For Each Process
 	for(link = C->scene->sets->first;link;link=link->next)
 	{
-		node = link->data; 
-		set = node->data;
+		node = ( t_node *) link->data; 
+		set = ( t_set *) node->data;
 
 		if(set->process_delay)
 		{

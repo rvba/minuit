@@ -17,6 +17,10 @@
 
 #include <GL/gl.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct Image
 {
 	t_id id;
@@ -41,5 +45,8 @@ int 		img_save_png(int alpha,int width,int height,unsigned char *bitmap, const c
 int 		img_save_png_hd(int alpha,int width,int height, const char name[],unsigned char *bitmap);
 void 		img_save_video(int width, int height, const char *name,unsigned char *image);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif

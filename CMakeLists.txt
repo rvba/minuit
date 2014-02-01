@@ -25,6 +25,12 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/src
 	)
 
+set(GPLUSPLUS FALSE)
+if(GPLUSPLUS)
+	set(CMAKE_C_COMPILER g++)
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D__cplusplus ")
+endif()
+
 set(CMAKE_BUILD_TYPE debug)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DWITH_DEBUG -Wall ")
 

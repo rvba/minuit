@@ -48,7 +48,7 @@ void 		term_free( t_term *term);
 t_term *	term_new( const char *name);
 void 		term_init( void);
 void 		term_print( t_term *term, const char *msg);
-void 		term_log( char *fmt, ...);
+void 		term_log( const char *fmt, ...);
 void 		term_echo( t_term *term, char *fmt, ...);
 t_term *	term_get( const char *name);
 

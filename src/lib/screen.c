@@ -109,7 +109,7 @@ void screen_block_add(t_screen *screen, t_block *block)
 
 // SWITCH BY NAME
 
-void screen_switch_by_name(char *name)
+void screen_switch_by_name( const char *name)
 {
 	t_context *C=ctx_get();
 	// check if screen exists

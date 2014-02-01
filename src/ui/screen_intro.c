@@ -126,11 +126,11 @@ void screen_intro(t_screen *screen)
 	if(!star_init)
 	{
 		star_init = 1;
-		stars = mem_malloc(sizeof(float)* star_count * 3);
-		stars_color = mem_malloc(sizeof(float)* star_count * 3);
-		stars_chance = mem_malloc(sizeof(int) * star_count);
-		stars_velocity = mem_malloc(sizeof(float) * star_count);
-		stars_size = mem_malloc(sizeof(int) * star_count);
+		stars = ( float *) mem_malloc(sizeof(float)* star_count * 3);
+		stars_color = ( float *) mem_malloc(sizeof(float)* star_count * 3);
+		stars_chance = ( int *) mem_malloc(sizeof(int) * star_count);
+		stars_velocity = ( float *) mem_malloc(sizeof(float) * star_count);
+		stars_size = ( int *) mem_malloc(sizeof(int) * star_count);
 		for(i=0;i<star_count;i++)
 		{
 			stars[(i*3)+0] = rnd_range(0,dist)*get_sign();
@@ -165,7 +165,7 @@ void screen_intro(t_screen *screen)
 	t_link *link = lst->first;
 
 	// Viewport
-	t_viewport *viewport = link->data;
+	t_viewport *viewport = ( t_viewport *) link->data;
 
 	// Camera
 	t_camera *camera = viewport->camera;

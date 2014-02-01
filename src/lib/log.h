@@ -29,7 +29,7 @@ char *LOG;
 #define LOG_CHECK 0
 #define LOG_REBIND 0
 
-void __log__(int status,char *fmt, ...);
+void __log__( int status, const char *fmt, ...);
 void log_init(void);
 
 int debug_lst;

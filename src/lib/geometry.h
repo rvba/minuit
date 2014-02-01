@@ -10,6 +10,10 @@
 #ifndef __GEOMETRY_EXTRUDE_H
 #define __GEOMETRY_EXTRUDE_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define ST_DB_POINT_ADD 0
 #define ST_DB_POINT_EXTRUDE 0
 
@@ -141,5 +145,9 @@ void geo_vlst_edges_set( struct Brick *brick, struct Lst *lst, struct VLst *vlst
 void geo_reset(t_geo *geo);
 void geo_array_init( t_geo_array *array);
 void geo_init( t_geo *geo);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

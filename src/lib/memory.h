@@ -12,15 +12,17 @@
 
 #include "common.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct Chunk t_chunk;
-typedef enum Chunk_Type t_chunk_type;
 
-
-enum Chunk_Type
+typedef enum Chunk_Type
 {	
 	ct_node,
 	ct_data
-};
+}t_chunk_type;
 
 struct Chunk
 {
@@ -50,5 +52,9 @@ char *chunk_type_get(t_chunk_type type);
 extern char chunk_name_null[];
 extern char chunk_name_node[];
 extern char chunk_name_data[];
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -10,6 +10,12 @@
 #ifndef __EVENT_H
 #define __EVENT_H
 
+#include "common.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define EVENT_WITH_POLYGON_OFFSET 0
 #define SKETCH_WITH_SCALE 1
 
@@ -20,8 +26,6 @@
 
 #define WITH_HIGHLIGHT 0
 #define FREE_SCENE 0
-
-#include "common.h"
 
 struct MINscreen;
 
@@ -295,5 +299,9 @@ t_event *	event_new( const char *name);
 t_main_event *	main_event_new(void);
 void 		event_log( t_event *e);
 char *		event_name( t_event *e);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

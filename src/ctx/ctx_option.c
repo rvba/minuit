@@ -38,7 +38,7 @@ t_node *ctx_node_find_option(t_scene *sc)
 
 	for(l=sc->tmp_node->first;l;l=l->next)
 	{
-		n=l->data;
+		n = ( t_node *) l->data;
 
 		//if(is(n->cls->type,"option"))
 		if(n->type==dt_option)
@@ -52,7 +52,7 @@ t_node *ctx_node_find_option(t_scene *sc)
 
 void option_load(t_context *C,t_node *node)
 {
-	t_option *option=node->data;
+	t_option *option = ( t_option *) node->data;
 
 	// app
 
@@ -100,7 +100,7 @@ void option_load(t_context *C,t_node *node)
 	C->app->window->fullscreen = option->fullscreen;
 	app_screen_set_fullscreen(C->app,C->app->window->fullscreen);
 
-	C->draw->color = option->color;
+	//C->draw->color = option->color;
 	op_set_color(C,C->draw->color);
 	C->draw->draw_lights = option->draw_lights;
 
@@ -112,7 +112,7 @@ void option_save(t_context *C)
 	t_node *node=scene_add(C->scene,dt_option,"option");
 	scene_store(C->scene,0);
 
-	t_option *option=node->data;
+	t_option *option = ( t_option *) node->data;
 
 	// app
 
@@ -177,8 +177,9 @@ void load_option(t_context *C,t_scene *sc)
 
 t_option *option_rebind(t_scene *scene, void *ptr)
 {
-	return ptr;
+	return ( t_option *) ptr;
 }
+
 void option_free(t_option *option)
 {
 }

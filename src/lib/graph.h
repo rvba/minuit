@@ -12,6 +12,10 @@
 
 #include "common.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct Lst;
 
 typedef struct Dot
@@ -71,5 +75,8 @@ t_graph *	graph_make(const char *name);
 t_graph *	graph_new(const char *name);
 void 		graph_free(t_graph *graph);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif

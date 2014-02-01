@@ -13,6 +13,10 @@
 
 #include "data.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct Context;
 struct Scene;
 struct Lst;
@@ -50,5 +54,8 @@ t_dict *		dict_rebind(struct Scene *sc,void *ptr);
 t_dict *		dict_new(const char *name);
 void 			dict_show(t_dict *dict);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif

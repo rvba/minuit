@@ -65,7 +65,7 @@ void term_print( t_term *term, const char *msg)
 	}
 }
 
-void term_log(char *fmt, ...)
+void term_log( const char *fmt, ...)
 {
 	t_context *C = ctx_get();
 	char msg[400];

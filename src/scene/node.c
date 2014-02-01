@@ -39,7 +39,7 @@
 #include "mesh.h"
 #include "geometry.h"
 #include "memory.h"
-
+#include "node.h"
 
 int node_equal(t_node *m, t_node *n)
 {
@@ -47,43 +47,41 @@ int node_equal(t_node *m, t_node *n)
 	else return 0;
 }
 
-
-
 // GET REF
 
 void *cls_node_get_ref_object(t_node *node, const char *ref)
 {
-	return object_get_ref(node->data, ref);
+	return object_get_ref( (t_object *) node->data, ref);
 }
 
 void *cls_node_get_ref_brick(t_node *node, const char *ref)
 {
-	return brick_get_ref(node->data, ref);
+	return brick_get_ref( ( t_brick *) node->data, ref);
 }
 
 void *cls_node_get_ref_material(t_node *node, const char *ref)
 {
-	return material_get_ref(node->data, ref);
+	return material_get_ref( ( t_material *) node->data, ref);
 }
 
 void *cls_node_get_ref_mesh(t_node *node, const char *ref)
 {
-	return mesh_get_ref(node->data, ref);
+	return mesh_get_ref( ( t_mesh *) node->data, ref);
 }
 
 void *cls_node_get_ref_vlst(t_node *node, const char *ref)
 {
-	return vlst_get_ref(node->data, ref);
+	return vlst_get_ref( ( t_vlst *) node->data, ref);
 }
 
 void *cls_node_get_ref_camera(t_node *node, const char *ref)
 {
-	return camera_get_ref(node->data, ref);
+	return camera_get_ref( ( t_camera *) node->data, ref);
 }
 
 void *cls_node_get_ref_geo_array(t_node *node, const char *ref)
 {
-	return geo_array_get_ref(node->data, ref);
+	return geo_array_get_ref( ( t_geo_array *) node->data, ref);
 }
 
 void *cls_node_get_ref(t_node *node, const char *ref)

@@ -10,6 +10,10 @@
 #ifndef __VLST_H
 #define __VLST_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct Brick;
 
 typedef struct VLst
@@ -71,6 +75,10 @@ void 		vlst_set(t_vlst *vlst,int i);
 t_vlst *	vlst_clone(t_vlst *vlst);
 
 void __vlst_update_data( struct Brick *brick, t_vlst *vlst,t_vlst *caller);
+
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif

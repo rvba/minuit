@@ -91,8 +91,8 @@ t_node *scene_get_data(t_scene *sc,void *ptr)
 
 	for(l=sc->datas->first;l;l=l->next)
 	{
-		n=l->data;
-		d=n->data;
+		n = ( t_node *) l->data;
+		d = ( t_data *) n->data;
 		if(d->pointer==ptr) return n;
 	}
 
@@ -109,7 +109,7 @@ t_node *scene_get_var(t_scene *sc,void *ptr)
 
 	for(l=sc->vars->first;l;l=l->next)
 	{
-		n=l->data;
+		n = ( t_node *) l->data;
 		if(n->id_ptr==ptr) return n;
 	}
 
@@ -267,7 +267,7 @@ void scene_cleanup(t_scene *sc)
 	{
 		if(link)
 		{
-			t_node *node = link->data;
+			t_node *node = ( t_node *) link->data;
 			scene_node_free(sc,node);
 		}
 	}
@@ -394,7 +394,7 @@ t_node *scene_add_data(t_scene *sc,const char *type,const char *target,const cha
 	//printf("scene_add_data %s %s %s\n",type,target,name);
 
 	t_node *node=scene_add_node(sc,dt_data,name);
-	t_data *data=node->data;
+	t_data *data = ( t_data *) node->data;
 
 	set_name(data->type,type);
 	set_name(data->target,target);
@@ -412,7 +412,7 @@ t_node *scene_add_data_node(t_scene *sc,const char *type,const char *target,cons
 	ulog((LOG_SCENE,"scene_add_node %s %s %s\n",type,target,name));
 
 	t_node *node=scene_add_node(sc,dt_data,name);
-	t_data *data=node->data;
+	t_data *data = ( t_data *) node->data;
 
 	set_name(data->type,type);
 	set_name(data->target,target);
@@ -434,8 +434,8 @@ void scene_remove_data_node(t_scene *sc,void *ptr)
 
 	for(l=sc->datas->first;l;l=l->next)
 	{
-		n=l->data;
-		d=n->data;
+		n = ( t_node *) l->data;
+		d = ( t_data *) n->data;
 
 		if(d->pointer==ptr)
 		{
@@ -462,7 +462,7 @@ t_node *scene_add_ref(t_scene *sc,const char *type,const char *target,const char
 	ulog((LOG_SCENE,"scene_add_ref %s %s %s\n",type,target,name));
 
 	t_node *node=scene_add_node(sc,dt_data,name);
-	t_data *data=node->data;
+	t_data *data = ( t_data *) node->data;
 
 	set_name(data->type,type); 
 	set_name(data->target,target);
@@ -486,7 +486,7 @@ void scene_add_data_var(t_scene *sc,const char *name,const char *name_var,int si
 
 	// data 
 	t_node *node_data=scene_add_data(sc,"dynamic","void",name,ptr);
-	t_data *data=node_data->data;
+	t_data *data = ( t_data *) node_data->data;
 
 	// store size
 	data->size=size;

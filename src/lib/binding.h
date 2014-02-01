@@ -12,6 +12,10 @@
 
 #include "common.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct Scene;
 
 typedef struct Binding
@@ -26,6 +30,10 @@ void binding_update(t_binding *binding, void *ptr);
 t_binding *binding_rebind(struct Scene *sc, void *ptr);
 t_binding *binding_new(const char *name);
 void binding_free(t_binding *binding);
+
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif

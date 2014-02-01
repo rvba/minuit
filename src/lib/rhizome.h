@@ -12,6 +12,10 @@
 
 #include "common.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct Scene;
 struct Block;
 struct Set;
@@ -61,5 +65,8 @@ void 		_rhizome_free(t_rhizome *rhizome);
 void 		rhizome_free(t_rhizome *rhizome);
 t_rhizome *	rhizome_new(const char *name);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif

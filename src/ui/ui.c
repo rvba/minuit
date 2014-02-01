@@ -221,7 +221,7 @@ void ui_draw_term(void)
 			t_term *t;
 			for(l = C->terms->first; l; l = l->next)
 			{
-				t = l->data;
+				t = ( t_term *) l->data;
 				t->draw(t);
 				glTranslatef(t->width + 30, 0, 0);
 			}
@@ -244,7 +244,7 @@ void ui_draw_menu(void)
 	{
 		C->event->ui.use_scale = 0;
 		node=scene_node_get(C->scene,"block","menu_mouse");
-		menu=node->data;
+		menu = ( t_block *) node->data;
 		menu->cls->draw(menu);
 		C->event->ui.use_scale = 1;
 	}
@@ -264,7 +264,7 @@ void ui_draw_bar(void)
 		glTranslatef(0,2,0);
 		C->event->ui.use_scale = 0;
 		node=scene_node_get(C->scene,"block","bar");
-		menu=node->data;
+		menu = ( t_block *) node->data;
 		menu->cls->draw(menu);
 		C->event->ui.use_scale = 1;
 	}
@@ -281,8 +281,8 @@ void ui_draw_sets(void)
 
 	for(link = C->scene->sets->first; link; link = link->next)
 	{
-		t_node *node = link->data;
-		t_set *set = node->data;
+		t_node *node = ( t_node *) link->data;
+		t_set *set = ( t_set *) node->data;
 		set_draw(set);
 	}
 }
@@ -299,8 +299,8 @@ void ui_draw_screens(t_context *C)
 	{
 		for(;l;l=l->next)
 		{
-			n=l->data;
-			s=n->data;
+			n = ( t_node *) l->data;
+			s = ( t_screen *) n->data;
 			if(s->is_visible)
 			{
 				s->draw(s);

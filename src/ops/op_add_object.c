@@ -134,7 +134,7 @@ void *op_add_viewport(t_brick *brick)
 	C->scene->has_generic_viewport = 1;
 
 	t_node *node = viewport_add("viewport");
-	t_viewport *viewport = node->data;
+	t_viewport *viewport = ( t_viewport *) node->data;
 
 	viewport->draw = viewport_draw_scene;
 
@@ -151,11 +151,11 @@ void *op_new_camera(const char *name)
 	scene_store(C->scene,1);
 
 	t_node *node_camera=camera_make(name);
-	t_camera *camera = node_camera->data;
+	t_camera *camera = ( t_camera *) node_camera->data;
 	op_camera_frustum_init(camera);
 
 	t_node *node_object=object_add("camera",name);
-	t_object *object=node_object->data;
+	t_object *object = ( t_object *) node_object->data;
 	object->cls->link(object,node_camera);
 
 
@@ -166,7 +166,7 @@ void *op_new_camera(const char *name)
 
 void *op_add_camera(t_brick *brick)
 {
-	t_node *node = op_new_camera("default");
+	t_node *node = ( t_node *) op_new_camera("default");
 	return node;
 }
 
@@ -175,7 +175,7 @@ void *op_add_object(const char *name)
 	t_context *C = ctx_get();
 	scene_store(C->scene,1);
 	t_node *node_object=object_add("point",name);
-	t_object *object=node_object->data;
+	t_object *object = ( t_object *) node_object->data;
 	scene_store(C->scene,0);
 	return object;
 }
@@ -189,7 +189,7 @@ void *op_add_mesh(const char *name)
 		t_node *node_mesh=mesh_make_empty("mesh");
 		t_node *node_object=object_add("mesh","cube");
 
-		t_object *object=node_object->data;
+		t_object *object = ( t_object *) node_object->data;
 		object->cls->link(object,node_mesh);
 
 	scene_store(C->scene,0);
@@ -205,7 +205,7 @@ void* op_add_camera_main(void)
 	scene_store(C->scene,1);
 
 	t_node *node_object=object_add("camera","main_camera");
-	t_object *object=node_object->data;
+	t_object *object = ( t_object *) node_object->data;
 
 	t_node *node_camera=camera_make("main_camera");
 
@@ -240,7 +240,7 @@ void *op_add_cube(t_brick *brick)
 		t_node *node_mesh=op_new_cube("cube");
 		t_node *node_object=object_add("mesh","cube");
 
-		t_object *object=node_object->data;
+		t_object *object = ( t_object *) node_object->data;
 		object->cls->link(object,node_mesh);
 
 	scene_store(C->scene,0);
@@ -257,7 +257,7 @@ void *op_add_plane(t_brick *brick)
 		t_node *node_mesh=op_new_plane("plane");
 		t_node *node_object=object_add("mesh","plane");
 
-		t_object *object=node_object->data;
+		t_object *object = ( t_object *) node_object->data;
 		object->cls->link(object,node_mesh);
 
 	scene_store(C->scene,0);
@@ -326,7 +326,7 @@ void op_mesh_add_brick_vertex(t_context *C,t_mesh *mesh)
 {
 	// New Block
 	t_node *_node_block=add_block(C,"vertex");
-	t_block *_block=_node_block->data;
+	t_block *_block= ( t_block *) _node_block->data;
 
 	// add vertex
 	scene_add_ref(C->scene,"struct_ref","mesh","vertex",&mesh->vertex,mesh);

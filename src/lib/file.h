@@ -13,6 +13,10 @@
 #include "util.h"
 #include "common.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct Scene;
 struct Lst;
 
@@ -88,5 +92,9 @@ void file_open(t_file *file);
 void file_close(t_file *file);
 int file_init(t_file *file);
 void file_free(t_file *file);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

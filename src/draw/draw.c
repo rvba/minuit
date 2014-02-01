@@ -56,7 +56,7 @@ void draw_clear(float r,float g,float b,float a)
 
 void draw_add_light(t_node *node)
 {
-	t_light *light = node->data;
+	t_light *light = ( t_light *) node->data;
 
 	float *p=light->pos;
 
@@ -79,7 +79,7 @@ void draw_light(t_draw *draw, t_node *node)
 {
 	if(draw->draw_lights)
 	{
-		t_light *light = node->data;
+		t_light *light = ( t_light *) node->data;
 		float *pos=light->pos;
 
 		if(draw->mode==mode_selection)
@@ -192,8 +192,8 @@ void draw_mesh_edges(t_draw *draw, t_mesh *mesh)
 			int a,b;
 			float *x;
 			float *y;
-			int *v = edges->data;
-			float *p = points->data;
+			int *v = ( int *) edges->data;
+			float *p = ( float *) points->data;
 			int l = points->length;
 			int i;
 			int j=0;
@@ -218,7 +218,7 @@ void draw_mesh_edges(t_draw *draw, t_mesh *mesh)
 
 					if(draw->with_edge_color && mesh->edges_color)
 					{
-						color = grf_float(mesh->edges_color->data,i*3);
+						color = ( float *) grf_float( mesh->edges_color->data, i*3);
 					}
 					else
 					{
@@ -243,7 +243,7 @@ void draw_mesh_points(t_draw *draw, t_mesh *mesh)
 	if( vlst_vertex)
 	{
 		t_vlst *vlst_colors = mesh->colors;
-		float *vertex = vlst_vertex->data;
+		float *vertex = ( float *) vlst_vertex->data;
 		float *colors = NULL;
 		float *color = NULL;
 		float selection_color[3];
@@ -281,11 +281,11 @@ void draw_mesh_points(t_draw *draw, t_mesh *mesh)
 			}
 			else if(vlst_colors)
 			{
-				colors = vlst_colors->data; 
+				colors = ( float *) vlst_colors->data; 
 			}
 			else
 			{
-				color = draw->front_color;
+				color = ( float *) draw->front_color;
 			}
 		}
 		
@@ -300,7 +300,7 @@ void draw_mesh_points(t_draw *draw, t_mesh *mesh)
 			if( indice >= 0 && indice < count)
 			{
 				t_vlst *vlst = mesh->vertex;
-				float *v = vlst->data;
+				float *v = ( float *) vlst->data;
 				int i = mesh->state.selected_vertex * 3;
 				skt_point(v+i,3,red);
 			}
@@ -312,7 +312,7 @@ void draw_mesh_points(t_draw *draw, t_mesh *mesh)
 			if( indice >= 0 && indice < count)
 			{
 				t_vlst *vlst = mesh->vertex;
-				float *v = vlst->data;
+				float *v = ( float *) vlst->data;
 				int i = mesh->state.hover_vertex * 3;
 				skt_point(v+i,3,green);
 			}
@@ -327,14 +327,14 @@ void draw_mesh_direct_faces(t_draw *draw, t_mesh *mesh)
 
 	if(vertex)
 	{
-		GLfloat *v=vertex->data;	// vertices 
+		GLfloat *v = ( GLfloat *) vertex->data;	// vertices 
 		int i,j,n;
 		// quads
 		if(quads)
 		{
-			int *q=quads->data;		// quad indices
-			t_vlst *vlst_quad=mesh->quad_normal;
-			float *normals=vlst_quad->data;
+			int *q = ( int *) quads->data;		// quad indices
+			t_vlst *vlst_quad = mesh->quad_normal;
+			float *normals = ( float *) vlst_quad->data;
 
 			float outline[4*3];
 
@@ -534,14 +534,14 @@ void draw_mesh(t_draw *draw, t_scene *scene, t_mesh *mesh)
 	if(draw->with_texture && mesh->state.with_texture)
 	{
 		node = scene_node_get(scene,"texture",mesh->texture_name);
-		texture=node->data;
+		texture = ( t_texture *) node->data;
 
 		if(texture && mesh->quad_uv)
 		{
 			glEnable(GL_TEXTURE_2D);
 
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-			glTexCoordPointer(2,GL_INT,0,mesh->quad_uv->data);
+			glTexCoordPointer( 2, GL_INT, 0, mesh->quad_uv->data);
 			glBindTexture(GL_TEXTURE_2D,texture->id_gl); 
 
 		}
@@ -699,13 +699,13 @@ void draw_lights(t_draw *draw, t_scene *scene)
 	// draw lights nodes
 	for(link=scene->lights->first;link;link=link->next)
 	{
-		node=link->data;
+		node = ( t_node *) link->data;
 		draw_light(draw,node);
 	}
 
 	for(link=scene->lights->first;link;link=link->next)
 	{
-		node=link->data;
+		node = ( t_node *) link->data;
 		draw_add_light(node); 
 	}
 }
@@ -732,8 +732,8 @@ void draw_objects(t_draw *draw, t_scene *scene)
 
 	for(link=scene->objects->first;link;link=link->next)
 	{
-		node=link->data;
-		t_object *object = node->data;
+		node = ( t_node *) link->data;
+		t_object *object = ( t_object *) node->data;
 
 		if(!object)
 		{
