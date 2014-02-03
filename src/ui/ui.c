@@ -63,33 +63,16 @@ void ui_image_draw( t_context *C, t_image *image, int x, int y)
 void ui_texture_draw( t_context *C, t_texture *texture, int px, int py, int sx, int sy)
 {
 	glPushMatrix();
+	glLoadIdentity();
 	glTranslatef( px, py, 0);
 
 	glEnable(GL_TEXTURE_2D);
 	//glActiveTexture(GL_TEXTURE0);
 	glBindTexture( GL_TEXTURE_2D, (GLuint) texture->id_gl);
 
-	//printf("ui ID:%d\n", texture->id_gl);
-	//texture_show( texture);
-
 	glBegin(GL_QUADS);
 
 	glColor4f(1,1,1,1);
-
-	/*
-	// upper left
-	glTexCoord2f(0, 0);
-	glVertex2f(0, 0);
-	// upper right
-	glTexCoord2f((float)nXRes/(float)g_nTexMapX, 0);
-	glVertex2f(GL_WIN_SIZE_X, 0);
-	// bottom right
-	glTexCoord2f((float)nXRes/(float)g_nTexMapX, (float)nYRes/(float)g_nTexMapY);
-	glVertex2f(GL_WIN_SIZE_X, GL_WIN_SIZE_Y);
-	// bottom left
-	glTexCoord2f(0, (float)nYRes/(float)g_nTexMapY);
-	glVertex2f(0, GL_WIN_SIZE_Y);
-	*/
 
 	glTexCoord2f(0, 0);
 	glVertex2f(0, 0);
@@ -106,8 +89,6 @@ void ui_texture_draw( t_context *C, t_texture *texture, int px, int py, int sx, 
 	glEnd();
 
 	glBindTexture( GL_TEXTURE_2D, 0);
-	//disableTextureTarget();
-
 	glDisable(GL_TEXTURE_2D);
 	glPopMatrix();
 }

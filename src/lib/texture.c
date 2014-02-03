@@ -61,7 +61,11 @@ void texture_image_load( t_texture *texture, t_image *image)
 	texture->internal_format = image->bpp;
 	texture->type = image->type;
 
+
 	glGenTextures( 1, &texture->id_gl);
+
+	glEnable( GL_TEXTURE_2D);
+
 	glBindTexture( GL_TEXTURE_2D, texture->id_gl); 
 	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -75,6 +79,8 @@ void texture_image_load( t_texture *texture, t_image *image)
 			texture->format,			// GLenum format		GL_RGB, ...
 			texture->type,				// GLenum type			GL_UNSIGNED_BYTE, ...
 			image->data);				// const GLvoid *textels	The data
+
+	glDisable( GL_TEXTURE_2D);
 
 }
 
