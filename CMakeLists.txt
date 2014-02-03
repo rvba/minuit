@@ -10,8 +10,10 @@ project(Minuit)
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
 find_package(PNG REQUIRED)
-find_package(JPEG REQUIRED)
+#find_package(JPEG REQUIRED)
 find_package(Threads)
+
+set(GNU_LIB /usr/lib/x86_64-linux-gnu)
 
 include_directories(
 	${CMAKE_SOURCE_DIR}/src/ops
@@ -24,6 +26,8 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/src/lib
 	${CMAKE_SOURCE_DIR}/src
 	)
+
+find_library(JPG jpeg PATHS)
 
 set(GPLUSPLUS FALSE)
 if(GPLUSPLUS)
@@ -42,7 +46,8 @@ add_executable(
 )
 
 target_link_libraries(minuit minuit-ctx minuit-ops minuit-ui minuit-draw minuit-scene minuit-lib minuit-app minuit-base)
-target_link_libraries(minuit ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${PNG_LIBRARY} ${JPEG_LIBRARY} pthread m)
+#target_link_libraries(minuit ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${PNG_LIBRARY} ${JPEG_LIBRARY} pthread m)
+target_link_libraries(minuit ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${PNG_LIBRARY} ${JPG} pthread m)
 
 
 

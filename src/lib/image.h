@@ -11,10 +11,6 @@
 #define __IMAGE_H
 
 #include "common.h"
-
-#include <jpeglib.h>
-#include <png.h>
-
 #include <GL/gl.h>
 
 #ifdef __cplusplus
@@ -29,15 +25,17 @@ typedef struct Image
 	int height;
 	int bpp; 		//byte per pixel
 	GLenum format;
+	GLenum type;
 
 	size_t size;
 	unsigned char *data;
 
 }t_image;
 
+t_image *	image_open( const char *path);
 void 		image_free(t_image *image);
 t_image *	image_new(const char *name);
-t_image *	img_read_jpg(char* Name);
+t_image *	img_read_jpg(const char *path);
 void 		img_save_jpg(int width,int height,const char name[]);
 void 		img_save_jpg_highres(int width,int height,const char name[],unsigned char *image);
 t_image *	img_read_png(char *filename);

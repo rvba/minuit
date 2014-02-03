@@ -66,6 +66,7 @@ extern "C" {
 struct Context;
 struct Event;
 struct Clock;
+struct Image;
 
 typedef struct Ui
 {
@@ -210,6 +211,8 @@ void ctx_ui_old( struct Context *C);
 
 int ui_get_window_width( struct Context *C);
 int ui_get_window_height( struct Context *C);
+
+void ui_image_draw( struct Context *C, struct Image *image, int x, int y);
 
 #ifdef __cplusplus
 }

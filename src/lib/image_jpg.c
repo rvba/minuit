@@ -12,10 +12,11 @@
 #include "util.h"
 #include "image.h"
 #include "memory.h"
+#include <jpeglib.h>
 
-t_image  *img_read_jpg(char* name)
+t_image  *img_read_jpg( const char *name)
 {
-	unsigned char a,r,g,b;
+	unsigned char r,g,b;
 	int width, height;
 	struct jpeg_decompress_struct cinfo;
 	struct jpeg_error_mgr jerr;
@@ -23,11 +24,13 @@ t_image  *img_read_jpg(char* name)
 	FILE * infile;        
 	JSAMPARRAY pJpegBuffer;       
 	int row_stride;       
+
 	if ((infile = fopen(name, "rb")) == NULL) 
 	{
 		printf("can't open [%s]\n", name);
 		return 0;
 	}
+
 	cinfo.err = jpeg_std_error(&jerr);
 	jpeg_create_decompress(&cinfo);
 	jpeg_stdio_src(&cinfo, infile);
@@ -38,9 +41,9 @@ t_image  *img_read_jpg(char* name)
 	width = cinfo.output_width;
 	height = cinfo.output_height;
 
-	unsigned char *ptr = (unsigned char*)mem_malloc(sizeof(unsigned char)*width*height*4); 
+	unsigned char *ptr = (unsigned char *) mem_malloc (sizeof( unsigned char) * width * height * 3); 
 
-	ptr +=(width*height*4); 
+	ptr += ( width * height * 3); 
 
 	if (!ptr)
 	{
@@ -57,13 +60,12 @@ t_image  *img_read_jpg(char* name)
 		int x;
 		for (x=width;x>0;x--)
 		{
-			a = 0; // no alpha 
-			r = pJpegBuffer[0][cinfo.output_components*x-2];
+			r = pJpegBuffer[0][cinfo.output_components * x];
 
 			if (cinfo.output_components>2)
 			{
-				g = pJpegBuffer[0][cinfo.output_components*x-1];
-				b = pJpegBuffer[0][cinfo.output_components*x];
+				g = pJpegBuffer[0][cinfo.output_components * x-1];
+				b = pJpegBuffer[0][cinfo.output_components * x-2];
 			}
 			else
 			{
@@ -74,32 +76,22 @@ t_image  *img_read_jpg(char* name)
 			*(ptr--) = r; 
 			*(ptr--) = g; 
 			*(ptr--) = b; 
-			*(ptr--) = a; 
 		}
 	}
+
 	fclose(infile);
 	(void) jpeg_finish_decompress(&cinfo);
 	jpeg_destroy_decompress(&cinfo);
 
-	//t_texture *texture = (t_texture*)mem_malloc(sizeof(t_texture));
 	t_image *image = image_new(name);
 
-	/*
-	texture->height=height;
-	texture->width=width;
-	texture->internal_format=4;
-	texture->texels=(GLubyte *)ptr;
-	texture->format=GL_RGBA;
-	*/
-	
 	image->width=width;
 	image->height=height;
 	image->bpp=4;
+	image->format = GL_RGB;
+	image->type = GL_UNSIGNED_BYTE;
 	image->data=ptr;
 
-	printf("image is done %s\n", image->id.name);
-
-	//return texture;
 	return image;
 }
 

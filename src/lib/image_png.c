@@ -12,6 +12,8 @@
 #include "util.h"
 #include "memory.h"
 
+#include <png.h>
+
 int img_save_png(int alpha,int width,int height,GLubyte *bitmap,const char name[])
 {
 	FILE *fp = fopen(name, "wb");

@@ -29,6 +29,7 @@
 #include "rhizome.h"
 #include "event.h"
 #include "clock.h"
+#include "image.h"
 
 t_lst *sets = NULL;
 
@@ -40,6 +41,20 @@ int ui_get_window_width( t_context *C)
 int ui_get_window_height( t_context *C)
 {
 	return C->app->window->height;
+}
+
+void ui_image_draw( t_context *C, t_image *image, int x, int y)
+{
+	glPixelStorei( GL_UNPACK_ALIGNMENT, 1);
+	glRasterPos2i( x, y);
+
+	glDrawPixels( 
+		image->width,
+		image->height,
+		image->format,
+		image->type,
+		image->data);
+
 }
 
 // FREEZE ICON
