@@ -67,6 +67,7 @@ struct Context;
 struct Event;
 struct Clock;
 struct Image;
+struct Texture;
 
 typedef struct Ui
 {
@@ -213,6 +214,7 @@ int ui_get_window_width( struct Context *C);
 int ui_get_window_height( struct Context *C);
 
 void ui_image_draw( struct Context *C, struct Image *image, int x, int y);
+void ui_texture_draw( struct Context *C, struct Texture *texture, int px, int py, int sx, int sy);
 
 #ifdef __cplusplus
 }

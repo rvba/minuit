@@ -85,9 +85,9 @@ t_image  *img_read_jpg( const char *name)
 
 	t_image *image = image_new(name);
 
-	image->width=width;
-	image->height=height;
-	image->bpp=4;
+	image->width = width;
+	image->height = height;
+	image->bpp = 3;
 	image->format = GL_RGB;
 	image->type = GL_UNSIGNED_BYTE;
 	image->data=ptr;

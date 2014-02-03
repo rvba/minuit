@@ -21,9 +21,7 @@ extern "C" {
 struct Scene;
 struct Image;
 
-typedef struct Texture t_texture;
-
-struct Texture
+typedef struct Texture
 {
 	t_id id;
 
@@ -34,13 +32,17 @@ struct Texture
 	GLuint height;
 
 	GLenum format;
+	GLenum type;
 	GLint internal_format;
 	GLuint id_gl;
 	
 	GLubyte *texels;
-};
+
+}t_texture;
 
 
+void 		texture_show( t_texture *texture);
+void 		texture_image_load( struct Texture *texture, struct Image *image);
 t_texture *	texture_clone(t_texture *texture);
 t_texture* 	texture_rebind(struct Scene *scene, void *ptr);
 t_texture*	texture_new(const char *name);
