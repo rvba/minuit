@@ -14,7 +14,7 @@
 #include "memory.h"
 
 
-t_module *mode_module_add(t_mode *mode,char *name,void *data)
+t_module *mode_module_add(t_mode *mode, const char *name, void *data)
 {
 	int is_free=1;
 	t_link *link;
@@ -44,7 +44,7 @@ t_module *mode_module_add(t_mode *mode,char *name,void *data)
 	}
 }
 
-t_module *mode_module_get(t_mode *mode,char *name)
+t_module *mode_module_get( t_mode *mode, const char *name)
 {
 	t_link *link;
 	for(link=mode->modules->first;link;link=link->next)
@@ -74,7 +74,7 @@ void mode_init(t_mode *mode)
 	mode->modules=lst_new("lst");
 }
 
-t_module *module_new( char *name, void *data)
+t_module *module_new( const char *name, void *data)
 {
 	t_module *module=(t_module *)mem_malloc(sizeof(t_module));
 	id_init( &module->id, name);

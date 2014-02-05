@@ -158,6 +158,7 @@ t_engine *engine_new(const char *name)
 	engine->processes=lst_new("lst");
 	engine->garbage = lst_new("lst");
 	engine->with_global_limit=ENGINE_WITH_GLOBAL_LIMIT;
+	engine->global_limit = 0;
 	engine->global_freq=ENGINE_GLOBAL_FREQ;
 	engine->process_count=0;
 	engine->process_id = 0;
