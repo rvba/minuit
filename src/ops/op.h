@@ -42,6 +42,8 @@ void 		op_add_global(struct Context *C,struct Block *block);
 void 		op_init(struct Context *C);
 void *		find_register(const char *target,const char *name);
 
+struct Node *op_add_mesh_raw( const char *name, int size);
+
 // OP_ADD_BRICK
 
 struct Set *get_current_set(struct Context *C);

@@ -251,14 +251,22 @@ t_node *mesh_make(
 	scene_add_data_node( C->scene, "app_node", "mesh", name, node_mesh);
 
 	// add vertex list
-	if(verts)
+	if( totvert)
 	{
-		mesh->vertex=vlst_make("vertex", dt_float, 3, totvert);
-		vlst_add_data(mesh->vertex,verts);
+		if(verts)
+		{
+			mesh->vertex=vlst_make("vertex", dt_float, 3, totvert);
+			vlst_add_data(mesh->vertex,verts);
+
+		
+		}
+		else
+		{
+			mesh->vertex=vlst_make("vertex", dt_float, 3, totvert);
+		}
 
 		// add brick vertex
 		if(C->ui->add_bricks) mesh_add_brick_vertex(C,mesh);
-	
 	}
 
 	// add quad list

@@ -85,6 +85,22 @@ t_node *op_new_cube(const char *name)
 	return cube;
 }
 
+t_node *op_new_mesh_raw( const char *name, int size)
+{
+	int tot_vertex=size;
+	int tot_face=0;
+	int tot_quad=0;
+	int tot_tri=0;
+
+	float *verts=NULL; 	//u_volume
+	int *quads=NULL;		//u_volume
+	int *tris = NULL;
+		
+	t_node *cube = mesh_make(name,tot_vertex,tot_face,tot_quad,tot_tri,verts,quads,tris);
+
+	return cube;
+}
+
 // PLANE
 t_node *op_new_plane(const char *name)
 {
@@ -230,21 +246,39 @@ void *op_add_light(t_brick *brick)
 }
 
 // new cube
-void *op_add_cube(t_brick *brick)
+
+void *op_add_cube( t_brick *brick)
 { 
 	t_context *C=ctx_get();
-	term_print(C->term,"+ cube");
+	term_print(C->term,"+ mesh raw");
 
 	scene_store(C->scene,1);
 
-		t_node *node_mesh=op_new_cube("cube");
-		t_node *node_object=object_add("mesh","cube");
+		t_node *node_mesh=op_new_cube( "cube");
+		t_node *node_object=object_add("mesh","mesh_raw");
 
 		t_object *object = ( t_object *) node_object->data;
 		object->cls->link(object,node_mesh);
 
 	scene_store(C->scene,0);
 	return NULL;
+}
+
+t_node *op_add_mesh_raw( const char *name, int size)
+{ 
+	t_context *C=ctx_get();
+	term_print(C->term,"+ mesh raw");
+
+	scene_store(C->scene,1);
+
+		t_node *node_mesh=op_new_mesh_raw( "mesh_raw", size);
+		t_node *node_object=object_add("mesh","mesh_raw");
+
+		t_object *object = ( t_object *) node_object->data;
+		object->cls->link(object,node_mesh);
+
+	scene_store(C->scene,0);
+	return node_mesh;
 }
 
 void *op_add_plane(t_brick *brick)
