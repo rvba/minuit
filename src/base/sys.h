@@ -19,7 +19,8 @@
 extern "C" {
 #endif
 
-size_t 	get_memory_usage( void);
+//size_t 	sys_mem_use( void);
+int 	sys_file_exists( const char *path);
 void 	sys_get_cd( const char *cmd);
 int 	sys_get_hostname( char* name, int size);
 void 	sys_git_get( void);

@@ -10,6 +10,11 @@
 #include "common.h"
 #include "util.h"
 
+int sys_file_exists( const char *path)
+{
+	if( access( path, F_OK ) != -1 ) return 1;
+	else return 0;
+}
 
 void sys_get_cd(const char *cmd)
 {
