@@ -67,14 +67,14 @@ void term_print( t_term *term, const char *msg)
 
 void term_log( const char *fmt, ...)
 {
-	t_context *C = ctx_get();
 	char msg[400];
 	va_list ap;
 	va_start(ap,fmt);
 	vsprintf(msg,fmt,ap);
 	va_end(ap);
 
-	term_print(C->term,msg);
+	t_term *term = term_get( "term_main");
+	term_print( term,msg);
 }
 
 void term_echo( t_term *term, char *fmt, ...)
@@ -143,6 +143,18 @@ void term_reset(t_term *term)
 	term->line=0;
 }
 
+void term_reset_all( void)
+{
+	t_context *C = ctx_get();
+	t_link *l;
+	t_term *term;
+	for(l = C->terms->first; l; l = l->next)
+	{
+		term = ( t_term *) l->data;
+		term_reset( term);
+	}
+}
+
 // FREE
 
 void term_free(t_term *term)
@@ -194,7 +206,8 @@ t_term *term_new( const char *name)
 void term_init(void)
 {
 	t_context *C = ctx_get();
-	lst_add( C->terms, C->term, "term_main");
+	t_term *term_main = term_new( "term_main");
+	lst_add( C->terms, term_main, "term_main");
 
 	t_term *term_event = term_new( "term_event");
 	lst_add( C->terms, term_event, "term_event");

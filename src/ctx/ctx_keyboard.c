@@ -182,7 +182,7 @@ void keymap_command( int key)
 		case NKEY: C->ui->step = 1; break;
 		case RKEY:
 			if(C->app->keyboard->alt)
-				term_reset(C->term);
+				term_reset_all();
 			else
 				C->ui->step_reset = 1;
 			break;

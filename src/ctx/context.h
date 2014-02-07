@@ -42,7 +42,6 @@ typedef struct Context
 	struct Ui *ui;
 	struct Draw *draw;
 	struct Sketch *skt;
-	struct Term *term;
 	struct Lst *terms;
 
 }t_context;
@@ -50,6 +49,7 @@ typedef struct Context
 void ctx_test(void);
 t_context *ctx_get(void);
 struct Scene *ctx_scene_get(void);
+void ctx_log( const char *fmt, ...);
 t_context *ctx_init(int argc,char **argv);
 
 // CTX_EVENT
@@ -189,6 +189,9 @@ void ctx_ui_log( const char *name);
 void ctx_ui_buffer_clear( struct Context *C);
 
 void ctx_thread_init( struct Context *C);
+
+// LOG
+
 
 #ifdef __cplusplus
 }

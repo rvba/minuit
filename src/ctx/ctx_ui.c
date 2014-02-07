@@ -173,10 +173,8 @@ void ctx_ui_log( const char *name)
 
 	snprintf( msg, 128,"%d %s", C->app->frame, name);
 
-	if( term)
-	{
-		term_print( term, msg);
-	}
+	if( term) term_print( term, msg);
+	else printf("[CTX_LOG] Can't find term\n");
 }
 
 void ctx_ui_freeze(t_context *C)

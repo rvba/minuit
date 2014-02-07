@@ -37,6 +37,18 @@ t_scene *ctx_scene_get(void)
 	return CONTEXT->scene;
 }
 
+void ctx_log( const char *fmt, ...)
+{
+	char msg[400];
+	va_list ap;
+	va_start(ap,fmt);
+	vsprintf(msg,fmt,ap);
+	va_end(ap);
+
+	t_term *term = term_get( "term_main"); 
+	term_print(term,msg);
+}
+
 t_context *ctx_new(int argc,char **argv)
 {
 	t_context *C = (t_context *) mem_malloc(sizeof(t_context));
@@ -48,7 +60,6 @@ t_context *ctx_new(int argc,char **argv)
 	C->draw = draw_new();
 	C->skt = skt_new();
 	C->ui = ui_new();
-	C->term = term_new( "main");
 	C->terms = lst_new( "terms");
 	C->mode = mode_new( "mode");
 	C->server = server_new( "server");
@@ -132,14 +143,8 @@ void ctx_update(t_context *C)
 
 void ctx_handler(void)
 {
-	if(CONTEXT->app->quit)
-	{
-		op_post_quit(NULL);
-	}
-	else
-	{
-		ctx_update( CONTEXT);
-	}
+	if(CONTEXT->app->quit) op_post_quit(NULL); 
+	else  ctx_update( CONTEXT); 
 }
 
 

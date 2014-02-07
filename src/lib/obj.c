@@ -120,9 +120,7 @@ void op_export(t_node *node)
 
 void obj_add(const char *object_name,int tot_vert,int tot_face,int tot_quad,int tot_tri)
 {
-	//printf("adding object:%s\n",object_name);
-	t_context *C=ctx_get();
-	term_print(C->term,"+ obj");
+	term_log("+ obj");
 	t_obj *obj=obj_new(object_name);
 
 	obj->tot_vert=tot_vert;

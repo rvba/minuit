@@ -54,7 +54,7 @@ void *ctx_compute_objects(void *data)
 	{
 		char msg[20];
 		sprintf(msg,"%d compute",C->app->frame);
-		term_print(C->term,msg);
+		term_log( msg);
 	}
 
 	t_node *node_object;

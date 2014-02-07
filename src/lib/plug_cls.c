@@ -208,26 +208,24 @@ t_plug *plug_get_dst(t_plug *plug)
 
 void plug_warning(t_plug *dst_plug,t_plug *src_plug)
 {
-	t_context *C=ctx_get();
 	char msg[40];
 	char *src_plug_type=data_name_get(src_plug->data_type);
 	char *dst_plug_type=data_name_get(dst_plug->data_type);
 
 	sprintf(msg,"(%s)(%s)-(%s)(%s)",src_plug->id.name,src_plug_type,dst_plug->id.name,dst_plug_type);
-	term_print(C->term,msg);
+	term_log(msg);
 }
 
 void plug_debug_connect(const char *name, t_plug *dst_plug, t_plug *src_plug)
 {
 	if(PLUG_DEBUG)
 	{
-		t_context *C=ctx_get();
 		char msg[40];
 		char *src_plug_type=data_name_get(src_plug->data_type);
 		char *dst_plug_type=data_name_get(dst_plug->data_type);
 
 		sprintf(msg,"%s %s-%s",name,dst_plug_type,src_plug_type);
-		term_print(C->term,msg);
+		term_log(msg);
 	}
 }
 

@@ -128,8 +128,7 @@ t_node *op_new_empty_mesh(const char *name)
 
 void *op_new_set(const char *name)
 {
-	t_context *C = ctx_get();
-	term_print(C->term,"+ set");
+	term_log("+ set");
 
 	t_node *node = set_add(name);
 
@@ -144,7 +143,7 @@ void *op_add_set(t_brick *brick)
 void *op_add_viewport(t_brick *brick)
 {
 	t_context *C = ctx_get();
-	term_print(C->term,"+ viewport");
+	term_log("+ viewport");
 
 	scene_store(C->scene,1);
 	C->scene->has_generic_viewport = 1;
@@ -162,7 +161,7 @@ void *op_add_viewport(t_brick *brick)
 void *op_new_camera(const char *name)
 {
 	t_context *C = ctx_get();
-	term_print(C->term,"+ camera");
+	term_log("+ camera");
 
 	scene_store(C->scene,1);
 
@@ -216,7 +215,7 @@ void *op_add_mesh(const char *name)
 void* op_add_camera_main(void)
 {
 	t_context *C = ctx_get();
-	term_print(C->term,"+ camera");
+	term_log("+ camera");
 
 	scene_store(C->scene,1);
 
@@ -235,7 +234,7 @@ void* op_add_camera_main(void)
 void *op_add_light(t_brick *brick)
 {
 	t_context *C = ctx_get();
-	term_print(C->term,"+ light");
+	term_log("+ light");
 
 	scene_store(C->scene,1);
 
@@ -250,7 +249,7 @@ void *op_add_light(t_brick *brick)
 void *op_add_cube( t_brick *brick)
 { 
 	t_context *C=ctx_get();
-	term_print(C->term,"+ mesh raw");
+	term_log("+ mesh raw");
 
 	scene_store(C->scene,1);
 
@@ -267,7 +266,7 @@ void *op_add_cube( t_brick *brick)
 t_node *op_add_mesh_raw( const char *name, int size)
 { 
 	t_context *C=ctx_get();
-	term_print(C->term,"+ mesh raw");
+	term_log("+ mesh raw");
 
 	scene_store(C->scene,1);
 
@@ -284,7 +283,7 @@ t_node *op_add_mesh_raw( const char *name, int size)
 void *op_add_plane(t_brick *brick)
 { 
 	t_context *C=ctx_get();
-	term_print(C->term,"+ plane");
+	term_log("+ plane");
 
 	scene_store(C->scene,1);
 

@@ -43,6 +43,7 @@ typedef struct Term
 	void (* init)(struct Term *term);
 }t_term;
 
+void 		term_reset_all( void);
 void 		term_reset (t_term *term);
 void 		term_free( t_term *term);
 t_term *	term_new( const char *name);
