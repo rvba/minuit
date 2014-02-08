@@ -52,7 +52,6 @@ void texture_show( t_texture *texture)
 
 }
 
-
 void texture_image_load( t_texture *texture, t_image *image)
 {
 	texture->width = image->width;
@@ -81,7 +80,6 @@ void texture_image_load( t_texture *texture, t_image *image)
 			image->data);				// const GLvoid *textels	The data
 
 	glDisable( GL_TEXTURE_2D);
-
 }
 
 t_texture *texture_clone(t_texture *texture)

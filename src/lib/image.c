@@ -8,12 +8,10 @@
  */
 
 #include "util.h"
-
 #include "image.h"
 #include "node.h"
 #include "memory.h"
 #include "file.h"
-
 
 t_image *image_open( const char *path)
 {
