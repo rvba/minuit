@@ -345,7 +345,6 @@ void state_block_disconnect( t_block *block, t_event *e)
 	}
 }
 
-
 void block_disconnect( t_context *C, t_block *block, t_brick *brick, t_event *e)
 {
 	t_plug *plug_target = brick->plug_in.src;

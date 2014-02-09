@@ -32,10 +32,7 @@ struct Lst;
 struct Plug;
 struct Dot;
 struct Event;
-
-typedef struct Block t_block;
-typedef struct Block_Class t_block_class;
-typedef struct Block_State t_block_state;
+struct Block;
 
 typedef enum Type_Operation 
 {
@@ -44,20 +41,19 @@ typedef enum Type_Operation
 
 }t_operation;
 
-/***		BLOCK		***/
-
-struct Block_Class
+typedef struct Block_Class
 {
 	char cls_type[_NAME_];
 	char type[_NAME_];
-	void (* make)(t_block *self);
-	void (* link)(t_block *self,struct Node *target);
-	void (* draw)(t_block *self);
-	void (* init)(t_block *self);
-	void (* dispatch)(t_block *self);
-};
+	void (* make)(struct Block *self);
+	void (* link)(struct Block *self,struct Node *target);
+	void (* draw)(struct Block *self);
+	void (* init)(struct Block *self);
+	void (* dispatch)(struct Block *self);
 
-struct Block_State
+}t_block_class;
+
+typedef struct Block_State
 {	
 	int is_root:1;
 	int draw_outline:1;
@@ -67,9 +63,10 @@ struct Block_State
 	int is_a_loop:1;
 	int is_in_rhizome:1;
 	int frame_based:1;
-};
 
-struct Block
+}t_block_state;
+
+typedef struct Block
 {
 	t_id id;
 	t_block_class *cls;
@@ -96,10 +93,8 @@ struct Block
 	struct Rhizome *rhizome;
 	struct Set *set;
 
-	void (* state)( t_block *block, struct Event *e);
-};
-
-
+	void (* state)( struct Block *block, struct Event *e);
+}t_block;
 
 // BLOCK
 

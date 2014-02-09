@@ -19,7 +19,13 @@
 #include "rhizome.h"
 #include "set.h"
 #include "graph.h"
-#include "memory.h"
+
+void cls_block_link(t_block *self,t_node *target);
+void cls_block_make(t_block *block);
+void cls_block_make_block(t_block *block);
+void cls_block_make_menu(t_block *block);
+void cls_block_make_bar(t_block *block);
+void cls_block_make_ref(t_block *block);
 
 void block_get_pos_plug_out( t_block *block, t_brick *brick, float *v)
 {
@@ -294,13 +300,6 @@ void cls_block_link(t_block *self,t_node *target)
 	else printf("[ERROR:cls_block_link] Unknown node type %s",data_name_get(target->type));
 }
 
-void cls_block_link(t_block *self,t_node *target);
-void cls_block_make(t_block *block);
-void cls_block_make_block(t_block *block);
-void cls_block_make_menu(t_block *block);
-void cls_block_make_bar(t_block *block);
-void cls_block_make_ref(t_block *block);
-
 // menu
 t_block_class block_menu =
 {
@@ -557,9 +556,7 @@ void _block_free(t_block *block)
 
 void block_bricks_free(t_block *block)
 {
-	t_context *C=ctx_get();
-
-	t_scene *sc=C->scene;
+	t_scene *sc = scene_get();
 
 	t_link *l;
 	t_brick *b;
@@ -571,41 +568,35 @@ void block_bricks_free(t_block *block)
 	}
 }
 
-// FREE BLOCK
+// FREE 
 
-void block_free(t_block *block)
+void block_free( t_block *block)
 {
-	t_context *C=ctx_get();
-	t_scene *sc=C->scene;
+	t_scene *sc = scene_get();
 
 	// free bricks
-	block_bricks_free(block);
+	block_bricks_free( block);
 
 	// free lst
-	scene_delete(sc,block->bricks);
+	scene_delete( sc, block->bricks);
 }
 
 // NEW
 
 t_block *block_new(const char *name)
 {
-	t_block *block  = (t_block *)mem_malloc(sizeof(t_block));
+	t_block *block  = (t_block *) mem_malloc( sizeof( t_block));
+
+	block->cls = NULL;
+
+	vset3i( block->idcol, 0, 0, 0);
 
 	id_init(&block->id, name);
-
 	bzero(block->type,_NAME_);
-
-	block->pos[0]=1;
-	block->pos[1]=0;
-	block->pos[2]=0;
-	block->pos[3]=1;
-	block->height=0;
-
-	block->bricks=NULL;
-
-	block->submenu = NULL;
-	block->hover = NULL;
-	block->selected = NULL;
+	
+	vset3f( block->pos, 0, 0, 0);
+	block->width = 0;
+	block->height = 0;
 
 	block->block_state.is_root=0;
 	block->block_state.draw_outline=0;
@@ -617,12 +608,17 @@ t_block *block_new(const char *name)
 	block->block_state.frame_based = 0;
 
 	block->tot_bricks=0;
-	block->width=0;
 	block->rhizome_order = -1;
 	block->rhizome_pos = 0;
 
+	block->bricks=NULL;
+	block->submenu = NULL;
+	block->hover = NULL;
+	block->selected = NULL;
 	block->rhizome = NULL;
 	block->set = NULL;
+
+	block->state = NULL;
 
 	return block;
 }
