@@ -138,21 +138,21 @@ void skt_circle(float *pos)
 	float angle = division;
 
 	glPushMatrix();
-	glTranslatef(pos[0],pos[1],pos[2]);
+		glTranslatef(pos[0],pos[1],pos[2]);
 
-	glColor3f(1,1,1);
+		glColor3f(1,1,1);
 
-	glBegin(GL_TRIANGLE_FAN);
+		glBegin(GL_TRIANGLE_FAN);
 
-	glVertex3f(radius,0,0);
+		glVertex3f(radius,0,0);
 
-	for(i=0;i<resolution;i++)
-	{
-		glVertex3f(cos(angle)*radius,sin(angle)*radius,0);
-		angle += division;
-	}
+		for(i=0;i<resolution;i++)
+		{
+			glVertex3f(cos(angle)*radius,sin(angle)*radius,0);
+			angle += division;
+		}
 
-	glEnd();
+		glEnd();
 	glPopMatrix();
 }
 

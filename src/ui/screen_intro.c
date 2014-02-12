@@ -176,81 +176,64 @@ void screen_intro(t_screen *screen)
 	if(C->ui->show_intro || C->ui->show_intro_always)
 	{
 		glPushMatrix();
-		glLoadIdentity();
-		glTranslatef(p[0],p[1],p[2]);
+			glLoadIdentity();
+			glTranslatef(p[0],p[1],p[2]);
 
-		glScalef(scale,scale,scale);
-		float z = C->ui->zoom;
-		C->ui->zoom = 5;
+			glScalef(scale,scale,scale);
+			float z = C->ui->zoom;
+			C->ui->zoom = 5;
 
-		glPushMatrix();
-
-
-		/*
-		if(C->ui->show_intro)
-		{
-			// Minuit
-			txt_intro->draw(txt_intro);
-
-			glTranslatef(txt_get_width(txt_intro)+1,0,0);
-			// Version
 			C->ui->zoom = z;
-			glScalef(scv,scv,scv);
-			txt_version->draw(txt_version);
-		}
-		*/
 
-		C->ui->zoom = z;
+			// 3D
+			op_camera_frustum_init(camera);
+			camera->type = camera_frustum;
+			camera->target[0]=500;
+			camera->target[1]=500;
+			camera->target[2]=500;
 
-		// 3D
-		op_camera_frustum_init(camera);
-		camera->type = camera_frustum;
-		camera->target[0]=500;
-		camera->target[1]=500;
-		camera->target[2]=500;
-
-		camera->eye[0]=0;
-		camera->eye[1]=0;
-		camera->eye[2]=0;
+			camera->eye[0]=0;
+			camera->eye[1]=0;
+			camera->eye[2]=0;
 
 
-		op_camera_switch_3d(C,camera);
-		glPopMatrix();
+			op_camera_switch_3d(C,camera);
+			glPopMatrix();
 
-		int frame = C->app->frame;
-		float rot = (float)frame*.05*intro_intensity;
+			int frame = C->app->frame;
+			float rot = (float)frame*.05*intro_intensity;
 
-		glRotatef(rot,0,0,1);
-		glRotatef(rot,0,1,0);
-		glRotatef(rot,1,0,0);
+			glRotatef(rot,0,0,1);
+			glRotatef(rot,0,1,0);
+			glRotatef(rot,1,0,0);
 
-		if(C->app->frame > time_limit)
-		{
-
-			float *s=stars;
-			float *col=stars_color;
-			float col_var[3];
-			float iii = (float) C->app->frame / 100;
-			int size;
-			for(i=0;i<star_count;i++)
+			if(C->app->frame > time_limit)
 			{
-				if(iii > 1) iii= 1;
-				vcp(col_var,col);
-				vmul(col_var,iii*intro_intensity);
 
-				star_intensity(i);
-				C->event->ui.use_point_global_width = 0;
-				size = stars_size[i];
-				skt_point(s,size,col_var);
-				C->event->ui.use_point_global_width = 1;
-				star_mvt(i);
-				s+=3;
-				col+=3;
+				float *s=stars;
+				float *col=stars_color;
+				float col_var[3];
+				float iii = (float) C->app->frame / 100;
+				int size;
+				for(i=0;i<star_count;i++)
+				{
+					if(iii > 1) iii= 1;
+					vcp(col_var,col);
+					vmul(col_var,iii*intro_intensity);
+
+					star_intensity(i);
+					C->event->ui.use_point_global_width = 0;
+					size = stars_size[i];
+					skt_point(s,size,col_var);
+					C->event->ui.use_point_global_width = 1;
+					star_mvt(i);
+					s+=3;
+					col+=3;
+				}
+
 			}
 
-		}
-
-		camera->type = camera_ortho;
+			camera->type = camera_ortho;
 
 		glPopMatrix();
 

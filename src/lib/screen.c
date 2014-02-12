@@ -157,19 +157,17 @@ void screen_generic(t_screen *screen)
 	op_camera_switch_2d(C,camera);
 
 	glPushMatrix();
-	glLoadIdentity();
-
-	ui_draw_menu();
-
-	glPushMatrix();
-	float scale=4;
-	float p[3]={(C->app->window->width)/4,(C->app->window->height)/2,0};
-	float color[]={0,0,0,0};
-	glTranslatef(p[0],p[1],p[2]);
-	glScalef(scale,scale,scale);
-	txt_draw_direct_2d(screen->id.name, p, color, scale);
+		glLoadIdentity();
+		ui_draw_menu();
 	glPopMatrix();
 
+	glPushMatrix();
+		float scale=4;
+		float p[3]={(C->app->window->width)/4,(C->app->window->height)/2,0};
+		float color[]={0,0,0,0};
+		glTranslatef(p[0],p[1],p[2]);
+		glScalef(scale,scale,scale);
+		txt_draw_direct_2d(screen->id.name, p, color, scale);
 	glPopMatrix();
 
 	op_camera_switch_3d(C, camera);
@@ -185,17 +183,17 @@ void screen_main(t_screen *screen)
 	op_camera_switch_2d(C,camera);
 
 	glPushMatrix();
-	glLoadIdentity();
+		glLoadIdentity();
 
-	ui_draw_mouse();
-	op_camera_switch_2d(C,camera);
-	ui_draw_term();
-	ui_draw_grid();
+		ui_draw_mouse();
+		op_camera_switch_2d(C,camera);
+		ui_draw_term();
+		ui_draw_grid();
 
-	ui_draw_menu();
-	ui_draw_bar();
-
+		ui_draw_menu();
+		ui_draw_bar();
 	glPopMatrix();
+
 	op_camera_switch_3d(C, camera);
 }
 
@@ -209,21 +207,17 @@ void screen_sets(t_screen *screen)
 	op_camera_switch_2d(C,camera);
 
 	glPushMatrix();
-	glLoadIdentity();
+		glLoadIdentity();
 
-	glTranslatef(C->ui->pan_x,C->ui->pan_y,0);
-	float zoom = C->ui->zoom;
-	glScalef(zoom,zoom,zoom);
+		glTranslatef(C->ui->pan_x,C->ui->pan_y,0);
+		float zoom = C->ui->zoom;
+		glScalef(zoom,zoom,zoom);
 
-	ui_draw_mouse();
-	op_camera_switch_2d(C,camera);
-	ui_draw_grid();
+		ui_draw_mouse();
+		op_camera_switch_2d(C,camera);
+		ui_draw_grid();
 
-	glPushMatrix();
-	glLoadIdentity();
-	glPopMatrix();
-
-	ui_draw_sets();
+		ui_draw_sets();
 
 	glPopMatrix();
 	op_camera_switch_3d(C, camera);
@@ -239,34 +233,34 @@ void screen_bricks(t_screen *screen)
 	op_camera_switch_2d(C,camera);
 
 	glPushMatrix();
-	glLoadIdentity();
-
-	glTranslatef(C->ui->pan_x,C->ui->pan_y,0);
-	float zoom = C->ui->zoom;
-	glScalef(zoom,zoom,zoom);
-
-
-	glPushMatrix();
-	glLoadIdentity();
+		glLoadIdentity();
+		glTranslatef(C->ui->pan_x,C->ui->pan_y,0);
+		float zoom = C->ui->zoom;
+		glScalef(zoom,zoom,zoom);
 
 
-	C->event->ui.use_scale = 0;
+		glPushMatrix();
+			glLoadIdentity();
 
-	t_link *link;
-	t_block *block;
 
-	for(link = screen->blocks->first; link; link = link->next)
-	{
-		block = link->data;
-		block->cls->draw(block);
-		glTranslatef(0,block->height,0);
-	}
+			C->event->ui.use_scale = 0;
 
-	C->event->ui.use_scale = 1;
+			t_link *link;
+			t_block *block;
+
+			for(link = screen->blocks->first; link; link = link->next)
+			{
+				block = link->data;
+				block->cls->draw(block);
+				glTranslatef(0,block->height,0);
+			}
+
+			C->event->ui.use_scale = 1;
+
+		glPopMatrix();
 
 	glPopMatrix();
 
-	glPopMatrix();
 	op_camera_switch_3d(C, camera);
 }
 

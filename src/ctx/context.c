@@ -132,10 +132,10 @@ void ctx_engine( t_context *C)
 void ctx_update(t_context *C)
 {
 	ctx_events( C);
+	ctx_render( C);
 	ctx_ui( C);
 	ctx_mode( C);
 	ctx_compute( C);
-	ctx_render( C);
 	ctx_engine( C);
 	scene_cleanup(C->scene);
 

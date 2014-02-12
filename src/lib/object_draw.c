@@ -31,47 +31,47 @@ void cls_object_draw_point(t_object *object)
 	t_draw *draw=C->draw;
 	glPushMatrix();
 
-	glTranslatef(object->loc[0],object->loc[1],object->loc[2]);
-	glScalef(object->size[0],object->size[1],object->size[2]);
+		glTranslatef(object->loc[0],object->loc[1],object->loc[2]);
+		glScalef(object->size[0],object->size[1],object->size[2]);
 
-	int size;
-	float p[3]={0,0,0};
-	//float black[3]={0,0,0};
-	float white[3]={1,1,1};
-	float red[3]={1,0,0};
-	float green[3]={.2,1,.1};
-	float cc[3];
-	float *color;
+		int size;
+		float p[3]={0,0,0};
+		//float black[3]={0,0,0};
+		float white[3]={1,1,1};
+		float red[3]={1,0,0};
+		float green[3]={.2,1,.1};
+		float cc[3];
+		float *color;
 
 
-	if(draw->mode==mode_selection)
-	{
-		size=10;
-		cconv(cc,object->idcol);
-		color=cc;
-		//vprint3i(object->idcol,'\n');
-	}
-	else
-	{
-		if(object->is_selected)
+		if(draw->mode==mode_selection)
 		{
-			color=green;
-			size=20;
-			object->loc[0]+=C->app->mouse->delta_x*.1;
-		}
-		else if(object->hover)
-		{
-			color=red;
 			size=10;
+			cconv(cc,object->idcol);
+			color=cc;
+			//vprint3i(object->idcol,'\n');
 		}
 		else
 		{
-			color=white;
-			size=1;
+			if(object->is_selected)
+			{
+				color=green;
+				size=20;
+				object->loc[0]+=C->app->mouse->delta_x*.1;
+			}
+			else if(object->hover)
+			{
+				color=red;
+				size=10;
+			}
+			else
+			{
+				color=white;
+				size=1;
+			}
 		}
-	}
 
-	skt_point(p,size,color);
+		skt_point(p,size,color);
 
 	glPopMatrix();
 }
@@ -114,45 +114,45 @@ void cls_object_draw_mesh(t_object *object)
 	
 		glPushMatrix();
 
-		glTranslatef(object->loc[0],object->loc[1],object->loc[2]);
-		glScalef(object->size[0],object->size[1],object->size[2]);
-		glRotatef(z,0,0,1);
-		glRotatef(y,0,1,0);
-		glRotatef(x,1,0,0);
+			glTranslatef(object->loc[0],object->loc[1],object->loc[2]);
+			glScalef(object->size[0],object->size[1],object->size[2]);
+			glRotatef(z,0,0,1);
+			glRotatef(y,0,1,0);
+			glRotatef(x,1,0,0);
 
-		if(mesh)
-		{
-			// selected
-			if(object->is_selected)
+			if(mesh)
 			{
-				mesh->state.is_selected=1;
-				if(object->is_edit_mode)
+				// selected
+				if(object->is_selected)
 				{
-					mesh->state.is_edit_mode = 1;
-					find_vertex(C,mesh);
+					mesh->state.is_selected=1;
+					if(object->is_edit_mode)
+					{
+						mesh->state.is_edit_mode = 1;
+						find_vertex(C,mesh);
+					}
+					else
+					{
+						mesh->state.is_edit_mode = 0;
+					}
 				}
 				else
 				{
+					mesh->state.is_selected = 0;
 					mesh->state.is_edit_mode = 0;
 				}
-			}
-			else
-			{
-				mesh->state.is_selected = 0;
-				mesh->state.is_edit_mode = 0;
-			}
 
-			// draw
-			if(draw->mode_direct)
-			{
-				draw_mesh_direct(draw,scene,mesh);
-			}
-			else
-			{
-				draw_mesh(draw,scene,mesh);
-			}
+				// draw
+				if(draw->mode_direct)
+				{
+					draw_mesh_direct(draw,scene,mesh);
+				}
+				else
+				{
+					draw_mesh(draw,scene,mesh);
+				}
 
-		}
+			}
 
 		glPopMatrix();
 	}

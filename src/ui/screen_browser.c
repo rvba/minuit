@@ -237,10 +237,10 @@ void screen_browser(t_screen *screen)
 	op_camera_switch_2d(C,camera);
 
 	glPushMatrix();
-	glLoadIdentity();
+		glLoadIdentity();
 
-	browser_update();
-	browser_draw();
+		browser_update();
+		browser_draw();
 
 	glPopMatrix();
 	op_camera_switch_3d(C, camera);
