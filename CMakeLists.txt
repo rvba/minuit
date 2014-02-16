@@ -5,15 +5,20 @@ if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
 		message(FATAL_ERROR "Don't build in SOURCE directory !")
 endif()
 
+###############		 OPTIONS #############################
 option(OPT_OSC "osc" ON)
 
-set(PATH_OSC_INC "/usr/include/lo")
-set(PATH_LIB "/usr/lib")
+
+###############		 LIBS	#############################
 
 SET(CMAKE_FIND_LIBRARY_PREFIXES "lib")
 SET(CMAKE_FIND_LIBRARY_SUFFIXES ".so" ".a")
 
+###############		 OSC	#############################
 if(OPT_OSC)
+	set(PATH_OSC_INC "/usr/include/lo")
+	set(PATH_LIB "/usr/lib")
+
 	include_directories(${PATH_OSC_INC})
 	find_library(LIB_OSC lo PATHS ${PATH_LIB})
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_OSC")
