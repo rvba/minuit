@@ -138,6 +138,9 @@ typedef struct App
 
 	int client;
 	int slave;
+	int osc_server;
+	int osc_client;
+	int osc_port;
 	
 	int frame;
 	float timer;

@@ -149,6 +149,14 @@ void app_launch(t_app *app)
 		{
 			 slave();
 		}
+		else if(app->osc_server)
+		{
+			osc_server( app->osc_port);
+		}
+		else if(app->osc_client)
+		{
+			osc_client( app->osc_port);
+		}
 	}
 	else if(app->with_glut==0)
 	{
@@ -159,12 +167,25 @@ void app_launch(t_app *app)
 		glutMainLoop();
 	}
 }
+void app_scan_port( t_app *app, const char *data)
+{
+	app->osc_port = atoi( data);
+	//printf("OSC port: %d\n", app->osc_port);
+}
 
 void app_args_scan(t_app *app)
 {
 	int i;
+	int scan_port = 0;
+
 	for(i=0;i<app->argc;i++)
 	{
+		if( scan_port)
+		{
+			app_scan_port( app, app->argv[i]);
+			scan_port = 0;
+		}
+
 		if(is(app->argv[i],"off"))
 		{
 			app->off_screen=1;
@@ -194,6 +215,23 @@ void app_args_scan(t_app *app)
 			app->load_file = 1;
 			app->file_path=s_allocate(path);
 		}
+
+		if(is(app->argv[i],"osc_server"))
+		{
+			app->off_screen = 1;
+			app->osc_server = 1;
+		}
+
+		if(is(app->argv[i],"osc_client"))
+		{
+			app->off_screen = 1;
+			app->osc_client = 1;
+		}
+
+		if(is(app->argv[i],"-port"))
+		{
+			scan_port = 1;
+		}
 	}
 }
 
@@ -220,7 +258,7 @@ void app_init(t_app *app, const char *name)
 	// GL
 	if(app->off_screen)
 	{
-		printf("(OFF)\n");
+		//printf("(OFF)\n");
 	}
 	else
 	{
@@ -271,8 +309,10 @@ t_app *app_new(int argc,char **argv)
 	app->load_file = 0;
 	app->loaded_file = 0;
 
-	app->client=0;
-	app->slave=0;
+	app->client = 0;
+	app->slave = 0;
+	app->osc_server = 0;
+	app->osc_port = 0;
 
 	// ARGS
 	app_args_scan(app);

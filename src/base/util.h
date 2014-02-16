@@ -27,6 +27,10 @@
 #include "clock.h"
 #include "shm.h"
 
+#ifdef HAVE_OSC
+#include "osc.h"
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif

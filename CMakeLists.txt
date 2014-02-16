@@ -5,7 +5,23 @@ if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
 		message(FATAL_ERROR "Don't build in SOURCE directory !")
 endif()
 
+option(OPT_OSC "osc" ON)
+
+set(PATH_OSC_INC "/usr/include/lo")
+set(PATH_LIB "/usr/lib")
+
+SET(CMAKE_FIND_LIBRARY_PREFIXES "lib")
+SET(CMAKE_FIND_LIBRARY_SUFFIXES ".so" ".a")
+
+if(OPT_OSC)
+	include_directories(${PATH_OSC_INC})
+	find_library(LIB_OSC lo PATHS ${PATH_LIB})
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_OSC")
+endif()
+
 project(Minuit)
+
+message("OSC " ${OPT_OSC})
 
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
@@ -14,6 +30,7 @@ find_package(PNG REQUIRED)
 find_package(Threads)
 
 set(GNU_LIB /usr/lib/x86_64-linux-gnu)
+
 
 include_directories(
 	${CMAKE_SOURCE_DIR}/src/ops
@@ -48,6 +65,11 @@ add_executable(
 target_link_libraries(minuit minuit-ctx minuit-ops minuit-ui minuit-draw minuit-scene minuit-lib minuit-app minuit-base)
 #target_link_libraries(minuit ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${PNG_LIBRARY} ${JPEG_LIBRARY} pthread m)
 target_link_libraries(minuit ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${PNG_LIBRARY} ${JPG} pthread m)
+if(OPT_OSC)
+	target_link_libraries(minuit ${LIB_OSC})
+endif()
+
+
 
 
 
