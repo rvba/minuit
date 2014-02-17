@@ -5,9 +5,13 @@ if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
 		message(FATAL_ERROR "Don't build in SOURCE directory !")
 endif()
 
-###############		 OPTIONS #############################
-option(OPT_OSC "osc" ON)
+###############		 PROJECT #############################
 
+project(Minuit)
+
+###############		 OPTIONS #############################
+
+option(OPT_OSC "osc" ON)
 
 ###############		 LIBS	#############################
 
@@ -24,7 +28,6 @@ if(OPT_OSC)
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_OSC")
 endif()
 
-project(Minuit)
 
 message("OSC " ${OPT_OSC})
 
