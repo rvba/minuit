@@ -269,11 +269,13 @@ void file_read_lines(t_file *file)
 
 void file_show(t_file *file)
 {
-	printf("SHOW FILE\n");
+	printf("FILE\n");
 	if(file->location) printf("location:%s\n",file->location);
 	if(file->path) printf("path:%s",file->path);
-	if(file->is_relative) printf("(path is relative)\n");
-	else printf("(file is absolute)\n");
+	if( file->path_type == PATH_RELATIVE) printf(", path is relative\n");
+	else if( file->path_type == PATH_ABSOLUTE) printf(", path is absolute\n");
+	else if( file->path_type == PATH_LOCAL) printf(", path is local\n");
+	else printf(", path of unknown type\n");
 	if(file->id.name) printf("name:%s\n", file->id.name);
 	if(file->ext) printf("ext:%s\n",file->ext);
 	printf("tot_directories:%d\n",file->tot_directories);
@@ -292,6 +294,13 @@ void file_show(t_file *file)
 		{
 			printf("%c",file->data[i]);
 		}
+	}
+
+	printf("DIRS\n");
+	int i;
+	for( i= 0; i < FILE_MAX_DIR; i++)
+	{
+		printf("%d: %s\n", i, file->dirs[i]);
 	}
 }
 
@@ -389,6 +398,93 @@ void file_build_location(t_file *file)
 // search for path / name / extention
 // WARNING: case path end with slash not implemented
 // WARNING: case of dotted file (hidden) not implemented
+
+int file_path_type( t_file *file)
+{
+	if( file->path[0] == '.') file->path_type = PATH_RELATIVE;
+	else if( file->path[0] == '/') file->path_type = PATH_ABSOLUTE;
+	else file->path_type = PATH_LOCAL;
+	return 1;
+}
+
+int file_slash_count( t_file *file)
+{
+	char *letter;
+	int slash_count = 0;
+	for( letter = file->path; *letter!='\0'; letter++)
+	{
+		if( *letter == '/') slash_count++;
+	}
+
+	return slash_count;
+}
+
+int file_dir_build( t_file *file)
+{
+	int slash_count = file_slash_count( file);
+	int i = 0;
+	int j = 0;
+	if( slash_count < FILE_MAX_DIR)
+	{
+		char *letter = file->path;
+		if( file->path_type == PATH_RELATIVE) letter += 2;
+		else if( file->path_type == PATH_ABSOLUTE) letter++;
+
+		for( ; *letter != '\0'; letter++)
+		{
+			if( *letter == '/')
+			{
+				file->dirs[i][j + 1] = '\0';
+				i++;
+				j = 0;
+			}
+			else
+			{
+				if( j >= _NAME_LONG_) 
+				{
+					printf("[FILE] Error, name too long\n");
+					return 0;
+				}
+				file->dirs[i][j] = *letter;
+				j++;
+			}
+		}
+
+		return 1;
+	}
+	else
+	{
+		printf("[FILE] Error, too much directories: %d\n", slash_count);
+		return 0;
+	}
+}
+
+int _file_test( const char *path)
+{
+	printf("TESTING %s\n", path);
+	t_file *file = file_new( "test");
+	set_path( file->path, path);
+
+	int s = 1;
+	if( s) s = file_path_type( file);
+	if( s) s = file_dir_build( file);
+	//if( s) s = file_name_build( file);
+
+	file_show( file);
+	file_free( file);
+
+	return 1;
+}
+
+int file_test( void)
+{
+	_file_test( "test");
+	_file_test( "/home/user");
+	_file_test( "/home/user/Desktop/");
+	_file_test( "./data");
+	_file_test( "/usr/share/image.jpg");
+	return 1;
+}
 
 int file_path_split(t_file *file)
 {
@@ -510,7 +606,7 @@ int file_init(t_file *file)
 	}
 
 	// split by /
-	is_split=file_path_split(file);
+	is_split = file_path_split(file);
 
 	// get filename
 	if(is_split)
@@ -612,6 +708,7 @@ t_file *file_new(const char *path)
 	file->is_relative = 0;
 	file->is_directory = 0;
 	file->has_extention = 0;
+	file->path_type = 0;
 
 	file->directories=NULL;
 	file->data=NULL;
@@ -621,6 +718,8 @@ t_file *file_new(const char *path)
 	file->tot_directories=0;
 	file->data_size=0;
 	file->tot_line=0;
+
+	bzero( file->dirs, FILE_MAX_DIR * _NAME_LONG_);
 
 	return file;
 }

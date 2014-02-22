@@ -13,6 +13,12 @@
 #include "util.h"
 #include "common.h"
 
+#define PATH_RELATIVE 1
+#define PATH_ABSOLUTE 2
+#define PATH_LOCAL 3
+
+#define FILE_MAX_DIR 10
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -54,9 +60,11 @@ struct File
 	int is_relative;
 	int is_directory;
 	int has_extention;
+	int path_type;
 
 	int tot_directories;
 	char **directories;
+	char dirs[FILE_MAX_DIR][_NAME_LONG_];
 
 	long data_size;
 	int tot_line;
@@ -69,6 +77,7 @@ struct File
 
 // FILE
 
+int file_test( void);
 int file_exists(t_file *file);
 void file_set_location(t_file *file, const char *path);
 void file_build_location(t_file *file);

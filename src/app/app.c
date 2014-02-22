@@ -281,6 +281,8 @@ void app_init(t_app *app, const char *name)
 	// Home
 	app_init_home( app);
 
+	file_test();
+
 	// GL
 	if(app->off_screen)
 	{
