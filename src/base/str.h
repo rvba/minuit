@@ -14,6 +14,10 @@
 extern "C" {
 #endif
 
+void 	s_cp( char *dst, const char *src, int size);
+void 	s_cat( char *dst, const char *src, int size);
+void 	s_show( const char *str);
+
 void 	s_raw_cp( char *src, char *dst);
 char *	s_allocate( const char *data);
 void 	s_truncate_after( char letter, char *target, char *src);

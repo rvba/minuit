@@ -24,6 +24,7 @@ int 	sys_file_exists( const char *path);
 void 	sys_get_cd( const char *cmd);
 int 	sys_get_hostname( char* name, int size);
 void 	sys_git_get( void);
+int sys_get( const char *cmd, char *data, int size);
 
 #ifdef __cplusplus
 }

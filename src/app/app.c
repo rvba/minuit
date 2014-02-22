@@ -245,6 +245,29 @@ int app_free(t_app *app)
 	return 1;
 }
 
+void app_init_home( t_app *app)
+{
+	int size = 16;
+	char name[size];
+
+	int size_home = _PATH_;
+	char path_home[size_home]; 
+
+	sys_get( "whoami", name, size);
+	
+	s_cp( path_home, "/home/", size_home);
+	s_cat( path_home, name, size);
+	s_cat( path_home, "/.minuit/", size_home);
+
+	if( !sys_file_exists( path_home))
+	{
+		printf("Creating minuit home directory: %s\n", path_home);
+		mkdir( path_home, 0777);
+	}
+
+	s_cp( app->app_home, path_home, _PATH_);
+}
+
 // INIT
 
 void app_init(t_app *app, const char *name)
@@ -254,6 +277,9 @@ void app_init(t_app *app, const char *name)
 
 	// Set Version
 	set_name(app->version, APP_VERSION);
+
+	// Home
+	app_init_home( app);
 
 	// GL
 	if(app->off_screen)

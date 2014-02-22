@@ -57,6 +57,29 @@ int sys_get_hostname( char* name, int size)
 	}
 }
 
+int sys_get( const char *cmd, char *data, int size)
+{
+	FILE *fp;
+	char input[ size];
+
+	fp = popen( cmd, "r");
+
+	if(fp)
+	{
+		while ( fgets ( input, sizeof( input) - 1, fp) != NULL)
+		{
+		}
+
+		s_remove_newline( data, input, size);
+		pclose(fp);
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
 void get_log(char *dst,char *msg)
 {
 	int i=0;

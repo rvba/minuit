@@ -9,6 +9,21 @@
 
 #include "util.h"
 
+void s_cp( char *dst, const char *src, int size)
+{
+	strncpy( dst, src, size);
+}
+
+void s_cat( char *dst, const char *src, int size)
+{
+	strncat( dst, src, size);
+}
+
+void s_show( const char *str)
+{
+	printf("%s\n", str);
+}
+
 void s_raw_cp(char *src,char *dst) 
 {
 	while(*src!='\0')
