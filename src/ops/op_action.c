@@ -161,8 +161,12 @@ int op_post_quit(t_node *node)
 	}
 
 	// minuit.save
+	char path[_PATH_];
+	s_cp( path, C->app->path_home, _PATH_);
+	s_cat( path, "/minuit.save", _PATH_);
 
-	t_file *file = file_new("minuit.save");
+	t_file *file = file_new( path);
+
 	file_init(file);
 	file_open(file);
 	fprintf(file->file,"%s\n",C->app->file->location);
