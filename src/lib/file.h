@@ -67,6 +67,7 @@ struct File
 	char **directories;
 	char dirs[FILE_MAX_DIR][_NAME_LONG_];
 	char file_name[_NAME_LONG_];
+	char dir_path[_PATH_];
 	int exists;
 
 	long data_size;
@@ -97,14 +98,23 @@ t_file *file_rebind(struct Scene *scene, void *ptr);
 t_file *file_new(const char *path);
 void file_free(t_file *file);
 void file_show(t_file *file);
-void file_read(t_file *file);
-void file_read_lines(t_file *file);
-void file_write(t_file *file);
+
+char *file_line_get( t_file *file, int p);
+
+int file_read(t_file *file);
+int file_read_lines(t_file *file);
+
+int file_write( t_file *file, const char *data, int size);
+//void file_write(t_file *file);
+
 void file_data_add(t_file *file,char *data);
-void file_open(t_file *file);
+int file_open(t_file *file);
 void file_close(t_file *file);
 int file_init(t_file *file);
+int _file_init( t_file *file);
 void file_free(t_file *file);
+t_file *file_access( const char *path);
+int file_create( const char *path);
 
 #ifdef __cplusplus
 }

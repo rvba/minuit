@@ -105,6 +105,18 @@ void s_convert_newline_endline(char *target,char *src)
 	*target='\0';
 }
 
+void s_convert_endline_newline( char *target, char *src)
+{
+	while( *src!='\0')
+	{
+		*target = *src;
+		target++;
+		src++;
+	}
+
+	*target ='\n';
+}
+
 void s_store(char *target,char source,int pos)
 {
 	target[pos] = source;

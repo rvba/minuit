@@ -25,6 +25,24 @@
 // used for GL calls without args
 t_app *APP;
 
+char app_filename_save[_PATH_];
+
+char *app_get_file_path( t_app *app, int type)
+{
+	switch ( type)
+	{
+		case( APP_FILENAME_SAVE):
+			s_cp( app_filename_save, app->path_home, _PATH_);
+			s_cat( app_filename_save, "minuit.save", _PATH_);
+			return app_filename_save;
+			break;
+		default:
+			printf("[APP] Error, unknown filename\n");
+			return NULL;
+			break;
+	}
+}
+
 t_app *app_get(void)
 {
 	return APP;
@@ -213,7 +231,7 @@ void app_args_scan(t_app *app)
 			char *path = app->argv[2];
 			printf("load %s\n",path);
 			app->load_file = 1;
-			app->file_path=s_allocate(path);
+			set_path( app->path_file, path);
 		}
 
 		if(is(app->argv[i],"osc_server"))
@@ -295,8 +313,6 @@ void app_init(t_app *app, const char *name)
 	app_init_home( app);
 	app_init_current( app);
 
-	//file_test();
-
 	// GL
 	if(app->off_screen)
 	{
@@ -356,6 +372,11 @@ t_app *app_new(int argc,char **argv)
 	app->osc_server = 0;
 	app->osc_port = 0;
 
+	bzero( app->path_home, _PATH_);
+	bzero( app->path_current, _PATH_);
+	bzero( app->filename, _NAME_LONG_);
+	bzero( app->path_file, _PATH_);
+
 	// ARGS
 	app_args_scan(app);
 
@@ -380,8 +401,6 @@ t_app *app_new(int argc,char **argv)
 
 	app->quit = 0;
 
-	bzero( app->path_home, _PATH_);
-	bzero( app->path_current, _PATH_);
 
 	return app;
 }

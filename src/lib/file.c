@@ -194,10 +194,14 @@ t_line *line_new(void)
 // FILE
 
 /** store lines without \n **/
-void file_read_lines(t_file *file)
+int file_read_lines(t_file *file)
 {
-	if(file->data_size>0)
+	//if(file->data_size>0)
+	if( file->data)
 	{
+
+		file->lines = lst_new("lst");
+
 		// count lines
 		int i,j,k;
 		int totline=0;
@@ -243,7 +247,8 @@ void file_read_lines(t_file *file)
 		{
 			if(file->data[i]=='\n')
 			{
-				line->data[k]='\n';
+				//line->data[k]='\n';
+				line->data[k]='\0';
 				lst_add(file->lines,line,"line");
 
 				j++;
@@ -263,6 +268,55 @@ void file_read_lines(t_file *file)
 				k++;
 			}
 
+		}
+
+		return 1;
+	}
+	else
+	{
+		printf("[FILE] Error, no data to read\n");
+		return 0;
+	}
+}
+
+char *file_line_get( t_file *file, int p)
+{
+	if( file->data)
+	{
+		if( file->lines)
+		{
+			t_line *line = ( t_line *) lst_get_by_range( file->lines, p);
+			if( line) 
+			{
+				return line->data;
+			}
+			else
+			{
+				printf("[FILE] Error, Can't get %d line\n", p);
+				return NULL;
+			}
+		}
+		else
+		{
+			if( file_read_lines( file))
+			{
+				return file_line_get( file, p);
+			}
+			else
+			{
+				return NULL;
+			}
+		}
+	}
+	else
+	{
+		if( file_read( file))
+		{
+			return file_line_get( file, p);
+		}
+		else
+		{
+			return NULL;
 		}
 	}
 }
@@ -320,11 +374,25 @@ void file_data_add(t_file *file,char *data)
 	strcpy(file->data,data);
 }
 
-void file_open(t_file *file)
+int file_open( t_file *file)
 {
-	if(!file->file)
+	if( file->file)
 	{
-		file->file=fopen(file->location,"w");
+		printf("[FILE] Error, file yet open\n");
+		return 1;
+	}
+	else
+	{
+		if( sys_file_exists( file->path))
+		{
+			file->file = fopen( file->path, "w");
+			return 1;
+		}
+		else
+		{
+			printf("[FILE] Error, file doesn't exists: %s\n", file->path);
+			return 0;
+		}
 	}
 }
 
@@ -340,16 +408,40 @@ void file_close(t_file *file)
 	}
 }
 
-void file_read(t_file *file)
+int file_read( t_file *file)
 {
-	FILE *f = fopen(file->location,"r");
-	fseek (f,0,SEEK_END);
-	file->data_size = ftell(f);
-	rewind(f);
-	file->data = (char *)malloc(sizeof(char)*file->data_size);
-	size_t r = fread (file->data,1,file->data_size,f);
-	if(r != file->data_size) printf("read error\n");
+	FILE *f = fopen( file->path, "r");
 
+	if( f)
+	{
+		fseek ( f, 0, SEEK_END);
+		file->data_size = ftell( f);
+		rewind( f);
+		file->data = (char *) malloc( sizeof( char) * file->data_size);
+		size_t r = fread ( file->data, 1, file->data_size, f);
+		if( r != file->data_size) printf("read error\n");
+
+		return 1;
+	}
+	else
+	{
+		printf("[FILE] Error, Can't open %s\n", file->path);
+		return 0;
+	}
+}
+
+int file_write( t_file *file, const char *data, int size)
+{
+	if( file_open( file))
+	{
+		fwrite( data, sizeof(char) * size, 1, file->file);
+		file_close( file);
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
 }
 
 
@@ -404,12 +496,11 @@ void file_build_location(t_file *file)
 // WARNING: case path end with slash not implemented
 // WARNING: case of dotted file (hidden) not implemented
 
-int file_path_type( t_file *file)
+void file_path_type( t_file *file)
 {
 	if( file->path[0] == '.') file->path_type = PATH_RELATIVE;
 	else if( file->path[0] == '/') file->path_type = PATH_ABSOLUTE;
 	else file->path_type = PATH_LOCAL;
-	return 1;
 }
 
 int file_slash_count( t_file *file)
@@ -462,19 +553,6 @@ int file_dir_build( t_file *file)
 		printf("[FILE] Error, too much directories: %d\n", slash_count);
 		return 0;
 	}
-}
-
-void file_dir_count( t_file *file)
-{
-	int i;
-	int count = 0; 
-	for( i = 0; i < FILE_MAX_DIR; i++)
-	{
-		if( strlen( file->dirs[i]) == 0) break;
-		else count++;
-	}
-
-	file->dir_count = count - 1;
 }
 
 void file_extention_get( t_file *file)
@@ -534,6 +612,19 @@ void file_extention_get( t_file *file)
 	}
 }
 
+void file_dir_count( t_file *file)
+{
+	int i;
+	int count = 0; 
+	for( i = 0; i < FILE_MAX_DIR; i++)
+	{
+		if( strlen( file->dirs[i]) == 0) break;
+		else count++;
+	}
+
+	file->dir_count = count - 1;
+}
+
 int file_name_build( t_file *file)
 {
 	file_dir_count( file);
@@ -549,7 +640,7 @@ int _file_test( const char *path)
 	set_path( file->path, path);
 
 	int s = 1;
-	if( s) s = file_path_type( file);
+	file_path_type( file);
 	if( s) s = file_dir_build( file);
 	if( s) s = file_name_build( file);
 
@@ -557,6 +648,16 @@ int _file_test( const char *path)
 	file_free( file);
 
 	return 1;
+}
+
+int _file_init( t_file *file)
+{
+	int s = 1;
+	file_path_type( file);
+	if( s) s = file_dir_build( file);
+	if( s) s = file_name_build( file);
+
+	return s;
 }
 
 int file_test( void)
@@ -773,6 +874,51 @@ void file_free(t_file *file)
 	}
 }
 
+// ACCESS
+
+t_file *file_access( const char *path)
+{
+	if( sys_file_exists( path))
+	{
+		t_file *file = file_new( path);
+		return file;
+
+	}
+	else
+	{
+		printf("[FILE] Error, can't access %s\n", path);
+		return NULL;
+	}
+}
+
+// CREATE
+
+int file_create( const char *path)
+{
+	t_file *file = file_new( path);
+	if ( _file_init( file))
+	{
+		file->file = fopen( file->path, "w");
+		if( file->file)
+		{
+			file_close( file);
+			file_free( file);
+			return 1;
+		}
+		else
+		{
+			printf("[FILE] Error can't create %s\n,", path);
+			file_free( file);
+			return 0;
+		}
+	}
+	else
+	{
+		file_free( file);
+		return 0;
+	}
+}
+
 // NEW
 
 t_file *file_new(const char *path)
@@ -786,6 +932,7 @@ t_file *file_new(const char *path)
 	memset( file->path,'\0',_PATH_);
 
 	set_path( file->location,path);
+	set_path( file->path, path);
 
 	file->is_relative = 0;
 	file->is_directory = 0;
@@ -794,7 +941,8 @@ t_file *file_new(const char *path)
 
 	file->directories = NULL;
 	file->data = NULL;
-	file->lines = lst_new("lst");
+	//file->lines = lst_new("lst");
+	file->lines = NULL;
 	file->file = NULL;
 
 	file->tot_directories = 0;
@@ -804,6 +952,7 @@ t_file *file_new(const char *path)
 	file->exists = 0;
 
 	bzero( file->dirs, FILE_MAX_DIR * _NAME_LONG_);
+	bzero( file->dir_path, _PATH_);
 
 	return file;
 }

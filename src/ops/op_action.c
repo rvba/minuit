@@ -160,33 +160,41 @@ int op_post_quit(t_node *node)
 	{
 	}
 
-	// minuit.save
-	char path[_PATH_];
-	s_cp( path, C->app->path_home, _PATH_);
-	s_cat( path, "/minuit.save", _PATH_);
+	if( strlen( C->app->filename))
+	{
+		char *path = app_get_file_path( C->app, APP_FILENAME_SAVE);
+		t_file *file = NULL;
 
-	t_file *file = file_new( path);
+		if( !sys_file_exists( path))
+		{
+			if( file_create( path)) file = file_access( path);
+		}
+		else
+		{
+			file = file_access( path);
+		}
 
-	file_init(file);
-	file_open(file);
-	fprintf(file->file,"%s\n",C->app->file->location);
-	file_close(file);
+		if( file)
+		{
+			if( strlen( C->app->path_file))
+			{
+				char filename[_PATH_];
+				bzero( filename, _PATH_);
+				s_convert_endline_newline( filename, C->app->path_file);
+				file_write( file, filename, strlen( filename));
+			}
+			else
+			{
+				printf("[OP] Quit error, invalid file path\n");
+			}
+		}
+	}
 
 	// exit badly
 	op_exit();
 
 	return 1;
 }
-
-/*
-void screen_capture(const char name[])
-{
-	t_context *C = ctx_get();
-
-	img_save_jpg(C->app->window->width,C->app->window->height,name);
-}
-*/
-
 
 
 

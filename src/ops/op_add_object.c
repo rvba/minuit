@@ -25,6 +25,7 @@
 #include "block.h"
 #include "brick.h"
 #include "geometry.h"
+#include "app.h"
 
 // GEO
 
@@ -309,21 +310,19 @@ void *op_add_default(t_brick *brick)
 void add_mn(void)
 {
 	t_context *C=ctx_get();
-	char *filename=C->event->standby_string;
-	if(filename)
+
+	t_file *file = file_new( C->app->path_file);
+	_file_init(file);
+
+	if(is(file->ext,"mn"))
 	{
-		t_file *file = file_new(filename);
-
-		file_init(file);
-
-		if(is(file->ext,"mn"))
-		{
-			load_file(C,file->location);
-		}
-		else
-		{
-			printf("Not a mn file\n");
-		}
+		load_file( C, file->path);
+		set_name_long( C->app->filename, file->file_name);
+		s_cat( C->app->filename, ".mn", _NAME_LONG_);
+	}
+	else
+	{
+		printf("Not a mn file\n");
 	}
 }
 

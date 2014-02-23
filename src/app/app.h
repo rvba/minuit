@@ -25,6 +25,8 @@ extern "C" {
 #define APP_DEBUG 0
 #define SET_FULLSCREEN  1
 
+#define APP_FILENAME_SAVE 1
+
 struct Lst;
 struct Clock;
 struct File;
@@ -126,11 +128,12 @@ typedef struct App
 	int argc;
 	char **argv;
 	char name[_NAME_];
-	
 	char version[_NAME_];
 	char app_name[_NAME_];
 	char path_home[_PATH_];
 	char path_current[_PATH_];
+	char path_file[_PATH_];
+	char filename[_NAME_LONG_];
 	
 	void (*main_func)(void);
 
@@ -159,7 +162,7 @@ typedef struct App
 
 	int load_file;
 	int loaded_file;
-	char *file_path;
+	//char *file_path;
 
 	struct File *file;
 	struct Lst *video_frames;
@@ -209,6 +212,8 @@ void glx_win(t_app *app);
 void glx_main_loop(void);
 
 // APP
+
+char *app_get_file_path( t_app *app, int type);
 
 void app_gl_display(void);
 void app_swap(t_app *app);

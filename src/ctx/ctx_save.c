@@ -20,57 +20,63 @@
 #include "list.h"
 #include "brick.h"
 
-void load_last(t_context *C)
+void load_last( t_context *C)
 {
-	t_link *link;
+	char *path = app_get_file_path( C->app, APP_FILENAME_SAVE);
+	char *filename = NULL;
+	t_file *file = NULL;
 
-	t_file *file = file_new("minuit.save");
-	file_init(file);
-	if(file_exists(file))
+	if( sys_file_exists( path))
 	{
-		file_read(file);
-		file_read_lines(file);
-		if(file->lines->first)
+		file = file_access( path);
+	}
+
+	if( file)
+	{
+		filename = file_line_get( file, 0);
+		if( filename)
 		{
-			link = file->lines->first;
-			t_line *line = ( t_line *) link->data;
-			line_read_words(line);
-			t_link *l = line->words->first;
-			if(l)
-			{
-				t_word *word = ( t_word *) l->data;
-				char *name = word->data;
-				if(is(name,"void"))
-				{
-					load_file(C,"minuit.mn");
-				}
-				else
-				{
-					load_file( C, word->data);
-				}
-			}
+			if( is( filename, "void")) filename = NULL;
 		}
+		else
+		{
+			printf("[LOAD] Can't get filename\n");
+		}
+	}
+
+	if( filename)
+	{
+		load_file( C, filename);
+		set_name_long( C->app->path_file, filename);
+		t_file *f = file_new( filename);
+		_file_init( f);
+		char new_name[_NAME_LONG_];
+		bzero( new_name, _NAME_LONG_);
+		set_name_long( new_name, f->file_name);
+		s_cat( new_name, ".mn", _NAME_LONG_);
+		set_name_long( C->app->filename, new_name);
+		file_free( f);
 	}
 	else
 	{
-		C->event->callback=add_mn;
+		C->event->callback = add_mn;
 		screen_switch_by_name("screen_browser");
 	}
 }
 
 void save_file(t_context *C)
 {
-	t_file *file = C->app->file;
+	char path[_PATH_];
+	char *filename = C->app->filename;
 
-	char *name = file->id.name;
+	if( !strlen( filename)) set_name_long( C->app->filename, "minuit.mn");
 
-	if(is(name,"void"))
-	{
-		set_name(file->id.name, "minuit.mn");
-		file_build_location(file);
-	}
+	s_cp( path, C->app->path_current, _PATH_);
+	s_cat( path, "/" , _PATH_);
+	s_cat( path, filename, _PATH_);
+	s_cp( C->app->path_file, path, _PATH_);
 
-	mem_write(file->location);
+	mem_write( path);
 }
 
 void save_to_file( t_context *C)
@@ -110,32 +116,38 @@ void save_to_file( t_context *C)
 
 void save_file_increment(t_context *C)
 {
-	t_file *file = C->app->file;
+	char name[_NAME_LONG_];
+	bzero( name, _NAME_LONG_);
+	set_name_long( name, C->app->filename);
 
-	file_path_split(file);
+	t_file *file = file_new( name);
+	_file_init( file);
 
-	int i,j;
-	char *name = file->id.name;
+	s_cp( name, file->file_name, _NAME_LONG_);
+
 	int length = strlen(name);
+	int i,j;
 	int last_char = length - 1; // starts from 0 !
 	int max_indice = 10;
 	char indice[max_indice];
 	bzero(indice,max_indice);
 
-	if(!isdigit(name[last_char]))
+
+	if( !isdigit( name[last_char]))
 	{
 		char number[4] = "-01";
 
-		strcat(file->id.name, number);
-		set_name(file->id.name, name);
-		file_build_location(file);
+		s_cat( name, number, _NAME_LONG_);
+		s_cat( name, ".mn", _NAME_LONG_);
+		set_name( C->app->filename, name);
+
 	}
 	else
 	{
 		j = 0;
 		for(i = 0; i < length ; i++)
 		{
-			if(isdigit(name[i]))
+			if( isdigit(name[i]))
 			{
 				if(j < max_indice)
 				{
@@ -167,7 +179,7 @@ void save_file_increment(t_context *C)
 
 			for(i = 0; i < length ; i++)
 			{
-				if(isdigit(name[i]))
+				if( name[i] == '-')
 				{
 					break;
 				}
@@ -177,13 +189,15 @@ void save_file_increment(t_context *C)
 				}
 			}
 
-			strcat(new_name,new_name_indice);
-
-			set_name(file->id.name, new_name);
-			file_build_location(file);
+			s_cat( new_name, "-", _NAME_LONG_);
+			s_cat( new_name, new_name_indice, _NAME_LONG_);
+			s_cat( new_name, ".mn", _NAME_LONG_);
+			set_name( C->app->filename, new_name);
 
 		}
 	}
+
+	file_free( file);
 
 	save_to_file(C);
 }

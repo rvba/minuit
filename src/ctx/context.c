@@ -97,9 +97,9 @@ void ctx_load_file(t_context *C)
 	{
 		C->app->load_file = 0;
 		C->app->loaded_file = 1;
-		C->event->standby_string = C->app->file_path;
+		//C->event->standby_string = C->app->file_path;
 		add_mn();
-		C->event->standby_string = NULL;
+		//C->event->standby_string = NULL;
 	}
 }
 

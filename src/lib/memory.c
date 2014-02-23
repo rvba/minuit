@@ -83,7 +83,7 @@ t_chunk *chunk_new(t_chunk_type chunk_type,t_data_type type,size_t size,int tot,
 void mem_write(const char *path)
 {
 	// open file
-	FILE *file=fopen(path,"w");
+	FILE *file = fopen(path,"w");
 
 	t_link *l;
 	t_chunk *c;

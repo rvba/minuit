@@ -288,6 +288,25 @@ t_link *lst_link_find_by_ptr(t_lst *lst, void *ptr)
 	return NULL;
 }
 
+// GET 
+
+void *lst_get_by_range( t_lst *lst, int i)
+{
+	int j;
+	t_link *l;
+	for( l = lst->first; l; l = l->next)
+	{
+		if( j == i)
+		{
+			return  l->data;
+		}
+		
+		j++;
+	}
+
+	return NULL;
+}
+
 // COPY
 
 t_lst *lst_copy(t_lst *lst)

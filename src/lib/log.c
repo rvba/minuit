@@ -15,11 +15,13 @@ t_file *LOG_FILE;
 
 void log_init(void)
 {
+	/*
 	t_file *file = file_new("minuit.log");
 	file_open(file);
 	fprintf(file->file,"LOG\n");
 	file_close(file);
 	LOG_FILE=file;
+	*/
 }
 
 void __log__( int status, const char *fmt, ...)
