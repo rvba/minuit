@@ -129,7 +129,8 @@ typedef struct App
 	
 	char version[_NAME_];
 	char app_name[_NAME_];
-	char app_home[_PATH_];
+	char path_home[_PATH_];
+	char path_current[_PATH_];
 	
 	void (*main_func)(void);
 

@@ -265,7 +265,20 @@ void app_init_home( t_app *app)
 		mkdir( path_home, 0777);
 	}
 
-	s_cp( app->app_home, path_home, _PATH_);
+	s_cp( app->path_home, path_home, _PATH_);
+}
+
+void app_init_current( t_app *app)
+{
+	char path[_PATH_];
+	if( sys_get( "pwd", path, _PATH_))
+	{
+		s_cp( app->path_current, path, _PATH_);
+	}
+	else
+	{
+		printf("[APP] Error, can't get current directory\n");
+	}
 }
 
 // INIT
@@ -280,6 +293,7 @@ void app_init(t_app *app, const char *name)
 
 	// Home
 	app_init_home( app);
+	app_init_current( app);
 
 	//file_test();
 
@@ -365,6 +379,9 @@ t_app *app_new(int argc,char **argv)
 	clock_init(app->clock);
 
 	app->quit = 0;
+
+	bzero( app->path_home, _PATH_);
+	bzero( app->path_current, _PATH_);
 
 	return app;
 }

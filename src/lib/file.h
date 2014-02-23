@@ -54,6 +54,7 @@ struct File
 	t_id id;
 
 	char location[_PATH_];
+
 	char path[_PATH_];
 	char ext[_EXT_];
 
