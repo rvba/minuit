@@ -297,11 +297,16 @@ void file_show(t_file *file)
 	}
 
 	printf("DIRS\n");
+	printf(" dir count: %d\n", file->dir_count);
 	int i;
 	for( i= 0; i < FILE_MAX_DIR; i++)
 	{
 		printf("%d: %s\n", i, file->dirs[i]);
 	}
+	printf("NAME\n");
+	printf("file name:%s\n", file->file_name);
+	if( file->has_extention) printf("ext:%s\n", file->ext);
+	else printf("ext:NULL\n");
 }
 
 void file_data_add(t_file *file,char *data)
@@ -459,6 +464,84 @@ int file_dir_build( t_file *file)
 	}
 }
 
+void file_dir_count( t_file *file)
+{
+	int i;
+	int count = 0; 
+	for( i = 0; i < FILE_MAX_DIR; i++)
+	{
+		if( strlen( file->dirs[i]) == 0) break;
+		else count++;
+	}
+
+	file->dir_count = count - 1;
+}
+
+void file_extention_get( t_file *file)
+{
+	char *letter;
+	char *data = file->dirs[ file->dir_count];
+	char name[_NAME_LONG_];
+	char ext[_EXT_];
+	int has_extention = 0;
+	bzero( name, _NAME_LONG_);
+	bzero( ext, _EXT_);
+
+	int i = 0;
+	int j = 0;
+	int ext_length = 0;
+
+	for( letter = data; *letter != '\0'; letter++)
+	{
+		if( i >= _NAME_LONG_)
+		{
+			printf("[FILE] Error name too long\n");
+			return;
+		}
+		else
+		{
+			if( *letter == '.')
+			{
+				name[j] ='\0';
+				has_extention = 1;
+				j = -1;
+			}
+			else
+			{
+				if( has_extention)
+				{
+					ext[j] = *letter;
+					ext_length++;
+				}
+				else
+				{
+					name[j] = *letter;
+				}
+			}
+		}
+
+		i++;
+		j++;
+	}
+
+	s_cp( file->file_name, name, _NAME_LONG_);
+
+	if( has_extention)
+	{
+		ext[ext_length] = '\0';
+		file->has_extention = 1;
+		s_cp( file->ext, ext, _EXT_);
+	}
+}
+
+int file_name_build( t_file *file)
+{
+	file_dir_count( file);
+	file_extention_get( file);
+
+	return 1;
+}
+
 int _file_test( const char *path)
 {
 	printf("TESTING %s\n", path);
@@ -468,7 +551,7 @@ int _file_test( const char *path)
 	int s = 1;
 	if( s) s = file_path_type( file);
 	if( s) s = file_dir_build( file);
-	//if( s) s = file_name_build( file);
+	if( s) s = file_name_build( file);
 
 	file_show( file);
 	file_free( file);
@@ -479,7 +562,6 @@ int _file_test( const char *path)
 int file_test( void)
 {
 	_file_test( "test");
-	_file_test( "/home/user");
 	_file_test( "/home/user/Desktop/");
 	_file_test( "./data");
 	_file_test( "/usr/share/image.jpg");
@@ -695,29 +777,31 @@ void file_free(t_file *file)
 
 t_file *file_new(const char *path)
 {
-	t_file *file = (t_file *)malloc(sizeof(t_file));
+	t_file *file = (t_file *) malloc( sizeof( t_file));
 
 	id_init( &file->id, path);
 
-	memset(file->id.name,'\0',_NAME_);
-	memset(file->ext,'\0',_EXT_);
-	memset(file->path,'\0',_PATH_);
+	memset( file->id.name,'\0',_NAME_);
+	memset( file->ext,'\0',_EXT_);
+	memset( file->path,'\0',_PATH_);
 
-	set_path(file->location,path);
+	set_path( file->location,path);
 
 	file->is_relative = 0;
 	file->is_directory = 0;
 	file->has_extention = 0;
 	file->path_type = 0;
 
-	file->directories=NULL;
-	file->data=NULL;
-	file->lines=lst_new("lst");
-	file->file=NULL;
+	file->directories = NULL;
+	file->data = NULL;
+	file->lines = lst_new("lst");
+	file->file = NULL;
 
-	file->tot_directories=0;
-	file->data_size=0;
-	file->tot_line=0;
+	file->tot_directories = 0;
+	file->data_size = 0;
+	file->tot_line = 0;
+	file->dir_count = 0;
+	file->exists = 0;
 
 	bzero( file->dirs, FILE_MAX_DIR * _NAME_LONG_);
 

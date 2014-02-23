@@ -65,9 +65,12 @@ struct File
 	int tot_directories;
 	char **directories;
 	char dirs[FILE_MAX_DIR][_NAME_LONG_];
+	char file_name[_NAME_LONG_];
+	int exists;
 
 	long data_size;
 	int tot_line;
+	int dir_count;
 
 	FILE *file; // stream
 	char *data; // content of file
