@@ -12,6 +12,7 @@ project(Minuit)
 ###############		 OPTIONS #############################
 
 option(OPT_OSC "osc" ON)
+option(OPT_OBJ "obj" OFF)
 
 ###############		 LIBS	#############################
 
@@ -30,6 +31,7 @@ endif()
 
 
 message("OSC " ${OPT_OSC})
+message("OBJ" ${OPT_OBJ})
 
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
@@ -62,6 +64,10 @@ endif()
 
 set(CMAKE_BUILD_TYPE debug)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DWITH_DEBUG -Wall ")
+
+if(OPT_OBJ) 
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_OBJ")
+endif()
 
 add_subdirectory(src)
 

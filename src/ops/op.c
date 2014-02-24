@@ -19,8 +19,10 @@
 #include "sketch.h"
 #include "draw.h"
 #include "clock.h"
-#include "obj.h"
 #include "viewport.h"
+#ifdef HAVE_OBJ
+#include "obj.h"
+#endif
 
 // store menu
 
@@ -94,7 +96,9 @@ t_block *make_menu_add_file( t_context *C)
 {
 	t_block *block = add_menu_block( C, "menu_add_geometry");
 
+	#ifdef HAVE_OBJ
 	add_brick_trigger(C,block,"obj",op_obj_import);
+	#endif
 	add_brick_trigger(C,block,"mn",op_add_mn);
 
 	return block;

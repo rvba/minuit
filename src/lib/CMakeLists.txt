@@ -77,5 +77,12 @@ set(SRC
 	vlst.h
 	vlst.c
 	)
+if(OPT_OBJ)
+set( 	SRC
+	${SRC}
+	obj.c
+	obj.h
+	)
+endif()
  
 add_library(minuit-lib STATIC ${SRC})
