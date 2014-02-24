@@ -141,6 +141,8 @@ struct MINscreen;
 #define MOUSE_WHEEL_DOWN	847
 #define MOUSE_END 850
 
+#define EVENT_BROWSER_SHOW	1000
+
 #define EVENT_KEYBOARD( event) ( event >= 0 && event <= KEYBOARD_STOP)
 #define EVENT_MOUSE( event) ( event >= MOUSE_START && event <= MOUSE_END)
 #define EVENT_MOUSE_WHEEL( event) ( ((event) == MOUSE_WHEEL_UP) || ((event) == MOUSE_WHEEL_DOWN))

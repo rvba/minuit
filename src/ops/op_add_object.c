@@ -328,9 +328,12 @@ void add_mn(void)
 
 void *op_add_mn(t_brick *brick)
 {
+	/*
 	t_context *C=ctx_get();
 	C->event->callback=add_mn;
 	screen_switch_by_name("screen_browser");
+	*/
+	ctx_event_add( EVENT_BROWSER_SHOW);
 
 	return NULL;
 }

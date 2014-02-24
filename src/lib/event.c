@@ -228,6 +228,8 @@ char *event_name( t_event *e)
 		case UI_BLOCK_RELEASED: return("UI_BLOCK_RELEASED"); break;
 		case UI_BLOCK_MOVE: return("UI_BLOCK_MOVE"); break;
 
+		case EVENT_BROWSER_SHOW: return("EVENT_BROWSER_SHOW"); break;
+
 		default: return("?");
 	}
 }

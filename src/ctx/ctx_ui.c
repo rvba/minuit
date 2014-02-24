@@ -415,6 +415,21 @@ void ctx_ui_menu_show( t_context *C)
 	ctx_ui_selection_set( C, node);
 }
 
+void ctx_browser( t_context *C)
+{
+	printf("browser!\n");
+
+	t_node *node = scene_node_get( C->scene, "block", "block_browser");
+	if( node)
+	{
+		ctx_ui_selection_set( C, node);
+	}
+	else
+	{
+		printf("no block!\n");
+	}
+}
+
 void ctx_ui_block_select( t_context *C)
 {
 	t_brick *brick = ( t_brick *) ctx_ui_hover_get( C, dt_brick);
@@ -453,8 +468,6 @@ void ctx_ui_deselect( t_context *C, t_event *e)
 		C->scene->selected = NULL;
 	}
 }
-
-
 
 void state_ui_block_trigger( t_context *C, t_event *e)
 {
@@ -832,10 +845,14 @@ void state_ui_default( t_context *C, t_event *e)
 	{
 		case MOUSE_RIGHT_PRESSED: 	ctx_ui_right( C, e); break;
 		case MOUSE_LEFT_PRESSED: 	ctx_ui_left( C, e); break;
+
 		case MOUSE_MIDDLE_PRESSED:
 		case MOUSE_WHEEL_UP:
 		case MOUSE_WHEEL_DOWN:
 		 				ctx_ui_middle( C, e); 
+						break;
+		case EVENT_BROWSER_SHOW:	
+						ctx_browser( C);
 						break;
 
 		default: break;
