@@ -388,9 +388,6 @@ t_app *app_new(int argc,char **argv)
 	app->keyboard=keyboard_new();
 	app->clock=clock_new( "clock");
 
-	app->file = file_new("void");
-	file_init(app->file);
-
 	app->video_frames = lst_new("video");
 	app->video_frames_swap = lst_new("video swap");
 	app->video_offset = 0;

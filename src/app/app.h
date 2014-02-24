@@ -162,9 +162,7 @@ typedef struct App
 
 	int load_file;
 	int loaded_file;
-	//char *file_path;
 
-	struct File *file;
 	struct Lst *video_frames;
 	struct Lst *video_frames_swap;
 

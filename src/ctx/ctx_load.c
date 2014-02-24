@@ -789,10 +789,6 @@ void load_file(t_context *C,const char *path)
 	// free tmp scene
 	scene_free(sc);
 	
-	// set file path
-	file_set_location(C->app->file,path);
-	file_init(C->app->file);
-
 	// Load Error
 	if(load_error)
 	{
