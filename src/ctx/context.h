@@ -101,6 +101,8 @@ void ctx_ui_exec(struct Context *C);
 void ctx_ui_menu_hide(struct Context *C);
 void ctx_ui_links_update(struct Context *C);
 
+void ctx_ui_event_add( int ui_event);
+
 
 void ctx_ui_keyboard_set( struct Context *C, struct Event *event);
 void ctx_ui_mouse_set( struct Context *C, struct Event *event);

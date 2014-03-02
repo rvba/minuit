@@ -33,8 +33,10 @@
 #include "camera.h"
 #include "viewport.h"
 
-t_lst *EXE=NULL;
+#define UI_EVENT_MAX 10
 
+t_lst *EXE=NULL;
+int UI_EVENT;
 
 /*	**********************************
 	DECLARATIONS
@@ -72,7 +74,19 @@ void op_debug_all(t_context *C)
 	}
 }
 
+/*	**********************************
+	:UI_EVENT
+	*********************************	*/
 
+void ctx_ui_event_init( t_context *C)
+{
+	UI_EVENT = UI_EVENT_NULL;
+}
+
+void ctx_ui_event_add( int ui_event)
+{
+	UI_EVENT = ui_event;
+}
 
 /*	**********************************
 	:DELETE
@@ -415,18 +429,17 @@ void ctx_ui_menu_show( t_context *C)
 	ctx_ui_selection_set( C, node);
 }
 
-void ctx_browser( t_context *C)
+void ctx_ui_browser( t_context *C)
 {
-	printf("browser!\n");
-
 	t_node *node = scene_node_get( C->scene, "block", "block_browser");
 	if( node)
 	{
 		ctx_ui_selection_set( C, node);
+		UI_EVENT = UI_EVENT_NULL;
+		UI_SWAP( C, state_ui_block_trigger); 
 	}
 	else
 	{
-		printf("no block!\n");
 	}
 }
 
@@ -841,6 +854,16 @@ void ctx_ui_keyboard( t_context *C, t_event *e)
 void state_ui_default( t_context *C, t_event *e)
 {
 	ctx_ui_log( "ui_default");
+
+	switch( UI_EVENT)
+	{
+		case UI_EVENT_BROWSER_SHOW:
+						ctx_ui_browser( C);
+						break;
+		default:
+			break;
+	}
+
 	switch( e->type)
 	{
 		case MOUSE_RIGHT_PRESSED: 	ctx_ui_right( C, e); break;
@@ -850,9 +873,6 @@ void state_ui_default( t_context *C, t_event *e)
 		case MOUSE_WHEEL_UP:
 		case MOUSE_WHEEL_DOWN:
 		 				ctx_ui_middle( C, e); 
-						break;
-		case EVENT_BROWSER_SHOW:	
-						ctx_browser( C);
 						break;
 
 		default: break;
@@ -882,6 +902,12 @@ void ctx_ui_dispatch( t_context *C)
 		event_log( e);
 		C->ui->state( C, e);
 	}
+
+	if( UI_EVENT != UI_EVENT_NULL)
+	{
+		//event_ui_log( UI_EVENT);
+		//C->ui->state( C, NULL);
+	}
 }
 
 /*	**********************************
@@ -907,6 +933,7 @@ void ctx_ui_init( t_context *C)
 {
 	C->ui->state = state_ui_intro;
 	exe_init();
+	ctx_ui_event_init( C);
 }
 
 

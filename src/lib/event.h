@@ -141,8 +141,6 @@ struct MINscreen;
 #define MOUSE_WHEEL_DOWN	847
 #define MOUSE_END 850
 
-#define EVENT_BROWSER_SHOW	1000
-
 #define EVENT_KEYBOARD( event) ( event >= 0 && event <= KEYBOARD_STOP)
 #define EVENT_MOUSE( event) ( event >= MOUSE_START && event <= MOUSE_END)
 #define EVENT_MOUSE_WHEEL( event) ( ((event) == MOUSE_WHEEL_UP) || ((event) == MOUSE_WHEEL_DOWN))
@@ -159,6 +157,8 @@ struct MINscreen;
 #define BRICK_PLUG_IN 		3
 #define BRICK_PLUG_OUT 		4
 
+#define UI_EVENT_NULL  1000
+#define UI_EVENT_BROWSER_SHOW 1001
 
 typedef struct State_Event_UI
 {
@@ -300,7 +300,8 @@ void 		event_dispach( t_main_event *main_event);
 t_event *	event_new( const char *name);
 t_main_event *	main_event_new(void);
 void 		event_log( t_event *e);
-char *		event_name( t_event *e);
+void 		event_ui_log( int type);
+char *		event_name( int type);
 
 #ifdef __cplusplus
 }

@@ -128,9 +128,9 @@ void event_add( t_main_event *main_event, t_screen *screen, int x, int y, int ty
 	lst_add( main_event->events, event, event->id.name);
 }
 
-char *event_name( t_event *e)
+char *event_name( int type)
 {
-	switch( e->type)
+	switch( type)
 	{
 		case AKEY: return("a"); break;
 		case BKEY: return("b"); break;
@@ -228,7 +228,7 @@ char *event_name( t_event *e)
 		case UI_BLOCK_RELEASED: return("UI_BLOCK_RELEASED"); break;
 		case UI_BLOCK_MOVE: return("UI_BLOCK_MOVE"); break;
 
-		case EVENT_BROWSER_SHOW: return("EVENT_BROWSER_SHOW"); break;
+		case UI_EVENT_BROWSER_SHOW: return("UI_EVENT_BROWSER_SHOW"); break;
 
 		default: return("?");
 	}
@@ -236,7 +236,7 @@ char *event_name( t_event *e)
 
 void event_show( t_event *event)
 {
-	printf("%s %d %d\n", event_name( event), event->x, event->y);
+	printf("%s %d %d\n", event_name( event->type), event->x, event->y);
 }
 
 void event_free( t_event *event)
@@ -251,7 +251,23 @@ void event_log( t_event *e)
 	t_context *C = ctx_get();
 	t_term *term = term_get( "term_event");
 
-	char *name = event_name( e);
+	char *name = event_name( e->type);
+	snprintf( msg, 128,"%d %s", C->app->frame, name);
+
+	if( term)
+	{
+		term_print( term, msg);
+	}
+}
+
+void event_ui_log( int type)
+{
+	char msg[128];
+
+	t_context *C = ctx_get();
+	t_term *term = term_get( "term_event");
+
+	char *name = event_name( type);
 	snprintf( msg, 128,"%d %s", C->app->frame, name);
 
 	if( term)

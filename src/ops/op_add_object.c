@@ -333,7 +333,7 @@ void *op_add_mn(t_brick *brick)
 	C->event->callback=add_mn;
 	screen_switch_by_name("screen_browser");
 	*/
-	ctx_event_add( EVENT_BROWSER_SHOW);
+	ctx_ui_event_add( UI_EVENT_BROWSER_SHOW);
 
 	return NULL;
 }
