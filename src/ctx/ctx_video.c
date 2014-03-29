@@ -56,8 +56,6 @@ void ctx_check_dir(t_context *C)
 
 void ctx_render_build_frames(t_context *C, t_lst *lst)
 {
-		//XXX!!!
-	/*
 	t_link *link;
 	unsigned char *frame;
 
@@ -74,7 +72,6 @@ void ctx_render_build_frames(t_context *C, t_lst *lst)
 		img_save_video(width,height,filename,frame);
 		C->event->video_frame_number++;
 	}
-	*/
 }
 
 void ctx_render_free_frames(t_context *C, t_lst *lst)
@@ -95,7 +92,6 @@ void *ctx_record_process(void *ptr)
 {
 	t_context *C = ctx_get();
 	t_process *process = (t_process *) ptr;
-
 
 	if(C->app->video_frames_swap)
 	{
@@ -141,7 +137,6 @@ void ctx_render_video(t_context *C)
 
 			if(C->app->video_build)
 			{
-				//system("ffmpeg -f image2 -i video/f%04d.jpg -r 25 -b 5000k video/video.avi &");
 				int r = system(command);
 				(void) r; // unused value:)
 			}
