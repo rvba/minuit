@@ -892,6 +892,7 @@ void ctx_ui_dispatch( t_context *C)
 	t_link *l;
 	t_event *e;
 
+	// copy events and empty list
 	ctx_events_swap( C);
 	lst_cleanup( C->event->events);
 
@@ -901,6 +902,9 @@ void ctx_ui_dispatch( t_context *C)
 		event_log( e);
 		C->ui->state( C, e);
 	}
+
+	// if new events, go recursive
+	if( C->event->events->first) ctx_ui_dispatch( C);
 
 	if( UI_EVENT != UI_EVENT_NULL)
 	{
@@ -915,17 +919,17 @@ void ctx_ui_dispatch( t_context *C)
 
 void ctx_ui(t_context *C)
 {
-	ctx_ui_mouse( C);
-	ctx_ui_hover( C);
-	ctx_ui_dispatch( C);
-	ctx_ui_exe( C);
+	ctx_ui_mouse( C); 	// update mouse status
+	ctx_ui_hover( C);	// update hoover status
+	ctx_ui_dispatch( C);	// DISPATCH events
+	ctx_ui_exe( C);		// exec recorded actions
 
 	if(C->event->color_transition_use && C->event->color_transition)
 	{
 		op_set_color(C,2);
 	}
 
-	ctx_ui_reset( C);
+	ctx_ui_reset( C);	// reset special keys
 }
 
 void ctx_ui_init( t_context *C)
