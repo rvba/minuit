@@ -290,11 +290,8 @@ void load_scene(t_context *C,t_scene *sc)
 		n = ( t_node *) l->data;	
 
 		// add to scene
-		scene_node_load(C->scene,n);
+		scene_node_load( C->scene, n);
 	}
-
-	// load data
-	//scene_data_load(sc);
 
 	// Build Graphs
 	for(l=C->scene->rhizomes->first;l;l=l->next)

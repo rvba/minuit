@@ -471,6 +471,8 @@ void cls_node_init_vector(t_node *node)
 void cls_node_init_viewport(t_node *node)
 {
 	cls_node_init_id(node);
+	t_scene *scene = scene_get();
+	if( scene) scene->has_generic_viewport = 1;
 }
 
 void cls_node_init_set(t_node *node)

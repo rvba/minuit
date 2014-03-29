@@ -537,13 +537,13 @@ t_camera *ctx_ui_camera_get( t_context *C)
 {
 	t_camera *camera = NULL;
 
-	if(C->scene->has_generic_viewport)
+	if( C->scene->has_generic_viewport)
 	{
 		// Get default Viewport
-		t_node *node_viewport = scene_node_get(C->scene,"viewport","viewport");
+		t_node *node_viewport = scene_node_get( C->scene,"viewport","viewport");
 		t_viewport *viewport = NULL;
 
-		if(node_viewport)
+		if( node_viewport)
 		{
 			viewport = ( t_viewport *) node_viewport->data;
 			camera = viewport->camera;
@@ -552,7 +552,6 @@ t_camera *ctx_ui_camera_get( t_context *C)
 
 	return camera;
 }
-
 
 void ctx_ui_camera_rotate( t_context *C, t_camera *camera, t_event *e)
 {
