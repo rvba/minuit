@@ -24,7 +24,7 @@ void ctx_ui_browser( t_context *C)
 		screen_switch_by_name( "screen_browser");
 		ctx_ui_selection_set( C, node);
 		ctx_show_browser = 1;
-		UI_EVENT = UI_EVENT_NULL;
+	//	UI_EVENT = UI_EVENT_NULL;
 		UI_SWAP( C, state_ui_block_trigger); 
 	}
 }
