@@ -330,7 +330,6 @@ void ctx_ui_hover( t_context *C)
 			node = ctx_scene_hover( C, dt_brick);
 			if( node)
 			{
-				t_brick *brick = node->data;
 				C->scene->hover = node;
 				C->scene->hover_type = dt_brick;
 			}
