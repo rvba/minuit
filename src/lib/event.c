@@ -84,9 +84,6 @@ t_main_event *main_event_new(void)
 	event->buffer_char_counter=0;
 	
 	event->callback=NULL;
-	event->standby_int=0;
-	event->standby_char='\0';
-	event->standby_string=NULL;
 	event->video_record = 0;
 	event->video_store = 0;
 	event->video_init = 0;

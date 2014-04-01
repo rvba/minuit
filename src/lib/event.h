@@ -251,9 +251,7 @@ typedef struct Main_Event
 	int buffer_char_counter;
 
 	void (* callback)(void);
-	int standby_int;
-	char standby_char;
-	char *standby_string;
+
 	int video_record;
 	int video_store;
 	int video_stop_call;

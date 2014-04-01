@@ -132,8 +132,6 @@ void *browser_return_filename(t_brick *brick)
 	pos=s_append(tmp,brick->id.name,pos);
 	pos=s_append(tmp,NULL,pos);
 
-	//C->event->standby_string=s_allocate(tmp);
-
 	screen_switch_by_name("screen_main");
 
 	set_path( C->app->path_file, tmp);

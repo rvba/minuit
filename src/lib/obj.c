@@ -138,7 +138,7 @@ void obj_add(const char *object_name,int tot_vert,int tot_face,int tot_quad,int 
 void _op_obj_import(void)
 {
 	t_context *C=ctx_get();
-	char *filename=C->event->standby_string;
+	char *filename = NULL;
 
 	if(filename)
 	{
@@ -149,8 +149,6 @@ void _op_obj_import(void)
 		t_file *file = file_new(filename);
 		file_init(file);
 
-		free(C->event->standby_string);
-		//C->event->standby_function=NULL;
 		C->event->callback=NULL;
 
 		file_read(file);
