@@ -16,7 +16,6 @@
 extern "C" {
 #endif
 
-
 #define COLOR_MATCH( C, c) ( ( (C)[0] == (c)[0]) && ( (C)[1] == (c)[1]) && ( (C)[2] == (c)[2]))
 
 struct Context;
@@ -200,6 +199,7 @@ int ctx_ui_selection_set( struct Context *C, struct Node *node);
 void state_ui_block_trigger( struct Context *C, struct Event *e);
 
 extern int UI_EVENT;
+extern int ctx_show_browser;
 
 
 #ifdef __cplusplus

@@ -36,6 +36,19 @@ char default_path[1024];
 
 int pos;
 
+t_lst *browser_get_bricks( void)
+{
+	if( BROWSER_BUTTONS)
+	{
+		t_block *block = ( t_block *) BROWSER_BUTTONS->data;
+		return block->bricks;
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
 // switch back to main screen
 void browser_abort(void)
 {

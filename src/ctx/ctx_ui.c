@@ -330,6 +330,7 @@ void ctx_ui_hover( t_context *C)
 			node = ctx_scene_hover( C, dt_brick);
 			if( node)
 			{
+				t_brick *brick = node->data;
 				C->scene->hover = node;
 				C->scene->hover_type = dt_brick;
 			}
@@ -923,6 +924,7 @@ void ctx_ui_init( t_context *C)
 	C->ui->state = state_ui_intro;
 	exe_init();
 	ctx_ui_event_init( C);
+	ctx_show_browser = 0;
 }
 
 	

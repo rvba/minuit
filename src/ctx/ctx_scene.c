@@ -23,6 +23,8 @@
 #include "term.h"
 #include "block.h"
 
+int ctx_show_browser;
+
 // Selections and updates
 
 void ctx_scene_selection(t_context *C, t_node *node, int state)
@@ -216,23 +218,48 @@ t_node *ctx_scene_hover( t_context *C, t_data_type type)
 	t_node *node = NULL;
 	int hover = 0;
 
-	switch( type)
+	if( type == dt_brick && ctx_show_browser)
 	{
-		case dt_object: lst = C->scene->objects; break;
-		case dt_brick: lst = C->scene->bricks; break;
-		default: break;
-	}
-
-	if( lst)
-	{
-		for(l=lst->first;l;l=l->next)
+		lst = browser_get_bricks();
+		if( lst)
 		{
-			node = ( t_node *) l->data;
-			hover = node_hover( C, node);
-			if( hover) break;
-			else node = NULL;
+			for(l=lst->first;l;l=l->next)
+			{
+				t_brick *brick = ( t_brick *) l->data;
+				t_node *n  = brick->id.node;
+				hover = node_hover( C, n);
+				if( hover)
+				{
+					node = n;
+					break;
+				}
+			}
 		}
-	}
 
-	return node;
+		return node;
+	}
+	else
+	{
+		switch( type)
+		{
+			case dt_object: lst = C->scene->objects; break;
+			case dt_brick:
+				lst = C->scene->bricks; 
+					break;
+			default: break;
+		}
+
+		if( lst)
+		{
+			for(l=lst->first;l;l=l->next)
+			{
+				node = ( t_node *) l->data;
+				hover = node_hover( C, node);
+				if( hover) break;
+				else node = NULL;
+			}
+		}
+
+		return node;
+	}
 }

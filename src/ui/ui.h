@@ -216,6 +216,8 @@ int ui_get_window_height( struct Context *C);
 void ui_image_draw( struct Context *C, struct Image *image, int x, int y);
 void ui_texture_draw( struct Context *C, struct Texture *texture, int px, int py, int sx, int sy);
 
+struct Lst *browser_get_bricks( void);
+
 #ifdef __cplusplus
 }
 #endif
