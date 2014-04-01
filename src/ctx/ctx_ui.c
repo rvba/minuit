@@ -435,6 +435,7 @@ void ctx_ui_browser( t_context *C)
 	t_node *node = scene_node_get( C->scene, "block", "block_browser");
 	if( node)
 	{
+		screen_switch_by_name( "screen_browser");
 		ctx_ui_selection_set( C, node);
 		UI_EVENT = UI_EVENT_NULL;
 		UI_SWAP( C, state_ui_block_trigger); 

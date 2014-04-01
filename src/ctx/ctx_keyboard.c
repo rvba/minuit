@@ -27,6 +27,12 @@ int switch_init=0;
 int switch_frame=0;
 int switch_done=0;
 
+void ctx_switch_font( t_context *C)
+{
+	if( C->ui->use_bitmap_font)  C->ui->use_bitmap_font = 0;
+	else C->ui->use_bitmap_font = 1;
+}
+
 void ctx_switch_intro(t_context *C)
 {
 	if(C->ui->show_intro_always) C->ui->show_intro_always = 0;
@@ -186,6 +192,9 @@ void keymap_command( int key)
 			else
 				C->ui->step_reset = 1;
 			break;
+
+		case UP_TKEY: ctx_switch_font( C);break;
+
 		case DKEY: C->event->brick_delete = 1; break;
 		case JKEY: ctx_ui_switch_show_states(C); break;
 		case FKEY: ctx_ui_freeze(C); break;
