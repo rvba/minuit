@@ -431,15 +431,13 @@ void ctx_ui_menu_show( t_context *C)
 
 void ctx_ui_browser( t_context *C)
 {
+	ctx_ui_log( "ui_browser");
 	t_node *node = scene_node_get( C->scene, "block", "block_browser");
 	if( node)
 	{
 		ctx_ui_selection_set( C, node);
 		UI_EVENT = UI_EVENT_NULL;
 		UI_SWAP( C, state_ui_block_trigger); 
-	}
-	else
-	{
 	}
 }
 
@@ -801,7 +799,6 @@ void state_ui_mouse_right( t_context *C, t_event *e)
 				UI_SWAP( C, state_ui_block_trigger); 
 				break;
 		}
-				
 	}
 }
 
@@ -854,32 +851,37 @@ void state_ui_default( t_context *C, t_event *e)
 {
 	ctx_ui_log( "ui_default");
 
-	switch( UI_EVENT)
+	if( UI_EVENT)
 	{
-		case UI_EVENT_BROWSER_SHOW:
-						ctx_ui_browser( C);
-						break;
-		default:
-			break;
+		switch( UI_EVENT)
+		{
+			case UI_EVENT_BROWSER_SHOW:
+							ctx_ui_browser( C);
+							break;
+			default:
+				break;
+		}
 	}
-
-	switch( e->type)
+	else
 	{
-		case MOUSE_RIGHT_PRESSED: 	ctx_ui_right( C, e); break;
-		case MOUSE_LEFT_PRESSED: 	ctx_ui_left( C, e); break;
+		switch( e->type)
+		{
+			case MOUSE_RIGHT_PRESSED: 	ctx_ui_right( C, e); break;
+			case MOUSE_LEFT_PRESSED: 	ctx_ui_left( C, e); break;
 
-		case MOUSE_MIDDLE_PRESSED:
-		case MOUSE_WHEEL_UP:
-		case MOUSE_WHEEL_DOWN:
-		 				ctx_ui_middle( C, e); 
-						break;
+			case MOUSE_MIDDLE_PRESSED:
+			case MOUSE_WHEEL_UP:
+			case MOUSE_WHEEL_DOWN:
+							ctx_ui_middle( C, e); 
+							break;
 
-		default: break;
-	}
+			default: break;
+		}
 
-	if( EVENT_KEYBOARD( e->type))
-	{
-		ctx_ui_keyboard( C, e);
+		if( EVENT_KEYBOARD( e->type))
+		{
+			ctx_ui_keyboard( C, e);
+		}
 	}
 }
 
@@ -905,12 +907,8 @@ void ctx_ui_dispatch( t_context *C)
 
 	// if new events, go recursive
 	if( C->event->events->first) ctx_ui_dispatch( C);
+	if( UI_EVENT && C->ui->state == state_ui_default) C->ui->state( C, NULL);
 
-	if( UI_EVENT != UI_EVENT_NULL)
-	{
-		//event_ui_log( UI_EVENT);
-		//C->ui->state( C, NULL);
-	}
 }
 
 /*	**********************************

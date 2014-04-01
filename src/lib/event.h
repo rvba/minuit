@@ -157,7 +157,7 @@ struct MINscreen;
 #define BRICK_PLUG_IN 		3
 #define BRICK_PLUG_OUT 		4
 
-#define UI_EVENT_NULL  1000
+#define UI_EVENT_NULL  0
 #define UI_EVENT_BROWSER_SHOW 1001
 
 typedef struct State_Event_UI
