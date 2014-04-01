@@ -429,19 +429,6 @@ void ctx_ui_menu_show( t_context *C)
 	ctx_ui_selection_set( C, node);
 }
 
-void ctx_ui_browser( t_context *C)
-{
-	ctx_ui_log( "ui_browser");
-	t_node *node = scene_node_get( C->scene, "block", "block_browser");
-	if( node)
-	{
-		screen_switch_by_name( "screen_browser");
-		ctx_ui_selection_set( C, node);
-		UI_EVENT = UI_EVENT_NULL;
-		UI_SWAP( C, state_ui_block_trigger); 
-	}
-}
-
 void ctx_ui_block_select( t_context *C)
 {
 	t_brick *brick = ( t_brick *) ctx_ui_hover_get( C, dt_brick);
@@ -937,6 +924,5 @@ void ctx_ui_init( t_context *C)
 	exe_init();
 	ctx_ui_event_init( C);
 }
-
 
 	

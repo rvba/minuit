@@ -2,6 +2,7 @@
 set(SRC
 	context.c
 	context.h
+	ctx_browser.c
 	ctx_compute.c
 	ctx_event.c
 	ctx_keyboard.c

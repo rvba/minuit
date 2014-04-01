@@ -192,7 +192,14 @@ void ctx_ui_buffer_clear( struct Context *C);
 
 void ctx_thread_init( struct Context *C);
 
-// LOG
+// CTX_BROWSER
+
+void ctx_ui_browser( struct Context *C);
+int ctx_ui_selection_set( struct Context *C, struct Node *node);
+
+void state_ui_block_trigger( struct Context *C, struct Event *e);
+
+extern int UI_EVENT;
 
 
 #ifdef __cplusplus
