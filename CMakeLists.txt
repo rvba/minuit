@@ -69,6 +69,10 @@ if(OPT_OBJ)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_OBJ")
 endif()
 
+if(OPT_OSC) 
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_OSC")
+endif()
+
 add_subdirectory(src)
 
 add_executable(

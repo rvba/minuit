@@ -167,6 +167,7 @@ void app_launch(t_app *app)
 		{
 			 slave();
 		}
+		#ifdef HAVE_OSC
 		else if(app->osc_server)
 		{
 			osc_server( app->osc_port);
@@ -175,6 +176,7 @@ void app_launch(t_app *app)
 		{
 			osc_client( app->osc_port);
 		}
+		#endif
 	}
 	else if(app->with_glut==0)
 	{
