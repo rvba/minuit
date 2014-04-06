@@ -384,6 +384,9 @@ t_app *app_new(int argc,char **argv)
 
 	// GLUT
 	if(app->with_glut) glutInit(&app->argc, app->argv);
+	#ifdef HAVE_GLEW
+	glewInit();
+	#endif
 
 	app->mouse=mouse_new();
 	app->window=window_new(app->with_glut);

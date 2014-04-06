@@ -13,6 +13,7 @@ project(Minuit)
 
 option(OPT_OSC "osc" OFF)
 option(OPT_OBJ "obj" OFF)
+option(OPT_GLEW "glew" OFF)
 
 ###############		 LIBS	#############################
 
@@ -29,9 +30,15 @@ if(OPT_OSC)
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_OSC")
 endif()
 
+###############		 GLEW	#############################
+if(OPT_GLEW)
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_GLEW")
+	find_library( GLEW_LIBRARY GLEW PATHS ${PATH_MINUIT_BUILD}/src/app)
+endif()
 
 message("OSC " ${OPT_OSC})
 message("OBJ" ${OPT_OBJ})
+message("GLEW ${OPT_GLEW}")
 
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
@@ -40,7 +47,6 @@ find_package(PNG REQUIRED)
 find_package(Threads)
 
 set(GNU_LIB /usr/lib/x86_64-linux-gnu)
-
 
 include_directories(
 	${CMAKE_SOURCE_DIR}/src/ops
@@ -86,6 +92,11 @@ target_link_libraries(minuit ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${PNG_LIBRARY} 
 if(OPT_OSC)
 	target_link_libraries(minuit ${LIB_OSC})
 endif()
+
+if(OPT_GLEW)
+	target_link_libraries(minuit ${GLEW_LIBRARY})
+endif()
+
 
 
 

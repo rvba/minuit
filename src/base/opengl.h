@@ -12,6 +12,10 @@
 
 #define GL_GLEXT_PROTOTYPES
 
+#ifdef HAVE_GLEW
+#include <GL/glew.h>
+#endif
+
 #include <GL/gl.h>
 #include <GL/glx.h>
 #include <GL/glext.h>
