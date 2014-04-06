@@ -18,51 +18,44 @@
 #include "memory.h"
 
 #define PATH_LIMIT 1024
-#define S_DEBUG 0
-
-/* **MEM** **/
 
 
 int file_exists(t_file *file)
 {
 	struct stat   buffer;   
-	return (stat (file->location, &buffer) == 0);
+	return (stat (file->path, &buffer) == 0);
 }
 
-void file_set_location(t_file *file, const char *path)
+void file_go_backward( t_file *file)
 {
-	set_path(file->location,path);
-}
-
-void file_go_backward(t_file *file)
-{
-	if(file->tot_directories>1)
+	if( file->dir_count > 0)
 	{
-		file->tot_directories--;
-		free(file->directories[file->tot_directories]);
-		// change name
-		set_name( file->id.name, file->directories[file->tot_directories-1]);
-		file_build_location(file); 
-	}
-	else
-	{
-		printf("no backward possible\n");
+		file->dir_count--;
+		file_path_build( file);
 	}
 }
 
 void file_element_add(t_file *file,char *name)
 {
-	file->directories=(char **)realloc(file->directories,sizeof(char *)*file->tot_directories+1);
-	file->directories[file->tot_directories]=s_allocate(name);
+	file->directories = (char **) realloc( file->directories, sizeof(char *) * file->tot_directories + 1);
+	file->directories[file->tot_directories] = s_allocate( name);
 	file->tot_directories++;
 	// change name
 	set_name( file->id.name, name);
 }
 
-void file_go_directory(t_file *file,char *name)
+void file_go_directory( t_file *file, char *name)
 {
-	file_element_add(file,name);
-	file_build_location(file); 
+	file->dir_count++;
+	s_cp( file->dirs[ file->dir_count], name, _NAME_LONG_);
+	file_path_build( file);
+}
+
+void file_name_add( t_file *file, char *name)
+{
+	file_path_build( file);
+	int l = strlen( file->path);
+	s_append( file->path, name, l);
 }
 
 // WORD
@@ -324,7 +317,6 @@ char *file_line_get( t_file *file, int p)
 void file_show(t_file *file)
 {
 	printf("FILE\n");
-	if(file->location) printf("location:%s\n",file->location);
 	if(file->path) printf("path:%s",file->path);
 	if( file->path_type == PATH_RELATIVE) printf(", path is relative\n");
 	else if( file->path_type == PATH_ABSOLUTE) printf(", path is absolute\n");
@@ -444,53 +436,6 @@ int file_write( t_file *file, const char *data, int size)
 	}
 }
 
-
-// LOCATION
-
-void file_build_location(t_file *file)
-{
-	int i;
-	int cursor=0;
-
-	char new_path[PATH_LIMIT];
-	bzero(new_path,PATH_LIMIT);
-
-	// relative path
-	if(file->is_relative)
-	{
-		new_path[0] = '.';
-		cursor++;
-	}
-
-	// loop over directories "/" 
-	for(i=0;i<file->tot_directories -1 ;i++)
-	{
-		// get directory name
-		char *add=file->directories[i];
-
-		new_path[cursor]='/';
-		cursor++;
-		while(*add!='\0')
-		{
-			new_path[cursor]=*add;
-			add++;
-			cursor++;
-		}
-	}
-
-
-	new_path[cursor]='/';
-	strcat( new_path, file->id.name);
-
-	if(file->has_extention)
-	{
-		strcat(new_path,".");
-		strcat(new_path,file->ext);
-	}
-
-	set_path(file->location,new_path);
-}
-
 // SPLIT
 // search for path / name / extention
 // WARNING: case path end with slash not implemented
@@ -513,6 +458,32 @@ int file_slash_count( t_file *file)
 	}
 
 	return slash_count;
+}
+
+void file_path_build( t_file *file)
+{
+	int c = 0;
+	char path[_PATH_];
+	bzero( path, _PATH_);
+	if( file->path_type == PATH_RELATIVE)
+	{
+		path[0] = '.';
+		c++;
+	}
+	else if( file->path_type == PATH_ABSOLUTE)
+	{
+		path[0] = '/';
+		c++;
+	}
+
+	int i;
+	for( i = 0; i <= file->dir_count; i++)
+	{
+		c = s_append( path, file->dirs[i], c);
+		c = s_append( path, "/", c);
+	}
+
+	s_cp( file->path, path, _PATH_);
 }
 
 int file_dir_build( t_file *file)
@@ -633,23 +604,6 @@ int file_name_build( t_file *file)
 	return 1;
 }
 
-int _file_test( const char *path)
-{
-	printf("TESTING %s\n", path);
-	t_file *file = file_new( "test");
-	set_path( file->path, path);
-
-	int s = 1;
-	file_path_type( file);
-	if( s) s = file_dir_build( file);
-	if( s) s = file_name_build( file);
-
-	file_show( file);
-	file_free( file);
-
-	return 1;
-}
-
 int file_init( t_file *file)
 {
 	int s = 1;
@@ -658,15 +612,6 @@ int file_init( t_file *file)
 	if( s) s = file_name_build( file);
 
 	return s;
-}
-
-int file_test( void)
-{
-	_file_test( "test");
-	_file_test( "/home/user/Desktop/");
-	_file_test( "./data");
-	_file_test( "/usr/share/image.jpg");
-	return 1;
 }
 
 // REBIND
@@ -750,7 +695,6 @@ t_file *file_new(const char *path)
 	memset( file->ext,'\0',_EXT_);
 	memset( file->path,'\0',_PATH_);
 
-	set_path( file->location,path);
 	set_path( file->path, path);
 
 	file->is_relative = 0;

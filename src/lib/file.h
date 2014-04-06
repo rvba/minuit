@@ -17,6 +17,10 @@
 #define PATH_ABSOLUTE 2
 #define PATH_LOCAL 3
 
+#define TYPE_NULL 0
+#define TYPE_FILE 1
+#define TYPE_DIRECTORY 2
+
 #define FILE_MAX_DIR 10
 
 #ifdef __cplusplus
@@ -53,8 +57,6 @@ struct File
 {
 	t_id id;
 
-	char location[_PATH_];
-
 	char path[_PATH_];
 	char ext[_EXT_];
 
@@ -80,9 +82,9 @@ struct File
 	struct Lst *lines;
 };
 
+void 		file_name_add( t_file *file, char *name);
+void 		file_path_build( t_file *file);
 int 		file_exists( t_file *file);
-void 		file_set_location( t_file *file, const char *path);
-void 		file_build_location( t_file *file);
 int 		file_path_split( t_file *file);
 void 		file_go_directory( t_file *file, char *name);
 void 		file_go_backward( t_file *file);

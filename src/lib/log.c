@@ -29,7 +29,7 @@ void __log__( int status, const char *fmt, ...)
 	if(status)
 	{
 		t_file *file=LOG_FILE;
-		file->file=fopen(file->location,"a");
+		file->file=fopen( file->path, "a");
 
 		va_list ap;
 		va_start(ap,fmt);

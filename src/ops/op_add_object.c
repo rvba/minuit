@@ -311,6 +311,7 @@ void add_mn(void)
 {
 	t_context *C=ctx_get();
 
+	printf("::: %s\n", C->app->path_file);
 	t_file *file = file_new( C->app->path_file);
 	file_init(file);
 

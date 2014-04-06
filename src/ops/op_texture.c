@@ -34,8 +34,7 @@ t_node *op_texture_jpg_add(t_file *file)
 	t_node *node = scene_add(C->scene, dt_texture, file->id.name);
 	t_texture *texture = ( t_texture *) node->data;
 
-	//t_image *image = img_read_jpg(file->path);
-	t_image *image = img_read_jpg(file->location);
+	t_image *image = img_read_jpg( file->path);
 
 	if(image)
 	{
@@ -51,15 +50,14 @@ t_node *op_texture_png_add(t_file *file)
 {
 	t_context *C = ctx_get();
 
-	t_node *node=scene_add(C->scene, dt_texture, file->id.name);
+	t_node *node = scene_add( C->scene, dt_texture, file->id.name);
 	t_texture *texture = ( t_texture *) node->data;
 
-	//t_image *image = img_read_png(file->path);
-	t_image *image = img_read_png(file->location);
+	t_image *image = img_read_png( file->path);
 
 	if(image)
 	{
-		texture_image_bind(texture,image);
+		texture_image_bind( texture, image);
 	}
 
 	op_texture_store(texture);

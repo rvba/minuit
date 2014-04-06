@@ -68,16 +68,16 @@ void keymap_browser( int key)
 	}
 }
 
-void *browser_go_backward(t_brick *brick)
+void *browser_go_backward( t_brick *brick)
 {
-	file_go_backward(path);
+	file_go_backward( path);
 	is_built=0;
 	return NULL;
 }
 
-void *browser_go_directory(t_brick *brick)
+void *browser_go_directory( t_brick *brick)
 {
-	file_go_directory(path,brick->id.name);
+	file_go_directory( path, brick->id.name);
 	is_built=0;
 	return NULL;
 }
@@ -113,7 +113,7 @@ void browser_reset(void)
 void browser_build_cmd(void)
 {
 	int p=0;
-	char *_path=path->location;
+	char *_path = path->path;
 
 	p=s_append(cmd,"cd ",p);
 	p=s_append(cmd,_path,p);
@@ -121,23 +121,13 @@ void browser_build_cmd(void)
 	p=s_append(cmd,NULL,p);
 }
 
-void *browser_return_filename(t_brick *brick)
+void *browser_return_filename( t_brick *brick)
 {
 	ctx_ui_log( "browser return filename");
 	t_context *C=ctx_get();
-	char tmp[1024];
-
-	int pos=0;
-
-	pos=s_append(tmp,path->location,pos);
-	pos=s_append(tmp,"/",pos);
-	pos=s_append(tmp,brick->id.name,pos);
-	pos=s_append(tmp,NULL,pos);
-
-	//screen_switch_by_name("screen_main");
 	BROWSER_EXIT = 1;
-
-	set_path( C->app->path_file, tmp);
+	file_name_add( path, brick->id.name);
+	set_path( C->app->path_file, path->path);
 	C->event->callback();
 
 	return NULL;
@@ -178,7 +168,7 @@ void browser_build(void)
 
 				s_convert_newline_endline(file_name,input);
 
-				pos=s_append(file_path,path->location,0);
+				pos=s_append(file_path,path->path,0);
 				pos=s_append(file_path,"/",pos);
 				pos=s_append(file_path,file_name,pos);
 				pos=s_append(file_path,NULL,pos);
@@ -211,7 +201,7 @@ void browser_build(void)
 						}
 						else
 						{
-							add_brick_trigger(C,block,file_name,browser_return_filename);
+							add_brick_trigger( C, block, file_name, browser_return_filename);
 						}
 
 
@@ -222,7 +212,7 @@ void browser_build(void)
 
 			}
 
-			add_brick_trigger(C,block,"..",browser_go_backward);
+			add_brick_trigger( C, block, "..", browser_go_backward);
 		}
 
 		// tmp colors
