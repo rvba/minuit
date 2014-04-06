@@ -93,7 +93,7 @@ t_screen *screen_sets_make( t_context *C)
 
 // SCREEN BRICKS
 
-t_screen *screen_bricks_make( t_context *C)
+t_screen *screen_bricks_menu_make( t_context *C)
 {
 	t_node *node = scene_add( C->scene, dt_screen, "screen_bricks");
 	t_screen *screen = ( t_screen *) node->data;
@@ -202,6 +202,19 @@ void op_screen_switch()
 
 		}
 	}	
+}
+
+// INIT
+
+void screen_init( t_context *C)
+{
+	t_screen *screen_main = screen_main_make( C);
+	C->ui->screen_active = screen_main;
+
+	screen_browser_make( C);
+	screen_sets_make( C);
+	screen_bricks_menu_make( C);
+	screen_intro_make( C);
 }
 
 

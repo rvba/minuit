@@ -68,6 +68,7 @@ struct Event;
 struct Clock;
 struct Image;
 struct Texture;
+struct Screen;
 
 typedef struct Ui
 {
@@ -217,6 +218,13 @@ void ui_image_draw( struct Context *C, struct Image *image, int x, int y);
 void ui_texture_draw( struct Context *C, struct Texture *texture, int px, int py, int sx, int sy);
 
 struct Lst *browser_get_bricks( void);
+
+void screen_bricks( struct MINscreen *screen);
+void screen_generic( struct MINscreen *screen);
+void screen_main( struct MINscreen *screen);
+void screen_intro(struct MINscreen *screen);
+
+void screen_init( struct Context *C);
 
 #ifdef __cplusplus
 }

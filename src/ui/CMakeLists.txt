@@ -6,6 +6,10 @@ set(SRC
 	screen_init.c
 	screen_intro.c
 	screen_browser.c
+	screen_bricks_menu.c
+	screen_generic.c
+	screen_main.c
+	screen_sets.c
 )
 
 add_library(minuit-ui STATIC ${SRC})
