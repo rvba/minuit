@@ -223,6 +223,7 @@ void screen_bricks( struct MINscreen *screen);
 void screen_generic( struct MINscreen *screen);
 void screen_main( struct MINscreen *screen);
 void screen_intro(struct MINscreen *screen);
+void screen_log(struct MINscreen *screen);
 
 void screen_init( struct Context *C);
 

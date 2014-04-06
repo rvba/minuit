@@ -16,7 +16,7 @@
 #include "util.h"
 #include "block.h"
 
-void screen_main(t_screen *screen)
+void screen_log( t_screen *screen)
 {
 	t_context *C=ctx_get();
 	t_camera *camera = C->ui->camera;
@@ -24,15 +24,10 @@ void screen_main(t_screen *screen)
 	op_camera_switch_2d(C,camera);
 
 	glPushMatrix();
-		glLoadIdentity();
+	glLoadIdentity();
 
-		ui_draw_mouse();
-		op_camera_switch_2d(C,camera);
-		//ui_draw_term();
-		ui_draw_grid();
+		ui_draw_term();
 
-		ui_draw_menu();
-		ui_draw_bar();
 	glPopMatrix();
 
 	op_camera_switch_3d(C, camera);

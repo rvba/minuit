@@ -10,6 +10,7 @@ set(SRC
 	screen_generic.c
 	screen_main.c
 	screen_sets.c
+	screen_log.c
 )
 
 add_library(minuit-ui STATIC ${SRC})
