@@ -346,6 +346,18 @@ void app_init(t_app *app, const char *name)
 	set_name(app->app_name,name);
 }
 
+void app_glew_test( int ext, const char *name)
+{
+	if( ext) printf("%s ON\n", name);
+	else printf("%s OFF\n", name);
+}
+
+void app_glew_init( void)
+{
+	glewInit();
+	app_glew_test( GLEW_ARB_vertex_shader, "GLEW_ARB_vertex_shader");
+}
+
 // NEW
 
 t_app *app_new(int argc,char **argv)
@@ -385,7 +397,7 @@ t_app *app_new(int argc,char **argv)
 	// GLUT
 	if(app->with_glut) glutInit(&app->argc, app->argv);
 	#ifdef HAVE_GLEW
-	glewInit();
+	app_glew_init();
 	#endif
 
 	app->mouse=mouse_new();
