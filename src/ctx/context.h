@@ -201,6 +201,13 @@ void state_ui_block_trigger( struct Context *C, struct Event *e);
 extern int UI_EVENT;
 extern int ctx_show_browser;
 
+extern void (* UI_STATE)( struct Context *C, struct Event *e);
+
+void state_browser( struct Context *C, struct Event *e);
+void state_ui_default( struct Context *C, struct Event *e);
+
+extern int BROWSER_EXIT;
+
 
 #ifdef __cplusplus
 }

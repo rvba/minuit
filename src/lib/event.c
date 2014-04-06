@@ -192,6 +192,7 @@ char *event_name( int type)
 		case TABKEY: return("TAB"); break;
 		case RETURNKEY: return("RETURN"); break;
 		case BACKSPACEKEY: return("BACKSPACE"); break;
+		case ESCKEY: return("ESC"); break;
 
 		case PADZERO: return("PAD 0"); break;
 		case PADONE: return("PAD 1"); break;

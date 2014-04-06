@@ -107,6 +107,7 @@ void browser_reset(void)
 	C->scene->use_tmp_colors=1;
 	browser_delete_bricks(C,block);
 	C->scene->use_tmp_colors=0;
+	C->scene->hover = NULL;
 }
 
 void browser_build_cmd(void)
@@ -122,6 +123,7 @@ void browser_build_cmd(void)
 
 void *browser_return_filename(t_brick *brick)
 {
+	ctx_ui_log( "browser return filename");
 	t_context *C=ctx_get();
 	char tmp[1024];
 
@@ -132,7 +134,8 @@ void *browser_return_filename(t_brick *brick)
 	pos=s_append(tmp,brick->id.name,pos);
 	pos=s_append(tmp,NULL,pos);
 
-	screen_switch_by_name("screen_main");
+	//screen_switch_by_name("screen_main");
+	BROWSER_EXIT = 1;
 
 	set_path( C->app->path_file, tmp);
 	C->event->callback();

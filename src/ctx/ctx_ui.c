@@ -37,6 +37,7 @@
 
 t_lst *EXE=NULL;
 int UI_EVENT;
+void (* UI_STATE)( t_context *C, t_event *e) = NULL;
 
 /*	**********************************
 	DECLARATIONS
@@ -289,10 +290,9 @@ int ctx_ui_hover_background( t_context *C)
 
 void ctx_ui_hover_reset( t_context *C)
 {
-	t_node *node = NULL;
-	if( C->scene->hover)
+	t_node *node = C->scene->hover;
+	if( node)
 	{
-		node = C->scene->hover;
 		if( node->cls->type == dt_brick)
 		{
 			t_brick *brick = ( t_brick *) node->data;
@@ -458,6 +458,7 @@ void ctx_ui_intro_stop( t_context *C)
 /*	**********************************
 	:TRIGGER
 	*********************************	*/
+
 void ctx_ui_deselect( t_context *C, t_event *e)
 {
 	t_node *node = C->scene->selected;
@@ -474,7 +475,12 @@ void state_ui_block_trigger( t_context *C, t_event *e)
 	if( e->type == UI_BLOCK_RELEASED)
 	{
 		ctx_ui_selection_release( C);
-		UI_SWAP( C, state_ui_default);
+		UI_SWAP( C, *UI_STATE);
+	}
+	else if( e->type == ESCKEY)
+	{
+		ctx_ui_selection_release( C);
+		UI_SWAP( C, *UI_STATE);
 	}
 	else if( e->type == BLOCK_DELETE)
 	{
@@ -936,6 +942,7 @@ void ctx_ui_init( t_context *C)
 	exe_init();
 	ctx_ui_event_init( C);
 	ctx_show_browser = 0;
+	UI_STATE = state_ui_default;
 }
 
 	
