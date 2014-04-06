@@ -19,7 +19,6 @@
 
 #define PATH_LIMIT 1024
 
-
 int file_exists(t_file *file)
 {
 	struct stat   buffer;   
@@ -33,15 +32,6 @@ void file_go_backward( t_file *file)
 		file->dir_count--;
 		file_path_build( file);
 	}
-}
-
-void file_element_add(t_file *file,char *name)
-{
-	file->directories = (char **) realloc( file->directories, sizeof(char *) * file->tot_directories + 1);
-	file->directories[file->tot_directories] = s_allocate( name);
-	file->tot_directories++;
-	// change name
-	set_name( file->id.name, name);
 }
 
 void file_go_directory( t_file *file, char *name)
@@ -58,262 +48,6 @@ void file_name_add( t_file *file, char *name)
 	s_append( file->path, name, l);
 }
 
-// WORD
-
-int word_equal(t_word *word,const char *string)
-{
-	if(strcmp(word->data,string)==0)
-		return 1;
-	else
-		return 0;
-}
-
-void word_show(t_word *word)
-{
-	int i;
-	printf("WORD:");
-	for(i=0;i<word->size;i++)
-	{
-		putchar(word->data[i]);
-	}
-	putchar('\n');
-}
-
-t_word *word_new(void)
-{
-	t_word *word = (t_word *)malloc(sizeof(t_word));
-	word->size=0;
-	word->data=NULL;
-
-	return word;
-}
-
-// LINE
-
-void line_read_words(t_line *line)
-{
-	int tot_word=0;
-	int i,j,k;
-
-	//count words
-	for(i=0;i<line->size;i++)
-	{
-		if(isspace(line->data[i]))
-		{
-			tot_word++;
-		}
-	}
-
-	//count words size
-	int size=0;
-	int sizes[tot_word];
-	j=0;
-
-	for(i=0;i<line->size;i++)
-	{
-		if(isspace(line->data[i]))
-		{
-			sizes[j]=size+1;
-			size=0;
-			j++;
-		}
-		else
-		{
-			size++;
-		}
-	}
-	
-	j=0;
-	k=0;
-	t_word *word=word_new();
-	word->size=sizes[j];
-	word->data=(char *)malloc(sizeof(char)*sizes[j]);
-
-	for(i=0;i<line->size;i++)
-	{
-		if(isspace(line->data[i]))
-		{
-			word->data[k]='\0';
-			lst_add(line->words,word,"word");
-
-			if(i<line->size)
-			{
-				k=0;
-				j++;
-
-				word=word_new();
-				word->size=sizes[j];
-				word->data=(char *)malloc(sizeof(char)*sizes[j]);
-			}
-		}
-		else
-		{
-			word->data[k]=line->data[i];
-			k++;
-		}
-	}
-}
-
-void line_show(t_line *line)
-{
-	int i;
-	printf("LINE %d:",line->size);
-	for(i=0;i<line->size;i++)
-	{
-		putchar(line->data[i]);
-	}
-
-	if(line->words)
-	{
-		t_link *link;
-		for(link=line->words->first;link;link=link->next)
-		{
-			t_word *word = link->data;
-			word_show(word);
-		}
-	}
-}
-
-t_line *line_new(void)
-{
-	t_line *line=(t_line *)malloc(sizeof(t_line));
-	line->size=0;
-	line->data=NULL;
-	line->words=lst_new("lst");
-
-	return line;
-}
-
-// FILE
-
-/** store lines without \n **/
-int file_read_lines(t_file *file)
-{
-	//if(file->data_size>0)
-	if( file->data)
-	{
-
-		file->lines = lst_new("lst");
-
-		// count lines
-		int i,j,k;
-		int totline=0;
-		int tot=0;
-		for(i=0;i<file->data_size;i++)
-		{
-			if(file->data[i]=='\n')
-			{	
-				totline++;
-			}
-		}
-
-		// count line size
-
-		int line_size[totline];
-		j=0;
-
-		for(i=0;i<file->data_size;i++)
-		{
-			if(file->data[i]=='\n')
-			{
-				tot++;
-				line_size[j]=tot;
-				tot=0;
-				j++;
-			}
-			else
-			{
-				tot++;
-			}
-		}
-
-		// store lines
-
-		j=0;
-		k=0;
-
-		t_line *line=line_new();
-		line->size=line_size[j];
-		line->data=(char *)malloc(sizeof(char)*line_size[j]);
-
-		for(i=0;i<file->data_size;i++)
-		{
-			if(file->data[i]=='\n')
-			{
-				//line->data[k]='\n';
-				line->data[k]='\0';
-				lst_add(file->lines,line,"line");
-
-				j++;
-				k=0;
-
-				if(j<totline)
-				{
-					int size = line_size[j];
-					line=line_new();
-					line->size=size;
-					line->data=(char *)malloc(sizeof(char)*size);
-				}
-			}
-			else
-			{
-				line->data[k]=file->data[i];
-				k++;
-			}
-
-		}
-
-		return 1;
-	}
-	else
-	{
-		printf("[FILE] Error, no data to read\n");
-		return 0;
-	}
-}
-
-char *file_line_get( t_file *file, int p)
-{
-	if( file->data)
-	{
-		if( file->lines)
-		{
-			t_line *line = ( t_line *) lst_get_by_range( file->lines, p);
-			if( line) 
-			{
-				return line->data;
-			}
-			else
-			{
-				printf("[FILE] Error, Can't get %d line\n", p);
-				return NULL;
-			}
-		}
-		else
-		{
-			if( file_read_lines( file))
-			{
-				return file_line_get( file, p);
-			}
-			else
-			{
-				return NULL;
-			}
-		}
-	}
-	else
-	{
-		if( file_read( file))
-		{
-			return file_line_get( file, p);
-		}
-		else
-		{
-			return NULL;
-		}
-	}
-}
-
 void file_show(t_file *file)
 {
 	printf("FILE\n");
@@ -324,15 +58,6 @@ void file_show(t_file *file)
 	else printf(", path of unknown type\n");
 	if(file->id.name) printf("name:%s\n", file->id.name);
 	if(file->ext) printf("ext:%s\n",file->ext);
-	printf("tot_directories:%d\n",file->tot_directories);
-	if(file->tot_directories)
-	{
-		int i;
-		for(i=0;i<file->tot_directories;i++)
-		{
-			printf("elem %d:%s\n",i,file->directories[i]);
-		}
-	}
 	if(file->data)
 	{
 		int i;
@@ -625,17 +350,6 @@ t_file *file_rebind(t_scene *scene, void *ptr)
 
 void file_free(t_file *file)
 {
-	if(file->directories)
-	{
-		int i;
-
-		for(i=0;i<file->tot_directories;i++)
-		{
-			free(file->directories[i]);
-		}
-
-		free(file->directories);
-	}
 }
 
 // ACCESS
@@ -702,12 +416,10 @@ t_file *file_new(const char *path)
 	file->has_extention = 0;
 	file->path_type = 0;
 
-	file->directories = NULL;
 	file->data = NULL;
 	file->lines = NULL;
 	file->file = NULL;
 
-	file->tot_directories = 0;
 	file->data_size = 0;
 	file->tot_line = 0;
 	file->dir_count = 0;

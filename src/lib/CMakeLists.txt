@@ -25,6 +25,7 @@ set(SRC
 	event.c
 	event.h
 	file.c
+	file_data.c
 	file.h
 	graph.c
 	graph.h

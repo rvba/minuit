@@ -65,8 +65,6 @@ struct File
 	int has_extention;
 	int path_type;
 
-	int tot_directories;
-	char **directories;
 	char dirs[FILE_MAX_DIR][_NAME_LONG_];
 	char file_name[_NAME_LONG_];
 	char dir_path[_PATH_];
