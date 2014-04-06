@@ -312,7 +312,7 @@ void add_mn(void)
 	t_context *C=ctx_get();
 
 	t_file *file = file_new( C->app->path_file);
-	_file_init(file);
+	file_init(file);
 
 	if(is(file->ext,"mn"))
 	{

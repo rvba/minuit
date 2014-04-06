@@ -650,7 +650,7 @@ int _file_test( const char *path)
 	return 1;
 }
 
-int _file_init( t_file *file)
+int file_init( t_file *file)
 {
 	int s = 1;
 	file_path_type( file);
@@ -669,192 +669,11 @@ int file_test( void)
 	return 1;
 }
 
-int file_path_split(t_file *file)
-{
-	int i,j;
-	char *letter;
-	int slash_count=0;
-	int *size;
-	int indice=-1;
-	int start=0;
-
-	char *path = file->location;
-
-	// PATH STARTS WITH DOT > go to first slash ./
-	if (path[0] == '.')
-	{
-		path++;
-		file->is_relative = 1;
-	}
-	else
-	{
-		file->is_relative = 0;
-	}
-
-	// COUNT SLASHES
-	for(letter=path;*letter!='\0';letter++)
-	{
-		if(*letter == '/') slash_count++;
-	}
-
-	// SLASH iS 0 
-	if(slash_count==0)
-	{
-		file->tot_directories=0;
-		file->is_relative = 1;
-
-		return 0;
-	}
-
-	// BUILD directories
-	else
-	{
-		// size: length of directories
-		size = (int *) malloc(sizeof(int) * slash_count);
-
-		// check size of string directories
-		for(letter=path; *letter!='\0'; letter++)
-		{
-			if(*letter == '/')
-			{
-				// go to next indice
-				indice++;
-				// reset size
-				size[indice]=0;
-			}
-			else
-			{
-				// increment size
-				size[indice]++;
-			}
-		}
-
-		// directories
-		file->directories = (char**) malloc( sizeof(char *) * slash_count);
-
-		// allocate parts
-		start = 0;
-
-		for(i=0; i < slash_count; i++)
-		{
-			//first slash
-			start++;
-
-			//XXX add 2 more char : start from 0 +  one for endline
-			file->directories[i] = (char *)malloc(sizeof(char) * (size[i]+1));
-
-			for(j=0;j<size[i];j++)
-			{
-				file->directories[i][j] = path[start];
-				start++;
-			}
-
-			file->directories[i][j] = '\0';
-
-			if(S_DEBUG) printf("element:%s\n",file->directories[i]);
-		}
-
-		file->tot_directories = slash_count;
-
-		// free
-		free(size);
-
-		return 1;
-	}
-}
-
 // REBIND
 
 t_file *file_rebind(t_scene *scene, void *ptr)
 {
 	return ptr;
-}
-
-// INIT
-
-int file_init(t_file *file)
-{
-	int i,j;
-	char *letter;
-	char *filename;
-	int indice=-1;
-	int is_split;
-	int with_extension=0;
-
-	// if no location > return
-	if(strlen(file->location)==0)
-	{
-		printf("null path\n");
-		return 0;
-	}
-
-	// split by /
-	is_split = file_path_split(file);
-
-	// get filename
-	if(is_split)
-	{
-		filename=file->directories[file->tot_directories-1];
-	}
-	else
-	{
-		filename=file->location;
-	}
-
-	// reset indice
-	indice = 0;
-
-	// check if name has extention
-	for(letter=filename;*letter!='\0';letter++)
-	{
-		if(*letter == '.')
-		{
-			with_extension=1;
-			file->has_extention = 1;
-			break;
-		}
-		else
-		{
-			indice++;
-		}
-	}
-
-	// set name && extention
-	if(with_extension)
-	{
-		// set name
-		i=0;
-
-		for(letter=filename;*letter!='.';letter++)
-		{
-			file->id.name[i] = *letter;
-			i++;
-		}
-
-		file->id.name[i] = '\0';
-
-		// set extention
-		i++;
-		j=0;
-
-		letter=filename;
-		letter+=i;
-
-		for(;*letter!='\0';letter++)
-		{
-			file->ext[j]=*letter;
-			j++;
-		}
-
-		file->ext[j] = '\0';
-	}
-	else
-	{
-		set_name( file->id.name, file->location);
-	}
-
-
-	return 1;
 }
 
 // FREE
@@ -896,7 +715,7 @@ t_file *file_access( const char *path)
 int file_create( const char *path)
 {
 	t_file *file = file_new( path);
-	if ( _file_init( file))
+	if ( file_init( file))
 	{
 		file->file = fopen( file->path, "w");
 		if( file->file)
@@ -941,7 +760,6 @@ t_file *file_new(const char *path)
 
 	file->directories = NULL;
 	file->data = NULL;
-	//file->lines = lst_new("lst");
 	file->lines = NULL;
 	file->file = NULL;
 

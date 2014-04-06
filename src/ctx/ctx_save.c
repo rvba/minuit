@@ -49,7 +49,7 @@ void load_last( t_context *C)
 		load_file( C, filename);
 		set_name_long( C->app->path_file, filename);
 		t_file *f = file_new( filename);
-		_file_init( f);
+		file_init( f);
 		char new_name[_NAME_LONG_];
 		bzero( new_name, _NAME_LONG_);
 		set_name_long( new_name, f->file_name);
@@ -121,7 +121,7 @@ void save_file_increment(t_context *C)
 	set_name_long( name, C->app->filename);
 
 	t_file *file = file_new( name);
-	_file_init( file);
+	file_init( file);
 
 	s_cp( name, file->file_name, _NAME_LONG_);
 

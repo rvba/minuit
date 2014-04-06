@@ -80,41 +80,31 @@ struct File
 	struct Lst *lines;
 };
 
-// FILE
-
-int file_test( void);
-int file_exists(t_file *file);
-void file_set_location(t_file *file, const char *path);
-void file_build_location(t_file *file);
-int file_path_split(t_file *file);
-void file_go_directory(t_file *file,char *name);
-void file_go_backward(t_file *file);
-int word_equal(t_word *word,const char *string);
-void word_show(t_word *word);
-void line_read_words(t_line *line);
-void line_show(t_line *line);
-t_line *line_new(void);
-t_file *file_rebind(struct Scene *scene, void *ptr);
-t_file *file_new(const char *path);
-void file_free(t_file *file);
-void file_show(t_file *file);
-
-char *file_line_get( t_file *file, int p);
-
-int file_read(t_file *file);
-int file_read_lines(t_file *file);
-
-int file_write( t_file *file, const char *data, int size);
-//void file_write(t_file *file);
-
-void file_data_add(t_file *file,char *data);
-int file_open(t_file *file);
-void file_close(t_file *file);
-int file_init(t_file *file);
-int _file_init( t_file *file);
-void file_free(t_file *file);
-t_file *file_access( const char *path);
-int file_create( const char *path);
+int 		file_exists( t_file *file);
+void 		file_set_location( t_file *file, const char *path);
+void 		file_build_location( t_file *file);
+int 		file_path_split( t_file *file);
+void 		file_go_directory( t_file *file, char *name);
+void 		file_go_backward( t_file *file);
+int 		word_equal( t_word *word, const char *string);
+void 		word_show( t_word *word);
+void 		line_read_words( t_line *line);
+void 		line_show( t_line *line);
+t_line *	line_new(void);
+t_file *	file_rebind( struct Scene *scene, void *ptr);
+void 		file_show( t_file *file);
+char *		file_line_get( t_file *file, int p);
+int 		file_read( t_file *file);
+int 		file_read_lines( t_file *file);
+int 		file_write( t_file *file, const char *data, int size);
+void 		file_data_add( t_file *file, char *data);
+int 		file_open( t_file *file);
+void 		file_close( t_file *file);
+int 		file_init( t_file *file);
+void 		file_free( t_file *file);
+t_file *	file_access( const char *path);
+int 		file_create( const char *path);
+t_file *	file_new( const char *path);
 
 #ifdef __cplusplus
 }
