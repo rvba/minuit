@@ -63,6 +63,8 @@ void screen_sets(t_screen *screen);
 
 // SCREEN.C
 
+t_screen *	screen_default(const char *name, void (* draw)(t_screen *s));
+
 void 		screen_always(t_screen *screen);
 void 		screen_on(t_screen *screen);
 void 		screen_off(t_screen *screen);
