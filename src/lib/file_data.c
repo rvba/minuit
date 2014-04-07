@@ -113,7 +113,7 @@ void line_read_words(t_line *line)
 void line_show(t_line *line)
 {
 	int i;
-	printf("LINE %d:",line->size);
+	printf("LINE (size%d):",line->size);
 	for(i=0;i<line->size;i++)
 	{
 		putchar(line->data[i]);
@@ -128,6 +128,8 @@ void line_show(t_line *line)
 			word_show(word);
 		}
 	}
+
+	printf("\n");
 }
 
 t_line *line_new(void)
@@ -145,10 +147,8 @@ t_line *line_new(void)
 /** store lines without \n **/
 int file_read_lines(t_file *file)
 {
-	//if(file->data_size>0)
 	if( file->data)
 	{
-
 		file->lines = lst_new("lst");
 
 		// count lines
@@ -196,7 +196,6 @@ int file_read_lines(t_file *file)
 		{
 			if(file->data[i]=='\n')
 			{
-				//line->data[k]='\n';
 				line->data[k]='\0';
 				lst_add(file->lines,line,"line");
 

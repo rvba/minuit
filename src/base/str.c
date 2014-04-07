@@ -122,3 +122,4 @@ void s_store(char *target,char source,int pos)
 	target[pos] = source;
 }
 
+
