@@ -14,6 +14,7 @@ project(Minuit)
 option(OPT_OSC "osc" OFF)
 option(OPT_OBJ "obj" OFF)
 option(OPT_GLEW "glew" OFF)
+option(OPT_SDL "sdl" OFF)
 
 ###############		 LIBS	#############################
 
@@ -33,12 +34,21 @@ endif()
 ###############		 GLEW	#############################
 if(OPT_GLEW)
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_GLEW")
-	find_library( GLEW_LIBRARY GLEW PATHS ${PATH_MINUIT_BUILD}/src/app)
+	find_library( GLEW_LIBRARY GLEW PATHS)
 endif()
+
+###############		 SDL	#############################
+if(OPT_SDL)
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_SDL")
+	find_library( SDL_LIBRARY SDL2 PATHS "/usr/lib/i386-linux-gnu")
+	include_directories("/usr/local/include/SDL2")
+endif()
+
 
 message("OSC " ${OPT_OSC})
 message("OBJ" ${OPT_OBJ})
 message("GLEW ${OPT_GLEW}")
+message("SDL ${OPT_SDL}")
 
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
@@ -88,6 +98,11 @@ add_executable(
 
 target_link_libraries(minuit minuit-ctx minuit-ops minuit-ui minuit-draw minuit-scene minuit-lib minuit-app minuit-base)
 #target_link_libraries(minuit ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${PNG_LIBRARY} ${JPEG_LIBRARY} pthread m)
+
+if(OPT_SDL)
+	target_link_libraries(minuit ${SDL_LIBRARY})
+endif()
+
 target_link_libraries(minuit ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${PNG_LIBRARY} ${JPG} pthread m)
 if(OPT_OSC)
 	target_link_libraries(minuit ${LIB_OSC})
@@ -96,6 +111,7 @@ endif()
 if(OPT_GLEW)
 	target_link_libraries(minuit ${GLEW_LIBRARY})
 endif()
+
 
 
 

@@ -82,7 +82,7 @@ t_context *ctx_init(int argc,char **argv)
 	term_init();
 	mode_init( C->mode);
 	ctx_thread_init( C);
-	screen_init( C);
+	//screen_init( C);
 	exe_init();
 
 	// Set GL Callback

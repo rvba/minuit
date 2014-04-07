@@ -8,6 +8,15 @@ set(SRC
 	app_window.c
 )
 
+if(OPT_SDL)
+
+set(SRC
+	${SRC}
+	app_sdl.c
+)
+
+endif()
+
 add_library(minuit-app STATIC ${SRC})
 
 

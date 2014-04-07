@@ -232,6 +232,12 @@ t_app *app_get(void);
 extern const char *git;
 #endif
 
+#ifdef HAVE_SDL
+
+int sdl_init( int argc, char **argv);
+
+#endif
+
 #ifdef __cplusplus
 }
 #endif

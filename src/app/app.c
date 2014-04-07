@@ -184,7 +184,11 @@ void app_launch(t_app *app)
 	}
 	else
 	{
+		#ifdef HAVE_SDL
+
+		#else
 		glutMainLoop();
+		#endif
 	}
 }
 void app_scan_port( t_app *app, const char *data)
@@ -322,6 +326,9 @@ void app_init(t_app *app, const char *name)
 	}
 	else
 	{
+		#ifdef HAVE_SDL
+
+		#else
 		if(app->with_glut)
 		{
 			glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_STENCIL | GLUT_ALPHA);
@@ -337,14 +344,19 @@ void app_init(t_app *app, const char *name)
 			glutPassiveMotionFunc(app_gl_passive_motion);
 			glutIdleFunc(app_gl_idle);
 		}
+
+		// Set Fullscreen
+		if(SET_FULLSCREEN && !app->off_screen) app_screen_set_fullscreen(app,1);
+
+		#endif
 		//else glx_win(app);
 	}
 
-	// Set Fullscreen
-	if(SET_FULLSCREEN && !app->off_screen) app_screen_set_fullscreen(app,1);
 
 	set_name(app->app_name,name);
 }
+
+#ifdef HAVE_GLEW
 
 void app_glew_test( int ext, const char *name)
 {
@@ -355,7 +367,15 @@ void app_glew_test( int ext, const char *name)
 void app_glew_init( void)
 {
 	glewInit();
+	printf("%d\n",GLEW_ARB_vertex_shader);
 	app_glew_test( GLEW_ARB_vertex_shader, "GLEW_ARB_vertex_shader");
+}
+
+#endif
+
+void app_glut_info( void)
+{
+//	printf("GLUT VERSION: %d\n", glutGet( GLUT_VERSION));
 }
 
 // NEW
@@ -394,10 +414,19 @@ t_app *app_new(int argc,char **argv)
 	// ARGS
 	app_args_scan(app);
 
-	// GLUT
-	if(app->with_glut) glutInit(&app->argc, app->argv);
+	// GLEW
 	#ifdef HAVE_GLEW
 	app_glew_init();
+	#endif
+
+	// SDL
+	#ifdef HAVE_SDL
+	sdl_init(app->argc, app->argv);
+	app->with_glut = 0;
+	#else
+	// GLUT
+	if(app->with_glut) glutInit(&app->argc, app->argv);
+	app_glut_info();
 	#endif
 
 	app->mouse=mouse_new();
@@ -414,7 +443,6 @@ t_app *app_new(int argc,char **argv)
 	clock_init(app->clock);
 
 	app->quit = 0;
-
 
 	return app;
 }
