@@ -11,7 +11,6 @@
 #define __IMAGE_H
 
 #include "common.h"
-#include <GL/gl.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -24,8 +23,8 @@ typedef struct Image
 	int width;
 	int height;
 	int bpp; 		//byte per pixel
-	GLenum format;
-	GLenum type;
+	int format;
+	int type;
 
 	size_t size;
 	unsigned char *data;

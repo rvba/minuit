@@ -14,6 +14,7 @@
 
 #ifdef HAVE_GLEW
 #include <GL/glew.h>
+#define WITH_GLEW
 #endif
 
 #include <GL/gl.h>

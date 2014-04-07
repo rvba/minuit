@@ -170,6 +170,7 @@ int file_read_lines(t_file *file)
 
 		for(i=0;i<file->data_size;i++)
 		{
+			printf(">>%c\n", file->data[i]);
 			if(file->data[i]=='\n')
 			{
 				tot++;
