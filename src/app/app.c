@@ -305,6 +305,37 @@ void app_init_current( t_app *app)
 	}
 }
 
+
+#ifdef HAVE_GLEW
+
+void app_glew_test( int ext, const char *name)
+{
+	if( ext) printf("%s ON\n", name);
+	else printf("%s OFF\n", name);
+}
+
+void app_glew_init( int log)
+{
+	glewInit();
+
+	if( log)
+	{
+		printf("OpenGL version: %s\n", glGetString(GL_VERSION));
+		if( GLEW_VERSION_1_3) printf("GLEW VERSION 1.3\n");
+		app_glew_test( GLEW_ARB_vertex_shader, "GLEW_ARB_vertex_shader");
+		app_glew_test( GLEW_ARB_vertex_shader, "GLEW_ARB_fragment_shader");
+		app_glew_test( GL_ARB_vertex_shader, "GL_ARB_vertex_shader");
+		app_glew_test( GL_ARB_fragment_shader, "GL_ARB_fragment_shader");
+	}
+}
+
+#endif
+
+void app_glut_info( void)
+{
+	//printf("GLUT VERSION: %d\n", glutGet( GLUT_VERSION));
+}
+
 // INIT
 
 void app_init(t_app *app, const char *name)
@@ -326,11 +357,19 @@ void app_init(t_app *app, const char *name)
 	}
 	else
 	{
+
 		#ifdef HAVE_SDL
 
+		sdl_init(app->argc, app->argv);
+		app->with_glut = 0;
+
 		#else
+
 		if(app->with_glut)
 		{
+
+			glutInit(&app->argc, app->argv);
+
 			glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_STENCIL | GLUT_ALPHA);
 			glutInitWindowPosition(WIN_X,WIN_Y);
 			glutInitWindowSize(app->window->width,app->window->height);
@@ -345,37 +384,18 @@ void app_init(t_app *app, const char *name)
 			glutIdleFunc(app_gl_idle);
 		}
 
+		// GLEW
+		#ifdef HAVE_GLEW
+		app_glew_init( 0);
+		#endif
+
 		// Set Fullscreen
 		if(SET_FULLSCREEN && !app->off_screen) app_screen_set_fullscreen(app,1);
 
 		#endif
-		//else glx_win(app);
 	}
 
-
 	set_name(app->app_name,name);
-}
-
-#ifdef HAVE_GLEW
-
-void app_glew_test( int ext, const char *name)
-{
-	if( ext) printf("%s ON\n", name);
-	else printf("%s OFF\n", name);
-}
-
-void app_glew_init( void)
-{
-	glewInit();
-	printf("%d\n",GLEW_ARB_vertex_shader);
-	app_glew_test( GLEW_ARB_vertex_shader, "GLEW_ARB_vertex_shader");
-}
-
-#endif
-
-void app_glut_info( void)
-{
-//	printf("GLUT VERSION: %d\n", glutGet( GLUT_VERSION));
 }
 
 // NEW
@@ -413,21 +433,6 @@ t_app *app_new(int argc,char **argv)
 
 	// ARGS
 	app_args_scan(app);
-
-	// GLEW
-	#ifdef HAVE_GLEW
-	app_glew_init();
-	#endif
-
-	// SDL
-	#ifdef HAVE_SDL
-	sdl_init(app->argc, app->argv);
-	app->with_glut = 0;
-	#else
-	// GLUT
-	if(app->with_glut) glutInit(&app->argc, app->argv);
-	app_glut_info();
-	#endif
 
 	app->mouse=mouse_new();
 	app->window=window_new(app->with_glut);

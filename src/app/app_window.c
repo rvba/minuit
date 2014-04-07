@@ -72,27 +72,13 @@ t_window *window_new(int with_glut)
 {
 	t_window *window = (t_window  *)mem_malloc(sizeof(t_window));
 
-	int width;
-	int height;
-
-	if(with_glut)
-	{
-		width=glutGet(GLUT_SCREEN_WIDTH)/2;
-		height=glutGet(GLUT_SCREEN_HEIGHT)/2;
-	}
-	else
-	{
-		width=100;
-		height=100;
-	}
-
 	window->fullscreen=0;
-	window->width = width;
-	window->height = height;
-	window->width_def = width;
-	window->height_def = height;
-	window->viewport_width=width;
-	window->viewport_height=height;
+	window->width = 400;
+	window->height = 300;
+	window->width_def = 400;
+	window->height_def = 300;
+	window->viewport_width = 400;
+	window->viewport_height = 300;
 	window->change=0;
 
 	return window;

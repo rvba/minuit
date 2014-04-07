@@ -46,7 +46,7 @@ endif()
 
 
 message("OSC " ${OPT_OSC})
-message("OBJ" ${OPT_OBJ})
+message("OBJ " ${OPT_OBJ})
 message("GLEW ${OPT_GLEW}")
 message("SDL ${OPT_SDL}")
 
