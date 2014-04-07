@@ -41,6 +41,10 @@ void sdl_quit( void)
     SDL_Quit();
 }
 
+void sdl_swap( t_app *app)
+{
+}
+
 void sdl_mainloop( t_app *app)
 {
 	SDL_Event e;

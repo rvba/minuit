@@ -144,7 +144,11 @@ void app_swap(t_app *app)
 	if (app->buffer==1)
 	{
 		glDrawBuffer(GL_BACK);
+		#ifdef HAVE_SDL
+		sdl_swap( app);
+		#else
 		glutSwapBuffers();
+		#endif
 	}
 	// single buffer
 	else

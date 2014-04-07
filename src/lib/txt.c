@@ -698,11 +698,16 @@ void txt_draw(t_txt *txt)
 	void * font;
 	float zoom = C->ui->zoom;
 	int line_width = 1;
+	font = GLUT_BITMAP_HELVETICA_10;
 
+	#ifdef HAVE_SDL
+
+	font_type = 2;
+
+	#else
 	if(C->ui->use_bitmap_font && txt->use_bitmap_font)
 	{
 		font_type = 1;
-		font = GLUT_BITMAP_HELVETICA_10;
 
 		if(C->event->ui.use_scale)
 		{
@@ -735,6 +740,7 @@ void txt_draw(t_txt *txt)
 
 	
 	}
+	#endif
 
 
 	if(font_type == 1)
