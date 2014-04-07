@@ -235,6 +235,7 @@ extern const char *git;
 #ifdef HAVE_SDL
 
 int sdl_init( int argc, char **argv);
+void sdl_mainloop( t_app *app);
 
 #endif
 

@@ -178,14 +178,10 @@ void app_launch(t_app *app)
 		}
 		#endif
 	}
-	else if(app->with_glut==0)
-	{
-		//glx_main_loop();	
-	}
 	else
 	{
 		#ifdef HAVE_SDL
-
+		sdl_mainloop( app);
 		#else
 		glutMainLoop();
 		#endif
