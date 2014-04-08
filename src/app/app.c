@@ -336,6 +336,18 @@ void app_glut_info( void)
 	//printf("GLUT VERSION: %d\n", glutGet( GLUT_VERSION));
 }
 
+void app_gl_info( void)
+{
+	int m,n;
+	glGetIntegerv( GL_MAJOR_VERSION, &m);
+	glGetIntegerv( GL_MINOR_VERSION, &n);
+
+	printf("RENDERER: %s\n", glGetString( GL_RENDERER));
+	printf("VENDOR: %s\n", glGetString( GL_VENDOR));
+	printf("VERSION: %s (%d.%d) \n", glGetString( GL_VERSION), m, n);
+	printf("GLSL VERSION: %s\n", glGetString( GL_SHADING_LANGUAGE_VERSION));
+}
+
 // INIT
 
 void app_init(t_app *app, const char *name)
@@ -395,6 +407,10 @@ void app_init(t_app *app, const char *name)
 		#endif
 	}
 
+	// Info
+	//app_gl_info();
+
+	// App Name
 	set_name(app->app_name,name);
 }
 
