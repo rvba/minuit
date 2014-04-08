@@ -358,6 +358,15 @@ void app_ext_info( void)
 	}
 }
 
+int app_have_glew( void)
+{
+	#ifdef HAVE_GLEW
+	return 1;
+	#else
+	return 0;
+	#endif
+}
+
 // INIT
 
 void app_init(t_app *app, const char *name)

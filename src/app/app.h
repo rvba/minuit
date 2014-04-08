@@ -238,7 +238,10 @@ int sdl_init( int argc, char **argv);
 void sdl_mainloop( t_app *app);
 void sdl_swap( t_app *app);
 
+
 #endif
+
+int app_have_glew( void);
 
 #ifdef __cplusplus
 }
