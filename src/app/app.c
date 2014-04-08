@@ -348,6 +348,16 @@ void app_gl_info( void)
 	printf("GLSL VERSION: %s\n", glGetString( GL_SHADING_LANGUAGE_VERSION));
 }
 
+void app_ext_info( void)
+{
+	int i,ext;
+	glGetIntegerv(GL_NUM_EXTENSIONS, &ext);
+	for( i = 0; i < ext; i++)
+	{
+		printf("%s\n", glGetStringi( GL_EXTENSIONS, i ) );
+	}
+}
+
 // INIT
 
 void app_init(t_app *app, const char *name)
@@ -409,6 +419,7 @@ void app_init(t_app *app, const char *name)
 
 	// Info
 	//app_gl_info();
+	//app_ext_info();
 
 	// App Name
 	set_name(app->app_name,name);
