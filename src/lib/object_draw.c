@@ -142,6 +142,9 @@ void cls_object_draw_mesh(t_object *object)
 					mesh->state.is_edit_mode = 0;
 				}
 
+				// shader
+				if(object->shader) object->shader( object, OBJECT_SHADER_ON);
+
 				// draw
 				if(draw->mode_direct)
 				{
@@ -151,6 +154,9 @@ void cls_object_draw_mesh(t_object *object)
 				{
 					draw_mesh(draw,scene,mesh);
 				}
+
+				// shader
+				if(object->shader) object->shader( object, OBJECT_SHADER_OFF);
 
 			}
 

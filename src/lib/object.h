@@ -12,6 +12,9 @@
 
 #include "common.h"
 
+#define OBJECT_SHADER_ON 1
+#define OBJECT_SHADER_OFF 2
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -64,6 +67,7 @@ typedef struct Object
 	void (* action)(struct Node *node);
 	void (* update)(struct Node *node);
 	void (* draw)(struct Node *node);
+	void (* shader)( struct Object *object, int state);
 
 }t_object;
 
