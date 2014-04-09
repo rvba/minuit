@@ -143,7 +143,7 @@ void cls_object_draw_mesh(t_object *object)
 				}
 
 				// shader
-				if(object->shader) object->shader( object, OBJECT_SHADER_ON);
+				if( draw->with_shaders && object->shader) object->shader( object, OBJECT_SHADER_ON);
 
 				// draw
 				if(draw->mode_direct)
@@ -156,7 +156,7 @@ void cls_object_draw_mesh(t_object *object)
 				}
 
 				// shader
-				if(object->shader) object->shader( object, OBJECT_SHADER_OFF);
+				if( draw->with_shaders && object->shader) object->shader( object, OBJECT_SHADER_OFF);
 
 			}
 

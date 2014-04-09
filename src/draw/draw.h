@@ -91,6 +91,7 @@ typedef struct Draw
 	int with_face_outline;
 	int with_blend;
 	int with_restrict_matrix;
+	int with_shaders;
 
 	int with_highlight;
 	int with_light;

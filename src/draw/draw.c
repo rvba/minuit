@@ -878,6 +878,8 @@ t_draw *draw_new(void)
 	draw->usex=0;
 	draw->usey=0;
 
+	draw->with_shaders = 1;
+
 	draw->draw_lights = 1;
 	draw->edit_mode = 0;
 
