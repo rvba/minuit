@@ -757,11 +757,11 @@ void state_ui_mouse_right_motion( t_context *C, t_event *e)
 				break;
 
 			case SHIFTKEY:
-				UI_SWAP( C, state_ui_pan);
+				UI_SWAP( C, state_ui_space_rotate);
 				break;
 
 			case CTRLKEY:
-				UI_SWAP( C, state_ui_zoom);
+				UI_SWAP( C, state_ui_space_translate);
 				break;
 		}
 	}
@@ -782,8 +782,8 @@ void state_ui_mouse_right( t_context *C, t_event *e)
 	{
 		switch( e->type)
 		{
-			case SHIFTKEY: UI_SWAP( C, state_ui_space_rotate); break;
-			case CTRLKEY: UI_SWAP( C, state_ui_space_translate); break;
+			case SHIFTKEY: UI_SWAP( C, state_ui_pan); break;
+			case CTRLKEY: UI_SWAP( C, state_ui_zoom); break;
 			case MOUSE_MOTION: 
 				if( ( abs( C->ui->mouse_delta_x) > D) || ( abs( C->ui->mouse_delta_y) > D))
 				UI_SWAP( C, state_ui_mouse_right_motion);
