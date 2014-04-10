@@ -213,36 +213,6 @@ void		cls_brick_build_width(struct Brick *brick);
 void 		cls_brick_build_txt(struct Brick *brick);
 
 
-// OP_ADD_OBJECT
-
-void *		op_add_viewport(t_brick *brick);
-void *		op_add_set(struct Brick *brick);
-void *		op_new_set(const char *name);
-void *		op_new_camera(const char *name);
-struct Node *	op_new_cube(const char *name);
-struct Node *	op_add_new_wire_cube(struct Node *node);
-void 		add_mn(void);
-void *		op_add_mn(struct Brick *brick);
-void *		op_add_camera(struct Brick *brick);
-void *	 	op_add_camera_main(void);
-void *		op_add_default(struct Brick *brick);
-void *		op_add_light(struct Brick *brick);
-void *		op_add_cube(struct Brick *brick);
-void *		op_add_plane(struct Brick *brick);
-void *		op_add_triangle(struct Brick *brick);
-void *		op_add_quad(struct Brick *brick);
-void *		op_add_empty_object(t_brick *brick);
-void *		op_add_empty_mesh(struct Brick *brick);
-void *		op_add_object(const char *name);
-void *		op_add_mesh(const char *name);
-void *		op_add_empty_vlst(struct Brick *brick);
-void *		op_add_empty_float_vlst(struct Brick *brick);
-void *		op_add_empty_int_vlst(struct Brick *brick);
-void *		op_add_empty_geometry(struct Brick *brick);
-void *		op_add_empty_geo_point(struct Brick *brick);
-void *		op_add_empty_geo_edge( struct Brick *brick);
-void *		op_add_geo_array( struct Brick *brick);
-
 
 void *		op_camera_rotate_xy(struct Brick *brick);
 void *		op_camera_rotate_z(struct Brick *brick);

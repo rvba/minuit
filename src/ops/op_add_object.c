@@ -119,6 +119,19 @@ t_node *op_new_plane(const char *name)
 	return plane;
 }
 
+t_node *op_new_square( const char *name)
+{
+	t_node *node = op_new_plane( name);
+	t_mesh *mesh = node->data;
+
+	mesh->state.has_face = 0;
+	mesh->state.has_quad = 0;
+	mesh->quads = NULL;
+
+	return node;
+}
+
+
 // EMPTY MESH
 
 t_node *op_new_empty_mesh(const char *name)
@@ -298,6 +311,23 @@ void *op_add_plane(t_brick *brick)
 
 	scene_store(C->scene,0);
 	return NULL;
+}
+
+void *op_add_object_square(t_brick *brick)
+{ 
+	t_context *C=ctx_get();
+	term_log("+ square");
+
+	scene_store(C->scene,1);
+
+		t_node *node_mesh=op_new_square("plane");
+		t_node *node_object=object_add("mesh","plane");
+
+		t_object *object = ( t_object *) node_object->data;
+		object->cls->link(object,node_mesh);
+
+	scene_store(C->scene,0);
+	return object;
 }
 
 // default 

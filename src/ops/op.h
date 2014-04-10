@@ -127,6 +127,37 @@ void 		register_set( struct Context *C);
 struct Block *add_menu( struct Context *C, const char *name);
 struct Block *add_submenu( struct Context *C, const char *menu_name, const char *submenu_name);
 
+// OP_ADD_OBJECT
+
+void *		op_add_viewport(struct Brick*brick);
+void *		op_add_set(struct Brick *brick);
+void *		op_new_set(const char *name);
+void *		op_new_camera(const char *name);
+struct Node *	op_new_cube(const char *name);
+struct Node *	op_add_new_wire_cube(struct Node *node);
+void 		add_mn(void);
+void *		op_add_mn(struct Brick *brick);
+void *		op_add_camera(struct Brick *brick);
+void *	 	op_add_camera_main(void);
+void *		op_add_default(struct Brick *brick);
+void *		op_add_light(struct Brick *brick);
+void *		op_add_cube(struct Brick *brick);
+void *		op_add_plane(struct Brick *brick);
+void *		op_add_triangle(struct Brick *brick);
+void *		op_add_quad(struct Brick *brick);
+void *		op_add_empty_object(struct Brick*brick);
+void *		op_add_empty_mesh(struct Brick *brick);
+void *		op_add_object(const char *name);
+void *		op_add_mesh(const char *name);
+void *		op_add_empty_vlst(struct Brick *brick);
+void *		op_add_empty_float_vlst(struct Brick *brick);
+void *		op_add_empty_int_vlst(struct Brick *brick);
+void *		op_add_empty_geometry(struct Brick *brick);
+void *		op_add_empty_geo_point(struct Brick *brick);
+void *		op_add_empty_geo_edge( struct Brick *brick);
+void *		op_add_geo_array( struct Brick *brick);
+
+void *		op_add_object_square(struct Brick *brick);
 
 #ifdef __cplusplus
 }
