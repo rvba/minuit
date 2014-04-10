@@ -180,7 +180,6 @@ void keymap_command( int key)
 		case PADTHREE: if(camera) op_camera_view_left(camera);break;
 		case PADTWO: if(camera) op_camera_ortho_rotate(camera,-5,0,0);break;
 		case PADZERO: 
-				printf("RESET\n");
 				C->ui->zoom = 1;
 				C->ui->pan_x = 0;
 				C->ui->pan_y = 0;

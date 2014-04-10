@@ -181,17 +181,18 @@ void op_camera_update(t_context *C, t_camera *camera)
 		glOrtho(left*z,right*z,bottom*z,top*z,camera->ortho_near,camera->ortho_far);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		glRotatef(camera->angle,
-			camera->ortho_rotation[0],
-			camera->ortho_rotation[1],
-			camera->ortho_rotation[2]
-			);
 
 		glTranslatef(
 				camera->ortho_location[0],
 				camera->ortho_location[1],
 				camera->ortho_location[2]
 				);
+		glRotatef(camera->angle,
+			camera->ortho_rotation[0],
+			camera->ortho_rotation[1],
+			camera->ortho_rotation[2]
+			);
+
 	}
 
 	// FRUSTUM
