@@ -134,6 +134,8 @@ void *		op_add_set(struct Brick *brick);
 void *		op_new_set(const char *name);
 void *		op_new_camera(const char *name);
 struct Node *	op_new_cube(const char *name);
+struct Node *op_new_empty_mesh(const char *name);
+
 struct Node *	op_add_new_wire_cube(struct Node *node);
 void 		add_mn(void);
 void *		op_add_mn(struct Brick *brick);

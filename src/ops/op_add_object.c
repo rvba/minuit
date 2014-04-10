@@ -374,19 +374,18 @@ void *op_add_empty_object(t_brick *brick)
 {
 	t_context *C=ctx_get();
 	scene_store(C->scene,1);
-	t_node *node_object=object_add("mesh","cube");
-	(void) node_object;
+	t_node *node = object_add("mesh","cube");
 	scene_store(C->scene,0);
-	return NULL;
+	return node;
 }
 
 void *op_add_empty_mesh(t_brick *brick)
 {
 	t_context *C = ctx_get();
 	scene_store(C->scene,1);
-	op_new_empty_mesh("mesh");
+	t_node *node = op_new_empty_mesh("mesh");
 	scene_store(C->scene,0);
-	return NULL;
+	return node;
 }
 
 void op_mesh_add_brick_vertex(t_context *C,t_mesh *mesh)

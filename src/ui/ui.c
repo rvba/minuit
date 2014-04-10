@@ -346,6 +346,7 @@ void ui_draw_selected( t_context *C)
 				{
 					block = l->data;
 					block->cls->draw( block);
+					glTranslatef( 0, block->height, 0);
 				}
 			}
 		}
