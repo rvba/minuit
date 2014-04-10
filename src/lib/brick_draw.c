@@ -132,61 +132,84 @@ void brick_build_txt(t_brick *brick)
 	}
 }
 
-void brick_draw_link(t_brick *brick)
+void brick_draw_connection_line(t_block *block, t_brick *brick, float *v2, int draw_points)
 {
-	t_context *C=ctx_get();
+	t_context *C = ctx_get();
 
 	float width = brick->geom.width;
+	float zoom = C->ui->zoom;
+	float *color=C->ui->front_color;
+	int line_width=1;
 
-	if(brick->brick_state.draw_plugs)
+	float ax= (float)block->pos[0]+ width + (brick->geom.height/2);
+	float ay = (float)block->pos[1]+(float)((brick->geom.block_pos*brick->geom.height)+(brick->geom.height/2));
+
+	float v1[3] = {ax*zoom,ay*zoom,0};
+	vmul( v2, zoom);
+	
+	glPushMatrix();
+	glLoadIdentity();
+
+		glTranslatef(C->ui->pan_x,C->ui->pan_y,0);
+
+		// line
+		skt_line(v1,v2,line_width,color);
+
+		// points
+		t_plug *plug_out = &brick->plug_out;
+		t_plug *plug_target=plug_out->dst;
+		if( draw_points && C->ui->show_plug_state)
+		{
+			if(plug_out->state.flow_out)
+			{
+				skt_point(v1,7,C->ui->front_color);
+			}
+
+			if(plug_target->state.flow_in)
+			{
+				skt_point(v2,7,C->ui->front_color);
+			}
+		}
+
+	glPopMatrix();
+
+}
+
+void brick_get_geo_in( float *p, t_block *block_target, t_brick *brick_target)
+{
+	float bx = (float) block_target->pos[0] - brick_target->geom.height /2;
+	float by = (float)block_target->pos[1] + (float)((brick_target->geom.block_pos*brick_target->geom.height)+(brick_target->geom.height/2));
+
+	p[0] = bx;
+	p[1] = by;
+}
+
+void brick_draw_link(t_brick *brick)
+{
+	t_block *block = brick->block;
+	if( block->block_state.connecting)
 	{
-		// draw line from plug_out
+		t_context *C = ctx_get();
+		float p[3]={0,0,0};
+
+		ctx_get_mouse_pos( C, p);
+		brick_draw_connection_line( block, brick, p, 0);
+
+	}
+	else if(brick->brick_state.draw_plugs)
+	{
 		t_plug *plug_out = &brick->plug_out;
 
 		if(plug_out->dst) 
 		{
-
-			t_block *block=brick->block;
 			t_plug *plug_target=plug_out->dst;
 			t_brick *brick_target=plug_target->brick;
 
 			t_block *block_target=brick_target->block;
 
-			// out: end of brick
-			float ax= (float)block->pos[0]+ width + (brick->geom.height/2);
-			float ay = (float)block->pos[1]+(float)((brick->geom.block_pos*brick->geom.height)+(brick->geom.height/2));
-
-			// in: target
-			float bx = (float)block_target->pos[0]-brick->geom.height/2;
-			float by = (float)block_target->pos[1]+(float)((brick_target->geom.block_pos*brick->geom.height)+(brick->geom.height/2));
-
-			float zoom = C->ui->zoom;
-
-			float v1[3] = {ax*zoom,ay*zoom,0};
-			float v2[3] = {bx*zoom,by*zoom,0};
-			float *color=C->ui->front_color;
-			int width=1;
-			
-			glPushMatrix();
-			glLoadIdentity();
-			glTranslatef(C->ui->pan_x,C->ui->pan_y,0);
-			skt_line(v1,v2,width,color);
-
-			// draw plug state
-			if(C->ui->show_plug_state)
-			{
-				if(plug_out->state.flow_out)
-				{
-					skt_point(v1,7,C->ui->front_color);
-				}
-
-				if(plug_target->state.flow_in)
-				{
-					skt_point(v2,7,C->ui->front_color);
-				}
-			}
-
-			glPopMatrix();
+			float p[3];
+			brick_get_geo_in(  p, block_target, brick_target);
+			brick_draw_connection_line( block, brick, p, 1);
 		}
 	}
 }

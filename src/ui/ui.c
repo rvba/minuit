@@ -416,7 +416,7 @@ void ui_draw(void)
 	}
 
 	// Link
-	if( C->ui->draw_link) ui_draw_lines( C); 
+	//if( C->ui->draw_link) ui_draw_lines( C); 
 
 
 	C->event->ui.use_point_global_width = 1;

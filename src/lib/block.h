@@ -63,6 +63,7 @@ typedef struct Block_State
 	int is_a_loop:1;
 	int is_in_rhizome:1;
 	int frame_based:1;
+	int connecting:1;
 
 }t_block_state;
 

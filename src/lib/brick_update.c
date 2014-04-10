@@ -100,6 +100,8 @@ void _cls_brick_disconnect(t_brick *self)
 void cls_brick_disconnect(t_brick *self)
 {
 	t_context *C = ctx_get();
+	t_block *block = self->block;
+	block->block_state.connecting = 1;
 	C->ui->do_disconnect = 1;
 	C->ui->connect_brick_in = self;
 }

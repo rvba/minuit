@@ -251,6 +251,7 @@ void state_block_exit( t_block *block, t_event *e)
 
 void block_linking_stop( t_context *C, t_block *block)
 {
+	block->block_state.connecting = 0;
 	C->ui->draw_link = 0;
 	BLOCK_SWAP( block, state_block_default);
 	block->selected = NULL;
@@ -264,7 +265,6 @@ void block_connect( t_context *C, t_block *block, t_brick *brick)
 		_cls_brick_connect( brick, block->selected);
 	}
 
-	block_linking_stop( C, block);
 }
 
 void state_brick_linking( t_block *block, t_event *e)
@@ -282,6 +282,7 @@ void state_brick_linking( t_block *block, t_event *e)
 		{
 			case MOUSE_LEFT_RELEASED:
 				block_connect( C, block, brick);
+				block_linking_stop( C, block);
 				break;
 		}
 	}
@@ -299,6 +300,7 @@ void state_brick_linking( t_block *block, t_event *e)
 void block_linking_start( t_context *C, t_block *block, t_brick *brick)
 {
 	block->selected = brick;
+	block->block_state.connecting = 1;
 	BLOCK_SWAP( block, state_brick_linking);
 }
 
@@ -334,9 +336,6 @@ void state_block_disconnect( t_block *block, t_event *e)
 
 	t_context *C = ctx_get();
 
-	C->event->start_x = e->x;
-	C->event->start_y = e->y;
-
 	switch( e->type)
 	{
 		case MOUSE_LEFT_RELEASED:
@@ -350,23 +349,19 @@ void block_disconnect( t_context *C, t_block *block, t_brick *brick, t_event *e)
 	t_plug *plug_target = brick->plug_in.src;
 	if( plug_target)
 	{
-		t_brick *brick_target = plug_target->brick;
-
-		float plug_pos[3];
-		t_block *block_target = brick_target->block;
-		block_get_pos_plug_out( block_target, brick_target, plug_pos);
+		//t_brick *brick_target = plug_target->brick;
+		//t_block *block_target = brick_target->block;
 
 		C->ui->draw_link = 1;
 
-		C->event->end_x = e->x;
-		C->event->end_y = e->y;
-
-		C->event->start_x = plug_pos[0] + C->ui->pan_x;
-		C->event->start_y = plug_pos[1] + C->ui->pan_y;
-
 		_cls_brick_disconnect( brick);
 
-		block_linking_start( C, block, brick_target);
+		block->block_state.connecting = 0;
+
+		block_linking_stop( C, block);
+
+		//XXX send linking msg
+		//BLOCK_SWAP( block, state_block_disconnect);
 	}
 }
 
@@ -483,7 +478,10 @@ void state_block_default( t_block *block, t_event *e)
 				{
 					if(  e->type == MOUSE_LEFT_PRESSED)
 					{
-						block_disconnect( C, block, brick, e);
+						if( brick->plug_in.src)
+						{
+							block_disconnect( C, block, brick, e);
+						}
 					}
 				}
 				else

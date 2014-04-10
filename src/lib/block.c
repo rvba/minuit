@@ -382,6 +382,8 @@ void block_cls_init(t_block *block)
 	}
 
 	if(!found)printf("[ERROR:cls_block_init] Unknown block type %s\n",block->type);
+
+	block->block_state.connecting = 0;
 }
 
 void block_brick_add(t_block *block,t_node *node_brick)
@@ -606,6 +608,7 @@ t_block *block_new(const char *name)
 	block->block_state.is_a_loop = 0;
 	block->block_state.is_in_rhizome = 0;
 	block->block_state.frame_based = 0;
+	block->block_state.connecting = 0;
 
 	block->tot_bricks=0;
 	block->rhizome_order = -1;
