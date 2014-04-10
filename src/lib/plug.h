@@ -90,7 +90,6 @@ struct Plug
 	int idcol[3];
 
 	t_data_type data_type;
-	//t_operator operator_type;
 	enum Type_Operator operator_type;
 	t_plug_state state;
 

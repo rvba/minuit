@@ -56,6 +56,7 @@ struct Node *	add_brick_submenu_poll( struct Context *C, struct Block *menu, str
 struct Node *	add_brick_selector(struct Context *C,struct Block *block,const char *name,void *data_target,int length);
 struct Node *	add_brick(struct Context *C,struct Block *block,const char *name,const char *type,const char *data_type,void *data_target);
 struct Node *	add_brick_slider_int(struct Context *C,struct Block *block,const char *name,void *data_target);
+struct Node *	add_brick_slider_int_odd(struct Context *C,struct Block *block,const char *name,void *data_target);
 struct Node *	add_brick_slider_float(struct Context *C,struct Block *block,const char *name,void *data_target);
 struct Node *	add_brick_slider_float_custom(struct Context *C,struct Block *block,const char *name,void *data_target,void *(*f)(struct Brick *b));
 struct Node *	add_brick_slider_int_custom(struct Context *C,struct Block *block,const char *name,void *data_target,void *(*f)(struct Brick *b));

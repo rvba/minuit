@@ -165,6 +165,58 @@ void *op_slider(t_brick *brick)
 	return NULL;
 }
 
+void set_odd( void *data, t_data_type type, int sign)
+{
+	int val;
+	int *int_ptr;
+	float *float_ptr;
+	int exec = 0;
+
+	switch( type)
+	{
+		case dt_int:
+			int_ptr = (int *) data;
+			val = *int_ptr;
+			exec = 1;
+			break;
+
+		case dt_float:
+			float_ptr = (float *) data;
+			val = (int) *float_ptr;
+			exec = 1;
+			break;
+
+		default: break;
+	}
+
+	if( exec)
+	{
+		if( val%2 )
+		{
+			if( type == dt_int)
+			{
+				if( sign >= 0) *int_ptr += 1;
+				else *int_ptr -= 1;
+			}
+		}
+	}
+}
+
+void *op_slider_odd(t_brick *brick)
+{
+	int dir;
+	op_slider( brick);
+
+	if( brick->state_pressed == BRICK_RIGHT) dir = 1;
+	else dir = -1;
+
+	t_plug *plug = &brick->plug_intern;
+	void *data = plug->data;
+	set_odd( data, plug->data_type, dir);
+
+	return NULL;
+}
+
 // SLIDER POSITIVE
 
 void *op_slider_positive(t_brick *brick)
