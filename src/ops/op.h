@@ -22,6 +22,8 @@ struct Block;
 struct Brick;
 struct Lst;
 
+extern struct Block *menu_node;
+
 // OP_DEBUG
 
 void op_debug_all(struct Context *C);
@@ -40,7 +42,6 @@ void 		op_export(struct Node *node);
 
 void 		op_add_global(struct Context *C,struct Block *block);
 void 		op_init(struct Context *C);
-void *		find_register(const char *target,const char *name);
 
 struct Node *op_add_mesh_raw( const char *name, int size);
 
@@ -113,6 +114,14 @@ int 		op_post_quit(struct Node *node);
 struct Block *	add_menu_block( struct Context *C, const char *name);
 
 struct Node *	add_brick_bar( struct Context *C, struct Block *block, const char *name, void *f(struct Brick *b));
+
+
+// OP_REGISTER
+
+
+void *		find_register(const char *target,const char *name);
+void 		register_set( struct Context *C);
+
 
 #ifdef __cplusplus
 }
