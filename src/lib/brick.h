@@ -91,6 +91,7 @@ typedef struct Brick_State
 	int is_root:1;
 	int debug:1;
 	int has_components:1;
+	int connecting:1;
 	int clone;
 	int frame_loop;
 

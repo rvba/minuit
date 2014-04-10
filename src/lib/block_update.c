@@ -254,6 +254,8 @@ void block_linking_stop( t_context *C, t_block *block)
 	block->block_state.connecting = 0;
 	C->ui->draw_link = 0;
 	BLOCK_SWAP( block, state_block_default);
+	t_brick *brick = block->selected;
+	if( brick) brick->brick_state.connecting = 0;
 	block->selected = NULL;
 	ctx_event_add( UI_BLOCK_RELEASED);
 }
@@ -301,6 +303,7 @@ void block_linking_start( t_context *C, t_block *block, t_brick *brick)
 {
 	block->selected = brick;
 	block->block_state.connecting = 1;
+	brick->brick_state.connecting = 1;
 	BLOCK_SWAP( block, state_brick_linking);
 }
 
@@ -349,9 +352,6 @@ void block_disconnect( t_context *C, t_block *block, t_brick *brick, t_event *e)
 	t_plug *plug_target = brick->plug_in.src;
 	if( plug_target)
 	{
-		//t_brick *brick_target = plug_target->brick;
-		//t_block *block_target = brick_target->block;
-
 		C->ui->draw_link = 1;
 
 		_cls_brick_disconnect( brick);
@@ -359,9 +359,6 @@ void block_disconnect( t_context *C, t_block *block, t_brick *brick, t_event *e)
 		block->block_state.connecting = 0;
 
 		block_linking_stop( C, block);
-
-		//XXX send linking msg
-		//BLOCK_SWAP( block, state_block_disconnect);
 	}
 }
 

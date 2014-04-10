@@ -187,7 +187,7 @@ void brick_get_geo_in( float *p, t_block *block_target, t_brick *brick_target)
 void brick_draw_link(t_brick *brick)
 {
 	t_block *block = brick->block;
-	if( block->block_state.connecting)
+	if( block->block_state.connecting && brick->brick_state.connecting)
 	{
 		t_context *C = ctx_get();
 		float p[3]={0,0,0};
