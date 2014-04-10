@@ -23,6 +23,7 @@
 #ifdef HAVE_OBJ
 #include "obj.h"
 #endif
+#include "util.h"
 
 // store menu
 
@@ -122,7 +123,7 @@ t_block *make_menu_add_geometry( t_context *C)
 
 t_block *make_menu_add( t_context *C)
 {
-	t_block *menu = add_menu_block( C, "menu_mouse");
+	t_block *menu = add_menu_block( C, "menu_add");
 
 	t_block *object = make_menu_add_object( C);
 	t_block *file = make_menu_add_file( C);
@@ -360,6 +361,41 @@ void op_menu_init(t_context *C)
 {
 	make_menu_mouse( C);
 	make_bar( C);
+}
+
+t_block *add_menu( t_context *C, const char *name) 
+{
+	set_draw_plug=0;
+
+	t_block *block = add_menu_block( C, name); 
+	return block;
+
+	set_draw_plug=1;
+}
+
+t_block *add_submenu( t_context *C, const char *menu_name, const char *submenu_name) 
+{
+	set_draw_plug=0;
+
+	t_node *node = scene_node_get( C->scene, "block", menu_name);
+	if( node)
+	{
+		char name[_NAME_];
+		bzero( name, _NAME_);
+		s_cp( name, "menu_", _NAME_);
+		s_cat( name, submenu_name, _NAME_);
+		t_block *menu = node->data;
+		t_block *submenu = add_menu( C, name);
+		add_brick_submenu( C, menu, submenu, submenu_name);
+		return submenu;
+	}
+	else
+	{
+		printf("[WARNING] Add_submenu, can't find menu %s\n", menu_name);
+		return NULL;
+	}
+
+	set_draw_plug=1;
 }
 
 // INIT
