@@ -33,6 +33,7 @@
 int set_draw_plug=1;
 int current_frame = 0;
 int block_pos_offset = 0;
+int opt_op_use_random = 0;
 
 // GET LIST
 
@@ -103,6 +104,11 @@ void add_block_offset(t_context *C, t_block *block)
 	block_pos_offset+=(brick_height*tot_brick);
 }
 
+float _rnd( void)
+{
+	return( .34 + ( rndf() * .8  * ( rnd_range(0,2) % 2)));
+}
+
 t_node *add_block(t_context *C,const char *name)
 {
 	// Get Set
@@ -128,7 +134,9 @@ t_node *add_block(t_context *C,const char *name)
 
 	float p[2];
 	ctx_get_mouse_pos(C,p);
-	vset3f(block->pos,p[0],p[1]+block_pos_offset,0);
+
+	if( opt_op_use_random) vset3f(block->pos,p[0] * _rnd() ,p[1] * _rnd() ,0);
+	else vset3f(block->pos,p[0],p[1]+block_pos_offset,0);
 
 	return node_block;
 }

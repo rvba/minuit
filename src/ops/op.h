@@ -23,6 +23,7 @@ struct Brick;
 struct Lst;
 
 extern struct Block *menu_node;
+extern int opt_op_use_random;
 
 // OP_DEBUG
 

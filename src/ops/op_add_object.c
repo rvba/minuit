@@ -250,6 +250,7 @@ void *op_add_light(t_brick *brick)
 void *op_add_cube( t_brick *brick)
 { 
 	t_context *C=ctx_get();
+	opt_op_use_random = 1;
 	term_log("+ mesh raw");
 
 	scene_store(C->scene,1);
@@ -261,6 +262,7 @@ void *op_add_cube( t_brick *brick)
 		object->cls->link(object,node_mesh);
 
 	scene_store(C->scene,0);
+	opt_op_use_random = 0;
 	return NULL;
 }
 
@@ -301,9 +303,12 @@ void *op_add_plane(t_brick *brick)
 // default 
 void *op_add_default(t_brick *brick)
 {
+	opt_op_use_random = 1;
 	op_add_light(NULL);
 	op_add_cube(NULL);
 	op_add_viewport(NULL);
+	opt_op_use_random = 0;
+
 	return NULL;
 }
 
