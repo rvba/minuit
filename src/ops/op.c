@@ -354,12 +354,21 @@ void make_bar( t_context *C)
 	add_brick_bar( C, block, name, op_void_act);
 }
 
+void make_screen_selector( t_context *C)
+{
+	t_block *block = add_menu_block( C, "menu_screen");
+
+	add_brick_trigger(C,block,"screens",op_brick_add);
+
+}
+
 // MAKE
 
 void op_menu_init(t_context *C)
 {
 	make_menu_mouse( C);
 	make_bar( C);
+	make_screen_selector( C);
 }
 
 // INIT
