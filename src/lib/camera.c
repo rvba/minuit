@@ -25,17 +25,6 @@ t_camera_cls cls_camera=
 	.init=cls_camera_init,
 };
 
-/*
-t_camera *camera_clone(t_camera *source)
-{
-	t_node *node_target = camera_make("clone");
-	t_camera *target = node_target->data;
-	camera_copy(target,source);
-
-	return target;
-}
-*/
-
 void camera_show(t_camera *camera)
 {
 	printf("Camera: %s\n",camera->id.name);

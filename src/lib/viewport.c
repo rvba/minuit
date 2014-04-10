@@ -20,14 +20,16 @@
 
 #include "brick.h"
 #include "memory.h"
+#include "app.h"
 
 // DRAW
 
 void viewport_draw_scene(t_viewport *viewport)
 {
 	t_context *C = ctx_get();
-
 	t_camera *camera = viewport->camera;
+
+	if( C->app->window->change) op_camera_frustum_init( camera);
 	op_camera_update(C, camera);
 	op_3d_orientation(); 
 	draw_scene(C->draw,C->scene);
