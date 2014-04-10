@@ -513,7 +513,6 @@ t_scene *scene_new(void)
 	vset3i(COLOR,0,0,0);
 	sc->use_tmp_colors=0;
 	sc->selected=NULL;
-	sc->_selected=NULL;
 	sc->selection = NULL;
 	sc->hover=NULL;
 	sc->hover_type = dt_null;

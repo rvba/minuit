@@ -174,11 +174,12 @@ void keymap_command( int key)
 
 		case DOTKEY: if(camera) op_camera_reset_pos(camera);break;
 		case PADFIVE: if(camera) op_camera_switch_type(camera);break;
-		case PADSEVEN: if(camera) op_camera_view_top(camera);break;
 		case PADONE: if(camera) op_camera_view_front(camera);break;
-		case PADNINE: if(camera) op_camera_view_axo(camera);break;
-		case PADTHREE: if(camera) op_camera_view_left(camera);break;
 		case PADTWO: if(camera) op_camera_ortho_rotate(camera,-5,0,0);break;
+		case PADTHREE: if(camera) op_camera_view_left(camera);break;
+		case PADFOUR: draw_switch_scene( C->draw);break;
+		case PADSEVEN: if(camera) op_camera_view_top(camera);break;
+		case PADNINE: if(camera) op_camera_view_axo(camera);break;
 		case PADZERO: 
 				C->ui->zoom = 1;
 				C->ui->pan_x = 0;

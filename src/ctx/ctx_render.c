@@ -136,6 +136,12 @@ void ctx_render_scene_full_pass(t_context *C)
 	ctx_render_scene(C);
 }
 
+void ctx_render_scene_clear_pass(t_context *C)
+{
+	ctx_render_set_full_pass(C);
+	draw_init(C->draw);
+}
+
 void ctx_render(t_context *C)
 {
 	// Check Not Off Screen
@@ -155,7 +161,8 @@ void ctx_render(t_context *C)
 		// Render Pass
 		if(C->draw->with_draw_pass)
 		{
-			ctx_render_scene_full_pass(C);
+			if( C->draw->with_scene) ctx_render_scene_full_pass(C);
+			else ctx_render_scene_clear_pass( C);
 
 			ui_draw();
 		}

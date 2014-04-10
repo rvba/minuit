@@ -38,6 +38,12 @@ GLenum LightList[] = {
 	GL_LIGHT3,
 };
 
+void draw_switch_scene( t_draw *draw)
+{
+	if( draw->with_scene) draw->with_scene = 0;
+	else draw->with_scene = 1;
+}
+
 void draw_switch_axis_world(t_draw *draw)
 {
 	if (draw->show_axis_world) draw->show_axis_world=0;
@@ -872,6 +878,7 @@ t_draw *draw_new(void)
 	draw->with_polygon_offset=DRAW_WITH_POLYGON_OFFSET;
 	draw->with_alpha=DRAW_WITH_ALPHA;
 	draw->with_blend=DRAW_WITH_BLEND;
+	draw->with_scene = 1;
 	draw->with_grid=0;
 	draw->divx=2;
 	draw->divy=2;

@@ -9,6 +9,7 @@ set(SRC
 	op_texture.c
 	op_camera.c
 	op_register.c
+	op_ui.c
 )
 
 add_library(minuit-ops STATIC ${SRC})

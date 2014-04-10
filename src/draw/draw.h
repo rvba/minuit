@@ -92,6 +92,7 @@ typedef struct Draw
 	int with_blend;
 	int with_restrict_matrix;
 	int with_shaders;
+	int with_scene;
 
 	int with_highlight;
 	int with_light;
@@ -121,5 +122,7 @@ void draw_switch_axis_world(t_draw *draw);
 void draw_mesh_direct(t_draw *draw,struct Scene *scene,struct Mesh *mesh);
 void draw_mesh(t_draw *draw, struct Scene *scene, struct Mesh *mesh);
 void type_font_3d(char* string,float pos[3]);
+
+void draw_switch_scene( t_draw *draw);
 
 #endif

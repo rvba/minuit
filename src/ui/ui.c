@@ -31,6 +31,7 @@
 #include "clock.h"
 #include "image.h"
 #include "texture.h"
+#include "object.h"
 
 t_lst *sets = NULL;
 
@@ -322,6 +323,36 @@ void ui_draw_bar(void)
 	glPopMatrix();
 }
 
+void ui_draw_selected( t_context *C)
+{
+	t_node *node = C->scene->selected;
+	if( node)
+	{
+		t_context *C=ctx_get();
+		t_camera *camera = C->ui->camera;
+		op_camera_switch_2d(C,camera);
+		glPushMatrix();
+		glLoadIdentity();
+
+		if( node->cls->type == dt_object)
+		{
+			t_object *object = node->data;
+			t_lst *lst = object->blocks;
+			t_link *l;
+			t_block *block;
+			if( lst)
+			{
+				for(l=lst->first;l;l=l->next)
+				{
+					block = l->data;
+					block->cls->draw( block);
+				}
+			}
+		}
+		glPopMatrix();
+	}
+}
+
 // DRAW SETS
 
 void ui_draw_sets(void)
@@ -375,6 +406,7 @@ void ui_draw(void)
 
 	// Draw Screens
 	if(C->ui->draw) ui_draw_screens(C);
+	ui_draw_selected( C);
 
 	// Freeze Icon
 	if(!C->ui->update_links)
@@ -384,6 +416,7 @@ void ui_draw(void)
 
 	// Link
 	if( C->ui->draw_link) ui_draw_lines( C); 
+
 
 	C->event->ui.use_point_global_width = 1;
 	C->event->ui.use_line_global_width = 1;
