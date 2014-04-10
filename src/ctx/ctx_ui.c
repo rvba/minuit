@@ -555,7 +555,8 @@ void ctx_ui_camera_rotate( t_context *C, t_camera *camera, t_event *e)
 
 void ctx_ui_camera_translate( t_context *C, t_camera *camera, t_event *e)
 {
-	op_camera_translate(C, camera);
+	if( camera->type == camera_frustum) op_camera_translate(C, camera);
+	else op_camera_set_ortho_pan( C, camera);
 }
 
 void ctx_ui_camera_zoom( t_context *C, t_camera *camera, t_event *e)
@@ -573,8 +574,8 @@ void ctx_ui_camera_zoom( t_context *C, t_camera *camera, t_event *e)
 	{
 		switch( e->type)
 		{
-			case MOUSE_WHEEL_UP:	op_camera_set_ortho_zoom(C, camera,-1); 
-			case MOUSE_WHEEL_DOWN:	op_camera_set_ortho_zoom(C, camera,1); 
+			case MOUSE_WHEEL_UP:	op_camera_set_ortho_zoom(C, camera,-1); break;
+			case MOUSE_WHEEL_DOWN:	op_camera_set_ortho_zoom(C, camera,1); break;
 		}
 	}
 }

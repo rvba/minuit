@@ -352,7 +352,7 @@ void op_camera_zoom(t_context *C, t_camera *camera, int dir)
 void op_camera_set_ortho_zoom(t_context *C, t_camera *camera, int i)
 {
 	float speed = camera->speed;
-	camera->ortho_zoom = camera->ortho_zoom + (i * OP_CAM_ORTHO_ZOOM_FAC * speed);
+	camera->ortho_zoom = camera->ortho_zoom + (i * OP_CAM_ORTHO_ZOOM_FAC * speed *camera->ortho_zoom * .001);
 
 	camera->is_moving=1;
 	op_camera_update(C, camera);
@@ -360,13 +360,18 @@ void op_camera_set_ortho_zoom(t_context *C, t_camera *camera, int i)
 
 void op_camera_set_ortho_pan(t_context *C, t_camera *camera)
 {
-	t_app *app=C->app;
+	//float speed = camera->speed;
+	float d = .00001;
+	float factor = camera->ortho_zoom *.1;
 
-	float speed = camera->speed;
-	float d = .001;
-	float dx = app->mouse->dx * d *speed * app->mouse->sign_x * OP_CAM_ORTHO_PAN_FAC;
-	float dy = app->mouse->dy * d * speed * app->mouse->sign_y * OP_CAM_ORTHO_PAN_FAC;
+	float dx = (float) (C->ui->mouse_dx);
+	float dy = (float) ( C->ui->mouse_dy);
+
+	dx *= d * factor;
+	dy *= d * factor;
+
 	float v[3];
+
 	vset(v,dx,dy,0);
 	vadd(camera->ortho_location,camera->ortho_location,v);
 }
