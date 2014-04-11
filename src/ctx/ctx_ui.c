@@ -884,11 +884,6 @@ void state_ui_default( t_context *C, t_event *e)
 
 			default: break;
 		}
-
-		if( EVENT_KEYBOARD( e->type))
-		{
-			ctx_ui_keyboard( C, e);
-		}
 	}
 }
 
