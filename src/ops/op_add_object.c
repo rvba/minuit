@@ -166,6 +166,7 @@ void *op_add_viewport(t_brick *brick)
 	t_viewport *viewport = ( t_viewport *) node->data;
 
 	viewport->draw = viewport_draw_scene;
+	viewport->fullscreen = 0;
 
 	scene_store(C->scene,0);
 

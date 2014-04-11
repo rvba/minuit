@@ -114,6 +114,7 @@ struct Node *	add_block(struct Context *C,const char *name);
 void 		add_block_offset(struct Context *C, struct Block *block);
 int 		op_post_quit(struct Node *node);
 
+struct Block *	add_block_block( struct Context *C, const char *name);
 struct Block *	add_menu_block( struct Context *C, const char *name);
 struct Block *	add_bar_block( struct Context *C, const char *name);
 

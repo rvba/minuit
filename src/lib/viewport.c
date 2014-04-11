@@ -22,7 +22,47 @@
 #include "memory.h"
 #include "app.h"
 
+#include "block.h"
+
+int opt_viewport_show_controls = 0;
+
 // DRAW
+
+void *viewport_get_ref(t_viewport *viewport, const char *ref)
+{
+	void *p;
+
+	if(is(ref,"width"))  				p=&viewport->width; 
+	else if(is(ref,"height"))  			p=&viewport->height; 
+	else if(is(ref,"x"))  				p=&viewport->x; 
+	else if(is(ref,"y"))  				p=&viewport->y; 
+	else if(is(ref,"fullscreen"))  				p=&viewport->fullscreen; 
+	else
+	{
+		printf("[ERROR mesh_get_ref] Unknown ref [%s] \n",ref);
+		return NULL;
+	}
+
+	return p;
+}
+
+
+void viewport_draw_controls( t_viewport *viewport)
+{
+	t_context *C = ctx_get();
+	op_camera_switch_2d( C, viewport->camera);
+	glPushMatrix();
+	glLoadIdentity();
+
+	t_block *block = viewport->controls;
+	if (block)
+	{
+		block->cls->draw( block);
+	}
+
+	glPopMatrix();
+	op_camera_switch_3d( C, viewport->camera);
+}
 
 void viewport_draw_scene(t_viewport *viewport)
 {
@@ -34,8 +74,18 @@ void viewport_draw_scene(t_viewport *viewport)
 		op_camera_frustum_init( camera);
 		C->app->window->change = 0;
 	}
-	op_camera_update(C, camera);
+
+	if( opt_viewport_show_controls)
+	{
+		viewport_draw_controls( viewport);
+	}
+
+	if( viewport->fullscreen) op_camera_update(C, camera);
+	else  _op_camera_update(C, camera, viewport);
+	
 	op_3d_orientation(); 
+
+
 	draw_scene(C->draw,C->scene);
 }
 
@@ -57,6 +107,7 @@ t_viewport *viewport_rebind( t_scene *sc, void *ptr)
 
 	rebind(sc, "viewport", "camera", (void **) &viewport->camera);
 	rebind(sc, "viewport", "draw", (void **) &viewport->draw);
+	rebind(sc, "viewport", "blocks", (void **) &viewport->controls);
 
 	return viewport;
 }
@@ -106,10 +157,34 @@ t_node *viewport_make(const char *name)
 	t_camera *camera = object->data;
 
 	viewport->camera = camera;
-	viewport->width = 100;
-	viewport->height = 100;
+	viewport->width = C->app->window->width;
+	viewport->height = C->app->window->height;
 	viewport->x = 0;
 	viewport->y = 0;
+
+	scene_add_ref(C->scene,"struct_ref","viewport","width",&viewport->width,viewport);
+	scene_add_ref(C->scene,"struct_ref","viewport","height",&viewport->height,viewport);
+	scene_add_ref(C->scene,"struct_ref","viewport","x",&viewport->x,viewport);
+	scene_add_ref(C->scene,"struct_ref","viewport","y",&viewport->y,viewport);
+	scene_add_ref(C->scene,"struct_ref","viewport","fullscreen",&viewport->fullscreen,viewport);
+
+	/*
+	t_node *node = add_block( C, "viewport_controls");
+	t_block *block = node->data;
+	*/
+	t_block *block = add_block_block( C, "viewport_controls");
+	if( block)
+	{
+		block->pos[0] = 0;
+		block->pos[1] = 1;
+		add_brick_slider_int( C, block, "width", &viewport->width);
+		add_brick_slider_int( C, block, "height", &viewport->height);
+		add_brick_slider_int( C, block, "x", &viewport->x);
+		add_brick_slider_int( C, block, "y", &viewport->y);
+		add_brick_switch( C, block, "fullscreen", &viewport->fullscreen);
+	}
+
+	viewport->controls = block;
 
 	return node_viewport;
 }
@@ -142,6 +217,8 @@ t_viewport *viewport_new(const char *name)
 	viewport->y = 0;
 	viewport->camera = NULL;
 	viewport->draw = NULL;
+	viewport->show_controls = 0;
+	viewport->fullscreen = 1;
 
 	return viewport;
 }

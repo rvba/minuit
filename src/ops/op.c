@@ -29,6 +29,12 @@
 
 t_block *menu_node=NULL;
 
+t_block *add_block_block( t_context *C, const char *name)
+{
+	t_node *menu = block_make( name, "block");
+	t_block *block = ( t_block *) menu->data;
+	return block;
+}
 
 t_block *add_menu_block( t_context *C, const char *name)
 {

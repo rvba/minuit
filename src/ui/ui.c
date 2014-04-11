@@ -414,6 +414,7 @@ void ui_draw(void)
 
 	// Draw Screens
 	if(C->ui->draw) ui_draw_screens(C);
+
 	ui_draw_selected( C);
 
 	// Freeze Icon

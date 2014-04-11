@@ -18,6 +18,8 @@
 extern "C" {
 #endif
 
+extern int opt_viewport_show_controls;
+
 typedef struct Viewport t_viewport;
 
 struct Viewport
@@ -30,10 +32,15 @@ struct Viewport
 	int x;
 	int y;
 
+	int show_controls;
+	int fullscreen;
+
 	struct Camera *camera;
 	void (* draw)(struct Viewport *viewport);
+	struct Block *controls;
 };
 
+void *viewport_get_ref(t_viewport *viewport, const char *ref);
 void 		viewport_draw_scene(t_viewport *viewport);
 void 		viewport_draw(t_viewport *viewport);
 t_viewport *	viewport_rebind(t_scene *scene, void *ptr);

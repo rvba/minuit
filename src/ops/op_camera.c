@@ -152,6 +152,136 @@ void op_camera_switch_3d(t_context *C, t_camera *camera)
 	op_3d_orientation();
 }
 
+void _op_camera_frustum_init(t_camera *camera, int w, int h)
+{
+	//t_app *app = app_get();
+	double r=3.14159265/180;
+	double fovy = CAM_FOVY;
+	double near = CAM_NEAR;
+	double aspect = (double)((double)w/(double)h);
+	double tangent = tan(fovy/2 * r);
+	double height = near*tangent;
+	double width = height*aspect;
+
+	camera->fovy=fovy;
+	camera->aspect=aspect;
+	camera->left = -width;
+	camera->right = width;
+	camera->bottom = -height;
+	camera->top = height;
+	camera->near = CAM_NEAR;
+	camera->far = CAM_FAR;
+
+	camera->ortho_near=CAM_ORTHO_NEAR;
+	camera->ortho_far=CAM_ORTHO_FAR;
+}
+
+void _op_camera_update(t_context *C, t_camera *camera, t_viewport *viewport)
+{
+	t_app *app=C->app;
+
+
+	int w,h;
+	//glViewport(0,0,app->window->viewport_width,app->window->viewport_height);
+	if( viewport->fullscreen)
+	{
+	w = app->window->viewport_width;
+	h = app->window->viewport_height;
+
+	}
+	else
+	{
+	w = viewport->width;
+	h = viewport->height;
+	}
+
+	_op_camera_frustum_init(camera, w, h);
+	//glViewport(0,0, w, h);
+	int x = viewport->x;
+	int y = viewport->y;
+	glViewport(x, y, w, h);
+
+	// ORTHO
+	if (camera->type == camera_ortho)
+	{
+		double left = camera->left;
+		double right = camera->right;	
+		double bottom = camera->bottom;
+		double top = camera->top;
+
+		float z=camera->ortho_zoom;
+
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		if(C->draw->with_restrict_matrix && (C->draw->mode == mode_selection))
+		{
+			GLint viewport[4];
+			glGetIntegerv(GL_VIEWPORT,viewport);
+			int x = C->app->mouse->x;
+			int y = C->app->mouse->y;
+			gluPickMatrix((double)x,(double)y,1.0f,1.0f,viewport);
+		}
+		glOrtho(left*z,right*z,bottom*z,top*z,camera->ortho_near,camera->ortho_far);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+
+		glTranslatef(
+				camera->ortho_location[0],
+				camera->ortho_location[1],
+				camera->ortho_location[2]
+				);
+		glRotatef(camera->angle,
+			camera->ortho_rotation[0],
+			camera->ortho_rotation[1],
+			camera->ortho_rotation[2]
+			);
+
+	}
+
+	// FRUSTUM
+	else if (camera->type == camera_frustum)
+	{
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		if(C->draw->with_restrict_matrix && (C->draw->mode == mode_selection))
+		{
+			GLint viewport[4];
+			glGetIntegerv(GL_VIEWPORT,viewport);
+			int x = C->app->mouse->x;
+			int y = C->app->mouse->y;
+			gluPickMatrix((double)x,(double)y,1.0f,1.0f,viewport);
+		}
+		glFrustum(
+			camera->left,
+			camera->right,
+			camera->bottom,
+			camera->top,
+			camera->near,
+			camera->far);
+
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		gluLookAt(
+			camera->eye[0],
+			camera->eye[1],
+			camera->eye[2],
+			camera->target[0],
+			camera->target[1],
+			camera->target[2],
+			camera->up[0],
+			camera->up[1],
+			camera->up[2]
+			);
+
+		float zenith = camera->zenith;
+		glTranslatef(camera->pos[0],camera->pos[1],camera->pos[2]);
+
+		// Camera Up rotation
+		glRotatef(zenith,camera->cross[0],camera->cross[1],camera->cross[2]);
+
+	}
+}
+
 void op_camera_update(t_context *C, t_camera *camera)
 {
 	t_app *app=C->app;

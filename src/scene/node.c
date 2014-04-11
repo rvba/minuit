@@ -49,6 +49,11 @@ int node_equal(t_node *m, t_node *n)
 
 // GET REF
 
+void *cls_node_get_ref_viewport(t_node *node, const char *ref)
+{
+	return viewport_get_ref( (t_viewport *) node->data, ref);
+}
+
 void *cls_node_get_ref_object(t_node *node, const char *ref)
 {
 	return object_get_ref( (t_object *) node->data, ref);
@@ -773,7 +778,7 @@ t_node_class viewport= {
 	.del=cls_node_del,
 	.init=cls_node_init_viewport,
 	.free=cls_node_viewport_free,
-	.get_ref = cls_node_get_ref,
+	.get_ref = cls_node_get_ref_viewport,
 };
 
 t_node_class set = {

@@ -24,6 +24,7 @@ void screen_generic(t_screen *screen)
 	t_context *C=ctx_get();
 	t_camera *camera = C->ui->camera;
 	op_camera_switch_2d(C,camera);
+	op_camera_update( C, camera);
 
 	glPushMatrix();
 		glLoadIdentity();
