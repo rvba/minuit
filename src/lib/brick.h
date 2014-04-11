@@ -214,67 +214,6 @@ void		cls_brick_build_width(struct Brick *brick);
 void 		cls_brick_build_txt(struct Brick *brick);
 
 
-
-void *		op_camera_rotate_xy(struct Brick *brick);
-void *		op_camera_rotate_z(struct Brick *brick);
-
-
-void *		op_void_act(t_brick *brick);
-
-void *		op_brick_add(struct Brick *brick);
-void *		op_selector(struct Brick *brick);
-void *		op_brick_node_action(struct Brick *brick);
-void *		op_void_exe(struct Brick *brick);
-void *		op_clone(struct Brick *brick);
-void *		op_loop(struct Brick *brick);
-void *		op_loop_get(struct Brick *brick);
-void *		op_switch(struct Brick *brick);
-void *		op_trigger(struct Brick *brick);
-void *		op_sin(struct Brick *brick);
-void *		op_cos(struct Brick *brick);
-void *		op_divide(struct Brick *brick);
-void *		op_add(struct Brick *brick);
-void *		op_geometry(struct Brick *brick);
-void *		op_geo(struct Brick *brick);
-void * 		op_geo_point(struct Brick *brick);
-void * 		op_geo_edge(struct Brick *brick);
-void *		op_geo_array( struct Brick *brick);
-void *		op_superior(struct Brick *brick);
-void *		op_inferior(struct Brick *brick);
-void *		op_plusplus(struct Brick *brick);
-void *		op_mult(struct Brick *brick);
-void * 		op_and(struct Brick *brick);
-void *		op_slider(struct Brick *brick);
-void *		op_slider_odd(struct Brick *brick);
-void *		op_slider_positive(struct Brick *brick);
-void *		op_slider_positive_non_zero(struct Brick *brick);
-void *		op_if(struct Brick *brick);
-void *		op_equal(struct Brick *brick);
-void *		op_while(struct Brick *brick);
-void *		op_in_multiplicator(struct Brick *brick);
-void *		op_window(struct Brick *brick);
-void *		op_set_selected(struct Brick *brick);
-void *		op_pointer(struct Brick *brick);
-void *		op_delete(struct Brick *brick);
-void *		op_pipe(struct Brick *brick);
-void *		op_rewind(struct Brick *brick);
-void *		op_not(struct Brick *brick);
-void *		op_set_vlst(struct Brick *brick);
-void *		op_set_colors(struct Brick *brick);
-void *		op_rnd(struct Brick *brick);
-void *		op_neg(struct Brick *brick);
-void *		op_abs(struct Brick *brick);
-void *		op_is_last(struct Brick *brick);
-void *		op_operator(struct Brick *brick);
-void *		op_vector(struct Brick *brick);
-void *		op_bang(struct Brick *brick);
-void *		op_do_quit(struct Brick *brick);
-void *		op_const(struct Brick *brick);
-void *		op_mod(struct Brick *brick);
-void *		op_float(struct Brick *brick);
-void *		op_int(struct Brick *brick);
-void *		op_stack(struct Brick *brick);
-
 void 		cls_brick_trigger_connections(struct Brick *brick);
 
 void 		brick_set_updated(struct Brick *brick);
