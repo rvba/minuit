@@ -534,9 +534,10 @@ void state_block_menu_brick_trigger( t_block *block, t_event *e)
 {
 	ctx_ui_log( "block_menu_brick_trigger");
 	t_brick *brick = block->selected;
+	t_context *C = ctx_get();
 	if( e->type == UI_BRICK_RELEASED)
 	{
-		if( brick->type == bt_trigger) block_menu_close( block);
+		if( brick->type == bt_trigger && !C->app->keyboard->shift) block_menu_close( block);
 		else BLOCK_SWAP( block, state_block_menu_default);
 	}
 	else if( e->type == MOUSE_RIGHT_PRESSED)
