@@ -208,19 +208,13 @@ void op_camera_projection_ortho( t_context *C, t_camera *camera)
 	double right = camera->right;	
 	double bottom = camera->bottom;
 	double top = camera->top;
-
 	float z=camera->ortho_zoom;
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	if(C->draw->with_restrict_matrix && (C->draw->mode == mode_selection))
-	{
-		GLint viewport[4];
-		glGetIntegerv(GL_VIEWPORT,viewport);
-		int x = C->app->mouse->x;
-		int y = C->app->mouse->y;
-		gluPickMatrix((double)x,(double)y,1.0f,1.0f,viewport);
-	}
+
+	op_camera_restrict( C, camera);
+
 	glOrtho(left*z,right*z,bottom*z,top*z,camera->ortho_near,camera->ortho_far);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -230,6 +224,7 @@ void op_camera_projection_ortho( t_context *C, t_camera *camera)
 			camera->ortho_location[1],
 			camera->ortho_location[2]
 			);
+
 	glRotatef(camera->angle,
 		camera->ortho_rotation[0],
 		camera->ortho_rotation[1],
@@ -239,12 +234,11 @@ void op_camera_projection_ortho( t_context *C, t_camera *camera)
 
 void op_camera_viewport( t_context *C, t_camera *camera, t_viewport *viewport)
 {
-	t_app *app=C->app;
 	int w,h;
 	if( viewport->fullscreen)
 	{
-		w = app->window->viewport_width;
-		h = app->window->viewport_height;
+		w = C->app->window->viewport_width;
+		h = C->app->window->viewport_height;
 
 	}
 	else
@@ -280,6 +274,7 @@ void op_camera_update(t_context *C, t_camera *camera)
 	// ORTHO
 	if (camera->type == camera_ortho)
 	{
+		op_camera_projection_ortho( C, camera);
 		double left = camera->left;
 		double right = camera->right;	
 		double bottom = camera->bottom;
