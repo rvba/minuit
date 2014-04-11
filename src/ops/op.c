@@ -36,6 +36,13 @@ t_block *add_menu_block( t_context *C, const char *name)
 	return block;
 }
 
+t_block *add_bar_block( t_context *C, const char *name)
+{
+	t_node *menu = block_make( name, "bar");
+	t_block *block = ( t_block *) menu->data;
+	return block;
+}
+
 // menu sketch 
 
 t_block *make_menu_skt( t_context *C)
@@ -357,10 +364,10 @@ void make_bar( t_context *C)
 
 void make_screen_selector( t_context *C)
 {
-	t_block *block = add_menu_block( C, "menu_screen");
-
-	add_brick_trigger(C,block,"screens",op_brick_add);
-
+	t_block *block = add_bar_block( C, "menu_screen");
+	add_brick_slider_int(C,block,"", &C->event->color[0]);
+	add_brick_slider_int(C,block,"", &C->event->color[1]);
+	add_brick_slider_int(C,block,"", &C->event->color[2]);
 }
 
 // MAKE
