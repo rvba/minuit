@@ -29,8 +29,8 @@ int switch_done=0;
 
 void ctx_switch_draw( t_context *C)
 {
-		if( C->draw->with_draw_pass) C->draw->with_draw_pass = 0;
-		else C->draw->with_draw_pass = 1;
+	if( C->draw->with_draw_pass) C->draw->with_draw_pass = 0;
+	else C->draw->with_draw_pass = 1;
 }
 
 void ctx_switch_font( t_context *C)
@@ -124,15 +124,21 @@ void keymap_typing( int key)
 	}
 }
 
+void op_reset( t_context *C)
+{
+	if(C->app->keyboard->alt) term_reset_all();
+	else C->ui->step_reset = 1;
+}
+
 void keymap_command( int key)
 {
 	t_context *C=ctx_get();
 	t_main_event *event = C->event;
-	t_camera *camera = NULL;
 
+	// Get default viewport
+	t_camera *camera = NULL;
 	if(C->scene->has_generic_viewport)
 	{
-		// Get default Viewport
 		t_node *node_viewport = scene_node_get(C->scene,"viewport","viewport");
 		t_viewport *viewport = NULL;
 
@@ -145,33 +151,25 @@ void keymap_command( int key)
 
 	switch(key)
 	{
-		// plugs
-
-		/*
-		case UP_AKEY: event->switch_plug_in_flow_in = 1; break;
-		case UP_QKEY: event->switch_plug_in_open_in = 1; break;
-		case UP_WKEY: event->switch_plug_in_follow_in = 1; break;
-
-		case UP_ZKEY: event->switch_plug_in_flow_out = 1; break;
-		case UP_SKEY: event->switch_plug_in_open_out = 1; break;
-		case UP_XKEY: event->switch_plug_in_follow_out = 1; break;
-
-		case UP_EKEY: event->switch_plug_out_flow_in = 1; break;
-		case UP_DKEY: event->switch_plug_out_open_in = 1; break;
-		case UP_CKEY: event->switch_plug_out_follow_in = 1; break;
-
-		case UP_RKEY: event->switch_plug_out_flow_out = 1; break;
-		case UP_FKEY: event->switch_plug_out_open_out = 1; break;
-		case UP_VKEY: event->switch_plug_out_follow_out = 1; break;
-		*/
-
-		case UP_BKEY: op_debug_all(C);break;
-
 		case BKEY: switch_bricks(C); break;
+		case DKEY: C->event->brick_delete = 1; break;
 		case EKEY: event->switch_brick_debug = 1; break;
+		case FKEY: ctx_ui_freeze(C); break;
+		case JKEY: ctx_ui_switch_show_states(C); break;
+		case NKEY: C->ui->step = 1; break;
+		case QKEY: op_quit(NULL);break;
+		case ZKEY: app_screen_switch_fullscreen(C->app);break;
+		case XKEY: op_switch_color(C);break;
+		case RKEY: op_reset( C);break;
+		case WKEY: ctx_switch_intro(C);
+
+		//case UP_AKEY: event->switch_plug_in_flow_in = 1; break;
+		case UP_BKEY: op_debug_all(C);break;
+		case UP_TKEY: ctx_switch_font( C); break;
+		case UP_MKEY: ctx_switch_draw( C); break;
+
 
 		case STARKEY: draw_switch_axis_world(C->draw);break;
-
 		case DOTKEY: if(camera) op_camera_reset_pos(camera);break;
 		case PADFIVE: if(camera) op_camera_switch_type(camera);break;
 		case PADONE: if(camera) op_camera_view_front(camera);break;
@@ -187,25 +185,6 @@ void keymap_command( int key)
 				C->event->ui.pan_x = 0;
 				C->event->ui.pan_y = 0;
 				break;
-
-		case QKEY: op_quit(NULL);break;
-		case ZKEY: app_screen_switch_fullscreen(C->app);break;
-		case XKEY: op_switch_color(C);break;
-		case NKEY: C->ui->step = 1; break;
-		case RKEY:
-			if(C->app->keyboard->alt)
-				term_reset_all();
-			else
-				C->ui->step_reset = 1;
-			break;
-
-		case UP_TKEY: ctx_switch_font( C); break;
-		case UP_MKEY: ctx_switch_draw( C); break;
-
-		case DKEY: C->event->brick_delete = 1; break;
-		case JKEY: ctx_ui_switch_show_states(C); break;
-		case FKEY: ctx_ui_freeze(C); break;
-		case WKEY: ctx_switch_intro(C);
 
 		case ESCKEY: 	
 
