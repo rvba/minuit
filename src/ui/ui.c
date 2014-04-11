@@ -277,6 +277,10 @@ void ui_draw_term(void)
 				t->draw(t);
 				glTranslatef(t->width + 30, 0, 0);
 			}
+
+			t_node *node_screen = scene_node_get( C->scene, "block", "menu_screen");
+			t_block *block = node_screen->data;
+			block->cls->draw( block);
 		}
 
 		C->event->ui.use_scale = 1;
