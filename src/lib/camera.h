@@ -23,7 +23,7 @@ extern "C" {
 #define CAM_NEAR .001
 #define CAM_FOVY 60 //60
 
-#define CAM_ORTHO_ZOOM 1000
+#define CAM_ORTHO_ZOOM 5000
 #define CAM_ORTHO_ZOOM_FAC 10
 #define CAM_IS_MOVING 0
 

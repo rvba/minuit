@@ -330,6 +330,17 @@ void *op_add_object_square(t_brick *brick)
 	return object;
 }
 
+void *op_add_default_viewport(t_brick *brick)
+{
+	opt_op_use_random = 1;
+	op_add_light(NULL);
+	op_add_cube(NULL);
+	op_add_viewport(NULL);
+	opt_op_use_random = 0;
+
+	return NULL;
+}
+
 // default 
 void *op_add_default(t_brick *brick)
 {

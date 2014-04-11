@@ -182,11 +182,12 @@ t_camera *camera_new(const char *name)
 	vset(camera->target,0,0,0);
 	vset(camera->up,0,1,0);
 
-	camera->ortho_view = 0;
+	vset(camera->ortho_rotation,1,0,0);
+	vset(camera->ortho_location,0,0,0);
+	camera->ortho_view = camera_top;
+	camera->angle = 90;
 	camera->ortho_zoom = CAM_ORTHO_ZOOM;
 
-	vset(camera->ortho_location,0,0,0);
-	vset(camera->ortho_rotation,1,0,0);
 	camera->ortho_near=CAM_ORTHO_NEAR;
 	camera->ortho_far=CAM_ORTHO_FAR;
 	camera->near=CAM_NEAR;
@@ -198,6 +199,7 @@ t_camera *camera_new(const char *name)
 	camera->zenith=0;
 	camera->frame=0;
 	camera->is_moving=CAM_IS_MOVING;
+
 
 	return camera;
 }
