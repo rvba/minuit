@@ -167,7 +167,7 @@ void keymap_command( int key)
 		case UP_BKEY: op_debug_all(C);break;
 		case UP_TKEY: ctx_switch_font( C); break;
 		case UP_MKEY: ctx_switch_draw( C); break;
-
+		case UP_LKEY: draw_switch_scene( C->draw);break;
 
 		case STARKEY: draw_switch_axis_world(C->draw);break;
 		case DOTKEY: if(camera) op_camera_reset_pos(camera);break;
@@ -175,7 +175,6 @@ void keymap_command( int key)
 		case PADONE: if(camera) op_camera_view_front(camera);break;
 		case PADTWO: if(camera) op_camera_ortho_rotate(camera,-5,0,0);break;
 		case PADTHREE: if(camera) op_camera_view_left(camera);break;
-		case PADFOUR: draw_switch_scene( C->draw);break;
 		case PADSEVEN: if(camera) op_camera_view_top(camera);break;
 		case PADNINE: if(camera) op_camera_view_axo(camera);break;
 		case PADZERO: 
