@@ -189,32 +189,32 @@ void brick_draw_link(t_brick *brick)
 	t_context *C = ctx_get();
 	if( C->draw->mode == mode_draw)
 	{
-	t_block *block = brick->block;
-	if( block->block_state.connecting && brick->brick_state.connecting)
-	{
-		t_context *C = ctx_get();
-		float p[3]={0,0,0};
-
-		ctx_get_mouse_pos( C, p);
-		brick_draw_connection_line( block, brick, p, 0);
-
-	}
-	else if(brick->brick_state.draw_plugs)
-	{
-		t_plug *plug_out = &brick->plug_out;
-
-		if(plug_out->dst) 
+		t_block *block = brick->block;
+		if( block->block_state.connecting && brick->brick_state.connecting)
 		{
-			t_plug *plug_target=plug_out->dst;
-			t_brick *brick_target=plug_target->brick;
+			t_context *C = ctx_get();
+			float p[3]={0,0,0};
 
-			t_block *block_target=brick_target->block;
+			ctx_get_mouse_pos( C, p);
+			brick_draw_connection_line( block, brick, p, 0);
 
-			float p[3];
-			brick_get_geo_in(  p, block_target, brick_target);
-			brick_draw_connection_line( block, brick, p, 1);
 		}
-	}
+		else if(brick->brick_state.draw_plugs)
+		{
+			t_plug *plug_out = &brick->plug_out;
+
+			if(plug_out->dst) 
+			{
+				t_plug *plug_target=plug_out->dst;
+				t_brick *brick_target=plug_target->brick;
+
+				t_block *block_target=brick_target->block;
+
+				float p[3];
+				brick_get_geo_in(  p, block_target, brick_target);
+				brick_draw_connection_line( block, brick, p, 1);
+			}
+		}
 	}
 }
 
