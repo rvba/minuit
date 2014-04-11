@@ -158,6 +158,15 @@ void object_data_add(t_node *node,void *ptr)
 	object->data=ptr;
 }
 
+void object_block_add( t_object *object, t_block *block)
+{
+	if( block)
+	{
+		if( !object->blocks) object->blocks = lst_new( "lst");
+		lst_add( object->blocks, block, "block");
+	}
+}
+
 // REF
 
 void *object_get_ref(t_object *object, const char *ref)

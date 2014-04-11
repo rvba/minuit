@@ -78,6 +78,9 @@ void 		object_mesh_add(struct Node *node,struct Node *mesh);
 void 		object_draw_add(struct Node *node,void (* func)(struct Node *node));
 void 		object_method_add(struct Node *node,const char method[],void (*func)(struct Node *n));
 void 		object_data_add(struct Node *node,void *ptr);
+void 		object_block_add( struct Object *object, struct Block *block);
+
+
 struct Node*	op_object_mesh_get(struct Node *node);
 
 
