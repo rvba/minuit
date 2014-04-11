@@ -178,11 +178,14 @@ void *op_new_camera(const char *name)
 	t_context *C = ctx_get();
 	term_log("+ camera");
 
+			int w = C->app->window->width;
+			int h = C->app->window->height;
+
 	scene_store(C->scene,1);
 
 	t_node *node_camera=camera_make(name);
 	t_camera *camera = ( t_camera *) node_camera->data;
-	op_camera_frustum_init(camera);
+	op_camera_frustum_init(camera, w, h);
 
 	t_node *node_object=object_add("camera",name);
 	t_object *object = ( t_object *) node_object->data;

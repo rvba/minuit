@@ -185,8 +185,10 @@ void screen_intro(t_screen *screen)
 
 			C->ui->zoom = z;
 
+			int w = C->app->window->width;
+			int h = C->app->window->height;
 			// 3D
-			op_camera_frustum_init(camera);
+			op_camera_frustum_init(camera, w, h);
 			camera->type = camera_frustum;
 			camera->target[0]=500;
 			camera->target[1]=500;

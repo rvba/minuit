@@ -69,9 +69,12 @@ void viewport_draw_scene(t_viewport *viewport)
 	t_context *C = ctx_get();
 	t_camera *camera = viewport->camera;
 
+			int w = C->app->window->width;
+			int h = C->app->window->height;
+
 	if( C->app->window->change)
 	{
-		op_camera_frustum_init( camera);
+		op_camera_frustum_init( camera, w, h);
 		C->app->window->change = 0;
 	}
 
