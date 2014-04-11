@@ -57,7 +57,11 @@ void ctx_event_dispatch( t_context *C)
 		event =  (t_event *) l->data;
 		ctx_event_exec( C, event);
 	}
+}
 
+void ctx_event( t_context *C)
+{
+	ctx_event_dispatch( C);
 }
 
 void ctx_event_add( int type)
@@ -65,9 +69,4 @@ void ctx_event_add( int type)
 	t_context *C = ctx_get();
 	t_screen *s = C->ui->screen_active;
 	event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, type);
-}
-
-void ctx_event( t_context *C)
-{
-	ctx_event_dispatch( C);
 }

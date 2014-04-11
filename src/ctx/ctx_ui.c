@@ -179,6 +179,18 @@ void ctx_ui_buffer_clear( t_context *C)
 	C->event->buffer_char_counter=0;
 }
 
+void ctx_log( const char *fmt, ...)
+{
+	char msg[400];
+	va_list ap;
+	va_start(ap,fmt);
+	vsprintf(msg,fmt,ap);
+	va_end(ap);
+
+	t_term *term = term_get( "term_main"); 
+	term_print(term,msg);
+}
+
 void ctx_ui_log( const char *name)
 {
 	char msg[128];

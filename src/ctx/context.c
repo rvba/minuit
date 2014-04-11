@@ -37,18 +37,6 @@ t_scene *ctx_scene_get(void)
 	return CONTEXT->scene;
 }
 
-void ctx_log( const char *fmt, ...)
-{
-	char msg[400];
-	va_list ap;
-	va_start(ap,fmt);
-	vsprintf(msg,fmt,ap);
-	va_end(ap);
-
-	t_term *term = term_get( "term_main"); 
-	term_print(term,msg);
-}
-
 t_context *ctx_new(int argc,char **argv)
 {
 	t_context *C = (t_context *) mem_malloc(sizeof(t_context));
@@ -82,7 +70,6 @@ t_context *ctx_init(int argc,char **argv)
 	term_init();
 	mode_init( C->mode);
 	ctx_thread_init( C);
-	//screen_init( C);
 	exe_init();
 
 	// Set GL Callback
@@ -129,9 +116,12 @@ void ctx_update(t_context *C)
 	ctx_app(C);
 	ctx_keyboard(C);	
 	ctx_mouse( C);
+
 	ctx_event( C);
 	ctx_ui( C);
+
 	ctx_render( C);
+
 	ctx_mode( C);
 	ctx_compute( C);
 	ctx_engine( C);
