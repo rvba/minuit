@@ -114,29 +114,28 @@ void ctx_mode(t_context *C)
 	C->mode->update(C->mode);
 }
 
-void ctx_events( t_context *C)
-{
-	ctx_app(C);
-	ctx_keyboard(C);	
-	ctx_mouse( C);
-	ctx_event( C);
-}
-
 void ctx_engine( t_context *C)
 {
 	engine_cleanup( C->engine);
 }
 
+void ctx_clean( t_context *C)
+{
+	scene_cleanup(C->scene);
+}
+
 void ctx_update(t_context *C)
 {
-	ctx_events( C);
+	ctx_app(C);
+	ctx_keyboard(C);	
+	ctx_mouse( C);
+	ctx_event( C);
 	ctx_ui( C);
 	ctx_render( C);
 	ctx_mode( C);
 	ctx_compute( C);
 	ctx_engine( C);
-	scene_cleanup(C->scene);
-
+	ctx_clean( C);
 }
 
 void ctx_handler(void)
