@@ -87,8 +87,6 @@ void viewport_draw_scene(t_viewport *viewport)
 	else  _op_camera_update(C, camera, viewport);
 	
 	op_3d_orientation(); 
-
-
 	draw_scene(C->draw,C->scene);
 }
 
@@ -97,7 +95,6 @@ void viewport_draw(t_viewport *viewport)
 	t_context *C = ctx_get();
 
 	t_camera *camera = viewport->camera;
-	op_camera_update(C, camera);
 	op_3d_orientation(); 
 	draw_scene(C->draw,C->scene);
 }
