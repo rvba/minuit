@@ -21,6 +21,7 @@ struct Scene;
 struct Block;
 struct MINscreen;
 struct Camera;
+struct Viewport;
 
 typedef struct MINscreen
 {
@@ -46,6 +47,10 @@ typedef struct MINscreen
 	void *data;
 
 }t_screen;
+
+
+struct Viewport *screen_viewport_get( t_screen *screen);
+void screen_switch_2d( t_screen *screen);
 
 // SCREEN BROWSER.C
 

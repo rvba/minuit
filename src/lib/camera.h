@@ -101,6 +101,11 @@ struct Camera
 
 };
 
+void camera_set_frustum( t_camera *camera, int w, int h);
+void camera_set_viewport( t_camera *camera, int px, int py, int width, int height);
+void camera_set_restrict_matrix( t_camera *camera, int x, int y);
+void camera_set_projection(t_camera *camera, int type);
+
 void *		camera_get_ref(t_camera *camera, const char *ref);
 void 		camera_show(t_camera *camera);
 t_camera *	camera_clone(t_camera *source);

@@ -33,6 +33,9 @@ void screen_bricks( t_screen *screen)
 		glPushMatrix();
 			glLoadIdentity();
 
+			printf("------------\n");
+			camera_show( camera);
+
 
 			C->event->ui.use_scale = 0;
 

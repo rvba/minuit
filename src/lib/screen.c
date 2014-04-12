@@ -24,6 +24,58 @@
 #include "camera.h"
 #include "memory.h"
 
+t_viewport *screen_viewport_get( t_screen *screen)
+{
+	t_viewport *viewport = NULL;
+	t_lst *lst = screen->viewports;
+	if( lst)
+	{
+		//viewport =  lst_get_by_range( lst, 0);
+		t_link *l = lst->first;
+		if( l)
+		{
+			viewport= l->data;
+		}
+		else
+		{
+			printf("Can't find link\n");
+		}
+	}
+	else printf("[SCREEN] Can't find lst\n");
+	return viewport;
+}
+
+void screen_switch_2d( t_screen *screen)
+{
+	t_viewport *viewport = screen_viewport_get( screen);
+	if( viewport)
+	{
+		t_context *C = ctx_get();
+		t_camera *camera = viewport->camera;
+
+		int px = 0;
+		int py = 0;
+		int mx = C->app->mouse->x;
+		int my = C->app->mouse->y;
+		/*
+		int width = viewport->width;
+		int height = viewport->height;
+		*/
+
+		int width = 1600;
+		int height = 1200;
+
+		//camera_set_frustum( camera, width, height);
+		camera_set_viewport( camera, px, py, width, height);
+		//camera_set_restrict_matrix( camera, mx, my);
+		camera_set_projection( camera, camera_ortho);
+	}
+	else
+	{
+		printf("[SCREEN] Can't find viewport\n");
+	}
+}
+
 t_screen *screen_default(const char *name, void (* draw)(t_screen *s))
 {
 	t_context *C=ctx_get();
