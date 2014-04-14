@@ -30,7 +30,6 @@ t_viewport *screen_viewport_get( t_screen *screen)
 	t_lst *lst = screen->viewports;
 	if( lst)
 	{
-		//viewport =  lst_get_by_range( lst, 0);
 		t_link *l = lst->first;
 		if( l)
 		{
@@ -57,17 +56,11 @@ void screen_switch_2d( t_screen *screen)
 		int py = 0;
 		int mx = C->app->mouse->x;
 		int my = C->app->mouse->y;
-		/*
+
 		int width = viewport->width;
 		int height = viewport->height;
-		*/
 
-		int width = 1600;
-		int height = 1200;
-
-		//camera_set_frustum( camera, width, height);
 		camera_set_viewport( camera, px, py, width, height);
-		//camera_set_restrict_matrix( camera, mx, my);
 		camera_set_projection( camera, camera_ortho);
 	}
 	else
