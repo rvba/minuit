@@ -37,19 +37,4 @@ void screen_main(t_screen *screen)
 	glPopMatrix();
 
 	op_camera_switch_3d(C, camera);
-	#else
-
-	screen_switch_2d( screen);
-
-	glPushMatrix();
-		glLoadIdentity();
-
-		ui_draw_mouse();
-		ui_draw_grid();
-		ui_draw_menu();
-		ui_draw_bar();
-
-	glPopMatrix();
-
-	#endif
 }

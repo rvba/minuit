@@ -50,5 +50,4 @@ void screen_view3d(t_screen *screen)
 
 		draw_scene(C->draw,C->scene);
 	}
-		else printf("NOPE VIEW3D\n");
 }
