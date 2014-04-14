@@ -26,6 +26,7 @@
 #include "brick.h"
 #include "geometry.h"
 #include "app.h"
+#include "ui.h"
 
 // GEO
 
@@ -151,6 +152,26 @@ void *op_new_set(const char *name)
 
 void *op_add_set(t_brick *brick)
 {
+	return NULL;
+}
+
+void *op_add_screen( t_brick *brick)
+{
+	t_context *C = ctx_get();
+	term_log("+ screen");
+
+	scene_store(C->scene,1);
+	C->scene->has_generic_viewport = 1;
+
+	t_screen *screen = screen_add_3d( "screen_view3d", screen_view3d);
+	screen->draw = screen_view3d;
+
+	screen->is_active = 1;
+	screen->is_visible = 1;
+
+
+	scene_store(C->scene,0);
+
 	return NULL;
 }
 
@@ -351,7 +372,7 @@ void *op_add_default(t_brick *brick)
 	opt_op_use_random = 1;
 	op_add_light(NULL);
 	op_add_cube(NULL);
-	op_add_viewport(NULL);
+	op_add_screen(NULL);
 	opt_op_use_random = 0;
 
 	return NULL;

@@ -540,17 +540,21 @@ void ctx_ui_object_trigger( t_context *C)
 t_camera *ctx_ui_camera_get( t_context *C)
 {
 	t_camera *camera = NULL;
+	t_screen *screen = NULL;
+	t_viewport *viewport = NULL;
+	t_node *node = NULL;
 
 	if( C->scene->has_generic_viewport)
 	{
-		// Get default Viewport
-		t_node *node_viewport = scene_node_get( C->scene,"viewport","viewport");
-		t_viewport *viewport = NULL;
-
-		if( node_viewport)
+		node = scene_node_get( C->scene, "screen", "screen_view3d");
+		if( node)
 		{
-			viewport = ( t_viewport *) node_viewport->data;
-			camera = viewport->camera;
+			screen = (t_screen *) node->data;
+			viewport = screen_viewport_get( screen);
+			if( viewport)
+			{
+				camera = viewport->camera;
+			}
 		}
 	}
 

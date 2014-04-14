@@ -85,6 +85,8 @@ void 		screen_free(t_screen *screen);
 t_screen *	screen_new(const char *name);
 void 		screen_init( struct Context *C);
 
+t_screen *screen_add_3d(const char *name, void (* draw)(t_screen *s));
+
 #ifdef __cplusplus
 }
 #endif

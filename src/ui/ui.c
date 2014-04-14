@@ -381,7 +381,7 @@ void ui_draw_sets(void)
 
 void ui_draw_screens(t_context *C)
 {
-	t_link *l=C->ui->screens->first;
+	t_link *l=C->scene->screens->first;
 	t_node *n;
 	t_screen *s;
 

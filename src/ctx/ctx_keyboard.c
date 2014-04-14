@@ -139,14 +139,7 @@ void keymap_command( int key)
 	t_camera *camera = NULL;
 	if(C->scene->has_generic_viewport)
 	{
-		t_node *node_viewport = scene_node_get(C->scene,"viewport","viewport");
-		t_viewport *viewport = NULL;
-
-		if(node_viewport)
-		{
-			viewport = ( t_viewport *) node_viewport->data;
-			camera = ( t_camera *) viewport->camera;
-		}
+		camera = ctx_ui_camera_get( C);
 	}
 
 	switch(key)

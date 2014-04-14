@@ -102,6 +102,39 @@ t_screen *screen_default(const char *name, void (* draw)(t_screen *s))
 	return screen;
 }
 
+t_screen *screen_add_3d(const char *name, void (* draw)(t_screen *s))
+{
+	t_context *C=ctx_get();
+
+	t_node *node=scene_add(C->scene,dt_screen,name);
+	t_screen *screen=node->data;
+
+	screen->keymap=keymap_generic;
+	screen->draw=draw;
+
+	lst_add(C->ui->screens,node,name);
+
+	// Lst
+	t_node *node_lst = scene_add( C->scene, dt_list, "lst_screen");
+	t_lst *lst = node_lst->data;
+
+	screen->viewports = lst;
+
+	// Viewport
+	t_node *node_viewport = scene_add( C->scene, dt_viewport, name);
+	t_viewport *viewport = node_viewport->data;
+
+	// Camera
+	t_node *node_camera = scene_add( C->scene, dt_camera, name);
+	t_camera *camera = node_camera->data;
+
+	viewport->camera = camera;
+
+	list_add_data(screen->viewports, viewport);
+
+	return screen;
+}
+
 void screen_always(t_screen *screen)
 {
 	screen->is_active=1;
@@ -237,6 +270,12 @@ t_screen *screen_rebind(t_scene *scene, void *ptr)
 
 	rebind(scene,"screen","blocks",(void **)&screen->blocks);
 	rebind(scene,"screen","viewports",(void **)&screen->viewports);
+
+	if( is( screen->id.name, "screen_view3d"))
+	{
+		t_context *C = ctx_get();
+		C->scene->has_generic_viewport = 1;
+	}
 
 	return ptr;
 }
