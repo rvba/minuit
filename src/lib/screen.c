@@ -78,11 +78,16 @@ void screen_switch_3d( t_screen *screen)
 		int w = C->app->window->width;
 		int h = C->app->window->height;
 
+		/*
 		if( C->app->window->change)
 		{
 			op_camera_frustum_init( camera, w, h);
 			C->app->window->change = 0;
 		}
+		*/
+
+			op_camera_frustum_init( camera, w, h);
+			C->app->window->change = 0;
 
 		if( viewport->fullscreen) op_camera_update(C, camera);
 		else  _op_camera_update(C, camera, viewport);
