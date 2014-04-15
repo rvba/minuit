@@ -46,6 +46,47 @@ void *viewport_get_ref(t_viewport *viewport, const char *ref)
 	return p;
 }
 
+void viewport_switch_2d( t_viewport *viewport)
+{
+	t_camera *camera = viewport->camera;
+	int width = viewport->width;
+	int height = viewport->height;
+
+	glViewport( 0, 0, width, height);
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	double left = camera->left;
+	double right = camera->right;	
+	double bottom = camera->bottom;
+	double top = camera->top;
+
+	glOrtho(
+		0 + left,
+		width + right,
+		0 + bottom,
+		height + top,
+		-1,
+		1
+		);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	glTranslatef(
+			camera->ortho_location[0],
+			camera->ortho_location[1],
+			camera->ortho_location[2]
+			);
+
+	glRotatef(camera->angle,
+		camera->ortho_rotation[0],
+		camera->ortho_rotation[1],
+		camera->ortho_rotation[2]
+		);
+}
+
 
 void viewport_draw_controls( t_viewport *viewport)
 {

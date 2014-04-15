@@ -92,47 +92,8 @@ void screen_switch_3d( t_screen *screen)
 
 void screen_switch_2d( t_screen *screen)
 {
-	/*
 	t_viewport *viewport = screen_viewport_get( screen);
-	if( viewport)
-	{
-		t_context *C = ctx_get();
-		t_camera *camera = viewport->camera;
-
-		int px = 0;
-		int py = 0;
-		int mx = C->app->mouse->x;
-		int my = C->app->mouse->y;
-
-		int width = viewport->width;
-		int height = viewport->height;
-
-		camera->ortho_zoom = 1;
-
-		camera_set_frustum( camera, width, height);
-
-		//camera_set_restrict_matrix( camera, mx, my);
-		camera->restrict_matrix = 0;
-		camera_set_viewport( camera, px, py, width, height);
-		camera_set_projection( camera, camera_ortho);
-		//_op_camera_switch_2d( C, camera, width, height);
-		op_camera_switch_2d( C, camera);
-	}
-	else
-	{
-		printf("[SCREEN] Can't find viewport\n");
-	}
-	*/
-
-	t_context *C = ctx_get();
-	t_viewport *viewport = screen_viewport_get( screen);
-
-	if( viewport)
-	{
-		t_camera *camera = viewport->camera;
-		op_camera_update( C, camera);
-		op_camera_switch_2d(C,camera);
-	}
+	viewport_switch_2d( viewport);
 }
 
 t_screen *screen_default(const char *name, void (* draw)(t_screen *s))
