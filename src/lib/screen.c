@@ -99,6 +99,7 @@ t_screen *screen_default(const char *name, void (* draw)(t_screen *s))
 	screen->keymap=keymap_generic;
 	screen->draw=draw;
 
+	// Add to UI Screens
 	lst_add(C->ui->screens,node,name);
 
 	// Lst

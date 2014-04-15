@@ -15,27 +15,24 @@
 #include "event.h"
 #include "util.h"
 #include "block.h"
+#include "viewport.h"
 
 void screen_bricks( t_screen *screen)
 {
-	t_context *C=ctx_get();
-	t_camera *camera = C->ui->camera;
-
-	op_camera_switch_2d(C,camera);
+	screen_switch_2d( screen);
+	t_context *C = ctx_get();
+	t_viewport *viewport = screen_viewport_get( screen);
+	t_camera *camera = viewport->camera;
 
 	glPushMatrix();
-		glLoadIdentity();
+	glLoadIdentity();
+
 		glTranslatef(C->ui->pan_x,C->ui->pan_y,0);
 		float zoom = C->ui->zoom;
 		glScalef(zoom,zoom,zoom);
 
-
 		glPushMatrix();
-			glLoadIdentity();
-
-			printf("------------\n");
-			camera_show( camera);
-
+		glLoadIdentity();
 
 			C->event->ui.use_scale = 0;
 
@@ -54,6 +51,4 @@ void screen_bricks( t_screen *screen)
 		glPopMatrix();
 
 	glPopMatrix();
-
-	op_camera_switch_3d(C, camera);
 }
