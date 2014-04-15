@@ -7,7 +7,6 @@ set(SRC
 	screen_intro.c
 	screen_browser.c
 	screen_bricks_menu.c
-	screen_generic.c
 	screen_main.c
 	screen_sets.c
 	screen_log.c

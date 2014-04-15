@@ -35,24 +35,6 @@ void screen_block_add_by_name(t_context *C, t_screen *screen, const char *name)
 	}
 }
 
-// NEW
-
-t_screen *screen_new_generic( t_context *C, char *name)
-{
-	t_node *node = scene_add( C->scene, dt_screen, name);
-	t_screen *screen = ( t_screen *) node->data;
-
-	screen->keymap = keymap_generic;
-	screen->draw = screen_generic;
-
-	screen->is_active = 0;
-	screen->is_visible = 0;
-
-	lst_add( C->ui->screens, node, "screen_generic");
-
-	return screen;
-};
-
 // MAKE MAIN
 
 t_screen *screen_main_make( t_context *C)
