@@ -146,6 +146,28 @@ void op_camera_switch_2d(t_context *C, t_camera *camera)
 	glMatrixMode(GL_MODELVIEW);
 }
 
+void _op_camera_switch_2d(t_context *C, t_camera *camera, int width, int height)
+{
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	double left = camera->left;
+	double right = camera->right;	
+	double bottom = camera->bottom;
+	double top = camera->top;
+
+	glOrtho(
+		0 + left,
+		width + right,
+		0 + bottom,
+		height + top,
+		-1,
+		1
+		);
+
+	glMatrixMode(GL_MODELVIEW);
+}
+
 void op_camera_switch_3d(t_context *C, t_camera *camera)
 {
 	op_camera_update(C, camera);
@@ -209,6 +231,7 @@ void op_camera_projection_ortho( t_context *C, t_camera *camera)
 	if( camera->restrict_matrix) op_camera_restrict( C, camera);
 
 	glOrtho(left*z,right*z,bottom*z,top*z,camera->ortho_near,camera->ortho_far);
+
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 

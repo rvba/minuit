@@ -58,6 +58,7 @@ t_screen *screen_new_generic( t_context *C, char *name)
 t_screen *screen_main_make( t_context *C)
 {
 	#if 1
+	/*
 	t_node *node = scene_add( C->scene, dt_screen, "screen_main");
 	t_screen *screen = ( t_screen *) node->data;
 
@@ -71,6 +72,16 @@ t_screen *screen_main_make( t_context *C)
 	C->ui->screen_link_active = link;
 
 	return screen;
+	*/
+
+	t_screen *screen = screen_default( "screen_main", screen_main);
+	screen->is_active = 1;
+	screen->is_visible = 1;
+
+	screen->keymap = keymap_main;
+
+	return screen;
+
 	#else
 
 	t_screen *screen = screen_default( "screen_main", screen_main);

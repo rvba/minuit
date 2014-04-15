@@ -28,7 +28,7 @@ t_camera_cls cls_camera=
 
 void camera_set_frustum( t_camera *camera, int w, int h)
 {
-	printf("set frustum %d %d\n", w, h);
+	//printf("set frustum %d %d\n", w, h);
 	double r=3.14159265/180;
 	double fovy = CAM_FOVY;
 	double near = CAM_NEAR;
@@ -95,9 +95,6 @@ void camera_projection_perspective( t_camera *camera)
 
 void camera_projection_ortho( t_camera *camera)
 {
-	printf("set projection ortho\n");
-
-	camera_show( camera);
 	double left = camera->left;
 	double right = camera->right;	
 	double bottom = camera->bottom;
@@ -124,9 +121,10 @@ void camera_projection_ortho( t_camera *camera)
 		);
 }
 
+
 void camera_set_viewport( t_camera *camera, int px, int py, int width, int height)
 {
-	printf("set viewport %d %d %d %d\n", px, py, width, height);
+	//printf("set viewport %d %d %d %d\n", px, py, width, height);
 	glViewport( px, py, width, height);
 }
 

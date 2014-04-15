@@ -60,8 +60,16 @@ void screen_switch_2d( t_screen *screen)
 		int width = viewport->width;
 		int height = viewport->height;
 
+		camera->ortho_zoom = 1;
+
+		camera_set_frustum( camera, width, height);
+
+		//camera_set_restrict_matrix( camera, mx, my);
+		camera->restrict_matrix = 0;
 		camera_set_viewport( camera, px, py, width, height);
 		camera_set_projection( camera, camera_ortho);
+		//_op_camera_switch_2d( C, camera, width, height);
+		op_camera_switch_2d( C, camera);
 	}
 	else
 	{
@@ -96,6 +104,8 @@ t_screen *screen_default(const char *name, void (* draw)(t_screen *s))
 	t_camera *camera = node_camera->data;
 
 	viewport->camera = camera;
+	viewport->width = 1600;
+	viewport->height = 1200;
 
 	lst_add(screen->viewports, viewport, name);
 

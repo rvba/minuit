@@ -16,25 +16,28 @@
 #include "util.h"
 #include "block.h"
 
+#include "viewport.h"
+
 void screen_main(t_screen *screen)
 {
-	#if 1
-	t_context *C=ctx_get();
-	t_camera *camera = C->ui->camera;
+	t_context *C = ctx_get();
+	t_viewport *viewport = screen_viewport_get( screen);
 
-	op_camera_update( C, camera);
+	if( viewport)
+	{
+		t_camera *camera = viewport->camera;
+		op_camera_update( C, camera);
 
-	glPushMatrix();
-		glLoadIdentity();
+		glPushMatrix();
+			glLoadIdentity();
 
-		op_camera_switch_2d(C,camera);
+			op_camera_switch_2d(C,camera);
 
-		ui_draw_mouse();
-		ui_draw_grid();
-		ui_draw_menu();
-		ui_draw_bar();
+			ui_draw_mouse();
+			ui_draw_grid();
+			ui_draw_menu();
+			ui_draw_bar();
 
-	glPopMatrix();
-
-	op_camera_switch_3d(C, camera);
+		glPopMatrix();
+	}
 }

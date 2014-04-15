@@ -133,6 +133,8 @@ void 		op_camera_switch_type(t_camera *camera);
 void 		op_camera_change_speed(t_camera *camera);
 void 		op_camera_translate_key(t_camera *camera,float x,float y);
 void 		op_camera_switch_2d(struct Context *C, t_camera *camera);
+void 		_op_camera_switch_2d(struct Context *C, t_camera *camera, int width, int height);
+
 void 		op_camera_switch_3d(struct Context *C, t_camera *camera);
 void 		op_camera_update(struct Context *C, t_camera *camera);
 void 		op_camera_frustum_init(t_camera *camera, int w, int h);
