@@ -205,6 +205,7 @@ extern void (* UI_STATE)( struct Context *C, struct Event *e);
 
 void state_browser( struct Context *C, struct Event *e);
 void state_ui_default( struct Context *C, struct Event *e);
+struct Camera *ctx_ui_camera_get( struct Context *C);
 
 extern int BROWSER_EXIT;
 

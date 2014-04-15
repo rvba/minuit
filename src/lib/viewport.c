@@ -94,7 +94,6 @@ void viewport_draw(t_viewport *viewport)
 {
 	t_context *C = ctx_get();
 
-	t_camera *camera = viewport->camera;
 	op_3d_orientation(); 
 	draw_scene(C->draw,C->scene);
 }

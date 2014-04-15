@@ -30,6 +30,7 @@ extern "C" {
 struct Context;
 struct Node;
 struct Scene;
+struct Viewport;
 
 typedef struct Camera t_camera;
 typedef struct Camera_Class t_camera_cls;
@@ -137,6 +138,7 @@ void 		_op_camera_switch_2d(struct Context *C, t_camera *camera, int width, int 
 
 void 		op_camera_switch_3d(struct Context *C, t_camera *camera);
 void 		op_camera_update(struct Context *C, t_camera *camera);
+void 		_op_camera_update( struct Context *C, struct Camera *camera, struct Viewport *viewport);
 void 		op_camera_frustum_init(t_camera *camera, int w, int h);
 void 		op_camera_reset(struct Context *C, t_camera *camera);
 void 		op_camera_reset_pos(t_camera *camera);

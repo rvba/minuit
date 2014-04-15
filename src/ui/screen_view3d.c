@@ -20,6 +20,8 @@
 #include "txt.h"
 #include "viewport.h"
 
+#include "draw.h"
+
 void screen_view3d(t_screen *screen)
 {
 	t_context *C = ctx_get();

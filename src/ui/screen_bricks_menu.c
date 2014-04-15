@@ -8,21 +8,17 @@
  */
 
 #include "screen.h"
-#include "camera.h"
 #include "context.h"
 #include "opengl.h"
 #include "ui.h"
-#include "event.h"
-#include "util.h"
 #include "block.h"
-#include "viewport.h"
+#include "util.h"
+#include "event.h"
 
 void screen_bricks( t_screen *screen)
 {
 	screen_switch_2d( screen);
 	t_context *C = ctx_get();
-	t_viewport *viewport = screen_viewport_get( screen);
-	t_camera *camera = viewport->camera;
 
 	glPushMatrix();
 	glLoadIdentity();

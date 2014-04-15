@@ -31,7 +31,6 @@ void screen_draw_controls( t_screen *screen)
 		screen_switch_2d( screen);
 		t_viewport *viewport = screen_viewport_get( screen);
 
-		t_context *C = ctx_get();
 		glPushMatrix();
 		glLoadIdentity();
 
