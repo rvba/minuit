@@ -40,6 +40,7 @@ struct Viewport
 	struct Block *controls;
 };
 
+void viewport_switch_3d( t_viewport *viewport);
 void viewport_switch_2d( t_viewport *viewport);
 void viewport_add_controls( t_viewport *viewport);
 void viewport_draw_controls( t_viewport *viewport);

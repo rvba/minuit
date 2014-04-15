@@ -46,6 +46,56 @@ void *viewport_get_ref(t_viewport *viewport, const char *ref)
 	return p;
 }
 
+void viewport_switch_3d( t_viewport *viewport)
+{
+	int width = viewport->width;
+	int height = viewport->height;
+
+	t_context *C = ctx_get();
+	t_camera *camera = viewport->camera;
+
+	if( camera->update_frustum)
+	{
+		op_camera_frustum_init( camera, width, height);
+		C->app->window->change = 0;
+	}
+
+	glViewport( 0, 0, width, height);
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	//if( camera->restrict_matrix) op_camera_restrict( C, camera);
+	glFrustum(
+		camera->left,
+		camera->right,
+		camera->bottom,
+		camera->top,
+		camera->near,
+		camera->far);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluLookAt(
+		camera->eye[0],
+		camera->eye[1],
+		camera->eye[2],
+		camera->target[0],
+		camera->target[1],
+		camera->target[2],
+		camera->up[0],
+		camera->up[1],
+		camera->up[2]
+		);
+
+	float zenith = camera->zenith;
+	glTranslatef(camera->pos[0],camera->pos[1],camera->pos[2]);
+
+	// Camera Up rotation
+	glRotatef(zenith,camera->cross[0],camera->cross[1],camera->cross[2]);
+
+	op_3d_orientation(); 
+}
+
 void viewport_switch_2d( t_viewport *viewport)
 {
 	t_camera *camera = viewport->camera;
