@@ -100,6 +100,8 @@ struct Camera
 	double near;
 	double far;
 
+	int update_frustum;
+
 };
 
 void camera_set_frustum( t_camera *camera, int w, int h);

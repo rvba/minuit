@@ -309,6 +309,7 @@ t_camera *camera_new(const char *name)
 	camera->zenith=0;
 	camera->frame=0;
 	camera->is_moving=CAM_IS_MOVING;
+	camera->update_frustum = 1;
 
 
 	return camera;
