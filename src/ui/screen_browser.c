@@ -238,19 +238,15 @@ void browser_draw(void)
 
 void screen_browser(t_screen *screen)
 {
-	t_context *C=ctx_get();
-	t_camera *camera = C->ui->camera;
-
-	op_camera_switch_2d(C,camera);
+	screen_switch_2d( screen);
 
 	glPushMatrix();
-		glLoadIdentity();
+	glLoadIdentity();
 
 		browser_update();
 		browser_draw();
 
 	glPopMatrix();
-	op_camera_switch_3d(C, camera);
 }
 
 void browser_init(void)
@@ -276,18 +272,9 @@ void browser_init(void)
 
 t_screen *screen_browser_make( t_context *C)
 {
-	t_node *node = scene_add( C->scene, dt_screen, "screen_browser");
-	t_screen *screen = ( t_screen *) node->data;
-
+	t_screen *screen = screen_default( "screen_browser", screen_browser);
 	screen->keymap = keymap_browser;
-	screen->draw = screen_browser;
 
-	screen->is_active = 0;
-	screen->is_visible = 0;
-
-	lst_add( C->ui->screens, node, "screen_browser");
-
-	// init
 	browser_init();
 
 	return screen;
