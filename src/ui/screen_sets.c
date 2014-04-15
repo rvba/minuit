@@ -18,24 +18,20 @@
 
 void screen_sets(t_screen *screen)
 {
-	t_context *C=ctx_get();
-	t_camera *camera = C->ui->camera;
-
-	op_camera_switch_2d(C,camera);
+	screen_switch_2d( screen);
 
 	glPushMatrix();
-		glLoadIdentity();
+	glLoadIdentity();
 
+		ui_draw_mouse();
+		ui_draw_grid();
+
+		t_context *C = ctx_get();
 		glTranslatef(C->ui->pan_x,C->ui->pan_y,0);
 		float zoom = C->ui->zoom;
 		glScalef(zoom,zoom,zoom);
 
-		ui_draw_mouse();
-		op_camera_switch_2d(C,camera);
-		ui_draw_grid();
-
 		ui_draw_sets();
 
 	glPopMatrix();
-	op_camera_switch_3d(C, camera);
 }

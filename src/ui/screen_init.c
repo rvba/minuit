@@ -70,6 +70,7 @@ t_screen *screen_main_make( t_context *C)
 
 t_screen *screen_sets_make( t_context *C)
 {
+	/*
 	t_node *node = scene_add( C->scene, dt_screen, "screen_sets");
 	t_screen *screen = ( t_screen *) node->data;
 
@@ -82,6 +83,10 @@ t_screen *screen_sets_make( t_context *C)
 	t_link *link = lst_add( C->ui->screens, node, "screen_sets");
 	C->ui->screen_link_active = link;
 
+	return screen;
+	*/
+
+	t_screen *screen = screen_default( "screen_sets", screen_sets);
 	return screen;
 };
 
