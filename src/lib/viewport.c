@@ -36,7 +36,7 @@ void *viewport_get_ref(t_viewport *viewport, const char *ref)
 	else if(is(ref,"height"))  			p=&viewport->height; 
 	else if(is(ref,"x"))  				p=&viewport->x; 
 	else if(is(ref,"y"))  				p=&viewport->y; 
-	else if(is(ref,"fullscreen"))  				p=&viewport->fullscreen; 
+	else if(is(ref,"fullscreen"))  			p=&viewport->fullscreen; 
 	else
 	{
 		printf("[ERROR mesh_get_ref] Unknown ref [%s] \n",ref);
@@ -48,11 +48,23 @@ void *viewport_get_ref(t_viewport *viewport, const char *ref)
 
 void viewport_switch_3d( t_viewport *viewport)
 {
-	int width = viewport->width;
-	int height = viewport->height;
+
+	int width;
+	int height;
 
 	t_context *C = ctx_get();
 	t_camera *camera = viewport->camera;
+
+	if( viewport->fullscreen)
+	{
+		width = C->app->window->width;
+		height = C->app->window->height;
+	}
+	else
+	{
+		width = viewport->width;
+		height = viewport->height;
+	}
 
 	if( camera->update_frustum)
 	{
@@ -98,9 +110,22 @@ void viewport_switch_3d( t_viewport *viewport)
 
 void viewport_switch_2d( t_viewport *viewport)
 {
+	t_context *C = ctx_get();
 	t_camera *camera = viewport->camera;
-	int width = viewport->width;
-	int height = viewport->height;
+
+	int width;
+	int height;
+
+	if( viewport->fullscreen)
+	{
+		width = C->app->window->width;
+		height = C->app->window->height;
+	}
+	else
+	{
+		width = viewport->width;
+		height = viewport->height;
+	}
 
 	glViewport( 0, 0, width, height);
 
@@ -330,6 +355,7 @@ t_viewport *viewport_new(const char *name)
 	viewport->draw = NULL;
 	viewport->show_controls = 0;
 	viewport->fullscreen = 1;
+	viewport->use_fullscreen = 1;
 
 	return viewport;
 }

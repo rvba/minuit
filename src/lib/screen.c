@@ -28,8 +28,13 @@ void screen_draw_controls( t_screen *screen)
 {
 	if( opt_viewport_show_controls)
 	{
-		screen_switch_2d( screen);
+		t_context *C = ctx_get();
+
 		t_viewport *viewport = screen_viewport_get( screen);
+		int fullscreen = viewport->fullscreen;
+		viewport->fullscreen = 1;
+
+		screen_switch_2d( screen);
 
 		glPushMatrix();
 		glLoadIdentity();
@@ -39,6 +44,8 @@ void screen_draw_controls( t_screen *screen)
 		{
 			block->cls->draw( block);
 		}
+
+		viewport->fullscreen = fullscreen;
 
 		glPopMatrix();
 	}
