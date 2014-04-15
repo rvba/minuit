@@ -50,6 +50,7 @@ typedef struct MINscreen
 
 
 struct Viewport *screen_viewport_get( t_screen *screen);
+void screen_switch( t_screen *screen);
 void screen_switch_2d( t_screen *screen);
 void screen_switch_3d( t_screen *screen);
 

@@ -26,7 +26,7 @@ void screen_view3d(t_screen *screen)
 {
 	t_context *C = ctx_get();
 	screen_draw_controls( screen);
-	screen_switch_3d( screen);
+	screen_switch( screen);
 
 	draw_scene(C->draw,C->scene);
 }

@@ -85,6 +85,14 @@ void screen_switch_2d( t_screen *screen)
 	viewport_switch_2d( viewport);
 }
 
+void screen_switch( t_screen *screen)
+{
+	t_viewport *viewport = screen_viewport_get( screen);
+	t_camera *camera = viewport->camera;
+	if( camera->type == camera_ortho) screen_switch_2d( screen);
+	else screen_switch_3d( screen) ;
+}
+
 t_screen *screen_default(const char *name, void (* draw)(t_screen *s))
 {
 	t_context *C=ctx_get();
