@@ -51,6 +51,8 @@ void viewport_switch_3d( t_viewport *viewport)
 
 	int width;
 	int height;
+	int x = viewport->x;
+	int y = viewport->y;
 
 	t_context *C = ctx_get();
 	t_camera *camera = viewport->camera;
@@ -59,11 +61,15 @@ void viewport_switch_3d( t_viewport *viewport)
 	{
 		width = C->app->window->width;
 		height = C->app->window->height;
+		x = 0;
+		y = 0;
 	}
 	else
 	{
 		width = viewport->width;
 		height = viewport->height;
+		x = viewport->x;
+		y = viewport->y;
 	}
 
 	if( camera->update_frustum)
@@ -72,7 +78,7 @@ void viewport_switch_3d( t_viewport *viewport)
 		C->app->window->change = 0;
 	}
 
-	glViewport( 0, 0, width, height);
+	glViewport( x, y, width, height);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
