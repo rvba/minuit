@@ -28,8 +28,6 @@ void screen_draw_controls( t_screen *screen)
 {
 	if( opt_viewport_show_controls)
 	{
-		t_context *C = ctx_get();
-
 		t_viewport *viewport = screen_viewport_get( screen);
 		int fullscreen = viewport->fullscreen;
 		viewport->fullscreen = 1;
@@ -115,8 +113,6 @@ t_screen *screen_default(const char *name, void (* draw)(t_screen *s))
 	t_camera *camera = node_camera->data;
 
 	viewport->camera = camera;
-	viewport->width = 1600;
-	viewport->height = 1200;
 
 	lst_add(screen->viewports, viewport, name);
 
