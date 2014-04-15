@@ -18,10 +18,7 @@
 
 void screen_log( t_screen *screen)
 {
-	t_context *C=ctx_get();
-	t_camera *camera = C->ui->camera;
-
-	op_camera_switch_2d(C,camera);
+	screen_switch_2d( screen);
 
 	glPushMatrix();
 	glLoadIdentity();
@@ -29,6 +26,4 @@ void screen_log( t_screen *screen)
 		ui_draw_term();
 
 	glPopMatrix();
-
-	op_camera_switch_3d(C, camera);
 }

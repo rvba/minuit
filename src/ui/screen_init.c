@@ -125,34 +125,13 @@ t_screen *screen_intro_make( t_context *C)
 
 t_screen *screen_log_make( t_context *C)
 {
-	t_node *node = scene_add( C->scene, dt_screen, "screen_log");
-	t_screen *screen = ( t_screen *) node->data;
-
-	screen->keymap = keymap_generic;
-	screen->draw = screen_log;
+	t_screen *screen = screen_default( "screen_log", screen_log);
 
 	screen->is_active = 1;
 	screen->is_visible = 1;
 	screen->always_active = 1;
 	screen->always_visible = 1;
-
-	lst_add( C->ui->screens, node, "screen_log");
-
-	// Lst
-	t_node *node_lst = scene_add( C->scene, dt_list, "lst");
-	t_lst *lst = ( t_lst *) node_lst->data;
-	screen->viewports = lst;
-
-	// Viewport
-	t_node *node_viewport = scene_add( C->scene, dt_viewport, "viewport_log");
-	t_viewport *viewport = ( t_viewport *) node_viewport->data;
-
-	// Camera
-	t_node *node_camera = scene_add( C->scene, dt_camera, "camera_log");
-	t_camera *camera = ( t_camera *) node_camera->data;
-	viewport->camera = camera;
-	lst_add(screen->viewports, viewport, "viewport_log");
-
+	
 	return screen;
 };
 
