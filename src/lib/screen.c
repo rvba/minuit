@@ -88,6 +88,7 @@ void screen_switch_2d( t_screen *screen)
 void screen_switch( t_screen *screen)
 {
 	t_viewport *viewport = screen_viewport_get( screen);
+	viewport->use_ui = 0;
 	t_camera *camera = viewport->camera;
 	if( camera->type == camera_ortho) screen_switch_2d( screen);
 	else screen_switch_3d( screen) ;

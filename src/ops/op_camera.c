@@ -97,6 +97,7 @@ void op_camera_change_speed(t_camera *camera)
 {
 	t_context *C=ctx_get();
 	if (C->app->keyboard->ctrl) camera->speed = 0.05; 
+	else if( C->app->keyboard->shift) camera->speed = 10;
 	else  camera->speed = 1.0;
 }
 
@@ -407,10 +408,10 @@ void op_camera_zoom(t_context *C, t_camera *camera, int dir)
 void op_camera_set_ortho_zoom(t_context *C, t_camera *camera, int i)
 {
 	float speed = camera->speed;
-	camera->ortho_zoom = camera->ortho_zoom + (i * OP_CAM_ORTHO_ZOOM_FAC * speed *camera->ortho_zoom * .001);
-
+	float add = (float ) i  * speed;
+	float zoom = camera->ortho_zoom;
+	camera->ortho_zoom += ( i * 200 * speed) ;
 	camera->is_moving=1;
-	op_camera_update(C, camera);
 }
 
 void op_camera_set_ortho_pan(t_context *C, t_camera *camera)

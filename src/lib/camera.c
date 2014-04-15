@@ -296,7 +296,8 @@ t_camera *camera_new(const char *name)
 	vset(camera->ortho_location,0,0,0);
 	camera->ortho_view = camera_top;
 	camera->angle = 90;
-	camera->ortho_zoom = CAM_ORTHO_ZOOM;
+	//camera->ortho_zoom = CAM_ORTHO_ZOOM;
+	camera->ortho_zoom = 1;
 
 	camera->ortho_near=CAM_ORTHO_NEAR;
 	camera->ortho_far=CAM_ORTHO_FAR;

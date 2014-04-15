@@ -121,6 +121,7 @@ void viewport_switch_2d( t_viewport *viewport)
 
 	int width;
 	int height;
+	float zoom = camera->ortho_zoom;
 
 	if( viewport->fullscreen)
 	{
@@ -138,18 +139,34 @@ void viewport_switch_2d( t_viewport *viewport)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	double left = camera->left;
-	double right = camera->right;	
-	double bottom = camera->bottom;
-	double top = camera->top;
+	double left, right, top, bottom,near,far;
+
+	if( viewport->use_ui)
+	{
+		left = ( 0 + camera->left) * zoom;
+		right = ( width + camera->right) * zoom;	
+		bottom = ( 0 + camera->bottom) * zoom;
+		top = (height + camera->top) * zoom;
+		near = -1;
+		far = 1;
+	}
+	else
+	{
+		left = camera->left * zoom;
+		right = camera->right * zoom;	
+		bottom = camera->bottom * zoom;
+		top = camera->top * zoom;
+		near = camera->ortho_near;
+		far = camera->ortho_far;
+	}
 
 	glOrtho(
-		0 + left,
-		width + right,
-		0 + bottom,
-		height + top,
-		-1,
-		1
+		left,
+		right,
+		bottom,
+		top,
+		near,
+		far
 		);
 
 	glMatrixMode(GL_MODELVIEW);
@@ -362,6 +379,7 @@ t_viewport *viewport_new(const char *name)
 	viewport->show_controls = 0;
 	viewport->fullscreen = 1;
 	viewport->use_fullscreen = 1;
+	viewport->use_ui = 1;
 
 	return viewport;
 }

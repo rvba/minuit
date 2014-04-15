@@ -35,6 +35,7 @@ struct Viewport
 	int show_controls;
 	int fullscreen;
 	int use_fullscreen;
+	int use_ui;
 
 	struct Camera *camera;
 	void (* draw)(struct Viewport *viewport);
