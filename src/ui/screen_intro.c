@@ -36,6 +36,9 @@ float *stars_velocity=NULL;
 int *stars_size = NULL;
 float intro_intensity=1;
 
+	int dist = 500;
+	int color_factor = 100;
+
 int get_sign(void)
 {
 	int i = rnd_range(0,1);
@@ -111,18 +114,10 @@ void star_mvt(int i)
 	}
 }
 
-void screen_intro(t_screen *screen)
+void screen_intro_init()
 {
-	t_context *C=ctx_get();
-
-	int time_limit = 25;
-
-	float scale= 5;
-	float p[3]={(C->app->window->width)/4,(C->app->window->height)/2,0};
-	int dist = 500;
-	int color_factor = 100;
-
 	int i;
+	t_context *C=ctx_get();
 	if(!star_init)
 	{
 		star_init = 1;
@@ -158,49 +153,23 @@ void screen_intro(t_screen *screen)
 		txt_version->use_bitmap_font=0;
 	}
 
-	// Lst
-	t_lst *lst = screen->viewports;
 
-	// Link
-	t_link *link = lst->first;
+}
 
-	// Viewport
-	t_viewport *viewport = ( t_viewport *) link->data;
-
-	// Camera
-	t_camera *camera = viewport->camera;
-
-	// 2d
-	op_camera_switch_2d(C,camera);
-
+void screen_intro_draw( t_context *C)
+{
 	if(C->ui->show_intro || C->ui->show_intro_always)
 	{
+		float p[3]={(C->app->window->width)/4,(C->app->window->height)/2,0};
+		int time_limit = 25;
+		float scale= 5;
+		int i;
+
 		glPushMatrix();
-			glLoadIdentity();
+		glLoadIdentity();
+
 			glTranslatef(p[0],p[1],p[2]);
-
 			glScalef(scale,scale,scale);
-			float z = C->ui->zoom;
-			C->ui->zoom = 5;
-
-			C->ui->zoom = z;
-
-			int w = C->app->window->width;
-			int h = C->app->window->height;
-			// 3D
-			op_camera_frustum_init(camera, w, h);
-			camera->type = camera_frustum;
-			camera->target[0]=500;
-			camera->target[1]=500;
-			camera->target[2]=500;
-
-			camera->eye[0]=0;
-			camera->eye[1]=0;
-			camera->eye[2]=0;
-
-
-			op_camera_switch_3d(C,camera);
-			glPopMatrix();
 
 			int frame = C->app->frame;
 			float rot = (float)frame*.05*intro_intensity;
@@ -211,7 +180,6 @@ void screen_intro(t_screen *screen)
 
 			if(C->app->frame > time_limit)
 			{
-
 				float *s=stars;
 				float *col=stars_color;
 				float col_var[3];
@@ -235,10 +203,17 @@ void screen_intro(t_screen *screen)
 
 			}
 
-			camera->type = camera_ortho;
-
 		glPopMatrix();
-
 	}
+}
+
+void screen_intro(t_screen *screen)
+{
+	t_context *C=ctx_get();
+
+	screen_intro_init();
+	screen_switch_3d( screen);
+	screen_intro_draw( C);
+
 }
 
