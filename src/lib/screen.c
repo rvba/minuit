@@ -24,6 +24,27 @@
 #include "camera.h"
 #include "memory.h"
 
+void screen_draw_controls( t_screen *screen)
+{
+	if( opt_viewport_show_controls)
+	{
+		screen_switch_2d( screen);
+		t_viewport *viewport = screen_viewport_get( screen);
+
+		t_context *C = ctx_get();
+		glPushMatrix();
+		glLoadIdentity();
+
+		t_block *block = viewport->controls;
+		if (block)
+		{
+			block->cls->draw( block);
+		}
+
+		glPopMatrix();
+	}
+}
+
 t_viewport *screen_viewport_get( t_screen *screen)
 {
 	t_viewport *viewport = NULL;
@@ -42,6 +63,32 @@ t_viewport *screen_viewport_get( t_screen *screen)
 	}
 	else printf("[SCREEN] Can't find lst\n");
 	return viewport;
+}
+
+void screen_switch_3d( t_screen *screen)
+{
+	t_context *C = ctx_get();
+	t_viewport *viewport = screen_viewport_get( screen);
+
+	if( viewport)
+	{
+		t_camera *camera = viewport->camera;
+		op_camera_switch_3d(C, camera);
+		
+		int w = C->app->window->width;
+		int h = C->app->window->height;
+
+		if( C->app->window->change)
+		{
+			op_camera_frustum_init( camera, w, h);
+			C->app->window->change = 0;
+		}
+
+		if( viewport->fullscreen) op_camera_update(C, camera);
+		else  _op_camera_update(C, camera, viewport);
+		
+		op_3d_orientation(); 
+	}
 }
 
 void screen_switch_2d( t_screen *screen)
@@ -152,6 +199,13 @@ t_screen *screen_add_3d(const char *name, void (* draw)(t_screen *s))
 	t_camera *camera = node_camera->data;
 
 	viewport->camera = camera;
+	viewport_add_controls( viewport);
+
+	screen->width = C->app->window->width;
+	screen->height = C->app->window->height;
+
+	viewport->width = C->app->window->width;
+	viewport->height = C->app->window->height;
 
 	list_add_data(screen->viewports, viewport);
 

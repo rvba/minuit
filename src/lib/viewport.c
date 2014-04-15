@@ -142,6 +142,31 @@ t_viewport *viewport_clone(t_viewport *viewport)
 	}
 }
 
+void viewport_add_controls( t_viewport *viewport)
+{
+	t_context *C = ctx_get();
+
+	scene_add_ref(C->scene,"struct_ref","viewport","width",&viewport->width,viewport);
+	scene_add_ref(C->scene,"struct_ref","viewport","height",&viewport->height,viewport);
+	scene_add_ref(C->scene,"struct_ref","viewport","x",&viewport->x,viewport);
+	scene_add_ref(C->scene,"struct_ref","viewport","y",&viewport->y,viewport);
+	scene_add_ref(C->scene,"struct_ref","viewport","fullscreen",&viewport->fullscreen,viewport);
+
+	t_block *block = add_block_block( C, "viewport_controls");
+	if( block)
+	{
+		block->pos[0] = 0;
+		block->pos[1] = 1;
+		add_brick_slider_int( C, block, "width", &viewport->width);
+		add_brick_slider_int( C, block, "height", &viewport->height);
+		add_brick_slider_int( C, block, "x", &viewport->x);
+		add_brick_slider_int( C, block, "y", &viewport->y);
+		add_brick_switch( C, block, "fullscreen", &viewport->fullscreen);
+	}
+
+	viewport->controls = block;
+
+}
 
 // MAKE
 
@@ -168,10 +193,6 @@ t_node *viewport_make(const char *name)
 	scene_add_ref(C->scene,"struct_ref","viewport","y",&viewport->y,viewport);
 	scene_add_ref(C->scene,"struct_ref","viewport","fullscreen",&viewport->fullscreen,viewport);
 
-	/*
-	t_node *node = add_block( C, "viewport_controls");
-	t_block *block = node->data;
-	*/
 	t_block *block = add_block_block( C, "viewport_controls");
 	if( block)
 	{

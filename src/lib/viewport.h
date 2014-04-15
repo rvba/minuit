@@ -40,6 +40,7 @@ struct Viewport
 	struct Block *controls;
 };
 
+void viewport_add_controls( t_viewport *viewport);
 void viewport_draw_controls( t_viewport *viewport);
 void *viewport_get_ref(t_viewport *viewport, const char *ref);
 void 		viewport_draw_scene(t_viewport *viewport);
