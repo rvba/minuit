@@ -20,24 +20,15 @@
 
 void screen_main(t_screen *screen)
 {
-	t_context *C = ctx_get();
-	t_viewport *viewport = screen_viewport_get( screen);
+	screen_switch_2d( screen);
 
-	if( viewport)
-	{
-		t_camera *camera = viewport->camera;
-		op_camera_update( C, camera);
+	glPushMatrix();
+	glLoadIdentity();
 
-		glPushMatrix();
-			glLoadIdentity();
+		ui_draw_mouse();
+		ui_draw_grid();
+		ui_draw_menu();
+		ui_draw_bar();
 
-			op_camera_switch_2d(C,camera);
-
-			ui_draw_mouse();
-			ui_draw_grid();
-			ui_draw_menu();
-			ui_draw_bar();
-
-		glPopMatrix();
-	}
+	glPopMatrix();
 }

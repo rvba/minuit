@@ -46,6 +46,7 @@ t_viewport *screen_viewport_get( t_screen *screen)
 
 void screen_switch_2d( t_screen *screen)
 {
+	/*
 	t_viewport *viewport = screen_viewport_get( screen);
 	if( viewport)
 	{
@@ -74,6 +75,17 @@ void screen_switch_2d( t_screen *screen)
 	else
 	{
 		printf("[SCREEN] Can't find viewport\n");
+	}
+	*/
+
+	t_context *C = ctx_get();
+	t_viewport *viewport = screen_viewport_get( screen);
+
+	if( viewport)
+	{
+		t_camera *camera = viewport->camera;
+		op_camera_update( C, camera);
+		op_camera_switch_2d(C,camera);
 	}
 }
 
