@@ -175,27 +175,6 @@ void *op_add_screen( t_brick *brick)
 	return NULL;
 }
 
-/*
-void *op_add_viewport(t_brick *brick)
-{
-	t_context *C = ctx_get();
-	term_log("+ viewport");
-
-	scene_store(C->scene,1);
-	C->scene->has_generic_viewport = 1;
-
-	t_node *node = viewport_add("viewport");
-	t_viewport *viewport = ( t_viewport *) node->data;
-
-	viewport->draw = viewport_draw_scene;
-	viewport->fullscreen = 0;
-
-	scene_store(C->scene,0);
-
-	return node;
-}
-*/
-
 void *op_new_camera(const char *name)
 {
 	t_context *C = ctx_get();

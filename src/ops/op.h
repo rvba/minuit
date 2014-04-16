@@ -132,7 +132,7 @@ struct Block *add_submenu( struct Context *C, const char *menu_name, const char 
 
 // OP_ADD_OBJECT
 
-void *		op_add_viewport(struct Brick*brick);
+void *		op_add_screen( struct Brick *brick);
 void *		op_add_set(struct Brick *brick);
 void *		op_new_set(const char *name);
 void *		op_new_camera(const char *name);

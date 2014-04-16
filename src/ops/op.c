@@ -96,7 +96,7 @@ t_block *make_menu_add_object( t_context *C)
 	add_brick_trigger(C,block,"cube",op_add_cube);
 	add_brick_trigger(C,block,"light",op_add_light);
 	add_brick_trigger(C,block,"camera",op_add_camera);
-	add_brick_trigger(C,block,"viewport",op_add_viewport);
+	add_brick_trigger(C,block,"viewport",op_add_screen);
 	add_brick_trigger(C,block,"object",op_add_empty_object);
 	add_brick_trigger(C,block,"mesh",op_add_empty_mesh);
 	add_brick_trigger(C,block,"vlstf",op_add_empty_float_vlst);
