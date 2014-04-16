@@ -30,7 +30,7 @@ void screen_draw_controls( t_screen *screen)
 	{
 		t_viewport *viewport = screen_viewport_get( screen);
 		int fullscreen = viewport->fullscreen;
-		viewport->fullscreen = 1;
+		viewport->use_ui = 1;
 
 		screen_switch_2d( screen);
 

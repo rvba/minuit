@@ -123,7 +123,7 @@ void viewport_switch_2d( t_viewport *viewport)
 	int height;
 	float zoom = camera->ortho_zoom;
 
-	if( viewport->fullscreen)
+	if( viewport->fullscreen || viewport->use_ui)
 	{
 		width = C->app->window->width;
 		height = C->app->window->height;
