@@ -203,10 +203,22 @@ void viewport_switch_2d( t_viewport *viewport)
 void viewport_draw_outline( t_viewport *viewport)
 {
 	t_context *C = ctx_get();
-	int width = 1;
+	int w = 1;
 	float *color = C->ui->front_color;
-	float p[] = { viewport->x, viewport->y, 0};
-	skt_line_rectangle( p, viewport->width, viewport->height, width, color);
+	float p[3]={ 0, 0, 0};
+	float width, height;
+	if( viewport->fullscreen)
+	{
+		width = C->app->window->width;
+		height = C->app->window->height;
+	}
+	else
+	{
+		vset( p, viewport->x, viewport->y, 0);
+		width = viewport->width;
+		height = viewport->height;
+	}
+	skt_line_rectangle( p, width, height, w, color);
 }
 
 void viewport_draw_controls( t_viewport *viewport)
