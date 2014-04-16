@@ -408,8 +408,6 @@ void op_camera_zoom(t_context *C, t_camera *camera, int dir)
 void op_camera_set_ortho_zoom(t_context *C, t_camera *camera, int i)
 {
 	float speed = camera->speed;
-	float add = (float ) i  * speed;
-	float zoom = camera->ortho_zoom;
 	camera->ortho_zoom += ( i * 200 * speed) ;
 	camera->is_moving=1;
 }
