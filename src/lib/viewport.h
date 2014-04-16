@@ -33,6 +33,7 @@ struct Viewport
 	int y;
 
 	int show_controls;
+	int show_outline;
 	int fullscreen;
 	int use_fullscreen;
 	int use_ui;
@@ -42,11 +43,12 @@ struct Viewport
 	struct Block *controls;
 };
 
-void viewport_switch_3d( t_viewport *viewport);
-void viewport_switch_2d( t_viewport *viewport);
-void viewport_add_controls( t_viewport *viewport);
-void viewport_draw_controls( t_viewport *viewport);
-void *viewport_get_ref(t_viewport *viewport, const char *ref);
+void 		viewport_switch_3d( t_viewport *viewport);
+void 		viewport_switch_2d( t_viewport *viewport);
+void 		viewport_add_controls( t_viewport *viewport);
+void 		viewport_draw_controls( t_viewport *viewport);
+void 		viewport_draw_outline( t_viewport *viewport);
+void *		viewport_get_ref(t_viewport *viewport, const char *ref);
 void 		viewport_draw_scene(t_viewport *viewport);
 void 		viewport_draw(t_viewport *viewport);
 t_viewport *	viewport_rebind(t_scene *scene, void *ptr);

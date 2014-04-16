@@ -175,6 +175,7 @@ void *op_add_screen( t_brick *brick)
 	return NULL;
 }
 
+/*
 void *op_add_viewport(t_brick *brick)
 {
 	t_context *C = ctx_get();
@@ -193,6 +194,7 @@ void *op_add_viewport(t_brick *brick)
 
 	return node;
 }
+*/
 
 void *op_new_camera(const char *name)
 {
@@ -355,12 +357,20 @@ void *op_add_object_square(t_brick *brick)
 	return object;
 }
 
+void *op_add_viewport(t_brick *brick)
+{
+	op_add_screen(NULL);
+
+	return NULL;
+}
+
 void *op_add_default_viewport(t_brick *brick)
 {
 	opt_op_use_random = 1;
 	op_add_light(NULL);
 	op_add_cube(NULL);
-	op_add_viewport(NULL);
+	//op_add_viewport(NULL);
+	op_add_screen(NULL);
 	opt_op_use_random = 0;
 
 	return NULL;

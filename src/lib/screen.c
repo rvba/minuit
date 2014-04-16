@@ -26,27 +26,18 @@
 
 void screen_draw_controls( t_screen *screen)
 {
-	if( opt_viewport_show_controls)
-	{
-		t_viewport *viewport = screen_viewport_get( screen);
-		int fullscreen = viewport->fullscreen;
-		viewport->use_ui = 1;
+	t_viewport *viewport = screen_viewport_get( screen);
 
-		screen_switch_2d( screen);
+	viewport->use_ui = 1;
+	screen_switch_2d( screen);
 
-		glPushMatrix();
-		glLoadIdentity();
+	glPushMatrix();
+	glLoadIdentity();
 
-		t_block *block = viewport->controls;
-		if (block)
-		{
-			block->cls->draw( block);
-		}
+	if( viewport->show_outline) viewport_draw_outline( viewport);
+	if( opt_viewport_show_controls) viewport_draw_controls( viewport);
 
-		viewport->fullscreen = fullscreen;
-
-		glPopMatrix();
-	}
+	glPopMatrix();
 }
 
 t_viewport *screen_viewport_get( t_screen *screen)

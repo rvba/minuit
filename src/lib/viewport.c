@@ -23,6 +23,8 @@
 #include "app.h"
 
 #include "block.h"
+#include "sketch.h"
+#include "ui.h"
 
 int opt_viewport_show_controls = 0;
 
@@ -37,6 +39,7 @@ void *viewport_get_ref(t_viewport *viewport, const char *ref)
 	else if(is(ref,"x"))  				p=&viewport->x; 
 	else if(is(ref,"y"))  				p=&viewport->y; 
 	else if(is(ref,"fullscreen"))  			p=&viewport->fullscreen; 
+	else if(is(ref,"show_outline"))  		p=&viewport->show_outline; 
 	else
 	{
 		printf("[ERROR mesh_get_ref] Unknown ref [%s] \n",ref);
@@ -185,22 +188,22 @@ void viewport_switch_2d( t_viewport *viewport)
 		);
 }
 
+void viewport_draw_outline( t_viewport *viewport)
+{
+	t_context *C = ctx_get();
+	int width = 1;
+	float *color = C->ui->front_color;
+	float p[] = { viewport->x, viewport->y, 0};
+	skt_line_rectangle( p, viewport->width, viewport->height, width, color);
+}
 
 void viewport_draw_controls( t_viewport *viewport)
 {
-	t_context *C = ctx_get();
-	op_camera_switch_2d( C, viewport->camera);
-	glPushMatrix();
-	glLoadIdentity();
-
 	t_block *block = viewport->controls;
 	if (block)
 	{
 		block->cls->draw( block);
 	}
-
-	glPopMatrix();
-	op_camera_switch_3d( C, viewport->camera);
 }
 
 void viewport_draw_scene(t_viewport *viewport)
@@ -250,11 +253,13 @@ t_viewport *viewport_rebind( t_scene *sc, void *ptr)
 	return viewport;
 }
 
+/*
 t_node *viewport_add(const char *name)
 {
 	t_node *node=viewport_make(name);
 	return node;
 }
+*/
 
 // CLONE
 
@@ -289,6 +294,7 @@ void viewport_add_controls( t_viewport *viewport)
 	scene_add_ref(C->scene,"struct_ref","viewport","x",&viewport->x,viewport);
 	scene_add_ref(C->scene,"struct_ref","viewport","y",&viewport->y,viewport);
 	scene_add_ref(C->scene,"struct_ref","viewport","fullscreen",&viewport->fullscreen,viewport);
+	scene_add_ref(C->scene,"struct_ref","viewport","show_outline",&viewport->show_outline,viewport);
 
 	t_block *block = add_block_block( C, "viewport_controls");
 	if( block)
@@ -300,6 +306,7 @@ void viewport_add_controls( t_viewport *viewport)
 		add_brick_slider_int( C, block, "x", &viewport->x);
 		add_brick_slider_int( C, block, "y", &viewport->y);
 		add_brick_switch( C, block, "fullscreen", &viewport->fullscreen);
+		add_brick_switch( C, block, "outline", &viewport->show_outline);
 	}
 
 	viewport->controls = block;
@@ -308,6 +315,7 @@ void viewport_add_controls( t_viewport *viewport)
 
 // MAKE
 
+/*
 t_node *viewport_make(const char *name)
 {
 	t_context *C = ctx_get();
@@ -347,6 +355,7 @@ t_node *viewport_make(const char *name)
 
 	return node_viewport;
 }
+*/
 
 void _viewport_free(t_viewport *viewport)
 {
@@ -377,6 +386,7 @@ t_viewport *viewport_new(const char *name)
 	viewport->camera = NULL;
 	viewport->draw = NULL;
 	viewport->show_controls = 0;
+	viewport->show_outline = 0;
 	viewport->fullscreen = 1;
 	viewport->use_fullscreen = 1;
 	viewport->use_ui = 1;
