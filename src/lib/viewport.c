@@ -143,6 +143,12 @@ void viewport_switch_2d( t_viewport *viewport)
 		y = viewport->y;
 	}
 
+	if( camera->update_frustum)
+	{
+		op_camera_frustum_init( camera, width, height);
+		C->app->window->change = 0;
+	}
+
 	glViewport( x, y, width, height);
 
 	glMatrixMode(GL_PROJECTION);
@@ -152,10 +158,10 @@ void viewport_switch_2d( t_viewport *viewport)
 
 	if( viewport->use_ui)
 	{
-		left = ( 0 + camera->left) * zoom;
-		right = ( width + camera->right) * zoom;	
-		bottom = ( 0 + camera->bottom) * zoom;
-		top = (height + camera->top) * zoom;
+		left =  0 + camera->left;
+		right = width + camera->right;	
+		bottom = 0 + camera->bottom;
+		top = height + camera->top;
 		near = -1;
 		far = 1;
 	}
