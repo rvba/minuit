@@ -60,6 +60,7 @@ typedef struct Scene
 	struct Lst *rhizomes;
 	struct Lst *graphs;
 	struct Lst *geos;
+	struct Lst *datums;
 
 	struct Lst *vars;
 

@@ -551,6 +551,7 @@ t_scene *scene_new(void)
 	sc->rhizomes=lst_new("rhizomes");
 	sc->graphs=lst_new("graphs");
 	sc->geos=lst_new("geos");
+	sc->datums = lst_new("datums");
 
 	sc->tmp_colors=lst_new("tmp_colors");
 

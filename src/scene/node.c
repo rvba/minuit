@@ -203,6 +203,8 @@ void cls_node_build(t_node *node,const char *name)
 		case dt_var: 
 			cls_node_build_var(node,name);
 			break;
+		case dt_datum:		p = datum_new( name);
+			break;
 
 		default:
 			printf("[ERROR cls_node_build] Unkown type %s\n", data_name_get( node->type));
@@ -379,6 +381,11 @@ void cls_node_geo_array_free(t_scene *sc,t_node *node)
 	geo_array_free(node->data);
 }
 
+void cls_node_datum_free(t_scene *sc,t_node *node)
+{
+	datum_free(node->data);
+}
+
 // INIT
 
 // get Scene ID
@@ -523,6 +530,12 @@ void cls_node_init_geo_array(t_node *node)
 {
 	cls_node_init_id(node);
 	geo_array_init( node->data);
+}
+
+void cls_node_init_datum(t_node *node)
+{
+	cls_node_init_id(node);
+	datum_init( node->data);
 }
 
 
@@ -877,6 +890,18 @@ t_node_class geo_array = {
 	.get_ref = cls_node_get_ref_geo_array,
 };
 
+t_node_class datum = {
+	.type=dt_datum,
+	.size=sizeof( t_datum),
+	.lst=NULL,
+	.build=cls_node_build,
+	.link=cls_node_link,
+	.del=cls_node_del,
+	.init=cls_node_init_datum,
+	.free=cls_node_datum_free,
+	.get_ref = cls_node_get_ref,
+};
+
 
 // TYPES
 
@@ -910,6 +935,7 @@ t_node_class *nodes[] = {
 				&geo_point,
 				&geo_edge,
 				&geo_array,
+				&datum,
 			};
 
 
@@ -947,6 +973,7 @@ void cls_node_lst_set( t_scene *sc, t_node *node)
 		case( dt_geo_point): node->cls->lst = sc->geos; break;
 		case( dt_geo_edge): node->cls->lst = sc->geos; break;
 		case( dt_geo_array): node->cls->lst = sc->geos; break;
+		case( dt_datum): node->cls->lst = sc->datums; break;
 		default: printf("[ERROR cls_node_lst_set] Unkown type %s\n", data_name_get( node->cls->type)); break;
 	}
 }
@@ -986,6 +1013,7 @@ void cls_node_cls_set( t_node *node)
 		case( dt_geo_point): node->cls = &geo_point; break;
 		case( dt_geo_edge): node->cls = &geo_edge; break;
 		case( dt_geo_array): node->cls = &geo_array; break;
+		case( dt_datum): node->cls = &datum; break;
 		default: printf("[ERROR cls_node_cls_set] Unkown type %s\n", data_name_get( node->type)); break;
 	}
 }

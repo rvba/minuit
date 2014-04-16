@@ -101,8 +101,11 @@ t_data *	data_rebind(struct Scene *sc,void *ptr);
 t_data *	data_new(const char *name);
 void		data_free(t_data *data);
 
-t_datum *datum_new( t_data_type type, const char *name, void *data);
+t_datum *datum_rebind( struct Scene *sc,void *ptr);
+t_datum *datum_new( const char *name);
+t_datum *datum_add( t_data_type type, const char *name, void *data);
 void datum_free(t_datum *datum);
+void datum_init( t_datum *datum);
 
 #ifdef __cplusplus
 }

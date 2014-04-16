@@ -26,6 +26,7 @@ struct Object;
 struct Lst;
 struct Scene;
 struct Context;
+struct Datum;
 
 // OBJECT CLASS
 
@@ -82,6 +83,7 @@ void 		object_method_add(struct Node *node,const char method[],void (*func)(stru
 void 		object_data_add(struct Node *node,void *ptr);
 void 		object_block_add( struct Object *object, struct Block *block);
 void *		object_member_add( t_object *object, t_data_type type, const char *name, void *data);
+struct Datum *	object_member_get( t_object *object, const char *name);
 
 
 struct Node*	op_object_mesh_get(struct Node *node);

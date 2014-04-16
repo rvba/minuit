@@ -517,6 +517,7 @@ void load_rebind(t_scene *sc)
 			case(dt_geo_point) : 	geo_point_rebind(sc,ptr);break; 
 			case(dt_geo_edge) : 	geo_edge_rebind(sc,ptr);break; 
 			case(dt_geo_array) : 	geo_array_rebind(sc,ptr);break; 
+			case(dt_datum):		datum_rebind(sc,ptr);break;
 
 			case(dt_var): break;
 			default:

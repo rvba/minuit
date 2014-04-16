@@ -60,6 +60,7 @@ char name_option[] = "option";
 char name_binding[] = "binding";
 char name_light[] = "light";
 char name_material[] = "material";
+char name_datum[] = "datum";
 
 void cls_data_init(t_data *data)
 {
@@ -114,6 +115,7 @@ char *data_name_get(t_data_type type)
 		case dt_binding: return name_binding; break;
 		case dt_material: return name_material; break;
 		case dt_light: return name_light; break;
+		case dt_datum: return name_datum; break;
 		default: printf("data_name_get type not implemented %d\n", type);return name_default; break;
 	}
 }
@@ -618,11 +620,28 @@ void datum_free(t_datum *datum)
 	mem_free( datum, sizeof( t_datum));
 }
 
-t_datum *datum_new( t_data_type type, const char *name, void *data)
+void datum_init( t_datum *datum)
+{
+
+
+}
+
+t_datum *datum_rebind(t_scene *sc,void *ptr)
+{
+	t_datum *datum = (t_datum *) ptr;
+
+	rebind(sc,"datum","data",(void **)&datum->data);
+
+	return datum;
+}
+
+t_datum *datum_add( t_data_type type, const char *name, void *data)
 {
 	t_context *C = ctx_get();
-	t_datum *datum = (t_datum *) mem_malloc(sizeof(t_datum));
-	id_init( &datum->id, name);
+	//t_datum *datum = (t_datum *) scene_add( C->scene, dt_datum, name);
+	t_node *node = scene_add( C->scene, dt_datum, name);
+	t_datum *datum = ( t_datum *) node->data;
+
 	datum->type = type;
 
 	switch( type)
@@ -654,5 +673,14 @@ t_datum *datum_new( t_data_type type, const char *name, void *data)
 	return datum;
 }
 
+t_datum *datum_new( const char *name)
+{
+	t_datum *datum = ( t_datum *) mem_malloc( sizeof( t_datum));
+	id_init( &datum->id, name);
+	datum->type = dt_null;
+	datum->data = NULL;
+
+	return datum;
+}
 
 

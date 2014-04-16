@@ -109,6 +109,7 @@ typedef enum Data_Type
 	dt_option,
 	dt_symbol,
 	dt_var,
+	dt_datum,
 
 }t_data_type;
 

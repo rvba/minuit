@@ -168,8 +168,18 @@ void object_block_add( t_object *object, t_block *block)
 
 void *object_member_add( t_object *object, t_data_type type, const char *name, void *data)
 {
-	t_datum *datum = datum_new( type, name, data);
+	//t_datum *datum = datum_new( type, name, data);
+	t_datum *datum = datum_add( type, name, data);
+	
+	list_add_data( object->members, datum);
 	return datum->data;
+}
+
+t_datum *object_member_get( t_object *object, const char *name)
+{
+	t_link *l = lst_link_find_by_name( object->members, name);
+	if( l) return l->data;
+	else return NULL;
 }
 
 // REF
