@@ -536,7 +536,6 @@ void ctx_ui_object_trigger( t_context *C)
 	:MIDDLE
 	**********************************	*/
 
-
 t_camera *ctx_ui_camera_get( t_context *C)
 {
 	t_camera *camera = NULL;

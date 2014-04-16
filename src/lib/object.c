@@ -162,8 +162,7 @@ void object_block_add( t_object *object, t_block *block)
 {
 	if( block)
 	{
-		if( !object->blocks) object->blocks = lst_new( "lst");
-		lst_add( object->blocks, block, "block");
+		list_add_data( object->blocks, block);
 	}
 }
 

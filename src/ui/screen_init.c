@@ -48,6 +48,17 @@ t_screen *screen_main_make( t_context *C)
 	return screen;
 };
 
+t_screen *screen_object_make( t_context *C)
+{
+	t_screen *screen = screen_default( "screen_object", screen_object);
+
+	screen->is_active = 1;
+	screen->is_visible = 1;
+	screen->always_active = 1;
+	screen->always_visible = 1;
+	return screen;
+};
+
 // SCREEN DESK
 
 t_screen *screen_sets_make( t_context *C)
@@ -179,6 +190,7 @@ void screen_init( t_context *C)
 	t_screen *screen_main = screen_main_make( C);
 	C->ui->screen_active = screen_main;
 
+	screen_object_make( C);
 	screen_browser_make( C);
 	screen_sets_make( C);
 	screen_bricks_menu_make( C);

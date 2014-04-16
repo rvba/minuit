@@ -228,6 +228,8 @@ void screen_log(struct MINscreen *screen);
 void screen_init( struct Context *C);
 void screen_view3d( struct MINscreen *screen);
 
+void screen_object( struct MINscreen *screen);
+
 #ifdef __cplusplus
 }
 #endif

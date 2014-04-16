@@ -16,6 +16,8 @@
 #include "event.h"
 #include "util.h"
 #include "sketch.h"
+#include "screen.h"
+#include "block.h"
 
 void cls_object_draw_light(t_object *object)
 {
@@ -95,6 +97,19 @@ void find_vertex(t_context *C, t_mesh *mesh)
 	else
 	{
 		mesh->state.hover_vertex = -1;
+	}
+}
+
+void object_draw_blocks( t_context *C,  t_object *object)
+{
+	if( object->blocks)
+	{
+		if( object->blocks->first)
+		{
+			t_link *link = object->blocks->first;
+			t_block *block = link->data;
+			block->cls->draw( block);
+		}
 	}
 }
 

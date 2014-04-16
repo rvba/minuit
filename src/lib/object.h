@@ -25,6 +25,7 @@ struct Block;
 struct Object;
 struct Lst;
 struct Scene;
+struct Context;
 
 // OBJECT CLASS
 
@@ -83,6 +84,7 @@ void 		object_block_add( struct Object *object, struct Block *block);
 
 struct Node*	op_object_mesh_get(struct Node *node);
 
+void object_draw_blocks( struct Context *C,  t_object *object);
 
 void 		cls_object_draw_camera(t_object *object);
 void 		cls_object_draw_mesh(t_object *object);
