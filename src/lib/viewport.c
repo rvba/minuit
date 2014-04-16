@@ -315,6 +315,8 @@ void viewport_add_controls( t_viewport *viewport)
 	t_block *block = add_block_block( C, "viewport_controls");
 	if( block)
 	{
+		set_draw_plug = 0;
+
 		block->pos[0] = 0;
 		block->pos[1] = 1;
 		add_brick_slider_int( C, block, "width", &viewport->width);
@@ -323,6 +325,8 @@ void viewport_add_controls( t_viewport *viewport)
 		add_brick_slider_int( C, block, "y", &viewport->y);
 		add_brick_switch( C, block, "fullscreen", &viewport->fullscreen);
 		add_brick_switch( C, block, "outline", &viewport->show_outline);
+
+		set_draw_plug = 1;
 	}
 
 	viewport->controls = block;
