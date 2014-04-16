@@ -229,6 +229,7 @@ void viewport_draw_controls( t_viewport *viewport)
 		block->cls->draw( block);
 	}
 }
+/*
 
 void viewport_draw_scene(t_viewport *viewport)
 {
@@ -255,6 +256,7 @@ void viewport_draw_scene(t_viewport *viewport)
 	op_3d_orientation(); 
 	draw_scene(C->draw,C->scene);
 }
+*/
 
 void viewport_draw(t_viewport *viewport)
 {

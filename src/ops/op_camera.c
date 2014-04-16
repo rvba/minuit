@@ -147,28 +147,6 @@ void op_camera_switch_2d(t_context *C, t_camera *camera)
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void _op_camera_switch_2d(t_context *C, t_camera *camera, int width, int height)
-{
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-
-	double left = camera->left;
-	double right = camera->right;	
-	double bottom = camera->bottom;
-	double top = camera->top;
-
-	glOrtho(
-		0 + left,
-		width + right,
-		0 + bottom,
-		height + top,
-		-1,
-		1
-		);
-
-	glMatrixMode(GL_MODELVIEW);
-}
-
 void op_camera_switch_3d(t_context *C, t_camera *camera)
 {
 	op_camera_update(C, camera);
@@ -249,39 +227,6 @@ void op_camera_projection_ortho( t_context *C, t_camera *camera)
 		);
 }
 
-void op_camera_viewport( t_context *C, t_camera *camera, t_viewport *viewport)
-{
-	int w,h;
-	if( viewport->fullscreen)
-	{
-		w = C->app->window->viewport_width;
-		h = C->app->window->viewport_height;
-
-	}
-	else
-	{
-		w = viewport->width;
-		h = viewport->height;
-	}
-
-	op_camera_frustum_init(camera, w, h);
-
-	int x = viewport->x;
-	int y = viewport->y;
-
-	glViewport(x, y, w, h);
-}
-
-void _op_camera_update(t_context *C, t_camera *camera, t_viewport *viewport)
-{
-	// Viewport
-	op_camera_viewport( C, camera, viewport);
-
-	// Projection
-	if (camera->type == camera_ortho)  op_camera_projection_ortho( C, camera); 
-	else if (camera->type == camera_frustum) op_camera_projection_perspective( C, camera);
-}
-
 void op_camera_update(t_context *C, t_camera *camera)
 {
 	t_app *app=C->app;
@@ -318,31 +263,6 @@ void op_camera_frustum_init(t_camera *camera, int w, int h)
 
 	camera->ortho_near=CAM_ORTHO_NEAR;
 	camera->ortho_far=CAM_ORTHO_FAR;
-}
-
-void op_camera_reset(t_context *C, t_camera *camera)
-{
-	t_app *app=C->app;
-
-	vset(camera->cross,0,0,0);
-	vset(camera->pos,0,0,0);
-	vset(camera->eye,3,3,3);
-	vset(camera->target,0,0,0);
-	vset(camera->up,0,1,0);
-	camera->ortho_view = 0;
-	camera->ortho_zoom = CAM_ORTHO_ZOOM;
-	camera->near = CAM_NEAR;
-	camera->far = CAM_FAR;
-	camera->aspect =(double)((double)app->window->width/(double)app->window->height);
-	camera->fovy = 60;
-	camera->zenith = 0;
-	camera->angle = 90;
-	vset(camera->ortho_location,0,0,0);
-	vset(camera->ortho_rotation,1,0,0);
-	camera->ortho_near=CAM_ORTHO_NEAR;
-	camera->ortho_far=CAM_ORTHO_FAR;
-
-	op_camera_update(C, camera);
 }
 
 void op_camera_reset_pos(t_camera *camera)

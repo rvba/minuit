@@ -115,7 +115,7 @@ void register_set(t_context *C)
 	scene_add_data(C->scene,"app_data","func","op_geo",			(void *) op_geo);
 	scene_add_data(C->scene,"app_data","func","_op_brick_add",		(void *) _op_brick_add);
 
-	scene_add_data(C->scene,"app_data","func","viewport_draw_scene",	(void *) viewport_draw_scene);
+//	scene_add_data(C->scene,"app_data","func","viewport_draw_scene",	(void *) viewport_draw_scene);
 
 
 	// data
@@ -181,7 +181,7 @@ void register_set(t_context *C)
 	dict_symbol_add(dict_func,"op_geometry",dt_pointer, (void *) op_geometry);
 	dict_symbol_add(dict_func,"op_geo",dt_pointer, (void *) op_geo);
 	dict_symbol_add(dict_func,"_op_brick_add",dt_pointer, (void *) _op_brick_add);
-	dict_symbol_add(dict_func,"viewport_draw_scene",dt_pointer, (void *) viewport_draw_scene);
+	//dict_symbol_add(dict_func,"viewport_draw_scene",dt_pointer, (void *) viewport_draw_scene);
 
 
 	// APP
