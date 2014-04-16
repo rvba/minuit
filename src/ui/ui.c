@@ -96,28 +96,31 @@ void ui_texture_draw( t_context *C, t_texture *texture, int px, int py, int sx, 
 
 // FREEZE ICON
 
-void ui_draw_icon_freeze(t_context *C)
+void ui_draw_icon_freeze( void)
 {
-	float *color = C->ui->front_color;
-	int width = 1;
+	t_context *C = ctx_get();
 
-	op_camera_switch_2d(C,C->ui->camera);
+	if(!C->ui->update_links)
+	{
+		float *color = C->ui->front_color;
+		int width = 1;
 
-	glPushMatrix();
-	glLoadIdentity();
+		glPushMatrix();
+		glLoadIdentity();
 
-		float o[]={0,0,0};
-		float w=200;
-		float h=200;
-		float size = .2;
+			float o[]={0,0,0};
+			float w=200;
+			float h=200;
+			float size = .2;
 
-		glTranslatef((float)C->app->window->width - 200,50,0);
-		glRotatef(45,0,0,1);
-		glScalef(size,size,size);
+			glTranslatef((float)C->app->window->width - 200,50,0);
+			glRotatef(45,0,0,1);
+			glScalef(size,size,size);
 
-		skt_line_rectangle(o,w,h,width,color);
+			skt_line_rectangle(o,w,h,width,color);
 
-	glPopMatrix();
+		glPopMatrix();
+	}
 }
 
 // MOUSE
@@ -143,27 +146,6 @@ void ui_draw_mouse(void)
 		C->event->ui.use_point_global_width = 1;
 		glPopMatrix();
 	}
-}
-
-// LINES
-
-void ui_draw_lines( t_context *C)
-{
-	C->event->ui.use_line_global_width = 0;
-
-	op_camera_switch_2d(C,C->ui->camera);
-
-	glPushMatrix();
-	glLoadIdentity();
-
-	float start[3] = { (float)C->event->start_x, (float)C->event->start_y, 0 };
-	float end[3] = { (float)C->event->end_x , (float)C->event->end_y , 0 };
-
-	float *color=C->ui->front_color;
-	skt_line( start, end, 1, color);
-	C->event->ui.use_line_global_width = 1;
-
-	glPopMatrix();
 }
 
 // GRID
@@ -330,37 +312,6 @@ void ui_draw_bar(void)
 	glPopMatrix();
 }
 
-void ui_draw_selected( t_context *C)
-{
-	t_node *node = C->scene->selected;
-	if( node)
-	{
-		t_context *C=ctx_get();
-		t_camera *camera = C->ui->camera;
-		op_camera_switch_2d(C,camera);
-		glPushMatrix();
-		glLoadIdentity();
-
-		if( node->cls->type == dt_object)
-		{
-			t_object *object = node->data;
-			t_lst *lst = object->blocks;
-			t_link *l;
-			t_block *block;
-			if( lst)
-			{
-				for(l=lst->first;l;l=l->next)
-				{
-					block = l->data;
-					block->cls->draw( block);
-					glTranslatef( 0, block->height, 0);
-				}
-			}
-		}
-		glPopMatrix();
-	}
-}
-
 // DRAW SETS
 
 void ui_draw_sets(void)
@@ -414,18 +365,6 @@ void ui_draw(void)
 
 	// Draw Screens
 	if(C->ui->draw) ui_draw_screens(C);
-
-	ui_draw_selected( C);
-
-	// Freeze Icon
-	if(!C->ui->update_links)
-	{
-		ui_draw_icon_freeze(C);
-	}
-
-	// Link
-	//if( C->ui->draw_link) ui_draw_lines( C); 
-
 
 	C->event->ui.use_point_global_width = 1;
 	C->event->ui.use_line_global_width = 1;

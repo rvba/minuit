@@ -197,6 +197,7 @@ void ui_draw_blocks(void);
 void ui_draw_debug(void);
 void ui_draw_term(void);
 void ui_draw_grid(void);
+void ui_draw_icon_freeze( void);
 
 void ui_draw_start(struct Context *C);
 void ui_draw_stop(struct Context *C);

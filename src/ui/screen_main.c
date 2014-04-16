@@ -29,6 +29,7 @@ void screen_main(t_screen *screen)
 		ui_draw_grid();
 		ui_draw_menu();
 		ui_draw_bar();
+		ui_draw_icon_freeze();
 
 	glPopMatrix();
 }
