@@ -120,39 +120,6 @@ void op_camera_translate_key(t_camera *camera,float x,float y)
 	camera->is_moving=1;
 }
 
-void op_camera_switch_2d(t_context *C, t_camera *camera)
-{
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-
-	t_app *app=C->app;
-
-	int width = app->window->width;
-	int height = app->window->height;
-
-	double left = camera->left;
-	double right = camera->right;	
-	double bottom = camera->bottom;
-	double top = camera->top;
-
-	glOrtho(
-		0 + left,
-		width + right,
-		0 + bottom,
-		height + top,
-		-1,
-		1
-		);
-
-	glMatrixMode(GL_MODELVIEW);
-}
-
-void op_camera_switch_3d(t_context *C, t_camera *camera)
-{
-	op_camera_update(C, camera);
-	op_3d_orientation();
-}
-
 void op_camera_restrict( t_context *C, t_camera *camera)
 {
 	GLint viewport[4];
@@ -162,91 +129,11 @@ void op_camera_restrict( t_context *C, t_camera *camera)
 	gluPickMatrix((double)x,(double)y,1.0f,1.0f,viewport);
 }
 
-void op_camera_projection_perspective( t_context *C, t_camera *camera)
-{
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	if( camera->restrict_matrix) op_camera_restrict( C, camera);
-	glFrustum(
-		camera->left,
-		camera->right,
-		camera->bottom,
-		camera->top,
-		camera->near,
-		camera->far);
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluLookAt(
-		camera->eye[0],
-		camera->eye[1],
-		camera->eye[2],
-		camera->target[0],
-		camera->target[1],
-		camera->target[2],
-		camera->up[0],
-		camera->up[1],
-		camera->up[2]
-		);
-
-	float zenith = camera->zenith;
-	glTranslatef(camera->pos[0],camera->pos[1],camera->pos[2]);
-
-	// Camera Up rotation
-	glRotatef(zenith,camera->cross[0],camera->cross[1],camera->cross[2]);
-}
-
-void op_camera_projection_ortho( t_context *C, t_camera *camera)
-{
-	double left = camera->left;
-	double right = camera->right;	
-	double bottom = camera->bottom;
-	double top = camera->top;
-	float z=camera->ortho_zoom;
-
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-
-	if( camera->restrict_matrix) op_camera_restrict( C, camera);
-
-	glOrtho(left*z,right*z,bottom*z,top*z,camera->ortho_near,camera->ortho_far);
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-	glTranslatef(
-			camera->ortho_location[0],
-			camera->ortho_location[1],
-			camera->ortho_location[2]
-			);
-
-	glRotatef(camera->angle,
-		camera->ortho_rotation[0],
-		camera->ortho_rotation[1],
-		camera->ortho_rotation[2]
-		);
-}
-
-void op_camera_update(t_context *C, t_camera *camera)
-{
-	t_app *app=C->app;
-
-	glViewport(0,0,app->window->viewport_width,app->window->viewport_height);
-
-	// Projection
-	if (camera->type == camera_ortho)  op_camera_projection_ortho( C, camera); 
-	else if (camera->type == camera_frustum) op_camera_projection_perspective( C, camera);
-
-}
-
 void op_camera_frustum_init(t_camera *camera, int w, int h)
 {
-//	t_app *app = app_get();
 	double r=3.14159265/180;
 	double fovy = CAM_FOVY;
 	double near = CAM_NEAR;
-//	int w=app->window->width;
-//	int h=app->window->height;
 	double aspect = (double)((double)w/(double)h);
 	double tangent = tan(fovy/2 * r);
 	double height = near*tangent;
