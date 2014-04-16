@@ -664,6 +664,25 @@ t_datum *datum_add( t_data_type type, const char *name, void *data)
 			}
 			break;
 
+		case( dt_float):
+			datum->data = (float *) mem_malloc( sizeof( float));
+
+			if( C->scene->store)
+			{
+				scene_add_data_var( C->scene, "float", name, sizeof(float), datum->data);
+			}
+
+			if(data)
+			{
+				cprf_float( datum->data, data, 0);
+			}	
+			else
+			{
+				*( (float *) datum->data) = 0;
+			}
+			break;
+
+
 
 		default:
 			printf("[ERROR datum_new] Unknown data type %s\n",data_name_get(type));
