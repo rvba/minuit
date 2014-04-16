@@ -101,7 +101,7 @@ t_data *	data_rebind(struct Scene *sc,void *ptr);
 t_data *	data_new(const char *name);
 void		data_free(t_data *data);
 
-t_datum *datum_new(t_data_type type, int count, void *data);
+t_datum *datum_new( t_data_type type, const char *name, void *data);
 void datum_free(t_datum *datum);
 
 #ifdef __cplusplus

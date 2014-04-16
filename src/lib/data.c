@@ -618,53 +618,34 @@ void datum_free(t_datum *datum)
 	mem_free( datum, sizeof( t_datum));
 }
 
-t_datum *datum_new(t_data_type type, int count, void *data)
+t_datum *datum_new( t_data_type type, const char *name, void *data)
 {
+	t_context *C = ctx_get();
 	t_datum *datum = (t_datum *) mem_malloc(sizeof(t_datum));
-	t_id *id = (t_id *) data;
-	id_init( &datum->id, id->name);
+	id_init( &datum->id, name);
 	datum->type = type;
-	datum->count = count;
-	datum->size = 0;
 
-	int i;
-	switch(type)
+	switch( type)
 	{
-		case(dt_int):
-			datum->data = (int *)mem_malloc(sizeof(int) * count);
-			datum->size = sizeof(int) * count;
+		case( dt_int):
+			datum->data = (int *) mem_malloc( sizeof( int));
+
+			if( C->scene->store)
+			{
+				scene_add_data_var( C->scene, "int", name, sizeof(int), datum->data);
+			}
+
 			if(data)
 			{
-				for(i=0;i<count;i++)
-				{
-					cprf_int(datum->data, data, i);
-				}
+				cprf_int( datum->data, data, 0);
 			}	
+			else
+			{
+				*( (int *) datum->data) = 0;
+			}
 			break;
 
-		case(dt_bool):
-			datum->data = (int *)mem_malloc(sizeof(int) * count);
-			datum->size = sizeof(int) * count;
-			if(data)
-			{
-				for(i=0;i<count;i++)
-				{
-					cprf_int(datum->data, data, i);
-				}
-			}	
-			break;
 
-		case(dt_float):
-			datum->data = (int *)mem_malloc(sizeof(float) * count);
-			datum->size = sizeof(float) * count;
-			if(data)
-			{
-				for(i=0;i<count;i++)
-				{
-					cprf_int(datum->data, data, i);
-				}
-			}	
-			break;
 		default:
 			printf("[ERROR datum_new] Unknown data type %s\n",data_name_get(type));
 			break;

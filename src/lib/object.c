@@ -166,6 +166,12 @@ void object_block_add( t_object *object, t_block *block)
 	}
 }
 
+void *object_member_add( t_object *object, t_data_type type, const char *name, void *data)
+{
+	t_datum *datum = datum_new( type, name, data);
+	return datum->data;
+}
+
 // REF
 
 void *object_get_ref(t_object *object, const char *ref)
@@ -279,6 +285,7 @@ t_object *object_rebind(t_scene *sc,void *ptr)
 	
 	rebind(sc,"object","mesh",(void **)&object->mesh);
 	rebind(sc,"object","blocks",(void **)&object->blocks);
+	rebind(sc,"object","members",(void **)&object->members);
 	rebind(sc,"object","ref",(void **)&object->ref);
 	rebind(sc,"object","data",(void **)&object->data);
 
@@ -336,8 +343,14 @@ t_node *object_make(const char *type,const char *name)
 	// new list (bricks list)
 	t_node *list = scene_add(C->scene,dt_list,"object_blocks");
 
+
 	// bind list
 	object->cls->link(object,list);
+
+	// Members
+	t_node *node_members = scene_add(C->scene,dt_list,"object_members");
+	t_lst *lst = node_members->data;
+	object->members = lst;
 
 	int col[3];
 	scene_color_get(sc,col);
@@ -363,6 +376,7 @@ t_object *object_new(const char *name)
 	object->data=NULL;
 	object->blocks=NULL;
 	object->ref=NULL;
+	object->members = NULL;
 
 	object->is_selected = 0;
 	object->hover = 0;

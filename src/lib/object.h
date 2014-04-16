@@ -64,6 +64,7 @@ typedef struct Object
 	struct Mesh *mesh;		// mesh
 	struct Lst *blocks;		// buttons
 	struct Block *ref;
+	struct Lst *members;
 
 	void (* action)(struct Node *node);
 	void (* update)(struct Node *node);
@@ -80,6 +81,7 @@ void 		object_draw_add(struct Node *node,void (* func)(struct Node *node));
 void 		object_method_add(struct Node *node,const char method[],void (*func)(struct Node *n));
 void 		object_data_add(struct Node *node,void *ptr);
 void 		object_block_add( struct Object *object, struct Block *block);
+void *		object_member_add( t_object *object, t_data_type type, const char *name, void *data);
 
 
 struct Node*	op_object_mesh_get(struct Node *node);
