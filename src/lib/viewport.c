@@ -54,8 +54,8 @@ void viewport_switch_3d( t_viewport *viewport)
 
 	int width;
 	int height;
-	int x = viewport->x;
-	int y = viewport->y;
+	int x;
+	int y;
 
 	t_context *C = ctx_get();
 	t_camera *camera = viewport->camera;
@@ -124,20 +124,26 @@ void viewport_switch_2d( t_viewport *viewport)
 
 	int width;
 	int height;
+	int x;
+	int y;
 	float zoom = camera->ortho_zoom;
 
 	if( viewport->fullscreen || viewport->use_ui)
 	{
 		width = C->app->window->width;
 		height = C->app->window->height;
+		x = 0;
+		y = 0;
 	}
 	else
 	{
 		width = viewport->width;
 		height = viewport->height;
+		x = viewport->x;
+		y = viewport->y;
 	}
 
-	glViewport( 0, 0, width, height);
+	glViewport( x, y, width, height);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
