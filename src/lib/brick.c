@@ -477,6 +477,8 @@ t_brick *brick_rebind(t_scene *sc,void *ptr)
 		brick_build_width(brick);
 	}
 
+	rebind(sc,"brick","data", (void **) &brick->data);
+
 	return brick;
 }
 
