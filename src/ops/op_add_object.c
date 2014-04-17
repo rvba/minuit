@@ -299,7 +299,7 @@ t_node *op_add_mesh_raw( const char *name, int size)
 		object->cls->link(object,node_mesh);
 
 	scene_store(C->scene,0);
-	return node_mesh;
+	return node_object;
 }
 
 void *op_add_plane(t_brick *brick)
