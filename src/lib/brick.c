@@ -683,6 +683,8 @@ t_brick *brick_new(const char *name)
 	//brick->state_pressed = BRICK_NULL;
 	brick->typing = 0;
 
+	brick->data = NULL;
+
 	return brick;
 }
 

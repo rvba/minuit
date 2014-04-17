@@ -168,6 +168,9 @@ typedef struct Brick
 
 	void (* state)( struct Brick *brick, struct Event *e);
 
+	// data
+	void *data;
+
 }t_brick;
 
 

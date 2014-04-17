@@ -263,6 +263,7 @@ t_node *mesh_make(
 		else
 		{
 			mesh->vertex=vlst_make("vertex", dt_float, 3, totvert);
+			vlst_init( mesh->vertex);
 		}
 
 		// add brick vertex

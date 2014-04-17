@@ -134,8 +134,15 @@ int action_check( t_action *action)
 {
 	t_brick *brick = action->brick;
 	t_set *set = brick->block->set;
-	if(set->processing) return 0;
-	else return 1;
+	if( set)
+	{
+		if(set->processing) return 0;
+		else return 1;
+	}
+	else
+	{
+		return 1;
+	}
 }
 
 void ctx_ui_exe(t_context *C)
