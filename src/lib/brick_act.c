@@ -165,7 +165,7 @@ void *op_slider(t_brick *brick)
 	return NULL;
 }
 
-void set_odd( void *data, t_data_type type, int sign)
+void set_odd( void *data, t_data_type type, int sign, int positive, int negative, int strict)
 {
 	int val;
 	int *int_ptr;
@@ -195,8 +195,33 @@ void set_odd( void *data, t_data_type type, int sign)
 		{
 			if( type == dt_int)
 			{
-				if( sign >= 0) *int_ptr += 1;
-				else *int_ptr -= 1;
+				if( sign >= 0)
+				{
+					*int_ptr += 1;
+				}
+				else
+				{
+					*int_ptr -= 1;
+				}
+			}
+		}
+
+	}
+
+	if( positive)
+	{
+		if( type == dt_int)
+		{
+			if( *int_ptr <= 0)
+			{
+				if( strict)
+				{
+					*(int_ptr) = *(int_ptr) + 2;
+				}
+				else
+				{
+					*(int_ptr) = 0;
+				}
 			}
 		}
 	}
@@ -212,7 +237,22 @@ void *op_slider_odd(t_brick *brick)
 
 	t_plug *plug = &brick->plug_intern;
 	void *data = plug->data;
-	set_odd( data, plug->data_type, dir);
+	set_odd( data, plug->data_type, dir, 0, 0, 0);
+
+	return NULL;
+}
+
+void *op_slider_odd_positive_strict(t_brick *brick)
+{
+	int dir;
+	op_slider( brick);
+
+	if( brick->state_pressed == BRICK_RIGHT) dir = 1;
+	else dir = -1;
+
+	t_plug *plug = &brick->plug_intern;
+	void *data = plug->data;
+	set_odd( data, plug->data_type, dir, 1, 0, 1);
 
 	return NULL;
 }

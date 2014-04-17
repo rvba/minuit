@@ -203,6 +203,7 @@ void * 		op_and(struct Brick *brick);
 void *		op_slider(struct Brick *brick);
 void *		op_slider_odd(struct Brick *brick);
 void *		op_slider_positive(struct Brick *brick);
+void *		op_slider_odd_positive_strict( struct Brick *brick);
 void *		op_slider_positive_non_zero(struct Brick *brick);
 void *		op_if(struct Brick *brick);
 void *		op_equal(struct Brick *brick);
