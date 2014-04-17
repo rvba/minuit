@@ -21,6 +21,7 @@ struct Node;
 struct Block;
 struct Brick;
 struct Lst;
+struct Dict;
 
 extern struct Block *menu_node;
 extern int opt_op_use_random;
@@ -124,6 +125,7 @@ struct Node *	add_brick_bar( struct Context *C, struct Block *block, const char 
 // OP_REGISTER
 
 
+void 		op_add_register( struct Context *C, struct Dict *dict, const char *name, void *ptr);
 void *		find_register(const char *target,const char *name);
 void 		register_set( struct Context *C);
 
