@@ -250,7 +250,7 @@ t_node *add_brick_slider_float_custom(t_context *C,t_block *block,const char *na
 	t_brick *brick = ( t_brick *) node_brick->data;
 	
 	// ACTION
-	brick->exe=f;
+	brick->act=f;
 
 	// PLUG
 	set_plug_option(brick);
