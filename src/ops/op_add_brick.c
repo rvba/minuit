@@ -172,6 +172,14 @@ t_node *add_brick_slider_int_odd( t_context *C, t_block *block, const char *name
 	return node;
 }
 
+t_node *add_brick_slider_int_odd_positive_strict( t_context *C, t_block *block, const char *name, void *data_target)
+{
+	t_node *node = add_brick_slider_int( C, block, name, data_target);
+	t_brick *brick = node->data;
+	brick->act = op_slider_odd_positive_strict;
+	return node;
+}
+
 t_node *add_brick_slider_add_bricks(t_context *C,t_block *block,const char *name,int offset,void *data_target)
 {
 	t_node *node = add_brick_slider_int( C, block, name, data_target);

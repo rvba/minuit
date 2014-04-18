@@ -74,6 +74,7 @@ void register_set(t_context *C)
 	scene_add_data(C->scene,"app_data","func","op_slider",			(void *) op_slider);
 	scene_add_data(C->scene,"app_data","func","op_slider_positive",		(void *) op_slider_positive);
 	scene_add_data(C->scene,"app_data","func","op_slider_positive_non_zero",		(void *) op_slider_positive_non_zero);
+	scene_add_data(C->scene,"app_data","func","op_slider_odd_positive_strict",		(void *) op_slider_odd_positive_strict);
 	scene_add_data(C->scene,"app_data","func","op_cos",			(void *) op_cos);
 	scene_add_data(C->scene,"app_data","func","op_sin",			(void *) op_sin);
 	scene_add_data(C->scene,"app_data","func","op_add",			(void *) op_add);
@@ -141,6 +142,8 @@ void register_set(t_context *C)
 	dict_symbol_add(dict_func,"op_slider",dt_pointer, (void *) op_slider);
 	dict_symbol_add(dict_func,"op_slider_positive",dt_pointer, (void *) op_slider_positive);
 	dict_symbol_add(dict_func,"op_slider_positive_non_zero",dt_pointer, (void *) op_slider_positive_non_zero);
+	dict_symbol_add(dict_func,"op_slider_positive_non_zero",dt_pointer, (void *) op_slider_positive_non_zero);
+	dict_symbol_add(dict_func,"op_slider_odd_positive_strict",dt_pointer, (void *) op_slider_odd_positive_strict);
 	dict_symbol_add(dict_func,"op_cos",dt_pointer, (void *) op_cos);
 	dict_symbol_add(dict_func,"op_sin",dt_pointer, (void *) op_sin);
 	dict_symbol_add(dict_func,"op_add",dt_pointer, (void *) op_add);
