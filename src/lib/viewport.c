@@ -339,10 +339,28 @@ void *op_viewport_center( t_brick *brick)
 	return NULL;
 }
 
+void *op_viewport_full_height( t_brick *brick)
+{
+	t_context *C = ctx_get();
+	t_viewport *viewport = ( t_viewport *) brick->data;
+	int v_width = viewport->width;
+	int v_height = viewport->height;
+	int w_width = C->app->window->width;
+	int w_height = C->app->window->height;
+
+	float ratio = (float) w_height / (float) v_height;
+	int n_w = (int) ( ratio * (float) v_width);
+	viewport->width = n_w;
+	viewport->height = w_height;
+
+	return NULL;
+}
+
 void viewport_register( t_context *C)
 {
 	op_add_register( C, "op_viewport_center", op_viewport_center);
 	op_add_register( C, "op_viewport_set_dimensions", op_viewport_set_dimensions);
+	op_add_register( C, "op_viewport_full_height", op_viewport_full_height);
 }
 
 void viewport_add_trigger( t_context *C, t_viewport *viewport, const char *name, void *( * f)( t_brick *brick))
@@ -380,6 +398,7 @@ void viewport_add_controls( t_viewport *viewport)
 
 	viewport_add_trigger( C, viewport, "A4", op_viewport_set_dimensions);
 	viewport_add_trigger( C, viewport, "center", op_viewport_center);
+	viewport_add_trigger( C, viewport, "full height", op_viewport_full_height);
 
 	set_draw_plug = 1;
 }
