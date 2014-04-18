@@ -24,6 +24,18 @@
 #include "obj.h"
 #endif
 
+t_dict *REGISTER = NULL;
+
+t_dict *register_dict_get( void)
+{
+	if( !REGISTER) 
+	{
+		REGISTER = dict_make("_register");
+	}
+
+	return REGISTER;
+}
+
 // REGISTER GET
 
 void *find_register(const char *target,const char *name)
@@ -54,13 +66,14 @@ void *find_register(const char *target,const char *name)
 	return NULL;
 }
 
-void op_add_register(t_context *C,t_dict *dict,const char *name,void *ptr)
+void op_add_register(t_context *C,const char *name,void *ptr)
 {
 	scene_store(C->scene,1);
+	t_dict *dict = register_dict_get();
 	scene_add_data(C->scene,"app_data", dict->id.name, name, ptr);
-	scene_store(C->scene,0);
 
 	dict_symbol_add(dict,name,dt_pointer,ptr);
+	scene_store(C->scene,0);
 }
 
 // REGISTER
@@ -202,16 +215,14 @@ void register_set(t_context *C)
 
 	// MOUSE
 
-	t_dict *dict_mouse = dict_make( "mouse");
-
 	t_mouse *mouse=C->app->mouse;
 
-	op_add_register(C,dict_mouse,"mouse_x",&mouse->x);
-	op_add_register(C,dict_mouse,"mouse_y",&mouse->y);
+	op_add_register(C,"mouse_x",&mouse->x);
+	op_add_register(C,"mouse_y",&mouse->y);
 
 	t_keyboard *keyboard=C->app->keyboard;
 
-	op_add_register(C,dict_mouse,"keyboard",&keyboard->key_pressed);
+	op_add_register(C,"keyboard",&keyboard->key_pressed);
 
 
 }
