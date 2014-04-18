@@ -28,5 +28,5 @@ void screen_view3d(t_screen *screen)
 	screen_draw_controls( screen);
 	screen_switch( screen);
 
-	draw_scene(C->draw,C->scene);
+	if( C->draw->with_scene) draw_scene(C->draw,C->scene);
 }
