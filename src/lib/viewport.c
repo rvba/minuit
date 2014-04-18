@@ -345,7 +345,6 @@ void *op_viewport_full_height( t_brick *brick)
 	t_viewport *viewport = ( t_viewport *) brick->data;
 	int v_width = viewport->width;
 	int v_height = viewport->height;
-	int w_width = C->app->window->width;
 	int w_height = C->app->window->height;
 
 	float ratio = (float) w_height / (float) v_height;
