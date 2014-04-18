@@ -129,6 +129,7 @@ struct Node *	add_brick_bar( struct Context *C, struct Block *block, const char 
 void 		op_add_register( struct Context *C, struct Dict *dict, const char *name, void *ptr);
 void *		find_register(const char *target,const char *name);
 void 		register_set( struct Context *C);
+void 		op_register_add( struct Context *C, const char *name, void *ptr);
 
 struct Block *add_menu( struct Context *C, const char *name);
 struct Block *add_submenu( struct Context *C, const char *menu_name, const char *submenu_name);

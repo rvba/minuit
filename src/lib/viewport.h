@@ -20,6 +20,8 @@ extern "C" {
 
 extern int opt_viewport_show_controls;
 
+struct Brick;
+
 typedef struct Viewport t_viewport;
 
 struct Viewport
@@ -42,6 +44,8 @@ struct Viewport
 	void (* draw)(struct Viewport *viewport);
 	struct Block *controls;
 };
+
+void *op_viewport_set_dimensions( struct Brick *brick);
 
 void 		viewport_switch_3d( t_viewport *viewport);
 void 		viewport_switch_2d( t_viewport *viewport);

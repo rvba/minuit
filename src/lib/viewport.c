@@ -303,6 +303,31 @@ t_viewport *viewport_clone(t_viewport *viewport)
 	}
 }
 
+void *op_viewport_set_dimensions( t_brick *brick)
+{
+	t_viewport *viewport = ( t_viewport *) brick->data;
+	int width = viewport->width;
+	int height = viewport->height;
+	if( is( brick->id.name, "A4"))
+	{
+		width = 210;
+		height = 297;
+	}
+
+	viewport->width = width;
+	viewport->height = height;
+
+	return NULL;
+}
+
+void viewport_add_trigger( t_context *C, t_viewport *viewport, const char *name, void *( * f)( t_brick *brick))
+{
+	t_block *block = viewport->controls;
+	t_node *node = add_brick_trigger( C, block, name, f);
+	t_brick *brick = ( t_brick *) node->data;
+	brick->data = viewport;
+}
+
 void viewport_add_controls( t_viewport *viewport)
 {
 	t_context *C = ctx_get();
@@ -315,24 +340,22 @@ void viewport_add_controls( t_viewport *viewport)
 	scene_add_ref(C->scene,"struct_ref","viewport","show_outline",&viewport->show_outline,viewport);
 
 	t_block *block = add_block_block( C, "viewport_controls");
-	if( block)
-	{
-		set_draw_plug = 0;
-
-		block->pos[0] = 0;
-		block->pos[1] = 1;
-		add_brick_slider_int( C, block, "width", &viewport->width);
-		add_brick_slider_int( C, block, "height", &viewport->height);
-		add_brick_slider_int( C, block, "x", &viewport->x);
-		add_brick_slider_int( C, block, "y", &viewport->y);
-		add_brick_switch( C, block, "fullscreen", &viewport->fullscreen);
-		add_brick_switch( C, block, "outline", &viewport->show_outline);
-
-		set_draw_plug = 1;
-	}
-
 	viewport->controls = block;
 
+	set_draw_plug = 0;
+
+	block->pos[0] = 0;
+	block->pos[1] = 1;
+	add_brick_slider_int( C, block, "width", &viewport->width);
+	add_brick_slider_int( C, block, "height", &viewport->height);
+	add_brick_slider_int( C, block, "x", &viewport->x);
+	add_brick_slider_int( C, block, "y", &viewport->y);
+	add_brick_switch( C, block, "fullscreen", &viewport->fullscreen);
+	add_brick_switch( C, block, "outline", &viewport->show_outline);
+
+	viewport_add_trigger( C, viewport, "A4", op_viewport_set_dimensions);
+
+	set_draw_plug = 1;
 }
 
 void _viewport_free(t_viewport *viewport)
