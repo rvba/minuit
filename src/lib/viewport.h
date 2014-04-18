@@ -45,6 +45,8 @@ struct Viewport
 	struct Block *controls;
 };
 
+void viewport_register( struct Context *C);
+
 void *op_viewport_set_dimensions( struct Brick *brick);
 
 void 		viewport_switch_3d( t_viewport *viewport);

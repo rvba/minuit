@@ -320,6 +320,31 @@ void *op_viewport_set_dimensions( t_brick *brick)
 	return NULL;
 }
 
+
+void *op_viewport_center( t_brick *brick)
+{
+	t_context *C = ctx_get();
+	t_viewport *viewport = ( t_viewport *) brick->data;
+	int v_width = viewport->width;
+	int v_height = viewport->height;
+	int w_width = C->app->window->width;
+	int w_height = C->app->window->height;
+
+	int x = ( w_width - v_width) / 2;
+	int y = ( w_height - v_height) / 2;
+
+	viewport->x = x;
+	viewport->y = y;
+
+	return NULL;
+}
+
+void viewport_register( t_context *C)
+{
+	op_add_register( C, "op_viewport_center", op_viewport_center);
+	op_add_register( C, "op_viewport_set_dimensions", op_viewport_set_dimensions);
+}
+
 void viewport_add_trigger( t_context *C, t_viewport *viewport, const char *name, void *( * f)( t_brick *brick))
 {
 	t_block *block = viewport->controls;
@@ -354,6 +379,7 @@ void viewport_add_controls( t_viewport *viewport)
 	add_brick_switch( C, block, "outline", &viewport->show_outline);
 
 	viewport_add_trigger( C, viewport, "A4", op_viewport_set_dimensions);
+	viewport_add_trigger( C, viewport, "center", op_viewport_center);
 
 	set_draw_plug = 1;
 }
