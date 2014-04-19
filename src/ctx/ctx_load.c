@@ -54,6 +54,8 @@
 
 #include "op.h"
 
+#include "sketch.h"
+
 // LISTS
 
 t_lst *NODES;
@@ -793,6 +795,8 @@ void load_file(t_context *C,const char *path)
 		C->ui->show_term = 1;
 		term_log("WARNING: Load Error");
 	}
+
+	skt_load( C);
 }
 
 

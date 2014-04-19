@@ -21,12 +21,60 @@
 #include "camera.h"
 #include "memory.h"
 
+#include "dict.h"
+
 // LOCAL
 t_skt *SKT=NULL;
 
 t_skt *skt_get(void)
 {
 	return SKT;
+}
+
+void skt_set( t_skt *skt)
+{
+	// free ...
+	SKT = skt;
+}
+
+void skt_cp( t_skt *dst, t_skt *src)
+{
+	dst->line_width = src->line_width;
+	dst->point_width = src->point_width;
+	dst->point_size = src->point_size;
+}
+
+void skt_load( t_context *C)
+{
+	t_node *node = scene_node_get( C->scene, "dict", "dict_skt");
+	t_dict *dict = node->data;
+	t_symbol *symbol = dict_pop( dict, "symbol_skt");
+	t_skt *skt = (t_skt *) symbol->data;
+
+	skt_cp( SKT, skt);
+
+	SKT->line_width = skt->line_width;
+}
+
+void skt_save( t_context *C)
+{
+	t_node *node = scene_node_exists( C->scene, "dict", "dict_skt");
+	if( node)
+	{
+		t_dict *dict = ( t_dict *) node->data;
+		t_symbol *symbol = dict_pop( dict, "symbol_skt");
+		t_skt *skt = ( t_skt *) symbol->data;
+
+		skt_cp( skt, SKT);
+	}
+	else
+	{
+		scene_store(C->scene,1);
+		t_dict *dict = dict_make("dict_skt");
+		dict_symbol_add(dict,"symbol_skt",dt_pointer, SKT);
+		scene_add_data_var( C->scene, "int", "var_skt", sizeof( t_skt), SKT);
+		scene_store(C->scene,0);
+	}
 }
 
 int skt_get_line_scale( void)

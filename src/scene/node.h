@@ -45,6 +45,7 @@ typedef struct Node
 	void *id_ptr_old;
 	int users;
 	int store;
+	int garbage;
 	int size;
 
 	t_data_type type;

@@ -20,6 +20,8 @@
 #include "list.h"
 #include "brick.h"
 
+#include "sketch.h"
+
 void load_last( t_context *C)
 {
 	char *path = app_get_file_path( C->app, APP_FILENAME_SAVE);
@@ -85,6 +87,7 @@ void save_to_file( t_context *C)
 	t_node *node;
 
 	option_save(C);
+	skt_save( C);
 
 	for(l=C->scene->nodes->first;l;l=l->next)
 	{

@@ -51,6 +51,9 @@ struct Sketch
 	int use_line_global_width;
 };
 
+void skt_save( struct Context *C);
+void skt_load( struct Context *C);
+
 // NEW
 
 t_skt *skt_new(void);
