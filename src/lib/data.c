@@ -8,7 +8,7 @@
  */
 
 #include "util.h"
-#include "context.h"
+#include "ctx.h"
 #include "node.h"
 #include "scene.h"
 #include "op.h"

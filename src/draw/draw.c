@@ -17,7 +17,7 @@
 #include "vlst.h"
 #include "object.h"
 
-#include "context.h"
+#include "ctx.h"
 #include "op.h"
 #include "camera.h"
 #include "event.h"

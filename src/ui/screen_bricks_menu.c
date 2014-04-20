@@ -8,7 +8,7 @@
  */
 
 #include "screen.h"
-#include "context.h"
+#include "ctx.h"
 #include "opengl.h"
 #include "ui.h"
 #include "block.h"

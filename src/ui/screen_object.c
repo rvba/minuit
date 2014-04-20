@@ -8,7 +8,7 @@
  */
 
 #include "screen.h"
-#include "context.h"
+#include "ctx.h"
 #include "util.h"
 #include "object.h"
 #include "scene.h"

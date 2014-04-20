@@ -8,7 +8,7 @@
  */
 
 #include "object.h"
-#include "context.h"
+#include "ctx.h"
 #include "scene.h"
 #include "draw.h"
 #include "mesh.h"

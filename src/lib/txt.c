@@ -10,7 +10,7 @@
 #include "util.h"
 #include "txt.h"
 #include "sketch.h"
-#include "context.h"
+#include "ctx.h"
 #include "event.h"
 #include "ui.h"
 #include "node.h"

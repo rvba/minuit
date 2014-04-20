@@ -22,7 +22,7 @@
 */
 
 #include "option.h"
-#include "context.h"
+#include "ctx.h"
 #include "action.h"
 #include "app.h"
 #include "event.h"

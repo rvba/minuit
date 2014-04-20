@@ -10,7 +10,7 @@
 #include "node.h"
 #include "util.h"
 #include "mesh.h"
-#include "context.h"
+#include "ctx.h"
 #include "scene.h"
 #include "list.h"
 #include "vlst.h"

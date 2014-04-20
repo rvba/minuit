@@ -7,7 +7,7 @@
  *
  */
 
-#include "context.h"
+#include "ctx.h"
 #include "app.h"
 
 int main(int argc, char **argv)

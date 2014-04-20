@@ -9,7 +9,7 @@
 
 #include "util.h"
 #include "ui.h"
-#include "context.h"
+#include "ctx.h"
 #include "event.h"
 #include "sketch.h"
 #include "block.h"

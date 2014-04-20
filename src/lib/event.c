@@ -7,7 +7,7 @@
  *
  */
 
-#include "context.h"
+#include "ctx.h"
 #include "event.h"
 #include "util.h"
 #include "screen.h"

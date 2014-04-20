@@ -10,7 +10,7 @@
 
 #include "util.h"
 #include "light.h"
-#include "context.h"
+#include "ctx.h"
 #include "scene.h"
 #include "node.h"
 #include "list.h"
