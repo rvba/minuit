@@ -21,6 +21,7 @@
 #include "brick.h"
 
 #include "sketch.h"
+#include "mode.h"
 
 void load_last( t_context *C)
 {
@@ -81,13 +82,23 @@ void save_file(t_context *C)
 	mem_write( path);
 }
 
+void mod_save( void)
+{
+	t_context *C = ctx_get();
+	skt_save( C);
+}
+
 void save_to_file( t_context *C)
 {
 	t_link *l;
 	t_node *node;
 
 	option_save(C);
-	skt_save( C);
+//	skt_save( C);
+	
+	t_module *module = mode_module_get( C->mode, "save");
+	void (* f)( void) =  module->data;
+	f();
 
 	for(l=C->scene->nodes->first;l;l=l->next)
 	{

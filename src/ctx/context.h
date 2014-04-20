@@ -57,6 +57,7 @@ void 		ctx_event( struct Context *C);
 
 // CTX_LOAD
 
+void mod_load( void);
 void load_file(struct Context *C,const char *path);
 void *ctx_get_pointer(void *ptr);
 void rebind(struct Scene *sc,const char *type,const char *name,void **ptr);
@@ -64,6 +65,7 @@ void load_last(struct Context *C);
 
 // CTX_SAVE
 
+void mod_save( void);
 void save_to_file( struct Context *C);
 void save_file(struct Context *C);
 void save_file_increment(struct Context *C);

@@ -56,6 +56,8 @@
 
 #include "sketch.h"
 
+#include "mode.h"
+
 // LISTS
 
 t_lst *NODES;
@@ -732,6 +734,12 @@ void load_read(t_scene *sc,const char *path)
 	fclose(file);
 }
 
+void mod_load( void)
+{
+	t_context *C = ctx_get();
+	skt_load( C);
+}
+
 // LOAD
 
 void load_file(t_context *C,const char *path)
@@ -796,7 +804,10 @@ void load_file(t_context *C,const char *path)
 		term_log("WARNING: Load Error");
 	}
 
-	skt_load( C);
+	
+	t_module *module = mode_module_get( C->mode, "load");
+	void (* f)( void) =  module->data;
+	f();
 }
 
 

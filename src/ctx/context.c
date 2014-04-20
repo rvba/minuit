@@ -55,6 +55,12 @@ t_context *ctx_new(int argc,char **argv)
 	return C;
 }
 
+void ctx_init_file( t_context *C)
+{
+	mode_module_add( C->mode, "save", mod_save);
+	mode_module_add( C->mode, "load", mod_load);
+}
+
 t_context *ctx_init(int argc,char **argv)
 {
 	t_context *C = ctx_new(argc,argv);
@@ -74,6 +80,8 @@ t_context *ctx_init(int argc,char **argv)
 
 	// Set GL Callback
 	C->app->main_func = ctx_handler;
+
+	ctx_init_file( C);
 
 	return C;
 }
