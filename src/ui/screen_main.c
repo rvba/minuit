@@ -15,8 +15,68 @@
 #include "event.h"
 #include "util.h"
 #include "block.h"
-
 #include "viewport.h"
+#include "draw.h"
+#include "app.h"
+#include "sketch.h"
+
+void ui_draw_menu(void)
+{
+	t_context *C=ctx_get();
+	t_node *node=C->scene->selected;
+	t_block *menu=NULL;
+
+	if(C->ui->show_menu)
+	{
+		C->event->ui.use_scale = 0;
+		node=scene_node_get(C->scene,"block","menu_mouse");
+		menu = ( t_block *) node->data;
+		menu->cls->draw(menu);
+		C->event->ui.use_scale = 1;
+	}
+}
+
+void ui_draw_bar(void)
+{
+	t_context *C=ctx_get();
+	t_node *node=C->scene->selected;
+	t_block *menu=NULL;
+
+	glPushMatrix();
+	if(C->ui->show_intro)
+	{
+		glTranslatef(0,2,0);
+		C->event->ui.use_scale = 0;
+		node=scene_node_get(C->scene,"block","bar");
+		menu = ( t_block *) node->data;
+		menu->cls->draw(menu);
+		C->event->ui.use_scale = 1;
+	}
+	glPopMatrix();
+}
+
+void ui_draw_mouse(void)
+{
+	t_context *C = ctx_get();
+	if(C->ui->show_mouse && (C->draw->mode != mode_selection))
+	{
+		float *color=C->ui->front_color;
+		float pos[3];
+
+		vset(pos,0,0,0);
+
+		pos[0] = (float) C->app->mouse->x;
+		pos[1] = (float) C->app->mouse->y;
+		pos[2] = 0;
+
+		glPushMatrix();
+		glLoadIdentity();
+		C->event->ui.use_point_global_width = 0;
+		skt_point(pos,C->ui->mouse_size,color);
+		C->event->ui.use_point_global_width = 1;
+		glPopMatrix();
+	}
+}
 
 void screen_main(t_screen *screen)
 {

@@ -15,6 +15,23 @@
 #include "event.h"
 #include "util.h"
 #include "block.h"
+#include "set.h"
+#include "scene.h"
+#include "node.h"
+
+void ui_draw_sets(void)
+{
+	t_context *C=ctx_get();
+
+	t_link *link;
+
+	for(link = C->scene->sets->first; link; link = link->next)
+	{
+		t_node *node = ( t_node *) link->data;
+		t_set *set = ( t_set *) node->data;
+		set_draw(set);
+	}
+}
 
 void screen_sets(t_screen *screen)
 {
@@ -23,7 +40,6 @@ void screen_sets(t_screen *screen)
 	glPushMatrix();
 	glLoadIdentity();
 
-		ui_draw_mouse();
 		t_context *C = ctx_get();
 		glTranslatef(C->ui->pan_x,C->ui->pan_y,0);
 		float zoom = C->ui->zoom;

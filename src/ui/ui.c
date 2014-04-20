@@ -123,30 +123,6 @@ void ui_draw_icon_freeze( void)
 	}
 }
 
-// MOUSE
-
-void ui_draw_mouse(void)
-{
-	t_context *C = ctx_get();
-	if(C->ui->show_mouse && (C->draw->mode != mode_selection))
-	{
-		float *color=C->ui->front_color;
-		float pos[3];
-
-		vset(pos,0,0,0);
-
-		pos[0] = (float) C->app->mouse->x;
-		pos[1] = (float) C->app->mouse->y;
-		pos[2] = 0;
-
-		glPushMatrix();
-		glLoadIdentity();
-		C->event->ui.use_point_global_width = 0;
-		skt_point(pos,C->ui->mouse_size,color);
-		C->event->ui.use_point_global_width = 1;
-		glPopMatrix();
-	}
-}
 
 // TERM
 
@@ -184,60 +160,6 @@ void ui_draw_term(void)
 	glPopMatrix();
 }
 
-// DRAW MENU 
-
-void ui_draw_menu(void)
-{
-	t_context *C=ctx_get();
-	t_node *node=C->scene->selected;
-	t_block *menu=NULL;
-
-	if(C->ui->show_menu)
-	{
-		C->event->ui.use_scale = 0;
-		node=scene_node_get(C->scene,"block","menu_mouse");
-		menu = ( t_block *) node->data;
-		menu->cls->draw(menu);
-		C->event->ui.use_scale = 1;
-	}
-}
-
-// DRAW BAR 
-
-void ui_draw_bar(void)
-{
-	t_context *C=ctx_get();
-	t_node *node=C->scene->selected;
-	t_block *menu=NULL;
-
-	glPushMatrix();
-	if(C->ui->show_intro)
-	{
-		glTranslatef(0,2,0);
-		C->event->ui.use_scale = 0;
-		node=scene_node_get(C->scene,"block","bar");
-		menu = ( t_block *) node->data;
-		menu->cls->draw(menu);
-		C->event->ui.use_scale = 1;
-	}
-	glPopMatrix();
-}
-
-// DRAW SETS
-
-void ui_draw_sets(void)
-{
-	t_context *C=ctx_get();
-
-	t_link *link;
-
-	for(link = C->scene->sets->first; link; link = link->next)
-	{
-		t_node *node = ( t_node *) link->data;
-		t_set *set = ( t_set *) node->data;
-		set_draw(set);
-	}
-}
 
 // DRAW SCREENS
 
