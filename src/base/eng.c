@@ -7,26 +7,8 @@
  *
  */
 
-/*
-#include "util.h"
-#include "node.h"
-#include "op.h"
-#include "engine.h"
-#include "process.h"
-#include "list.h"
-#include "context.h"
-#include "app.h"
-#include "memory.h"
-*/
-
 #include "util.h"
 
-/*
-t_engine_cls cls_engine=
-{
-	.cls_type="engine",
-};
-*/
 
 void engine_quit(t_engine *engine)
 {
