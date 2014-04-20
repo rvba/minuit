@@ -100,10 +100,6 @@ typedef struct Draw
 	int with_polygon_offset;
 	int with_alpha;
 	int with_grid;
-	int divx;
-	int divy;
-	int usex;
-	int usey;
 
 	int show_axis_world;
 	int draw_lights;

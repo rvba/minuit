@@ -148,97 +148,6 @@ void ui_draw_mouse(void)
 	}
 }
 
-// GRID
-
-/*
-void ui_draw_grid(void)
-{
-	t_context *C=ctx_get();
-	if(C->ui->show_grid && (C->draw->mode==mode_draw))
-	{
-		glPushMatrix();
-
-		float *color = C->draw->front_color;
-		int w=1;
-
-		int i;
-		float x=0;
-		float y=0;
-
-		float width,height;
-
-		int divx,divy;
-		float ori_x=1;
-		float ori_y=0;
-
-		width = (float)(C->app->window->width);
-		height = (float)(C->app->window->height-1);
-
-		divx=C->draw->divx;
-		divy=C->draw->divy;
-
-		// main frame
-		float a[3]={ori_x,ori_y,0};
-		float b[3]={width,ori_x,0};
-		float c[3]={width,height,0};
-		float d[3]={ori_x,height,0};
-
-		skt_line(a,b,w,color);
-		skt_line(b,c,w,color);
-		skt_line(c,d,w,color);
-		skt_line(d,a,w,color);
-
-		// divisions
-		float xx = (float)divx;
-		float yy = (float)divy;
-		float dx = width/xx;
-		float dy = height/yy;
-
-		int usex = C->draw->usex;
-		int usey = C->draw->usey;
-
-		float ax = usex * dx;
-		float ay = usey * dy ;
-		float origin[3] = {ax,ay,0};
-		float v1[3] = {dx,0,0};
-		float v2[3] = {0,dy,0};
-		int _width = 5;
-
-		_skt_rectangle(origin,v1,v2,color,_width);
-
-		// verticals
-		for(i=0;i<divx-1;i++)
-		{
-			x+=dx;
-
-			float l0[3]={x,0,0};
-			float l1[3]={x,height,0};
-			float l2[3]={x+1,0,0};
-			float l3[3]={x+1,height,0};
-
-			skt_line(l0,l1,w,color);
-			skt_line(l2,l3,w,color);
-		}
-			
-		// horizontals
-		for(i=0;i<divy-1;i++)
-		{
-			y+=dy;
-
-			float l0[3]={0,y,0};
-			float l1[3]={width,y,0};
-			float l2[3]={0,y+1,0};
-			float l3[3]={width,y+1,0};
-
-			skt_line(l0,l1,w,color);
-			skt_line(l2,l3,w,color);
-		}
-
-		glPopMatrix();
-	}
-}
-*/
-
 // TERM
 
 void ui_draw_term(void)
@@ -411,7 +320,6 @@ t_ui *ui_new(void)
 	ui->show_mouse = UI_SHOW_MOUSE;
 	ui->show_mouse_rec = 1;
 	ui->show_term = UI_SHOW_TERM;
-	ui->show_grid = 0;
 	ui->show_states = 0;
 	ui->show_step = 0;
 	ui->show_brick_step = 0;

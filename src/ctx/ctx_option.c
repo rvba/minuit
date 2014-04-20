@@ -80,8 +80,6 @@ void option_load(t_context *C,t_node *node)
 	vcp3f(C->draw->front_color,option->draw_front_color);
 
 	C->draw->with_grid=option->draw_with_grid;
-	C->draw->divx=option->draw_divx;
-	C->draw->divy=option->draw_divy;
 	C->draw->show_axis_world=option->draw_show_axis_world;
 
 	// event
@@ -139,8 +137,6 @@ void option_save(t_context *C)
 	vcp3f(option->draw_front_color,C->draw->front_color);
 
 	option->draw_with_grid=C->draw->with_grid;
-	option->draw_divx=C->draw->divx;
-	option->draw_divy=C->draw->divy;
 	option->draw_show_axis_world=C->draw->show_axis_world;
 
 	// event

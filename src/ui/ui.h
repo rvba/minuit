@@ -130,7 +130,6 @@ typedef struct Ui
 	int show_mouse;
 	int show_mouse_rec;
 	int show_term;
-	int show_grid;
 	int show_states;
 	int show_plug_state;
 	int show_step;

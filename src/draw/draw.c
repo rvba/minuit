@@ -880,10 +880,6 @@ t_draw *draw_new(void)
 	draw->with_blend=DRAW_WITH_BLEND;
 	draw->with_scene = 1;
 	draw->with_grid=0;
-	draw->divx=2;
-	draw->divy=2;
-	draw->usex=0;
-	draw->usey=0;
 
 	draw->with_shaders = 1;
 
