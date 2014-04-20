@@ -26,7 +26,6 @@ void screen_main(t_screen *screen)
 	glLoadIdentity();
 
 		ui_draw_mouse();
-		ui_draw_grid();
 		ui_draw_menu();
 		ui_draw_bar();
 		ui_draw_icon_freeze();

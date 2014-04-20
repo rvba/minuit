@@ -150,6 +150,7 @@ void ui_draw_mouse(void)
 
 // GRID
 
+/*
 void ui_draw_grid(void)
 {
 	t_context *C=ctx_get();
@@ -236,6 +237,7 @@ void ui_draw_grid(void)
 		glPopMatrix();
 	}
 }
+*/
 
 // TERM
 

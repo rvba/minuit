@@ -24,8 +24,6 @@ void screen_sets(t_screen *screen)
 	glLoadIdentity();
 
 		ui_draw_mouse();
-		ui_draw_grid();
-
 		t_context *C = ctx_get();
 		glTranslatef(C->ui->pan_x,C->ui->pan_y,0);
 		float zoom = C->ui->zoom;
