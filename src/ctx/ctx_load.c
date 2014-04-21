@@ -815,6 +815,20 @@ void load_file(t_context *C,const char *path)
 	}
 }
 
+void load_file_from_path( t_context *C, const char *filename)
+{
+	load_file( C, filename);
+	set_name_long( C->app->path_file, filename);
+	t_file *f = file_new( filename);
+	file_init( f);
+	char new_name[_NAME_LONG_];
+	bzero( new_name, _NAME_LONG_);
+	set_name_long( new_name, f->file_name);
+	s_cat( new_name, ".mn", _NAME_LONG_);
+	set_name_long( C->app->filename, new_name);
+	file_free( f);
+}
+
 void load_last( t_context *C)
 {
 	char *path = app_get_file_path( C->app, APP_FILENAME_SAVE);
@@ -841,6 +855,7 @@ void load_last( t_context *C)
 
 	if( filename)
 	{
+		/*
 		load_file( C, filename);
 		set_name_long( C->app->path_file, filename);
 		t_file *f = file_new( filename);
@@ -851,6 +866,8 @@ void load_last( t_context *C)
 		s_cat( new_name, ".mn", _NAME_LONG_);
 		set_name_long( C->app->filename, new_name);
 		file_free( f);
+		*/
+		load_file_from_path( C, filename);
 	}
 	else
 	{
@@ -868,9 +885,12 @@ void add_mn(void)
 
 	if(is(file->ext,"mn"))
 	{
+		/*
 		load_file( C, file->path);
 		set_name_long( C->app->filename, file->file_name);
 		s_cat( C->app->filename, ".mn", _NAME_LONG_);
+		*/
+		load_file_from_path( C, file->path);
 	}
 	else
 	{
