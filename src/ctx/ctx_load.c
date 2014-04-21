@@ -740,6 +740,13 @@ void mod_load( void)
 	skt_load( C);
 }
 
+void load_settings( t_context *C)
+{
+	t_module *module = mode_module_get( C->mode, "load");
+	void (* f)( void) =  module->data;
+	f();
+}
+
 // LOAD
 
 void load_file(t_context *C,const char *path)
@@ -786,6 +793,9 @@ void load_file(t_context *C,const char *path)
 	// add to scene 
 	load_scene(C,sc);
 
+	// Load Settings
+	load_settings( C);
+
 /** RESET **/
 
 	// free NODES & DATAS
@@ -803,11 +813,50 @@ void load_file(t_context *C,const char *path)
 		C->ui->show_term = 1;
 		term_log("WARNING: Load Error");
 	}
+}
 
-	
-	t_module *module = mode_module_get( C->mode, "load");
-	void (* f)( void) =  module->data;
-	f();
+void load_last( t_context *C)
+{
+	char *path = app_get_file_path( C->app, APP_FILENAME_SAVE);
+	char *filename = NULL;
+	t_file *file = NULL;
+
+	if( sys_file_exists( path))
+	{
+		file = file_access( path);
+	}
+
+	if( file)
+	{
+		filename = file_line_get( file, 0);
+		if( filename)
+		{
+			if( is( filename, "void")) filename = NULL;
+		}
+		else
+		{
+			printf("[LOAD] Can't get filename\n");
+		}
+	}
+
+	if( filename)
+	{
+		load_file( C, filename);
+		set_name_long( C->app->path_file, filename);
+		t_file *f = file_new( filename);
+		file_init( f);
+		char new_name[_NAME_LONG_];
+		bzero( new_name, _NAME_LONG_);
+		set_name_long( new_name, f->file_name);
+		s_cat( new_name, ".mn", _NAME_LONG_);
+		set_name_long( C->app->filename, new_name);
+		file_free( f);
+	}
+	else
+	{
+		C->event->callback = add_mn;
+		screen_switch_by_name("screen_browser");
+	}
 }
 
 
