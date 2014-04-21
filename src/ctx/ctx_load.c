@@ -896,6 +896,8 @@ void add_mn(void)
 	{
 		printf("Not a mn file\n");
 	}
+
+	file_free( file);
 }
 
 

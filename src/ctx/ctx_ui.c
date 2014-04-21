@@ -874,19 +874,20 @@ void state_ui_default( t_context *C, t_event *e)
 		{
 			case UI_EVENT_BROWSER_SHOW:
 
-						// close 
-						if( ctx_show_browser)
-						{
-							ctx_show_browser = 0;
-							UI_EVENT = UI_EVENT_NULL;
-						}
-						// open
-						else
-						{
-							ctx_ui_browser( C);
-						}
+				// close 
+				if( ctx_show_browser)
+				{
+					ctx_show_browser = 0;
+					UI_EVENT = UI_EVENT_NULL;
+				}
+				// open
+				else
+				{
+					ctx_ui_browser( C);
+				}
 
-						break;
+				break;
+
 			default:
 				break;
 		}
