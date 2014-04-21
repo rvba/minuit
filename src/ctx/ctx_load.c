@@ -859,4 +859,23 @@ void load_last( t_context *C)
 	}
 }
 
+void add_mn(void)
+{
+	t_context *C=ctx_get();
+
+	t_file *file = file_new( C->app->path_file);
+	file_init(file);
+
+	if(is(file->ext,"mn"))
+	{
+		load_file( C, file->path);
+		set_name_long( C->app->filename, file->file_name);
+		s_cat( C->app->filename, ".mn", _NAME_LONG_);
+	}
+	else
+	{
+		printf("Not a mn file\n");
+	}
+}
+
 
