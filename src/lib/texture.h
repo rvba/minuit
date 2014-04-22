@@ -44,7 +44,7 @@ typedef struct Texture
 void 		texture_show( t_texture *texture);
 void 		texture_image_load( struct Texture *texture, struct Image *image);
 t_texture *	texture_clone(t_texture *texture);
-t_texture* 	texture_rebind(struct Scene *scene, void *ptr);
+void	 	texture_rebind(struct Scene *scene, void *ptr);
 t_texture*	texture_new(const char *name);
 void 		_texture_free(t_texture *texture);
 void 		texture_free(t_texture *texture);

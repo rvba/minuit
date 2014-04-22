@@ -58,7 +58,7 @@ t_rhizome *	rhizome_add(const char *name);
 
 void rhizome_graph_build(t_rhizome *rhizome);
 void 		rhizome_init(t_rhizome *rhizome);
-t_rhizome *	rhizome_rebind(struct Scene *sc,void *ptr);
+void		rhizome_rebind(struct Scene *sc,void *ptr);
 
 t_rhizome *	rhizome_clone(t_rhizome *rhizome);
 void 		_rhizome_free(t_rhizome *rhizome);

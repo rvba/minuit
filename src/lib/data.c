@@ -587,9 +587,8 @@ void data_init(t_data_type type,void *data_dst, void *data_src)
 
 }
 
-t_data *data_rebind(t_scene *sc,void *ptr)
+void data_rebind(t_scene *sc,void *ptr)
 {
-	return ptr;
 }
 
 t_data *data_new(const char *name)
@@ -626,13 +625,11 @@ void datum_init( t_datum *datum)
 
 }
 
-t_datum *datum_rebind(t_scene *sc,void *ptr)
+void datum_rebind(t_scene *sc,void *ptr)
 {
 	t_datum *datum = (t_datum *) ptr;
 
 	rebind(sc,"datum","data",(void **)&datum->data);
-
-	return datum;
 }
 
 t_datum *datum_add( t_data_type type, const char *name, void *data)

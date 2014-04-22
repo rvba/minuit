@@ -438,7 +438,7 @@ void *brick_get_ref(t_brick *brick, const char *ref)
 
 // REBIND
 
-t_brick *brick_rebind(t_scene *sc,void *ptr)
+void brick_rebind(t_scene *sc,void *ptr)
 {
 	t_brick *brick=(t_brick *)ptr;
 
@@ -478,8 +478,6 @@ t_brick *brick_rebind(t_scene *sc,void *ptr)
 	}
 
 	rebind(sc,"brick","data", (void **) &brick->data);
-
-	return brick;
 }
 
 // INIT

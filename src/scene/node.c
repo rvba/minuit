@@ -41,6 +41,10 @@
 #include "memory.h"
 #include "node.h"
 
+void var_rebind( struct Scene *scene, void *ptr)
+{
+}
+
 int node_equal(t_node *m, t_node *n)
 {
 	if(m->id == n->id) return 1;
@@ -551,6 +555,7 @@ t_node_class mesh= {
 	.init=cls_node_init_mesh,
 	.free=cls_node_mesh_free,
 	.get_ref = cls_node_get_ref_mesh,
+	.rebind = mesh_rebind,
 };
 
 t_node_class block= {
@@ -563,6 +568,7 @@ t_node_class block= {
 	.init=cls_node_init_block,
 	.free=cls_node_block_free,
 	.get_ref = cls_node_get_ref,
+	.rebind = block_rebind,
 };
 
 t_node_class brick= {
@@ -575,6 +581,7 @@ t_node_class brick= {
 	.init=cls_node_init_brick,
 	.free=cls_node_brick_free,
 	.get_ref = cls_node_get_ref_brick,
+	.rebind = brick_rebind,
 };
 
 t_node_class light= {
@@ -587,6 +594,7 @@ t_node_class light= {
 	.init=cls_node_init_id,
 	.free=cls_node_light_free,
 	.get_ref = cls_node_get_ref,
+	.rebind = light_rebind,
 };
 
 t_node_class object= {
@@ -599,6 +607,7 @@ t_node_class object= {
 	.init=cls_node_init_id,
 	.free=cls_node_object_free,
 	.get_ref = cls_node_get_ref_object,
+	.rebind = object_rebind,
 };
 
 t_node_class screen= {
@@ -611,6 +620,7 @@ t_node_class screen= {
 	.init=cls_node_init_id,
 	.free=cls_node_screen_free,
 	.get_ref = cls_node_get_ref,
+	.rebind = screen_rebind,
 };
 
 t_node_class file= {
@@ -623,6 +633,7 @@ t_node_class file= {
 	.init=cls_node_init_id,
 	.free=cls_node_file_free,
 	.get_ref = cls_node_get_ref,
+	.rebind = file_rebind,
 };
 
 t_node_class image= {
@@ -635,6 +646,7 @@ t_node_class image= {
 	.init=cls_node_init_id,
 	.free=cls_node_image_free,
 	.get_ref = cls_node_get_ref,
+	.rebind = image_rebind,
 };
 
 t_node_class material= {
@@ -647,6 +659,7 @@ t_node_class material= {
 	.init=cls_node_init_id,
 	.free=cls_node_material_free,
 	.get_ref = cls_node_get_ref_material,
+	.rebind = material_rebind,
 };
 
 t_node_class list= {
@@ -660,6 +673,7 @@ t_node_class list= {
 	.init=cls_node_init_id,
 	.free=cls_node_list_free,
 	.get_ref = cls_node_get_ref,
+	.rebind = list_rebind,
 };
 
 t_node_class _link_= {
@@ -672,6 +686,7 @@ t_node_class _link_= {
 	.init=cls_node_init_id,
 	.free=cls_node_link_free,
 	.get_ref = cls_node_get_ref,
+	.rebind = link_rebind,
 };
 
 t_node_class data= {
@@ -684,6 +699,7 @@ t_node_class data= {
 	.init=cls_node_init_id,
 	.free=cls_node_data_free,
 	.get_ref = cls_node_get_ref,
+	.rebind = data_rebind,
 };
 
 t_node_class texture= {
@@ -696,6 +712,7 @@ t_node_class texture= {
 	.init=cls_node_init_id,
 	.free=cls_node_texture_free,
 	.get_ref = cls_node_get_ref,
+	.rebind = texture_rebind,
 };
 
 t_node_class var= {
@@ -708,6 +725,7 @@ t_node_class var= {
 	.init=cls_node_init_var,
 	.free=cls_node_var_free,
 	.get_ref = cls_node_get_ref,
+	.rebind = var_rebind,
 };
 
 t_node_class option= {
@@ -720,6 +738,7 @@ t_node_class option= {
 	.init=cls_node_init_id,
 	.free=cls_node_option_free,
 	.get_ref = cls_node_get_ref,
+	.rebind = var_rebind,
 };
 
 t_node_class vlst= {
@@ -732,6 +751,7 @@ t_node_class vlst= {
 	.init=cls_node_init_id,
 	.free=cls_node_vlst_free,
 	.get_ref = cls_node_get_ref_vlst,
+	.rebind = vlst_rebind,
 };
 
 t_node_class camera= {
@@ -744,6 +764,7 @@ t_node_class camera= {
 	.init=cls_node_init_camera,
 	.free=cls_node_camera_free,
 	.get_ref = cls_node_get_ref_camera,
+	.rebind = camera_rebind,
 };
 
 t_node_class dict= {
@@ -756,6 +777,7 @@ t_node_class dict= {
 	.init=cls_node_init_id,
 	.free=cls_node_dict_free,
 	.get_ref = cls_node_get_ref,
+	.rebind = dict_rebind,
 };
 
 t_node_class symbol= {
@@ -768,6 +790,7 @@ t_node_class symbol= {
 	.init=cls_node_init_symbol,
 	.free=cls_node_symbol_free,
 	.get_ref = cls_node_get_ref,
+	.rebind = symbol_rebind,
 };
 
 t_node_class vector= {
@@ -780,6 +803,7 @@ t_node_class vector= {
 	.init=cls_node_init_vector,
 	.free=cls_node_vector_free,
 	.get_ref = cls_node_get_ref,
+	.rebind = vector_rebind,
 };
 
 t_node_class viewport= {
@@ -792,6 +816,7 @@ t_node_class viewport= {
 	.init=cls_node_init_viewport,
 	.free=cls_node_viewport_free,
 	.get_ref = cls_node_get_ref_viewport,
+	.rebind = viewport_rebind,
 };
 
 t_node_class set = {
@@ -804,6 +829,7 @@ t_node_class set = {
 	.init=cls_node_init_set,
 	.free=cls_node_set_free,
 	.get_ref = cls_node_get_ref,
+	.rebind = set_rebind,
 };
 
 t_node_class binding = {
@@ -816,6 +842,7 @@ t_node_class binding = {
 	.init=cls_node_init_binding,
 	.free=cls_node_binding_free,
 	.get_ref = cls_node_get_ref,
+	.rebind = binding_rebind,
 };
 
 t_node_class rhizome = {
@@ -828,6 +855,7 @@ t_node_class rhizome = {
 	.init=cls_node_init_rhizome,
 	.free=cls_node_rhizome_free,
 	.get_ref = cls_node_get_ref,
+	.rebind = rhizome_rebind,
 };
 
 t_node_class graph = {
@@ -840,6 +868,7 @@ t_node_class graph = {
 	.init=cls_node_init_graph,
 	.free=cls_node_graph_free,
 	.get_ref = cls_node_get_ref,
+	.rebind = graph_rebind,
 };
 
 t_node_class geo = {
@@ -852,6 +881,7 @@ t_node_class geo = {
 	.init=cls_node_init_geo,
 	.free=cls_node_geo_free,
 	.get_ref = cls_node_get_ref,
+	.rebind = geo_rebind,
 };
 
 t_node_class geo_point = {
@@ -864,6 +894,7 @@ t_node_class geo_point = {
 	.init=cls_node_init_geo_point,
 	.free=cls_node_geo_point_free,
 	.get_ref = cls_node_get_ref,
+	.rebind = geo_point_rebind,
 };
 
 t_node_class geo_edge = {
@@ -876,6 +907,7 @@ t_node_class geo_edge = {
 	.init=cls_node_init_geo_edge,
 	.free=cls_node_geo_edge_free,
 	.get_ref = cls_node_get_ref,
+	.rebind = geo_edge_rebind,
 };
 
 t_node_class geo_array = {
@@ -888,6 +920,7 @@ t_node_class geo_array = {
 	.init=cls_node_init_geo_array,
 	.free=cls_node_geo_array_free,
 	.get_ref = cls_node_get_ref_geo_array,
+	.rebind = geo_array_rebind,
 };
 
 t_node_class datum = {
@@ -900,6 +933,7 @@ t_node_class datum = {
 	.init=cls_node_init_datum,
 	.free=cls_node_datum_free,
 	.get_ref = cls_node_get_ref,
+	.rebind = datum_rebind,
 };
 
 

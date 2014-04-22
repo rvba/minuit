@@ -288,7 +288,7 @@ void screen_free(t_screen *screen)
 
 // REBIND
 
-t_screen *screen_rebind(t_scene *scene, void *ptr)
+void screen_rebind(t_scene *scene, void *ptr)
 {
 	t_screen *screen = (t_screen *) ptr;
 
@@ -300,8 +300,6 @@ t_screen *screen_rebind(t_scene *scene, void *ptr)
 		t_context *C = ctx_get();
 		C->scene->has_generic_viewport = 1;
 	}
-
-	return ptr;
 }
 
 // NEW

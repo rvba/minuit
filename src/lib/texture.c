@@ -119,9 +119,8 @@ void _texture_free(t_texture *texture)
 
 // REBIND
 
-t_texture *texture_rebind(t_scene *scene, void *ptr)
+void texture_rebind(t_scene *scene, void *ptr)
 {
-	return ptr;
 }
 
 void texture_image_bind(t_texture *texture,t_image *image)

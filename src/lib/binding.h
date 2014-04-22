@@ -27,7 +27,7 @@ typedef struct Binding
 }t_binding;
 
 void binding_update(t_binding *binding, void *ptr);
-t_binding *binding_rebind(struct Scene *sc, void *ptr);
+void binding_rebind(struct Scene *sc, void *ptr);
 t_binding *binding_new(const char *name);
 void binding_free(t_binding *binding);
 

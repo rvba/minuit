@@ -51,7 +51,7 @@ void vector_op_copy(t_vector *dst, t_vector *src);
 void vector_op_add(t_vector *dst,t_vector *src);
 void vector_show(t_vector *vector);
 
-t_vector *vector_rebind( struct Scene *sc,void *ptr);
+void vector_rebind( struct Scene *sc,void *ptr);
 
 #ifdef __cplusplus
 }

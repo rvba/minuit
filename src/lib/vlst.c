@@ -799,7 +799,7 @@ void *vlst_get_ref(t_vlst *vlst, const char *ref)
 
 // REBIND
 
-t_vlst *vlst_rebind(t_scene *sc,void *ptr)
+void vlst_rebind(t_scene *sc,void *ptr)
 {
 	t_vlst *vlst=(t_vlst *)ptr;
 
@@ -807,8 +807,6 @@ t_vlst *vlst_rebind(t_scene *sc,void *ptr)
 
 	rebind(sc,"vlst","data",(void **)&vlst->data);
 	rebind(sc,"vlst","link",(void **)&vlst->link);
-
-	return vlst;
 }
 
 // NEW

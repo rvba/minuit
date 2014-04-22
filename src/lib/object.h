@@ -96,7 +96,7 @@ void 		cls_object_draw_light(t_object *object);
 void 		cls_object_draw_point(t_object *object);
 
 t_object *	object_clone(t_object *object);
-t_object *	object_rebind(struct Scene *sc,void *ptr);
+void		object_rebind(struct Scene *sc,void *ptr);
 void 		object_build(t_object *object,const char *type);
 struct Node *	object_make(const char *type,const char *name);
 struct Node *	object_add(const char *type,const char *name);

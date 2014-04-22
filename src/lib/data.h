@@ -97,11 +97,11 @@ void		print_type(t_data_type type);
 void		 data_init(t_data_type type,void *data_dst, void *data_src);
 void *		data_add(t_data_type type,void *data);
 void *		data_copy(t_data_type type,void *data);
-t_data *	data_rebind(struct Scene *sc,void *ptr);
+void 		data_rebind(struct Scene *sc,void *ptr);
 t_data *	data_new(const char *name);
 void		data_free(t_data *data);
 
-t_datum *datum_rebind( struct Scene *sc,void *ptr);
+void datum_rebind( struct Scene *sc,void *ptr);
 t_datum *datum_new( const char *name);
 t_datum *datum_add( t_data_type type, const char *name, void *data);
 void datum_free(t_datum *datum);

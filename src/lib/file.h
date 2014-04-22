@@ -91,7 +91,7 @@ void 		word_show( t_word *word);
 void 		line_read_words( t_line *line);
 void 		line_show( t_line *line);
 t_line *	line_new(void);
-t_file *	file_rebind( struct Scene *scene, void *ptr);
+void		file_rebind( struct Scene *scene, void *ptr);
 void 		file_show( t_file *file);
 char *		file_line_get( t_file *file, int p);
 int 		file_read( t_file *file);

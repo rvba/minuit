@@ -57,7 +57,7 @@ void 		viewport_draw_outline( t_viewport *viewport);
 void *		viewport_get_ref(t_viewport *viewport, const char *ref);
 void 		viewport_draw_scene(t_viewport *viewport);
 void 		viewport_draw(t_viewport *viewport);
-t_viewport *	viewport_rebind(t_scene *scene, void *ptr);
+void		viewport_rebind(t_scene *scene, void *ptr);
 t_node *	viewport_add(const char *name);
 t_viewport *	viewport_clone(t_viewport *viewport);
 void 		_viewport_free(t_viewport *viewport);

@@ -116,7 +116,7 @@ struct Node*		block_create(const char *name);
 struct Node*		block_make(const char *name,const char *type);
 void 		block_free(t_block *block);
 t_block *	block_new(const char *name);
-t_block *	block_rebind(struct Scene *sc,void *ptr);
+void		block_rebind(struct Scene *sc,void *ptr);
 
 void cls_block_dispatch( t_block *block);
 void cls_block_dispatch( t_block *block);

@@ -66,7 +66,7 @@ void *mesh_get_ref(t_mesh *mesh, const char *ref)
 
 // REBIND
 
-t_mesh *mesh_rebind(t_scene *sc,void *ptr)
+void mesh_rebind(t_scene *sc,void *ptr)
 {
 	t_mesh *mesh=(t_mesh *)ptr;
 	
@@ -101,8 +101,6 @@ t_mesh *mesh_rebind(t_scene *sc,void *ptr)
 	mesh->state.is_selected=0;
 	mesh->state.buffer_type=buffer_empty;
 	mesh->state.is_buffer_built=0;
-
-	return mesh;
 }
 
 // FACES

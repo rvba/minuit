@@ -510,7 +510,7 @@ void block_init(t_scene *sc,t_block *block)
 
 // REBIND
 
-t_block *block_rebind(t_scene *sc,void *ptr)
+void block_rebind(t_scene *sc,void *ptr)
 {
 	t_block *block=(t_block *)ptr;
 
@@ -524,8 +524,6 @@ t_block *block_rebind(t_scene *sc,void *ptr)
 
 	t_context *C=ctx_get();
 	block_init(C->scene,block);
-
-	return block;
 }
 
 // MAKE

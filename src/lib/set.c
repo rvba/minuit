@@ -151,14 +151,12 @@ void set_block_push(t_set *set, t_block *block)
 	set_setup(set);
 }
 
-t_set *set_rebind(t_scene *sc, void *ptr)
+void set_rebind(t_scene *sc, void *ptr)
 {
 	t_set *set=(t_set *)ptr;
 
 	rebind(sc,"set","blocks",(void **)&set->blocks);
 	rebind(sc,"set","rhizomes",(void **)&set->rhizomes);
-
-	return set;
 }
 
 t_node *set_add(const char *name)

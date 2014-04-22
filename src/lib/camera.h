@@ -118,7 +118,7 @@ void 		camera_free(t_camera *camera);
 struct Node *	camera_add(const char *name);
 
 t_camera *	camera_clone(t_camera *camera);
-t_camera *	camera_rebind(struct Scene *scene, void *ptr);
+void 		camera_rebind(struct Scene *scene, void *ptr);
 t_camera *	camera_new(const char *name);
 struct Node *	camera_make(const char *name);
 

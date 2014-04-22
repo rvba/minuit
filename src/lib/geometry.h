@@ -104,7 +104,7 @@ void geo_point_show(t_geo_point *point);
 // GEO
 
 
-t_geo *geo_rebind( t_scene *sc, void *data);
+void geo_rebind( t_scene *sc, void *data);
 void geo_show(t_geo *geo);
 t_geo *geo_make( struct Context *C, const char *name);
 t_geo *geo_new(const char *name);
@@ -112,14 +112,14 @@ void geo_free(t_geo *geo);
 
 // POINT
 
-t_geo_point *geo_point_rebind( t_scene *sc, void *data);
+void geo_point_rebind( t_scene *sc, void *data);
 void geo_point_free(t_geo_point *point);
 t_geo_point *geo_point_make( struct Context *C, const char *name);
 t_geo_point *geo_point_new(const char *name);
 
 // EDGE
 
-t_geo_edge *geo_edge_rebind( t_scene *sc, void *data);
+void geo_edge_rebind( t_scene *sc, void *data);
 void geo_edge_free(t_geo_edge *edge) ;
 t_geo_edge *geo_edge_make( struct Context *C, const char *name);
 t_geo_edge *geo_edge_new(const char *name);
@@ -127,7 +127,7 @@ t_geo_edge *geo_edge_new(const char *name);
 // ARRAY
 
 void *geo_array_get_ref(t_geo_array *array, const char *ref);
-t_geo_array *geo_array_rebind( t_scene *sc, void *data);
+void geo_array_rebind( t_scene *sc, void *data);
 void geo_array_build( t_geo_array *array);
 void geo_array_free(t_geo_array *array);
 t_geo_array *geo_array_make( struct Context *C, const char *name);

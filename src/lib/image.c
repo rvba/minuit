@@ -13,6 +13,10 @@
 #include "memory.h"
 #include "file.h"
 
+void		image_rebind( struct Scene *sc, void *ptr)
+{
+}
+
 t_image *image_open( const char *path)
 {
 	t_image *image = NULL;

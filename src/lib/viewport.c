@@ -268,15 +268,13 @@ void viewport_draw(t_viewport *viewport)
 
 // ADD 
 
-t_viewport *viewport_rebind( t_scene *sc, void *ptr)
+void viewport_rebind( t_scene *sc, void *ptr)
 {
 	t_viewport *viewport=( t_viewport *) ptr;
 
 	rebind(sc, "viewport", "camera", (void **) &viewport->camera);
 	rebind(sc, "viewport", "draw", (void **) &viewport->draw);
 	rebind(sc, "viewport", "blocks", (void **) &viewport->controls);
-
-	return viewport;
 }
 
 // CLONE

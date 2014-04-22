@@ -341,9 +341,8 @@ int file_init( t_file *file)
 
 // REBIND
 
-t_file *file_rebind(t_scene *scene, void *ptr)
+void file_rebind(t_scene *scene, void *ptr)
 {
-	return ptr;
 }
 
 // FREE

@@ -271,9 +271,8 @@ t_camera *camera_clone(t_camera *camera)
 
 };
 
-t_camera *camera_rebind(t_scene *scene, void *ptr)
+void camera_rebind(t_scene *scene, void *ptr)
 {
-	return ptr;
 }
 
 

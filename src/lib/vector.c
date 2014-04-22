@@ -213,13 +213,11 @@ t_node *vector_add(const char *name)
 	return node;
 }
 
-t_vector *vector_rebind(t_scene *sc,void *ptr)
+void vector_rebind(t_scene *sc,void *ptr)
 {
 	t_vector *vector = (t_vector *)ptr;
 
 	rebind(sc,"vector","vlst",(void **)&vector->vector);
-
-	return vector;
 }
 
 t_vector *vector_new(const char *name)

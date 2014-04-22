@@ -16,6 +16,9 @@
 #include "node.h"
 #include "memory.h"
 
+void graph_rebind( struct Scene *scene, void *ptr)
+{
+}
 
 // DISJOIN
 

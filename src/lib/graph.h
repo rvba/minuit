@@ -74,6 +74,7 @@ t_dash *	graph_dash_add(t_graph *graph, t_dot *x, t_dot *y);
 t_graph *	graph_make(const char *name);
 t_graph *	graph_new(const char *name);
 void 		graph_free(t_graph *graph);
+void graph_rebind( struct Scene *scene, void *ptr);
 
 #ifdef __cplusplus
 }

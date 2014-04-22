@@ -41,7 +41,7 @@ void 		set_exec(t_set *set);
 void 		set_draw(t_set *set);
 void 		set_block_pop(t_set *set, struct Block *block);
 void 		set_block_push(t_set *set, struct Block *block);
-t_set *		set_rebind(struct Scene *sc, void *ptr);
+void		set_rebind(struct Scene *sc, void *ptr);
 struct Node *	set_add(const char *name);
 t_set *		set_clone(t_set *set);
 void 		_set_free(t_set *set);

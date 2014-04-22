@@ -341,7 +341,7 @@ void list_remove_by_id(t_lst *lst, int item_id)
 
 // REBIND
 
-t_lst *list_rebind(t_scene *sc,void *ptr)
+void list_rebind(t_scene *sc,void *ptr)
 {
 	t_lst *lst=(t_lst *)ptr;
 
@@ -349,10 +349,9 @@ t_lst *list_rebind(t_scene *sc,void *ptr)
 	rebind(sc,"list","last",(void **)&lst->last);
 	rebind(sc,"list","current",(void **)&lst->current);
 
-	return lst;
 }
 
-t_link *link_rebind(t_scene *sc,void *ptr)
+void link_rebind(t_scene *sc,void *ptr)
 {
 	t_link *link=(t_link *)ptr;
 
@@ -360,8 +359,6 @@ t_link *link_rebind(t_scene *sc,void *ptr)
 	rebind(sc,"link","next",(void **)&link->next);
 	rebind(sc,"link","prev",(void **)&link->prev);
 	rebind(sc,"link", link->id.name, (void **)&link->data);
-
-	return link;
 }
 
 t_lst *list_make( t_data_type type, const char *name)

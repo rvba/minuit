@@ -811,7 +811,7 @@ t_rhizome *rhizome_clone(t_rhizome *rhizome)
 
 // REBIND
 
-t_rhizome *rhizome_rebind(t_scene *sc,void *ptr)
+void rhizome_rebind(t_scene *sc,void *ptr)
 {
 	t_rhizome *rhizome=(t_rhizome *)ptr;
 
@@ -820,8 +820,6 @@ t_rhizome *rhizome_rebind(t_scene *sc,void *ptr)
 
 	rhizome->graph = NULL;
 	rhizome->roots = NULL;
-
-	return rhizome;
 }
 
 // FREE

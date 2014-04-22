@@ -200,7 +200,7 @@ void 		_brick_init(struct Brick *brick);
 t_brick *	brick_clone(t_brick *brick);
 struct Brick *	brick_new(const char *name);
 void *		brick_get_ref(struct Brick *brick, const char *ref);
-struct Brick *	brick_rebind(struct Scene *sc,void *ptr);
+void 		brick_rebind(struct Scene *sc,void *ptr);
 struct Node 	*brick_make(struct Block *block,const char *name,t_brick_type brick_type,enum Data_Type data_type,void *data_target);
 
 // BRICK_CLS

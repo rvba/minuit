@@ -117,23 +117,20 @@ t_dict *dict_make( const char *name)
 
 // REBIND
 
-t_symbol *symbol_rebind(t_scene *sc,void *ptr)
+void symbol_rebind(t_scene *sc,void *ptr)
 {
 	t_symbol *symbol=(t_symbol *)ptr;
 
 	rebind(sc,"symbol","data",(void **)&symbol->data);
 
-	return symbol;
 }
 
 
-t_dict *dict_rebind(t_scene *sc,void *ptr)
+void dict_rebind(t_scene *sc,void *ptr)
 {
 	t_dict *dict=(t_dict *)ptr;
 
 	rebind(sc,"dict","symbols",(void **)&dict->symbols);
-
-	return dict;
 }
 
 // NEW

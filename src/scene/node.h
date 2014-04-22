@@ -32,6 +32,7 @@ typedef struct NodeClass
 	void (* init)(struct Node *node);
 	void (* free)(struct Scene *sc,struct Node *node);
 	void *(* get_ref)(struct Node *node, const char *ref);
+	void (* rebind)(struct Scene *scene, void *ptr);
 
 }t_node_class;
 
@@ -62,6 +63,8 @@ t_node *	node_new(t_data_type type);
 t_node *	node_clone(t_node *src);
 
 void id_init	(t_id *id, const char *name);
+
+void var_rebind( struct Scene *scene, void *ptr);
 
 #ifdef __cplusplus
 }

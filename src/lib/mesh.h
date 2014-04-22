@@ -143,7 +143,7 @@ struct Node *mesh_make_empty(const char *name);
 
 t_mesh *	mesh_clone(t_mesh *mesh);
 void *		mesh_get_ref(t_mesh *mesh, const char *ref);
-t_mesh*		mesh_rebind(struct Scene *sc,void *ptr);
+void		mesh_rebind(struct Scene *sc,void *ptr);
 void 		mesh_init(struct Scene *sc,t_mesh *mesh);
 
 t_mesh *	mesh_clone(t_mesh *mesh);

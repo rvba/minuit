@@ -81,7 +81,7 @@ void 		screen_switch_to_main( void);
 
 
 t_screen *	screen_clone(t_screen *screen);
-t_screen *	screen_rebind(struct Scene *scene, void *ptr);
+void		screen_rebind(struct Scene *scene, void *ptr);
 void 		_screen_free(t_screen *screen);
 void 		screen_free(t_screen *screen);
 t_screen *	screen_new(const char *name);

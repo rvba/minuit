@@ -16,10 +16,9 @@
 #include "list.h"
 #include "memory.h"
 
-t_light *light_rebind(t_scene *sc,void *ptr)
+void light_rebind(t_scene *sc,void *ptr)
 {
-	t_light *light=(t_light *)ptr;
-	return light;
+//	t_light *light=(t_light *)ptr;
 }
 
 t_node *light_make(const char *name)

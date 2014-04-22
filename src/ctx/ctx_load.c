@@ -493,6 +493,9 @@ void load_rebind(t_scene *sc)
 		t_node *node = ( t_node *) l->data;
 		void *ptr = node->data;
 
+		if( node->cls->type != dt_var) node->cls->rebind( sc, ptr);
+
+		/*
 		switch(node->type)
 		{
 			case(dt_link): 		link_rebind(sc,ptr);break;
@@ -529,6 +532,7 @@ void load_rebind(t_scene *sc)
 				load_error = 1;
 				break;
 		}
+		*/
 	}
 }
 

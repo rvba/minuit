@@ -59,10 +59,9 @@ void *material_get_ref(t_material *material, const char *ref)
 
 // REBIND
 
-t_material *material_rebind(t_scene *sc,void *ptr)
+void material_rebind(t_scene *sc,void *ptr)
 {
-	t_material *material=(t_material *)ptr;
-	return material;
+	//t_material *material=(t_material *)ptr;
 }
 
 // FREE

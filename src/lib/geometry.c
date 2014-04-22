@@ -540,37 +540,33 @@ t_geo *geo_duplicate( t_geo *geo, float *point)
  *	*************************************************************
  */
 
-t_geo *geo_rebind( t_scene *sc, void *data)
+void geo_rebind( t_scene *sc, void *data)
 {
 	t_geo *geo = (t_geo *) data;
 	rebind( sc, "geo", "block", (void **) &geo->block);
 
-	return geo;
 }
 
-t_geo_point *geo_point_rebind( t_scene *sc, void *data)
+void geo_point_rebind( t_scene *sc, void *data)
 {
-	t_geo_point *point = (t_geo_point *) data;
-	return point;
+	//t_geo_point *point = (t_geo_point *) data;
 }
 
-t_geo_edge *geo_edge_rebind( t_scene *sc, void *data)
+void geo_edge_rebind( t_scene *sc, void *data)
 {
 	t_geo_edge *edge = (t_geo_edge *) data;
 
 	rebind( sc, "geo_edge", "a", (void **) &edge->a);
 	rebind( sc, "geo_edge", "b", (void **) &edge->b);
-	return edge;
 }
 
-t_geo_array *geo_array_rebind( t_scene *sc, void *data)
+void geo_array_rebind( t_scene *sc, void *data)
 {
 	t_geo_array *array = (t_geo_array *) data;
 
 	rebind( sc, "geo_array", "element", (void **) &array->element);
 	rebind( sc, "geo_array", "vector", (void **) &array->vector);
 	rebind( sc, "geo_array", "block", (void **) &array->block);
-	return array;
 }
 
 void *geo_array_get_ref(t_geo_array *array, const char *ref)

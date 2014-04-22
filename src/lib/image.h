@@ -16,6 +16,8 @@
 extern "C" {
 #endif
 
+struct Scene;
+
 typedef struct Image
 {
 	t_id id;
@@ -31,6 +33,7 @@ typedef struct Image
 
 }t_image;
 
+void		image_rebind( struct Scene *sc, void *prt);
 t_image *	image_open( const char *path);
 void 		image_free(t_image *image);
 t_image *	image_new(const char *name);

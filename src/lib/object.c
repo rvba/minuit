@@ -287,7 +287,7 @@ t_object *object_clone(t_object *object)
 
 // REBIND
 
-t_object *object_rebind(t_scene *sc,void *ptr)
+void object_rebind(t_scene *sc,void *ptr)
 {
 	t_object *object=(t_object *)ptr;
 
@@ -301,8 +301,6 @@ t_object *object_rebind(t_scene *sc,void *ptr)
 
 	object->action=NULL;
 	object->update=NULL;
-
-	return object;
 }
 
 // ADD

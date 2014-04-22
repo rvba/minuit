@@ -51,7 +51,7 @@ void *		vlst_get_ref(t_vlst *vlst, const char *ref);
 void *		vlst_get_pointer(t_vlst *vlst, int indice);
 void 		vlst_set_data(t_vlst *vlst, void *data, int indice);
 
-t_vlst *	vlst_rebind(struct Scene *sc,void *ptr);
+void		vlst_rebind(struct Scene *sc,void *ptr);
 void 		vlst_normal_3f(t_vlst *dst,t_vlst *vertex,t_vlst *face);
 void 		vlst_normal_4f(t_vlst *dst,t_vlst *vertex,t_vlst *face);
 void		vlst_normal_4f_direct(t_vlst *dst,t_vlst *vertex,t_vlst *face);

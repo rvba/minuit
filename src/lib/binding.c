@@ -44,13 +44,11 @@ void binding_free(t_binding *binding)
 
 // REBIND
 
-t_binding *binding_rebind(t_scene *sc, void *ptr)
+void binding_rebind(t_scene *sc, void *ptr)
 {
 	t_binding *binding = (t_binding *) ptr;
 
 	rebind(sc, "binding", "data", (void **) &binding->data);
-
-	return binding;
 }
 
 // NEW
