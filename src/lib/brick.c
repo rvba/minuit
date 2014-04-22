@@ -569,6 +569,10 @@ t_node *brick_make(t_block *block,const char *name,t_brick_type brick_type,t_dat
 	{
 		block->block_state.frame_based  =1;
 	}
+	else if(is(name,"rnd"))
+	{
+		block->block_state.frame_based  =1;
+	}
 
 	return node_brick;
 }
