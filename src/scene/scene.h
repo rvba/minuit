@@ -63,6 +63,7 @@ typedef struct Scene
 	struct Lst *datums;
 
 	struct Lst *vars;
+	struct Lst *classes;
 
 	// selections
 	struct Node *selected;
@@ -149,5 +150,8 @@ t_scene *scene_new(void);
 void scene_store(t_scene *scene, int val);
 
 void scene_delete( t_scene *sc, void *data);
+
+void scene_class_add( struct Scene *scene, int type, void *cls);
+void *scene_class_get( struct Scene *scene, int type);
 
 #endif

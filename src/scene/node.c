@@ -1008,12 +1008,15 @@ void cls_node_lst_set( t_scene *sc, t_node *node)
 		case( dt_geo_edge): node->cls->lst = sc->geos; break;
 		case( dt_geo_array): node->cls->lst = sc->geos; break;
 		case( dt_datum): node->cls->lst = sc->datums; break;
+		case( dt_undefined): break;
 		default: printf("[ERROR cls_node_lst_set] Unkown type %s\n", data_name_get( node->cls->type)); break;
 	}
 }
 
 void cls_node_cls_set( t_node *node)
 {
+	t_scene *scene;
+
 	switch( node->type)
 	{
 		case( dt_mesh): node->cls = &mesh; break;
@@ -1048,6 +1051,10 @@ void cls_node_cls_set( t_node *node)
 		case( dt_geo_edge): node->cls = &geo_edge; break;
 		case( dt_geo_array): node->cls = &geo_array; break;
 		case( dt_datum): node->cls = &datum; break;
+		case( dt_undefined):
+			scene = scene_get();
+			node->cls = scene_class_get( scene, node->extra_type);
+			break;
 		default: printf("[ERROR cls_node_cls_set] Unkown type %s\n", data_name_get( node->type)); break;
 	}
 }
@@ -1088,6 +1095,7 @@ t_node *node_new(t_data_type type)
 
 	node->data=NULL;
 	node->type=type;
+	node->extra_type = 0;
 	node->store = 0;
 	node->size = 0;
 

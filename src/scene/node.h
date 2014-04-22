@@ -48,6 +48,7 @@ typedef struct Node
 	int store;
 	int garbage;
 	int size;
+	int extra_type;
 
 	t_data_type type;
 	struct NodeClass *cls;

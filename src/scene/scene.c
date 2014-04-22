@@ -30,6 +30,32 @@ t_scene *scene_get(void)
 	return SCENE;
 }
 
+void scene_class_add( struct Scene *scene, int type, void *cls)
+{
+	t_node *node = node_new( dt_undefined);
+	node->extra_type = type;
+	node->data = cls;
+	lst_add( scene->classes, node, "node");
+}
+
+void *scene_class_get( struct Scene *scene, int type)
+{
+	t_link *l;
+	t_node *node;
+	for( l = scene->classes->first; l; l = l->next)
+	{
+		node = l->data;
+		if( node->extra_type == type)
+		{
+			return node->data;
+		}
+	}
+
+	printf("[SCENE] Warning can't find class %d\n", type);
+
+	return NULL;
+}
+
 void scene_store(t_scene *scene, int val)
 {
 	//if( scene->debug_all) printf("scene_store %d\n", val);
@@ -569,6 +595,7 @@ t_scene *scene_new(void)
 	sc->graphs=lst_new("graphs");
 	sc->geos=lst_new("geos");
 	sc->datums = lst_new("datums");
+	sc->classes = lst_new("classes");
 
 	sc->tmp_colors=lst_new("tmp_colors");
 

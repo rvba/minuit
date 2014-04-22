@@ -61,6 +61,7 @@ char name_binding[] = "binding";
 char name_light[] = "light";
 char name_material[] = "material";
 char name_datum[] = "datum";
+char name_undefined[] = "undefined";
 
 void cls_data_init(t_data *data)
 {
@@ -116,6 +117,7 @@ char *data_name_get(t_data_type type)
 		case dt_material: return name_material; break;
 		case dt_light: return name_light; break;
 		case dt_datum: return name_datum; break;
+		case dt_undefined: return name_undefined; break;
 		default: printf("data_name_get type not implemented %d\n", type);return name_default; break;
 	}
 }
