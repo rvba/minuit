@@ -493,46 +493,7 @@ void load_rebind(t_scene *sc)
 		t_node *node = ( t_node *) l->data;
 		void *ptr = node->data;
 
-		if( node->cls->type != dt_var) node->cls->rebind( sc, ptr);
-
-		/*
-		switch(node->type)
-		{
-			case(dt_link): 		link_rebind(sc,ptr);break;
-			case(dt_list): 		list_rebind(sc,ptr); break;
-			case(dt_object): 	object_rebind(sc,ptr); break;
-			case(dt_mesh): 		mesh_rebind(sc,ptr); break;
-			case(dt_brick): 	brick_rebind(sc,ptr); break;
-			case(dt_block): 	block_rebind(sc,ptr); break;
-			case(dt_light): 	light_rebind(sc,ptr); break;
-			case(dt_material): 	material_rebind(sc,ptr); break;
-			case(dt_vlst): 		vlst_rebind(sc,ptr); break;
-			case(dt_data): 		data_rebind(sc,ptr);break;
-			case(dt_file): 		file_rebind(sc,ptr);break;
-			case(dt_texture): 	texture_rebind(sc,ptr);break;
-			case(dt_screen): 	screen_rebind(sc,ptr);break;
-			case(dt_option): 	option_rebind(sc,ptr);break;
-			case(dt_camera): 	camera_rebind(sc,ptr);break;
-			case(dt_dict): 		dict_rebind(sc,ptr); break;
-			case(dt_symbol): 	symbol_rebind(sc,ptr); break;
-			case(dt_vector) : 	vector_rebind(sc,ptr);break; 
-			case(dt_viewport) : 	viewport_rebind(sc,ptr);break; 
-			case(dt_set) : 		set_rebind(sc,ptr);break; 
-			case(dt_binding) : 	binding_rebind(sc,ptr);break; 
-			case(dt_rhizome) : 	rhizome_rebind(sc,ptr);break; 
-			case(dt_geo) : 		geo_rebind(sc,ptr);break; 
-			case(dt_geo_point) : 	geo_point_rebind(sc,ptr);break; 
-			case(dt_geo_edge) : 	geo_edge_rebind(sc,ptr);break; 
-			case(dt_geo_array) : 	geo_array_rebind(sc,ptr);break; 
-			case(dt_datum):		datum_rebind(sc,ptr);break;
-
-			case(dt_var): break;
-			default:
-				printf("[ERROR load_data] Unknown type %s\n",data_name_get(node->type));
-				load_error = 1;
-				break;
-		}
-		*/
+		node->cls->rebind( sc, ptr);
 	}
 }
 
