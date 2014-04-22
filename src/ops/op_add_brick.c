@@ -1064,7 +1064,7 @@ t_node *add_slider_int_custom(t_context *C,const char *name,void *target_data,vo
 	t_brick *brick = ( t_brick *) node_brick->data;
  
 	// SET ACTION
-	brick->act=f;
+	brick->exe=f;
 	brick->brick_state.is_versatil=1;
 
 	return node_block;
