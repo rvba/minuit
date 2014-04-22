@@ -1,8 +1,10 @@
 # CTX
 set(SRC
-	ctx.c
 	ctx.h
+	ctx.c
 	ctx_browser.c
+	ctx_block.c
+	ctx_brick.c
 	ctx_compute.c
 	ctx_event.c
 	ctx_keyboard.c
