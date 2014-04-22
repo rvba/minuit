@@ -457,12 +457,6 @@ void draw_mesh_direct_selection_stencil(t_draw *draw, t_mesh *mesh)
 
 void draw_mesh_direct(t_draw *draw,t_scene *scene,t_mesh *mesh)
 {
-	// Init Buffers
-	if(mesh->state.buffer_type!=buffer_direct)
-	{
-		mesh_init_buffers(mesh,buffer_direct); 
-	}
-
 	// Material
 	if (draw->with_material && draw->mode != mode_selection)
 	{

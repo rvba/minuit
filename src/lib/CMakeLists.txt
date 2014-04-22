@@ -6,13 +6,11 @@ set(SRC
 	binding.c
 	binding.h
 	block.c
-	block_draw.c
 	block.h
 	brick_exe.c
 	brick.c
 	brick_act.c
 	brick_cls.c
-	brick_draw.c
 	brick.h
 	camera.c
 	camera.h

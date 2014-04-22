@@ -17,6 +17,7 @@
 #include "viewport.h"
 #include "list.h"
 #include "object.h"
+#include "mesh.h"
 
 // RENDER PASS
 
@@ -140,8 +141,29 @@ void ctx_render_scene_clear_pass(t_context *C)
 	draw_init(C->draw);
 }
 
+void ctx_render_init( t_context *C)
+{
+	t_link *l;
+	t_object *object;
+	t_node *node;
+	t_mesh *mesh;
+	for( l = C->scene->objects->first; l; l=l->next)
+	{
+		node = l->data;
+		object = node->data;
+		mesh = object->mesh;
+		if( mesh)
+		{
+			if(!mesh->state.is_buffer_built)  mesh_init_buffers(mesh,buffer_direct); 
+		}
+	}
+}
+
 void ctx_render(t_context *C)
 {
+	// Init Buffers
+	ctx_render_init( C);
+
 	// Check Not Off Screen
 	if(!C->app->off_screen)
 	{

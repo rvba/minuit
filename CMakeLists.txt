@@ -96,7 +96,7 @@ add_executable(
     src/minuit.c
 )
 
-target_link_libraries(minuit minuit-ctx minuit-ops minuit-ui minuit-draw minuit-scene minuit-lib minuit-app minuit-base)
+target_link_libraries(minuit minuit-ctx minuit-ops minuit-ui minuit-scene minuit-lib minuit-draw minuit-app minuit-base)
 #target_link_libraries(minuit ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${PNG_LIBRARY} ${JPEG_LIBRARY} pthread m)
 
 if(OPT_SDL)
