@@ -4,6 +4,7 @@ set(SRC
 	draw.h
 	draw_brick.c
 	draw_block.c
+	draw_object.c
 	sketch.c
 	sketch.h
 )

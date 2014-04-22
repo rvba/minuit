@@ -49,7 +49,6 @@ set(SRC
 	mode.h
 	obj.c
 	object.c
-	object_draw.c
 	object.h
 	obj.h
 	option.h
