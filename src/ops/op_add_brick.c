@@ -370,6 +370,9 @@ t_node *add_brick_switch_custom(t_context *C,t_block *block,const char *name,voi
 	// NEW BRICK
 	t_node *node_brick=brick_make(block,name,bt_switch,dt_int,ptr);
 	t_brick *brick = ( t_brick *) node_brick->data;
+
+	// Dont Draw Value
+	brick->brick_state.draw_value = 0;
 	
 	// ACTION
 	brick->act=f;
