@@ -65,6 +65,7 @@ struct Node *	add_brick_slider_float_custom(struct Context *C,struct Block *bloc
 struct Node *	add_brick_slider_int_custom(struct Context *C,struct Block *block,const char *name,void *data_target,void *(*f)(struct Brick *b));
 struct Node *	add_brick_label(struct Context *C,struct Block *block,const char *name);
 struct Node *	add_brick_switch(struct Context *C,struct Block *block,const char *name,void *data_target);
+struct Node *	add_brick_switch_custom( struct Context *C, struct Block *block, const char *name, void *data_target, void *(* f)( struct Brick *brick));
 struct Node *	add_brick_trigger(struct Context *C,struct Block *block,const char *name,void *(*f)(struct Brick *b));
 struct Node *	add_trigger(struct Context *C,const char *name,void*(* f)(struct Brick *brick));
 struct Node *	add_trigger_always(struct Context *C,const char *name,void*(* f)(struct Brick *brick));

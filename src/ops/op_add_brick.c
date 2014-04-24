@@ -372,7 +372,7 @@ t_node *add_brick_switch_custom(t_context *C,t_block *block,const char *name,voi
 	t_brick *brick = ( t_brick *) node_brick->data;
 	
 	// ACTION
-	brick->exe=f;
+	brick->act=f;
 
 	// PLUG
 	set_plug_option(brick);
