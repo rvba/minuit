@@ -195,7 +195,8 @@ void scene_color_switch_mode(t_scene *sc)
 	else
 	{
 		sc->use_tmp_colors=1;
-		bzero(COLOR,3);
+		//bzero(COLOR,3);
+		vcp3i( COLOR, sc->color);
 	}
 }
 
