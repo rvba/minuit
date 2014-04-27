@@ -697,16 +697,20 @@ void draw_lights(t_draw *draw, t_scene *scene)
 	t_link *link;
 
 	// draw lights nodes
-	for(link=scene->lights->first;link;link=link->next)
+	t_lst *lst = scene_lst_get( scene, dt_light);
+	if( lst)
+	{
+	for(link=lst->first;link;link=link->next)
 	{
 		node = ( t_node *) link->data;
 		draw_light(draw,node);
 	}
 
-	for(link=scene->lights->first;link;link=link->next)
+	for(link=lst->first;link;link=link->next)
 	{
 		node = ( t_node *) link->data;
 		draw_add_light(node); 
+	}
 	}
 }
 
@@ -728,9 +732,10 @@ void draw_objects(t_draw *draw, t_scene *scene)
 	t_link *link;
 	t_node *node;
 
-	link=scene->objects->first;
+	t_lst *lst = scene_lst_get( scene, dt_object);
+	link=lst->first;
 
-	for(link=scene->objects->first;link;link=link->next)
+	for(link=lst->first;link;link=link->next)
 	{
 		node = ( t_node *) link->data;
 		t_object *object = ( t_object *) node->data;

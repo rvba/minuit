@@ -205,13 +205,14 @@ void screen_switch_by_name( const char *name)
 {
 	t_context *C=ctx_get();
 	// check if screen exists
-	t_node *node = list_find_node_by_name(C->ui->screens,name);
+	t_lst *lst = scene_lst_get( C->scene, dt_screen);
+	t_node *node = list_find_node_by_name( lst,name);
 
 	if(node)
 	{
 		t_link *l;
 
-		for(l=C->scene->screens->first;l;l=l->next) 
+		for(l=lst->first;l;l=l->next) 
 		{
 			t_node *this_node=l->data;
 			t_screen *this_screen=this_node->data;

@@ -115,7 +115,8 @@ void ctx_render_scene(t_context *C)
 	t_viewport *viewport;
 
 	// Draw Viewports
-	for(link = scene->viewports->first; link; link = link->next)
+	t_lst *lst = scene_lst_get( scene, dt_viewport);
+	for(link = lst->first; link; link = link->next)
 	{
 		node = ( t_node *) link->data;
 		viewport = ( t_viewport *) node->data;
@@ -147,7 +148,10 @@ void ctx_render_init( t_context *C)
 	t_object *object;
 	t_node *node;
 	t_mesh *mesh;
-	for( l = C->scene->objects->first; l; l=l->next)
+	t_lst *lst = scene_lst_get( C->scene, dt_object);
+	if( lst)
+	{
+	for( l = lst->first; l; l=l->next)
 	{
 		node = l->data;
 		object = node->data;
@@ -156,6 +160,7 @@ void ctx_render_init( t_context *C)
 		{
 			if(!mesh->state.is_buffer_built)  mesh_init_buffers(mesh,buffer_direct); 
 		}
+	}
 	}
 }
 

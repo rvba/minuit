@@ -39,20 +39,25 @@ int opt_op_use_random = 0;
 
 t_set *get_current_set(t_context *C)
 {
-	if(C->scene->sets->first)
+	t_lst *lst = scene_lst_get( C->scene, dt_set);
+	t_set *set = NULL;
+	if( lst)
 	{
-		t_node *node  = ( t_node *) C->scene->sets->first->data;
-		t_set  *set = ( t_set *) node->data;
-		return set;
+		if( lst->first)
+		{
+			t_node *node  = ( t_node *) lst->first->data;
+			set = ( t_set *) node->data;
+		}
 	}
 	else
 	{
 		op_new_set("set");
+		t_lst *lst = scene_lst_get( C->scene, dt_set);
 
-		t_node *node  = ( t_node *) C->scene->sets->first->data;
-		t_set  *set = ( t_set *) node->data;
-		return set;
+		t_node *node  = ( t_node *) lst->first->data;
+		set = ( t_set *) node->data;
 	}
+	return set;
 }
 
 // GET FIRST BRICK

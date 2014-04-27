@@ -30,7 +30,8 @@ void ctx_set_exec(struct Context *C)
 		C->event->loop_step = 0;
 
 		// For All Sets
-		for(link = C->scene->sets->first; link; link = link->next)
+		t_lst *lst = scene_lst_get( C->scene, dt_set);
+		for(link = lst->first; link; link = link->next)
 		{
 			t_node *node = ( t_node *) link->data;
 			t_set *set = ( t_set *) node->data;

@@ -90,41 +90,8 @@ void scene_store(t_scene *scene, int val)
 
 // get lst
 
-//t_lst *scene_lst_get(t_scene *sc,const char *type)
 t_lst *scene_lst_get( t_scene *sc, t_data_type type)
 {
-	/*
-	t_lst *lst=NULL;
-
-	if(is(type,"screen"))  lst=sc->screens; 
-	else if(is(type,"mesh"))  lst=sc->meshes; 
-	else if(is(type,"block"))  lst=sc->blocks; 
-	else if(is(type,"brick"))  lst=sc->bricks; 
-	else if(is(type,"light"))  lst=sc->lights; 
-	else if(is(type,"object"))  lst=sc->objects; 
-	else if(is(type,"file"))  lst=sc->files; 
-	else if(is(type,"material"))  lst=sc->materials; 
-	else if(is(type,"list"))  lst=sc->lists; 
-	else if(is(type,"link"))  lst=sc->links; 
-	else if(is(type,"texture"))  lst=sc->textures; 
-	else if(is(type,"camera"))  lst=sc->cameras; 
-	else if(is(type,"dict"))  lst=sc->dicts; 
-	else if(is(type,"symbols"))  lst=sc->symbols; 
-	else if(is(type,"viewport"))  lst=sc->viewports; 
-	else if(is(type,"set"))  lst=sc->sets; 
-	else if(is(type,"rhizome"))  lst=sc->rhizomes; 
-
-	if(lst)
-	{
-		return lst;
-	}
-	else
-	{
-		printf("[ERROR scene_lst_get] Unknown type:%s\n",type);
-		return NULL;
-	}
-	*/
-
 	t_node_class *cls = classes[ type];
 	return cls->lst;
 }
@@ -135,7 +102,8 @@ t_node *scene_get_data(t_scene *sc,void *ptr)
 	t_node *n;
 	t_data *d;
 
-	for(l=sc->datas->first;l;l=l->next)
+	t_lst *lst = scene_lst_get( sc, dt_data);
+	for(l=lst->first;l;l=l->next)
 	{
 		n = ( t_node *) l->data;
 		d = ( t_data *) n->data;
@@ -153,7 +121,8 @@ t_node *scene_get_var(t_scene *sc,void *ptr)
 	t_link *l;
 	t_node *n;
 
-	for(l=sc->vars->first;l;l=l->next)
+	t_lst *lst = scene_lst_get( sc, dt_var);
+	for(l=lst->first;l;l=l->next)
 	{
 		n = ( t_node *) l->data;
 		if(n->id_ptr==ptr) return n;
@@ -180,7 +149,6 @@ t_node *scene_node_get( t_scene *sc, t_data_type type, const char *name)
 	}
 }
 
-//t_node *scene_node_exists(t_scene *sc,const char *type,const char *name)
 t_node *scene_node_exists( t_scene *sc, t_data_type type, const char *name)
 {
 	t_lst *lst=scene_lst_get(sc,type);
@@ -303,8 +271,6 @@ int scene_id_get(t_scene *sc)
 
 void scene_node_free( t_scene *sc, t_node *node)
 {
-	//if( sc->debug_all) printf("scene_node_free %s \n",data_name_get(node->cls->type));
-
 	// Remove from Lst
 	lst_link_delete_by_id( node->cls->lst, node->id);
 	lst_link_delete_by_id( sc->nodes, node->id);
@@ -418,8 +384,8 @@ t_node *scene_add_node(t_scene *sc,t_data_type type,const char *name)
 	// new node
 	t_node *node = node_new(type);
 
-	// make node (init cls,size,lst)
-	node_init(node,type);
+	node->cls = scene_class_pop( sc, type);
+	if( !node->cls->lst) node->cls->lst = lst_new("lst"); 
 
 	// build data 
 	if( node->cls->build) node->data = node->cls->build( name);
@@ -501,7 +467,8 @@ void scene_remove_data_node(t_scene *sc,void *ptr)
 	t_node *node=NULL;
 	t_data *d;
 
-	for(l=sc->datas->first;l;l=l->next)
+	t_lst *lst = scene_lst_get( sc, dt_data);
+	for(l=lst->first;l;l=l->next)
 	{
 		n = ( t_node *) l->data;
 		d = ( t_data *) n->data;
@@ -596,34 +563,7 @@ t_scene *scene_new(void)
 
 	// build lists
 	sc->nodes=lst_new("nodes");
-	sc->blocks=lst_new("blocks");	
-	sc->bricks=lst_new("bricks");	
-	sc->textures=lst_new("textures");	
-	sc->materials=lst_new("materials");
-	sc->files=lst_new("files");	
-	sc->meshes=lst_new("meshes");	
-	sc->cameras=lst_new("cameras");	
-	sc->lights=lst_new("lights");	
-	sc->objects=lst_new("objects");
-	sc->screens=lst_new("screens");
-	sc->lists=lst_new("lists");
-	sc->links=lst_new("links");
-	sc->datas=lst_new("datas");
-	sc->vars=lst_new("vars");
-	sc->images=lst_new("images");
 	sc->stack=lst_new("stack");
-	sc->selections=lst_new("selections");
-	sc->vlst=lst_new("vlst");
-	sc->dicts=lst_new("dicts");
-	sc->symbols=lst_new("symbols");
-	sc->vectors=lst_new("vectors");
-	sc->viewports=lst_new("viewports");
-	sc->sets=lst_new("sets");
-	sc->bindings=lst_new("bindings");
-	sc->rhizomes=lst_new("rhizomes");
-	sc->graphs=lst_new("graphs");
-	sc->geos=lst_new("geos");
-	sc->datums = lst_new("datums");
 	sc->classes = lst_new("classes");
 
 	sc->tmp_colors=lst_new("tmp_colors");

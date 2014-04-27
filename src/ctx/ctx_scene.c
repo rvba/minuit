@@ -242,10 +242,8 @@ t_node *ctx_scene_hover( t_context *C, t_data_type type)
 	{
 		switch( type)
 		{
-			case dt_object: lst = C->scene->objects; break;
-			case dt_brick:
-				lst = C->scene->bricks; 
-					break;
+			case dt_object: lst = scene_lst_get( C->scene, dt_object); break;
+			case dt_brick: lst = scene_lst_get( C->scene, dt_brick);  break;
 			default: break;
 		}
 

@@ -8,6 +8,7 @@
  */
 
 
+#include "scene.h"
 #include "option.h"
 #include "ctx.h"
 #include "action.h"
@@ -845,149 +846,20 @@ t_node_class datum = {
 	.rebind = datum_rebind,
 };
 
-
-// TYPES
-
-t_node_class *nodes[] = {
-				&mesh,
-				&block,
-				&brick,
-				&light,
-				&object,
-				&screen,
-				&file,
-				&image,
-				&material,
-				&list,
-				&_link_,
-				&data,
-				&texture,
-				&var,
-				&option,
-				&vlst,
-				&camera,
-				&dict,
-				&symbol,
-				&vector,
-				&viewport,
-				&set,
-				&binding,
-				&rhizome,
-				&graph,
-				&geo,
-				&geo_point,
-				&geo_edge,
-				&geo_array,
-				&datum,
-			};
-
-
-void cls_node_lst_set( t_scene *sc, t_node *node)
-{
-	switch( node->cls->type)
-	{
-		case( dt_mesh): node->cls->lst = sc->meshes; break;
-		case( dt_block): node->cls->lst = sc->blocks; break;
-		case( dt_brick): node->cls->lst = sc->bricks; break;
-		case( dt_light): node->cls->lst = sc->lights; break;
-		case( dt_object): node->cls->lst = sc->objects; break;
-		case( dt_screen): node->cls->lst = sc->screens; break;
-		case( dt_file): node->cls->lst = sc->files; break;
-		case( dt_image): node->cls->lst = sc->images; break;
-		case( dt_material): node->cls->lst = sc->materials; break;
-		case( dt_list): node->cls->lst = sc->lists; break;
-		case( dt_link): node->cls->lst = sc->links; break;
-		case( dt_texture): node->cls->lst = sc->textures; break;
-		case( dt_option): node->cls->lst = NULL; break;
-		case( dt_vlst): node->cls->lst = sc->vlst; break;
-		case( dt_camera): node->cls->lst = sc->cameras; break;
-		case( dt_dict): node->cls->lst = sc->dicts; break;
-		case( dt_symbol): node->cls->lst = sc->symbols; break;
-		case( dt_vector): node->cls->lst = sc->vectors; break;
-		case( dt_binding): node->cls->lst = sc->bindings; break;
-		case( dt_rhizome): node->cls->lst = sc->rhizomes; break;
-		case( dt_graph): node->cls->lst = sc->graphs; break;
-		case( dt_viewport): node->cls->lst = sc->viewports; break;
-		case( dt_set): node->cls->lst = sc->sets; break;
-		case( dt_null): break;
-		case( dt_data):node->cls->lst = sc->datas; break;
-		case( dt_var): node->cls->lst = sc->vars; break;
-		case( dt_geo): node->cls->lst = sc->geos; break;
-		case( dt_geo_point): node->cls->lst = sc->geos; break;
-		case( dt_geo_edge): node->cls->lst = sc->geos; break;
-		case( dt_geo_array): node->cls->lst = sc->geos; break;
-		case( dt_datum): node->cls->lst = sc->datums; break;
-		case( dt_undefined): break;
-		default: printf("[ERROR cls_node_lst_set] Unkown type %s\n", data_name_get( node->cls->type)); break;
-	}
-}
-
-void cls_node_cls_set( t_node *node)
-{
-	t_scene *scene;
-
-	switch( node->type)
-	{
-		case( dt_mesh): node->cls = &mesh; break;
-		case( dt_block): node->cls = &block; break;
-		case( dt_brick): node->cls = &brick; break;
-		case( dt_light): node->cls = &light; break;
-		case( dt_object): node->cls = &object; break;
-		case( dt_screen): node->cls = &screen; break;
-		case( dt_file): node->cls = &file; break;
-		case( dt_image): node->cls = &image; break;
-		case( dt_material): node->cls = &material; break;
-		case( dt_list): node->cls = &list; break;
-		case( dt_lst): node->cls = &list; break;
-		case( dt_link): node->cls = &_link_; break;
-		case( dt_texture): node->cls = &texture; break;
-		case( dt_option): node->cls = &option; break;
-		case( dt_vlst): node->cls = &vlst; break;
-		case( dt_camera): node->cls = &camera; break;
-		case( dt_dict): node->cls = &dict; break;
-		case( dt_symbol): node->cls = &symbol; break;
-		case( dt_vector): node->cls = &vector; break;
-		case( dt_binding): node->cls = &binding; break;
-		case( dt_rhizome): node->cls = &rhizome; break;
-		case( dt_graph): node->cls = &graph; break;
-		case( dt_viewport): node->cls = &viewport; break;
-		case( dt_set): node->cls = &set; break;
-		case( dt_null): node->cls = NULL;break;
-		case( dt_data): node->cls = &data; break;
-		case( dt_var): node->cls = &var; break;
-		case( dt_geo): node->cls = &geo ; break;
-		case( dt_geo_point): node->cls = &geo_point; break;
-		case( dt_geo_edge): node->cls = &geo_edge; break;
-		case( dt_geo_array): node->cls = &geo_array; break;
-		case( dt_datum): node->cls = &datum; break;
-		case( dt_undefined):
-			scene = scene_get();
-			node->cls = scene_class_get( scene, node->extra_type);
-			break;
-		default: printf("[ERROR cls_node_cls_set] Unkown type %s\n", data_name_get( node->type)); break;
-	}
-}
-
-
-void cls_node_make( t_scene *sc, t_node *node, t_data_type type)
-{
-	node->type = type;
-	cls_node_cls_set( node);
-	cls_node_lst_set( sc, node);
-}
-
-
-// INIT 
-
-void cls_node_init(t_node *node,t_data_type type)
-{
-	t_scene *sc = ctx_scene_get();
-	cls_node_make( sc, node, type);
-}
-
 void node_init(t_node *node,t_data_type type)
 {
-	cls_node_init(node,type);
+	t_scene *scene = scene_get();
+
+	if( node->type == dt_undefined)
+	{
+		node->cls = scene_class_get( scene, node->extra_type);
+	}
+	else
+	{
+		node->cls = scene_class_pop( scene, type);
+	}
+
+	if( !node->cls->lst) node->cls->lst = lst_new("lst");
 }
 
 void node_classes_init( t_scene *scene)
@@ -1003,6 +875,7 @@ void node_classes_init( t_scene *scene)
 	scene_class_init( scene, dt_image, &image);
 	scene_class_init( scene, dt_material, &material);
 	scene_class_init( scene, dt_list, &list);
+	scene_class_init( scene, dt_lst, &list);
 	scene_class_init( scene, dt_link, &_link_);
 	scene_class_init( scene, dt_data, &data);
 	scene_class_init( scene, dt_texture, &texture);

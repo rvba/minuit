@@ -62,7 +62,8 @@ void *ctx_compute_objects(void *data)
 
 	if(C->scene->is_ready)
 	{
-		for(link_object=C->scene->objects->first;link_object;link_object=link_object->next)
+		t_lst *lst = scene_lst_get( C->scene, dt_object);
+		for(link_object=lst->first;link_object;link_object=link_object->next)
 		{
 			node_object = ( t_node *) link_object->data;
 			t_object *object = ( t_object *) node_object->data;

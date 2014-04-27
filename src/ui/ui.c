@@ -165,7 +165,8 @@ void ui_draw_term(void)
 
 void ui_draw_screens(t_context *C)
 {
-	t_link *l=C->scene->screens->first;
+	t_lst *lst = scene_lst_get( C->scene, dt_screen);
+	t_link *l = lst->first;
 	t_node *n;
 	t_screen *s;
 

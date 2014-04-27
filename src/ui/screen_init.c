@@ -153,14 +153,16 @@ void op_screen_switch()
 			else
 			{
 				update=1;
-				C->ui->screen_link_active=C->scene->screens->first;
+				t_lst *lst = scene_lst_get( C->scene, dt_screen);
+				C->ui->screen_link_active=lst->first;
 				C->ui->screen_direction=1;
 			}
 		}
 
 		if(update)
 		{
-			for(l=C->scene->screens->first;l;l=l->next)
+			t_lst *lst = scene_lst_get( C->scene, dt_screen);
+			for(l=lst->first;l;l=l->next)
 			{
 				n = ( t_node *) C->ui->screen_link_active->data;
 				int id=n->id;

@@ -14,7 +14,6 @@
 
 struct Node;
 struct Lst;
-//enum Node_Type;
 
 typedef struct Scene 
 {
@@ -35,34 +34,6 @@ typedef struct Scene
 	int debug_all;
 	
 	struct Lst *nodes;
-
-	struct Lst *files;
-	struct Lst *textures;
-	struct Lst *materials;
-	struct Lst *blocks;
-	struct Lst *bricks;
-	struct Lst *meshes;
-	struct Lst *lights;
-	struct Lst *objects;
-	struct Lst *cameras;
-	struct Lst *screens; 
-	struct Lst *images;
-	struct Lst *datas;
-	struct Lst *vlst;
-	struct Lst *lists;
-	struct Lst *links;
-	struct Lst *dicts;
-	struct Lst *symbols;
-	struct Lst *vectors;
-	struct Lst *viewports;
-	struct Lst *sets;
-	struct Lst *bindings;
-	struct Lst *rhizomes;
-	struct Lst *graphs;
-	struct Lst *geos;
-	struct Lst *datums;
-
-	struct Lst *vars;
 	struct Lst *classes;
 
 	// selections
@@ -157,5 +128,9 @@ void *scene_class_get( struct Scene *scene, int type);
 
 struct NodeClass;
 void scene_class_init( t_scene *scene, t_data_type type, struct NodeClass *cls);
+
+struct Lst *scene_lst_get( t_scene *sc, t_data_type type);
+
+struct NodeClass *scene_class_pop( t_scene *scene, t_data_type type);
 
 #endif

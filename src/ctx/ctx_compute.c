@@ -34,7 +34,10 @@ void ctx_compute(t_context *C)
 	else PLUG_DEBUG = 0;
 
 	// For Each Process
-	for(link = C->scene->sets->first;link;link=link->next)
+	t_lst *lst = scene_lst_get( C->scene, dt_set);
+	if( lst)
+	{
+	for(link = lst->first;link;link=link->next)
 	{
 		node = ( t_node *) link->data; 
 		set = ( t_set *) node->data;
@@ -97,6 +100,7 @@ void ctx_compute(t_context *C)
 			}
 		}
 
+	}
 	}
 }
 

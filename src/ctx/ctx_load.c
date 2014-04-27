@@ -276,11 +276,15 @@ void load_scene(t_context *C,t_scene *sc)
 	}
 
 	// Build Graphs
-	for(l=C->scene->rhizomes->first;l;l=l->next)
+	t_lst *lst = scene_lst_get( C->scene, dt_rhizome);
+	if( lst)
+	{
+	for(l=lst->first;l;l=l->next)
 	{
 		t_node *node = ( t_node *) l->data;
 		t_rhizome *rhizome = ( t_rhizome *) node->data;
 		rhizome_graph_build(rhizome);
+	}
 	}
 }
 
