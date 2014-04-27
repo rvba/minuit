@@ -394,17 +394,16 @@ void scene_node_load(t_scene *sc,t_node *node)
 
 t_node *scene_add_node(t_scene *sc,t_data_type type,const char *name)
 {
-	//if( sc->debug_all) printf("scene_add_node %s %s\n",data_name_get( type), name);
 	// new node
 	t_node *node = node_new(type);
 
 	// make node (init cls,size,lst)
 	node_init(node,type);
 
-	// build data (allocate struct data (!var), add node->id=g->id (!var))
+	// build data 
 	if( node->cls->build) node->data = node->cls->build( name);
 
-	node->id_ptr=node->data;
+	node->id_ptr = node->data;
 
 	if(node->type != dt_var)
 	{
