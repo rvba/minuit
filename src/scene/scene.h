@@ -98,8 +98,9 @@ void 		scene_data_node_load(t_scene *sc,struct Node *node);
 void 		scene_node_free(t_scene *sc,struct Node *node);
 int		scene_node_delete(t_scene *sc,struct Node *node);
 struct Node *	scene_node_get_by_id_global(t_scene *sc,int id);
-struct Node*	scene_node_get(t_scene *sc,const char *type,const char *name);
-struct Node*	scene_node_exists(t_scene *sc,const char *type,const char *name);
+struct Node*	scene_node_get(t_scene *sc, t_data_type type,const char *name);
+//struct Node*	scene_node_exists(t_scene *sc,const char *type,const char *name);
+struct Node*	scene_node_exists(t_scene *sc, t_data_type type,const char *name);
 void		scene_cleanup(t_scene *sc);
 
 struct Node *	scene_add(t_scene *sc, t_data_type type,const char *name);
@@ -153,5 +154,8 @@ void scene_delete( t_scene *sc, void *data);
 
 void scene_class_add( struct Scene *scene, int type, void *cls);
 void *scene_class_get( struct Scene *scene, int type);
+
+struct NodeClass;
+void scene_class_init( t_scene *scene, t_data_type type, struct NodeClass *cls);
 
 #endif

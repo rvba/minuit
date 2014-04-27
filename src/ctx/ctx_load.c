@@ -185,7 +185,6 @@ t_node *find_by_ptr(t_scene *sc,void *ptr)
 			t_data *data = ( t_data *) n->data;
 
 			if(
-				is(data->type,"app_struct")	||
 				is(data->type,"app_data") 	||
 				is(data->type,"struct_ref") 	||
 				is(data->type,"app_node") 
@@ -215,27 +214,6 @@ t_node *find_by_ptr(t_scene *sc,void *ptr)
 				}
 			}
 		}
-	}
-
-	return NULL;
-}
-
-// find struct
-
-void *find_struct(const char *target,const char *name)
-{
-	t_context *C=ctx_get();
-
-	t_node *node = scene_node_get(C->scene,target,name);
-
-	if(node)
-	{
-		return node->data;
-	}
-	{
-		load_error = 1;
-		printf("[ERROR app_get] Unknown target %s\n",name);
-		ulog((LOG_REBIND,"[ERROR app_get] Unknown target %s\n", name));
 	}
 
 	return NULL;
@@ -374,9 +352,6 @@ void load_store(t_scene *sc)
 
 				id->id_chunk = n->id_chunk;
 			}
-			else if(is(d->type,"app_struct"))
-			{
-			}
 			else if(is(d->type,"app_data"))
 			{
 			}
@@ -415,6 +390,7 @@ void load_store(t_scene *sc)
 	Relink pointers with new adresses
 */
 
+
 void rebind(t_scene *sc,const char *type,const char *name,void **ptr)
 {
 	if(*ptr)
@@ -443,11 +419,6 @@ void rebind(t_scene *sc,const char *type,const char *name,void **ptr)
 				{
 					// get ref
 					*ptr=find_ref(sc,data);
-				}
-				else if(is(data->type,"app_struct"))
-				{
-					// get internal struct by name
-					*ptr=find_struct(data->target, data->id.name);
 				}
 				else if(is(data->type,"app_node"))
 				{

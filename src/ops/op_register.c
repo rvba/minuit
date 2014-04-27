@@ -42,7 +42,7 @@ void *find_register(const char *target,const char *name)
 {
 	t_context *C=ctx_get();
 
-	t_node *node_dict=scene_node_get(C->scene,"dict",target);
+	t_node *node_dict=scene_node_get( C->scene, dt_dict, target);
 
 	if(node_dict)
 	{
@@ -136,10 +136,6 @@ void register_set(t_context *C)
 	scene_add_data(C->scene,"app_data","app","sec",				&C->app->clock->sec);
 	scene_add_data(C->scene,"app_data","app","msec",			&C->app->clock->msec);
 	scene_add_data(C->scene,"app_data","app","loaded_file",			&C->app->loaded_file);
-
-	// struct
-
-	scene_add_data(C->scene,"app_struct","block","menu_node",		menu_node);
 
 	//store
 	scene_store(C->scene,0);

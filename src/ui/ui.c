@@ -150,7 +150,7 @@ void ui_draw_term(void)
 			
 			float h = -20;
 			glTranslatef( 0, h, 0);
-			t_node *node_screen = scene_node_get( C->scene, "block", "menu_screen");
+			t_node *node_screen = scene_node_get( C->scene, dt_block, "menu_screen");
 			t_block *block = node_screen->data;
 			block->cls->draw( block);
 		}

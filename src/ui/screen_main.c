@@ -29,7 +29,7 @@ void ui_draw_menu(void)
 	if(C->ui->show_menu)
 	{
 		C->event->ui.use_scale = 0;
-		node=scene_node_get(C->scene,"block","menu_mouse");
+		node = scene_node_get( C->scene, dt_block, "menu_mouse");
 		menu = ( t_block *) node->data;
 		menu->cls->draw(menu);
 		C->event->ui.use_scale = 1;
@@ -47,7 +47,7 @@ void ui_draw_bar(void)
 	{
 		glTranslatef(0,2,0);
 		C->event->ui.use_scale = 0;
-		node=scene_node_get(C->scene,"block","bar");
+		node = scene_node_get( C->scene, dt_block, "bar");
 		menu = ( t_block *) node->data;
 		menu->cls->draw(menu);
 		C->event->ui.use_scale = 1;

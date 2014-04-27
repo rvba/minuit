@@ -27,8 +27,6 @@
 
 // store menu
 
-t_block *menu_node=NULL;
-
 t_block *add_block_block( t_context *C, const char *name)
 {
 	t_node *menu = block_make( name, "block");
@@ -400,7 +398,7 @@ t_block *add_submenu( t_context *C, const char *menu_name, const char *submenu_n
 {
 	set_draw_plug=0;
 
-	t_node *node = scene_node_get( C->scene, "block", menu_name);
+	t_node *node = scene_node_get( C->scene, dt_block, menu_name);
 	if( node)
 	{
 		char name[_NAME_];

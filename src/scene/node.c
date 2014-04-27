@@ -990,6 +990,41 @@ void node_init(t_node *node,t_data_type type)
 	cls_node_init(node,type);
 }
 
+void node_classes_init( t_scene *scene)
+{
+	scene_class_init( scene, dt_mesh, &mesh);
+	scene_class_init( scene, dt_block, &block);
+	scene_class_init( scene, dt_brick, &brick);
+	scene_class_init( scene, dt_light, &light);
+	scene_class_init( scene, dt_object, &object);
+	scene_class_init( scene, dt_object, &object);
+	scene_class_init( scene, dt_screen, &screen);
+	scene_class_init( scene, dt_file, &file);
+	scene_class_init( scene, dt_image, &image);
+	scene_class_init( scene, dt_material, &material);
+	scene_class_init( scene, dt_list, &list);
+	scene_class_init( scene, dt_link, &_link_);
+	scene_class_init( scene, dt_data, &data);
+	scene_class_init( scene, dt_texture, &texture);
+	scene_class_init( scene, dt_var, &var);
+	scene_class_init( scene, dt_option, &option);
+	scene_class_init( scene, dt_vlst, &vlst);
+	scene_class_init( scene, dt_camera, &camera);
+	scene_class_init( scene, dt_symbol, &symbol);
+	scene_class_init( scene, dt_dict, &dict);
+	scene_class_init( scene, dt_vector, &vector);
+	scene_class_init( scene, dt_viewport, &viewport);
+	scene_class_init( scene, dt_set, &set);
+	scene_class_init( scene, dt_binding, &binding);
+	scene_class_init( scene, dt_rhizome, &rhizome);
+	scene_class_init( scene, dt_graph, &graph);
+	scene_class_init( scene, dt_geo, &geo);
+	scene_class_init( scene, dt_geo_point, &geo_point);
+	scene_class_init( scene, dt_geo_edge, &geo_edge);
+	scene_class_init( scene, dt_geo_array, &geo_array);
+	scene_class_init( scene, dt_datum, &datum);
+}
+
 // NEW
 
 t_node *node_new(t_data_type type)

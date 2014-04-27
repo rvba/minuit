@@ -38,7 +38,7 @@ void state_browser( t_context *C, t_event *e)
 	}
 	else
 	{
-		t_node *node = scene_node_get( C->scene, "block", "block_browser");
+		t_node *node = scene_node_get( C->scene, dt_block, "block_browser");
 
 		switch( e->type)
 		{
@@ -59,7 +59,7 @@ void state_browser( t_context *C, t_event *e)
 void ctx_ui_browser( t_context *C)
 {
 	ctx_ui_log( "ui_browser");
-	t_node *node = scene_node_get( C->scene, "block", "block_browser");
+	t_node *node = scene_node_get( C->scene, dt_block, "block_browser");
 	if( node)
 	{
 		screen_switch_by_name( "screen_browser");

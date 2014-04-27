@@ -437,7 +437,7 @@ void ctx_ui_reset( t_context *C)
 
 void ctx_ui_menu_show( t_context *C)
 {
-	t_node *node = scene_node_get( C->scene, "block", "menu_mouse");
+	t_node *node = scene_node_get( C->scene, dt_block, "menu_mouse");
 	t_block *block = ( t_block *) node->data;
 
 	block->pos[0] = C->app->mouse->x + 10;
@@ -462,7 +462,7 @@ void ctx_ui_block_select( t_context *C)
 
 void ctx_ui_menu_hide( t_context *C)
 {
-	t_node *node = scene_node_get( C->scene, "block", "menu_mouse");
+	t_node *node = scene_node_get( C->scene, dt_block, "menu_mouse");
 	t_block *block = ( t_block *) node->data;
 
 	C->ui->show_menu = 0;
@@ -552,7 +552,7 @@ t_camera *ctx_ui_camera_get( t_context *C)
 
 	if( C->scene->has_generic_viewport)
 	{
-		node = scene_node_get( C->scene, "screen", "screen_view3d");
+		node = scene_node_get( C->scene, dt_screen, "screen_view3d");
 		if( node)
 		{
 			screen = (t_screen *) node->data;

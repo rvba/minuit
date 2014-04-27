@@ -70,6 +70,8 @@ void var_rebind( struct Scene *scene, void *ptr);
 void cls_node_id_add(t_node *node);
 void cls_node_user_add(t_node *node);
 
+void node_classes_init( struct Scene *scene);
+
 #ifdef __cplusplus
 }
 #endif

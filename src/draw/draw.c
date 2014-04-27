@@ -533,7 +533,7 @@ void draw_mesh(t_draw *draw, t_scene *scene, t_mesh *mesh)
 	// TEXTURE
 	if(draw->with_texture && mesh->state.with_texture)
 	{
-		node = scene_node_get(scene,"texture",mesh->texture_name);
+		node = scene_node_get( scene, dt_texture, mesh->texture_name);
 		texture = ( t_texture *) node->data;
 
 		if(texture && mesh->quad_uv)

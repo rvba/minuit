@@ -485,7 +485,7 @@ t_node *add_brick_operator(t_context *C,t_block *block,const char *name)
 
 t_block *add_default_menu(t_context *C, const char *name)
 {
-	t_node *menu_root = scene_node_get(C->scene,"block","menu_mouse");
+	t_node *menu_root = scene_node_get( C->scene, dt_block, "menu_mouse");
 	t_block *block_root = ( t_block *) menu_root->data;
 
 	t_node *menu = block_make(name,"menu");
@@ -1271,7 +1271,7 @@ t_node *add_brick_mesh( t_context *C, const char *name)
 t_node *add_slider_camera(t_context *C,const char *name)
 {
 	// Get default Viewport
-	t_node *node_viewport = scene_node_get(C->scene,"viewport","viewport");
+	t_node *node_viewport = scene_node_get( C->scene, dt_viewport, "viewport");
 	t_viewport *viewport = NULL;
 	t_camera *camera = NULL;
 

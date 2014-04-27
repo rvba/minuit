@@ -27,7 +27,7 @@
 
 void screen_block_add_by_name(t_context *C, t_screen *screen, const char *name)
 {
-	t_node *node = scene_node_get(C->scene,"block",name);
+	t_node *node = scene_node_get(C->scene, dt_block, name);
 	if( node)
 	{
 		t_block *block = ( t_block *) node->data;

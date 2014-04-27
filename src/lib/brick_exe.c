@@ -439,7 +439,7 @@ void *op_camera_rotate_xy(t_brick *brick)
 	float *data=brick->plug_intern.data;
 
 	// Get default Viewport
-	t_node *node_viewport = scene_node_get(C->scene,"viewport","viewport");
+	t_node *node_viewport = scene_node_get( C->scene, dt_viewport, "viewport");
 	t_viewport *viewport;
 	t_camera *camera;
 
@@ -460,7 +460,7 @@ void *op_camera_rotate_z(t_brick *brick)
 	t_context *C=ctx_get();
 
 	// Get default Viewport
-	t_node *node_viewport = scene_node_get(C->scene,"viewport","viewport");
+	t_node *node_viewport = scene_node_get( C->scene, dt_viewport, "viewport");
 	t_viewport *viewport;
 	t_camera *camera;
 

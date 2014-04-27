@@ -21,6 +21,20 @@ t_scene *SCENE=NULL;
 // tmp idcol
 int COLOR[3];
 
+#define CLASS_MAX 128
+
+t_node_class *classes[ CLASS_MAX];
+
+void scene_class_init( t_scene *scene, t_data_type type, t_node_class *cls)
+{
+	classes[ type] = cls;
+}
+
+t_node_class *scene_class_pop( t_scene *scene, t_data_type type)
+{
+	return classes[ type];
+}
+
 /***	 GET	* **/
 
 // get scene
@@ -76,8 +90,10 @@ void scene_store(t_scene *scene, int val)
 
 // get lst
 
-t_lst *scene_lst_get(t_scene *sc,const char *type)
+//t_lst *scene_lst_get(t_scene *sc,const char *type)
+t_lst *scene_lst_get( t_scene *sc, t_data_type type)
 {
+	/*
 	t_lst *lst=NULL;
 
 	if(is(type,"screen"))  lst=sc->screens; 
@@ -107,6 +123,10 @@ t_lst *scene_lst_get(t_scene *sc,const char *type)
 		printf("[ERROR scene_lst_get] Unknown type:%s\n",type);
 		return NULL;
 	}
+	*/
+
+	t_node_class *cls = classes[ type];
+	return cls->lst;
 }
 
 t_node *scene_get_data(t_scene *sc,void *ptr)
@@ -145,7 +165,7 @@ t_node *scene_get_var(t_scene *sc,void *ptr)
 
 // get node by type/name
 
-t_node *scene_node_get(t_scene *sc,const char *type,const char *name)
+t_node *scene_node_get( t_scene *sc, t_data_type type, const char *name)
 {
 	t_lst *lst=scene_lst_get(sc,type);
 
@@ -155,12 +175,13 @@ t_node *scene_node_get(t_scene *sc,const char *type,const char *name)
 	}
 	else
 	{
-		printf("[ERROR scene_node_get] Unknown type:%s\n",type);
+		printf("[ERROR scene_node_get] Unknown type:%s\n", data_name_get( type));
 		return NULL;
 	}
 }
 
-t_node *scene_node_exists(t_scene *sc,const char *type,const char *name)
+//t_node *scene_node_exists(t_scene *sc,const char *type,const char *name)
+t_node *scene_node_exists( t_scene *sc, t_data_type type, const char *name)
 {
 	t_lst *lst=scene_lst_get(sc,type);
 
@@ -618,4 +639,6 @@ void scene_init(t_scene *scene)
 {
 	// Store Localy
 	SCENE = scene;
+
+	node_classes_init( scene);
 }
