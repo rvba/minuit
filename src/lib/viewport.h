@@ -62,7 +62,7 @@ t_node *	viewport_add(const char *name);
 t_viewport *	viewport_clone(t_viewport *viewport);
 void 		_viewport_free(t_viewport *viewport);
 void 		viewport_free(t_viewport *viewport);
-t_viewport *	viewport_new(const char *name);
+void *		viewport_new(const char *name);
 t_node *	viewport_make(const char *name);
 
 #ifdef __cplusplus

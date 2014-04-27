@@ -137,7 +137,7 @@ void texture_image_bind(t_texture *texture,t_image *image)
 
 // NEW
 
-t_texture *texture_new(const char *name)
+void *texture_new(const char *name)
 {
 	t_texture *texture = (t_texture *)mem_malloc(sizeof(t_texture));
 

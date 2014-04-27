@@ -63,7 +63,7 @@ void		rhizome_rebind(struct Scene *sc,void *ptr);
 t_rhizome *	rhizome_clone(t_rhizome *rhizome);
 void 		_rhizome_free(t_rhizome *rhizome);
 void 		rhizome_free(t_rhizome *rhizome);
-t_rhizome *	rhizome_new(const char *name);
+void *		rhizome_new(const char *name);
 
 #ifdef __cplusplus
 }

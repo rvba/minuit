@@ -593,7 +593,7 @@ void data_rebind(t_scene *sc,void *ptr)
 {
 }
 
-t_data *data_new(const char *name)
+void *data_new(const char *name)
 {
 	t_data *data = (t_data *)mem_malloc(sizeof(t_data));
 	id_init(&data->id, name);
@@ -691,7 +691,7 @@ t_datum *datum_add( t_data_type type, const char *name, void *data)
 	return datum;
 }
 
-t_datum *datum_new( const char *name)
+void *datum_new( const char *name)
 {
 	t_datum *datum = ( t_datum *) mem_malloc( sizeof( t_datum));
 	id_init( &datum->id, name);

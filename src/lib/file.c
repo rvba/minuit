@@ -398,7 +398,7 @@ int file_create( const char *path)
 
 // NEW
 
-t_file *file_new(const char *path)
+void *file_new(const char *path)
 {
 	t_file *file = (t_file *) malloc( sizeof( t_file));
 

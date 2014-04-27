@@ -179,7 +179,7 @@ void term_free(t_term *term)
 
 // NEW
 
-t_term *term_new( const char *name)
+void *term_new( const char *name)
 {
 	t_term *term  = (t_term *)mem_malloc(sizeof(t_term));
 

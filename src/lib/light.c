@@ -41,7 +41,7 @@ void light_free(t_light *light)
 	mem_free( light, sizeof( t_light));
 }
 
-t_light *light_new(const char *name)
+void *light_new(const char *name)
 {
 	t_light *light = (t_light *)mem_malloc(sizeof(t_light));
 

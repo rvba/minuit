@@ -21,7 +21,7 @@ void action_free(t_action *action)
 	mem_free( action, sizeof( t_action));
 }
 
-t_action *action_new(const char *name)
+void *action_new(const char *name)
 {
 	t_action *action = (t_action *)mem_malloc(sizeof(t_action));
 	

@@ -416,7 +416,7 @@ void viewport_free(t_viewport *viewport)
 
 // NEW
 
-t_viewport *viewport_new(const char *name)
+void *viewport_new(const char *name)
 {
 	t_viewport *viewport = (t_viewport *) mem_malloc(sizeof(t_viewport));
 

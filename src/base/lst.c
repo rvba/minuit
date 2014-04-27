@@ -618,7 +618,7 @@ void lst_free(t_lst *lst)
 
 // NEW
 
-t_link *link_new(const char *name)
+void *link_new(const char *name)
 {
 	t_link *link = (t_link *)mem_malloc(sizeof(t_link));
 
@@ -634,7 +634,7 @@ t_link *link_new(const char *name)
 	return link;
 }
 
-t_lst *lst_new(const char *name)
+void *lst_new(const char *name)
 {
 	t_lst *lst = (t_lst *)mem_malloc(sizeof(t_lst));
 

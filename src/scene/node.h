@@ -26,7 +26,7 @@ typedef struct NodeClass
 	int size;
 	struct Lst *lst;
 
-	void (* build)(struct Node *node,const char *name);
+	void *(* build)( const char *name);
 	void (* link)(struct Node *node);
 	void (* del)( void *data);
 	void (* init)(struct Node *node);
@@ -66,6 +66,9 @@ t_node *	node_clone(t_node *src);
 void id_init	(t_id *id, const char *name);
 
 void var_rebind( struct Scene *scene, void *ptr);
+
+void cls_node_id_add(t_node *node);
+void cls_node_user_add(t_node *node);
 
 #ifdef __cplusplus
 }

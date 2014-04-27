@@ -852,7 +852,7 @@ void rhizome_free(t_rhizome *rhizome)
 
 // NEW
 
-t_rhizome *rhizome_new(const char *name)
+void *rhizome_new(const char *name)
 {
 	t_rhizome *rhizome = (t_rhizome *)mem_malloc(sizeof(t_rhizome));
 

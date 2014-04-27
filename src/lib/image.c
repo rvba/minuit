@@ -35,7 +35,7 @@ void image_free(t_image *image)
 {
 }
 
-t_image *image_new(const char *name)
+void *image_new(const char *name)
 {
 	t_image *image = (t_image *)mem_malloc(sizeof(t_image));
 

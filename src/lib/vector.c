@@ -220,7 +220,7 @@ void vector_rebind(t_scene *sc,void *ptr)
 	rebind(sc,"vector","vlst",(void **)&vector->vector);
 }
 
-t_vector *vector_new(const char *name)
+void *vector_new(const char *name)
 {
 	t_vector *vector = (t_vector *) mem_malloc(sizeof(t_vector));
 

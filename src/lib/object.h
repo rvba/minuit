@@ -100,7 +100,7 @@ void		object_rebind(struct Scene *sc,void *ptr);
 void 		object_build(t_object *object,const char *type);
 struct Node *	object_make(const char *type,const char *name);
 struct Node *	object_add(const char *type,const char *name);
-t_object*	object_new(const char *name);
+void *		object_new(const char *name);
 
 void 		_object_free(t_object *object);
 void 		object_free(t_object *object);

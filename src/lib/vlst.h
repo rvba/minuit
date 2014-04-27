@@ -44,7 +44,7 @@ void 		vlst_update_data( struct Brick *brick, t_vlst *vlst,t_vlst *caller);
 void		vlst_free(t_vlst *vlst);
 void 		vlst_delete( t_vlst *vlst);
 void 		vlst_init(t_vlst *vlst);
-t_vlst *	vlst_new(const char *name);
+void *		vlst_new(const char *name);
 t_vlst *	vlst_make(const char *name,t_data_type type,int length, int count);
 
 void *		vlst_get_ref(t_vlst *vlst, const char *ref);

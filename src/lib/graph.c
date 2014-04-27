@@ -318,7 +318,7 @@ t_graph *graph_make(const char *name)
 
 // NEW
 
-t_dot *dot_new(void *data)
+void *dot_new(void *data)
 {
 	t_dot *dot = (t_dot *)mem_malloc(sizeof(t_dot));
 
@@ -333,7 +333,7 @@ t_dot *dot_new(void *data)
 	return dot;
 }
 
-t_dash *dash_new(t_dot *x, t_dot *y)
+void *dash_new(t_dot *x, t_dot *y)
 {
 	t_dash *dash = (t_dash *)mem_malloc(sizeof(t_dash));
 
@@ -343,7 +343,7 @@ t_dash *dash_new(t_dot *x, t_dot *y)
 	return dash;
 }
 
-t_graph *graph_new(const char *name)
+void *graph_new(const char *name)
 {
 	t_graph *graph = (t_graph *)mem_malloc(sizeof(t_graph));
 

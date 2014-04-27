@@ -123,7 +123,7 @@ struct Mesh
 
 void 		mesh_vertex_add(t_mesh *mesh, float *v);
 void		mesh_uv_add(t_mesh *mesh,int *uvs,int totuv);
-t_mesh*		mesh_new(const char *name);
+void * 		mesh_new(const char *name);
 
 void		 _mesh_free(t_mesh *mesh);
 void 		mesh_free(t_mesh *mesh);

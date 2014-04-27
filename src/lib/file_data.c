@@ -132,7 +132,7 @@ void line_show(t_line *line)
 	printf("\n");
 }
 
-t_line *line_new(void)
+void *line_new(void)
 {
 	t_line *line=(t_line *)malloc(sizeof(t_line));
 	line->size=0;

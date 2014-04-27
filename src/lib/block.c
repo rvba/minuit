@@ -583,7 +583,7 @@ void block_free( t_block *block)
 
 // NEW
 
-t_block *block_new(const char *name)
+void *block_new(const char *name)
 {
 	t_block *block  = (t_block *) mem_malloc( sizeof( t_block));
 

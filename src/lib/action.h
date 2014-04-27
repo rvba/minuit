@@ -34,7 +34,7 @@ struct Action
 // ACTION
 
 void action_free(t_action *action);
-t_action *action_new(const char *name);
+void *action_new(const char *name);
 void exe_add_action(t_action *action);
 
 #ifdef __cplusplus

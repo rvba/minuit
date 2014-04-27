@@ -180,7 +180,7 @@ void option_free(t_option *option)
 {
 }
 
-t_option *option_new(const char *name)
+void *option_new(const char *name)
 {
 	t_option *option = (t_option *)mem_malloc(sizeof(t_option));
 	id_init( &option->id, name);

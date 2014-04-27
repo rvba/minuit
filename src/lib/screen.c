@@ -304,7 +304,7 @@ void screen_rebind(t_scene *scene, void *ptr)
 
 // NEW
 
-t_screen *screen_new(const char *name)
+void *screen_new(const char *name)
 {
 	t_screen *screen=(t_screen *)mem_malloc(sizeof(t_screen));
 

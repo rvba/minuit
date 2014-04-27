@@ -390,7 +390,7 @@ t_mesh *mesh_clone(t_mesh *mesh)
 
 // NEW
 
-t_mesh *mesh_new(const char *name)
+void *mesh_new(const char *name)
 {
 	t_mesh *mesh = (t_mesh *)mem_malloc(sizeof(t_mesh));
 

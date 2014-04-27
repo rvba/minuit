@@ -135,7 +135,7 @@ void dict_rebind(t_scene *sc,void *ptr)
 
 // NEW
 
-t_symbol *symbol_new(const char *name)
+void *symbol_new(const char *name)
 {
 	t_symbol *symbol = (t_symbol *)mem_malloc(sizeof(t_symbol));
 
@@ -151,7 +151,7 @@ t_symbol *symbol_new(const char *name)
 }
 	
 
-t_dict *dict_new(const char *name)
+void *dict_new(const char *name)
 {
 	t_dict *dict = (t_dict *)mem_malloc(sizeof(t_dict));
 

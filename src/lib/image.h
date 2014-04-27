@@ -36,7 +36,7 @@ typedef struct Image
 void		image_rebind( struct Scene *sc, void *prt);
 t_image *	image_open( const char *path);
 void 		image_free(t_image *image);
-t_image *	image_new(const char *name);
+void * 		image_new(const char *name);
 t_image *	img_read_jpg(const char *path);
 void 		img_save_jpg(int width,int height,const char name[]);
 void 		img_save_jpg_highres(int width,int height,const char name[],unsigned char *image);

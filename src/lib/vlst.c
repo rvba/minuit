@@ -811,7 +811,7 @@ void vlst_rebind(t_scene *sc,void *ptr)
 
 // NEW
 
-t_vlst *vlst_new(const char *name)
+void *vlst_new(const char *name)
 {
 	t_vlst *vlst=(t_vlst *)mem_malloc(sizeof(t_vlst));
 

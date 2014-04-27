@@ -369,7 +369,7 @@ t_node *object_make(const char *type,const char *name)
 
 // NEW
 
-t_object *object_new(const char *name)
+void *object_new(const char *name)
 {
 	t_object *object = (t_object *)mem_malloc(sizeof(t_object));
 

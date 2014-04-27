@@ -274,7 +274,7 @@ void event_ui_log( int type)
 	}
 }
 
-t_event *event_new( const char *name)
+void *event_new( const char *name)
 {
 	t_event *event = mem_malloc( sizeof( t_event));
 	id_init( &event->id, name);

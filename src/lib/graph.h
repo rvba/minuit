@@ -56,9 +56,9 @@ typedef struct Graph
 }t_graph;
 
 
-t_dot *		dot_new(void *data);
+void * 		dot_new(void *data);
 void 		dash_free(t_dash *dash);
-t_dash *	dash_new(t_dot *x, t_dot *y);
+void * 		dash_new(t_dot *x, t_dot *y);
 void 		dot_show(t_dot *dot);
 
 void 		graph_dj_set(t_graph *graph);
@@ -72,7 +72,7 @@ int 		graph_link_exists(t_graph *graph, int id_x, int id_y);
 t_dot *	 	graph_dot_add(t_graph *graph, void *data);
 t_dash *	graph_dash_add(t_graph *graph, t_dot *x, t_dot *y);
 t_graph *	graph_make(const char *name);
-t_graph *	graph_new(const char *name);
+void *		graph_new(const char *name);
 void 		graph_free(t_graph *graph);
 void graph_rebind( struct Scene *scene, void *ptr);
 

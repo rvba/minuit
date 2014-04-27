@@ -74,7 +74,7 @@ void mode_init(t_mode *mode)
 	mode->modules=lst_new("lst");
 }
 
-t_module *module_new( const char *name, void *data)
+void *module_new( const char *name, void *data)
 {
 	t_module *module=(t_module *)mem_malloc(sizeof(t_module));
 	id_init( &module->id, name);

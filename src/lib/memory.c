@@ -62,7 +62,7 @@ void mem_show(void)
 	}
 }
 
-t_chunk *chunk_new(t_chunk_type chunk_type,t_data_type type,size_t size,int tot,void *pointer)
+void *chunk_new(t_chunk_type chunk_type,t_data_type type,size_t size,int tot,void *pointer)
 {
 	t_chunk *chunk=(t_chunk *)mem_malloc(sizeof(t_chunk));
 

@@ -38,7 +38,7 @@ t_material *	material_clone(t_material *material);
 void *		material_get_ref(t_material *material, const char *ref);
 void 		material_free(t_material *material);
 void		 _material_free(t_material *material);
-t_material*	material_new(const char *name);
+void *		material_new(const char *name);
 void		material_rebind(struct Scene *sc,void *ptr);
 
 #ifdef __cplusplus

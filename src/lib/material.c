@@ -78,7 +78,7 @@ void material_free(t_material *material)
 
 // NEW
 
-t_material *material_new(const char *name)
+void *material_new(const char *name)
 {
 	t_material *material = (t_material *)mem_malloc(sizeof(t_material));
 

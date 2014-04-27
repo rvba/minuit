@@ -276,7 +276,7 @@ void camera_rebind(t_scene *scene, void *ptr)
 }
 
 
-t_camera *camera_new(const char *name)
+void *camera_new(const char *name)
 {
 	t_camera *camera  = (t_camera *)mem_malloc(sizeof(t_camera));
 

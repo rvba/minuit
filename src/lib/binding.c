@@ -53,7 +53,7 @@ void binding_rebind(t_scene *sc, void *ptr)
 
 // NEW
 
-t_binding *binding_new(const char *name)
+void *binding_new(const char *name)
 {
 	t_binding *binding=(t_binding *)mem_malloc(sizeof(t_binding));
 

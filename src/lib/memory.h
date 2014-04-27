@@ -41,7 +41,7 @@ void 		mem_show(void);
 void 		mem_read(void);
 void 		mem_init(void);
 void 		mem_write(const char *path);
-t_chunk *	chunk_new(t_chunk_type chunk_type,t_data_type type,size_t size,int tot,void *pointer);
+void *		chunk_new(t_chunk_type chunk_type,t_data_type type,size_t size,int tot,void *pointer);
 void 		mem_remove(int id);
 
 //void mem_free(void);

@@ -295,7 +295,7 @@ void 		event_show( t_event *event);
 void 		event_free( t_event *event);
 void		event_add( t_main_event *main_event, struct MINscreen *screen, int x, int y, int type);
 void 		event_dispach( t_main_event *main_event);
-t_event *	event_new( const char *name);
+void *		event_new( const char *name);
 t_main_event *	main_event_new(void);
 void 		event_log( t_event *e);
 void 		event_ui_log( int type);

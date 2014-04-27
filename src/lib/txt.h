@@ -61,6 +61,6 @@ void txt_draw_direct_2d(char *string,float pos[3],float *color,float scale);
 void txt_free(t_txt *txt);
 
 void txt_init(t_txt *txt,const char *name);
-t_txt *txt_new(const char *data);
+void * txt_new(const char *data);
 
 #endif

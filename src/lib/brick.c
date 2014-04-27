@@ -621,7 +621,7 @@ void brick_free(t_brick *brick)
 
 // NEW
 
-t_brick *brick_new(const char *name)
+void *brick_new(const char *name)
 {
 	t_brick *brick = (t_brick *)mem_malloc(sizeof(t_brick));
 

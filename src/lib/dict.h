@@ -48,10 +48,10 @@ void *			dict_pop_data(t_dict *dict,const char *name);
 t_dict *		dict_make( const char *name);
 void			symbol_free(t_symbol *symbol);
 void			symbol_rebind(struct Scene *sc,void *ptr);
-t_symbol *		symbol_new(const char *name);
+void *			symbol_new(const char *name);
 void 			dict_free(t_dict *dict);
 void			dict_rebind(struct Scene *sc,void *ptr);
-t_dict *		dict_new(const char *name);
+void *			dict_new(const char *name);
 void 			dict_show(t_dict *dict);
 
 #ifdef __cplusplus

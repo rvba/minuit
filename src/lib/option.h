@@ -76,13 +76,12 @@ typedef struct Option
 // OPTION
 
 void option_free(t_option *option);
-t_option *option_new(const char *name);
+void * option_new(const char *name);
 t_option *option_rebind(struct Scene *scene, void *ptr);
 
 // OPTION
 
 void option_free(t_option *option);
-t_option *option_new(const char *name);
 t_option *option_rebind(struct Scene *scene, void *ptr);
 
 #ifdef __cplusplus

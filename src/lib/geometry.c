@@ -149,7 +149,7 @@ void geo_show(t_geo *geo)
 
 // NEW GEOMETRY 
 
-t_geo *geo_new( const char *name)
+void *geo_new( const char *name)
 {
 	t_geo *geo = mem_malloc(sizeof(t_geo));
 	id_init( &geo->id, name);
@@ -167,7 +167,7 @@ t_geo *geo_new( const char *name)
 
 // NEW POINT 
 
-t_geo_point *geo_point_new( const char *name)
+void *geo_point_new( const char *name)
 {
 	t_geo_point *point = mem_malloc(sizeof(t_geo_point));
 	id_init( &point->id, name);
@@ -181,7 +181,7 @@ t_geo_point *geo_point_new( const char *name)
 
 // NEW EDGE 
 
-t_geo_edge *geo_edge_new( const char *name)
+void *geo_edge_new( const char *name)
 {
 	t_geo_edge *edge = mem_malloc(sizeof(t_geo_edge));
 	id_init( &edge->id, name);
@@ -195,7 +195,7 @@ t_geo_edge *geo_edge_new( const char *name)
 
 // NEW FACE 
 
-t_geo_face *geo_face_new( const char *name)
+void *geo_face_new( const char *name)
 {
 	t_geo_face *face = mem_malloc(sizeof(t_geo_face));
 	id_init( &face->id, name);
@@ -217,7 +217,7 @@ t_geo_face *geo_face_new( const char *name)
 
 // NEW ARRAY
 
-t_geo_array *geo_array_new(const char *name)
+void *geo_array_new(const char *name)
 {
 	t_geo_array *array = mem_malloc(sizeof(t_geo_array));
 	id_init( &array->id, name);

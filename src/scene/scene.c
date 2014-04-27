@@ -402,7 +402,15 @@ t_node *scene_add_node(t_scene *sc,t_data_type type,const char *name)
 	node_init(node,type);
 
 	// build data (allocate struct data (!var), add node->id=g->id (!var))
-	node->cls->build(node,name);
+	if( node->cls->build) node->data = node->cls->build( name);
+
+	node->id_ptr=node->data;
+
+	if(node->type != dt_var)
+	{
+		cls_node_id_add(node);
+		cls_node_user_add(node);
+	}
 
 	// add to local list
 	if(node->cls->lst) lst_add(node->cls->lst,node,name); 

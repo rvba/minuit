@@ -98,11 +98,11 @@ void		 data_init(t_data_type type,void *data_dst, void *data_src);
 void *		data_add(t_data_type type,void *data);
 void *		data_copy(t_data_type type,void *data);
 void 		data_rebind(struct Scene *sc,void *ptr);
-t_data *	data_new(const char *name);
+void *		data_new(const char *name);
 void		data_free(t_data *data);
 
 void datum_rebind( struct Scene *sc,void *ptr);
-t_datum *datum_new( const char *name);
+void *datum_new( const char *name);
 t_datum *datum_add( t_data_type type, const char *name, void *data);
 void datum_free(t_datum *datum);
 void datum_init( t_datum *datum);

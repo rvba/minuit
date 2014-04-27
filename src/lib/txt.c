@@ -824,7 +824,7 @@ void txt_init(t_txt *txt,const char *name)
 	txt->use_front_color = 1;
 }
 
-t_txt *txt_new(const char *name)
+void *txt_new(const char *name)
 {
 	t_txt *txt=(t_txt *)mem_malloc(sizeof(t_txt));
 

@@ -225,7 +225,7 @@ void set_free(t_set *set)
 
 // NEW
 	
-t_set *set_new(const char *name)
+void *set_new(const char *name)
 {
 	t_set *set = (t_set *)mem_malloc(sizeof(t_set));
 

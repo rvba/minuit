@@ -37,7 +37,7 @@ t_module *		mode_module_add( t_mode *mode, const char *name, void *data);
 t_module *		ctx_module_get(struct Context *C, char *name);
 void 			ctx_module_add( struct Context *C, char *name, void *data);
 void 			mode_init( t_mode *mode);
-t_module *		module_new( const char *name, void *data);
+void * 			module_new( const char *name, void *data);
 t_mode *		mode_new( const char *name);
 
 #endif

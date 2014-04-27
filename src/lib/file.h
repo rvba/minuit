@@ -90,7 +90,7 @@ int 		word_equal( t_word *word, const char *string);
 void 		word_show( t_word *word);
 void 		line_read_words( t_line *line);
 void 		line_show( t_line *line);
-t_line *	line_new(void);
+void *		line_new(void);
 void		file_rebind( struct Scene *scene, void *ptr);
 void 		file_show( t_file *file);
 char *		file_line_get( t_file *file, int p);
@@ -104,7 +104,7 @@ int 		file_init( t_file *file);
 void 		file_free( t_file *file);
 t_file *	file_access( const char *path);
 int 		file_create( const char *path);
-t_file *	file_new( const char *path);
+void *		file_new( const char *path);
 
 #ifdef __cplusplus
 }

@@ -40,7 +40,7 @@ struct Light
 
 void 		light_show(t_light *light);
 void 		light_free(t_light *light);
-t_light*	light_new(const char *name);
+void * 		light_new(const char *name);
 void		light_rebind(struct Scene *sc,void *ptr);
 struct Node*		light_make(const char *name);
 
