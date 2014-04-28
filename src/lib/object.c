@@ -166,6 +166,23 @@ void object_block_add( t_object *object, t_block *block)
 	}
 }
 
+t_block *object_block_get( t_object *object, const char *name)
+{
+	t_link *l;
+	t_block *block;
+	t_lst *lst = object->blocks;
+	if( lst)
+	{
+		for( l = lst->first; l; l = l->next)
+		{
+			block = l->data;
+			if( is( block->id.name, name)) return block;
+		}
+	}
+
+	return NULL;
+}
+
 void *object_member_add( t_object *object, t_data_type type, const char *name, void *data)
 {
 	//t_datum *datum = datum_new( type, name, data);

@@ -105,6 +105,8 @@ void *		object_new(const char *name);
 void 		_object_free(t_object *object);
 void 		object_free(t_object *object);
 
+struct Block *object_block_get( t_object *object, const char *name);
+
 #ifdef __cplusplus
 }
 #endif
