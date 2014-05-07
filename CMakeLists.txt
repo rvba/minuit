@@ -34,7 +34,7 @@ endif()
 ###############		 GLEW	#############################
 if(OPT_GLEW)
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_GLEW")
-	find_library( GLEW_LIBRARY GLEW PATHS)
+	find_library( GLEW_LIBRARY GLEW "/usr/lib")
 endif()
 
 ###############		 SDL	#############################
