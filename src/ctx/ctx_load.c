@@ -288,6 +288,24 @@ void load_scene(t_context *C,t_scene *sc)
 	}
 }
 
+void load_module( t_context *C, t_scene *sc)
+{
+	t_link *l;
+	t_node *n;
+
+	// Loop tmp nodes  
+	for(l=sc->tmp_node->first;l;l=l->next)
+	{
+		// node
+		n = ( t_node *) l->data;	
+
+		if( n->type == dt_module)
+		{
+			lst_add( C->mode->modules, n->data, "module");
+		}
+	}
+}
+
 // STORE
 /*
 	add to MEMORY
@@ -732,6 +750,8 @@ void load_file(t_context *C,const char *path)
 
 	// add to scene 
 	load_scene(C,sc);
+
+	load_module( C, sc);
 
 	// Load Settings
 	load_settings( C);

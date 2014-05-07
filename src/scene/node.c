@@ -41,6 +41,7 @@
 #include "geometry.h"
 #include "memory.h"
 #include "node.h"
+#include "mode.h"
 
 void var_rebind( struct Scene *scene, void *ptr)
 {
@@ -92,6 +93,11 @@ void *cls_node_get_ref_camera(t_node *node, const char *ref)
 void *cls_node_get_ref_geo_array(t_node *node, const char *ref)
 {
 	return geo_array_get_ref( ( t_geo_array *) node->data, ref);
+}
+
+void *cls_node_get_ref_module(t_node *node, const char *ref)
+{
+	return module_get_ref( ( t_module *) node->data, ref);
 }
 
 void *cls_node_get_ref(t_node *node, const char *ref)
@@ -300,6 +306,10 @@ void cls_node_datum_free(t_scene *sc,t_node *node)
 	datum_free(node->data);
 }
 
+void cls_node_module_free(t_scene *sc,t_node *node)
+{
+}
+
 // INIT
 
 // get Scene ID
@@ -451,6 +461,13 @@ void cls_node_init_datum(t_node *node)
 	cls_node_init_id(node);
 	datum_init( node->data);
 }
+
+void cls_node_init_module(t_node *node)
+{
+	cls_node_init_id(node);
+	module_init( node->data);
+}
+
 
 
 // CLASSES
@@ -846,6 +863,19 @@ t_node_class datum = {
 	.rebind = datum_rebind,
 };
 
+t_node_class module = {
+	.type=dt_module,
+	.size=sizeof( t_module),
+	.lst=NULL,
+	.build=_module_new,
+	.link=cls_node_link,
+	.del=cls_node_del,
+	.init=cls_node_init_module,
+	.free=cls_node_module_free,
+	.get_ref = cls_node_get_ref_module,
+	.rebind = module_rebind,
+};
+
 void node_init(t_node *node,t_data_type type)
 {
 	t_scene *scene = scene_get();
@@ -896,6 +926,7 @@ void node_classes_init( t_scene *scene)
 	scene_class_init( scene, dt_geo_edge, &geo_edge);
 	scene_class_init( scene, dt_geo_array, &geo_array);
 	scene_class_init( scene, dt_datum, &datum);
+	scene_class_init( scene, dt_module, &module);
 }
 
 // NEW

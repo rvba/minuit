@@ -12,7 +12,25 @@
 #include "mode.h"
 #include "list.h"
 #include "memory.h"
+#include "ctx.h"
 
+void *module_get_ref( t_module *module, const char *ref)
+{
+	return NULL;
+
+}
+
+void module_rebind( struct Scene *scene, void *ptr)
+{
+	t_module *module = ( t_module *) ptr;
+
+	rebind( scene, "module", "data", (void **) &module->data);
+	rebind( scene, "module", "update", (void **) &module->update);
+}
+
+void module_init( t_module *module)
+{
+}
 
 t_module *mode_module_add(t_mode *mode, const char *name, void *data)
 {
@@ -72,6 +90,15 @@ void mode_update(t_mode *mode)
 void mode_init(t_mode *mode)
 {
 	mode->modules=lst_new("lst");
+}
+
+void *_module_new( const char *name)
+{
+	t_module *module=(t_module *)mem_malloc(sizeof(t_module));
+	id_init( &module->id, name);
+	module->data=NULL;
+	module->update=NULL;
+	return module;
 }
 
 void *module_new( const char *name, void *data)
