@@ -70,6 +70,7 @@ typedef struct Object
 	void (* action)(struct Node *node);
 	void (* update)(struct Node *node);
 	void (* draw)(struct Node *node);
+	void (* draw_screen)( struct Object *object);
 	void (* shader)( struct Object *object, int state);
 
 }t_object;

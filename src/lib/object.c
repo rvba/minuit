@@ -410,6 +410,7 @@ void *object_new(const char *name)
 	object->update=object_default;
 	object->action=NULL;
 	object->draw=NULL;
+	object->draw_screen=NULL;
 	object->shader = NULL;
 
 	return object;

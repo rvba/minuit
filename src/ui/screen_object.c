@@ -31,6 +31,8 @@ void screen_object( t_screen *screen)
 
 				object_draw_blocks( C, object);
 
+				if( object->draw_screen) object->draw_screen( object);
+
 				glPopMatrix();
 		}
 	}
