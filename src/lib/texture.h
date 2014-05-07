@@ -41,6 +41,7 @@ typedef struct Texture
 }t_texture;
 
 
+void 		texture_update( t_texture *texture, struct Image *image);
 void 		texture_show( t_texture *texture);
 void 		texture_image_load( struct Texture *texture, struct Image *image);
 t_texture *	texture_clone(t_texture *texture);
