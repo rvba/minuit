@@ -98,8 +98,7 @@ void block_delete(t_action *action)
 	t_context *C = ctx_get();
 	t_dict *args = action->args;
 
-	t_brick *brick = ( t_brick *) dict_pop_data(args,"brick");
-	t_block *block = brick->block;
+	t_block *block = ( t_block *) dict_pop_data(args,"block");
 
 	if(
 		   !block_is_connected("in",block)
@@ -116,22 +115,18 @@ void block_delete(t_action *action)
 void block_do_delete( t_block *block)
 {
 	t_action *action = action_new("action");
-	t_brick *brick = block->selected;
-
 	action->act = block_delete;
 
 	t_dict *dict = dict_make("args");
 	action->args = dict;
-	action->brick = brick;
-
-	dict_symbol_add( action->args, "brick", dt_null, brick);
+	dict_symbol_add( action->args, "block", dt_null, block);
 
 	exe_add_action(action);
 }
 
-
 int action_check( t_action *action)
 {
+	/*
 	t_brick *brick = action->brick;
 	t_set *set = brick->block->set;
 	if( set)
@@ -143,6 +138,9 @@ int action_check( t_action *action)
 	{
 		return 1;
 	}
+	*/
+
+	return 1;
 }
 
 void ctx_ui_exe(t_context *C)
@@ -159,6 +157,7 @@ void ctx_ui_exe(t_context *C)
 		if( action_check( action))
 		{
 			action->act(action);
+			C->scene->hover = NULL;
 			action_free(action);
 		}
 		else
@@ -880,6 +879,23 @@ void ctx_ui_keyboard( t_context *C, t_event *e)
 
 }
 
+void ctx_ui_delete( t_context *C, t_event *e)
+{
+	if( C->scene->hover_type == dt_brick)
+	{
+		ctx_ui_selection_set( C, C->scene->hover);
+
+		t_brick *brick = ( t_brick *) ctx_ui_selection_get( C, dt_brick);
+		t_block *block = brick->block;
+		if( !block_is_connected( "in", block) && !block_is_connected( "out", block))
+		{
+			block_do_delete( block);
+		}
+		ctx_ui_selection_release( C);
+		UI_SWAP( C, state_ui_default);
+	}
+}
+
 /*	**********************************
 	:DEFAULT
 	*********************************	*/
@@ -916,6 +932,7 @@ void state_ui_default( t_context *C, t_event *e)
 	{
 		switch( e->type)
 		{
+			case DKEY:			ctx_ui_delete( C, e); break;
 			case MOUSE_RIGHT_PRESSED: 	ctx_ui_right( C, e); break;
 			case MOUSE_LEFT_PRESSED: 	ctx_ui_left( C, e); break;
 

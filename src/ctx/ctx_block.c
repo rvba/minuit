@@ -265,7 +265,7 @@ void block_brick_delete( t_block *block, t_brick *brick)
 	t_context *C = ctx_get();
 
 	block->selected = brick;
-	 block_brick_trigger( C, block);
+	block_brick_trigger( C, block);
 }
 
 void state_block_default( t_block *block, t_event *e)
