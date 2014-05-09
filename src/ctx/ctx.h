@@ -114,6 +114,8 @@ void ctx_ui_mouse_motion( struct Context *C, int x, int y);
 void ctx_ui( struct Context *C);
 void ctx_ui_init( struct Context *C);
 
+void brick_dispatch( struct Brick *brick);
+
 // CTX_SCENE
 
 void ctx_scene_selection(struct Context *C, struct Node *node, int state);

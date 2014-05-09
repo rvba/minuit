@@ -66,7 +66,7 @@ void state_block_brick_trigger( t_block *block, t_event *e)
 	}
 	else
 	{
-		brick->cls->dispatch( brick); 
+		brick_dispatch( brick);
 	}
 }
 
@@ -74,7 +74,7 @@ void block_brick_trigger( t_context *C, t_block *block)
 {
 	t_brick *brick = block_brick_hover( C);
 	block->selected = brick;
-	brick->cls->dispatch( brick); 
+	brick_dispatch( brick);
 
 	BLOCK_SWAP( block, state_block_brick_trigger);
 }
@@ -99,9 +99,8 @@ void block_connect( t_context *C, t_block *block, t_brick *brick)
 {
 	if( ctx_mouse_hover_brick_plug_in( C, brick))
 	{
-		_cls_brick_connect( brick, block->selected);
+		brick->cls->connect( brick, block->selected);
 	}
-
 }
 
 void state_brick_linking( t_block *block, t_event *e)
@@ -189,7 +188,7 @@ void block_disconnect( t_context *C, t_block *block, t_brick *brick, t_event *e)
 	{
 		C->ui->draw_link = 1;
 
-		_cls_brick_disconnect( brick);
+		brick->cls->disconnect( brick);
 
 		block->block_state.connecting = 0;
 
@@ -338,6 +337,10 @@ void cls_block_dispatch( t_block *block)
 	for(l=C->event->events_swap->first;l;l=l->next)
 	{
 		e = l->data;
+		if( !block->state)
+		{
+			block->state = state_block_default;
+		}
 		block->state( block, e);
 	}
 }

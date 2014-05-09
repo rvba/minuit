@@ -34,6 +34,7 @@ void state_brick_slider_default( t_brick *brick, t_event *e);
 void state_brick_default( t_brick *brick, t_event *e);
 void state_brick_edit( t_brick *brick, t_event *e);
 
+
 typedef void (* State_Func) (struct Brick *, struct Event *);
 State_Func brick_state_set_default( t_brick *brick)
 {
@@ -44,69 +45,6 @@ State_Func brick_state_set_default( t_brick *brick)
 		default: return 		&state_brick_default; break;
 	}
 }
-
-int brick_check_viewport( t_brick *brick)
-{
-	t_context *C=ctx_get();
-	if(C->scene->has_generic_viewport) return 1;
-	else return 0;
-}
-
-/*	**********************************
-	:CONNECT
-	**********************************	*/
-
-void cls_brick_connect(t_brick *brick_in ,t_brick *brick_out)
-{
-	t_context *C = ctx_get();
-	C->ui->do_connect = 1;
-	C->ui->connect_brick_in = brick_in;
-	C->ui->connect_brick_out = brick_out;
-}
-
-void _cls_brick_connect(t_brick *brick_in ,t_brick *brick_out)
-{
-	t_plug *plug_brick_in = &brick_in->plug_intern;
-	t_plug *plug_brick_out = &brick_out->plug_intern;
-
-	// first Out
-	plug_brick_out->cls->connect(mode_out, plug_brick_out, plug_brick_in);
-	// Then In
-	plug_brick_in->cls->connect(mode_in, plug_brick_in, plug_brick_out);
-}
-
-/*	**********************************
-	:DISCONNECT
-	**********************************	*/
-
-void _cls_brick_disconnect(t_brick *self)
-{
-	t_brick *brick_in = self;
-	t_plug *plug_target = brick_in->plug_in.src;
-	if( plug_target)
-	{
-		t_brick *brick_out = plug_target->brick;
-		t_plug *plug_out = &brick_out->plug_intern;
-		t_plug *plug_in = &brick_in->plug_intern;
-
-		plug_out->cls->disconnect(mode_out ,plug_out);
-		plug_in->cls->disconnect(mode_in , plug_in);
-
-		// Split Graph
-		brick_rhizome_split(brick_in, brick_out);
-	}
-}
-
-void cls_brick_disconnect(t_brick *self)
-{
-	t_context *C = ctx_get();
-	t_block *block = self->block;
-	block->block_state.connecting = 1;
-	C->ui->do_disconnect = 1;
-	C->ui->connect_brick_in = self;
-}
-
-
 void brick_hover_set( t_brick *brick)
 {
 	t_context *C = ctx_get();
@@ -237,7 +175,7 @@ void state_brick_slider_default( t_brick *brick, t_event *e)
 			if( !brick->plug_in.src)
 			{
 				BRICK_SWAP( brick, state_brick_slider_trigger);
-				brick->cls->dispatch( brick);
+				brick_dispatch( brick);
 			}
 			else
 			{
@@ -307,7 +245,7 @@ void state_brick_default( t_brick *brick, t_event *e)
 	DISPATCH
 	**********************************	*/
 
-void cls_brick_dispatch( t_brick *brick)
+void brick_dispatch( t_brick *brick)
 {
 	t_context *C = ctx_get();
 	t_link *l;
@@ -315,6 +253,12 @@ void cls_brick_dispatch( t_brick *brick)
 	for(l=C->event->events_swap->first;l;l=l->next)
 	{
 		e = l->data;
+		if( !brick->state)
+		{
+			if( brick->type == bt_slider) brick->state = state_brick_slider_default;
+			else if( brick->type == bt_switch) brick->state = state_brick_switch_default;
+			else brick->state = state_brick_default;
+		}
 		brick->state( brick, e);
 	}
 }

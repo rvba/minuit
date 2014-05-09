@@ -309,7 +309,6 @@ t_block_class block_menu =
 	.link=cls_block_link,
 	.draw=cls_block_draw_menu,
 	.init=_block_init,
-	.dispatch = cls_block_dispatch,
 };
 
 // block
@@ -321,7 +320,6 @@ t_block_class block_block =
 	.link=cls_block_link,
 	.draw=cls_block_draw_block,
 	.init=_block_init,
-	.dispatch = cls_block_dispatch,
 };
 
 // bar
@@ -333,7 +331,6 @@ t_block_class block_bar =
 	.link=cls_block_link,
 	.draw=cls_block_draw_bar,
 	.init=_block_init,
-	.dispatch = cls_block_dispatch,
 };
 
 void cls_block_make_block(t_block *block)

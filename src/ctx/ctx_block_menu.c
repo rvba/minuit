@@ -176,7 +176,7 @@ void block_menu_trigger( t_context *C, t_block *block)
 {
 	t_brick *brick = block_brick_hover( C);
 	block->selected = brick;
-	brick->cls->dispatch( brick); 
+	brick_dispatch( brick);
 	BLOCK_SWAP( block, state_block_menu_brick_trigger);
 }
 
@@ -206,7 +206,7 @@ void state_block_menu_brick_trigger_fixed( t_block *block, t_event *e)
 	}
 	else
 	{
-		brick->cls->dispatch( brick); 
+		brick_dispatch( brick);
 	}
 }
 
@@ -230,7 +230,7 @@ void state_block_menu_brick_trigger( t_block *block, t_event *e)
 	}
 	else 
 	{
-		brick->cls->dispatch( brick); 
+		brick_dispatch( brick);
 	}
 }
 
@@ -288,7 +288,7 @@ void block_hover_brick( t_context *C, t_block *block, t_brick *brick, t_event *e
 		switch( e->type)
 		{
 			case MOUSE_LEFT_PRESSED:
-				brick->cls->dispatch( brick);
+				brick_dispatch( brick);
 				BLOCK_SWAP( block, state_block_menu_brick_trigger);
 				break;
 		}

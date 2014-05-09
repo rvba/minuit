@@ -49,7 +49,6 @@ typedef struct Block_Class
 	void (* link)(struct Block *self,struct Node *target);
 	void (* draw)(struct Block *self);
 	void (* init)(struct Block *self);
-	void (* dispatch)(struct Block *self);
 
 }t_block_class;
 

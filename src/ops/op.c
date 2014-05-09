@@ -25,6 +25,13 @@
 #endif
 #include "util.h"
 
+int brick_check_viewport( t_brick *brick)
+{
+	t_context *C=ctx_get();
+	if(C->scene->has_generic_viewport) return 1;
+	else return 0;
+}
+
 // store menu
 
 t_block *add_block_block( t_context *C, const char *name)

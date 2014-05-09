@@ -517,7 +517,8 @@ void brick_init(t_scene *sc,t_brick *brick)
 	plug_out->src = plug_intern;
 
 	// State
-	brick->state = state_brick_default;
+	//brick->state = state_brick_default;
+	brick->state = NULL;
 }
 
 

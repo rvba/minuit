@@ -12,6 +12,43 @@
 #include "brick.h"
 #include "camera.h"
 
+#include "scene.h"
+#include "event.h"
+#include "util.h"
+
+
+
+
+void cls_brick_connect(t_brick *brick_in ,t_brick *brick_out)
+{
+	t_plug *plug_brick_in = &brick_in->plug_intern;
+	t_plug *plug_brick_out = &brick_out->plug_intern;
+
+	// first Out
+	plug_brick_out->cls->connect(mode_out, plug_brick_out, plug_brick_in);
+	// Then In
+	plug_brick_in->cls->connect(mode_in, plug_brick_in, plug_brick_out);
+}
+
+
+void cls_brick_disconnect(t_brick *self)
+{
+	t_brick *brick_in = self;
+	t_plug *plug_target = brick_in->plug_in.src;
+	if( plug_target)
+	{
+		t_brick *brick_out = plug_target->brick;
+		t_plug *plug_out = &brick_out->plug_intern;
+		t_plug *plug_in = &brick_in->plug_intern;
+
+		plug_out->cls->disconnect(mode_out ,plug_out);
+		plug_in->cls->disconnect(mode_in , plug_in);
+
+		// Split Graph
+		brick_rhizome_split(brick_in, brick_out);
+	}
+}
+
 // DECLARATIONS
 
 void cls_brick_init(t_brick *brick)
@@ -23,13 +60,13 @@ void cls_brick_init(t_brick *brick)
 void cls_brick_init_switch( t_brick *brick)
 {
 	cls_brick_init( brick);
-	brick->state = state_brick_switch_default;
+	brick->state = NULL;
 }
 
 void cls_brick_init_slider( t_brick *brick)
 {
 	cls_brick_init( brick);
-	brick->state = state_brick_slider_default;
+	brick->state = NULL;
 }
 
 void brick_make_trigger(t_brick *brick);
@@ -49,7 +86,6 @@ t_brick_class brick_trigger = {
 	.init=cls_brick_init,
 	.connect=cls_brick_connect,
 	.disconnect=cls_brick_disconnect,
-	.dispatch=cls_brick_dispatch,
 	};
 
 // SLIDER
@@ -62,7 +98,6 @@ t_brick_class brick_slider = {
 	.init=cls_brick_init_slider,
 	.connect=cls_brick_connect,
 	.disconnect=cls_brick_disconnect,
-	.dispatch=cls_brick_dispatch,
 	};
 
 // MENU
@@ -75,7 +110,6 @@ t_brick_class brick_menu = {
 	.init=cls_brick_init,
 	.connect=cls_brick_connect,
 	.disconnect=cls_brick_disconnect,
-	.dispatch=cls_brick_dispatch,
 	};
 
 // SELECTOR
@@ -88,7 +122,6 @@ t_brick_class brick_selector = {
 	.init=cls_brick_init,
 	.connect=cls_brick_connect,
 	.disconnect=cls_brick_disconnect,
-	.dispatch=cls_brick_dispatch,
 	};
 
 // SWITCH
@@ -101,7 +134,6 @@ t_brick_class brick_switch = {
 	.init=cls_brick_init_switch,
 	.connect=cls_brick_connect,
 	.disconnect=cls_brick_disconnect,
-	.dispatch=cls_brick_dispatch,
 	};
 
 // BAR
@@ -114,7 +146,6 @@ t_brick_class brick_bar = {
 	.init=cls_brick_init_switch,
 	.connect=cls_brick_connect,
 	.disconnect=cls_brick_disconnect,
-	.dispatch=cls_brick_dispatch,
 	};
 
 

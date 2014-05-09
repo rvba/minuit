@@ -511,7 +511,8 @@ void state_ui_block_trigger( t_context *C, t_event *e)
 	else
 	{
 		t_block *block = ( t_block *) ctx_ui_selection_get( C, dt_block);
-		block->cls->dispatch( block);
+		//block->cls->dispatch( block);
+		cls_block_dispatch( block);
 	}
 }
 
@@ -525,7 +526,8 @@ void ctx_ui_block_trigger( t_context *C)
 {
 	ctx_ui_block_select( C);
 	t_block *block = ( t_block *) ctx_ui_selection_get( C, dt_block);
-	block->cls->dispatch( block);
+	//block->cls->dispatch( block);
+	cls_block_dispatch( block);
 	UI_SWAP( C, state_ui_block_trigger);
 }
 
