@@ -44,6 +44,7 @@ typedef struct Scene
 	struct Lst *stack; 			 
 
 	struct Node *selection;
+	struct Node *selection_swap;
 
 	// tmp
 	struct Lst *tmp_colors;

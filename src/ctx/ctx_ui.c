@@ -249,6 +249,15 @@ void ctx_ui_selection_release( t_context *C)
 	else printf("[SELECTION RELEASE] NULL SELECTION\n");
 }
 
+void ctx_ui_selection_swap( t_context *C)
+{
+	if( C->scene->selection) C->scene->selection = NULL;
+	else printf("[SELECTION RELEASE] NULL SELECTION\n");
+
+	C->scene->selection = C->scene->selection_swap;
+	C->scene->selection_swap = NULL;
+}
+
 void *ctx_ui_selection_get( t_context *C, t_data_type type)
 {
 	if( C->scene->selection)
@@ -490,11 +499,20 @@ void ctx_ui_deselect( t_context *C, t_event *e)
 
 void state_ui_block_trigger( t_context *C, t_event *e)
 {
-	ctx_ui_log( "ui_block_trigger");
+		t_block *block = ( t_block *) ctx_ui_selection_get( C, dt_block);
+		char txt[128];
+		sprintf(txt, "ui_block_trigger %s", block->id.name);
+	ctx_ui_log(txt);
+	//ctx_ui_log( "ui_block_trigger");
 	if( e->type == UI_BLOCK_RELEASED)
 	{
 		ctx_ui_selection_release( C);
 		UI_SWAP( C, *UI_STATE);
+	}
+	else if( e->type == UI_BLOCK_SWAP)
+	{
+		ctx_ui_selection_swap( C);
+		//UI_SWAP( C, *UI_STATE);
 	}
 	else if( e->type == ESCKEY)
 	{

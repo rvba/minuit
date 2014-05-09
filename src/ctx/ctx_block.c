@@ -95,6 +95,22 @@ void block_linking_stop( t_context *C, t_block *block)
 	ctx_event_add( UI_BLOCK_RELEASED);
 }
 
+void block_linking_swap( t_context *C, t_block *block, t_block *block_target)
+{
+	C->scene->selection_swap = block_target->id.node;
+
+	block->block_state.connecting = 0;
+
+//	C->ui->draw_link = 0;
+
+	BLOCK_SWAP( block, state_block_default);
+	t_brick *brick = block->selected;
+	if( brick) brick->brick_state.connecting = 0;
+	block->selected = NULL;
+	ctx_event_add( UI_BLOCK_SWAP);
+
+}
+
 void block_connect( t_context *C, t_block *block, t_brick *brick)
 {
 	if( ctx_mouse_hover_brick_plug_in( C, brick))
@@ -186,7 +202,13 @@ void block_disconnect( t_context *C, t_block *block, t_brick *brick, t_event *e)
 
 		block->block_state.connecting = 0;
 
-		block_linking_stop( C, block);
+
+		t_brick *brick_target = plug_target->brick;
+		t_block *block_target = brick_target->block;
+
+		block_linking_swap( C, block, block_target);
+
+		block_connect_start( C, block_target, brick_target, e);
 	}
 }
 

@@ -553,6 +553,7 @@ t_scene *scene_new(void)
 	sc->use_tmp_colors=0;
 	sc->selected=NULL;
 	sc->selection = NULL;
+	sc->selection_swap = NULL;
 	sc->hover=NULL;
 	sc->hover_type = dt_null;
 	sc->is_ready=1;

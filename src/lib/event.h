@@ -150,6 +150,7 @@ struct MINscreen;
 #define UI_BLOCK_RELEASED 	1200
 #define BLOCK_DELETE		 	1201
 #define UI_SELECT_RESET		1202
+#define UI_BLOCK_SWAP		1203
 
 #define BRICK_NULL 		0
 #define BRICK_LEFT 		1
