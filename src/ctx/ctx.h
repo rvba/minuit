@@ -94,6 +94,9 @@ inline int ui_left_clic( struct Ui *ui);
 
 // CTX_UI
 
+void state_block_exit( struct Block *block, struct Event *e);
+struct Brick *block_brick_hover( struct Context *C);
+
 void ctx_ui_freeze(struct Context *C);
 void ctx_ui_switch_show_step(struct Context *C);
 void ctx_ui_switch_show_states(struct Context *C);

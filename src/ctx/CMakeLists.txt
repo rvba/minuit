@@ -4,6 +4,7 @@ set(SRC
 	ctx.c
 	ctx_browser.c
 	ctx_block.c
+	ctx_block_menu.c
 	ctx_brick.c
 	ctx_compute.c
 	ctx_event.c
