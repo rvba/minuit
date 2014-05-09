@@ -80,7 +80,7 @@ void block_brick_trigger( t_context *C, t_block *block)
 }
 
 /*	**********************************
-	:LINKING
+	:CONNECT
 	**********************************	*/
 
 
@@ -149,12 +149,6 @@ void block_connect_start( t_context *C, t_block *block, t_brick *brick, t_event 
 
 		float v[3];
 		block_get_pos_plug_out( block, brick, v);
-
-		float dd[3] = { C->ui->pan_x, C->ui->pan_y, 0};
-		vadd( v, v, dd);
-
-		C->event->end_x = v[0];
-		C->event->end_y = v[1];
 
 		C->event->start_x = v[0];
 		C->event->start_y = v[1];
