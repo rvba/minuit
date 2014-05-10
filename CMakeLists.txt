@@ -32,9 +32,10 @@ if(OPT_OSC)
 endif()
 
 ###############		 GLEW	#############################
+
+include(cmake/dependencies.cmake)
 if(OPT_GLEW)
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_GLEW")
-	find_library( GLEW_LIBRARY GLEW PATHS "/usr/lib" "/usr/lib/x86_64-linux-gnu/")
+	FIND_GLEW()
 endif()
 
 ###############		 SDL	#############################
@@ -104,6 +105,7 @@ if(OPT_SDL)
 endif()
 
 target_link_libraries(minuit ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${PNG_LIBRARY} ${JPG} pthread m)
+
 if(OPT_OSC)
 	target_link_libraries(minuit ${LIB_OSC})
 endif()
