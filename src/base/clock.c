@@ -11,9 +11,23 @@
 #include "clock.h"
 #include "util.h"
 
+/*
+struct timeval {
+       time_t      tv_sec;     // seconds 
+       suseconds_t tv_usec;    // microseconds ( 1 / 1 000 000 )
+   };
+*/
+
 int clock_to_sec( unsigned int time)
 {
 	return time / 1000;
+}
+
+double clock_now_sec_precise( void)
+{
+	struct timeval time;
+	gettimeofday( &time, NULL);
+	return(  ( double) time.tv_sec  + ( ((double) time.tv_usec) * 1000000 ));
 }
 
 unsigned int clock_now_usec( void)

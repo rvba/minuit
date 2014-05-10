@@ -44,6 +44,7 @@ typedef struct Clock
 
 }t_clock;
 
+double 		clock_now_sec_precise( void);
 void 		clock_init( t_clock *clock);
 void 		clock_free( t_clock *clock);
 int 		clock_get_delta_sec( t_clock *clock);
