@@ -14,6 +14,7 @@
 extern "C" {
 #endif
 
+int osc_send( const char *port, const char *msg, const char *format, ...);
 int osc_server( int port);
 int osc_client( int port);
 

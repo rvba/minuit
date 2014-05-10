@@ -47,6 +47,20 @@ int osc_handler_vector(const char *path, const char *types, lo_arg ** argv, int 
     return 0;
 }
 
+int osc_handler_int(const char *path, const char *types, lo_arg ** argv, int argc, void *data, void *user_data)
+{
+    printf("[OSC SERVER][INT %d]\n", argv[0]->i);
+
+    return 0;
+}
+
+int osc_handler_quad(const char *path, const char *types, lo_arg ** argv, int argc, void *data, void *user_data)
+{
+    printf("[OSC QUAD][%d %f %f %f %f]\n", argv[0]->i, argv[1]->f,  argv[2]->f, argv[3]->f, argv[4]->f);
+
+    return 0;
+}
+
 int osc_handler_quit(const char *path, const char *types, lo_arg ** argv, int argc, void *data, void *user_data)
 {
     osc_server_done = 1;
@@ -75,6 +89,8 @@ int osc_server( int port)
 	lo_server_thread_add_method(st, NULL, NULL, osc_handler_generic, NULL);
 	lo_server_thread_add_method(st, "/a/b/c", "fff", osc_handler_vector, NULL);
 	lo_server_thread_add_method(st, "/quit", "", osc_handler_quit, NULL);
+	lo_server_thread_add_method(st, "/int", "i", osc_handler_int, NULL);
+	lo_server_thread_add_method(st, "/quad", "iffff", osc_handler_quad, NULL);
 
 	lo_server_thread_start(st);
 
@@ -89,18 +105,36 @@ int osc_server( int port)
 }
 
 
-// CLIENT
-
-
-int osc_send( const char *port, const char *msg)
+int osc_send( const char *port, const char *msg, const char *format, ...)
 {
 	lo_address t = lo_address_new(NULL, port);
+	lo_message message = lo_message_new();
 
-	if( !lo_send( t, "/msg" , "s", msg))
+	va_list args;
+	va_start( args, format);
+
+	while( *format != '\0')
+	{
+		switch( *format)
+		{
+			case 's': lo_message_add_string( message, va_arg( args, const char *)); break;
+			case 'i': lo_message_add_int32( message, va_arg( args, int)); break;
+			case 'f': lo_message_add_float( message, va_arg( args, double)); break;
+		}
+
+		++format;
+	}
+
+	va_end( args);
+	
+
+	if( !lo_send_message( t, msg, message))
 	{
 		printf("OSC error %d: %s\n", lo_address_errno(t),
 		lo_address_errstr(t));
 	}
+
+	lo_message_free( message);
 
 	return 0;
 }
@@ -182,7 +216,8 @@ int osc_client( int port)
 		}
 		else
 		{
-			osc_send( sport, msg); 
+			printf("quad!!\n");
+			osc_send( sport, "/quad", "iffff", 1, .1, .2, .3, .4); 
 		}
 
 		usleep(1000);
