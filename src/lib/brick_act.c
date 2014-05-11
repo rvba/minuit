@@ -137,7 +137,6 @@ void *op_brick_add(t_brick *brick)
 
 void *op_slider(t_brick *brick)
 {
-	ctx_ui_log("slide;::");
 	void *data = brick->plug_intern.data;
 	t_data_type type = brick->plug_intern.data_type;
 	switch( brick->state_pressed)
