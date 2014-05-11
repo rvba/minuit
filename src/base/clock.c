@@ -27,7 +27,7 @@ double clock_now_sec_precise( void)
 {
 	struct timeval time;
 	gettimeofday( &time, NULL);
-	return(  ( double) time.tv_sec  + ( ((double) time.tv_usec) * 1000000 ));
+	return(  ( double) time.tv_sec  + ((double)time.tv_usec / 1000000));
 }
 
 unsigned int clock_now_usec( void)
