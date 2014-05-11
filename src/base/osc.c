@@ -195,6 +195,7 @@ int osc_send_ints( const char *port, const char *msg, int count, int *val)
 		lo_address_errstr(t));
 	}
 
+	if( osc_log) osc_log_print( msg, message);
 	lo_message_free( message);
 
 	return 0;
