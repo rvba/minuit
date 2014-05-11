@@ -106,7 +106,6 @@ int osc_server( int port)
 	return 0;
 }
 
-
 int osc_send( const char *port, const char *msg, const char *format, ...)
 {
 	lo_address t = lo_address_new(NULL, port);
@@ -129,6 +128,28 @@ int osc_send( const char *port, const char *msg, const char *format, ...)
 
 	va_end( args);
 	
+
+	if( !lo_send_message( t, msg, message))
+	{
+		printf("OSC error %d: %s\n", lo_address_errno(t),
+		lo_address_errstr(t));
+	}
+
+	lo_message_free( message);
+
+	return 0;
+}
+
+int osc_send_ints( const char *port, const char *msg, int count, int *val)
+{
+	lo_address t = lo_address_new(NULL, port);
+	lo_message message = lo_message_new();
+
+	int i;
+	for( i = 0; i < count; i++)
+	{
+		lo_message_add_int32( message, val[i]);
+	}
 
 	if( !lo_send_message( t, msg, message))
 	{
