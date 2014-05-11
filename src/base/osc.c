@@ -17,6 +17,7 @@
 
 int osc_server_done = 0;
 int osc_debug = 0;
+int osc_log = 1;
 
 void osc_error(int num, const char *msg, const char *path)
 {
@@ -106,6 +107,42 @@ int osc_server( int port)
 	return 0;
 }
 
+void osc_log_print( const char *msg, lo_message lomsg)
+{
+	int count = lo_message_get_argc( lomsg);
+	int i;
+	char *type = lo_message_get_types( lomsg);
+	lo_arg** arg = lo_message_get_argv( lomsg);
+
+	printf("%s ", msg);
+
+	for( i = 0; i < count ; i++)
+	{
+		switch( type[i])
+		{
+			case 's': printf("s"); break;
+			case 'i': printf("i"); break;
+			case 'f': printf("f"); break;
+			case 'l': printf("l"); break;
+		}
+	}
+
+	printf(" ");
+
+	for( i = 0; i < count ; i++)
+	{
+		switch( type[i])
+		{
+			case 's': printf("%s ", &arg[i]->s); break;
+			case 'i': printf("%d ", arg[i]->i32); break;
+			case 'f': printf("%f ", arg[i]->f); break;
+			case 'l': printf("%lu ", arg[i]->i64); break;
+		}
+	}
+
+	printf("\n");
+}
+
 int osc_send( const char *port, const char *msg, const char *format, ...)
 {
 	lo_address t = lo_address_new(NULL, port);
@@ -135,6 +172,7 @@ int osc_send( const char *port, const char *msg, const char *format, ...)
 		lo_address_errstr(t));
 	}
 
+	if( osc_log) osc_log_print( msg, message);
 	lo_message_free( message);
 
 	return 0;
