@@ -174,6 +174,7 @@ int osc_send( const char *port, const char *msg, const char *format, ...)
 
 	if( osc_log) osc_log_print( msg, message);
 	lo_message_free( message);
+	lo_address_free( t);
 
 	return 0;
 }
