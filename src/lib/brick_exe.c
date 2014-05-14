@@ -1106,17 +1106,9 @@ void *op_not(t_brick *brick)
 
 // SET VLST
 
-int _pressed=0;
-int _released=0;
-
 void *op_set_vlst(t_brick *brick)
 {
-	t_context *C=ctx_get();
-
-	//op_slider_positive_non_zero(brick);
-
 	t_block *block=brick->block;
-
 	t_brick *brick_vlst = NULL;
 
 	if(is(block->id.name,"vertex"))
@@ -1137,29 +1129,10 @@ void *op_set_vlst(t_brick *brick)
 
 		if(vlst)
 		{
-
-		if( C->ui->mouse_state == UI_LEFT_PRESSED)
-		{
-			_pressed=1;
-		}
-		
-		if(_pressed== 1 && C->ui->mouse_state == UI_LEFT_RELEASED)
-		{
-			_pressed=0;
-			_released=1;
-		}
-		
-		if( C->ui->mouse_state == UI_LEFT_RELEASED)
-		{
 			if(vlst->count != vlst->count_new) 
 			{
-				if(_released)
-				{
-					_released=0;
-					vlst_update_data(brick, vlst, NULL);
-				}
+				vlst_update_data(brick, vlst, NULL);
 			}
-		}
 		}
 	}
 

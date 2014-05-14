@@ -36,6 +36,7 @@ typedef struct Set
 
 }t_set;
 
+void 		set_set_process( t_set *set);
 void 		set_setup(t_set *set);
 void 		set_exec(t_set *set);
 void 		set_draw(t_set *set);

@@ -61,7 +61,15 @@ void state_block_brick_trigger( t_block *block, t_event *e)
 	if( e->type == UI_BRICK_RELEASED)
 	{
 		ctx_event_add( UI_BLOCK_RELEASED);
-		if( block->rhizome) rhizome_setup( block->rhizome);
+		// Send to be Computed
+		if( block->rhizome)
+		{
+			rhizome_setup( block->rhizome);
+		}
+		else
+		{
+			block_set_setup( block);
+		}
 		BLOCK_SWAP( block, state_block_default);
 	}
 	else

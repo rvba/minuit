@@ -99,6 +99,8 @@ typedef struct Block
 
 // BLOCK
 
+void block_set_setup( t_block *block);
+
 void block_brick_set_order( t_block *block);
 void 		block_dash_add(t_block *block, struct Dot *dot_x, struct Dot *dot_y);
 

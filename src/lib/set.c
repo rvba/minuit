@@ -29,6 +29,13 @@
 #include "memory.h"
 
 
+void set_set_process( t_set *set)
+{
+	// Do Process
+	if(!set->processing) set->process = 1;
+	else set->process_delay = 1;
+}
+
 void set_setup(t_set *set)
 {
 	t_link *link;
@@ -57,9 +64,8 @@ void set_setup(t_set *set)
 
 	set->frame_based = frame_based;
 
-	// Do Process
-	if(!set->processing) set->process = 1;
-	else set->process_delay = 1;
+	// Send To Compute
+	set_set_process( set);
 }
 
 void set_exec(t_set *set)

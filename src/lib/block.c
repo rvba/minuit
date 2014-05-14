@@ -27,6 +27,12 @@ void cls_block_make_menu(t_block *block);
 void cls_block_make_bar(t_block *block);
 void cls_block_make_ref(t_block *block);
 
+void block_set_setup( t_block *block)
+{
+	t_set *set = block->set;
+	set_set_process( set);
+}
+
 void block_get_pos_plug_out( t_block *block, t_brick *brick, float *v)
 {
 	float pos_x = block->pos[0];
