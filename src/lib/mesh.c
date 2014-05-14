@@ -26,6 +26,23 @@
 
 void mesh_add_brick_vertex(t_context *C,t_mesh *mesh);
 
+void mesh_update( t_mesh *mesh)
+{
+	t_vlst *vlst = mesh->vertex;
+	if( vlst->count != mesh->var.tot_vertex)
+	{
+		if( mesh->state.buffer_type == buffer_direct)
+		{
+			mesh->var.tot_vertex = vlst->count;
+		}
+		else
+		{
+			// need to update buffers !
+		}
+	}
+}
+
+
 void mesh_init(t_scene *sc,t_mesh *mesh)
 {
 	int col[3];

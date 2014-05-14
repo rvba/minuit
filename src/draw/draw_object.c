@@ -19,6 +19,8 @@
 #include "screen.h"
 #include "block.h"
 
+#include "vlst.h"
+
 void cls_object_draw_light(t_object *object)
 {
 }
@@ -137,6 +139,7 @@ void cls_object_draw_mesh(t_object *object)
 
 			if(mesh)
 			{
+				mesh_update( mesh);
 				// selected
 				if(object->is_selected)
 				{
