@@ -618,6 +618,8 @@ void *block_new(const char *name)
 
 	block->state = NULL;
 
+	block->up = 1;
+
 	return block;
 }
 

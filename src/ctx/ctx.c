@@ -70,10 +70,10 @@ t_context *ctx_init(int argc,char **argv)
 	scene_init( C->scene);
 	app_init( C->app, "minuit");
 	log_init();
+	term_init();
 	mem_init();
 	op_init( C); 
 	ui_init();
-	term_init();
 	mode_init( C->mode);
 	ctx_thread_init( C);
 	exe_init();

@@ -109,8 +109,8 @@ void block_draw_bricks(t_block *block)
 		// Draw brick
 		brick->cls->draw(brick);
 
-		// Translate Up
-		if(brick->brick_state.draw) glTranslatef(0,brick->geom.height,0);
+		// Translate Up or Down
+		if(brick->brick_state.draw) glTranslatef(0,brick->geom.height * block->up ,0);
 	}
 
 	glPopMatrix();

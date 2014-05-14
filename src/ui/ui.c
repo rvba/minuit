@@ -136,24 +136,29 @@ void ui_draw_term(void)
 	{
 		C->event->ui.use_scale = 0;
 
-		if(C->draw->mode==mode_draw)
+		t_link *l;
+		t_term *t;
+		for(l = C->terms->first; l; l = l->next)
 		{
-			t_link *l;
-			t_term *t;
-			for(l = C->terms->first; l; l = l->next)
-			{
-				t = ( t_term *) l->data;
-				t->draw(t);
-				glTranslatef(t->width + 30, 0, 0);
-			}
+			t = ( t_term *) l->data;
 
-			
-			float h = -20;
-			glTranslatef( 0, h, 0);
-			t_node *node_screen = scene_node_get( C->scene, dt_block, "menu_screen");
-			t_block *block = node_screen->data;
-			block->cls->draw( block);
+			if( t->type == TERM_SIMPLE && C->draw->mode==mode_draw)
+			{
+				t->draw(t);
+			}
+			else
+			{
+				t->draw(t);
+			}
+			glTranslatef(t->width + 30, 0, 0);
 		}
+
+		
+		float h = -20;
+		glTranslatef( 0, h, 0);
+		t_node *node_screen = scene_node_get( C->scene, dt_block, "menu_screen");
+		t_block *block = node_screen->data;
+		block->cls->draw( block);
 
 		C->event->ui.use_scale = 1;
 	}

@@ -123,6 +123,18 @@ void term_draw(t_term *term)
 	term->width = width;
 }
 
+void term_draw_dynamic( t_term *term)
+{
+	t_block *b = term->block;
+
+	glPushMatrix();
+
+		glTranslatef(0,-20,0);
+		if( b) b->cls->draw( b);
+
+	glPopMatrix();
+}
+
 // RESET
 
 void term_reset(t_term *term)
@@ -194,26 +206,75 @@ void *term_new( const char *name)
 	term->is_init = 0;
 	term->loc_x = 0;
 	term->loc_y = 0;
-	term->draw = term_draw;
+	term->draw = NULL;
 	term->width = 250;
 	term->height = 20;
 
+	term->block = NULL;
+
 	return term;
 };
+
+void *ddd( t_brick *brick)
+{
+	printf("screens\n");
+	return NULL;
+}
+
+void term_add_screen( const char *name)
+{
+	t_context *C = ctx_get();
+	t_term *term = term_get( "term_screens");
+	if( term)
+	{
+		add_brick_trigger( C, term->block, name, ddd);
+	}
+}
+
+t_term *term_make( t_context *C, const char *name, int type)
+{
+	t_term *term = term_new( name);
+	term->type = type;
+	t_node *node;
+	t_block *block;
+
+	if( type == TERM_DYNAMIC)
+	{
+		node = block_make(name,"block");
+		block = node->data;
+		block->up = -1;
+		term->block = block;
+		term->draw = term_draw_dynamic;
+
+		add_brick_trigger( C, block, "screen", ddd);
+
+	}
+	else
+	{
+		term->draw = term_draw;
+	}
+
+	return term;
+}
 
 // INIT
 
 void term_init(void)
 {
 	t_context *C = ctx_get();
-	t_term *term_main = term_new( "term_main");
+	t_term *term_main = term_make( C, "term_main", TERM_SIMPLE);
 	lst_add( C->terms, term_main, "term_main");
 
-	t_term *term_event = term_new( "term_event");
+	t_term *term_event = term_make( C, "term_event", TERM_SIMPLE);
 	lst_add( C->terms, term_event, "term_event");
 
-	t_term *term_state = term_new( "term_state");
+	t_term *term_state = term_make( C, "term_state", TERM_SIMPLE);
 	lst_add( C->terms, term_state, "term_state");
+
+	/*
+	t_term *term_new = term_make( C, "term_screens", TERM_DYNAMIC);
+	lst_add( C->terms, term_new, "term_screens");
+	*/
 }
 
 // GET

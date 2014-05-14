@@ -16,6 +16,8 @@
 #include "util.h"
 
 #define TERM_LIMIT 30
+#define TERM_SIMPLE 1
+#define TERM_DYNAMIC 2
 
 struct Lst;
 struct Link;
@@ -41,6 +43,10 @@ typedef struct Term
 
 	void (* draw)(struct Term *term);
 	void (* init)(struct Term *term);
+
+	struct Block *block;
+	int type;
+
 }t_term;
 
 void 		term_reset_all( void);
