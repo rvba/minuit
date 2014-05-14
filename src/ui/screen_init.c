@@ -128,6 +128,20 @@ t_screen *screen_log_make( t_context *C)
 	return screen;
 };
 
+t_screen *screen_info_make( t_context *C)
+{
+	t_screen *screen = screen_default( "screen_info", screen_info);
+
+	/*
+	screen->is_active = 1;
+	screen->is_visible = 1;
+	screen->always_active = 1;
+	screen->always_visible = 1;
+	*/
+	
+	return screen;
+};
+
 // SCREEN SWITCH
 
 void op_screen_switch()
@@ -198,6 +212,7 @@ void screen_init( t_context *C)
 	screen_bricks_menu_make( C);
 	screen_intro_make( C);
 	screen_log_make( C);
+	screen_info_make( C);
 }
 
 

@@ -15,6 +15,7 @@ extern "C" {
 #endif
 
 struct Brick;
+struct Term;
 
 typedef struct VLst
 {
@@ -60,6 +61,7 @@ void 		vlst_fill_4f(t_vlst *vlst,float x,float y,float z,float w);
 void 		vlst_color_3f(t_vlst *vlst,int *color);
 void 		vlst_color_4f(t_vlst *vlst,int *color);
 void 		vlst_show(t_vlst *vlst);
+void 		vlst_info( struct Term *t, t_vlst *vlst);
 void 		vlst_vertex(const char *type,t_vlst *dst,t_vlst *vertex,t_vlst *face);
 void 		_do_face(void *src,void *dst,int count,int size);
 void 		vlst_build(t_vlst *vlst,void *ptr);

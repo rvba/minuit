@@ -130,6 +130,25 @@ void op_reset( t_context *C)
 	else C->ui->step_reset = 1;
 }
 
+void switch_info( t_context *C)
+{
+	t_term *term = term_get("term_info");
+	t_node *node = scene_node_get( C->scene, dt_screen , "screen_info");
+	t_screen *screen = node->data;
+
+	int visible = term->visible;
+	if( visible)
+	{
+		term->visible = 0;
+		screen_off( screen);
+	}
+	else
+	{
+		term->visible = 1;
+		screen_on( screen);
+	}
+}
+
 void keymap_command( int key)
 {
 	t_context *C=ctx_get();
@@ -161,6 +180,7 @@ void keymap_command( int key)
 		case UP_TKEY: ctx_switch_font( C); break;
 		case UP_MKEY: ctx_switch_draw( C); break;
 		case UP_LKEY: draw_switch_scene( C->draw);break;
+		case UP_IKEY: switch_info( C); break;
 
 		case STARKEY: draw_switch_axis_world(C->draw);break;
 		case DOTKEY: if(camera) op_camera_reset_pos(camera);break;

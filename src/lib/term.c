@@ -77,6 +77,17 @@ void term_log( const char *fmt, ...)
 	term_print( term,msg);
 }
 
+void term_l( t_term *term, const char *fmt, ...)
+{
+	char msg[400];
+	va_list ap;
+	va_start(ap,fmt);
+	vsprintf(msg,fmt,ap);
+	va_end(ap);
+
+	term_print( term,msg);
+}
+
 void term_echo( t_term *term, char *fmt, ...)
 {
 	char msg[400];
@@ -153,6 +164,7 @@ void term_reset(t_term *term)
 	term->is_init = 0;
 
 	term->line=0;
+	term->height = 20;
 }
 
 void term_reset_all( void)
@@ -211,6 +223,7 @@ void *term_new( const char *name)
 	term->height = 20;
 
 	term->block = NULL;
+	term->visible = 1;
 
 	return term;
 };
@@ -270,6 +283,10 @@ void term_init(void)
 
 	t_term *term_state = term_make( C, "term_state", TERM_SIMPLE);
 	lst_add( C->terms, term_state, "term_state");
+
+	t_term *term_info = term_make( C, "term_info", TERM_SIMPLE);
+	term_info->visible = 0;
+	lst_add( C->terms, term_info, "term_info");
 
 	/*
 	t_term *term_new = term_make( C, "term_screens", TERM_DYNAMIC);

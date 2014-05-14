@@ -46,6 +46,7 @@ typedef struct Term
 
 	struct Block *block;
 	int type;
+	int visible;
 
 }t_term;
 
@@ -56,6 +57,7 @@ void *		term_new( const char *name);
 void 		term_init( void);
 void 		term_print( t_term *term, const char *msg);
 void 		term_log( const char *fmt, ...);
+void 		term_l( t_term *term, const char *fmt, ...);
 void 		term_echo( t_term *term, char *fmt, ...);
 t_term *	term_get( const char *name);
 

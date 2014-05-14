@@ -36,8 +36,8 @@ extern "C" {
 #define MINUIT_VERSION 0.5
 
 #define DEBUG_PROCESS 0
-#define DEBUG_CONSOLE 1
-#define DEBUG_TERMINAL 1
+#define DEBUG_CONSOLE 0
+#define DEBUG_TERMINAL 0
 #define DEBUG_LOOP 0
 #define DEBUG_KEY 0
 #define DEBUG_PLUG 1 

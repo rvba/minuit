@@ -243,6 +243,15 @@ void vlst_add_vlst(t_vlst *vlst_dst,t_vlst *vlst_src)
 	*/
 }
 
+t_term *term = NULL;
+
+void vlst_info( t_term *t, t_vlst *vlst)
+{
+	term = t;
+	vlst_show( vlst);
+	term = NULL;
+}
+
 void vlst_show(t_vlst *vlst)
 {
 	t_context *C = ctx_get();
@@ -258,6 +267,8 @@ void vlst_show(t_vlst *vlst)
 		if(C->event->debug_console)
 			term_log("[VLST] type:%s name:%s count:%d length:%d", data_name_get(vlst->type), vlst->id.name, count, length);
 
+		if( term) term_l( term, "[VLST] type:%s name:%s count:%d length:%d", data_name_get(vlst->type), vlst->id.name, count, length);
+
 		if(dat)
 		{
 			if(vlst->type == dt_float)
@@ -271,6 +282,8 @@ void vlst_show(t_vlst *vlst)
 							printf("[%d] %f %f %f\n",i,d[0],d[1],d[2]);
 						if(C->event->debug_console)
 							term_log("[%d] %f %f %f",i,d[0],d[1],d[2]);
+						if( term)
+							term_l( term, "[%d] %f %f %f",i,d[0],d[1],d[2]);
 
 						d+=length;
 					}
@@ -284,6 +297,8 @@ void vlst_show(t_vlst *vlst)
 							printf("[%d] %f %f %f %f\n",i,d[0],d[1],d[2],d[3]);
 						if(C->event->debug_console)
 							term_log("[%d] %f %f %f %f",i,d[0],d[1],d[2],d[3]);
+						if( term)
+							term_l( term, "[%d] %f %f %f %f",i,d[0],d[1],d[2],d[3]);
 
 						d+=length;
 					}
@@ -301,6 +316,8 @@ void vlst_show(t_vlst *vlst)
 							printf("[%d] %u %u %u \n",i,d[0],d[1],d[2]);
 						if(C->event->debug_console)
 							term_log("[%d] %u %u %u",i,d[0],d[1],d[2]);
+						if( term)
+							term_l( term, "[%d] %u %u %u",i,d[0],d[1],d[2]);
 
 						d+=length;
 					}
@@ -314,6 +331,8 @@ void vlst_show(t_vlst *vlst)
 							printf("[%d] %u %u %u %u\n",i,d[0],d[1],d[2],d[3]);
 						if(C->event->debug_console)
 							term_log("[%d] %u %u %u %u",i,d[0],d[1],d[2],d[3]);
+						if( term)
+							term_l( term, "[%d] %u %u %u %u",i,d[0],d[1],d[2],d[3]);
 						d+=length;
 					}
 				}
@@ -329,6 +348,8 @@ void vlst_show(t_vlst *vlst)
 							printf("[%d] %d %d %d %d\n",i,d[0],d[1],d[2],d[3]);
 						if(C->event->debug_console)
 							term_log("[%d] %d %d %d %d",i,d[0],d[1],d[2],d[3]);
+						if( term)
+							term_l( term, "[%d] %d %d %d %d",i,d[0],d[1],d[2],d[3]);
 						d+=length;
 					}
 				}
@@ -342,6 +363,8 @@ void vlst_show(t_vlst *vlst)
 							printf("[%d] %d %d \n",i,d[0],d[1]);
 						if(C->event->debug_console)
 							term_log("[%d] %d %d",i,d[0],d[1]);
+						if( term)
+							term_l( term, "[%d] %d %d",i,d[0],d[1]);
 						d+=length;
 					}
 				}

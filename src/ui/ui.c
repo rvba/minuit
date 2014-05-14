@@ -141,16 +141,19 @@ void ui_draw_term(void)
 		for(l = C->terms->first; l; l = l->next)
 		{
 			t = ( t_term *) l->data;
+			if( t->visible)
+			{
 
-			if( t->type == TERM_SIMPLE && C->draw->mode==mode_draw)
-			{
-				t->draw(t);
+				if( t->type == TERM_SIMPLE && C->draw->mode==mode_draw)
+				{
+					t->draw(t);
+				}
+				else
+				{
+					t->draw(t);
+				}
+				glTranslatef(t->width + 30, 0, 0);
 			}
-			else
-			{
-				t->draw(t);
-			}
-			glTranslatef(t->width + 30, 0, 0);
 		}
 
 		

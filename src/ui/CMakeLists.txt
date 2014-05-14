@@ -10,6 +10,7 @@ set(SRC
 	screen_main.c
 	screen_sets.c
 	screen_log.c
+	screen_info.c
 	screen_view3d.c
 	screen_object.c
 )
