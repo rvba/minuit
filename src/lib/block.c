@@ -243,6 +243,8 @@ t_block *block_dupli(t_block *block)
 	t_block *clone_block=clone_node->data;
 
 	vcp(clone_block->pos,block->pos);
+	block->pos[0]+=10;
+	block->pos[1]+=10;
 
 	t_link *l;
 	t_brick *b;
@@ -251,6 +253,15 @@ t_block *block_dupli(t_block *block)
 	{
 		b=l->data;
 		brick_dupli(clone_block,b);
+	}
+
+	if( block->clone)
+	{
+		clone_block->clone = block->clone;
+	}
+	else
+	{
+		clone_block->clone = block;
 	}
 
 	scene_store(C->scene,0);
@@ -520,6 +531,7 @@ void block_rebind(t_scene *sc,void *ptr)
 	rebind(sc,"block","bricks",(void **)&block->bricks);
 	rebind(sc,"block","rhizome",(void **)&block->rhizome);
 	rebind(sc,"block","set",(void **)&block->set);
+	rebind(sc,"block","clone",(void **)&block->clone);
 
 	// reset
 	block->hover=NULL;
@@ -623,6 +635,7 @@ void *block_new(const char *name)
 	block->set = NULL;
 
 	block->state = NULL;
+	block->clone = NULL;
 
 	block->up = 1;
 

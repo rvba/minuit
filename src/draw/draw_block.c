@@ -15,6 +15,8 @@
 #include "block.h"
 #include "brick.h"
 #include "list.h"
+#include "draw.h"
+#include "brick.h"
 
 // update txt && mouse over
 void block_update_data(t_block *block)
@@ -90,6 +92,75 @@ void block_update_geometry(t_block *block)
 	}
 
 }
+
+t_brick *block_get_first_brick( t_block *block)
+{
+	t_link *l  = block->bricks->first;
+	t_brick *brick = l->data;
+	return brick;
+}
+
+void block_draw_clone(t_block *block)
+{
+	t_context *C = ctx_get();
+	t_block *clone = block->clone;
+	if( clone)
+	{
+		if( C->draw->mode == mode_draw)
+		{
+			t_brick *brick = block_get_first_brick( block);
+			t_brick *clone_brick = block_get_first_brick( clone);
+			float p[3];
+			brick_get_geo_in(  p, clone, clone_brick);
+			brick_draw_clone_link( block, brick, p);
+		}
+	}
+}
+
+
+/*
+void brick_draw_link(t_brick *brick)
+{
+	t_context *C = ctx_get();
+	if( C->draw->mode == mode_draw)
+	{
+		t_block *block = brick->block;
+		if( block->block_state.connecting && brick->brick_state.connecting)
+		{
+			t_context *C = ctx_get();
+			float p[3]={0,0,0};
+
+			ctx_get_mouse_pos( C, p);
+			brick_draw_connection_line( block, brick, p, 0);
+
+		}
+		else if(brick->brick_state.draw_plugs)
+		{
+			t_plug *plug_out = &brick->plug_out;
+
+			if(plug_out->dst) 
+			{
+				t_plug *plug_target=plug_out->dst;
+				t_brick *brick_target=plug_target->brick;
+
+				t_block *block_target=brick_target->block;
+
+				float p[3];
+				brick_get_geo_in(  p, block_target, brick_target);
+				brick_draw_connection_line( block, brick, p, 1);
+			}
+		}
+	}
+}
+*/
+
+
+
+
+
+
+
+
 
 void block_draw_bricks(t_block *block)
 {
@@ -285,6 +356,7 @@ void cls_block_draw_block(t_block *block)
 	block_update_geometry(block);
 	block_draw_bricks(block);
 	block_draw_outline(block);
+	block_draw_clone(block);
 }
 
 void cls_block_draw_bar(t_block *block)

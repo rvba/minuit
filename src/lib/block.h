@@ -90,6 +90,7 @@ typedef struct Block
 	struct Brick *submenu;
 	struct Brick *hover;			// submenu
 	struct Brick *selected;			// submenu
+	struct Block *clone;
 
 	struct Rhizome *rhizome;
 	struct Set *set;

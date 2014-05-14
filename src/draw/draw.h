@@ -49,6 +49,8 @@
 struct Context;
 struct Scene;
 struct Mesh;
+struct Block;
+struct Brick;
 
 typedef enum Draw_Mode
 {
@@ -120,5 +122,8 @@ void draw_mesh(t_draw *draw, struct Scene *scene, struct Mesh *mesh);
 void type_font_3d(char* string,float pos[3]);
 
 void draw_switch_scene( t_draw *draw);
+
+void brick_draw_clone_link( struct Block *block, struct Brick *brick, float *v2);
+void brick_get_geo_in( float *p, struct Block *block_target, struct Brick *brick_target);
 
 #endif

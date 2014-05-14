@@ -569,7 +569,7 @@ void state_ui_object_trigger( t_context *C, t_event *e)
 
 void ctx_ui_block_trigger( t_context *C, t_event *e)
 {
-	if( C->app->keyboard->shift) 
+	if( C->app->keyboard->alt) 
 	{
 		ctx_ui_clone( C);
 	}

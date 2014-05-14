@@ -132,32 +132,62 @@ void brick_build_txt(t_brick *brick)
 	}
 }
 
-void brick_draw_connection_line(t_block *block, t_brick *brick, float *v2, int draw_points)
+void brick_get_v1( t_block *block, t_brick *brick, float *v1)
+{
+	t_context *C = ctx_get();
+	float width = brick->geom.width;
+	float zoom = C->ui->zoom;
+	float ax= (float)block->pos[0]+ width + (brick->geom.height/2);
+	float ay = (float)block->pos[1]+(float)((brick->geom.block_pos*brick->geom.height)+(brick->geom.height/2));
+	float v[3] = {ax*zoom,ay*zoom,0};
+	vcp( v1, v);
+}
+
+void brick_draw_line(t_block *block, t_brick *brick, float *v2, float *color)
 {
 	t_context *C = ctx_get();
 
-	float width = brick->geom.width;
 	float zoom = C->ui->zoom;
-	float *color=C->ui->front_color;
 	int line_width=1;
+	float v1[3];
 
-	float ax= (float)block->pos[0]+ width + (brick->geom.height/2);
-	float ay = (float)block->pos[1]+(float)((brick->geom.block_pos*brick->geom.height)+(brick->geom.height/2));
-
-	float v1[3] = {ax*zoom,ay*zoom,0};
+	brick_get_v1( block, brick, v1);
 	vmul( v2, zoom);
 	
 	glPushMatrix();
 	glLoadIdentity();
 
 		glTranslatef(C->ui->pan_x,C->ui->pan_y,0);
-
-		// line
 		skt_line(v1,v2,line_width,color);
 
-		// points
-		t_plug *plug_out = &brick->plug_out;
-		t_plug *plug_target=plug_out->dst;
+	glPopMatrix();
+}
+
+void brick_draw_clone_link( t_block *block, t_brick *brick, float *v2)
+{
+	glLineStipple(2, 0xAAAA);
+	glEnable(GL_LINE_STIPPLE);
+	float color[] = {.5,.5,.5};
+	brick_draw_line( block, brick, v2, color);
+	glDisable(GL_LINE_STIPPLE);
+}
+
+void brick_draw_point( t_block *block, t_brick *brick, float *v2, int draw_points)
+{
+	t_context *C = ctx_get();
+	float zoom = C->ui->zoom;
+	float v1[3];
+	brick_get_v1( block, brick, v1);
+	vmul( v2, zoom);
+	t_plug *plug_out = &brick->plug_out;
+	t_plug *plug_target=plug_out->dst;
+
+	glPushMatrix();
+	glLoadIdentity();
+
+		glTranslatef(C->ui->pan_x,C->ui->pan_y,0);
+
+
 		if( draw_points && C->ui->show_plug_state)
 		{
 			if(plug_out->state.flow_out)
@@ -172,7 +202,14 @@ void brick_draw_connection_line(t_block *block, t_brick *brick, float *v2, int d
 		}
 
 	glPopMatrix();
+}
 
+void brick_draw_connection_line(t_block *block, t_brick *brick, float *v2, int draw_points)
+{
+	t_context *C = ctx_get();
+	float *color=C->ui->front_color;
+	brick_draw_line( block, brick, v2, color);
+	brick_draw_point( block, brick, v2, draw_points);
 }
 
 void brick_get_geo_in( float *p, t_block *block_target, t_brick *brick_target)
@@ -183,6 +220,7 @@ void brick_get_geo_in( float *p, t_block *block_target, t_brick *brick_target)
 	p[0] = bx;
 	p[1] = by;
 }
+
 
 void brick_draw_link(t_brick *brick)
 {

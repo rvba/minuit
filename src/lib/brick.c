@@ -179,14 +179,16 @@ t_brick *brick_dupli(t_block *block,t_brick *brick)
 	if(brick->brick_state.clone)
 	{
 		clone_brick->brick_state.clone = brick->brick_state.clone;
-		brick_clone_change_name(clone_brick);
+		//brick_clone_change_name(clone_brick);
 	}
 	else
 	{
 		brick->brick_state.clone = brick->id.id;
 		clone_brick->brick_state.clone = brick->id.id;
+		/*
 		brick_clone_change_name(brick);
 		brick_clone_change_name(clone_brick);
+		*/
 		brick_build_width(brick);
 	}
 
@@ -473,7 +475,7 @@ void brick_rebind(t_scene *sc,void *ptr)
 
 	if(brick->brick_state.clone)
 	{
-		brick_clone_change_name(brick);
+		//brick_clone_change_name(brick);
 		brick_build_width(brick);
 	}
 
