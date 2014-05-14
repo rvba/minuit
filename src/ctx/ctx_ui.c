@@ -49,7 +49,7 @@ void state_ui_motion( t_context *C, t_event *e);
 
 void ctx_ui_space_rotate( t_context *C, t_event *e);
 
-void ctx_ui_block_trigger( t_context *C);
+void ctx_ui_block_trigger( t_context *C, t_event *e);
 
 void op_debug_all(t_context *C)
 {
@@ -141,6 +141,34 @@ int action_check( t_action *action)
 	*/
 
 	return 1;
+}
+
+
+void state_ui_brick_clone( t_context *C, t_event *e)
+{
+	ctx_ui_log("state_ui_brick_clone");
+
+	switch( e->type)
+	{
+		case MOUSE_RIGHT_RELEASED:
+			UI_SWAP( C, *UI_STATE);
+			break;
+	}
+}
+
+void ctx_ui_clone( t_context *C)
+{
+	t_node *node = C->scene->hover;
+	if( node)
+	{
+		if( node->type == dt_brick)
+		{
+			t_brick *brick = node->data;
+			t_block *block = brick->block;
+			block_dupli( block);
+			UI_SWAP( C, state_ui_brick_clone);
+		}
+	}
 }
 
 void ctx_ui_exe(t_context *C)
@@ -539,13 +567,19 @@ void state_ui_object_trigger( t_context *C, t_event *e)
 	UI_SWAP( C, state_ui_default);
 }
 
-void ctx_ui_block_trigger( t_context *C)
+void ctx_ui_block_trigger( t_context *C, t_event *e)
 {
-	ctx_ui_block_select( C);
-	t_block *block = ( t_block *) ctx_ui_selection_get( C, dt_block);
-	//block->cls->dispatch( block);
-	cls_block_dispatch( block);
-	UI_SWAP( C, state_ui_block_trigger);
+	if( C->app->keyboard->shift) 
+	{
+		ctx_ui_clone( C);
+	}
+	else
+	{
+		ctx_ui_block_select( C);
+		t_block *block = ( t_block *) ctx_ui_selection_get( C, dt_block);
+		cls_block_dispatch( block);
+		UI_SWAP( C, state_ui_block_trigger);
+	}
 }
 
 void ctx_ui_object_trigger( t_context *C)
@@ -710,7 +744,7 @@ void state_ui_mouse_left( t_context *C, t_event *e)
 
 	switch( C->scene->hover_type)
 	{
-		case dt_brick: ctx_ui_block_trigger( C); break;
+		case dt_brick: ctx_ui_block_trigger( C, e); break;
 		case dt_object: ctx_ui_object_trigger( C); break;
 		default: 
 			UI_SWAP( C, state_ui_default);
@@ -788,7 +822,7 @@ void state_ui_mouse_right_motion( t_context *C, t_event *e)
 	if( C->scene->hover_type == dt_brick)
 	{
 		ctx_event_add( UI_BLOCK_MOVE);
-		ctx_ui_block_trigger( C);
+		ctx_ui_block_trigger( C, e);
 	}
 	else
 	{
@@ -818,7 +852,7 @@ void state_ui_mouse_right( t_context *C, t_event *e)
 
 	if( C->scene->hover_type == dt_brick)
 	{
-		ctx_ui_block_trigger( C);
+		ctx_ui_block_trigger( C, e);
 	}
 	else
 	{
@@ -874,7 +908,7 @@ void ctx_ui_keyboard( t_context *C, t_event *e)
 	ctx_ui_log( "ui_keyboard");
 	if( C->scene->hover_type == dt_brick)
 	{
-		ctx_ui_block_trigger( C);
+		ctx_ui_block_trigger( C, e);
 	}
 
 }
