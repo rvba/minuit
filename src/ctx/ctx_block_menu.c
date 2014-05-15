@@ -38,8 +38,8 @@ void state_block_dupli( t_block *block, t_event *e)
 			if( dupli)
 			{
 				t_block *clone = block_dupli( dupli);
-				clone->pos[0] = C->app->mouse->x;
-				clone->pos[1] = C->app->mouse->y;
+				clone->pos[0] = (float) ( C->app->mouse->x - C->ui->pan_x);
+				clone->pos[1] = (float) (C->app->mouse->y - C->ui->pan_y);
 				block_cls_change( clone, "block");
 				if(!C->ui->show_sets) show_sets(C);
 			}
@@ -331,14 +331,14 @@ void state_block_menu_hover_menu( t_block *block, t_event *e)
 
 void block_hover_brick( t_context *C, t_block *block, t_brick *brick, t_event *e)
 {
-		block->selected = brick;
-		switch( e->type)
-		{
-			case MOUSE_LEFT_PRESSED:
-				brick_dispatch( brick);
-				BLOCK_SWAP( block, state_block_menu_brick_trigger);
-				break;
-		}
+	block->selected = brick;
+	switch( e->type)
+	{
+		case MOUSE_LEFT_PRESSED:
+			brick_dispatch( brick);
+			BLOCK_SWAP( block, state_block_menu_brick_trigger);
+			break;
+	}
 }
 
 // MENU DEFAULT
