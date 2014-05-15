@@ -234,6 +234,12 @@ void _add_block(t_context *C,t_block *block)
 	list_add_data(list, block);
 }
 
+void block_cls_change( t_block *block, const char *name)
+{
+	set_name( block->type, name);
+	block_cls_init( block); 
+}
+
 t_block *block_dupli(t_block *block)
 {
 	t_context *C=ctx_get();
@@ -243,8 +249,9 @@ t_block *block_dupli(t_block *block)
 	t_block *clone_block=clone_node->data;
 
 	vcp(clone_block->pos,block->pos);
-	block->pos[0]+=10;
-	block->pos[1]+=10;
+
+	clone_block->pos[0]+=10;
+	clone_block->pos[1]+=10;
 
 	t_link *l;
 	t_brick *b;
@@ -622,6 +629,7 @@ void *block_new(const char *name)
 	block->block_state.is_in_rhizome = 0;
 	block->block_state.frame_based = 0;
 	block->block_state.connecting = 0;
+	block->block_state.draw_clone_link = 0;
 
 	block->tot_bricks=0;
 	block->rhizome_order = -1;

@@ -104,6 +104,8 @@ void block_draw_clone(t_block *block)
 {
 	t_context *C = ctx_get();
 	t_block *clone = block->clone;
+	if( block->block_state.draw_clone_link)
+	{
 	if( clone)
 	{
 		if( C->draw->mode == mode_draw)
@@ -114,6 +116,7 @@ void block_draw_clone(t_block *block)
 			brick_get_geo_in(  p, clone, clone_brick);
 			brick_draw_clone_link( block, brick, p);
 		}
+	}
 	}
 }
 

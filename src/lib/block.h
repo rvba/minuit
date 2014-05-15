@@ -57,6 +57,7 @@ typedef struct Block_State
 	int is_root:1;
 	int draw_outline:1;
 	int draw_plugs:1;
+	int draw_clone_link:1;
 	int is_mouse_over:1;
 	int update_geometry:1;
 	int is_a_loop:1;
@@ -100,6 +101,7 @@ typedef struct Block
 
 // BLOCK
 
+void block_cls_change( t_block *block, const char *name);
 void block_set_setup( t_block *block);
 
 void block_brick_set_order( t_block *block);

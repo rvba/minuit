@@ -296,7 +296,7 @@ void state_block_default( t_block *block, t_event *e)
 		{
 			if( e->type == DKEY)
 			{
-				block_brick_delete( block, brick);
+				//block_brick_delete( block, brick);
 			}
 
 			if( e->type == MOUSE_RIGHT_PRESSED)

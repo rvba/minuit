@@ -25,6 +25,49 @@
 
 void state_block_menu_brick_trigger( t_block *block, t_event *e);
 
+t_block *dupli = NULL;
+
+void state_block_dupli( t_block *block, t_event *e)
+{
+	t_context *C = ctx_get();
+	ctx_ui_log( "state_block_dupli");
+	switch( e->type)
+	{
+		case MOUSE_LEFT_RELEASED:
+
+			if( dupli)
+			{
+				t_block *clone = block_dupli( dupli);
+				clone->pos[0] = C->app->mouse->x;
+				clone->pos[1] = C->app->mouse->y;
+				block_cls_change( clone, "block");
+				if(!C->ui->show_sets) show_sets(C);
+			}
+
+			BLOCK_SWAP( block, state_block_exit);
+			break;
+	}
+}
+
+void ctx_block_dupli( t_block *block, t_event *e)
+{
+	t_context *C = ctx_get();
+	t_node *node = C->scene->hover;
+	if( node)
+	{
+		if( node->type ==dt_brick)
+		{
+			t_brick *brick = node->data;
+			t_block *b = brick->block;
+
+			dupli = b;
+			BLOCK_SWAP( block, state_block_dupli);
+			cls_block_dispatch( block);
+		}
+	}
+}
+
+
 
 /*	**********************************
 	OPERATORS MENU 
@@ -227,6 +270,10 @@ void state_block_menu_brick_trigger( t_block *block, t_event *e)
 	else if( e->type == SHIFTKEY)
 	{
 		BLOCK_SWAP( block, state_block_menu_brick_trigger_fixed);
+	}
+	else if( e->type == CTRLKEY)
+	{
+		ctx_block_dupli( block, e);
 	}
 	else 
 	{
