@@ -27,6 +27,470 @@ void cls_block_make_menu(t_block *block);
 void cls_block_make_bar(t_block *block);
 void cls_block_make_ref(t_block *block);
 
+
+/*
+	**********************************
+	BRANCHES
+	**********************************
+*/
+
+// Get Plug Pointer
+t_plug *get_plug( t_brick *brick, int dir)
+{
+	if( dir == EAST) return &brick->plug_out;
+	else return &brick->plug_in;
+}
+
+// Get Brick connected to this Brick
+t_brick *get_brick_connected( t_brick *brick, int dir)
+{
+	t_plug *plug = get_plug( brick, dir);
+	t_plug *p;
+	t_brick *target = NULL;
+	if( dir == EAST)
+	{
+		p = plug->dst;
+		if( p) target = p->brick;
+	}
+	else
+	{
+		p = plug->src;
+		if( p) target = p->brick;
+	}
+
+	return target;
+}
+
+// Get Block connected to this brick
+t_block *get_block_connected( t_brick *brick, int dir)
+{
+	t_block *block = NULL;
+	t_brick *target = get_brick_connected( brick, dir);
+	if( target) block = target->block;
+	return block;
+}
+
+void get_all_block_connected( t_block *block, t_lst *lst, int dir)
+{
+	t_link *l;
+	t_brick *brick;
+	for( l = block->bricks->first; l; l= l->next)
+	{
+		brick = l->data;
+		t_block *b = get_block_connected( brick, dir);
+		if( b) lst_add( lst, b, "b");
+	}
+}
+
+int block_in_list( t_block *block, t_lst *lst)
+{
+	t_link *l;
+	t_block *b;
+	for( l = lst->first; l; l = l->next)
+	{
+		b = l->data;
+		if( b->id.id == block->id.id)
+		{
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
+void get_branch( t_block *block, t_lst *lst, int dir)
+{
+	if( !block_in_list( block, lst))
+	{
+		lst_add( lst, block, block->id.name);
+
+		t_lst *bricks = block->bricks;
+		t_brick *brick;
+		t_block *target;
+		t_link *l;
+
+		for( l = bricks->first; l; l = l->next)
+		{
+			brick = l->data;
+			target = get_block_connected( brick, dir);
+			if( target) get_branch( target, lst, dir);
+		}
+	}
+}
+
+t_lst *block_branch_get( t_block *block, int dir)
+{
+	t_lst *branch = lst_new( "branch");
+	t_lst *bricks = block->bricks;
+	t_link *l;
+	t_block *target;
+	t_brick *brick;
+
+	for( l = bricks->first; l; l = l->next)
+	{
+		brick = l->data;
+		target = get_block_connected( brick, dir);
+		if( target) get_branch( target, branch, dir);
+	}
+
+	return branch;
+}
+
+t_lst *block_leaves_get( t_block *block, int dir)
+{
+	t_lst *branch = lst_new( "branch");
+	t_lst *bricks = block->bricks;
+	t_link *l;
+	t_block *target;
+	t_brick *brick;
+
+	for( l = bricks->first; l; l = l->next)
+	{
+		brick = l->data;
+		target = get_block_connected( brick, dir);
+		if( target) lst_add( branch, target, target->id.name);
+	}
+
+	return branch;
+}
+
+/*
+	**********************************
+	BRANCHES
+	**********************************
+*/
+
+
+t_block *get_nearest( t_block *block, t_lst *lst)
+{
+	t_link *l;
+	t_block *block_target;
+	int order = block->rhizome_pos;
+	printf("order:%d\n", order);
+	for( l = lst->first; l; l = l->next)
+	{
+		block_target = l->data;
+		printf("o: %d\n", block_target->rhizome_pos);
+		if( block_target->rhizome_pos == (order - 1))
+		{
+			return block_target;
+		}
+	}
+
+	return NULL;
+}
+
+void get_bounding_box( t_block *block, float margin, float *box)
+{
+	float width = block->width;
+	float height = block->height;
+	float x = block->pos[0];
+	float y = block->pos[1];
+
+	box[0] = x - margin;
+	box[1] = y - margin;
+
+	box[2] = box[0] + width + margin + margin;
+	box[3] = box[1];
+
+	box[4] = box[2];
+	box[5] = box[1] +  height + margin + margin;
+
+	box[6] = box[0];
+	box[7] = box[5];
+
+	if(0)
+	{
+	printf("box %s %f %f %f %f %f %f %f %f %f %f\n", 
+		block->id.name,
+		width, 
+		height,
+		box[0],
+		box[1],
+		box[2],
+		box[3],
+		box[4],
+		box[5],
+		box[6],
+		box[7]
+		);
+	}
+
+}
+
+int is_inside( float *box, float x, float y)
+{
+	float box_lower_x = box[0];
+	float box_lower_y = box[1];
+	float box_upper_x = box[4];
+	float box_upper_y = box[5];
+
+
+	return( ( x >= box_lower_x) && ( x <= box_upper_x) && ( y >= box_lower_y) && ( y <= box_upper_y));
+}
+
+int test_bounding_box( float *b1, float *b2) // big small
+{
+
+	int a = is_inside( b1, b2[0], b2[1]);
+	int b = is_inside( b1, b2[2], b2[3]);
+	int c = is_inside( b1, b2[4], b2[5]);
+	int d = is_inside( b1, b2[6], b2[7]);
+
+	//printf("%d %d %d %d\n", a, b, c, d);
+
+	if( !a && !b && !c && !d)
+	{
+		return 0;
+	}
+	else
+	{
+		return 1;
+	}
+}
+
+#define DIR_ALL 11
+
+void displace( t_block *src, t_block *dst, int dir)
+{
+	//printf("go way\n");
+	float *src_pos = src->pos;
+	float *dst_pos = dst->pos;
+	float d = 2;
+
+	switch( dir)
+	{
+		case DIR_ALL:
+			if( dst_pos[0] <= src_pos[0]) { dst_pos[0] -=2; }
+			else { dst_pos[0] +=2; }
+
+			if( dst_pos[1] <= src_pos[1]) { dst_pos[1] -=2; }
+			else { dst_pos[1] +=2; }
+
+			break;
+		case WEST:
+			dst_pos[0] -= d;
+			break;
+		case EAST:
+			dst_pos[0] += d;
+			break;
+
+		case NORTH:
+			dst_pos[1] += d;
+			break;
+
+		case SOUTH:
+			dst_pos[1] -= d;
+			break;
+
+		default:
+			break;
+	}
+}
+
+void displace_tree( t_lst *lst, int dir)
+{
+	float delta;
+	int indice;
+	switch( dir)
+	{
+		case( NORTH): delta = 2; indice = 2; break;
+		default: printf("displace_tree ????\n");
+	}
+
+	t_link *l;
+	t_block *block;
+	for( l = lst->first; l; l = l->next)
+	{
+		block = l->data;
+		block->pos[indice] += delta;
+	}
+}
+	
+void drive_away( t_block *block, t_block *block_nearest, int dir)
+{
+	float box_block[8];
+	float box_nearest[8];
+	float margin = 5;
+	get_bounding_box( block, margin ,box_block);
+	get_bounding_box( block_nearest, margin, box_nearest);
+
+	float *big;
+	float *small;
+
+	if( block->width >= block_nearest->width && block->height >= block_nearest->height)
+	{
+		big = box_block;
+		small = box_nearest;
+	}
+	else
+	{
+		big = box_nearest;
+		small = box_block;
+	}
+	int test = test_bounding_box( big, small);
+	//printf("test:%d\n", test);
+	if( test)
+	{
+		displace( block, block_nearest, dir);
+		drive_away( block, block_nearest, dir);
+	}
+}
+
+void justify( t_block *block, t_block *block_nearest, int dir)
+{
+	float x = block_nearest->pos[0];
+	float y = block_nearest->pos[1];
+	float m = 60;
+	switch( dir)
+	{
+		case WEST:
+			if( x + block_nearest->width + m >= block->pos[0])
+			{
+				displace( block, block_nearest, dir);
+				justify( block, block_nearest, dir);
+			}
+			break;
+		case EAST:
+			if( x <= block->pos[0] +block->width + m)
+			{
+				displace( block, block_nearest, dir);
+				justify( block, block_nearest, dir);
+			}
+			break;
+
+		case NORTH:
+			if( y <= block->pos[1] + block->height + m)
+			{
+				displace( block, block_nearest, dir);
+				justify( block, block_nearest, dir);
+			}
+			break;
+
+		case SOUTH:
+			if( y <= block->pos[1] + block->height + m)
+			{
+				displace( block, block_nearest, dir);
+				justify( block, block_nearest, dir);
+			}
+			break;
+	}
+}
+
+void get_bigger_box( float *origin, float *test)
+{
+	if( test[0] < origin[0]) origin[0] = test[0];
+	if( test[1] < origin[1]) origin[1] = test[1];
+	if( test[2] > origin[2]) origin[2] = test[2];
+	if( test[3] < origin[3]) origin[3] = test[3];
+	if( test[4] > origin[4]) origin[4] = test[4];
+	if( test[5] > origin[5]) origin[5] = test[5];
+	if( test[6] < origin[6]) origin[6] = test[6];
+	if( test[7] > origin[7]) origin[7] = test[7];
+}
+
+void get_branch_bounding_box( t_block *block, t_lst *lst, float *box_tree, int dir)
+{
+	t_link *l;
+	t_block *block_leaf;
+	float box_leaf[8];
+	float margin = 0;
+	for( l = lst->first; l; l = l->next)
+	{
+		block_leaf = l->data;
+		get_bounding_box( block_leaf, margin, box_leaf);
+		get_bigger_box( box_tree, box_leaf);
+	}
+}
+
+void do_justify_tree( t_block *block, t_lst *tree, float *box_previous, float *box_current, int dir)
+{
+	float previous_y = box_previous[5];
+	float current_y = box_current[5];
+	switch( dir)
+	{
+		case NORTH:
+			if( current_y <= previous_y)
+			{
+				displace_tree( tree, dir);
+				get_branch_bounding_box( block, tree, box_current, dir);
+				do_justify_tree( block, tree, box_previous, box_current, dir);
+			}
+			break;
+		default:
+			printf("do_justify_tree ???\n");
+			break;
+	}
+}
+
+void justify_tree( t_block *block_previous, t_block *block_current, int dir)
+{
+	float box_previous[8];
+	float box_current[8];
+
+	bzero( box_previous, 8);
+	bzero( box_current, 8);
+
+	t_lst *lst_previous = block_branch_get( block_previous, dir);
+	t_lst *lst_current = block_branch_get( block_current, dir);
+
+	get_branch_bounding_box( block_previous, lst_previous, box_previous, dir);
+	get_branch_bounding_box( block_current, lst_current, box_current, dir);
+
+	do_justify_tree( block_current, lst_current, box_previous, box_current, dir);
+}
+
+void block_arrange( t_block *block)
+{
+	t_lst *lst = block_leaves_get( block, WEST);
+	lst_show( lst);
+
+	t_link *l;
+	for( l = lst->first; l; l = l->next)
+	{
+		t_block *block_nearest = l->data;
+		drive_away( block, block_nearest, WEST);
+		block_arrange( block_nearest);
+	}
+
+	lst_free( lst);
+}
+
+void block_justify( t_block *block, int dir)
+{
+	t_lst *lst = block_leaves_get( block, dir);
+	//lst_show( lst);
+
+	t_link *l;
+	t_block *previous = NULL;
+	for( l = lst->first; l; l = l->next)
+	{
+		t_block *block_nearest = l->data;
+		justify( block, block_nearest, dir);
+
+		if( previous)
+		{
+			justify( previous, block_nearest, NORTH);
+			//justify_tree( previous, block_nearest, NORTH);
+		}
+
+		// Go Recursive
+		block_justify( block_nearest, dir);
+
+		previous = block_nearest;
+	}
+
+	lst_free( lst);
+}
+
+
+/*
+	**********************************
+	RHIZOME
+	**********************************
+*/
+
+
 void block_set_setup( t_block *block)
 {
 	t_set *set = block->set;
@@ -234,12 +698,6 @@ void _add_block(t_context *C,t_block *block)
 	list_add_data(list, block);
 }
 
-void block_cls_change( t_block *block, const char *name)
-{
-	set_name( block->type, name);
-	block_cls_init( block); 
-}
-
 t_block *block_dupli(t_block *block)
 {
 	t_context *C=ctx_get();
@@ -405,6 +863,13 @@ void block_cls_init(t_block *block)
 	if(!found)printf("[ERROR:cls_block_init] Unknown block type %s\n",block->type);
 
 	block->block_state.connecting = 0;
+}
+
+
+void block_cls_change( t_block *block, const char *name)
+{
+	set_name( block->type, name);
+	block_cls_init( block); 
 }
 
 void block_brick_add(t_block *block,t_node *node_brick)

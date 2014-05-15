@@ -52,6 +52,14 @@ extern "C" {
 
 #define N_w 99
 
+#define NORTH 1
+#define NORTHEAST 2
+#define EAST 3
+#define SOUTHEAST 4
+#define SOUTH 5
+#define SOUTHWEST 6
+#define WEST 7
+
 typedef struct ID
 {
 	int id;

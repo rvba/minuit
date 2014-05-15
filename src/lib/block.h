@@ -101,6 +101,10 @@ typedef struct Block
 
 // BLOCK
 
+void block_justify( t_block *block, int dir);
+
+struct Lst *block_leaves_get( t_block *block, int dir);
+struct Lst *block_branch_get( t_block *block, int dir);
 void block_cls_change( t_block *block, const char *name);
 void block_set_setup( t_block *block);
 

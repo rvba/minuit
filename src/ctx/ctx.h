@@ -131,9 +131,9 @@ void ctx_render_scene(struct Context *C);
 
 // CTX_LINKS.C
 
-struct Lst *block_branch_src_get(struct Context *C,struct Block *block);
+//struct Lst *block_branch_src_get(struct Context *C,struct Block *block);
 void ctx_links_term_cleanup(struct Context *C);
-void block_branch_get(struct Lst *lst,struct Block *block);
+//void block_branch_get(struct Lst *lst,struct Block *block);
 void ctx_links_loop(struct Context *C);
 void ctx_links_update(struct Context *C);
 void ctx_links_reset(struct Context *C,struct Lst *lst);

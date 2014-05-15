@@ -276,6 +276,20 @@ void block_brick_delete( t_block *block, t_brick *brick)
 	block_brick_trigger( C, block);
 }
 
+void block_tree( t_block *block)
+{
+	block_justify( block, WEST);
+	block_justify( block, EAST);
+}
+
+void state_block_justify( t_block *block, t_event *e)
+{
+	if( e->type == MOUSE_RIGHT_RELEASED)
+	{
+		BLOCK_SWAP( block, state_block_default);
+	}
+}
+
 void state_block_default( t_block *block, t_event *e)
 {
 	ctx_ui_log( "block_default");
@@ -283,7 +297,15 @@ void state_block_default( t_block *block, t_event *e)
 
 	if( e->type == MOUSE_RIGHT_PRESSED)
 	{
-		BLOCK_SWAP( block, state_block_move);
+		if( C->app->keyboard->shift)
+		{
+			block_tree( block);
+			BLOCK_SWAP( block, state_block_move);
+		}
+		else
+		{
+			BLOCK_SWAP( block, state_block_move);
+		}
 	}
 	else if( e->type == UI_BLOCK_MOVE)
 	{
