@@ -496,7 +496,7 @@ void block_justify( t_block *block, int dir)
 void block_set_setup( t_block *block)
 {
 	t_set *set = block->set;
-	set_set_process( set);
+	if( set) set_set_process( set);
 }
 
 void block_get_pos_plug_out( t_block *block, t_brick *brick, float *v)
