@@ -26,11 +26,14 @@ void ui_draw_sets(void)
 	t_link *link;
 
 	t_lst *lst = scene_lst_get( C->scene, dt_set);
-	for(link = lst->first; link; link = link->next)
+	if( lst)
 	{
-		t_node *node = ( t_node *) link->data;
-		t_set *set = ( t_set *) node->data;
-		set_draw(set);
+		for(link = lst->first; link; link = link->next)
+		{
+			t_node *node = ( t_node *) link->data;
+			t_set *set = ( t_set *) node->data;
+			set_draw(set);
+		}
 	}
 }
 
