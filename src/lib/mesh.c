@@ -29,15 +29,18 @@ void mesh_add_brick_vertex(t_context *C,t_mesh *mesh);
 void mesh_update( t_mesh *mesh)
 {
 	t_vlst *vlst = mesh->vertex;
-	if( vlst->count != mesh->var.tot_vertex)
+	if( vlst)
 	{
-		if( mesh->state.buffer_type == buffer_direct)
+		if( vlst->count != mesh->var.tot_vertex)
 		{
-			mesh->var.tot_vertex = vlst->count;
-		}
-		else
-		{
-			// need to update buffers !
+			if( mesh->state.buffer_type == buffer_direct)
+			{
+				mesh->var.tot_vertex = vlst->count;
+			}
+			else
+			{
+				// need to update buffers !
+			}
 		}
 	}
 }
