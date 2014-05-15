@@ -236,9 +236,7 @@ void state_block_move( t_block *block, t_event *e)
 
 	ctx_get_mouse_pos(C,mouse);
 	block_get_center( block, center);
-
 	vsub( vector, mouse, center);
-
 	vcp( block->pos, vector);
 
 	switch( e->type)
@@ -284,9 +282,45 @@ void block_tree( t_block *block)
 
 void state_block_justify( t_block *block, t_event *e)
 {
+	ctx_ui_log( "state_block_justify");
 	if( e->type == MOUSE_RIGHT_RELEASED)
 	{
 		BLOCK_SWAP( block, state_block_default);
+	}
+}
+
+void ctx_rhizome_move( t_block *block)
+{
+	t_context *C = ctx_get();
+	t_rhizome *rhizome = block->rhizome;
+	if( rhizome)
+	{
+		float x = ( float) (C->ui->mouse_delta_x) * .1;
+		float y = ( float) (C->ui->mouse_delta_y) * .1;
+		t_link *link;
+		for(link=rhizome->blocks->first;link;link=link->next)
+		{
+
+			block = link->data;
+			block->pos[0] += x;
+			block->pos[1] += y;
+
+		}
+	}
+}
+
+void state_rhizome_move( t_block *block, t_event *e)
+{
+	ctx_ui_log( "state_rhizome_move");
+	if( e->type == MOUSE_RIGHT_RELEASED)
+	{
+		BLOCK_SWAP( block, state_block_default);
+		ctx_event_add( UI_BLOCK_RELEASED);
+	}
+	else
+	{
+		ctx_rhizome_move( block);
+
 	}
 }
 
@@ -299,8 +333,12 @@ void state_block_default( t_block *block, t_event *e)
 	{
 		if( C->app->keyboard->shift)
 		{
-			block_tree( block);
-			BLOCK_SWAP( block, state_block_default);
+				block_tree( block);
+				BLOCK_SWAP( block, state_block_justify);
+		}
+		else if( C->app->keyboard->ctrl)
+		{
+			BLOCK_SWAP( block, state_rhizome_move);
 		}
 		else
 		{
