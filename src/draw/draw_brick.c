@@ -208,8 +208,11 @@ void brick_draw_connection_line(t_block *block, t_brick *brick, float *v2, int d
 {
 	t_context *C = ctx_get();
 	float *color=C->ui->front_color;
-	brick_draw_line( block, brick, v2, color);
-	brick_draw_point( block, brick, v2, draw_points);
+	float vv2[3];
+	vcp( vv2, v2);
+	brick_draw_line( block, brick, vv2, color);
+	vcp( vv2, v2);
+	brick_draw_point( block, brick, vv2, draw_points);
 }
 
 void brick_get_geo_in( float *p, t_block *block_target, t_brick *brick_target)
