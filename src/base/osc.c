@@ -17,14 +17,17 @@
 
 int osc_server_done = 0;
 int osc_debug = 0;
-int osc_log = 1;
+int osc_log = 0;
 
 void osc_error(int num, const char *msg, const char *path)
 {
     printf("liblo server error %d in path %s: %s\n", num, path, msg);
 }
 
-
+void osc_log_set( int i)
+{
+	osc_log = i;
+}
 
 int osc_handler_generic( const char *path, const char *types, lo_arg ** argv, int argc, void *data, void *user_data)
 {

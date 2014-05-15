@@ -14,6 +14,8 @@
 extern "C" {
 #endif
 
+
+void osc_log_set( int i);
 void osc_error(int num, const char *msg, const char *path);
 int osc_send( const char *port, const char *msg, const char *format, ...);
 int osc_send_ints( const char *port, const char *msg, int count, int *val);
