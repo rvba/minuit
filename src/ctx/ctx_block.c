@@ -300,7 +300,7 @@ void state_block_default( t_block *block, t_event *e)
 		if( C->app->keyboard->shift)
 		{
 			block_tree( block);
-			BLOCK_SWAP( block, state_block_move);
+			BLOCK_SWAP( block, state_block_default);
 		}
 		else
 		{
