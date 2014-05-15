@@ -160,6 +160,7 @@ t_lst *block_leaves_get( t_block *block, int dir)
 	**********************************
 */
 
+#define DIR_ALL 11
 
 t_block *get_nearest( t_block *block, t_lst *lst)
 {
@@ -225,7 +226,6 @@ int is_inside( float *box, float x, float y)
 	float box_upper_x = box[4];
 	float box_upper_y = box[5];
 
-
 	return( ( x >= box_lower_x) && ( x <= box_upper_x) && ( y >= box_lower_y) && ( y <= box_upper_y));
 }
 
@@ -249,11 +249,9 @@ int test_bounding_box( float *b1, float *b2) // big small
 	}
 }
 
-#define DIR_ALL 11
 
 void displace( t_block *src, t_block *dst, int dir)
 {
-	//printf("go way\n");
 	float *src_pos = src->pos;
 	float *dst_pos = dst->pos;
 	float d = 2;
@@ -300,6 +298,7 @@ void displace_tree( t_lst *lst, int dir)
 
 	t_link *l;
 	t_block *block;
+
 	for( l = lst->first; l; l = l->next)
 	{
 		block = l->data;
@@ -312,6 +311,7 @@ void drive_away( t_block *block, t_block *block_nearest, int dir)
 	float box_block[8];
 	float box_nearest[8];
 	float margin = 5;
+
 	get_bounding_box( block, margin ,box_block);
 	get_bounding_box( block_nearest, margin, box_nearest);
 
@@ -328,8 +328,9 @@ void drive_away( t_block *block, t_block *block_nearest, int dir)
 		big = box_nearest;
 		small = box_block;
 	}
+
 	int test = test_bounding_box( big, small);
-	//printf("test:%d\n", test);
+
 	if( test)
 	{
 		displace( block, block_nearest, dir);
@@ -438,12 +439,14 @@ void justify_tree( t_block *block_previous, t_block *block_current, int dir)
 	get_branch_bounding_box( block_current, lst_current, box_current, dir);
 
 	do_justify_tree( block_current, lst_current, box_previous, box_current, dir);
+
+	lst_free( lst_previous);
+	lst_free( lst_current);
 }
 
 void block_arrange( t_block *block)
 {
 	t_lst *lst = block_leaves_get( block, WEST);
-	lst_show( lst);
 
 	t_link *l;
 	for( l = lst->first; l; l = l->next)
@@ -459,7 +462,6 @@ void block_arrange( t_block *block)
 void block_justify( t_block *block, int dir)
 {
 	t_lst *lst = block_leaves_get( block, dir);
-	//lst_show( lst);
 
 	t_link *l;
 	t_block *previous = NULL;
