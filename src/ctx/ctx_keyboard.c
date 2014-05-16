@@ -173,7 +173,7 @@ void keymap_command( int key)
 		case ZKEY: app_screen_switch_fullscreen(C->app);break;
 		case XKEY: op_switch_color(C);break;
 		case RKEY: op_reset( C);break;
-		case WKEY: ctx_switch_intro(C);
+		case WKEY: ctx_switch_intro(C);break;
 
 		//case UP_AKEY: event->switch_plug_in_flow_in = 1; break;
 		case UP_BKEY: op_debug_all(C);break;
