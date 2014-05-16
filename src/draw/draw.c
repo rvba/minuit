@@ -100,7 +100,13 @@ void draw_light(t_draw *draw, t_node *node)
 		{
 			float color[]={0,0,0};
 			int width=5;
+			t_skt *skt = skt_get();
+			int s = skt->point_smooth;
+			skt->point_smooth = 1;
+
 			skt_point(pos,width,color);
+
+			skt->point_smooth = s;
 		}
 	}
 }
