@@ -739,6 +739,10 @@ t_block *block_dupli(t_block *block)
 		clone_block->clone = block;
 	}
 
+	t_block *block_parent = clone_block->clone;
+
+	block_parent->clones+=1;
+
 	scene_store(C->scene,0);
 
 	return clone_block;
@@ -1121,6 +1125,7 @@ void *block_new(const char *name)
 	block->clone = NULL;
 
 	block->up = 1;
+	block->clones = 0;
 
 	return block;
 }

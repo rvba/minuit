@@ -80,6 +80,7 @@ typedef struct Block
 	float width;				// block width
 	float height;				// block height
 	int up;
+	int clones;
 
 	t_block_state block_state;			// block state
 

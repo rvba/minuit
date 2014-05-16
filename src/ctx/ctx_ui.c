@@ -102,10 +102,17 @@ void block_delete(t_action *action)
 
 	if(
 		   !block_is_connected("in",block)
-		&& !block_is_connected("out",block))
+		&& !block_is_connected("out",block)
+		&& block->clones == 0)
 	{
 		t_set *set = get_current_set(C);
 		t_lst *lst = set->blocks;
+
+		if( block->clone)
+		{
+			t_block *block_parent = block->clone;
+			block_parent->clones -= 1;
+		}
 
 		list_remove_by_ptr(lst,block);
 		scene_delete(C->scene,block);
