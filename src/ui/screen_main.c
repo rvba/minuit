@@ -43,7 +43,7 @@ void ui_draw_bar(void)
 	t_block *menu=NULL;
 
 	glPushMatrix();
-	if(C->ui->show_intro)
+	if(C->ui->show_intro && 0)
 	{
 		glTranslatef(0,2,0);
 		C->event->ui.use_scale = 0;
