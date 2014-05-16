@@ -115,6 +115,7 @@ void *op_brick_add(t_brick *brick)
 	else if(is(name,"mesh")) 		node = add_slider_object(C,"mesh"); 
 	else if(is(name,"vertex")) 		node = add_brick_mesh(C,"vertex"); 
 	else if(is(name,"edges")) 		node = add_brick_mesh(C,"edges"); 
+	else if(is(name,"case")) 		node = add_case(C,"switch"); 
 
 	// Store
 	scene_store(C->scene,0);

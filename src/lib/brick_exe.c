@@ -386,6 +386,26 @@ void *op_clone(t_brick *brick)
 	return NULL;
 }
 
+void *op_case( t_brick *brick)
+{
+	t_block *block = brick->block;
+	t_brick *brick_case = block_brick_get( block, "case");
+	t_brick *brick_result = block_brick_get( block, "result");
+	int c = drf_int( brick_case->plug_intern.data);
+	if( c > 0)
+	{
+		c = c  - 1;
+		t_brick *b = ( t_brick *) lst_get_by_range( block->bricks, c);
+		if( b)
+		{
+			float val = drf_float( b->plug_intern.data);
+			set_float( brick_result->plug_intern.data, val);
+		}
+	}
+
+	return NULL;
+}
+
 // SIN
 
 void *op_sin(t_brick *brick)

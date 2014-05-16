@@ -204,8 +204,43 @@ void skt_circle(float *pos)
 	glPopMatrix();
 }
 
+void skt_point_polygon( float *pos, int width, float *color)
+{
+	int resolution = SKT->point_resolution;
+	double radius = (double) width / 2;
+
+	float *points = calc_circle( pos, radius, resolution);
+
+	int i;
+	int u = 0;
+	float *p = points;
+	glBegin(GL_TRIANGLE_FAN);
+	for( i = 0; i < resolution; i++)
+	{
+		if( i == (resolution - 1))
+		{
+			glVertex3f( pos[0], pos[1], pos[2]);
+			glVertex3f( p[u], p[u+1], p[u+2]);
+			glVertex3f( p[0], p[1], p[2]);
+
+		}
+		else
+		{
+			glVertex3f( pos[0], pos[1], pos[2]);
+			glVertex3f( p[u], p[u+1], p[u+2]);
+			glVertex3f( p[u+3], p[u+4], p[u+5]);
+		}
+		u+=3;
+	}
+	glEnd();
+
+	free( p);
+}
+
 void skt_point(float *pos,int width,float *color) 
 {
+	if( SKT->point_smooth)
+	{
 	if(SKT->point_smooth) glEnable(GL_POINT_SMOOTH);
 	else glDisable(GL_POINT_SMOOTH);
 
@@ -221,6 +256,11 @@ void skt_point(float *pos,int width,float *color)
 	glBegin(GL_POINTS);
 		glVertex3f(pos[0],pos[1],pos[2]);
 	glEnd();
+	}
+	else
+	{
+		skt_point_polygon( pos, width, color);
+	}
 }
 
 // VECTOR

@@ -1353,6 +1353,27 @@ t_node *add_clone(t_context *C)
 	return node_block;
 }
 
+t_node *add_case(t_context *C, const char *name)
+{
+	// NEW BLOCK
+	t_node *node_block = add_block(C,"clone");
+	t_block *block = ( t_block *) node_block->data;
+	block->block_state.draw_outline=1;
+
+	// Add Clone
+	t_node *node_brick_clone = add_part_slider_add_bricks( C, block, "clone", 3, NULL);
+	t_brick *brick_clone = ( t_brick *) node_brick_clone->data;
+	brick_clone->exe=op_case;
+
+	// Add Result
+	t_node *node_brick = add_part_slider_float(C,block,"result",NULL);
+
+	// Add Case
+	t_node *n = add_part_slider_int(C,block,"case",NULL);
+
+	return node_block;
+}
+
 // PIPE
 
 t_node *add_pipe(t_context *C)

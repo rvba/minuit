@@ -260,6 +260,7 @@ t_block *make_menu_ops( t_context *C)
 {
 	t_block *block = add_menu_block( C, "menu_operator");
 
+	add_brick_trigger(C,block,"case",op_brick_add);
 	add_brick_trigger(C,block,"get",op_brick_add);
 	add_brick_trigger(C,block,"clone",op_brick_add);
 	add_brick_trigger(C,block,"pipe",op_brick_add);

@@ -69,6 +69,7 @@ struct Node *	add_brick_trigger(struct Context *C,struct Block *block,const char
 struct Node *	add_trigger(struct Context *C,const char *name,void*(* f)(struct Brick *brick));
 struct Node *	add_trigger_always(struct Context *C,const char *name,void*(* f)(struct Brick *brick));
 struct Node *	add_clone(struct Context *C);
+struct Node *	add_case(struct Context *C, const char *name);
 struct Node *	add_maths(struct Context *C,const char *name);
 struct Node *	add_brick_geometry(struct Context *C,const char *name, void *data);
 struct Node *	add_brick_geo_point(struct Context *C,const char *name, void *data);
@@ -190,6 +191,7 @@ void *		op_selector(struct Brick *brick);
 void *		op_brick_node_action(struct Brick *brick);
 void *		op_void_exe(struct Brick *brick);
 void *		op_clone(struct Brick *brick);
+void *		op_case(struct Brick *brick);
 void *		op_loop(struct Brick *brick);
 void *		op_loop_get(struct Brick *brick);
 void *		op_switch(struct Brick *brick);

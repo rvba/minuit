@@ -292,7 +292,7 @@ t_link *lst_link_find_by_ptr(t_lst *lst, void *ptr)
 
 void *lst_get_by_range( t_lst *lst, int i)
 {
-	int j;
+	int j=0;
 	t_link *l;
 	for( l = lst->first; l; l = l->next)
 	{
