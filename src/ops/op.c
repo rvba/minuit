@@ -289,6 +289,7 @@ t_block *make_menu_time( t_context *C)
 {
 	t_block *block = add_menu_block( C, "menu_time");
 
+	add_brick_trigger(C,block,"min",op_brick_add);
 	add_brick_trigger(C,block,"sec",op_brick_add);
 	add_brick_trigger(C,block,"msec",op_brick_add);
 	add_brick_trigger(C,block,"frame",op_brick_add);

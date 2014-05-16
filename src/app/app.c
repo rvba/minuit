@@ -62,11 +62,12 @@ void app_clock(t_app *app)
 	modf(seconds,&intpart);
 
 	int sec = intpart - (app->clock->min*60);
+//	int sec = intpart;
 	
 	if(sec>59)
 	{
-		app->clock->min++;
-		app->clock->sec=1;
+		app->clock->min+=1;
+		//app->clock->sec=0;
 	}
 	else
 	{

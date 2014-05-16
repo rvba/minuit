@@ -59,6 +59,7 @@ void *op_brick_add(t_brick *brick)
 	else if(is(name,"clone"))  		node = add_clone(C); 
 	else if(is(name,"pipe")) 		node = add_pipe(C); 
 	else if(is(name,"sec")) 		node = add_slider_int(C,"sec",&C->app->clock->sec);
+	else if(is(name,"min")) 		node = add_slider_int(C,"min",&C->app->clock->min);
 	else if(is(name,"int")) 		node = add_slider_int(C,"int",NULL);
 	else if(is(name,"float")) 		node = add_slider_float(C,"float",NULL);
 	else if(is(name,"10")) 			node = add_multiplier(C,"10");
