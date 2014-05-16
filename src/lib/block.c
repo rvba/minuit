@@ -472,8 +472,11 @@ void block_justify( t_block *block, int dir)
 
 		if( previous)
 		{
-			justify( previous, block_nearest, NORTH);
-			//justify_tree( previous, block_nearest, NORTH);
+			if( previous->id.id != block_nearest->id.id)
+			{
+				justify( previous, block_nearest, NORTH);
+				//justify_tree( previous, block_nearest, NORTH);
+			}
 		}
 
 		// Go Recursive
