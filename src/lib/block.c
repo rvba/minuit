@@ -578,7 +578,14 @@ void block_exec(t_block *block)
 	for(link=block->bricks->first;link;link=link->next)
 	{
 		brick = link->data;
-		brick->exe( brick);
+		if( !brick->brick_state.hold)
+		{
+			brick->exe( brick);
+			if( brick->brick_state.singular)
+			{
+				brick->brick_state.hold = 1;
+			}
+		}
 	}
 }
 

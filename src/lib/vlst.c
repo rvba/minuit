@@ -24,7 +24,6 @@
 #include "vlst.h"
 #include "brick.h"
 
-
 void *vlst_get_pointer(t_vlst *vlst, int indice)
 {
 	void *ptr = vlst->data;

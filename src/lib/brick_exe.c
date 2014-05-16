@@ -1108,6 +1108,7 @@ void *op_not(t_brick *brick)
 
 void *op_set_vlst(t_brick *brick)
 {
+	t_context *C = ctx_get();
 	t_block *block=brick->block;
 	t_brick *brick_vlst = NULL;
 
