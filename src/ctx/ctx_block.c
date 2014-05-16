@@ -286,6 +286,7 @@ void state_block_justify( t_block *block, t_event *e)
 	if( e->type == MOUSE_RIGHT_RELEASED)
 	{
 		BLOCK_SWAP( block, state_block_default);
+		ctx_event_add( UI_BLOCK_RELEASED);
 	}
 }
 
