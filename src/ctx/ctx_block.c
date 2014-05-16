@@ -285,6 +285,12 @@ void state_block_justify( t_block *block, t_event *e)
 	ctx_ui_log( "state_block_justify");
 	if( e->type == MOUSE_RIGHT_RELEASED)
 	{
+		block_tree( block);
+		BLOCK_SWAP( block, state_block_default);
+		ctx_event_add( UI_BLOCK_RELEASED);
+	}
+	else if( e->type == MOUSE_MOTION)
+	{
 		BLOCK_SWAP( block, state_block_default);
 		ctx_event_add( UI_BLOCK_RELEASED);
 	}
@@ -334,7 +340,6 @@ void state_block_default( t_block *block, t_event *e)
 	{
 		if( C->app->keyboard->shift)
 		{
-				block_tree( block);
 				BLOCK_SWAP( block, state_block_justify);
 		}
 		else if( C->app->keyboard->ctrl)
