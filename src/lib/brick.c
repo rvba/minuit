@@ -394,6 +394,7 @@ void plug_reset(t_plug *plug,const char *name)
 	vseti(plug->idcol,0,0,0);
 	plug->bindings = NULL;
 
+	plug->state.can_connect=1;
 	plug->state.is_connected=0;
 	plug->state.is_updated=0;
 	plug->state.is_versatil=0;

@@ -55,6 +55,7 @@ struct Plug_Class
 
 struct Plug_State
 {
+	int can_connect:1;
 	int is_connected:1;
 	int is_updated:1;
 	int is_init:1;
