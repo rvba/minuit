@@ -272,7 +272,7 @@ void state_block_menu_brick_trigger( t_block *block, t_event *e)
 	{
 		BLOCK_SWAP( block, state_block_menu_brick_trigger_fixed);
 	}
-	else if( e->type == CTRLKEY)
+	else if( e->type == ALTKEY)
 	{
 		ctx_block_dupli( block, e);
 	}
