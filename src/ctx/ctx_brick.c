@@ -132,7 +132,7 @@ void state_brick_slider_drag( t_brick *brick, t_event *e)
 	t_context *C = ctx_get();
 	if( e->type == MOUSE_LEFT_RELEASED)
 	{
-		brick->brick_state.hold = 0;
+		if( brick->brick_state.use_hold) brick->brick_state.hold = 0;
 		ctx_event_add( UI_BRICK_RELEASED);
 		BRICK_SWAP( brick, state_brick_slider_default);
 	}
@@ -152,7 +152,7 @@ void state_brick_slider_trigger( t_brick *brick, t_event *e)
 	{
 		case MOUSE_LEFT_RELEASED:
 			brick->act( brick);
-			brick->brick_state.hold = 0;
+			if( brick->brick_state.use_hold)  brick->brick_state.hold = 0;
 			ctx_event_add( UI_BRICK_RELEASED);
 			BRICK_SWAP( brick, state_brick_slider_default);
 			break;
@@ -174,7 +174,7 @@ void state_brick_slider_default( t_brick *brick, t_event *e)
 	{
 		case MOUSE_LEFT_PRESSED:
 			brick_hover_set( brick);
-			brick->brick_state.hold = 1;
+			if( brick->brick_state.use_hold)  brick->brick_state.hold = 1;
 			if( !brick->plug_in.src)
 			{
 				BRICK_SWAP( brick, state_brick_slider_trigger);

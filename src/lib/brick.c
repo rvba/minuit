@@ -659,6 +659,7 @@ void *brick_new(const char *name)
 	brick->brick_state.draw = 1;
 	brick->brick_state.has_components = 0;
 	brick->brick_state.hold = 0;
+	brick->brick_state.use_hold = 0;
 	brick->brick_state.singular = 0;
 
 	brick->brick_state.connecting = 0;

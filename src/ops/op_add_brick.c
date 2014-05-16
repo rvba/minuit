@@ -825,6 +825,7 @@ t_node *add_part_vlst(t_context *C,t_block *block,t_data_type type,const char *n
 	brick_count->plug_intern.data_memory = NULL;
 	brick_count->exe=op_set_vlst;
 	brick_count->brick_state.singular=1;
+	brick_count->brick_state.use_hold = 1;
 
 	t_brick *brick = ( t_brick *) node->data;
 	brick->brick_state.draw_outline=0;

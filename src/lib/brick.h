@@ -91,6 +91,7 @@ typedef struct Brick_State
 	int debug:1;
 	int has_components:1;
 	int connecting:1;
+	int use_hold:1;
 	int hold:1;
 	int singular:1;
 	int clone;

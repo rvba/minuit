@@ -581,7 +581,7 @@ void block_exec(t_block *block)
 		if( !brick->brick_state.hold)
 		{
 			brick->exe( brick);
-			if( brick->brick_state.singular)
+			if( brick->brick_state.singular && brick->brick_state.use_hold)
 			{
 				brick->brick_state.hold = 1;
 			}
