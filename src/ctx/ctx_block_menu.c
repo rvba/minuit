@@ -40,6 +40,7 @@ void state_block_dupli( t_block *block, t_event *e)
 				t_block *clone = block_dupli( dupli);
 				clone->pos[0] = (float) ( C->app->mouse->x - C->ui->pan_x);
 				clone->pos[1] = (float) (C->app->mouse->y - C->ui->pan_y);
+				clone->block_state.draw_clone_link = 0;
 				block_cls_change( clone, "block");
 				if(!C->ui->show_sets) show_sets(C);
 			}

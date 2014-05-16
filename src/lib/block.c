@@ -720,6 +720,7 @@ t_block *block_dupli(t_block *block)
 	clone_block->pos[0]+=10;
 	clone_block->pos[1]+=10;
 
+	clone_block->block_state.draw_clone_link = 1;
 	t_link *l;
 	t_brick *b;
 
