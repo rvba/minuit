@@ -377,6 +377,7 @@ void *op_clone(t_brick *brick)
 
 				// Disconnect Clone
 				plug_in_clone->src=NULL;
+				plug_in_clone->state.can_connect = 0;
 				plug_in_clone->state.is_connected = 0;
 			}
 		}
@@ -1108,7 +1109,6 @@ void *op_not(t_brick *brick)
 
 void *op_set_vlst(t_brick *brick)
 {
-	t_context *C = ctx_get();
 	t_block *block=brick->block;
 	t_brick *brick_vlst = NULL;
 

@@ -368,7 +368,7 @@ void exe_add_brick(t_action *action)
 	t_plug *p_in = &b->plug_in;
 	
 	p_in->state.follow_in=1;
-	p_in->state.can_connect = 0;
+	//p_in->state.can_connect = 0;
 
 	block->block_state.update_geometry=1;
 
