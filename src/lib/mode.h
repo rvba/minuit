@@ -12,6 +12,7 @@
 
 #include "common.h"
 
+struct Scene;
 struct Context;
 struct Lst;
 
