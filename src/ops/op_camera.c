@@ -95,6 +95,18 @@ t_camera *op_camera_default_get( t_context *C)
 	return camera;
 }
 
+void op_camera_default_ortho_location( t_context *C, float x, float y)
+{
+	t_camera *camera = op_camera_default_get( C);
+	if( camera) vset( camera->ortho_location, x, y, 0);
+}
+
+void op_camera_default_ortho_zoom( t_context *C, float zoom)
+{
+	t_camera *camera = op_camera_default_get( C);
+	if( camera) camera->ortho_zoom = zoom;
+}
+
 void op_camera_default_ortho( t_context *C)
 {
 	t_camera *camera = op_camera_default_get( C);

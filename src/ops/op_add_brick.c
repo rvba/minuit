@@ -1366,10 +1366,10 @@ t_node *add_case(t_context *C, const char *name)
 	brick_clone->exe=op_case;
 
 	// Add Result
-	t_node *node_brick = add_part_slider_float(C,block,"result",NULL);
+	add_part_slider_float(C,block,"result",NULL);
 
 	// Add Case
-	t_node *n = add_part_slider_int(C,block,"case",NULL);
+	add_part_slider_int(C,block,"case",NULL);
 
 	return node_block;
 }
