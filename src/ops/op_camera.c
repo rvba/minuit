@@ -15,6 +15,7 @@
 #include "viewport.h"
 #include "util.h"
 #include "ui.h"
+#include "op.h"
 
 #define OP_CAM_SPEED 50
 #define OP_CAM_ORTHO_ZOOM_FAC 100
@@ -85,6 +86,25 @@ void op_camera_switch_view(t_camera *camera)
 			camera->angle = 90;
 			break;
 	}
+}
+
+t_camera *op_camera_default_get( t_context *C)
+{
+	t_camera *camera = NULL;
+	if(C->scene->has_generic_viewport) camera = ctx_ui_camera_get( C);
+	return camera;
+}
+
+void op_camera_default_ortho( t_context *C)
+{
+	t_camera *camera = op_camera_default_get( C);
+	if( camera) camera->type = camera_ortho;
+}
+
+void op_camera_default_front( t_context *C)
+{
+	t_camera *camera = op_camera_default_get( C);
+	if( camera) op_camera_view_front(camera);
 }
 
 void op_camera_switch_type(t_camera *camera)

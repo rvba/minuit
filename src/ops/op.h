@@ -22,6 +22,8 @@ struct Block;
 struct Brick;
 struct Lst;
 struct Dict;
+struct Viewport;
+struct Camera;
 
 extern int opt_op_use_random;
 
@@ -174,7 +176,32 @@ void *		op_add_geo_array( struct Brick *brick);
 void *		op_add_object_square(struct Brick *brick);
 
 
+void		op_camera_default_ortho( struct Context *C);
+void 		op_camera_default_front( struct Context *C);
+void 		op_camera_view_top(struct Camera *camera);
+void 		op_camera_view_axo(struct Camera *camera);
+void 		op_camera_view_front(struct Camera *camera);
+void 		op_camera_view_left(struct Camera *camera);
+void 		op_camera_view_right(struct Camera *camera);
+void 		op_camera_ortho_rotate(struct Camera *camera,int x,int y,int z);
+void 		op_camera_switch_view(struct Camera *camera);
+void 		op_camera_switch_type(struct Camera *camera);
+void 		op_camera_change_speed(struct Camera *camera);
+void 		op_camera_translate_key(struct Camera *camera,float x,float y);
+void 		op_camera_switch_2d(struct Context *C, struct Camera *camera);
+void 		_op_camera_switch_2d(struct Context *C, struct Camera *camera, int width, int height);
 
+void 		op_camera_switch_3d(struct Context *C, struct Camera *camera);
+void 		op_camera_update(struct Context *C, struct Camera *camera);
+void 		_op_camera_update( struct Context *C, struct Camera *camera, struct Viewport *viewport);
+void 		op_camera_frustum_init(struct Camera *camera, int w, int h);
+void 		op_camera_reset(struct Context *C, struct Camera *camera);
+void 		op_camera_reset_pos(struct Camera *camera);
+void 		op_camera_rotate(struct Context *C, struct Camera *camera, float dx, float dy);
+void 		op_camera_translate(struct Context *C, struct Camera *camera);
+void 		op_camera_zoom(struct Context *C, struct Camera *camera, int dir);
+void 		op_camera_set_ortho_zoom(struct Context *C, struct Camera *camera, int i);
+void 		op_camera_set_ortho_pan(struct Context *C, struct Camera *camera);
 
 
 
