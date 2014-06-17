@@ -60,6 +60,9 @@ extern "C" {
 #define SOUTHWEST 6
 #define WEST 7
 
+#define UP 1
+#define DOWN 2
+
 typedef struct ID
 {
 	int id;
