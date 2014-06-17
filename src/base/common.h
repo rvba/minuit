@@ -24,7 +24,7 @@ extern "C" {
 
 #define MILLION 1000000
 
-#define APP_VERSION "0.6.1"
+#define APP_VERSION "0.6.4"
 
 #define _NAME_ 64
 #define _NAME_LONG_ 128
@@ -33,7 +33,7 @@ extern "C" {
 #define _STATE_ 20
 #define _LIST_ 10
 
-#define MINUIT_VERSION 0.5
+#define MINUIT_VERSION 0.6
 
 #define DEBUG_PROCESS 0
 #define DEBUG_CONSOLE 0
