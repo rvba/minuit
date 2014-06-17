@@ -74,16 +74,16 @@ void ui_texture_draw( t_context *C, t_texture *texture, int px, int py, int sx, 
 
 		glColor4f(1,1,1,1);
 
-		glTexCoord2f(1, 1);
+		glTexCoord2f(0, 0);
 		glVertex2f(0, 0);
 
-		glTexCoord2f( 0, 1);
+		glTexCoord2f( 1, 0);
 		glVertex2f( texture->width * sx, 0);
 
-		glTexCoord2f( 0, 0);
+		glTexCoord2f( 1, 1);
 		glVertex2f( texture->width * sx , texture->height * sy);
 
-		glTexCoord2f(1, 0);
+		glTexCoord2f(0, 1);
 		glVertex2f( 0, texture->height * sy);
 
 		glEnd();
