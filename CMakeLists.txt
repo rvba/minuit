@@ -68,6 +68,11 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/src/ctx
 	${CMAKE_SOURCE_DIR}/src/base
 	${CMAKE_SOURCE_DIR}/src/lib
+	${CMAKE_SOURCE_DIR}/src/lib/brick
+	${CMAKE_SOURCE_DIR}/src/lib/core
+	${CMAKE_SOURCE_DIR}/src/lib/data
+	${CMAKE_SOURCE_DIR}/src/lib/object
+	${CMAKE_SOURCE_DIR}/src/lib/screen
 	${CMAKE_SOURCE_DIR}/src
 	)
 
@@ -97,8 +102,20 @@ add_executable(
     src/minuit.c
 )
 
-target_link_libraries(minuit minuit-ctx minuit-ops minuit-ui minuit-scene minuit-lib minuit-draw minuit-app minuit-base)
-#target_link_libraries(minuit ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${PNG_LIBRARY} ${JPEG_LIBRARY} pthread m)
+target_link_libraries(
+		minuit 
+		minuit-ctx 
+		minuit-ops 
+		minuit-ui 
+		minuit-scene 
+		minuit-lib_core
+		minuit-lib_object
+		minuit-lib_data
+		minuit-lib_screen
+		minuit-lib_brick
+		minuit-draw 
+		minuit-app 
+		minuit-base)
 
 if(OPT_SDL)
 	target_link_libraries(minuit ${SDL_LIBRARY})

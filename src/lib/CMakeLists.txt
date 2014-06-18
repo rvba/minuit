@@ -1,84 +1,8 @@
 # LIB
 
-set(SRC
-	action.c
-	action.h
-	binding.c
-	binding.h
-	block.c
-	block.h
-	brick_exe.c
-	brick.c
-	brick_act.c
-	brick_cls.c
-	brick.h
-	camera.c
-	camera.h
-	data.c
-	data.h
-	dict.c
-	dict.h
-	event.c
-	event.h
-	file.c
-	file_data.c
-	file.h
-	graph.c
-	graph.h
-	image.c
-	image.h
-	image_jpg.c
-	image_png.c
-	light.c
-	light.h
-	list.c
-	list.h
-	geometry.c
-	geometry.h
-	log.c
-	log.h
-	material.c
-	material.h
-	memory.c
-	memory.h
-	mesh_buffer.c
-	mesh.c
-	mesh.h
-	mesh_transform.c
-	mode.c
-	mode.h
-	obj.c
-	object.c
-	object.h
-	obj.h
-	option.h
-	plug_cls.c
-	plug.h
-	rhizome.c
-	rhizome.h
-	screen.c
-	screen.h
-	set.c
-	set.h
-	term.c
-	term.h
-	texture.c
-	texture.h
-	txt.c
-	txt.h
-	vector.c
-	vector.h
-	viewport.c
-	viewport.h
-	vlst.h
-	vlst.c
-	)
-if(OPT_OBJ)
-set( 	SRC
-	${SRC}
-	obj.c
-	obj.h
-	)
-endif()
+add_subdirectory(brick)
+add_subdirectory(core)
+add_subdirectory(data)
+add_subdirectory(object)
+add_subdirectory(screen)
  
-add_library(minuit-lib STATIC ${SRC})
