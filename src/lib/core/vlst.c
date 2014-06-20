@@ -456,6 +456,25 @@ void _loop_unsigned_int(void *dst,void *src,int count,int size)
 	}
 }
 
+void _loop_unsigned_char(void *dst,void *src,int count,int size)
+{
+	int i;
+	unsigned char *s=(unsigned char *)src;
+	unsigned char *d=(unsigned char *)dst;
+
+	int p=0;
+
+	for(i=0;i<count;i++)
+	{
+		if(size>=1) d[p+0]=s[p+0];
+		if(size>=2) d[p+1]=s[p+1];
+		if(size>=3) d[p+2]=s[p+2];
+		if(size>=4) d[p+3]=s[p+3];
+
+		p+=size;
+	}
+}
+
 void _face_int(void *src,void *dst,int count,int size)
 {
 	int i;
@@ -671,6 +690,7 @@ void vlst_add_data(t_vlst *vlst,void *ptr)
 	if (t == dt_int) _loop_int(vlst->data,ptr,vlst->count,vlst->length);
 	else if	(t == dt_float) _loop_float(vlst->data,ptr,vlst->count,vlst->length);
 	else if	(t == dt_uint) _loop_unsigned_int(vlst->data,ptr,vlst->count,vlst->length);
+	else if	(t == dt_uchar) _loop_unsigned_char(vlst->data,ptr,vlst->count,vlst->length);
 	else 	printf("[ERROR vlst_add_data] Unknown type %d\n",t);
 }
 

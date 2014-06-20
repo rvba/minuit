@@ -186,7 +186,6 @@ t_block *object_block_get( t_object *object, const char *name)
 
 void *object_member_add( t_object *object, t_data_type type, const char *name, void *data)
 {
-	//t_datum *datum = datum_new( type, name, data);
 	t_datum *datum = datum_add( type, name, data);
 	
 	list_add_data( object->members, datum);

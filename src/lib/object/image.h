@@ -17,6 +17,7 @@ extern "C" {
 #endif
 
 struct Scene;
+struct VLst;
 
 typedef struct Image
 {
@@ -29,7 +30,7 @@ typedef struct Image
 	int type;
 
 	size_t size;
-	unsigned char *data;
+	struct VLst *vlst;
 
 }t_image;
 

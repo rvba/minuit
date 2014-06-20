@@ -36,7 +36,6 @@ void datum_rebind(t_scene *sc,void *ptr)
 t_datum *datum_add( t_data_type type, const char *name, void *data)
 {
 	t_context *C = ctx_get();
-	//t_datum *datum = (t_datum *) scene_add( C->scene, dt_datum, name);
 	t_node *node = scene_add( C->scene, dt_datum, name);
 	t_datum *datum = ( t_datum *) node->data;
 

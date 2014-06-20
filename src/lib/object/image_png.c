@@ -11,6 +11,7 @@
 #include "image.h"
 #include "util.h"
 #include "memory.h"
+#include "vlst.h"
 
 #include <png.h>
 
@@ -212,7 +213,7 @@ t_image *img_read_png(char *filename)
 			break;
 	}
 
-	image->data = (unsigned char *)mem_malloc(sizeof(unsigned char) * image->width * image->height * image->bpp);
+	image->vlst = vlst_make( "vlst", dt_uchar, image->width * image->height, image->bpp);
 
 	png_bytep *row_pointers;
 
@@ -221,7 +222,7 @@ t_image *img_read_png(char *filename)
 	int i;
 	for (i = 0; i < image->height; ++i)
 	{
-		row_pointers[i] = (png_bytep)(image->data +
+		row_pointers[i] = (png_bytep)(image->vlst->data +
 		((image->height - (i + 1)) * image->width * image->bpp));
 	}
 

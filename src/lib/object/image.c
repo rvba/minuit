@@ -13,7 +13,7 @@
 #include "memory.h"
 #include "file.h"
 
-void		image_rebind( struct Scene *sc, void *ptr)
+void image_rebind( struct Scene *sc, void *ptr)
 {
 }
 
@@ -45,7 +45,7 @@ void *image_new(const char *name)
 	image->width=0;
 	image->height=0;
 	image->bpp=0;
-	image->data=NULL;
+	image->vlst=NULL;
 
 	image->size = 0;
 

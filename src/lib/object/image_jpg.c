@@ -11,6 +11,7 @@
 #include "opengl.h"
 #include "util.h"
 #include "image.h"
+#include "vlst.h"
 #include "memory.h"
 #include <jpeglib.h>
 
@@ -90,7 +91,11 @@ t_image  *img_read_jpg( const char *name)
 	image->bpp = 3;
 	image->format = GL_RGB;
 	image->type = GL_UNSIGNED_BYTE;
-	image->data=ptr;
+	image->vlst = vlst_make( "vlst", dt_uchar, 3, width * height);
+
+	vlst_add_data( image->vlst, ptr);
+
+	free(ptr);
 
 	return image;
 }

@@ -25,6 +25,7 @@
 #include "camera.h"
 #include "list.h"
 #include "data.h"
+#include "vlst.h"
 #include "camera.h"
 #include "rhizome.h"
 #include "event.h"
@@ -50,14 +51,14 @@ void ui_image_draw( t_context *C, t_image *image, int x, int y)
 	glPixelStorei( GL_UNPACK_ALIGNMENT, 1);
 	glRasterPos2i( x, y);
 
-	if( image->data)
+	if( image->vlst)
 	{
 		glDrawPixels( 
 			image->width,		// GLsizei
 			image->height,		// GLsizei
 			image->format,		// GLenum GL_RGB, GL_ALPHA, ...
 			image->type,		// GL_UNSIGNED_BYTE, ...
-			image->data);		// GLvoid *
+			image->vlst->data);		// GLvoid *
 	}
 }
 

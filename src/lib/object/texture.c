@@ -14,6 +14,7 @@
 #include "op.h"
 #include "texture.h"
 #include "image.h"
+#include "vlst.h"
 #include "memory.h"
 
 /***		TEXTURE		***/
@@ -78,7 +79,7 @@ void texture_update( t_texture *texture, t_image *image)
 		      	0,					// GLint border			border width, 0 if no border
 			texture->format,			// GLenum format		GL_RGB, ...
 			texture->type,				// GLenum type			GL_UNSIGNED_BYTE, ...
-			image->data);				// const GLvoid *textels	The data
+			image->vlst->data);				// const GLvoid *textels	The data
 
 	glDisable( GL_TEXTURE_2D);
 }
@@ -129,7 +130,7 @@ void texture_image_bind(t_texture *texture,t_image *image)
 	texture->width=image->width;
 	texture->height=image->height;
 
-	texture->texels=image->data;
+	texture->texels=image->vlst->data;
 	texture->internal_format=image->bpp;
 	texture->format=image->format;
 	texture->size = image->size;
