@@ -14,6 +14,7 @@
 extern "C" {
 #endif
 
+int cpt_map_fi( float x, float ostart, float oend, int tstart, int tend);
 float calc_normalize(int n,int range);
 float *calc_circle(float center[3],double radius,int divisions);
 float *calc_arc(float center[3],double radius,int divisions, int start, int end);

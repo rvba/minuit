@@ -13,6 +13,25 @@
 
 #define _PI 3.14159655f
 
+
+int cpt_map_fi( float x, float ostart, float oend, int tstart, int tend)
+{
+		return
+		(
+			(int)
+			(
+				(
+					( x - ostart) / ( oend - ostart)
+					*
+					(float) ( tend - tstart)
+				)
+				+
+				(float) tstart
+			)
+		);
+
+}
+
 float calc_normalize(int n,int range)
 {
 	return (float)((float)n/(float)range);
