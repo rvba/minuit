@@ -21,14 +21,6 @@ extern "C" {
 struct Scene;
 struct Data;
 
-typedef struct Datum
-{
-	t_id id;
-	t_data_type type;
-	int count;
-	size_t size;
-	void *data;
-}t_datum;
 
 typedef struct Data_Class
 {
@@ -101,16 +93,10 @@ void 		data_rebind(struct Scene *sc,void *ptr);
 void *		data_new(const char *name);
 void		data_free(t_data *data);
 
-void datum_rebind( struct Scene *sc,void *ptr);
-void *datum_new( const char *name);
-t_datum *datum_add( t_data_type type, const char *name, void *data);
-void datum_free(t_datum *datum);
-void datum_init( t_datum *datum);
 
 #ifdef __cplusplus
 }
 #endif
-
 
 
 

@@ -6,6 +6,8 @@ set(
 	binding.h  
 	data.c  
 	data.h  
+	datum.c
+	datum.h
 	event.c  
 	event.h  
 	file.c  

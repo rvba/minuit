@@ -18,6 +18,7 @@
 #include "camera.h"
 #include "dict.h"
 #include "data.h"
+#include "datum.h"
 #include "binding.h"
 #include "list.h"
 #include "vlst.h"

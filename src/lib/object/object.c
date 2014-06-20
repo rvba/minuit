@@ -23,6 +23,7 @@
 #include "vector.h"
 #include "ui.h"
 #include "memory.h"
+#include "datum.h"
 #include "scene.h"
 
 void object_default(t_node *node){}
