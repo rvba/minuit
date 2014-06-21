@@ -213,7 +213,7 @@ t_image *img_read_png(char *filename)
 			break;
 	}
 
-	image->vlst = vlst_make( "vlst", dt_uchar, image->width * image->height, image->bpp);
+	image->vlst = vlst_make( "vlst", dt_uchar, image->width * image->height, image->bpp, NULL);
 
 	png_bytep *row_pointers;
 

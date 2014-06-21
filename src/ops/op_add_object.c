@@ -58,7 +58,7 @@ t_geo_array *op_new_geo_array( t_context *C,const char *name)
 // VLST
 t_vlst *op_new_vlst(const char *name, t_data_type type, int size)
  {
-	 t_vlst *vlst = vlst_make("vlst", type, size, 0);
+	 t_vlst *vlst = vlst_make("vlst", type, size, 0, NULL);
 	 /*
 	 t_block *block = vlst->ref;
 	 if( block)

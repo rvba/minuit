@@ -46,7 +46,7 @@ void		vlst_free(t_vlst *vlst);
 void 		vlst_delete( t_vlst *vlst);
 void 		vlst_init(t_vlst *vlst);
 void *		vlst_new(const char *name);
-t_vlst *	vlst_make(const char *name,t_data_type type,int length, int count);
+t_vlst *	vlst_make( const char *name, t_data_type type, int length, int count, void *data);
 
 void *		vlst_get_ref(t_vlst *vlst, const char *ref);
 void *		vlst_get_pointer(t_vlst *vlst, int indice);

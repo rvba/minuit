@@ -732,7 +732,7 @@ void vlst_build(t_vlst *vlst,void *ptr)
 
 // MAKE
 
-t_vlst *vlst_make(const char *name,t_data_type type, int length, int count)
+t_vlst *vlst_make( const char *name, t_data_type type, int length, int count, void *data)
 {
 	t_context *C=ctx_get();
 
@@ -749,7 +749,7 @@ t_vlst *vlst_make(const char *name,t_data_type type, int length, int count)
 	else if(type == dt_float) vlst->size = sizeof(float);
 	else printf("[ERROR vlst_make] Unknown type %s\n",data_name_get(type));
 
-	if(length && count)
+	if( !data && length && count)
 	{
 		vlst->data=mem_malloc((vlst->size)*(vlst->length)*(vlst->count));
 		if(C->scene->store)
@@ -759,7 +759,7 @@ t_vlst *vlst_make(const char *name,t_data_type type, int length, int count)
 	}
 	else
 	{
-		vlst->data = NULL;
+		vlst->data = data;
 	}
 
 	if(C->ui->add_bricks)
@@ -778,7 +778,7 @@ t_vlst *vlst_make(const char *name,t_data_type type, int length, int count)
 
 t_vlst *vlst_duplicate(t_vlst *vlst)
 {
-	t_vlst *vlst_new = vlst_make(vlst->id.name, vlst->type, vlst->length, vlst->count);
+	t_vlst *vlst_new = vlst_make(vlst->id.name, vlst->type, vlst->length, vlst->count, NULL);
 	vlst_copy(vlst_new,vlst->data);
 
 	return vlst_new;

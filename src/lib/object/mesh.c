@@ -183,7 +183,7 @@ void mesh_add_default_color(t_mesh *mesh)
 {
 	int tot_vertex=mesh->var.tot_vertex;
 
-	mesh->colors=vlst_make("color",dt_float, 3, tot_vertex);
+	mesh->colors=vlst_make("color",dt_float, 3, tot_vertex, NULL);
 	mesh->state.has_color=1;
 
 	t_vlst *vlst=mesh->colors;
@@ -273,14 +273,14 @@ t_node *mesh_make(
 	{
 		if(verts)
 		{
-			mesh->vertex=vlst_make("vertex", dt_float, 3, totvert);
+			mesh->vertex=vlst_make("vertex", dt_float, 3, totvert, NULL);
 			vlst_add_data(mesh->vertex,verts);
 
 		
 		}
 		else
 		{
-			mesh->vertex=vlst_make("vertex", dt_float, 3, totvert);
+			mesh->vertex=vlst_make("vertex", dt_float, 3, totvert, NULL);
 			vlst_init( mesh->vertex);
 		}
 
@@ -294,7 +294,7 @@ t_node *mesh_make(
 		mesh->state.has_quad=1;
 		mesh->state.has_face=1;
 
-		mesh->quads=vlst_make("quads", dt_uint, 4, totquad);
+		mesh->quads=vlst_make("quads", dt_uint, 4, totquad, NULL);
 		vlst_add_data(mesh->quads,quads);
 	}
 
@@ -304,7 +304,7 @@ t_node *mesh_make(
 		mesh->state.has_tri=1;
 		mesh->state.has_face=1;
 
-		mesh->tris=vlst_make("tris", dt_uint, 3,tottri);
+		mesh->tris=vlst_make("tris", dt_uint, 3,tottri, NULL);
 		vlst_add_data(mesh->tris,tris);
 	}
 

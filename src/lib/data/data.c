@@ -291,7 +291,7 @@ void *data_add(t_data_type type,void *data)
 			{
 				_vlst=(t_vlst *)data;
 
-				return vlst_make("vlst",_vlst->type,_vlst->length,_vlst->count);
+				return vlst_make("vlst",_vlst->type,_vlst->length,_vlst->count, data);
 			}
 			else
 			{
