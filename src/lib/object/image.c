@@ -11,12 +11,13 @@
 #include "image.h"
 #include "node.h"
 #include "memory.h"
+#include "vlst.h"
 #include "file.h"
+#include "scene.h"
 
 void image_rebind( struct Scene *sc, void *ptr)
 {
 }
-
 
 t_image *image_copy( t_image *image_src)
 {
@@ -48,6 +49,13 @@ t_image *image_open( const char *path)
 
 void image_free(t_image *image)
 {
+	mem_free( image, sizeof( t_image));
+}
+
+void image_delete( t_image *image)
+{
+	if( image->vlst) vlst_delete( image->vlst);
+	image_free( image);
 }
 
 void *image_new(const char *name)
