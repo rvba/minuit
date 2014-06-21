@@ -381,23 +381,23 @@ t_mesh *mesh_clone(t_mesh *mesh)
 
 		clone->texture = texture_clone(mesh->texture);
 		clone->material = material_clone(mesh->material);
-		clone->edges = vlst_clone(mesh->edges);
+		clone->edges = vlst_copy(mesh->edges);
 		clone->texture_id = mesh->texture_id;
-		clone->vertex = vlst_clone(mesh->vertex);
-		clone->quads = vlst_clone(mesh->quads);
-		clone->tris = vlst_clone(mesh->tris);
-		clone->uvs = vlst_clone(mesh->uvs);
-		clone->colors = vlst_clone(mesh->colors);
-		clone->quad_vertex = vlst_clone(mesh->quad_vertex);
-		clone->quad_face = vlst_clone(mesh->quad_face);
-		clone->quad_normal = vlst_clone(mesh->quad_normal);
-		clone->quad_color = vlst_clone(mesh->quad_color);
-		clone->quad_uv = vlst_clone(mesh->quad_uv);
-		clone->tri_vertex = vlst_clone(mesh->tri_vertex);
-		clone->tri_face = vlst_clone(mesh->tri_face);
-		clone->tri_normal = vlst_clone(mesh->tri_normal);
-		clone->tri_color = vlst_clone(mesh->tri_color);
-		clone->tri_uv = vlst_clone(mesh->tri_uv);
+		clone->vertex = vlst_copy(mesh->vertex);
+		clone->quads = vlst_copy(mesh->quads);
+		clone->tris = vlst_copy(mesh->tris);
+		clone->uvs = vlst_copy(mesh->uvs);
+		clone->colors = vlst_copy(mesh->colors);
+		clone->quad_vertex = vlst_copy(mesh->quad_vertex);
+		clone->quad_face = vlst_copy(mesh->quad_face);
+		clone->quad_normal = vlst_copy(mesh->quad_normal);
+		clone->quad_color = vlst_copy(mesh->quad_color);
+		clone->quad_uv = vlst_copy(mesh->quad_uv);
+		clone->tri_vertex = vlst_copy(mesh->tri_vertex);
+		clone->tri_face = vlst_copy(mesh->tri_face);
+		clone->tri_normal = vlst_copy(mesh->tri_normal);
+		clone->tri_color = vlst_copy(mesh->tri_color);
+		clone->tri_uv = vlst_copy(mesh->tri_uv);
 
 		return clone;
 	}

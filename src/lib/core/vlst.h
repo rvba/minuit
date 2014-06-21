@@ -66,15 +66,17 @@ void 		vlst_vertex(const char *type,t_vlst *dst,t_vlst *vertex,t_vlst *face);
 void 		_do_face(void *src,void *dst,int count,int size);
 void 		vlst_build(t_vlst *vlst,void *ptr);
 void 		vlst_add_data(t_vlst *vlst,void *ptr);
-void 		vlst_copy(t_vlst *dst,t_vlst *src);
+void 		vlst_copy_data(t_vlst *dst,t_vlst *src);
+t_vlst *	vlst_copy( t_vlst *vlst_src);
 void 		vlst_normal_4f(t_vlst *dst,t_vlst *vertex,t_vlst *face);
 void 		vlst_add_vlst(t_vlst *vlst_dst,t_vlst *vlst_src);
 
 void 		vlst_add_number(t_vlst *vlst,t_data_type type,void *data);
 
+/*
 t_vlst *	vlst_duplicate(t_vlst *vlst);
-void 		vlst_set(t_vlst *vlst,int i);
 t_vlst *	vlst_clone(t_vlst *vlst);
+*/
 
 void __vlst_update_data( struct Brick *brick, t_vlst *vlst,t_vlst *caller);
 

@@ -434,7 +434,7 @@ void *data_copy(t_data_type type,void *data)
 
 			vlst_new = (t_vlst *)data_new;
 			vlst_old = (t_vlst *)data;
-			vlst_copy(vlst_new,vlst_old);
+			vlst_copy_data(vlst_new,vlst_old);
 			//XXX
 			vlst_new->is_linked = 0;
 

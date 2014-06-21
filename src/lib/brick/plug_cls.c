@@ -970,7 +970,7 @@ void __cls_plug_flow_vector(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 					t_vlst *vlst_dst = vector_self->vector;
 
 					// Copy Vector List Datas
-					vlst_copy(vlst_dst, vlst_src);
+					vlst_copy_data(vlst_dst, vlst_src);
 
 					// If Vector Has Components
 					if(brick->brick_state.has_components)

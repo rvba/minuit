@@ -18,6 +18,20 @@ void image_rebind( struct Scene *sc, void *ptr)
 }
 
 
+t_image *image_copy( t_image *image_src)
+{
+	t_image *image = image_new( image_src->id.name);
+
+	image->width = image_src->width;
+	image->height = image_src->height;
+	image->bpp = image_src->bpp;
+	image->size = image_src->size;
+	image->vlst = vlst_copy( image_src->vlst);
+
+	return image;
+}
+	
+
 t_image *image_open( const char *path)
 {
 	t_image *image = NULL;

@@ -683,6 +683,26 @@ void vlst_vertex(const char *type,t_vlst *dst,t_vlst *vertex,t_vlst *face)
 
 // COPY
 
+t_vlst *vlst_copy( t_vlst *vlst_src)
+{
+	t_vlst *vlst = vlst_new( vlst_src->id.name);
+
+	vlst->count = vlst_src->count;
+	vlst->length = vlst_src->length;
+	vlst->size = vlst_src->size;
+	vlst->count_new = vlst_src->count_new;
+	vlst->need_update = vlst_src->need_update;
+	vlst->is_linked = vlst_src->is_linked;
+	vlst->link = vlst_src->link;
+	vlst->type = vlst_src->type;
+
+	size_t size = vlst->size * vlst->length * vlst->count;
+	vlst->data = mem_malloc(size);
+	memcpy( vlst->data, vlst_src->data, size);
+
+	return vlst;
+}
+
 void vlst_add_data(t_vlst *vlst,void *ptr)
 {
 	t_data_type t=vlst->type;
@@ -694,7 +714,7 @@ void vlst_add_data(t_vlst *vlst,void *ptr)
 	else 	printf("[ERROR vlst_add_data] Unknown type %d\n",t);
 }
 
-void vlst_copy(t_vlst *dst,t_vlst *src)
+void vlst_copy_data(t_vlst *dst,t_vlst *src)
 {
 	if(src->type==dst->type)
 	{
@@ -709,13 +729,6 @@ void vlst_copy(t_vlst *dst,t_vlst *src)
 	{
 		printf("[ERROR vlst_copy]Vlists don't match\n");
 	}
-}
-
-// SET
-
-void vlst_set(t_vlst *vlst,int i)
-{
-	vlst_copy(vlst,NULL);
 }
 
 // BUILD
@@ -776,6 +789,7 @@ t_vlst *vlst_make( const char *name, t_data_type type, int length, int count, vo
 
 // CLONE
 
+/*
 t_vlst *vlst_duplicate(t_vlst *vlst)
 {
 	t_vlst *vlst_new = vlst_make(vlst->id.name, vlst->type, vlst->length, vlst->count, NULL);
@@ -783,6 +797,7 @@ t_vlst *vlst_duplicate(t_vlst *vlst)
 
 	return vlst_new;
 }
+*/
 
 // INIT
 
@@ -794,6 +809,7 @@ void vlst_init(t_vlst *vlst)
 
 // CLONE
 
+/*
 t_vlst *vlst_clone(t_vlst *vlst)
 {
 	if(vlst)
@@ -821,6 +837,7 @@ t_vlst *vlst_clone(t_vlst *vlst)
 		return NULL;
 	}
 }
+*/
 
 // REF
 
