@@ -34,6 +34,7 @@ typedef struct Image
 
 }t_image;
 
+void 		image_delete( t_image *image);
 t_image *	image_copy( t_image *image_src);
 void		image_rebind( struct Scene *sc, void *prt);
 t_image *	image_open( const char *path);
