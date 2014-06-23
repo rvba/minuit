@@ -19,6 +19,19 @@ void image_rebind( struct Scene *sc, void *ptr)
 {
 }
 
+void image_data_convert( t_image *image, t_data_type type)
+{
+	t_vlst *vlst = image->vlst;
+	if(vlst)
+	{
+		if( type == dt_uchar && vlst->type == dt_float)
+		{
+			vlst_map( vlst, dt_uchar, 0, 255);
+		}
+		else printf("Not implemented\n");
+	}
+}
+
 t_image *image_copy( t_image *image_src)
 {
 	t_image *image = image_new( image_src->id.name);
@@ -31,7 +44,6 @@ t_image *image_copy( t_image *image_src)
 
 	return image;
 }
-	
 
 t_image *image_open( const char *path)
 {

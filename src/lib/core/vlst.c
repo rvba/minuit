@@ -24,6 +24,41 @@
 #include "vlst.h"
 #include "brick.h"
 
+int vlst_get_size( t_vlst *vlst)
+{
+	return( vlst->count * vlst->length * vlst->size);
+}
+
+void vlst_map( t_vlst *vlst, t_data_type type, float start, float end)
+{
+	switch( type)
+	{
+		case( dt_uchar):
+			if( vlst->type == dt_float)
+			{
+				float *src = ( float *) vlst->data;
+				int size = vlst_get_size( vlst);
+				unsigned char *data = (unsigned char *) mem_malloc( size);
+				int count = vlst->count * vlst->length;
+				
+				int i;
+				for( i = 0; i < count ; i++)
+				{
+					int a = cpt_map_fi( src[i] , 0, 1, 0, 255);
+					data[i] = (unsigned char) a;
+				}
+
+				mem_free( vlst->data, size);
+
+				vlst->type = dt_uchar;
+				vlst->data = data;
+			}
+
+			break;
+		default: printf("Not Implemented\n");
+	}
+}
+
 void *vlst_get_pointer(t_vlst *vlst, int indice)
 {
 	void *ptr = vlst->data;

@@ -34,6 +34,7 @@ typedef struct Image
 
 }t_image;
 
+void 		image_data_convert( t_image *image, t_data_type type);
 void 		image_delete( t_image *image);
 t_image *	image_copy( t_image *image_src);
 void		image_rebind( struct Scene *sc, void *prt);

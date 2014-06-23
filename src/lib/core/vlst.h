@@ -41,6 +41,8 @@ typedef struct VLst
 }t_vlst;
 
 
+void 		vlst_map( t_vlst *vlst, t_data_type type, float start, float end);
+
 void 		vlst_update_data( struct Brick *brick, t_vlst *vlst,t_vlst *caller);
 void		vlst_free(t_vlst *vlst);
 void 		vlst_delete( t_vlst *vlst);
