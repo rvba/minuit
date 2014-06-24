@@ -38,6 +38,7 @@ typedef struct Object_Class
 	void (* show)(struct Object *self);
 	void (* draw)(struct Object *self);
 	void (* init)(struct Object *object);
+	void (* build)(struct Object *object);
 
 }t_object_class;
 

@@ -31,13 +31,36 @@ void cls_object_link(t_object *self,t_node *target);
 void cls_object_show(t_object *object);
 void cls_object_init(t_object *object) {};
 
+void cls_object_build( t_object *object)
+{
+	t_context *C = ctx_get();
+
+	if(C->ui->add_bricks)
+	{
+		// add data node
+		scene_add_data_node(C->scene,"app_node","object", object->id.name, object->id.node);
+
+		// New Block
+		t_node *node_block=add_block(C, object->id.name);
+		t_block *block=node_block->data;
+		object->ref=block;
+
+		// add selector
+		add_part_selector(C,block, object->id.name, object->id.node,dt_object);
+
+		// Add Offset
+		add_block_offset(C,block);
+	}
+}
+
 t_object_class object_point =
 {
 	.type=dt_point,
 	.init=cls_object_init,
 	.link=cls_object_link,
 	.show=cls_object_show,
-	.draw=cls_object_draw_point
+	.draw=cls_object_draw_point,
+	.build=cls_object_build,
 };
 
 t_object_class object_mesh =
@@ -46,7 +69,8 @@ t_object_class object_mesh =
 	.init=cls_object_init,
 	.link=cls_object_link,
 	.show=cls_object_show,
-	.draw=cls_object_draw_mesh
+	.draw=cls_object_draw_mesh,
+	.build=cls_object_build,
 };
 
 t_object_class object_light =
@@ -55,7 +79,8 @@ t_object_class object_light =
 	.init=cls_object_init,
 	.link=cls_object_link,
 	.show=cls_object_show,
-	.draw=cls_object_draw_light
+	.draw=cls_object_draw_light,
+	.build=cls_object_build,
 };
 
 t_object_class object_camera =
@@ -64,7 +89,8 @@ t_object_class object_camera =
 	.init=cls_object_init,
 	.link=cls_object_link,
 	.show=cls_object_show,
-	.draw=cls_object_draw_camera
+	.draw=cls_object_draw_camera,
+	.build=cls_object_build,
 };
 
 t_object_class object_image =
@@ -73,7 +99,8 @@ t_object_class object_image =
 	.init=cls_object_init,
 	.link=cls_object_link,
 	.show=cls_object_show,
-	.draw=cls_object_draw_image
+	.draw=cls_object_draw_image,
+	.build=cls_object_build,
 };
 
 t_object_class *object_classes[] = 
@@ -347,27 +374,13 @@ t_node *object_make( t_data_type type, const char *name)
 	t_lst *lst = node_members->data;
 	object->members = lst;
 
+	// Set Colors
 	int col[3];
 	scene_color_get(sc,col);
 	vcp3i(object->idcol,col);
 
-	if(C->ui->add_bricks)
-	{
-		// add data node
-		scene_add_data_node(C->scene,"app_node","object",name,node);
-
-		// New Block
-		t_node *node_block=add_block(C,name);
-		t_block *block=node_block->data;
-
-		object->ref=block;
-
-		// add selector
-		add_part_selector(C,block,name,node,dt_object);
-
-		// Add Offset
-		add_block_offset(C,block);
-	}
+	// Build Bricks
+	object->cls->build( object);
 
 	return node;
 }
