@@ -322,15 +322,34 @@ void object_rebind(t_scene *sc,void *ptr)
 	object->update=NULL;
 }
 
-// ADD
+// MAKE
 
-t_node *object_add( t_data_type type, const char *name)
+t_node *object_make( t_data_type type, const char *name)
 {
 	t_context *C = ctx_get();
+	t_scene *sc = C->scene;
 
-	// make object
-	t_node *node = object_make( type, name);
-	t_object *object = node->data;
+	// new object
+	t_node *node = scene_add( C->scene, dt_object, name);
+	t_object *object=node->data;
+
+	// build cls
+	cls_object_set( object, type);
+
+	// new list (bricks list)
+	t_node *list = scene_add(C->scene,dt_list,"object_blocks");
+
+	// bind list
+	object->cls->link(object,list);
+
+	// Members
+	t_node *node_members = scene_add(C->scene,dt_list,"object_members");
+	t_lst *lst = node_members->data;
+	object->members = lst;
+
+	int col[3];
+	scene_color_get(sc,col);
+	vcp3i(object->idcol,col);
 
 	if(C->ui->add_bricks)
 	{
@@ -349,39 +368,6 @@ t_node *object_add( t_data_type type, const char *name)
 		// Add Offset
 		add_block_offset(C,block);
 	}
-
-	return node;
-}
-
-// MAKE
-
-t_node *object_make( t_data_type type, const char *name)
-{
-	t_context *C = ctx_get();
-	t_scene *sc = C->scene;
-
-	// new object
-	t_node *node = scene_add( C->scene, dt_object, name);
-	t_object *object=node->data;
-
-	// build cls
-	cls_object_set( object, type);
-
-	// new list (bricks list)
-	t_node *list = scene_add(C->scene,dt_list,"object_blocks");
-
-
-	// bind list
-	object->cls->link(object,list);
-
-	// Members
-	t_node *node_members = scene_add(C->scene,dt_list,"object_members");
-	t_lst *lst = node_members->data;
-	object->members = lst;
-
-	int col[3];
-	scene_color_get(sc,col);
-	vcp3i(object->idcol,col);
 
 	return node;
 }
