@@ -35,9 +35,8 @@ void cls_object_init(t_object *object)
 
 t_object_class object_point =
 {
-	.cls_type="object",
-	.init=cls_object_init,
 	.type=dt_point,
+	.init=cls_object_init,
 	.link=cls_object_link,
 	.show=cls_object_show,
 	.draw=cls_object_draw_point
@@ -45,9 +44,8 @@ t_object_class object_point =
 
 t_object_class object_generic =
 {
-	.cls_type="object",
-	.init=cls_object_init,
 	.type=dt_object,
+	.init=cls_object_init,
 	.link=cls_object_link,
 	.show=cls_object_show,
 	.draw=cls_object_draw_mesh
@@ -55,9 +53,8 @@ t_object_class object_generic =
 
 t_object_class object_light =
 {
-	.cls_type="object",
-	.init=cls_object_init,
 	.type=dt_light,
+	.init=cls_object_init,
 	.link=cls_object_link,
 	.show=cls_object_show,
 	.draw=cls_object_draw_light
@@ -65,9 +62,8 @@ t_object_class object_light =
 
 t_object_class object_camera =
 {
-	.cls_type="object",
-	.init=cls_object_init,
 	.type=dt_camera,
+	.init=cls_object_init,
 	.link=cls_object_link,
 	.show=cls_object_show,
 	.draw=cls_object_draw_camera
@@ -75,9 +71,8 @@ t_object_class object_camera =
 
 t_object_class object_image =
 {
-	.cls_type="object",
-	.init=cls_object_init,
 	.type=dt_image,
+	.init=cls_object_init,
 	.link=cls_object_link,
 	.show=cls_object_show,
 	.draw=cls_object_draw_image

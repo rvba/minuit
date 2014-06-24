@@ -32,7 +32,6 @@ struct Datum;
 
 typedef struct Object_Class
 {
-	char cls_type[_NAME_];
 	t_data_type type;
 	struct Node *(* get_mesh)(struct Node *node);
 	void (* link)(struct Object *self,struct Node *target);
