@@ -485,5 +485,14 @@ void *op_add_geo_array(t_brick *brick)
 
 	return NULL;
 }
+
+void *op_add_image( t_brick *brick)
+{
+	t_context *C=ctx_get();
+	scene_store(C->scene,1);
+	t_node *node = object_add( "image", "image");
+	scene_store(C->scene,0);
+	return node;
+}
 	
 	

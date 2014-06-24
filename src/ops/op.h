@@ -174,6 +174,7 @@ void *		op_add_empty_geo_edge( struct Brick *brick);
 void *		op_add_geo_array( struct Brick *brick);
 
 void *		op_add_object_square(struct Brick *brick);
+void *		op_add_image( struct Brick *brick);
 
 
 void 		op_camera_default_ortho_location( struct Context *C, float x, float y);

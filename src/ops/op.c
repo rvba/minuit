@@ -104,6 +104,7 @@ t_block *make_menu_add_object( t_context *C)
 	add_brick_trigger(C,block,"viewport",op_add_screen);
 	add_brick_trigger(C,block,"object",op_add_empty_object);
 	add_brick_trigger(C,block,"mesh",op_add_empty_mesh);
+	add_brick_trigger(C,block,"image",op_add_image);
 	add_brick_trigger(C,block,"vlstf",op_add_empty_float_vlst);
 	add_brick_trigger(C,block,"vlsti",op_add_empty_int_vlst);
 

@@ -73,6 +73,16 @@ t_object_class object_camera =
 	.draw=cls_object_draw_camera
 };
 
+t_object_class object_image =
+{
+	.cls_type="object",
+	.init=cls_object_init,
+	.type="image",
+	.link=cls_object_link,
+	.show=cls_object_show,
+	.draw=cls_object_draw_image
+};
+
 void cls_object_show(t_object *object)
 {
 	printf("[OBJECT]\n");
@@ -124,6 +134,10 @@ void object_build(t_object *object,const char *type)
 	else if(is(type,"point"))
 	{
 		object->cls=&object_point;
+	}
+	else if(is(type,"image"))
+	{
+		object->cls=&object_image;
 	}
 	else
 	{

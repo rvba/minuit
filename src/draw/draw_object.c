@@ -29,6 +29,11 @@ void cls_object_draw_camera(t_object *object)
 {
 }
 
+
+void cls_object_draw_image( t_object *object)
+{
+}
+
 void cls_object_draw_point(t_object *object)
 {
 	t_context *C=ctx_get();
