@@ -53,6 +53,18 @@ void cls_object_build( t_object *object)
 	}
 }
 
+void cls_object_build_image( t_object *object)
+{
+	t_context *C = ctx_get();
+
+	cls_object_build( object);
+	if(C->ui->add_bricks)
+	{
+		t_block *block = object->ref;
+		add_part_label( C, block, "");
+	}
+}
+
 t_object_class object_point =
 {
 	.type=dt_point,
@@ -100,7 +112,7 @@ t_object_class object_image =
 	.link=cls_object_link,
 	.show=cls_object_show,
 	.draw=cls_object_draw_image,
-	.build=cls_object_build,
+	.build=cls_object_build_image,
 };
 
 t_object_class *object_classes[] = 

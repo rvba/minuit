@@ -674,7 +674,7 @@ t_node *add_brick_pointer(t_context *C,t_block *block,const char *name,t_data_ty
 
 t_node *add_part_label(t_context *C,t_block *block,const char *name)
 {
-	t_node *node=brick_make(block,name,bt_trigger,dt_int,NULL);
+	t_node *node=brick_make( block, name, bt_label, dt_string, NULL);
 	t_brick *brick = ( t_brick *) node->data;
 	brick->brick_state.draw_outline=0;
 	return node;

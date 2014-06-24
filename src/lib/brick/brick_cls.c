@@ -79,6 +79,7 @@ void brick_make_menu(t_brick *brick);
 void brick_make_selector(t_brick *brick);
 void brick_make_switch(t_brick *brick);
 void brick_make_bar(t_brick *brick);
+void brick_make_label(t_brick *brick);
 
 // TRIGGER
 
@@ -152,6 +153,18 @@ t_brick_class brick_bar = {
 	.disconnect=cls_brick_disconnect,
 	};
 
+// LABEL
+
+t_brick_class brick_label = {
+	.cls_type="brick",
+	.type=bt_label,
+	.make=brick_make_label,
+	.draw=brick_draw,
+	.init=cls_brick_init,
+	.connect=cls_brick_connect,
+	.disconnect=cls_brick_disconnect,
+	};
+
 
 // CLS
 
@@ -162,6 +175,7 @@ t_brick_class *bricks[] = {
 	&brick_selector,
 	&brick_switch,
 	&brick_bar,
+	&brick_label,
 	};
 
 void brick_make_trigger(t_brick *brick)
@@ -193,6 +207,12 @@ void brick_make_bar(t_brick *brick)
 {
 	brick->cls=&brick_bar;
 }
+
+void brick_make_label(t_brick *brick)
+{
+	brick->cls=&brick_label;
+}
+
 
 // INIT
 

@@ -42,6 +42,7 @@ typedef enum Brick_Type
 	bt_selector,
 	bt_switch,
 	bt_bar,
+	bt_label,
 
 }t_brick_type;
 
