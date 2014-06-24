@@ -94,6 +94,7 @@ typedef enum Data_Type
 	dt_vlst,
 	dt_camera,
 	dt_object,
+	dt_point,
 	dt_selector,
 	dt_trigger,
 	dt_operator,

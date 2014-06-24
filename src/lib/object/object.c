@@ -37,7 +37,7 @@ t_object_class object_point =
 {
 	.cls_type="object",
 	.init=cls_object_init,
-	.type="point",
+	.type=dt_point,
 	.link=cls_object_link,
 	.show=cls_object_show,
 	.draw=cls_object_draw_point
@@ -47,7 +47,7 @@ t_object_class object_generic =
 {
 	.cls_type="object",
 	.init=cls_object_init,
-	.type="object",
+	.type=dt_object,
 	.link=cls_object_link,
 	.show=cls_object_show,
 	.draw=cls_object_draw_mesh
@@ -57,7 +57,7 @@ t_object_class object_light =
 {
 	.cls_type="object",
 	.init=cls_object_init,
-	.type="light",
+	.type=dt_light,
 	.link=cls_object_link,
 	.show=cls_object_show,
 	.draw=cls_object_draw_light
@@ -67,7 +67,7 @@ t_object_class object_camera =
 {
 	.cls_type="object",
 	.init=cls_object_init,
-	.type="camera",
+	.type=dt_camera,
 	.link=cls_object_link,
 	.show=cls_object_show,
 	.draw=cls_object_draw_camera
@@ -77,7 +77,7 @@ t_object_class object_image =
 {
 	.cls_type="object",
 	.init=cls_object_init,
-	.type="image",
+	.type=dt_image,
 	.link=cls_object_link,
 	.show=cls_object_show,
 	.draw=cls_object_draw_image
@@ -117,36 +117,36 @@ void cls_object_link(t_object *self,t_node *target)
 	else printf("[ERROR:cls_object_link] Unknown node type %s",data_name_get(target->type));
 }
 
-void object_build(t_object *object,const char *type)
+void object_build( t_object *object, t_data_type type)
 {
-	if(is(type,"mesh"))
+	if( type == dt_mesh)
 	{
 		object->cls=&object_generic;
 	}
-	else if(is(type,"light"))
+	else if( type == dt_light)
 	{
 		object->cls=&object_light;
 	}
-	else if(is(type,"camera"))
+	else if( type == dt_camera)
 	{
 		object->cls=&object_camera;
 	}
-	else if(is(type,"point"))
+	else if( type == dt_point)
 	{
 		object->cls=&object_point;
 	}
-	else if(is(type,"image"))
+	else if( type == dt_image)
 	{
 		object->cls=&object_image;
 	}
 	else
 	{
-		printf("[ERROR object_build] Unknown type %s\n",type);
+		printf("[ERROR object_build] Unknown type %s\n", data_name_get( type));
 	}
 
-	set_name(object->type,type);
+	// Store object type
+	object->type = type;
 }
-
 
 void object_draw_add(t_node *node,void (* func)(t_node *node))
 {
@@ -322,7 +322,7 @@ void object_rebind(t_scene *sc,void *ptr)
 {
 	t_object *object=(t_object *)ptr;
 
-	object_build(object,object->type);
+	object_build( object, object->type);
 	
 	rebind(sc,"object","mesh",(void **)&object->mesh);
 	rebind(sc,"object","blocks",(void **)&object->blocks);
@@ -336,13 +336,13 @@ void object_rebind(t_scene *sc,void *ptr)
 
 // ADD
 
-t_node *object_add(const char *type,const char *name)
+t_node *object_add( t_data_type type, const char *name)
 {
 	t_context *C = ctx_get();
 
 	// make object
-	t_node *node=object_make(type,name);
-	t_object *object=node->data;
+	t_node *node = object_make( type, name);
+	t_object *object = node->data;
 
 	if(C->ui->add_bricks)
 	{
@@ -367,17 +367,17 @@ t_node *object_add(const char *type,const char *name)
 
 // MAKE
 
-t_node *object_make(const char *type,const char *name)
+t_node *object_make( t_data_type type, const char *name)
 {
 	t_context *C = ctx_get();
 	t_scene *sc = C->scene;
 
 	// new object
-	t_node *node = scene_add(C->scene,dt_object,name);
+	t_node *node = scene_add( C->scene, dt_object, name);
 	t_object *object=node->data;
 
 	// build cls
-	object_build(object,type);
+	object_build( object, type);
 
 	// new list (bricks list)
 	t_node *list = scene_add(C->scene,dt_list,"object_blocks");

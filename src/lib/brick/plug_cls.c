@@ -1531,7 +1531,7 @@ void __cls_plug_flow_object(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 
 				if(object)
 				{
-					if(is(object->type,"mesh"))
+					if( object->type == dt_mesh)
 					{
 						mesh=src_plug->data;
 						object->mesh=mesh;
@@ -1543,7 +1543,7 @@ void __cls_plug_flow_object(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 			// + CAMERA
 			case dt_camera:
 
-				if(is(object->type,"camera"))
+				if( object->type == dt_camera)
 				{
 					if(src_plug->state.open_out)
 					{

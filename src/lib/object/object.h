@@ -33,7 +33,7 @@ struct Datum;
 typedef struct Object_Class
 {
 	char cls_type[_NAME_];
-	char type[_NAME_];
+	t_data_type type;
 	struct Node *(* get_mesh)(struct Node *node);
 	void (* link)(struct Object *self,struct Node *target);
 	void (* show)(struct Object *self);
@@ -50,7 +50,7 @@ typedef struct Object
 	t_object_class *cls;
 
 	int idcol[3];
-	char type[_NAME_];
+	t_data_type type;
 
 	float loc[3];
 	float rot[3];
@@ -99,9 +99,9 @@ void 		cls_object_draw_point(t_object *object);
 
 t_object *	object_clone(t_object *object);
 void		object_rebind(struct Scene *sc,void *ptr);
-void 		object_build(t_object *object,const char *type);
-struct Node *	object_make(const char *type,const char *name);
-struct Node *	object_add(const char *type,const char *name);
+void 		object_build(t_object *object, t_data_type type);
+struct Node *	object_make( t_data_type type , const char *name);
+struct Node *	object_add( t_data_type type, const char *name);
 void *		object_new(const char *name);
 
 void 		_object_free(t_object *object);

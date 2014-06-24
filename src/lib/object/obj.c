@@ -404,7 +404,7 @@ void _op_obj_import(void)
 
 
 			// new object
-			t_node *node_object=object_add("mesh",obj->name);
+			t_node *node_object = object_add( dt_mesh, obj->name);
 
 			// link
 			t_object *object=node_object->data;

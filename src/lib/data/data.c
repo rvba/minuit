@@ -65,6 +65,7 @@ char name_undefined[] = "undefined";
 char name_texture[] = "texture";
 char name_image[] = "image";
 char name_module[] = "module";
+char name_point[] = "point";
 
 void cls_data_init(t_data *data)
 {
@@ -124,6 +125,7 @@ char *data_name_get(t_data_type type)
 		case dt_texture: return name_texture; break;
 		case dt_image: return name_image; break;
 		case dt_module: return name_module; break;
+		case dt_point: return name_point; break;
 		default: printf("data_name_get type not implemented %d\n", type);return name_default; break;
 	}
 }

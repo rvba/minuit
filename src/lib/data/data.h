@@ -82,6 +82,7 @@ extern char name_option[];
 extern char name_binding[];
 extern char name_material[];
 extern char name_light[];
+extern char name_point[];
 
 
 char *		data_name_get(t_data_type);

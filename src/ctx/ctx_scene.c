@@ -136,7 +136,7 @@ int node_hover_object(t_context *C, t_node *node)
 	t_object *object = ( t_object *) node->data;
 	t_mesh *mesh=object->mesh;
 
-	if(is(object->type,"point"))
+	if( object->type == dt_point)
 	{
 		if(COLOR_MATCH( C->event->color, object->idcol))
 		{
