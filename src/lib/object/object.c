@@ -29,9 +29,7 @@
 void object_default(t_node *node){}
 void cls_object_link(t_object *self,t_node *target);
 void cls_object_show(t_object *object);
-void cls_object_init(t_object *object)
-{
-}
+void cls_object_init(t_object *object) {};
 
 t_object_class object_point =
 {
@@ -42,9 +40,9 @@ t_object_class object_point =
 	.draw=cls_object_draw_point
 };
 
-t_object_class object_generic =
+t_object_class object_mesh =
 {
-	.type=dt_object,
+	.type=dt_mesh,
 	.init=cls_object_init,
 	.link=cls_object_link,
 	.show=cls_object_show,
@@ -78,6 +76,32 @@ t_object_class object_image =
 	.draw=cls_object_draw_image
 };
 
+t_object_class *object_classes[] = 
+{
+	&object_point,
+	&object_mesh,
+	&object_light,
+	&object_camera,
+	&object_image,
+};
+
+void cls_object_set( t_object *object, t_data_type type)
+{
+	int n = sizeof( object_classes) / sizeof( object_classes[0]);
+	int i;
+	for( i = 0; i < n; i++)
+	{
+		if( type == object_classes[i]->type)
+		{
+			object->cls = object_classes[i];
+			object->type = type;
+			return;
+		}
+	}
+
+	printf("[ERROR:Object] Unknown type %s\n", data_name_get( type));
+}
+
 void cls_object_show(t_object *object)
 {
 	printf("[OBJECT]\n");
@@ -110,37 +134,6 @@ void cls_object_link(t_object *self,t_node *target)
 		target->users++;
 	}
 	else printf("[ERROR:cls_object_link] Unknown node type %s",data_name_get(target->type));
-}
-
-void object_build( t_object *object, t_data_type type)
-{
-	if( type == dt_mesh)
-	{
-		object->cls=&object_generic;
-	}
-	else if( type == dt_light)
-	{
-		object->cls=&object_light;
-	}
-	else if( type == dt_camera)
-	{
-		object->cls=&object_camera;
-	}
-	else if( type == dt_point)
-	{
-		object->cls=&object_point;
-	}
-	else if( type == dt_image)
-	{
-		object->cls=&object_image;
-	}
-	else
-	{
-		printf("[ERROR object_build] Unknown type %s\n", data_name_get( type));
-	}
-
-	// Store object type
-	object->type = type;
 }
 
 void object_draw_add(t_node *node,void (* func)(t_node *node))
@@ -317,7 +310,7 @@ void object_rebind(t_scene *sc,void *ptr)
 {
 	t_object *object=(t_object *)ptr;
 
-	object_build( object, object->type);
+	cls_object_set( object, object->type);
 	
 	rebind(sc,"object","mesh",(void **)&object->mesh);
 	rebind(sc,"object","blocks",(void **)&object->blocks);
@@ -372,7 +365,7 @@ t_node *object_make( t_data_type type, const char *name)
 	t_object *object=node->data;
 
 	// build cls
-	object_build( object, type);
+	cls_object_set( object, type);
 
 	// new list (bricks list)
 	t_node *list = scene_add(C->scene,dt_list,"object_blocks");
