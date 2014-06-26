@@ -20,53 +20,6 @@
 #include "ui.h"
 #include "memory.h"
 
-char name_null[] = "null";
-char name_int[] = "int";
-char name_default[] = "default";
-char name_float[] = "float";
-char name_string[] = "string";
-char name_char[] = "char";
-char name_vertex[] = "vertex";
-char name_face[] = "face";
-char name_lst[] = "lst";
-char name_vlst[] = "vlst";
-char name_pointer[] = "pointer";
-char name_mesh[] = "mesh";
-char name_object[] = "object";
-char name_selector[] = "selector";
-char name_uint[] = "uint";
-char name_camera[] = "camera";
-char name_trigger[] = "trigger";
-char name_operator[] = "operator";
-char name_vector[] = "vector";
-char name_viewport[] = "viewport";
-char name_brick[] = "brick";
-char name_block[] = "block";
-char name_rhizome[] = "rhizome";
-char name_graph[] = "graph";
-char name_set[] = "set";
-char name_geo_point[] = "point";
-char name_geo_edge[] = "edge";
-char name_geo_array[] = "array";
-char name_geo[] = "geometry";
-char name_dict[] = "dict";
-char name_symbol[] = "symbol";
-char name_var[] = "var";
-char name_list[] = "list";
-char name_link[] = "link";
-char name_data[] = "data";
-char name_screen[] = "screen";
-char name_option[] = "option";
-char name_binding[] = "binding";
-char name_light[] = "light";
-char name_material[] = "material";
-char name_datum[] = "datum";
-char name_undefined[] = "undefined";
-char name_texture[] = "texture";
-char name_image[] = "image";
-char name_module[] = "module";
-char name_point[] = "point";
-
 void cls_data_init(t_data *data)
 {
 }
@@ -77,56 +30,56 @@ t_data_cls cls_data=
 	.init=cls_data_init,
 };
 
-char *data_name_get(t_data_type type)
+const char *data_name_get(t_data_type type)
 {
 	switch(type)
 	{
-		case dt_null: return name_null; break;
-		case dt_int: return name_int; break;
-		case dt_uint: return name_uint; break;
-		case dt_float: return name_float; break; 
-		case dt_char: return name_char; break;
-		case dt_string: return name_string; break;
-		case dt_pointer: return name_pointer; break;
-		case dt_vertex: return name_vertex; break;
-		case dt_face: return name_face; break;
-		case dt_mesh: return name_mesh; break;
-		case dt_lst: return name_lst; break;
-		case dt_vlst: return name_vlst; break;
-		case dt_camera: return name_camera; break;
-		case dt_object: return name_object; break;
-		case dt_selector: return name_selector; break;
-		case dt_trigger: return name_trigger; break;
-		case dt_operator: return name_operator; break;
-		case dt_vector: return name_vector; break;
-		case dt_viewport: return name_viewport; break;
-		case dt_brick: return name_brick; break;
-		case dt_block: return name_block; break;
-		case dt_set: return name_set; break;
-		case dt_rhizome: return name_rhizome; break;
-		case dt_graph:  return name_graph; break;
-		case dt_geo_point:  return name_geo_point; break;
-		case dt_geo_edge:  return name_geo_edge; break;
-		case dt_geo_array:  return name_geo_array; break;
-		case dt_geo:  return name_geo; break;
-		case dt_dict: return name_dict; break;
-		case dt_symbol: return name_symbol; break;
-		case dt_var: return name_var; break;
-		case dt_list: return name_list; break;
-		case dt_link: return name_link; break;
-		case dt_data: return name_data; break;
-		case dt_screen: return name_screen; break;
-		case dt_option: return name_option; break;
-		case dt_binding: return name_binding; break;
-		case dt_material: return name_material; break;
-		case dt_light: return name_light; break;
-		case dt_datum: return name_datum; break;
-		case dt_undefined: return name_undefined; break;
-		case dt_texture: return name_texture; break;
-		case dt_image: return name_image; break;
-		case dt_module: return name_module; break;
-		case dt_point: return name_point; break;
-		default: printf("data_name_get type not implemented %d\n", type);return name_default; break;
+		case dt_null: return "null"; break;
+		case dt_int: return "int"; break;
+		case dt_uint: return "uint"; break;
+		case dt_float: return "float"; break; 
+		case dt_char: return "char"; break;
+		case dt_string: return "string"; break;
+		case dt_pointer: return "pointer"; break;
+		case dt_vertex: return "vertex"; break;
+		case dt_face: return "face"; break;
+		case dt_mesh: return "mesh"; break;
+		case dt_lst: return "lst"; break;
+		case dt_vlst: return "vlst"; break;
+		case dt_camera: return "camera"; break;
+		case dt_object: return "object"; break;
+		case dt_selector: return "selector"; break;
+		case dt_trigger: return "trigger"; break;
+		case dt_operator: return "operator"; break;
+		case dt_vector: return "vector"; break;
+		case dt_viewport: return "viewport"; break;
+		case dt_brick: return "brick"; break;
+		case dt_block: return "block"; break;
+		case dt_set: return "set"; break;
+		case dt_rhizome: return "rhizome"; break;
+		case dt_graph:  return "graph"; break;
+		case dt_geo_point:  return "geo_point"; break;
+		case dt_geo_edge:  return "geo_edge"; break;
+		case dt_geo_array:  return "geo_array"; break;
+		case dt_geo:  return "geo"; break;
+		case dt_dict: return "dict"; break;
+		case dt_symbol: return "symbol"; break;
+		case dt_var: return "var"; break;
+		case dt_list: return "list"; break;
+		case dt_link: return "link"; break;
+		case dt_data: return "data"; break;
+		case dt_screen: return "screen"; break;
+		case dt_option: return "option"; break;
+		case dt_binding: return "binding"; break;
+		case dt_material: return "material"; break;
+		case dt_light: return "light"; break;
+		case dt_datum: return "datum"; break;
+		case dt_undefined: return "undefined"; break;
+		case dt_texture: return "texture"; break;
+		case dt_image: return "image"; break;
+		case dt_module: return "module"; break;
+		case dt_point: return "point"; break;
+		default: printf("data_name_get type not implemented %d\n", type);return "-"; break;
 	}
 }
 

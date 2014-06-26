@@ -209,8 +209,8 @@ t_plug *plug_get_dst(t_plug *plug)
 void plug_warning(t_plug *dst_plug,t_plug *src_plug)
 {
 	char msg[40];
-	char *src_plug_type=data_name_get(src_plug->data_type);
-	char *dst_plug_type=data_name_get(dst_plug->data_type);
+	const char *src_plug_type=data_name_get(src_plug->data_type);
+	const char *dst_plug_type=data_name_get(dst_plug->data_type);
 
 	sprintf(msg,"(%s)(%s)-(%s)(%s)",src_plug->id.name,src_plug_type,dst_plug->id.name,dst_plug_type);
 	term_log(msg);
@@ -221,8 +221,8 @@ void plug_debug_connect(const char *name, t_plug *dst_plug, t_plug *src_plug)
 	if(PLUG_DEBUG)
 	{
 		char msg[40];
-		char *src_plug_type=data_name_get(src_plug->data_type);
-		char *dst_plug_type=data_name_get(dst_plug->data_type);
+		const char *src_plug_type=data_name_get(src_plug->data_type);
+		const char *dst_plug_type=data_name_get(dst_plug->data_type);
 
 		sprintf(msg,"%s %s-%s",name,dst_plug_type,src_plug_type);
 		term_log(msg);
@@ -1980,8 +1980,7 @@ void plug_cls_init(t_plug *plug)
 
 	if(!found)
 	{
-		char *type=data_name_get(plug->data_type);
-		printf("[ERROR:plug_cls_init] Unknown plug type [%s]\n",type);
+		printf("[ERROR:plug_cls_init] Unknown plug type [%s]\n", data_name_get( plug->data_type));
 	}
 }
 

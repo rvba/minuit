@@ -93,7 +93,6 @@ void brick_build_txt(t_brick *brick)
 	t_txt *txt_data=&brick->txt_data;
 
 	char txt[30];
-	char *_type;
 
 	//-- vector brick is not initialized
 	if(plug_intern->data)
@@ -125,8 +124,7 @@ void brick_build_txt(t_brick *brick)
 				break;
 
 			default:
-				_type=data_name_get(type);
-				txt_data->data_change(txt_data,_type);
+				txt_data->data_change(txt_data, data_name_get( type));
 				break;
 		}
 	}
