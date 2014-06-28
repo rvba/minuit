@@ -149,7 +149,7 @@ void camera_show(t_camera *camera)
 	printf("far %f\n",camera->far);
 }
 
-void camera_copy(t_camera *target,t_camera *source)
+void camera_copy_data(t_camera *target,t_camera *source)
 {
 	target->type = source->type;
 
@@ -182,6 +182,14 @@ void camera_copy(t_camera *target,t_camera *source)
 	target->frame=source->frame;
 }
 
+t_camera *camera_copy( t_camera *camera_src)
+{
+	t_node *node = camera_make( camera_src->id.name);
+	t_camera *camera = ( t_camera *) node->data;
+	camera_copy_data( camera, camera_src);
+	return camera;
+}
+
 void _camera_free(t_camera *camera)
 {
 	mem_free( camera, sizeof( t_camera));
@@ -196,6 +204,12 @@ t_node *camera_add(const char *name)
 {
 	t_node *node = camera_make(name); //XXX
 	return node;
+}
+
+void camera_delete( t_camera *camera)
+{
+	t_context *C = ctx_get();
+	scene_delete( C->scene, camera);
 }
 
 t_node *camera_make(const char *name)
@@ -229,6 +243,7 @@ void *camera_get_ref(t_camera *camera, const char *ref)
 	return p;
 }
 
+/*
 t_camera *camera_clone(t_camera *camera)
 {
 	t_camera *clone = camera_new(camera->id.name);
@@ -270,6 +285,7 @@ t_camera *camera_clone(t_camera *camera)
 	return clone;
 
 };
+*/
 
 void camera_rebind(t_scene *scene, void *ptr)
 {

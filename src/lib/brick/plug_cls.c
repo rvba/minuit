@@ -1549,7 +1549,7 @@ void __cls_plug_flow_object(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 					{
 						camera_src=src_plug->data;
 						camera_dst=object->data;
-						camera_copy(camera_dst,camera_src);
+						camera_copy_data( camera_dst, camera_src);
 					}
 				}
 

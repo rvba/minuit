@@ -290,7 +290,7 @@ t_viewport *viewport_clone(t_viewport *viewport)
 		
 		clone->x = viewport->x;
 		clone->y = viewport->y;
-		clone->camera = camera_clone(viewport->camera);
+		clone->camera = camera_copy( viewport->camera);
 		clone->draw = viewport->draw;
 
 		return clone;
