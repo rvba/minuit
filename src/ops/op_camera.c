@@ -91,7 +91,7 @@ void op_camera_switch_view(t_camera *camera)
 t_camera *op_camera_default_get( t_context *C)
 {
 	t_camera *camera = NULL;
-	if(C->scene->has_generic_viewport) camera = ctx_ui_camera_get( C);
+	if(C->scene->has_generic_viewport) camera = ctx_ui_get_camera( C);
 	return camera;
 }
 

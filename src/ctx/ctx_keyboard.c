@@ -158,7 +158,7 @@ void keymap_command( int key)
 	t_camera *camera = NULL;
 	if(C->scene->has_generic_viewport)
 	{
-		camera = ctx_ui_camera_get( C);
+		camera = ctx_ui_get_camera( C);
 	}
 
 	switch(key)

@@ -131,9 +131,7 @@ void ctx_render_scene(struct Context *C);
 
 // CTX_LINKS.C
 
-//struct Lst *block_branch_src_get(struct Context *C,struct Block *block);
 void ctx_links_term_cleanup(struct Context *C);
-//void block_branch_get(struct Lst *lst,struct Block *block);
 void ctx_links_loop(struct Context *C);
 void ctx_links_update(struct Context *C);
 void ctx_links_reset(struct Context *C,struct Lst *lst);
@@ -212,7 +210,10 @@ extern void (* UI_STATE)( struct Context *C, struct Event *e);
 
 void state_browser( struct Context *C, struct Event *e);
 void state_ui_default( struct Context *C, struct Event *e);
-struct Camera *ctx_ui_camera_get( struct Context *C);
+struct Camera *ctx_ui_get_camera( struct Context *C);
+struct MINscreen *ctx_ui_get_screen( struct Context *C);
+struct Viewport *ctx_ui_get_viewport( struct Context *C);
+struct Camera *ctx_ui_get_camera( struct Context *C);
 
 extern int BROWSER_EXIT;
 

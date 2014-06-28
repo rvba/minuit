@@ -76,6 +76,40 @@ void op_debug_all(t_context *C)
 }
 
 /*	**********************************
+	:UI_GET
+	*********************************	*/
+
+t_screen *ctx_ui_get_screen( t_context *C)
+{
+	t_screen *screen = NULL;
+	if( C->scene->has_generic_viewport)
+	{
+		t_node *node = scene_node_get( C->scene, dt_screen, "screen_view3d");
+		if( node)
+		{
+			screen = (t_screen *) node->data;
+		}
+	}
+	return screen;
+}
+
+t_viewport *ctx_ui_get_viewport( t_context *C)
+{
+	t_viewport *viewport = NULL;
+	t_screen *screen = ctx_ui_get_screen( C);
+	if( screen) viewport = screen_viewport_get( screen);
+	return viewport;
+}
+
+t_camera *ctx_ui_get_camera( t_context *C)
+{
+	t_camera *camera = NULL;
+	t_viewport *viewport = ctx_ui_get_viewport( C);
+	if( viewport) camera = viewport->camera;
+	return camera;
+}
+
+/*	**********************************
 	:UI_EVENT
 	*********************************	*/
 
@@ -603,30 +637,6 @@ void ctx_ui_object_trigger( t_context *C)
 	:MIDDLE
 	**********************************	*/
 
-t_camera *ctx_ui_camera_get( t_context *C)
-{
-	t_camera *camera = NULL;
-	t_screen *screen = NULL;
-	t_viewport *viewport = NULL;
-	t_node *node = NULL;
-
-	if( C->scene->has_generic_viewport)
-	{
-		node = scene_node_get( C->scene, dt_screen, "screen_view3d");
-		if( node)
-		{
-			screen = (t_screen *) node->data;
-			viewport = screen_viewport_get( screen);
-			if( viewport)
-			{
-				camera = viewport->camera;
-			}
-		}
-	}
-
-	return camera;
-}
-
 void ctx_ui_camera_rotate( t_context *C, t_camera *camera, t_event *e)
 {
 	float dx = (float) -C->ui->mouse_dx * .1;
@@ -665,7 +675,7 @@ void ctx_ui_camera_zoom( t_context *C, t_camera *camera, t_event *e)
 void state_ui_space_zoom( t_context *C, t_event *e)
 {
 	ctx_ui_log( "ui_space_zoom");
-	t_camera *camera = ctx_ui_camera_get( C);
+	t_camera *camera = ctx_ui_get_camera( C);
 	if( camera)
 	{
 		op_camera_change_speed(camera);
@@ -679,7 +689,7 @@ void state_ui_space_zoom( t_context *C, t_event *e)
 void state_ui_space_rotate( t_context *C, t_event *e)
 {
 	ctx_ui_log( "ui_space_rotate");
-	t_camera *camera = ctx_ui_camera_get( C);
+	t_camera *camera = ctx_ui_get_camera( C);
 	if( camera)
 	{
 		op_camera_change_speed(camera);
@@ -698,7 +708,7 @@ void state_ui_space_rotate( t_context *C, t_event *e)
 void state_ui_space_translate( t_context *C, t_event *e)
 {
 	ctx_ui_log( "ui_space_translate");
-	t_camera *camera = ctx_ui_camera_get( C);
+	t_camera *camera = ctx_ui_get_camera( C);
 	if( camera)
 	{
 		op_camera_change_speed(camera);
