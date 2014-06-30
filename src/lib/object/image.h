@@ -68,7 +68,7 @@ void 		img_save_jpg(int width,int height,const char name[]);
 void 		img_save_jpg_highres(int width,int height,const char name[],unsigned char *image);
 t_image *	img_read_png(char *filename);
 
-int 		img_save_png(int alpha,int width,int height,unsigned char *bitmap, const char name[]);
+int 		img_save_png( t_image *image);
 int 		img_save_png_hd(int alpha,int width,int height, const char name[],unsigned char *bitmap);
 void 		img_save_video(int width, int height, const char *name,unsigned char *image);
 

@@ -15,9 +15,9 @@
 
 #include <png.h>
 
-int img_save_png(int alpha,int width,int height,GLubyte *bitmap,const char name[])
+int img_save_png( t_image *image)
 {
-	FILE *fp = fopen(name, "wb");
+	FILE *fp = fopen( image->id.name, "wb");
 	png_structp png_ptr = NULL;
 	png_infop info_ptr = NULL;
 	int x, y;
@@ -27,7 +27,9 @@ int img_save_png(int alpha,int width,int height,GLubyte *bitmap,const char name[
 	int bytes_per_pixel;
 	int COLOR_TYPE;
 
-	if(alpha)
+	unsigned char *bitmap = image->vlst->data;
+
+	if( image->alpha)
 	{
 		COLOR_TYPE = PNG_COLOR_TYPE_RGBA;
 		bytes_per_pixel=4;
@@ -66,25 +68,25 @@ int img_save_png(int alpha,int width,int height,GLubyte *bitmap,const char name[
 	png_set_IHDR(
 		png_ptr,			// struct ptr
 		info_ptr,			// info ptr
-		width,				// in px
-		height,				// in px
+		image->width,				// in px
+		image->height,				// in px
 		8,				// bit depth aka color depth, bits per color [ 1 | 2 | 4 | 8 | 16 ]
 		COLOR_TYPE,			// PNG_COLOR_TYPE_[ GRAY | GRAY_ALPHA | PALETTE | RGB | RGB_ALPHA ] or PNG_COLOR_MASK_[ PALETTE | COLOR | ALPHA ]
 		PNG_INTERLACE_NONE,		// or PNG_INTERLACE_ADAM7
 		PNG_COMPRESSION_TYPE_DEFAULT,
 		PNG_FILTER_TYPE_DEFAULT);
 
-	bytes_per_row = width * bytes_per_pixel;
-	row_pointers = png_malloc(png_ptr, height * sizeof(png_byte *));
+	bytes_per_row = image->width * bytes_per_pixel;
+	row_pointers = png_malloc(png_ptr, image->height * sizeof(png_byte *));
 
 	unsigned int v;
-	for (y = height-1 ; y >= 0 ; --y)
+	for (y = image->height-1 ; y >= 0 ; --y)
 	{
 		unsigned char *row = png_malloc(png_ptr, sizeof(unsigned char) * bytes_per_row);
 		row_pointers[y] = (png_byte *)row;
-		for (x = 0; x < width; ++x)
+		for (x = 0; x < image->width; ++x)
 		{
-			if(alpha)
+			if( image->alpha)
 			{
 				*row++=*bitmap++;
 				*row++=*bitmap++;
@@ -106,7 +108,7 @@ int img_save_png(int alpha,int width,int height,GLubyte *bitmap,const char name[
 	png_set_rows(png_ptr, info_ptr, row_pointers);
 	png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
 
-	for (y = 0; y < height; y++)
+	for (y = 0; y < image->height; y++)
 	{
 		png_free(png_ptr, row_pointers[y]);
 	}
