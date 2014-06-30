@@ -10,8 +10,6 @@
 #ifndef __DRAW_H
 #define __DRAW_H
 
-#include "opengl.h"
-
 #define SEL_LINE_WIDTH 200
 
 #define DRAW_SELECTION_PASS 1

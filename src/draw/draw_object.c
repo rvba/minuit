@@ -7,6 +7,7 @@
  *
  */
 
+#include "opengl.h"
 #include "object.h"
 #include "ctx.h"
 #include "scene.h"

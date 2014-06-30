@@ -8,6 +8,7 @@
  */
 
 
+#include "opengl.h"
 #include "ctx.h"
 #include "node.h"
 #include "scene.h"

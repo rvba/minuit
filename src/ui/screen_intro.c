@@ -22,6 +22,7 @@
 #include "event.h"
 #include "viewport.h"
 #include "memory.h"
+#include "opengl.h"
 
 t_txt *txt_intro;
 t_txt *txt_version;

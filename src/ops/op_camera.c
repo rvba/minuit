@@ -16,6 +16,7 @@
 #include "util.h"
 #include "ui.h"
 #include "op.h"
+#include "opengl.h"
 
 #define OP_CAM_SPEED 50
 #define OP_CAM_ORTHO_ZOOM_FAC 100

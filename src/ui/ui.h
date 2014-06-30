@@ -10,7 +10,6 @@
 #ifndef __UI_H
 #define __UI_H
 
-#include "opengl.h"
 
 #ifdef __cplusplus
 extern "C" {

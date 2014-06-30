@@ -7,6 +7,8 @@
  *
  */
 
+#include "opengl.h"
+
 #include "util.h"
 #include "draw.h"
 #include "sketch.h"

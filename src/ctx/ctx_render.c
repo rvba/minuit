@@ -18,6 +18,7 @@
 #include "list.h"
 #include "object.h"
 #include "mesh.h"
+#include "opengl.h"
 
 // RENDER PASS
 
