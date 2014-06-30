@@ -53,13 +53,14 @@ void texture_show( t_texture *texture)
 
 }
 
+
 void texture_image_load( t_texture *texture, t_image *image)
 {
 	texture->width = image->width;
 	texture->height = image->height;
-	texture->format = image->format;
+	texture->format = image_gl_color_type( image);
 	texture->internal_format = image->bpp;
-	texture->type = image->type;
+	texture->type = image_gl_data_type( image);
 
 	glGenTextures( 1, &texture->id_gl);
 }
@@ -131,8 +132,8 @@ void texture_image_bind(t_texture *texture,t_image *image)
 	texture->height=image->height;
 
 	texture->texels=image->vlst->data;
-	texture->internal_format=image->bpp;
-	texture->format=image->format;
+	texture->internal_format = image->bpp;
+	texture->format = image_gl_color_type( image);
 	texture->size = image->size;
 }
 

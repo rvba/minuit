@@ -15,6 +15,35 @@
 #include "file.h"
 #include "scene.h"
 
+GLenum image_gl_color_type( t_image *image)
+{
+	switch( image->color_type)
+	{
+		case IMG_BITMAP:
+			return GL_ALPHA;
+			break;
+		case IMG_GRAYSCALE:
+			if( image->alpha) return GL_LUMINANCE_ALPHA;
+			else return GL_LUMINANCE; 
+			break;
+		case IMG_RGB:
+			if( image->alpha) return GL_RGBA;
+			else return GL_RGB;
+			break;
+	}
+	return GL_FALSE;
+}
+
+GLenum image_gl_data_type( t_image *image)
+{
+	switch( image->data_type)
+	{
+		case IMG_FLOAT: return GL_FLOAT; break;
+		case IMG_BYTE: return GL_UNSIGNED_BYTE; break;
+	}
+	return GL_FALSE;
+}
+
 void image_rebind( struct Scene *sc, void *ptr)
 {
 }

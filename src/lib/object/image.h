@@ -10,6 +10,7 @@
 #ifndef __IMAGE_H
 #define __IMAGE_H
 
+#include <GL/gl.h>
 #include "common.h"
 
 #ifdef __cplusplus
@@ -19,6 +20,21 @@ extern "C" {
 struct Scene;
 struct VLst;
 
+typedef enum Image_Data
+{
+	IMG_FLOAT,
+	IMG_BYTE
+
+}t_image_data;
+
+typedef enum Image_Color
+{
+	IMG_BITMAP,
+	IMG_GRAYSCALE,
+	IMG_RGB
+
+}t_image_color;
+
 typedef struct Image
 {
 	t_id id;
@@ -26,13 +42,19 @@ typedef struct Image
 	int width;
 	int height;
 	int bpp; 		//byte per pixel
-	int format;
-	int type;
+	//int format;		// GL_RGB, GL_RGBA, GL_LULMINACE
+	t_image_color color_type;
+	//int type;
+	t_image_data data_type;
+	int alpha;
 
 	size_t size;
 	struct VLst *vlst;
 
 }t_image;
+
+GLenum 		image_gl_color_type( t_image *image);
+GLenum 		image_gl_data_type( t_image *image);
 
 void 		image_data_convert( t_image *image, t_data_type type);
 void 		image_delete( t_image *image);

@@ -63,15 +63,16 @@ int img_save_png(int alpha,int width,int height,GLubyte *bitmap,const char name[
 		return -1;
 	}
 
-	png_set_IHDR(png_ptr,
-		 info_ptr,
-		 width,
-		 height,
-		 8,
-		 COLOR_TYPE,
-		 PNG_INTERLACE_NONE,
-		 PNG_COMPRESSION_TYPE_DEFAULT,
-		 PNG_FILTER_TYPE_DEFAULT);
+	png_set_IHDR(
+		png_ptr,			// struct ptr
+		info_ptr,			// info ptr
+		width,				// in px
+		height,				// in px
+		8,				// bit depth aka color depth, bits per color [ 1 | 2 | 4 | 8 | 16 ]
+		COLOR_TYPE,			// PNG_COLOR_TYPE_[ GRAY | GRAY_ALPHA | PALETTE | RGB | RGB_ALPHA ] or PNG_COLOR_MASK_[ PALETTE | COLOR | ALPHA ]
+		PNG_INTERLACE_NONE,		// or PNG_INTERLACE_ADAM7
+		PNG_COMPRESSION_TYPE_DEFAULT,
+		PNG_FILTER_TYPE_DEFAULT);
 
 	bytes_per_row = width * bytes_per_pixel;
 	row_pointers = png_malloc(png_ptr, height * sizeof(png_byte *));
@@ -85,18 +86,18 @@ int img_save_png(int alpha,int width,int height,GLubyte *bitmap,const char name[
 		{
 			if(alpha)
 			{
-			*row++=*bitmap++;
-			*row++=*bitmap++;
-			*row++=*bitmap++;
-			*row++=*bitmap++;
+				*row++=*bitmap++;
+				*row++=*bitmap++;
+				*row++=*bitmap++;
+				*row++=*bitmap++;
 			}
 			else
 			{
-			*row++=*bitmap++;
-			*row++=*bitmap++;
-			*row++=*bitmap++;
-			v=*bitmap++;
-			v++;
+				*row++=*bitmap++;
+				*row++=*bitmap++;
+				*row++=*bitmap++;
+				v=*bitmap++;
+				v++;
 			}
 		}
 	}
@@ -189,23 +190,26 @@ t_image *img_read_png(char *filename)
 	{
 
 		case PNG_COLOR_TYPE_GRAY:
-			image->format=GL_LUMINANCE;
+			image->color_type = IMG_GRAYSCALE;
+			image->alpha = 0;
 			image->bpp = 1;
 			break;
 
 		case PNG_COLOR_TYPE_GRAY_ALPHA:
-			image->format=GL_LUMINANCE_ALPHA;
+			image->color_type = IMG_GRAYSCALE;
+			image->alpha = 1;
 			image->bpp = 2;
 			break;
 
 		case PNG_COLOR_TYPE_RGB:
-			image->format=GL_RGB;
+			image->color_type = IMG_RGB;
+			image->alpha = 0;
 			image->bpp = 3;
 			break;
 
 		case PNG_COLOR_TYPE_RGB_ALPHA:
-			image->format=GL_RGBA;
-
+			image->color_type = GL_RGBA;
+			image->alpha = 1;
 			image->bpp = 4;
 			break;
 

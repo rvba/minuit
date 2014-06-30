@@ -89,8 +89,10 @@ t_image  *img_read_jpg( const char *name)
 	image->width = width;
 	image->height = height;
 	image->bpp = 3;
-	image->format = GL_RGB;
-	image->type = GL_UNSIGNED_BYTE;
+	//image->format = GL_RGB;
+	image->color_type = IMG_RGB; 
+	//image->type = GL_UNSIGNED_BYTE;
+	image->data_type = IMG_BYTE;
 	image->vlst = vlst_make( "vlst", dt_uchar, 3, width * height, NULL);
 
 	vlst_add_data( image->vlst, ptr);
