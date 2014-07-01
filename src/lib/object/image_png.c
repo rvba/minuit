@@ -20,26 +20,47 @@ int img_save_png( t_image *image)
 	FILE *fp = fopen( image->id.name, "wb");
 	png_structp png_ptr = NULL;
 	png_infop info_ptr = NULL;
-	int x, y;
 	png_uint_32 bytes_per_row;
 	png_byte **row_pointers = NULL;
+	int x, y;
 
 	int bytes_per_pixel;
 	int COLOR_TYPE;
 
 	unsigned char *bitmap = image->vlst->data;
 
-	if( image->alpha)
+	switch( image->color_type)
 	{
-		COLOR_TYPE = PNG_COLOR_TYPE_RGBA;
-		bytes_per_pixel=4;
+		case( IMG_RGB):
+			if( image->alpha)
+			{
+				COLOR_TYPE = PNG_COLOR_TYPE_RGBA;
+				bytes_per_pixel=4;
+			}
+			else
+			{
+				COLOR_TYPE = PNG_COLOR_TYPE_RGB;
+				bytes_per_pixel=3;
+			}
+			break;
+		case( IMG_GRAYSCALE):
+			if( image->alpha)
+			{
+				COLOR_TYPE = PNG_COLOR_TYPE_GRAY_ALPHA;
+				bytes_per_pixel=2;
+			}
+			else
+			{
+				COLOR_TYPE = PNG_COLOR_TYPE_GRAY;
+				bytes_per_pixel=1;
+			}
+			break;
+		case( IMG_BITMAP):
+			printf("Not implemented !\n");
+			return 0;
+			break;
 	}
-	else
-	{
-		COLOR_TYPE = PNG_COLOR_TYPE_RGB;
-		bytes_per_pixel=3;
-	}
-
+			
 	if (fp == NULL) return -1;
 
 	png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
