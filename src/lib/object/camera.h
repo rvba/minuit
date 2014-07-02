@@ -104,46 +104,28 @@ struct Camera
 
 };
 
-void camera_set_frustum( t_camera *camera, int w, int h);
-void camera_set_viewport( t_camera *camera, int px, int py, int width, int height);
-void camera_set_restrict_matrix( t_camera *camera, int x, int y);
-void camera_set_projection(t_camera *camera, int type);
-
+void 		camera_set_frustum( t_camera *camera, int w, int h);
+void 		camera_set_viewport( t_camera *camera, int px, int py, int width, int height);
+void 		camera_set_restrict_matrix( t_camera *camera, int x, int y);
+void 		camera_set_projection(t_camera *camera, int type);
 void *		camera_get_ref(t_camera *camera, const char *ref);
 void 		camera_show(t_camera *camera);
-//t_camera *	camera_clone(t_camera *source);
-//void 		camera_copy(t_camera *target,t_camera *source);
 void 		camera_copy_data(t_camera *target,t_camera *source);
 t_camera * 	camera_copy( t_camera *camera_src);
 void 		_camera_free(t_camera *camera);
 void 		camera_free(t_camera *camera);
 struct Node *	camera_add(const char *name);
-
-void camera_delete( t_camera *camera);
-//t_camera *	camera_clone(t_camera *camera);
+void 		camera_delete( t_camera *camera);
 void 		camera_rebind(struct Scene *scene, void *ptr);
 void *		camera_new(const char *name);
 struct Node *	camera_make(const char *name);
-
-
-
 void 		op_3d_orientation(void);
-
-char *		render_null;
-char *		render_camera;
-char *		render_fbo;
-char *		render_tiled;
-
-void 		op_3d_orientation(void);
-void camera_free( t_camera *camera);
-
-
+void 		camera_free( t_camera *camera);
 
 
 #ifdef __cplusplus
 }
 #endif
-
 
 
 #endif
