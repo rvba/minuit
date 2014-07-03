@@ -100,7 +100,6 @@ int img_save_png( t_image *image)
 	bytes_per_row = image->width * bytes_per_pixel;
 	row_pointers = png_malloc(png_ptr, image->height * sizeof(png_byte *));
 
-	unsigned int v;
 	for (y = image->height-1 ; y >= 0 ; --y)
 	{
 		unsigned char *row = png_malloc(png_ptr, sizeof(unsigned char) * bytes_per_row);
@@ -119,8 +118,6 @@ int img_save_png( t_image *image)
 				*row++=*bitmap++;
 				*row++=*bitmap++;
 				*row++=*bitmap++;
-				v=*bitmap++;
-				v++;
 			}
 		}
 	}
