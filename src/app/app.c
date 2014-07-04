@@ -27,6 +27,12 @@ t_app *APP;
 
 char app_filename_save[_PATH_];
 
+const char *app_get_arg( t_app *app, int pos)
+{
+	if( app->argv[pos]) return app->argv[pos];
+	else return NULL;
+}
+
 char *app_get_file_path( t_app *app, int type)
 {
 	switch ( type)

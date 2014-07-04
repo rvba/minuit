@@ -211,6 +211,7 @@ void glx_main_loop(void);
 
 // APP
 
+const char *app_get_arg( t_app *app, int pos);
 char *app_get_file_path( t_app *app, int type);
 
 void app_gl_display(void);
