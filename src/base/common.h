@@ -59,6 +59,7 @@ extern "C" {
 #define SOUTH 5
 #define SOUTHWEST 6
 #define WEST 7
+#define CENTER 8
 
 #define UP 1
 #define DOWN 2
