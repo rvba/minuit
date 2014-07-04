@@ -44,6 +44,14 @@ GLenum image_gl_data_type( t_image *image)
 	return GL_FALSE;
 }
 
+t_image_orientation image_get_orientation( t_image *image)
+{
+	if( image->width == image->height) return IMG_SQUARE;
+	else if( image->width > image->height) return IMG_LANSCAPE;
+	else return IMG_PORTRAIT;
+}
+
+
 void image_show( t_image *image)
 {
 	printf("Image\n");

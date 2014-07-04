@@ -35,6 +35,14 @@ typedef enum Image_Color
 
 }t_image_color;
 
+typedef enum Image_Orientation
+{
+	IMG_PORTRAIT,
+	IMG_LANSCAPE,
+	IMG_SQUARE
+
+}t_image_orientation;
+
 typedef struct Image
 {
 	t_id id;
@@ -56,6 +64,7 @@ typedef struct Image
 GLenum 		image_gl_color_type( t_image *image);
 GLenum 		image_gl_data_type( t_image *image);
 
+t_image_orientation image_get_orientation( t_image *image);
 void 		image_show( t_image *image);
 void 		image_data_convert( t_image *image, t_data_type type);
 void 		image_delete( t_image *image);
