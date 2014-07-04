@@ -39,6 +39,7 @@ const char *data_name_get(t_data_type type)
 		case dt_uint: return "uint"; break;
 		case dt_float: return "float"; break; 
 		case dt_char: return "char"; break;
+		case dt_uchar: return "uchar"; break;
 		case dt_string: return "string"; break;
 		case dt_pointer: return "pointer"; break;
 		case dt_vertex: return "vertex"; break;

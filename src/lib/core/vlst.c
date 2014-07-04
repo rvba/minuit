@@ -795,6 +795,7 @@ t_vlst *vlst_make( const char *name, t_data_type type, int length, int count, vo
 	if(type == dt_int) vlst->size = sizeof(int);
 	else if(type == dt_uint) vlst->size = sizeof(unsigned int);
 	else if(type == dt_float) vlst->size = sizeof(float);
+	else if(type == dt_uchar) vlst->size = sizeof(unsigned char);
 	else printf("[ERROR vlst_make] Unknown type %s\n",data_name_get(type));
 
 	if( !data && length && count)
