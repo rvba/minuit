@@ -375,6 +375,9 @@ void app_init(t_app *app, const char *name)
 	// Store Localy
 	APP = app;
 
+	// ARGS
+	app_args_scan(app);
+
 	// Set Version
 	set_name(app->version, APP_VERSION);
 
@@ -468,8 +471,6 @@ t_app *app_new(int argc,char **argv)
 	bzero( app->filename, _NAME_LONG_);
 	bzero( app->path_file, _PATH_);
 
-	// ARGS
-	app_args_scan(app);
 
 	app->mouse=mouse_new();
 	app->window=window_new(app->with_glut);
