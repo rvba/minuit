@@ -44,6 +44,14 @@ GLenum image_gl_data_type( t_image *image)
 	return GL_FALSE;
 }
 
+void image_show( t_image *image)
+{
+	printf("Image\n");
+	id_show( &image->id);
+	printf("width: %d\n", image->width);
+	printf("height: %d\n", image->height);
+}
+
 void image_rebind( struct Scene *sc, void *ptr)
 {
 }

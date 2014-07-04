@@ -39,6 +39,7 @@ extern "C" {
 #define is( a, b) ( !( strcmp( (a), (b))))  
 
 void color_id(int *color);
+void id_show( t_id *id);
 void id_init(t_id *id, const char *name);
 void set_name(char *dst,const char *src);
 void set_name_long(char *dst,const char *src);

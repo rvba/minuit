@@ -56,6 +56,11 @@ void set_path(char *dst,const char *src)
 	dst[_PATH_-1]='\0';
 }
 
+void id_show( t_id *id)
+{
+	printf("[id] id:%d name:%s store:%d\n", id->id, id->name, id->store);
+}
+
 void id_init(t_id *id, const char *name)
 {
 	id->id = 0;

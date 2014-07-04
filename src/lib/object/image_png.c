@@ -138,7 +138,7 @@ int img_save_png( t_image *image)
 	return 0;
 }
 
-t_image *img_read_png(char *filename)
+t_image *img_read_png(const char *filename)
 {
 	FILE *file ;
 	png_byte magic[8];

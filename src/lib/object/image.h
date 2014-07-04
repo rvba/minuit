@@ -56,6 +56,7 @@ typedef struct Image
 GLenum 		image_gl_color_type( t_image *image);
 GLenum 		image_gl_data_type( t_image *image);
 
+void 		image_show( t_image *image);
 void 		image_data_convert( t_image *image, t_data_type type);
 void 		image_delete( t_image *image);
 t_image *	image_copy( t_image *image_src);
@@ -66,7 +67,7 @@ void * 		image_new(const char *name);
 t_image *	img_read_jpg(const char *path);
 void 		img_save_jpg(int width,int height,const char name[]);
 void 		img_save_jpg_highres(int width,int height,const char name[],unsigned char *image);
-t_image *	img_read_png(char *filename);
+t_image *	img_read_png( const char *filename);
 
 int 		img_save_png( t_image *image);
 int 		img_save_png_hd(int alpha,int width,int height, const char name[],unsigned char *bitmap);

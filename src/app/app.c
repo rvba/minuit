@@ -182,6 +182,13 @@ void app_launch(t_app *app)
 			osc_client( app->osc_port);
 		}
 		#endif
+		else
+		{
+			if( app->main_func)
+			{
+				app->main_func();
+			}
+		}
 	}
 	else
 	{
@@ -464,6 +471,7 @@ t_app *app_new(int argc,char **argv)
 	app->client = 0;
 	app->slave = 0;
 	app->osc_server = 0;
+	app->osc_client = 0;
 	app->osc_port = 0;
 
 	bzero( app->path_home, _PATH_);
