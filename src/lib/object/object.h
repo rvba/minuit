@@ -62,6 +62,7 @@ typedef struct Object
 
 	void *data; 		// struct (data)
 
+	struct Texture *texture;
 	struct Mesh *mesh;		// mesh
 	struct Lst *blocks;		// buttons
 	struct Block *ref;
@@ -74,6 +75,8 @@ typedef struct Object
 	void (* shader)( struct Object *object, int state);
 
 }t_object;
+
+void object_image_load( t_object *object, const char *path);
 
 // METHODS
 void *		object_get_ref(t_object *object, const char *ref);

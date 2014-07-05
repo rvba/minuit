@@ -526,12 +526,13 @@ void *op_void_act(t_brick *brick)
 	return NULL;
 }
 
-void object_image_load( void)
+void op_object_image_load( void)
 {
 	t_context *C=ctx_get();
-	printf("%s\n", C->app->path_file);
+	//printf("%s\n", C->app->path_file);
 	t_object *object = ( t_object *) callback_get_data();
 	printf("ob: %s\n", object->id.name);
+	object_image_load( object, C->app->path_file);
 }
 
 void *op_file_get_data( t_brick *brick, const char *name)
@@ -560,7 +561,7 @@ void *op_file( struct Brick *brick)
 	void *data = op_file_get_data( brick, "image");
 	if( data)
 	{
-		callback_add( C, object_image_load, data);
+		callback_add( C, op_object_image_load, data);
 	}
 	return NULL;
 }

@@ -25,11 +25,23 @@
 #include "memory.h"
 #include "datum.h"
 #include "scene.h"
+#include "image.h"
 
 void object_default(t_node *node){}
 void cls_object_link(t_object *self,t_node *target);
 void cls_object_show(t_object *object);
 void cls_object_init(t_object *object) {};
+
+void object_image_load( t_object *object, const char *path)
+{
+	printf("Loading %s\n", path);
+	t_image *image = image_open( path);
+	if( image)
+	{
+		object->data = image;
+	}
+
+}
 
 void cls_object_build( t_object *object)
 {
@@ -52,7 +64,6 @@ void cls_object_build( t_object *object)
 		add_block_offset(C,block);
 	}
 }
-
 
 void cls_object_build_image( t_object *object)
 {
@@ -411,6 +422,7 @@ void *object_new(const char *name)
 	vset(object->size,1,1,1);
 	vseti(object->idcol,0,0,0);
 	
+	object->texture = NULL;
 	object->mesh=NULL;
 	object->data=NULL;
 	object->blocks=NULL;

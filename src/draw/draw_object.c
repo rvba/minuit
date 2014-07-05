@@ -21,6 +21,8 @@
 #include "block.h"
 
 #include "vlst.h"
+#include "ui.h"
+#include "texture.h"
 
 void cls_object_draw_light(t_object *object)
 {
@@ -33,6 +35,25 @@ void cls_object_draw_camera(t_object *object)
 
 void cls_object_draw_image( t_object *object)
 {
+	if( object->texture)
+	{
+		printf("draw texture\n");
+		t_context *C = ctx_get();
+		texture_update( object->texture, object->data);
+		ui_texture_draw( C, object->texture , 0, 0, 1 ,1);
+	}
+	else
+	{
+		if( object->data)
+		{
+			if( !object->texture)
+			{
+				t_texture *texture = texture_new( "...");
+				texture_image_load( texture, object->data);
+				object->texture = texture;
+			}
+		}
+	}
 }
 
 void cls_object_draw_point(t_object *object)
