@@ -298,6 +298,7 @@ void vlst_show(t_vlst *vlst)
 
 		if(C->event->debug_terminal)
 			printf("[VLST] type:%s name:%s count:%d length:%d\n", data_name_get(vlst->type), vlst->id.name, count, length);
+			else printf("wtf!!!!!\n");
 		if(C->event->debug_console)
 			term_log("[VLST] type:%s name:%s count:%d length:%d", data_name_get(vlst->type), vlst->id.name, count, length);
 

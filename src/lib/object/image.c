@@ -11,6 +11,7 @@
 #include "image.h"
 #include "node.h"
 #include "memory.h"
+#include "data.h"
 #include "vlst.h"
 #include "file.h"
 #include "scene.h"
@@ -51,6 +52,17 @@ t_image_orientation image_get_orientation( t_image *image)
 	else return IMG_PORTRAIT;
 }
 
+const char *image_get_color_type( t_image *image)
+{
+	switch( image->color_type)
+	{
+		case( IMG_RGB): return "RGB"; break;
+		case( IMG_GRAYSCALE): return "Grayscale"; break;
+		case( IMG_BITMAP): return "Bitmap"; break;
+	}
+
+	return NULL;
+}
 
 void image_show( t_image *image)
 {
@@ -58,6 +70,9 @@ void image_show( t_image *image)
 	id_show( &image->id);
 	printf("width: %d\n", image->width);
 	printf("height: %d\n", image->height);
+	printf("color_type: %s\n", image_get_color_type( image));
+	printf("alpha: %d\n", image->alpha);
+	printf("bpp: %d\n", image->bpp);
 }
 
 void image_rebind( struct Scene *sc, void *ptr)
@@ -73,7 +88,7 @@ void image_data_convert( t_image *image, t_data_type type)
 		{
 			vlst_map( vlst, dt_uchar, 0, 255);
 		}
-		else printf("Not implemented\n");
+		else printf("[Image] data_convert Not implemented for %s\n", data_name_get( type));
 	}
 }
 

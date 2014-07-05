@@ -56,7 +56,7 @@ int img_save_png( t_image *image)
 			}
 			break;
 		case( IMG_BITMAP):
-			printf("Not implemented !\n");
+			printf("[PNG] Color_type not implemented\n");
 			return 0;
 			break;
 	}
