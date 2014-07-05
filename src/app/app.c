@@ -27,6 +27,15 @@ t_app *APP;
 
 char app_filename_save[_PATH_];
 
+void app_print_args( t_app *app)
+{
+	int i;
+	for( i = 0; i < app->argc; i++)
+	{
+		printf("[%d] %s\n", i, app->argv[i]);
+	}
+}
+
 const char *app_get_arg( t_app *app, int pos)
 {
 	if( app->argv[pos]) return app->argv[pos];
