@@ -30,6 +30,26 @@
 #include "geometry.h"
 #include "term.h"
 
+
+///////////////
+#include "file.h"
+#include "object.h"
+
+void *callback_data = NULL;
+
+void callback_add( t_context *C, void (* callback)( void), void *data)
+{
+	C->event->callback = callback;
+	callback_data = data;
+	ctx_ui_event_add( UI_EVENT_BROWSER_SHOW);
+}
+
+void *callback_get_data( void)
+{
+	return callback_data;
+}
+
+
 // BRICK ADD
 
 void *op_brick_add(t_brick *brick)
@@ -503,5 +523,44 @@ void *op_switch(t_brick *brick)
 
 void *op_void_act(t_brick *brick)
 {
+	return NULL;
+}
+
+void object_image_load( void)
+{
+	t_context *C=ctx_get();
+	printf("%s\n", C->app->path_file);
+	t_object *object = ( t_object *) callback_get_data();
+	printf("ob: %s\n", object->id.name);
+}
+
+void *op_file_get_data( t_brick *brick, const char *name)
+{
+	t_block *block = brick->block;
+	t_brick *brick_object = block_brick_get( block, "image");
+	t_plug *plug = &brick_object->plug_intern;
+	void *data = NULL;
+
+	if(plug->data)
+	{
+		t_id *id = (t_id *) plug->data;
+		t_node *node = id->node;
+		data = node->data;
+	}
+	else
+	{
+		printf("op_file_get_data: can't get object\n");
+	}
+	return data;
+}
+
+void *op_file( struct Brick *brick)
+{
+	t_context *C=ctx_get();
+	void *data = op_file_get_data( brick, "image");
+	if( data)
+	{
+		callback_add( C, object_image_load, data);
+	}
 	return NULL;
 }

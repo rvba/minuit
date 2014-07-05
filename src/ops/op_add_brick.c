@@ -680,6 +680,15 @@ t_node *add_part_label(t_context *C,t_block *block,const char *name)
 	return node;
 }
 
+t_node *add_part_label_custom(t_context *C,t_block *block,const char *name, void *(* f)(struct Brick *brick))
+{
+	t_node *node = add_part_label( C, block, name);
+	t_brick *brick = ( t_brick *) node->data;
+	// ACTION
+	brick->act=f;
+	return node;
+}
+
 // PART TRIGGER 
 
 t_node *add_part_trigger(t_context *C,t_block *block,const char *name,void *f(t_brick *b))

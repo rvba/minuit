@@ -53,6 +53,7 @@ void cls_object_build( t_object *object)
 	}
 }
 
+
 void cls_object_build_image( t_object *object)
 {
 	t_context *C = ctx_get();
@@ -61,7 +62,7 @@ void cls_object_build_image( t_object *object)
 	if(C->ui->add_bricks)
 	{
 		t_block *block = object->ref;
-		add_part_label( C, block, "");
+		add_part_label_custom( C, block, "path", op_file);
 	}
 }
 

@@ -492,6 +492,7 @@ void *op_add_image( t_brick *brick)
 	scene_store(C->scene,1);
 	t_node *node = object_make( dt_image, "image");
 	scene_store(C->scene,0);
+
 	return node;
 }
 	

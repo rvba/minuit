@@ -217,6 +217,10 @@ struct Camera *ctx_ui_get_camera( struct Context *C);
 
 extern int BROWSER_EXIT;
 
+// CTX_CALLBACK
+
+void ctx_callback_add( struct Context *C, void (* callback)( void), void *data);
+
 
 #ifdef __cplusplus
 }
