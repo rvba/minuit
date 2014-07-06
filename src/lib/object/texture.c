@@ -25,9 +25,9 @@ void gl_show_type( int type)
 {
 	switch( type)
 	{
-		case GL_UNSIGNED_BYTE: 	printf( "Type:UNSIGNED_BYTE\n");	break;
-		case GL_INT: 		printf( "Type:INT\n");			break;
-		case GL_FLOAT: 		printf( "Type:FLOAT\n");		break;
+		case GL_UNSIGNED_BYTE: 	printf( "Type:GL_UNSIGNED_BYTE\n");	break;
+		case GL_INT: 		printf( "Type:GL_INT\n");			break;
+		case GL_FLOAT: 		printf( "Type:GL_FLOAT\n");		break;
 		default:		printf( "Type:Unknown\n");		break;
 	}
 }
@@ -36,8 +36,8 @@ void gl_show_format( int format)
 {
 	switch( format)
 	{
-		case GL_RGB:	 	printf( "Format:RGB\n");		break;
-		case GL_RGBA: 		printf( "Format:RGBA\n");		break;
+		case GL_RGB:	 	printf( "Format:GL_RGB\n");		break;
+		case GL_RGBA: 		printf( "Format:GL_RGBA\n");		break;
 		default:		printf( "Format:Unknown\n");		break;
 	}
 }
@@ -46,13 +46,13 @@ void texture_show( t_texture *texture)
 {
 	printf("Texture %s\n", texture->id.name);
 	printf("id:%d\n", texture->id_gl);
+	printf("size:%d\n", (int)texture->size);
 	printf("width:%d height:%d\n", texture->width, texture->height);
 	gl_show_format( texture->format);
 	gl_show_type( texture->type);
 	printf("internal_format: %d\n", texture->internal_format);
 
 }
-
 
 void texture_image_load( t_texture *texture, t_image *image)
 {
@@ -71,6 +71,8 @@ void texture_update( t_texture *texture, t_image *image)
 	glBindTexture( GL_TEXTURE_2D, texture->id_gl); 
 	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glPixelStorei( GL_UNPACK_ALIGNMENT, 1);
 	
 	glTexImage2D (	GL_TEXTURE_2D,				// GLenum target		GL_TEXTURE_2D, GL_TEXTURE_CUBE, ...
 			0,					// GLint level			Mimap, if only one resolution, level should be 0

@@ -94,6 +94,7 @@ struct Node*	op_object_mesh_get(struct Node *node);
 
 void object_draw_blocks( struct Context *C,  t_object *object);
 
+void 		cls_object_screen_image( t_object *object);
 void 		cls_object_draw_image( t_object *object);
 void 		cls_object_draw_camera(t_object *object);
 void 		cls_object_draw_mesh(t_object *object);

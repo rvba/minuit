@@ -25,15 +25,15 @@ void screen_object( t_screen *screen)
 		{
 			t_object *object = node->data;
 
-				screen_switch_2d( screen);
-				glPushMatrix();
-				glLoadIdentity();
+			screen_switch_2d( screen);
+			glPushMatrix();
+			glLoadIdentity();
 
-				object_draw_blocks( C, object);
+			object_draw_blocks( C, object);
 
-				if( object->draw_screen) object->draw_screen( object);
+			if( object->draw_screen) object->draw_screen( object);
 
-				glPopMatrix();
+			glPopMatrix();
 		}
 	}
 }

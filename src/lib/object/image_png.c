@@ -228,7 +228,7 @@ t_image *img_read_png(const char *filename)
 			break;
 
 		case PNG_COLOR_TYPE_RGB_ALPHA:
-			image->color_type = GL_RGBA;
+			image->color_type = IMG_RGB;
 			image->alpha = 1;
 			image->bpp = 4;
 			break;
@@ -236,6 +236,7 @@ t_image *img_read_png(const char *filename)
 		default:
 			break;
 	}
+	image->data_type = IMG_BYTE;
 
 	image->vlst = vlst_make( "vlst", dt_uchar, image->width * image->height, image->bpp, NULL);
 

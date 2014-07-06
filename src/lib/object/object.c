@@ -26,6 +26,7 @@
 #include "datum.h"
 #include "scene.h"
 #include "image.h"
+#include "texture.h"
 
 void object_default(t_node *node){}
 void cls_object_link(t_object *self,t_node *target);
@@ -38,9 +39,15 @@ void object_image_load( t_object *object, const char *path)
 	t_image *image = image_open( path);
 	if( image)
 	{
+		t_texture *texture = texture_new( image->id.name);
+		texture_image_load( texture, image);
+		object->texture = texture;
 		object->data = image;
-	}
+		object->draw_screen = cls_object_screen_image;
 
+		image_show( image);
+		texture_show( texture);
+	}
 }
 
 void cls_object_build( t_object *object)
