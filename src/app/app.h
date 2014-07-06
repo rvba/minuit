@@ -219,8 +219,9 @@ void app_gl_display(void);
 void app_swap(t_app *app);
 void app_update_viewport(t_app *app);
 
-void app_set_dsp_func(t_app *app,void(*dsp_func)(void));
-void app_set_main_func(t_app *app,void(*func)(void));
+void app_set_offscreen( t_app *app);
+//void app_set_dsp_func(t_app *app,void(*dsp_func)(void));
+//void app_set_main_func(t_app *app,void(*func)(void));
 
 int app_free(t_app *app);
 void app_launch(t_app *app);

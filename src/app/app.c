@@ -27,6 +27,11 @@ t_app *APP;
 
 char app_filename_save[_PATH_];
 
+void app_set_offscreen( t_app *app)
+{
+	app->off_screen = 1;
+}
+
 void app_print_args( t_app *app)
 {
 	int i;
