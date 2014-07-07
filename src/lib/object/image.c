@@ -141,7 +141,7 @@ void *image_new(const char *name)
 	image->height=0;
 	image->bpp=0;
 	image->vlst=NULL;
-
+	image->alpha = 0;
 	image->size = 0;
 
 	return image;
