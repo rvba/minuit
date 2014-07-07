@@ -20,8 +20,18 @@ extern "C" {
 struct Scene;
 struct VLst;
 
+typedef enum Image_File
+{
+	IMG_FILE,
+	IMG_PPM,
+	IMG_JPG,
+	IMG_PNG
+
+}t_image_file;
+
 typedef enum Image_Data
 {
+	IMG_DATA,
 	IMG_FLOAT,
 	IMG_BYTE
 
@@ -29,6 +39,7 @@ typedef enum Image_Data
 
 typedef enum Image_Color
 {
+	IMG_COLOR,
 	IMG_BITMAP,
 	IMG_GRAYSCALE,
 	IMG_RGB
@@ -37,6 +48,7 @@ typedef enum Image_Color
 
 typedef enum Image_Orientation
 {
+	IMG_ORIENTATION,
 	IMG_PORTRAIT,
 	IMG_LANSCAPE,
 	IMG_SQUARE
@@ -50,11 +62,11 @@ typedef struct Image
 	int width;
 	int height;
 	int bpp; 		//byte per pixel
-	//int format;		// GL_RGB, GL_RGBA, GL_LULMINACE
-	t_image_color color_type;
-	//int type;
-	t_image_data data_type;
 	int alpha;
+
+	t_image_color color_type;
+	t_image_data data_type;
+	t_image_file file_type;
 
 	size_t size;
 	struct VLst *vlst;
@@ -63,6 +75,8 @@ typedef struct Image
 
 GLenum 		image_gl_color_type( t_image *image);
 GLenum 		image_gl_data_type( t_image *image);
+
+void image_get_filename( const char *path, char *name);
 
 t_image_orientation image_get_orientation( t_image *image);
 void 		image_show( t_image *image);

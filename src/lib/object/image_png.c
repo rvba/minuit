@@ -59,6 +59,11 @@ int img_save_png( t_image *image)
 			printf("[PNG] Color_type not implemented\n");
 			return 0;
 			break;
+		case IMG_COLOR:
+			printf("[PNG] Color_type not set\n");
+			return 0;
+			break;
+			
 	}
 			
 	if (fp == NULL) return -1;
@@ -205,6 +210,8 @@ t_image *img_read_png(const char *filename)
 
 	image->width=w;
 	image->height=h;
+	image->file_type = IMG_PNG;
+	image->data_type = IMG_BYTE;
 
 	switch (color_type)
 	{
@@ -236,7 +243,7 @@ t_image *img_read_png(const char *filename)
 		default:
 			break;
 	}
-	image->data_type = IMG_BYTE;
+
 
 	image->vlst = vlst_make( "vlst", dt_uchar, image->width * image->height, image->bpp, NULL);
 

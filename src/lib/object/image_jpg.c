@@ -84,15 +84,16 @@ t_image  *img_read_jpg( const char *name)
 	(void) jpeg_finish_decompress(&cinfo);
 	jpeg_destroy_decompress(&cinfo);
 
-	t_image *image = image_new(name);
+	char name_raw[_NAME_];
+	image_get_filename( name, name_raw);
+	t_image *image = image_new( name_raw);
 
 	image->width = width;
 	image->height = height;
 	image->bpp = 3;
-	//image->format = GL_RGB;
 	image->color_type = IMG_RGB; 
-	//image->type = GL_UNSIGNED_BYTE;
 	image->data_type = IMG_BYTE;
+	image->file_type = IMG_JPG;
 	image->alpha = 0;
 	image->vlst = vlst_make( "vlst", dt_uchar, 3, width * height, NULL);
 
@@ -105,13 +106,6 @@ t_image  *img_read_jpg( const char *name)
 
 void img_save_video(int width, int height, const char *name,unsigned char *image)
 {
-	//GLubyte *image = (GLubyte *)mem_malloc(width*height*sizeof(GLubyte)*3);
-	/*
-	unsigned char *image = (unsigned char *)mem_malloc(width*height*sizeof(unsigned char)*3);
-	glPixelStorei(GL_PACK_ALIGNMENT, 1);
-	glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, image);
-	*/
-
 	int quality = 100;
 	struct jpeg_compress_struct cinfo;
 	struct jpeg_error_mgr jerr;
@@ -153,9 +147,8 @@ void img_save_video(int width, int height, const char *name,unsigned char *image
 	}
 }
 
-void img_save_jpg(int width, int height, const char *name)
+void img_save_jpg( int width, int height, const char *name)
 {
-//	GLubyte *image = (GLubyte *)mem_malloc(width*height*sizeof(GLubyte)*3);
 	size_t malloc_size = width * height * sizeof( unsigned char) * 3;
 	unsigned char *image = (unsigned char *)mem_malloc(malloc_size);
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);

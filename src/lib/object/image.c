@@ -15,6 +15,7 @@
 #include "vlst.h"
 #include "file.h"
 #include "scene.h"
+#include "file.h"
 
 GLenum image_gl_color_type( t_image *image)
 {
@@ -31,6 +32,10 @@ GLenum image_gl_color_type( t_image *image)
 			if( image->alpha) return GL_RGBA;
 			else return GL_RGB;
 			break;
+		case IMG_COLOR:
+			printf("[IMAGE] Color type not set\n");
+			return GL_FALSE;
+			break;
 	}
 	return GL_FALSE;
 }
@@ -41,6 +46,10 @@ GLenum image_gl_data_type( t_image *image)
 	{
 		case IMG_FLOAT: return GL_FLOAT; break;
 		case IMG_BYTE: return GL_UNSIGNED_BYTE; break;
+		case IMG_DATA:
+			printf("[IMAGE] Data type not set\n");
+			return GL_FALSE;
+			break;
 	}
 	return GL_FALSE;
 }
@@ -56,12 +65,21 @@ const char *image_get_color_type( t_image *image)
 {
 	switch( image->color_type)
 	{
-		case( IMG_RGB): return "RGB"; break;
-		case( IMG_GRAYSCALE): return "Grayscale"; break;
-		case( IMG_BITMAP): return "Bitmap"; break;
+		case IMG_RGB: return "RGB"; break;
+		case IMG_GRAYSCALE: return "Grayscale"; break;
+		case IMG_BITMAP: return "Bitmap"; break;
+		case IMG_COLOR: return "Not Set"; break;
 	}
 
 	return NULL;
+}
+
+void image_get_filename( const char *path, char *name)
+{
+	t_file *file = file_new( path);
+	file_init( file);
+	s_cp( name, file->file_name, _NAME_);
+	file_free( file);
 }
 
 void image_show( t_image *image)
@@ -101,6 +119,9 @@ t_image *image_copy( t_image *image_src)
 	image->bpp = image_src->bpp;
 	image->size = image_src->size;
 	image->vlst = vlst_copy( image_src->vlst);
+	image->color_type = image_src->color_type;
+	image->data_type = image_src->data_type;
+	image->file_type = image_src->file_type;
 
 	return image;
 }
@@ -120,7 +141,7 @@ t_image *image_open( const char *path)
 	return image;
 }
 
-void image_free(t_image *image)
+void image_free( t_image *image)
 {
 	mem_free( image, sizeof( t_image));
 }
@@ -131,11 +152,11 @@ void image_delete( t_image *image)
 	image_free( image);
 }
 
-void *image_new(const char *name)
+void *image_new( const char *name)
 {
-	t_image *image = (t_image *)mem_malloc(sizeof(t_image));
+	t_image *image = ( t_image *) mem_malloc( sizeof( t_image));
 
-	id_init(&image->id, name);
+	id_init( &image->id, name);
 
 	image->width=0;
 	image->height=0;
@@ -143,6 +164,9 @@ void *image_new(const char *name)
 	image->vlst=NULL;
 	image->alpha = 0;
 	image->size = 0;
+	image->color_type = IMG_COLOR;
+	image->data_type = IMG_DATA;
+	image->file_type = IMG_FILE;
 
 	return image;
 }
