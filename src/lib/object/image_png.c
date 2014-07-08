@@ -206,7 +206,9 @@ t_image *img_read_png(const char *filename)
 	png_get_IHDR (png_ptr, info_ptr, &w, &h, &bit_depth, &color_type, NULL, NULL, NULL);
 
 
-	t_image *image = image_new(filename);
+	char name_raw[_NAME_];
+	image_get_filename( filename, name_raw);
+	t_image *image = image_new( name_raw);
 
 	image->width=w;
 	image->height=h;
