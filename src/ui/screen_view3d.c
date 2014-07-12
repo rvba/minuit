@@ -17,13 +17,22 @@
 void screen_view3d(t_screen *screen)
 {
 	t_context *C = ctx_get();
+
+	// Viewport controls
 	screen_draw_controls( screen);
+
+	// Switch Perspective/Ortho View
 	screen_switch( screen);
 
+	// Point & Line Options
 	C->event->ui.use_point_global_width = 1;
 	skt_update( C);
 	t_skt *skt = skt_get();
 	skt->use_line_global_width = 1;
 
-	if( C->draw->with_scene) draw_scene(C->draw,C->scene);
+	// Scene
+	if( C->draw->with_scene)
+	{
+		draw_scene( C->draw, C->scene);
+	}
 }

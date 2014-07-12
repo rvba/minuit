@@ -834,9 +834,12 @@ void draw_init(t_draw *draw)
 
 void draw_scene(t_draw *draw, t_scene *scene)
 {
+	// Edit Mode
 	if(scene->edit_mode) draw->edit_mode = 1;
 	else draw->edit_mode = 0;
 
+
+	// Objects
 	draw_lights(draw,scene);
 	draw_objects(draw,scene);
 	draw_axis_world(draw);
