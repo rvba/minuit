@@ -11,6 +11,8 @@
 #ifndef __MESH_H_
 #define __MESH_H_
 
+#include "common.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -49,6 +49,7 @@ struct Scene;
 struct Mesh;
 struct Block;
 struct Brick;
+struct Node;
 
 typedef enum Draw_Mode
 {
@@ -115,13 +116,26 @@ t_draw *draw_new(void);
 void draw_init(t_draw *draw);
 void draw_scene(t_draw *draw, struct Scene *scene);
 void draw_switch_axis_world(t_draw *draw);
+
+
+// MESH
+
+void draw_mesh_points(t_draw *draw, struct Mesh *mesh);
 void draw_mesh_direct(t_draw *draw,struct Scene *scene,struct Mesh *mesh);
 void draw_mesh(t_draw *draw, struct Scene *scene, struct Mesh *mesh);
-void type_font_3d(char* string,float pos[3]);
+
+// POINT
+
+void draw_points(t_draw *draw, int count, float *points, float *colors, float *color);
+
 
 void draw_switch_scene( t_draw *draw);
 
 void brick_draw_clone_link( struct Block *block, struct Brick *brick, float *v2);
 void brick_get_geo_in( float *p, struct Block *block_target, struct Brick *brick_target);
+
+// LIGHT
+
+void draw_light(t_draw *draw, struct Node *node);
 
 #endif

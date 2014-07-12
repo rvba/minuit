@@ -14,8 +14,11 @@
 extern "C" {
 #endif
 
+#include "common.h"
+
 struct Brick;
 struct Term;
+struct Scene;
 
 typedef struct VLst
 {
