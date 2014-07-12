@@ -8,15 +8,9 @@
  */
 
 #include "screen.h"
-#include "camera.h"
 #include "ctx.h"
-#include "opengl.h"
 #include "ui.h"
 #include "event.h"
-#include "util.h"
-#include "block.h"
-#include "app.h"
-#include "txt.h"
 #include "draw.h"
 #include "sketch.h"
 
