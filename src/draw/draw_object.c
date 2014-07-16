@@ -196,5 +196,24 @@ void cls_object_draw_mesh(t_object *object)
 	}
 }
 
+void cls_object_draw_void( t_object *object)
+{
+	float x  = (float)(180 * object->rot[0] / PI );
+	float y  = (float)(180 * object->rot[1] / PI );
+	float z  = (float)(180 * object->rot[2] / PI );
+
+	glPushMatrix();
+
+		glTranslatef(object->loc[0],object->loc[1],object->loc[2]);
+		glScalef(object->size[0],object->size[1],object->size[2]);
+		glRotatef(z,0,0,1);
+		glRotatef(y,0,1,0);
+		glRotatef(x,1,0,0);
+
+		if(object->draw) object->draw( object);
+
+	glPopMatrix();
+}
+
 
 

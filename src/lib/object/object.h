@@ -70,7 +70,7 @@ typedef struct Object
 
 	void (* action)(struct Node *node);
 	void (* update)(struct Node *node);
-	void (* draw)(struct Node *node);
+	void (* draw)( struct Object *object);
 	void (* draw_screen)( struct Object *object);
 	void (* shader)( struct Object *object, int state);
 
@@ -100,6 +100,7 @@ void 		cls_object_draw_camera(t_object *object);
 void 		cls_object_draw_mesh(t_object *object);
 void 		cls_object_draw_light(t_object *object);
 void 		cls_object_draw_point(t_object *object);
+void 		cls_object_draw_void( t_object *object);
 
 t_object *	object_clone(t_object *object);
 void		object_rebind(struct Scene *sc,void *ptr);

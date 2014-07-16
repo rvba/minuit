@@ -77,6 +77,7 @@ typedef struct ID
 typedef enum Data_Type
 {
 	dt_null,
+	dt_void,
 	dt_undefined,
 	dt_bool,
 	dt_int,

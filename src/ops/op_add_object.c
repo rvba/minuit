@@ -205,11 +205,11 @@ void *op_add_camera(t_brick *brick)
 	return node;
 }
 
-void *op_add_object(const char *name)
+void *op_add_object_void( const char *name)
 {
 	t_context *C = ctx_get();
 	scene_store(C->scene,1);
-	t_node *node_object = object_make( dt_point, name);
+	t_node *node_object = object_make( dt_void, name);
 	t_object *object = ( t_object *) node_object->data;
 	scene_store(C->scene,0);
 	return object;

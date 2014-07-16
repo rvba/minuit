@@ -84,6 +84,16 @@ void cls_object_build_image( t_object *object)
 	}
 }
 
+t_object_class object_void =
+{
+	.type=dt_void,
+	.init=cls_object_init,
+	.link=cls_object_link,
+	.show=cls_object_show,
+	.draw=cls_object_draw_void,
+	.build=cls_object_build,
+};
+
 t_object_class object_point =
 {
 	.type=dt_point,
@@ -141,6 +151,7 @@ t_object_class *object_classes[] =
 	&object_light,
 	&object_camera,
 	&object_image,
+	&object_void,
 };
 
 void cls_object_set( t_object *object, t_data_type type)
@@ -192,12 +203,6 @@ void cls_object_link(t_object *self,t_node *target)
 		target->users++;
 	}
 	else printf("[ERROR:cls_object_link] Unknown node type %s",data_name_get(target->type));
-}
-
-void object_draw_add(t_node *node,void (* func)(t_node *node))
-{
-	t_object *object = node->data;
-	object->draw=func;
 }
 
 void object_method_add(t_node *node,const char method[],void (*func)(t_node *n))
