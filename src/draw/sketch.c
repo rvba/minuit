@@ -349,6 +349,33 @@ void skt_msh_rectangle(float *p,float w,float h,float *color)
 	glEnd();
 }
 
+void skt_msh_rectangle_uv(float *p,float w,float h)
+{
+	float a[3];
+	float b[3];
+	float c[3];
+	float d[3];
+
+	float vw[] = {w,0,0};
+	float vh[] = {0,h,0};
+
+	vcp(a,p);
+	vadd(b,a,vw);
+	vadd(c,b,vh);
+	vadd(d,a,vh);
+
+	glBegin(GL_POLYGON);
+		glTexCoord2d( 0, 0);
+		glVertex3f(a[0],a[1],a[2]);
+		glTexCoord2d( 1, 0);
+		glVertex3f(b[0],b[1],b[2]);
+		glTexCoord2d( 1, 1);
+		glVertex3f(c[0],c[1],c[2]);
+		glTexCoord2d( 0, 1);
+		glVertex3f(d[0],d[1],d[2]);
+	glEnd();
+}
+
 void skt_update( t_context *C)
 {
 	if( C->event->ui.use_point_global_width) SKT->use_point_global_width = 1;
