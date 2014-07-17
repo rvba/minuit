@@ -49,7 +49,7 @@ int ui_get_window_height( t_context *C)
 void ui_image_draw( t_context *C, t_image *image, int x, int y)
 {
 	glPixelStorei( GL_UNPACK_ALIGNMENT, 1);
-	glRasterPos2i( x, y);
+	glWindowPos2i( x, y);
 
 	if( image->vlst)
 	{
