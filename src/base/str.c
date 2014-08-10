@@ -7,7 +7,7 @@
  *
  */
 
-#include "util.h"
+#include "base.h"
 
 void s_cp( char *dst, const char *src, int size)
 {

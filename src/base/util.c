@@ -7,7 +7,7 @@
  *
  */
 
-#include "util.h"
+#include "base.h"
 
 /*
 size_t get_memory_peak(void)

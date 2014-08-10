@@ -27,7 +27,7 @@
 #include "mesh.h"
 #include "term.h"
 #include "object.h"
-#include "util.h"
+#include "base.h"
 #include "mode.h"
 //#include "dict.h"
 #include "draw.h"

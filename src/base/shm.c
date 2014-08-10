@@ -10,7 +10,7 @@
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
-#include "util.h"
+#include "base.h"
 
 key_t shm_key( const char *file)
 {

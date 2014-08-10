@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef __UTIL_H
-#define __UTIL_H
+#ifndef __BASE_H__
+#define __BASE_H__
 
 #include "mem.h"
 #include "vec.h"

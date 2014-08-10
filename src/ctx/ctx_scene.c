@@ -19,7 +19,7 @@
 #include "mesh.h"
 #include "object.h"
 #include "brick.h"
-#include "util.h"
+#include "base.h"
 #include "term.h"
 #include "block.h"
 

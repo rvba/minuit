@@ -7,11 +7,11 @@
  *
  */
 
+#include "base.h"
 #include "opengl.h"
 #include "ctx.h"
 #include "node.h"
 #include "scene.h"
-
 #include "op.h"
 #include "app.h"
 #include "event.h"
@@ -20,9 +20,7 @@
 #include "camera.h"
 #include "ui.h"
 #include "file.h"
-
 #include "list.h"
-
 #include "block.h"
 #include "brick.h"
 

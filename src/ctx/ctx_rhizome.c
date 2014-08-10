@@ -7,6 +7,7 @@
  *
  */
 
+#include "base.h"
 #include "node.h"
 #include "ctx.h"
 #include "scene.h"

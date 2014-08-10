@@ -9,7 +9,7 @@
 
 #include "opengl.h"
 #include "image.h"
-#include "util.h"
+#include "base.h"
 #include "memory.h"
 #include "vlst.h"
 

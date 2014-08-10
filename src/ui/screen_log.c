@@ -13,7 +13,7 @@
 #include "opengl.h"
 #include "ui.h"
 #include "event.h"
-#include "util.h"
+#include "base.h"
 #include "block.h"
 
 void screen_log( t_screen *screen)

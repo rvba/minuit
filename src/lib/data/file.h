@@ -10,7 +10,6 @@
 #ifndef __FILE_H
 #define __FILE_H
 
-#include "util.h"
 #include "common.h"
 
 #define PATH_RELATIVE 1

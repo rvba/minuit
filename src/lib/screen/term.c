@@ -8,6 +8,7 @@
  */
 
 
+#include "base.h"
 #include "opengl.h"
 #include "ctx.h"
 #include "node.h"

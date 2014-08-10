@@ -7,7 +7,7 @@
  *
  */
 
-#include "util.h"
+#include "base.h"
 #include <stdlib.h>
 
 size_t MEM_SIZE = 0;

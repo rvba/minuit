@@ -21,7 +21,7 @@
 #include "screen.h"
 #include "list.h"
 #include "brick.h"
-#include "util.h"
+#include "base.h"
 
 t_context *CONTEXT;
 

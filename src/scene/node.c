@@ -29,7 +29,7 @@
 #include "object.h"
 #include "screen.h"
 #include "vector.h"
-#include "util.h"
+#include "base.h"
 #include "light.h"
 #include "set.h"
 #include "image.h"

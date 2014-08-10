@@ -8,7 +8,7 @@
  */
 
 #include "node.h"
-#include "util.h"
+#include "base.h"
 #include "scene.h"
 #include "op.h"
 #include "binding.h"

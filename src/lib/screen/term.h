@@ -13,7 +13,6 @@
 #include <stdarg.h>
 
 #include "txt.h"
-#include "util.h"
 
 #define TERM_LIMIT 30
 #define TERM_SIMPLE 1

@@ -9,7 +9,7 @@
 
 #include "ctx.h"
 #include "event.h"
-#include "util.h"
+#include "base.h"
 #include "screen.h"
 #include "term.h"
 #include "app.h"

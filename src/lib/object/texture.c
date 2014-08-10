@@ -10,7 +10,7 @@
 #include "ctx.h"
 #include "node.h"
 #include "scene.h"
-#include "util.h"
+#include "base.h"
 #include "op.h"
 #include "texture.h"
 #include "image.h"

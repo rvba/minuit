@@ -12,7 +12,7 @@
 #include "opengl.h"
 #include "ui.h"
 #include "block.h"
-#include "util.h"
+#include "base.h"
 #include "event.h"
 
 void screen_bricks( t_screen *screen)

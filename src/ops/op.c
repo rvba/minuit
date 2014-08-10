@@ -23,7 +23,7 @@
 #ifdef HAVE_OBJ
 #include "obj.h"
 #endif
-#include "util.h"
+#include "base.h"
 
 int brick_check_viewport( t_brick *brick)
 {

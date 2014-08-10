@@ -19,6 +19,7 @@ extern "C" {
 struct Scene;
 struct Block;
 struct Set;
+struct Lst;
 
 typedef struct Rhizome
 {
@@ -46,7 +47,7 @@ void 		rhizome_delete(t_rhizome *rhizome);
 void 		rhizome_exec(t_rhizome *rhizome);
 void 		rhizome_sort(t_rhizome *rhizome);
 void 		rhizome_get_roots(t_rhizome *rhizome);
-t_rhizome *	rhizome_build_from_list(t_lst *lst);
+t_rhizome *	rhizome_build_from_list(struct Lst *lst);
 void 		rhizome_merge(t_rhizome *src, t_rhizome *dst);
 void 		rhizome_draw_roots(t_rhizome *rhizome);
 void 		rhizome_draw_blocks(t_rhizome *rhizome);

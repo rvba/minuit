@@ -8,7 +8,7 @@
  */
 
 #include "common.h"
-#include "util.h"
+#include "base.h"
 #include <time.h>
 
 void rnd_init(void)

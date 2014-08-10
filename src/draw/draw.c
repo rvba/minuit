@@ -8,7 +8,7 @@
  */
 
 #include "opengl.h"
-#include "util.h"
+#include "base.h"
 #include "draw.h"
 #include "sketch.h"
 #include "scene.h"

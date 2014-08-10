@@ -15,7 +15,7 @@
 #define APP_VIDEO_LIMIT 20
 
 #include "opengl.h"
-#include "util.h"
+#include "base.h"
 #include "app.h"
 #include "list.h"
 #include "clock.h"

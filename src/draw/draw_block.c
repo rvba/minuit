@@ -8,7 +8,7 @@
  */
 
 #include "opengl.h"
-#include "util.h"
+#include "base.h"
 #include "ui.h"
 #include "ctx.h"
 #include "event.h"

@@ -8,7 +8,7 @@
  */
 
 #include "file.h"
-#include "util.h"
+#include "base.h"
 #include "log.h"
 
 t_file *LOG_FILE;

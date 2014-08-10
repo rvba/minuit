@@ -8,7 +8,7 @@
  */
 
 
-#include "util.h"
+#include "base.h"
 #include "light.h"
 #include "ctx.h"
 #include "scene.h"

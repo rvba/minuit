@@ -133,8 +133,8 @@ void geo_array_free(t_geo_array *array);
 t_geo_array *geo_array_make( struct Context *C, const char *name);
 void * geo_array_new(const char *name);
 
-void geo_array_get_edges( t_geo_array *array, t_lst *lst);
-void geo_array_get_points( t_geo_array *array, t_lst *lst);
+void geo_array_get_edges( t_geo_array *array, struct Lst *lst);
+void geo_array_get_points( t_geo_array *array, struct Lst *lst);
 
 
 void geo_data_set(t_geo *geo, t_data_type type, struct Lst *points);

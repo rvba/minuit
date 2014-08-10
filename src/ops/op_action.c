@@ -16,7 +16,7 @@
 #include "draw.h"
 #include "ui.h"
 #include "file.h"
-#include "util.h"
+#include "base.h"
 
 void op_set_color(t_context *C,int color)
 {
