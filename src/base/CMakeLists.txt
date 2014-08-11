@@ -34,8 +34,8 @@ set(SRC
 	vec.c
 	vol.c
 	vol.h
-	util.c
-	util.h
+	base.c
+	base.h
 	)
 
 if(OPT_OSC)
