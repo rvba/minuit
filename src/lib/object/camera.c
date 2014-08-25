@@ -15,6 +15,7 @@
 #include "camera.h"
 #include "memory.h"
 #include "opengl.h"
+#include "block.h"
 
 void cls_camera_init(t_camera *camera)
 {
@@ -25,6 +26,34 @@ t_camera_cls cls_camera=
 	.cls_type="camera",
 	.init=cls_camera_init,
 };
+
+void camera_draw_controls( t_camera *camera)
+{
+	t_block *block = camera->controls;
+	if ( camera)
+	{
+		block->cls->draw( block);
+	}
+}
+
+
+void camera_add_controls( t_camera *camera)
+{
+	t_context *C = ctx_get();
+
+	scene_add_ref( C->scene, "struct_ref", "camera", "ortho_zoom", &camera->ortho_zoom, camera);
+
+	t_block *block = add_block_block( C, "camera_controls");
+	camera->controls = block;
+
+	set_draw_plug = 0;
+
+	block->pos[0] = 0;
+	block->pos[1] = 1;
+	add_brick_slider_float( C, block, "ortho_zoom", &camera->ortho_zoom);
+
+	set_draw_plug = 1;
+}
 
 void camera_set_frustum( t_camera *camera, int w, int h)
 {
@@ -234,6 +263,7 @@ void *camera_get_ref(t_camera *camera, const char *ref)
 	else if(is(ref,"eye_x"))  			p=&camera->eye[0]; 
 	else if(is(ref,"eye_y"))  			p=&camera->eye[1]; 
 	else if(is(ref,"eye_z"))  			p=&camera->eye[2]; 
+	else if(is(ref,"ortho_zoom"))  			p=&camera->ortho_zoom; 
 	else
 	{
 		printf("[ERROR camera_get_ref] Unknown ref [%s] \n",ref);
@@ -289,6 +319,8 @@ t_camera *camera_clone(t_camera *camera)
 
 void camera_rebind(t_scene *scene, void *ptr)
 {
+	t_camera *camera = ( t_camera *) ptr;
+	rebind(scene,"camera","controls",(void **)&camera->controls);
 }
 
 

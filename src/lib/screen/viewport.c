@@ -230,34 +230,6 @@ void viewport_draw_controls( t_viewport *viewport)
 		block->cls->draw( block);
 	}
 }
-/*
-
-void viewport_draw_scene(t_viewport *viewport)
-{
-	t_context *C = ctx_get();
-	t_camera *camera = viewport->camera;
-
-			int w = C->app->window->width;
-			int h = C->app->window->height;
-
-	if( C->app->window->change)
-	{
-		op_camera_frustum_init( camera, w, h);
-		C->app->window->change = 0;
-	}
-
-	if( opt_viewport_show_controls)
-	{
-		viewport_draw_controls( viewport);
-	}
-
-	if( viewport->fullscreen) op_camera_update(C, camera);
-	else  _op_camera_update(C, camera, viewport);
-	
-	op_3d_orientation(); 
-	draw_scene(C->draw,C->scene);
-}
-*/
 
 void viewport_draw(t_viewport *viewport)
 {
@@ -302,12 +274,10 @@ t_viewport *viewport_clone(t_viewport *viewport)
 	}
 }
 
-void *op_viewport_set_dimensions( t_brick *brick)
+void viewport_set_format( t_viewport *viewport, const char *format)
 {
-	t_viewport *viewport = ( t_viewport *) brick->data;
-	int width = viewport->width;
-	int height = viewport->height;
-	if( is( brick->id.name, "A4"))
+	int width, height;
+	if( is( format, "A4"))
 	{
 		width = 210;
 		height = 297;
@@ -315,15 +285,11 @@ void *op_viewport_set_dimensions( t_brick *brick)
 
 	viewport->width = width;
 	viewport->height = height;
-
-	return NULL;
 }
 
-
-void *op_viewport_center( t_brick *brick)
+void viewport_set_center( t_viewport *viewport)
 {
 	t_context *C = ctx_get();
-	t_viewport *viewport = ( t_viewport *) brick->data;
 	int v_width = viewport->width;
 	int v_height = viewport->height;
 	int w_width = C->app->window->width;
@@ -334,14 +300,11 @@ void *op_viewport_center( t_brick *brick)
 
 	viewport->x = x;
 	viewport->y = y;
-
-	return NULL;
 }
 
-void *op_viewport_full_height( t_brick *brick)
+void viewport_set_full_height( t_viewport *viewport)
 {
 	t_context *C = ctx_get();
-	t_viewport *viewport = ( t_viewport *) brick->data;
 	int v_width = viewport->width;
 	int v_height = viewport->height;
 	int w_height = C->app->window->height;
@@ -350,6 +313,27 @@ void *op_viewport_full_height( t_brick *brick)
 	int n_w = (int) ( ratio * (float) v_width);
 	viewport->width = n_w;
 	viewport->height = w_height;
+}
+
+void *op_viewport_set_dimensions( t_brick *brick)
+{
+	t_viewport *viewport = ( t_viewport *) brick->data;
+	viewport_set_format( viewport, "A4");
+
+	return NULL;
+}
+
+void *op_viewport_center( t_brick *brick)
+{
+	t_viewport *viewport = ( t_viewport *) brick->data;
+	viewport_set_center( viewport);
+	return NULL;
+}
+
+void *op_viewport_full_height( t_brick *brick)
+{
+	t_viewport *viewport = ( t_viewport *) brick->data;
+	viewport_set_full_height( viewport);
 
 	return NULL;
 }

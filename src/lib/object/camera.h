@@ -31,6 +31,7 @@ struct Context;
 struct Node;
 struct Scene;
 struct Viewport;
+struct Block;
 
 typedef struct Camera t_camera;
 typedef struct Camera_Class t_camera_cls;
@@ -102,6 +103,8 @@ struct Camera
 
 	int update_frustum;
 
+	struct Block *controls;
+
 };
 
 void 		camera_set_frustum( t_camera *camera, int w, int h);
@@ -121,6 +124,8 @@ void *		camera_new(const char *name);
 struct Node *	camera_make(const char *name);
 void 		op_3d_orientation(void);
 void 		camera_free( t_camera *camera);
+void 		camera_add_controls( t_camera *camera);
+void 		camera_draw_controls( t_camera *camera);
 
 
 #ifdef __cplusplus

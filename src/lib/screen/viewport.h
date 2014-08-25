@@ -64,6 +64,9 @@ void 		_viewport_free(t_viewport *viewport);
 void 		viewport_free(t_viewport *viewport);
 void *		viewport_new(const char *name);
 t_node *	viewport_make(const char *name);
+void		viewport_set_format( t_viewport *viewport, const char *format);
+void		viewport_set_center( t_viewport *viewport);
+void		viewport_set_full_height( t_viewport *viewport);
 
 #ifdef __cplusplus
 }

@@ -36,7 +36,15 @@ void screen_draw_controls( t_screen *screen)
 	glLoadIdentity();
 
 	if( viewport->show_outline) viewport_draw_outline( viewport);
-	if( opt_viewport_show_controls) viewport_draw_controls( viewport);
+	if( opt_viewport_show_controls)
+	{
+		viewport_draw_controls( viewport);
+		int height = viewport->controls->height;
+		glTranslatef( 0, height, 0);
+		t_context *C = ctx_get();
+		t_camera *camera = ctx_ui_get_camera( C);
+		if( camera) camera_draw_controls( camera);
+	}
 
 	glPopMatrix();
 }
@@ -145,9 +153,11 @@ t_screen *screen_add_3d(const char *name, void (* draw)(t_screen *s))
 	// Camera
 	t_node *node_camera = scene_add( C->scene, dt_camera, name);
 	t_camera *camera = node_camera->data;
+	camera_add_controls( camera);
 
 	viewport->camera = camera;
 	viewport_add_controls( viewport);
+
 
 	screen->width = C->app->window->width;
 	screen->height = C->app->window->height;
