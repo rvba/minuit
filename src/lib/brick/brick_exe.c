@@ -1153,7 +1153,7 @@ void *op_set_vlst(t_brick *brick)
 		{
 			if(vlst->count != vlst->count_new) 
 			{
-				vlst_update_data(brick, vlst, NULL);
+				vlst_update_data( vlst, NULL);
 			}
 		}
 	}

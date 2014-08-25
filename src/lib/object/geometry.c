@@ -958,7 +958,7 @@ void geo_vlst( t_brick *brick, t_vlst *vlst, t_lst *lst)
 		if(lst->count > 0)
 		{
 			vlst->count_new = lst->count;
-			 __vlst_update_data( brick, vlst, NULL);
+			vlst_change_data( vlst, NULL);
 		}
 	}
 }
