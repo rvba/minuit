@@ -34,6 +34,7 @@ struct Sketch
 
 	// line
 	int line_width;
+	int line_smooth;
 
 	//point
 	int point_width;

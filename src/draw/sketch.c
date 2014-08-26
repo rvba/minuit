@@ -106,10 +106,14 @@ void skt_line( float *v1, float *v2, int width, float *color)
 	glColor3f(color[0]*i,color[1]*i,color[2]*i);
 	glLineWidth(width * scale);
 
+	if( SKT->line_smooth) glEnable(GL_LINE_SMOOTH);
+
 	glBegin(GL_LINES);
 		glVertex3f(v1[0],v1[1],v1[2]);
 		glVertex3f(v2[0],v2[1],v2[2]);
 	glEnd();
+
+	if( SKT->line_smooth) glDisable(GL_LINE_SMOOTH);
 }
 
 void skt_closedline(float *points,int tot,float *color,int width)
@@ -394,6 +398,7 @@ t_skt *skt_new(void)
 
 	skt->point_size=SKT_POINT_SIZE;
 	skt->line_width=SKT_LINE_WIDTH_FRONT;
+	skt->line_smooth = 0;
 	skt->with_scale=SKT_WITH_SCALE;
 	skt->scale=SKT_SCALE;
 	//skt->intensity=SKT_INTENSITY;
