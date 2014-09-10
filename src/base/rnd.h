@@ -18,6 +18,7 @@ float rndr(void);
 float rndf(void);
 void rnd_init(void);
 int rnd(int n);
+int rndb( void);
 int rnd_range(int start,int end);
 
 #ifdef __cplusplus

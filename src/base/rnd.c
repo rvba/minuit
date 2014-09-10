@@ -37,3 +37,8 @@ float rndr(void)
 	return ( ( rndf() - 0.5) * 2.0f );
 }
 
+int rndb( void)
+{
+	return rnd(1);
+}
+
