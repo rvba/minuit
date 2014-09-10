@@ -180,6 +180,7 @@ t_draw *draw_new(void)
 	draw->color=DRAW_COLOR;
 
 	draw->with_selection_pass=DRAW_SELECTION_PASS; 
+	draw->with_object_selection = 1;
 	draw->with_draw_pass=DRAW_WITH_DRAW;
 
 	draw->with_clear=DRAW_WITH_CLEAR;

@@ -137,62 +137,65 @@ void cls_object_draw_mesh(t_object *object)
 
 	if(object->mesh)
 	{
-		t_mesh *mesh=object->mesh;
+		if( draw->mode == mode_draw || (draw->mode == mode_selection && draw->with_object_selection))
+		{
+			t_mesh *mesh=object->mesh;
 
-		float x  = (float)(180 * object->rot[0] / PI );
-		float y  = (float)(180 * object->rot[1] / PI );
-		float z  = (float)(180 * object->rot[2] / PI );
-	
-		glPushMatrix();
+			float x  = (float)(180 * object->rot[0] / PI );
+			float y  = (float)(180 * object->rot[1] / PI );
+			float z  = (float)(180 * object->rot[2] / PI );
+		
+			glPushMatrix();
 
-			glTranslatef(object->loc[0],object->loc[1],object->loc[2]);
-			glScalef(object->size[0],object->size[1],object->size[2]);
-			glRotatef(z,0,0,1);
-			glRotatef(y,0,1,0);
-			glRotatef(x,1,0,0);
+				glTranslatef(object->loc[0],object->loc[1],object->loc[2]);
+				glScalef(object->size[0],object->size[1],object->size[2]);
+				glRotatef(z,0,0,1);
+				glRotatef(y,0,1,0);
+				glRotatef(x,1,0,0);
 
-			if(mesh)
-			{
-				mesh_update( mesh);
-				// selected
-				if(object->is_selected)
+				if(mesh)
 				{
-					mesh->state.is_selected=1;
-					if(object->is_edit_mode)
+					mesh_update( mesh);
+					// selected
+					if(object->is_selected)
 					{
-						mesh->state.is_edit_mode = 1;
-						find_vertex(C,mesh);
+						mesh->state.is_selected=1;
+						if(object->is_edit_mode)
+						{
+							mesh->state.is_edit_mode = 1;
+							find_vertex(C,mesh);
+						}
+						else
+						{
+							mesh->state.is_edit_mode = 0;
+						}
 					}
 					else
 					{
+						mesh->state.is_selected = 0;
 						mesh->state.is_edit_mode = 0;
 					}
+
+					// shader
+					if( draw->with_shaders && object->shader) object->shader( object, OBJECT_SHADER_ON);
+
+					// draw
+					if(draw->mode_direct)
+					{
+						draw_mesh_direct(draw,scene,mesh);
+					}
+					else
+					{
+						draw_mesh(draw,scene,mesh);
+					}
+
+					// shader
+					if( draw->with_shaders && object->shader) object->shader( object, OBJECT_SHADER_OFF);
+
 				}
-				else
-				{
-					mesh->state.is_selected = 0;
-					mesh->state.is_edit_mode = 0;
-				}
 
-				// shader
-				if( draw->with_shaders && object->shader) object->shader( object, OBJECT_SHADER_ON);
-
-				// draw
-				if(draw->mode_direct)
-				{
-					draw_mesh_direct(draw,scene,mesh);
-				}
-				else
-				{
-					draw_mesh(draw,scene,mesh);
-				}
-
-				// shader
-				if( draw->with_shaders && object->shader) object->shader( object, OBJECT_SHADER_OFF);
-
-			}
-
-		glPopMatrix();
+			glPopMatrix();
+		}
 	}
 }
 

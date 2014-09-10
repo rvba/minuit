@@ -77,6 +77,7 @@ typedef struct Draw
 	int mode_direct;
 
 	int with_selection_pass; //with_color
+	int with_object_selection;
 	int with_draw_pass;
 	int with_ui;
 
