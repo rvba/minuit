@@ -119,6 +119,8 @@ void line_show(t_line *line)
 		putchar(line->data[i]);
 	}
 
+	printf("\n");
+
 	if(line->words)
 	{
 		t_link *link;
@@ -162,6 +164,8 @@ int file_read_lines(t_file *file)
 				totline++;
 			}
 		}
+
+		file->tot_line = totline;
 
 		// count line size
 

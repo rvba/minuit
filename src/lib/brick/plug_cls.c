@@ -67,8 +67,10 @@ void object_show(t_object *object)
 
 void mesh_show(t_mesh *mesh)
 {
+	printf("MESH\n");
+	printf("tot_vertex: %d\n", mesh->var.tot_vertex);
+	printf("tot_face: %d\n", mesh->var.tot_face);
 
-	//term_log("mesh");
 	if(mesh->vertex)
 	{
 		vlst_show(mesh->vertex);
@@ -76,6 +78,11 @@ void mesh_show(t_mesh *mesh)
 	else
 	{
 		printf("MESH no vlst\n");
+	}
+
+	if(mesh->colors)
+	{
+		vlst_show(mesh->colors);
 	}
 }
 
