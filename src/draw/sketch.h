@@ -82,6 +82,7 @@ void _skt_rectangle(float *point, float *v1, float *v2, float *color, int width)
 void skt_circle(float *pos);
 void skt_point_size_set(float size) ;
 void skt_point(float *pos,int width,float *color);
+void skt_point_polygon( float *pos, int width, float *color);
 
 // VECTOR
 
