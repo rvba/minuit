@@ -219,6 +219,8 @@ void skt_point_polygon( float *pos, int width, float *color)
 	int i;
 	int u = 0;
 	float *p = points;
+
+	glColor3f( color[0], color[1], color[2]);
 	glBegin(GL_TRIANGLE_FAN);
 	for( i = 0; i < resolution; i++)
 	{
