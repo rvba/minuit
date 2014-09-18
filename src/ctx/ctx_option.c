@@ -71,6 +71,7 @@ void option_load(t_context *C,t_node *node)
 	C->skt->point_size=option->skt_point_size;
 	C->skt->with_scale=option->skt_with_scale;
 	C->skt->scale=option->skt_scale;
+	C->skt->point_smooth=option->skt_point_smooth;
 
 	C->event->sketch_with_scale=option->skt_with_scale;
 
@@ -130,6 +131,7 @@ void option_save(t_context *C)
 	option->skt_point_size=C->skt->point_size;
 	option->skt_with_scale=C->event->sketch_with_scale;
 	option->skt_scale=C->skt->scale;
+	option->skt_point_smooth=C->skt->point_smooth;
 
 	// draw
 

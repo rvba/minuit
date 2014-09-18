@@ -44,6 +44,7 @@ typedef struct Option
 	float skt_point_size;
 	int skt_with_scale;
 	float skt_scale;
+	int skt_point_smooth;
 
 	// draw
 
