@@ -24,10 +24,10 @@
 #include "mode.h"
 
 
-void save_file(t_context *C)
+void save_name_set( t_context *C)
 {
-	char path[_PATH_];
 	char *filename = C->app->filename;
+	char *path = C->app->path_file;
 
 	if( !strlen( filename)) set_name_long( C->app->filename, "minuit.mn");
 
@@ -35,8 +35,12 @@ void save_file(t_context *C)
 	s_cat( path, "/" , _PATH_);
 	s_cat( path, filename, _PATH_);
 	s_cp( C->app->path_file, path, _PATH_);
+}
 
-	mem_write( path);
+void save_write(t_context *C)
+{
+	save_name_set( C);
+	mem_write( C->app->path_file);
 }
 
 void mod_save( void)
@@ -82,7 +86,7 @@ void save_to_file( t_context *C)
 		}
 	}
 
-	save_file( C);
+	save_write( C);
 }
 
 void save_file_increment(t_context *C)
