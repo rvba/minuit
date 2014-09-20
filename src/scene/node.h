@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef __NODE_H
-#define __NODE_H
+#ifndef __NODE_H__
+#define __NODE_H__
 
 #include "common.h"
 
@@ -46,7 +46,6 @@ typedef struct Node
 	void *id_ptr_old;
 	int users;
 	int store;
-	int garbage;
 	int size;
 	int extra_type;
 
@@ -54,6 +53,7 @@ typedef struct Node
 	struct NodeClass *cls;
 
 	void *data;  
+
 }t_node;
 
 
@@ -62,15 +62,11 @@ t_node*		node_load(void *ptr,const char *type);
 void		node_init(t_node *node,t_data_type type);
 t_node *	node_new(t_data_type type);
 t_node *	node_clone(t_node *src);
-
-void id_init	(t_id *id, const char *name);
-
-void var_rebind( struct Scene *scene, void *ptr);
-
-void cls_node_id_add(t_node *node);
-void cls_node_user_add(t_node *node);
-
-void node_classes_init( struct Scene *scene);
+void 		id_init	(t_id *id, const char *name);
+void 		var_rebind( struct Scene *scene, void *ptr);
+void 		cls_node_id_add(t_node *node);
+void 		cls_node_user_add(t_node *node);
+void 		node_classes_init( struct Scene *scene);
 
 #ifdef __cplusplus
 }

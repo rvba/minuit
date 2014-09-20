@@ -538,7 +538,6 @@ void scene_remove_ref(t_scene *sc,void *ptr)
 }
 
 // data var (name)(name)(size)(ptr)
-int node_garbage = 0;
 
 void scene_add_data_var(t_scene *sc,const char *name,const char *name_var,int size,void *ptr)
 {
@@ -546,7 +545,6 @@ void scene_add_data_var(t_scene *sc,const char *name,const char *name_var,int si
 
 	// data 
 	t_node *node_data=scene_add_data(sc,"dynamic","void",name,ptr);
-	if( node_garbage) node_data->garbage = 1;
 	t_data *data = ( t_data *) node_data->data;
 
 	// store size
@@ -554,7 +552,6 @@ void scene_add_data_var(t_scene *sc,const char *name,const char *name_var,int si
 
 	// VAR
 	t_node *node_var=scene_add(sc,dt_var,"var");
-	if( node_garbage) node_var->garbage = 1;
 	node_var->data=ptr;
 	node_var->id_ptr=ptr;
 	node_var->size = size;
