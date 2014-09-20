@@ -49,6 +49,12 @@ void mod_save( void)
 	skt_save( C);
 }
 
+void save_app( t_context *C)
+{
+
+
+}
+
 void save_file( t_context *C)
 {
 	t_link *l;
@@ -56,6 +62,7 @@ void save_file( t_context *C)
 
 	option_save(C);
 //	skt_save( C);
+	save_app( C);
 	
 	t_module *module = mode_module_get( C->mode, "save");
 	void (* f)( void) =  module->data;

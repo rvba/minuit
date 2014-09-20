@@ -15,35 +15,30 @@
 #include "base.h"
 #include "memory.h"
 
+#define CLASS_MAX 128
+
 // STATIC
 t_scene *SCENE=NULL;
 
-// tmp idcol
+// Static TMP COLOR
 int COLOR[3];
 
-#define CLASS_MAX 128
+/*
+	****************************
+	CLASSES
+	****************************
+*/
 
+// Classes Pointer List
 t_node_class *classes[ CLASS_MAX];
 
+// Add a Class Pointer to classes List 
 void scene_class_init( t_scene *scene, t_data_type type, t_node_class *cls)
 {
 	classes[ type] = cls;
 }
 
-t_node_class *scene_class_pop( t_scene *scene, t_data_type type)
-{
-	return classes[ type];
-}
-
-/***	 GET	* **/
-
-// get scene
-
-t_scene *scene_get(void)
-{
-	return SCENE;
-}
-
+// Add Extra (external) Class (sc->classes)
 void scene_class_add( struct Scene *scene, int type, void *cls)
 {
 	t_node *node = node_new( dt_undefined);
@@ -52,7 +47,14 @@ void scene_class_add( struct Scene *scene, int type, void *cls)
 	lst_add( scene->classes, node, "node");
 }
 
-void *scene_class_get( struct Scene *scene, int type)
+// Get a Pointer to a Class
+t_node_class *scene_class_get( t_scene *scene, t_data_type type)
+{
+	return classes[ type];
+}
+
+// Get a Pointer to an Externa Class (sc->classes)
+void *scene_class_extra_get( struct Scene *scene, int type)
 {
 	t_link *l;
 	t_node *node;
@@ -70,9 +72,16 @@ void *scene_class_get( struct Scene *scene, int type)
 	return NULL;
 }
 
+/*
+	****************************
+	STORE
+	****************************
+*/
+
+
+// Set Store State ( manage multiple opening/closing states)
 void scene_store(t_scene *scene, int val)
 {
-	//if( scene->debug_all) printf("scene_store %d\n", val);
 	if(val)
 	{
 		scene->store_stack++;
@@ -84,25 +93,38 @@ void scene_store(t_scene *scene, int val)
 		if(scene->store_stack ==  0)
 			scene->store = 0;
 	}
-
-	//if( scene->debug_all) printf("scene_store store=%d\n", scene->store);
 }
 
-// get lst
+/*
+	****************************
+	GET
+	****************************
+*/
 
+// Return Scene Pointer
+t_scene *scene_get( void)
+{
+	return SCENE;
+}
+
+// Get Lst by Node Type
 t_lst *scene_lst_get( t_scene *sc, t_data_type type)
 {
 	t_node_class *cls = classes[ type];
 	return cls->lst;
 }
 
-t_node *scene_get_data(t_scene *sc,void *ptr)
+// Retrieve a Node Data 
+t_node *scene_get_data( t_scene *sc, void *ptr)
 {
 	t_link *l;
 	t_node *n;
 	t_data *d;
 
+	// Get the Data type List
 	t_lst *lst = scene_lst_get( sc, dt_data);
+
+	// Compare ptr with data->pointer
 	for(l=lst->first;l;l=l->next)
 	{
 		n = ( t_node *) l->data;
@@ -114,8 +136,7 @@ t_node *scene_get_data(t_scene *sc,void *ptr)
 	return NULL;
 }
 
-// ptr was mem_malloc'ed, find data var with ptr address
-
+// Retrieve a Node Var 
 t_node *scene_get_var(t_scene *sc,void *ptr)
 {
 	t_link *l;
@@ -132,8 +153,7 @@ t_node *scene_get_var(t_scene *sc,void *ptr)
 	return NULL;
 }
 
-// get node by type/name
-
+// Get A Node by Name (With Warning Message) 
 t_node *scene_node_get( t_scene *sc, t_data_type type, const char *name)
 {
 	t_lst *lst=scene_lst_get(sc,type);
@@ -149,6 +169,7 @@ t_node *scene_node_get( t_scene *sc, t_data_type type, const char *name)
 	}
 }
 
+// Get A Node by Name  
 t_node *scene_node_exists( t_scene *sc, t_data_type type, const char *name)
 {
 	t_lst *lst=scene_lst_get(sc,type);
@@ -163,18 +184,13 @@ t_node *scene_node_exists( t_scene *sc, t_data_type type, const char *name)
 	}
 }
 
+/*
+	****************************
+	COLORS ID
+	****************************
+*/
 
-/***	 COLOR	***/
-
-
-
-void scene_color_tmp_reset(t_scene *scene)
-{
-	bzero(COLOR,3);
-}
-
-// switch tmp mode
-
+// Switch between Regular / tmp color mode 
 void scene_color_switch_mode(t_scene *sc)
 {
 	if(sc->use_tmp_colors)
@@ -184,13 +200,11 @@ void scene_color_switch_mode(t_scene *sc)
 	else
 	{
 		sc->use_tmp_colors=1;
-		//bzero(COLOR,3);
 		vcp3i( COLOR, sc->color);
 	}
 }
 
-// set single id col
-
+// Set single id col
 void scene_set_color(t_scene *sc)	
 {
 	int step = sc->step;
@@ -254,11 +268,13 @@ void scene_switch_edit_mode(t_scene *scene, int state)
 	{
 		scene->edit_mode = 1;
 	}
-
-	//scene_color_switch_mode(scene);
 }
 
-/***	 ID	***/
+/*
+	****************************
+	ID
+	****************************
+*/
 
 
 int scene_id_get(t_scene *sc)
@@ -267,7 +283,11 @@ int scene_id_get(t_scene *sc)
 	return sc->id;
 }
 
-/***	 FREE	***/
+/*
+	****************************
+	DELETE NODES
+	****************************
+*/
 
 void scene_node_free( t_scene *sc, t_node *node)
 {
@@ -336,15 +356,15 @@ void scene_delete( t_scene *sc, void *data)
 	}
 }
 
-
-// free
-
 void scene_free(t_scene *sc)
 {
 }
 
-
-/***	 LOAD	***/
+/*
+	****************************
+	LOAD NODES
+	****************************
+*/
 
 void scene_node_load(t_scene *sc,t_node *node)
 {
@@ -370,41 +390,45 @@ void scene_node_load(t_scene *sc,t_node *node)
 	}
 }
 
-
-
-
-/***	ADD	***/
-
-
+/*
+	****************************
+	ADD NODES
+	****************************
+*/
 
 // node
 
 t_node *scene_add_node(t_scene *sc,t_data_type type,const char *name)
 {
-	// new node
+	// New node
 	t_node *node = node_new(type);
 
-	node->cls = scene_class_pop( sc, type);
+	// Get Class Pointer
+	node->cls = scene_class_get( sc, type);
+
+	// Init List
 	if( !node->cls->lst) node->cls->lst = lst_new("lst"); 
 
-	// build data 
+	// Build Data 
 	if( node->cls->build) node->data = node->cls->build( name);
 
+	// Store Data Address
 	node->id_ptr = node->data;
 
+	// Init ID & User
 	if(node->type != dt_var)
 	{
 		cls_node_id_add(node);
 		cls_node_user_add(node);
 	}
 
-	// add to local list
+	// Add to (local) Class List
 	if(node->cls->lst) lst_add(node->cls->lst,node,name); 
 
-	// add to nodes list
+	// Add to (global) Nodes List
 	lst_add(sc->nodes,node,name);
 
-	// store data
+	// Set Store State
 	if(sc->store) node->store = 1; 
 
 	return node;
@@ -426,7 +450,6 @@ t_node *scene_add(t_scene *sc,t_data_type type,const char *name)
 t_node *scene_add_data(t_scene *sc,const char *type,const char *target,const char *name,void *ptr)
 {
 	ulog((LOG_SCENE,"scene_add_data %s %s %s\n",type,target,name));
-	//printf("scene_add_data %s %s %s\n",type,target,name);
 
 	t_node *node=scene_add_node(sc,dt_data,name);
 	t_data *data = ( t_data *) node->data;
@@ -537,8 +560,6 @@ void scene_add_data_var(t_scene *sc,const char *name,const char *name_var,int si
 	node_var->size = size;
 }
 
-/***	INIT	***/
-
 t_scene *scene_new(void)
 {
 	// new scene
@@ -581,5 +602,6 @@ void scene_init(t_scene *scene)
 	// Store Localy
 	SCENE = scene;
 
+	// Fill Classes Pointers
 	node_classes_init( scene);
 }

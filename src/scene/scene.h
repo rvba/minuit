@@ -125,13 +125,13 @@ void scene_store(t_scene *scene, int val);
 void scene_delete( t_scene *sc, void *data);
 
 void scene_class_add( struct Scene *scene, int type, void *cls);
-void *scene_class_get( struct Scene *scene, int type);
+struct NodeClass *scene_class_get( t_scene *scene, t_data_type type);
+void *scene_class_extra_get( struct Scene *scene, int type);
 
 struct NodeClass;
 void scene_class_init( t_scene *scene, t_data_type type, struct NodeClass *cls);
 
 struct Lst *scene_lst_get( t_scene *sc, t_data_type type);
 
-struct NodeClass *scene_class_pop( t_scene *scene, t_data_type type);
 
 #endif

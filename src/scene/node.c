@@ -883,11 +883,11 @@ void node_init(t_node *node,t_data_type type)
 
 	if( node->type == dt_undefined)
 	{
-		node->cls = scene_class_get( scene, node->extra_type);
+		node->cls = scene_class_extra_get( scene, node->extra_type);
 	}
 	else
 	{
-		node->cls = scene_class_pop( scene, type);
+		node->cls = scene_class_get( scene, type);
 	}
 
 	if( !node->cls->lst) node->cls->lst = lst_new("lst");
