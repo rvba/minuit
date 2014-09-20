@@ -396,8 +396,8 @@ void scene_node_load(t_scene *sc,t_node *node)
 	****************************
 */
 
-// node
 
+// Add Node
 t_node *scene_add_node(t_scene *sc,t_data_type type,const char *name)
 {
 	// New node
@@ -434,30 +434,28 @@ t_node *scene_add_node(t_scene *sc,t_data_type type,const char *name)
 	return node;
 }
 
-// add regular struct
-
+// Add Node 
 t_node *scene_add(t_scene *sc,t_data_type type,const char *name)
 {
 	ulog((LOG_SCENE,"scene_add %s %s \n",data_name_get(type),name));
 
-	t_node *node=scene_add_node(sc,type,name);
+	t_node *node = scene_add_node(sc,type,name);
 
 	return node;
 }
 
-// data register (app_data)(app|func)
-
-t_node *scene_add_data(t_scene *sc,const char *type,const char *target,const char *name,void *ptr)
+// Add Data Node 
+t_node *scene_add_data( t_scene *sc, const char *type, const char *target, const char *name, void *ptr)
 {
 	ulog((LOG_SCENE,"scene_add_data %s %s %s\n",type,target,name));
 
-	t_node *node=scene_add_node(sc,dt_data,name);
+	t_node *node = scene_add_node( sc, dt_data, name);
 	t_data *data = ( t_data *) node->data;
 
-	set_name(data->type,type);
-	set_name(data->target,target);
+	set_name( data->type, type);
+	set_name( data->target, target);
 
-	data->pointer=ptr;
+	data->pointer = ptr;
 
 	return node;
 }
@@ -467,18 +465,12 @@ t_node *scene_add_data(t_scene *sc,const char *type,const char *target,const cha
 
 t_node *scene_add_data_node(t_scene *sc,const char *type,const char *target,const char *name,void *ptr)
 {
-	ulog((LOG_SCENE,"scene_add_node %s %s %s\n",type,target,name));
-
-	t_node *node=scene_add_node(sc,dt_data,name);
+	// Add Data Node
+	t_node *node = scene_add_data( sc, type, target, name, ptr);
 	t_data *data = ( t_data *) node->data;
 
-	set_name(data->type,type);
-	set_name(data->target,target);
-
-	data->pointer=ptr;
-
-	t_node *n=(t_node *)ptr;
-	data->id_node=n->id;
+	t_node *n = ( t_node *) ptr;
+	data->id_node = n->id;
 
 	return node;
 }
@@ -556,6 +548,12 @@ void scene_add_data_var(t_scene *sc,const char *name,const char *name_var,int si
 	node_var->id_ptr=ptr;
 	node_var->size = size;
 }
+
+/*
+	****************************
+	NEW SCENE
+	****************************
+*/
 
 t_scene *scene_new(void)
 {
