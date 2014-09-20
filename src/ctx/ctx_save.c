@@ -49,7 +49,7 @@ void mod_save( void)
 	skt_save( C);
 }
 
-void save_to_file( t_context *C)
+void save_file( t_context *C)
 {
 	t_link *l;
 	t_node *node;
@@ -174,5 +174,5 @@ void save_file_increment(t_context *C)
 
 	file_free( file);
 
-	save_to_file(C);
+	save_file(C);
 }

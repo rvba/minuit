@@ -218,7 +218,7 @@ void keymap_command( int key)
 			break;
 
 		case F1KEY: load_last(C);break; 
-		case F2KEY: save_to_file(C);break;
+		case F2KEY: save_file(C);break;
 		case F3KEY: save_file_increment(C);break; 
 	}
 }
