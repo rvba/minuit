@@ -49,30 +49,19 @@ void mod_save( void)
 	skt_save( C);
 }
 
-void save_app( t_context *C)
-{
-
-
-}
-
-void save_file( t_context *C)
+void save_nodes( t_context *C)
 {
 	t_link *l;
 	t_node *node;
 
-	option_save(C);
-//	skt_save( C);
-	save_app( C);
-	
-	t_module *module = mode_module_get( C->mode, "save");
-	void (* f)( void) =  module->data;
-	f();
-
+	// For All Nodes
 	for(l=C->scene->nodes->first;l;l=l->next)
 	{
 		node = ( t_node *) l->data;
+		// If Store Flag
 		if( node->store)
 		{
+			// Add to Memory
 			if( node->type==dt_var)
 			{
 				node->id_chunk_self = mem_store(ct_node,dt_var,sizeof(t_node),1,node);
@@ -92,7 +81,27 @@ void save_file( t_context *C)
 			}
 		}
 	}
+}
 
+void save_module( t_context *C)
+{
+	t_module *module = mode_module_get( C->mode, "save");
+	void (* f)( void) =  module->data;
+	f();
+}
+
+void save_file( t_context *C)
+{
+	// Options
+	option_save(C);
+	
+	// Exec Save Module
+	save_module( C);
+
+	// Save Nodes 
+	save_nodes( C);
+
+	// Write File
 	save_write( C);
 }
 
