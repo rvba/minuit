@@ -398,7 +398,7 @@ void scene_node_load(t_scene *sc,t_node *node)
 
 
 // Add Node
-t_node *scene_add_node(t_scene *sc,t_data_type type,const char *name)
+t_node *scene_add_node( t_scene *sc, t_data_type type, const char *name)
 {
 	// New node
 	t_node *node = node_new(type);
@@ -434,8 +434,11 @@ t_node *scene_add_node(t_scene *sc,t_data_type type,const char *name)
 	return node;
 }
 
-// Add Node 
-t_node *scene_add(t_scene *sc,t_data_type type,const char *name)
+// ********************************
+// Add Struct 
+// ********************************
+
+t_node *scene_add( t_scene *sc, t_data_type type, const char *name)
 {
 	ulog((LOG_SCENE,"scene_add %s %s \n",data_name_get(type),name));
 
@@ -444,7 +447,9 @@ t_node *scene_add(t_scene *sc,t_data_type type,const char *name)
 	return node;
 }
 
-// Add Data Node 
+// ********************************
+// Add Data Node (Registers) 
+// ********************************
 t_node *scene_add_data( t_scene *sc, const char *type, const char *target, const char *name, void *ptr)
 {
 	ulog((LOG_SCENE,"scene_add_data %s %s %s\n",type,target,name));
@@ -460,9 +465,9 @@ t_node *scene_add_data( t_scene *sc, const char *type, const char *target, const
 	return node;
 }
 
-// data node (app_node)(object|)
-// retrieve node's struct by struct's id
-
+// ********************************
+// Add Data Node (Node pointers for bricks)
+// ********************************
 t_node *scene_add_data_node(t_scene *sc,const char *type,const char *target,const char *name,void *ptr)
 {
 	// Add Data Node
@@ -475,6 +480,7 @@ t_node *scene_add_data_node(t_scene *sc,const char *type,const char *target,cons
 	return node;
 }
 
+// Remove Data Node
 void scene_remove_data_node(t_scene *sc,void *ptr)
 {
 	t_link *l;
@@ -503,10 +509,11 @@ void scene_remove_data_node(t_scene *sc,void *ptr)
 	{
 		printf("[ERROR scene_remove_data_node] Can't find node\n");
 	}
-
 }
 
-// data ref (struct_ref)(object|)(loc_x|)
+// ********************************
+// Add Ref (Struct internal pointers)
+// ********************************
 
 t_node *scene_add_ref(t_scene *sc,const char *type,const char *target,const char *name,void *ptr,void *ref)
 {
@@ -524,25 +531,27 @@ t_node *scene_add_ref(t_scene *sc,const char *type,const char *target,const char
 	return node;
 }
 
+// Remove Ref
 void scene_remove_ref(t_scene *sc,void *ptr)
 {
 	scene_remove_data_node(sc,ptr);
 }
 
-// data var (name)(name)(size)(ptr)
-
+// ********************************
+// Add Data Var 
+// ********************************
 void scene_add_data_var(t_scene *sc,const char *name,const char *name_var,int size,void *ptr)
 {
 	ulog((LOG_SCENE,"scene_add_data_var %s %s %d\n",name,name_var,size));
 
-	// data 
+	// Add Data Node 
 	t_node *node_data=scene_add_data(sc,"dynamic","void",name,ptr);
 	t_data *data = ( t_data *) node_data->data;
 
-	// store size
+	// Store Size 
 	data->size=size;
 
-	// VAR
+	// Add Var Node 
 	t_node *node_var=scene_add(sc,dt_var,"var");
 	node_var->data=ptr;
 	node_var->id_ptr=ptr;
