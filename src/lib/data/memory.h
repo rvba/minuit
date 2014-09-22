@@ -16,6 +16,8 @@
 extern "C" {
 #endif
 
+struct Scene;
+
 typedef struct Chunk t_chunk;
 
 typedef enum Chunk_Type
@@ -36,17 +38,14 @@ struct Chunk
 	void *pointer;		// pointer to data 
 };
 
-int		mem_store(t_chunk_type chunk_type,t_data_type type,size_t size,int tot,void *pointer);
+int		mem_add( t_chunk_type chunk_type, t_data_type type, size_t size, int tot, void *pointer);
 void 		mem_show(void);
-void 		mem_read(void);
 void 		mem_init(void);
 void 		mem_write(const char *path);
 void *		chunk_new(t_chunk_type chunk_type,t_data_type type,size_t size,int tot,void *pointer);
-char *		chunk_type_get(t_chunk_type type);
+const char *	chunk_type_get(t_chunk_type type);
 
-extern char chunk_name_null[];
-extern char chunk_name_node[];
-extern char chunk_name_data[];
+void mem_read( struct Scene *sc, const char *path);
 
 #ifdef __cplusplus
 }

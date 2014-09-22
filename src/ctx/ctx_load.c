@@ -6,6 +6,7 @@
  * see /LICENSE for more information
  *
  */
+
  /*
 	NODE
 
@@ -51,11 +52,8 @@
 #include "geometry.h"
 #include "material.h"
 #include "texture.h"
-
 #include "op.h"
-
 #include "sketch.h"
-
 #include "mode.h"
 
 // LISTS
@@ -64,45 +62,6 @@ t_lst *NODES;
 t_lst *DATA;
 
 int load_error;
-
-// ID STORE
-
-t_node *tmp_node;
-
-void id_store(t_scene *sc,t_chunk *c,void *data)
-{
-	t_lst *lst;
-
-	// store node
-	if(c->chunk_type==ct_node)
-	{
-		lst=sc->tmp_node;
-
-		// var node: store tmp node
-		if(c->type==dt_var)
-		{
-			tmp_node = ( t_node *) data;
-		}
-	}
-	// store struct
-	else
-	{
-		lst=sc->tmp_data;
-
-		// var data: bind tmp node
-		if(c->type==dt_var)
-		{
-			if(tmp_node)
-			{
-				tmp_node->data = data;
-				tmp_node=NULL;
-			}
-		}
-	}
-
-	// add to LST
-	lst_add(lst,data,"data");
-}
 
 // FIND
 
@@ -613,85 +572,6 @@ void load_node(t_scene *sc)
 */
 
 
-void load_read(t_scene *sc,const char *path)
-{
-	void *data; 		// struct memory allocation
-	char magic;		// read magic
-	int limit=0;		// max size
-	#ifdef WITH_DEBUG
-	int file_size;		// size of bin
-	#endif
-
-	t_chunk *c;
-
-	// FILE
-	FILE *file=fopen(path,"r");
-
-	// FILE SIZE
-	fseek (file,0,SEEK_END);
-	#ifdef WITH_DEBUG
-	file_size = (int)ftell(file);
-	#endif
-	rewind(file);
-
-	// NEW CHUNK
-	c=chunk_new(ct_node,dt_null,0,0,NULL);
-
-	ulog((LOG_READ,"File size:%d\n",file_size));
-	ulog((LOG_READ,"[0]\n",file_size));
-
-	size_t rsize;
-
-	// READ FILE
-	while(1)
-	{
-		// LIMIT
-		if(limit>BIN_MAX)
-		{
-			printf("[ERROR ctx_load] Max Bin\n]");
-			break;
-		}
-
-		// MAGIC
-		rsize = fread(&magic,sizeof(char),1,file);
-		if(rsize != 1) printf("read error 1\n");
-
-		ulog((LOG_READ,"[%d][%d]\t(+%d)\tmagic {%c}\n",limit,(int)ftell(file),(int)sizeof(char),magic));
-
-		// BREAK EOF
-		if(magic=='&') break;
-
-		// READ CHUNK
-		rsize = fread(c,sizeof(t_chunk),1,file);
-		(void) rsize;
-		//if( rsize != (sizeof(t_chunk) * 1)) printf("read error 3\n");
-		ulog((LOG_READ,"[%d]\t(+%d)\tchunk",(int)ftell(file),(int)sizeof(t_chunk)));
-		ulog((LOG_READ," %s:%s:%d:%d\n",chunk_type_get(c->chunk_type),data_name_get(c->type),c->size,c->tot));
-
-		// READ DATA
-
-		// MALLOC
-		data=mem_malloc(c->size*c->tot);
-
-		// READ
-		rsize = fread(data,c->size,c->tot,file);
-		(void) rsize;
-		//if(rsize != c->size * c->tot) printf("read error 4\n");
-
-		ulog((LOG_READ,"[%d]\t(+%d)\tstruct %s:%s\n",(int)ftell(file),c->size,chunk_type_get(c->chunk_type),c->type));
-
-		// STORE  Nodes + Structs
-		id_store(sc,c,data);
-
-		// LIMIT++
-		limit++;
-	}
-
-	// CLOSE FILE
-
-	fclose(file);
-}
-
 void mod_load( void)
 {
 	t_context *C = ctx_get();
@@ -725,7 +605,7 @@ void load_file(t_context *C,const char *path)
 /** READ **/
 	
 	// read file, allocate memory, store in id
-	load_read(sc,path);
+	mem_read( sc, path);
 
 /** BIND **/
 

@@ -64,16 +64,16 @@ void save_nodes( t_context *C)
 			// Add to Memory
 			if( node->type==dt_var)
 			{
-				node->id_chunk_self = mem_store(ct_node,dt_var,sizeof(t_node),1,node);
-				node->id_chunk = mem_store(ct_data,dt_var,node->size,1,node->id_ptr);
+				node->id_chunk_self = mem_add(ct_node,dt_var,sizeof(t_node),1,node);
+				node->id_chunk = mem_add(ct_data,dt_var,node->size,1,node->id_ptr);
 			}
 			else
 			{
 				// store node && get chunk indice
-				node->id_chunk_self = mem_store( ct_node, node->type, sizeof( t_node), 1, node);
+				node->id_chunk_self = mem_add( ct_node, node->type, sizeof( t_node), 1, node);
 
 				// store data && get chunk indice
-				node->id_chunk = mem_store( ct_data, node->type, node->cls->size, 1, node->data);
+				node->id_chunk = mem_add( ct_data, node->type, node->cls->size, 1, node->data);
 
 				// copy chunk indice to generic
 				t_id *id = (t_id *) node->data;
