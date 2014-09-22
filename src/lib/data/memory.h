@@ -42,12 +42,7 @@ void 		mem_read(void);
 void 		mem_init(void);
 void 		mem_write(const char *path);
 void *		chunk_new(t_chunk_type chunk_type,t_data_type type,size_t size,int tot,void *pointer);
-void 		mem_remove(int id);
-
-//void mem_free(void);
-
-
-char *chunk_type_get(t_chunk_type type);
+char *		chunk_type_get(t_chunk_type type);
 
 extern char chunk_name_null[];
 extern char chunk_name_node[];

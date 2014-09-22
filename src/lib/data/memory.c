@@ -178,40 +178,6 @@ int mem_store(t_chunk_type chunk_type,t_data_type type,size_t size,int tot,void 
 	return chunk->id;
 }
 
-void mem_remove(int id)
-{
-	// if (chunk-)id == 0 > node has not been stored (default to 0) 
-	if(id)
-	{
-		t_link *l;
-		t_chunk *c;
-		t_link *_link=NULL;
-		t_chunk *_chunk=NULL;
-
-		for(l=MEMORY->first;l;l=l->next)
-		{
-			c=l->data;
-			if(c->id==id)
-			{
-				_chunk=c;
-				_link=l;
-				break;
-			}
-		}
-
-		if(_link)
-		{
-			lst_link_delete(MEMORY,_link);
-			mem_free(_chunk, sizeof( t_chunk));
-		}
-		else
-		{
-			printf("[ERROR mem_remove]\n");
-		}
-
-	}
-}
-
 
 
 
