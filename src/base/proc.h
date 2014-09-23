@@ -48,6 +48,7 @@ void *		process_loop(void *data);
 void 		process_remove( t_process *process, struct Engine *engine);
 t_process *	process_new(const char *name,void*(* func)(void *data));
 t_process *	process_add( struct Engine *engine, const char *name, void *(* f)(void *d));
+t_process *	process_start( t_engine *engine, const char *name, void *(* f)(void *d), void *data, float clock);
 void 		process_launch(t_process *process);
 void 		process_free(t_process *process);
 

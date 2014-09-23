@@ -110,6 +110,45 @@ int osc_server( int port)
 	return 0;
 }
 
+t_osc *osc_server_new( int port)
+{
+	t_osc *osc = osc_new( "osc_server");
+
+	char sport[8];
+
+	if( !port)
+	{
+		printf("[OSC SERVER] No valid port\n");
+		return NULL;
+	}
+	else
+	{
+		snprintf( sport, 8, "%d", port);
+		printf("[OSC SERVER] Init server at %d\n", port);
+	}
+
+	osc->thread = lo_server_thread_new( sport, osc_error);
+
+	return osc;
+}
+
+void osc_server_start( t_osc *osc)
+{
+	lo_server_thread_start( osc->thread);
+
+	while ( !osc->done)
+	{
+		usleep(1000);
+	}
+
+	lo_server_thread_free( osc->thread);
+}
+
+void osc_method_add( t_osc *osc, const char *msg, const char *type, osc_method f)
+{
+	lo_server_thread_add_method( osc->thread, msg, type, *f, NULL);
+}
+
 void osc_log_print( const char *msg, lo_message lomsg)
 {
 	int count = lo_message_get_argc( lomsg);
@@ -292,6 +331,16 @@ int osc_client( int port)
 
 
 	return 1;
+}
+
+t_osc *osc_new( const char *name)
+{
+	t_osc *osc = mem_malloc( sizeof( t_osc));
+	id_init( &osc->id, name);
+
+	osc->done = 0;
+
+	return osc;
 }
 
 

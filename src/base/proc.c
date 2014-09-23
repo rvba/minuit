@@ -25,7 +25,7 @@ void *process_loop(void *data)
 		else
 		{
 			// WITH TIME LIMIT
-			if(process->limit)
+			if(process->limit && process->clock->limit)
 			{
 				// get time
 				gettimeofday(&process->clock->now,NULL);
@@ -83,6 +83,15 @@ t_process *process_add( t_engine *engine, const char *name, void *(* f)(void *d)
 	process->clock->limit=.1;
 	engine_process_add( engine, process);
 
+	return process;
+}
+
+t_process *process_start( t_engine *engine, const char *name, void *(* f)(void *d), void *data, float clock)
+{
+	t_process *process = process_add( engine, name, f);
+	process->data = data;
+	process->clock->limit = clock;
+	process_launch( process);
 	return process;
 }
 
