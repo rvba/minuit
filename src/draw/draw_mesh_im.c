@@ -138,6 +138,7 @@ void draw_mesh_direct_faces(t_draw *draw, t_mesh *mesh)
 				}
 			}
 		}
+
 	}
 }
 

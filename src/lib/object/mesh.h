@@ -171,11 +171,6 @@ void 		mesh_do_tri_colors(t_mesh *mesh,int *col);
 void 		mesh_do_quad_normals(t_mesh *mesh);
 void 		mesh_do_tri_normals(t_mesh *mesh);
 void 		mesh_recalc_normals(t_mesh *mesh);
-void 		mesh_show_normals(t_mesh *mesh);
-void 		mesh_show_vertices(t_mesh *mesh);
-void 		mesh_show_colors(t_mesh *mesh);
-void 		mesh_show_faces(t_mesh *mesh);
-void 		mesh_show_uv(t_mesh *mesh);
 void 		mesh_show(t_mesh *mesh);
 
 #ifdef __cplusplus

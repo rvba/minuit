@@ -346,7 +346,7 @@ t_node *add_brick_vector(t_context *C,t_block *block,const char *name)
 
 // BRICK SWITCH
 
-t_node *add_brick_switch(t_context *C,t_block *block,const char *name,void *data_target)
+t_node *add_brick_switch(t_context *C,t_block *block,const char *name,void *data_target, void *(* f)(t_brick *brick))
 {
 	void *ptr=add_brick_data(dt_int,data_target);
 
@@ -358,7 +358,8 @@ t_node *add_brick_switch(t_context *C,t_block *block,const char *name,void *data
 	brick->brick_state.draw_value = 0;
 	
 	// ACTION
-	brick->act=op_switch;
+	if( f) brick->act = f;
+	else brick->act=op_switch;
 
 	// PLUG
 	set_plug_option(brick);
@@ -368,6 +369,7 @@ t_node *add_brick_switch(t_context *C,t_block *block,const char *name,void *data
 
 // BRICK SWITCH CUSTOM
 
+/*
 t_node *add_brick_switch_custom(t_context *C,t_block *block,const char *name,void *data_target,void *(* f)(t_brick *brick))
 {
 	void *ptr=add_brick_data(dt_int,data_target);
@@ -387,6 +389,7 @@ t_node *add_brick_switch_custom(t_context *C,t_block *block,const char *name,voi
 
 	return node_brick;
 }
+*/
 
 // BRICK TRIGGER
 
@@ -939,14 +942,14 @@ t_node *add_label(t_context *C,const char *name)
 
 //  SWITCH 
 
-t_node *add_switch(t_context *C,const char *name,void *data)
+t_node *add_switch(t_context *C,const char *name,void *data, void *(* f)( t_brick *brick))
 {
 	// BLOCK
 	t_node *node_block = add_block(C,"switch");
 	t_block *block = ( t_block *) node_block->data;
 
 	// BRICK SWICH
-	add_brick_switch(C,block,name,data);
+	add_brick_switch(C,block,name,data, f);
 
 	return node_block;
 }
@@ -960,7 +963,7 @@ t_node *add_switch_custom(t_context *C,const char *name,void *data,void *(* f)(t
 	t_block *block = ( t_block *) node_block->data;
 
 	// BRICK SWICH
-	t_node *node_switch = add_brick_switch_custom(C,block,name,data,f);
+	t_node *node_switch = add_brick_switch(C,block,name,data,f);
 	t_brick *brick_switch = ( t_brick *) node_switch->data;
 
 	brick_switch->brick_state.always_trigger = 1;

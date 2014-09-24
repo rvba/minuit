@@ -65,8 +65,9 @@ struct Node *	add_brick_slider_float(struct Context *C,struct Block *block,const
 struct Node *	add_brick_slider_float_custom(struct Context *C,struct Block *block,const char *name,void *data_target,void *(*f)(struct Brick *b));
 struct Node *	add_brick_slider_int_custom(struct Context *C,struct Block *block,const char *name,void *data_target,void *(*f)(struct Brick *b));
 struct Node *	add_brick_label(struct Context *C,struct Block *block,const char *name);
-struct Node *	add_brick_switch(struct Context *C,struct Block *block,const char *name,void *data_target);
-struct Node *	add_brick_switch_custom( struct Context *C, struct Block *block, const char *name, void *data_target, void *(* f)( struct Brick *brick));
+//struct Node *	add_brick_switch(struct Context *C,struct Block *block,const char *name,void *data_target);
+//struct Node *	add_brick_switch_custom( struct Context *C, struct Block *block, const char *name, void *data_target, void *(* f)( struct Brick *brick));
+struct Node *	add_brick_switch( struct Context *C, struct Block *block, const char *name, void *data_target, void *(* f)( struct Brick *brick));
 struct Node *	add_brick_trigger(struct Context *C,struct Block *block,const char *name,void *(*f)(struct Brick *b));
 struct Node *	add_trigger(struct Context *C,const char *name,void*(* f)(struct Brick *brick));
 struct Node *	add_trigger_always(struct Context *C,const char *name,void*(* f)(struct Brick *brick));
@@ -78,8 +79,8 @@ struct Node *	add_brick_geo_point(struct Context *C,const char *name, void *data
 struct Node * 	add_brick_geo_edge(struct Context *C,const char *name, void *data);
 struct Node * 	add_brick_geo_array(struct Context *C,const char *name, void *data);
 struct Node *	add_loop(struct Context *C);
-struct Node *	add_switch(struct Context *C,const char *name,void *data);
-struct Node *	add_switch_custom(struct Context *C,const char *name,void *data,void *(* f)(struct Brick *brick));
+struct Node *	add_switch(struct Context *C,const char *name,void *data, void *(* f)( struct Brick *brick));
+//struct Node *	add_switch_custom(struct Context *C,const char *name,void *data,void *(* f)(struct Brick *brick));
 struct Node *	add_label(struct Context *C,const char *name);
 struct Node *	add_slider_float(struct Context *C,const char *name,void *target_data);
 struct Node *	add_brick_int(struct Context *C, struct Block *block, const char *name, void *data_target);

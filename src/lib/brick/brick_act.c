@@ -75,7 +75,7 @@ void *op_brick_add(t_brick *brick)
 	else if(is(name,"x")) 			node = add_maths(C,"x");
 	else if(is(name,"+"))  			node = add_maths(C,"+"); 
 	else if(is(name,"++")) 			node = add_plusplus(C);
-	else if(is(name,"switch"))  		node = add_switch(C,"switch",NULL); 
+	else if(is(name,"switch"))  		node = add_switch(C,"switch",NULL,NULL); 
 	else if(is(name,"clone"))  		node = add_clone(C); 
 	else if(is(name,"pipe")) 		node = add_pipe(C); 
 	else if(is(name,"sec")) 		node = add_slider_int(C,"sec",&C->app->clock->sec);
@@ -123,7 +123,7 @@ void *op_brick_add(t_brick *brick)
 	else if(is(name,"rnd")) 		node = add_slider_int_custom(C,"rnd",NULL,op_rnd);
 	else if(is(name,"neg")) 		node = add_slider_int_custom(C,"neg",NULL,op_neg);
 	else if(is(name,"abs")) 		node = add_slider_int_custom( C, "abs", NULL, op_abs); 
-	else if(is(name,"last?")) 		node = add_switch_custom(C,"last?",NULL,op_is_last);
+	else if(is(name,"last?")) 		node = add_switch(C,"last?",NULL,op_is_last);
 	else if(is(name,"for")) 		node = add_for(C);
 	else if(is(name,"vector 3d")) 		node = add_vector_3d(C);
 	else if(is(name,"vector 2d")) 		node = add_vector_2d(C);

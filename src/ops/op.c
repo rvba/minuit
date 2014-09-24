@@ -65,7 +65,7 @@ t_block *make_menu_skt( t_context *C)
 	add_brick_slider_float(C,block,"point size",&C->skt->point_size);
 	add_brick_slider_float(C,block,"intensity",&C->skt->intensity);
 	add_brick_slider_int(C,block,"point resolution",&C->skt->point_resolution);
-	add_brick_switch(C,block,"point smooth",&C->skt->point_smooth);
+	add_brick_switch(C,block,"point smooth",&C->skt->point_smooth, NULL);
 
 	return block;
 }
@@ -76,17 +76,17 @@ t_block *make_menu_draw( t_context *C)
 {
 	t_block *block = add_menu_block( C, "menu_draw");
 
-	add_brick_switch(C,block,"face",&C->event->with_face);
-	add_brick_switch(C,block,"face outline",&C->event->with_face_outline);
-	add_brick_switch(C,block,"points",&C->event->with_point);
-	add_brick_switch(C,block,"edges",&C->event->with_edge);
-	add_brick_switch(C,block,"edges color",&C->event->with_edge_color);
-	add_brick_switch(C,block,"texture",&C->event->with_texture);
-	add_brick_switch(C,block,"normal",&C->event->with_normal);
-	add_brick_switch(C,block,"light",&C->event->with_light);
-	add_brick_switch(C,block,"depth",&C->event->with_depth);
-	add_brick_switch(C,block,"blend",&C->event->with_blend);
-	add_brick_switch(C,block,"draw lights",&C->draw->draw_lights);
+	add_brick_switch(C,block,"face",&C->event->with_face, NULL);
+	add_brick_switch(C,block,"face outline",&C->event->with_face_outline, NULL);
+	add_brick_switch(C,block,"points",&C->event->with_point, NULL);
+	add_brick_switch(C,block,"edges",&C->event->with_edge, NULL);
+	add_brick_switch(C,block,"edges color",&C->event->with_edge_color, NULL);
+	add_brick_switch(C,block,"texture",&C->event->with_texture, NULL);
+	add_brick_switch(C,block,"normal",&C->event->with_normal, NULL);
+	add_brick_switch(C,block,"light",&C->event->with_light, NULL);
+	add_brick_switch(C,block,"depth",&C->event->with_depth, NULL);
+	add_brick_switch(C,block,"blend",&C->event->with_blend, NULL);
+	add_brick_switch(C,block,"draw lights",&C->draw->draw_lights, NULL);
 
 	return block;
 }

@@ -26,6 +26,22 @@
 
 void mesh_add_brick_vertex(t_context *C,t_mesh *mesh);
 
+void mesh_show(t_mesh *mesh)
+{
+	printf("MESH\n");
+	printf("tot_vertex: %d\n", mesh->var.tot_vertex);
+	printf("tot_face: %d\n", mesh->var.tot_face);
+
+	printf("VERTICES\n");
+	if(mesh->vertex) vlst_show(mesh->vertex);
+	printf("COLORS\n");
+	if(mesh->colors) vlst_show(mesh->colors);
+	printf("QUADS\n");
+	if(mesh->quads) vlst_show( mesh->quads);
+	printf("TRIS\n");
+	if(mesh->tris) vlst_show( mesh->tris);
+}
+
 void mesh_update( t_mesh *mesh)
 {
 	t_vlst *vlst = mesh->vertex;

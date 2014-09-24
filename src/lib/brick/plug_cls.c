@@ -65,27 +65,6 @@ void object_show(t_object *object)
 	term_log("object");
 }
 
-void mesh_show(t_mesh *mesh)
-{
-	printf("MESH\n");
-	printf("tot_vertex: %d\n", mesh->var.tot_vertex);
-	printf("tot_face: %d\n", mesh->var.tot_face);
-
-	if(mesh->vertex)
-	{
-		vlst_show(mesh->vertex);
-	}
-	else
-	{
-		printf("MESH no vlst\n");
-	}
-
-	if(mesh->colors)
-	{
-		vlst_show(mesh->colors);
-	}
-}
-
 
 void plug_debug(t_plug *plug)
 {
