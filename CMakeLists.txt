@@ -11,7 +11,7 @@ project(Minuit)
 
 ###############		 OPTIONS #############################
 
-option(OPT_OSC "osc" OFF)
+option(OPT_OSC "osc" ON)
 option(OPT_OBJ "obj" OFF)
 option(OPT_GLEW "glew" ON)
 option(OPT_SDL "sdl" OFF)
