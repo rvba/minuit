@@ -87,7 +87,15 @@ void brick_rhizome_add(t_brick *brick_x, t_brick *brick_y)
 	rhizome_setup(block_x->rhizome);
 }
 
-int brick_is_different(t_brick *dst, t_brick *src)
+int brick_equal( t_brick *dst, t_brick *src)
+{
+	if(dst->id.id == src->id.id)
+		return 1;
+	else
+		return 0;
+}
+
+int brick_equal_data( t_brick *dst, t_brick *src)
 {
 	if(dst->plug_intern.data_type != src->plug_intern.data_type)
 		return 1;
@@ -97,7 +105,7 @@ int brick_is_different(t_brick *dst, t_brick *src)
 
 void brick_copy_data(t_brick *dst, t_brick *src)
 {
-	if(brick_is_different(dst,src))
+	if(brick_equal_data(dst,src))
 		brick_type_change(dst,&src->plug_intern);
 
 	dst->plug_intern.data = src->plug_intern.data;

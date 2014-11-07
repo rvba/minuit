@@ -519,6 +519,42 @@ void *op_switch(t_brick *brick)
 	return NULL;
 }
 
+// MULTISWITCH
+
+void *op_multiswitch( struct Brick *brick)
+{
+	t_block *block = brick->block;
+	int *target = brick->plug_intern.data;
+
+	// If Brick OFF
+	if(*target == 0)
+	{
+		// Switch ON
+		*target=1; 
+
+		t_link *l;
+		t_brick *b;
+
+		// Switch All Block OFF
+		for( l = block->bricks->first; l; l = l->next)
+		{
+			b = l->data;
+			// If Not this brick
+			if( !brick_equal( b, brick))
+			{
+				if( b->type == bt_switch)
+				{
+					int *i = b->plug_intern.data;
+					*i = 0;
+				}
+			}
+		}
+	}
+
+
+	return NULL;
+}
+
 // VOID
 
 void *op_void_act(t_brick *brick)

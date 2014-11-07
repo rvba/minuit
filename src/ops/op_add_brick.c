@@ -367,29 +367,19 @@ t_node *add_brick_switch(t_context *C,t_block *block,const char *name,void *data
 	return node_brick;
 }
 
-// BRICK SWITCH CUSTOM
+// BRICK MULTISWITCH
 
-/*
-t_node *add_brick_switch_custom(t_context *C,t_block *block,const char *name,void *data_target,void *(* f)(t_brick *brick))
+t_node *add_brick_multiswitch( t_context *C, t_block *block, const char *name, void *data_target, void *(* f)(t_brick *brick))
 {
-	void *ptr=add_brick_data(dt_int,data_target);
+	t_node *node = add_brick_switch( C, block, name, data_target, f);
+	t_brick *brick = node->data;
 
-	// NEW BRICK
-	t_node *node_brick=brick_make(block,name,bt_switch,dt_int,ptr);
-	t_brick *brick = ( t_brick *) node_brick->data;
-
-	// Dont Draw Value
-	brick->brick_state.draw_value = 0;
-	
 	// ACTION
-	brick->act=f;
+	if( f) brick->act = f;
+	else brick->act = op_multiswitch;
 
-	// PLUG
-	set_plug_option(brick);
-
-	return node_brick;
+	return node;
 }
-*/
 
 // BRICK TRIGGER
 

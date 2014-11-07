@@ -181,7 +181,7 @@ void 		brick_rhizome_split(t_brick *brick_x, t_brick *brick_y);
 void 		brick_rhizome_add(t_brick *brick_x, t_brick *brick_y);
 void 		brick_remove(struct Action *action);
 
-int 		brick_is_different(struct Brick *dst, struct Brick *src);
+int 		brick_equal(struct Brick *dst, struct Brick *src);
 void 		brick_copy_data(struct Brick *dst, struct Brick *src);
 void 		brick_binding_add(struct Brick *brick, enum Data_Type type, void *data);
 struct Brick *	brick_copy(struct Block *block,struct Brick *brick);
