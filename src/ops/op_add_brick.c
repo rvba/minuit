@@ -954,25 +954,6 @@ t_node *add_switch(t_context *C,const char *name,void *data, void *(* f)( t_bric
 	return node_block;
 }
 
-/*
-// SWITCH CUSTOM
-
-t_node *add_switch_custom(t_context *C,const char *name,void *data,void *(* f)(t_brick *brick))
-{
-	// BLOCK
-	t_node *node_block = add_block(C,"switch");
-	t_block *block = ( t_block *) node_block->data;
-
-	// BRICK SWICH
-	t_node *node_switch = add_brick_switch(C,block,name,data,f);
-	t_brick *brick_switch = ( t_brick *) node_switch->data;
-
-	brick_switch->brick_state.always_trigger = 1;
-
-	return node_block;
-}
-*/
-
 // MULTIPLIER 
 
 t_node *add_multiplier( t_context *C, const char *type)
