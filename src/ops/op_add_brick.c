@@ -954,6 +954,7 @@ t_node *add_switch(t_context *C,const char *name,void *data, void *(* f)( t_bric
 	return node_block;
 }
 
+/*
 // SWITCH CUSTOM
 
 t_node *add_switch_custom(t_context *C,const char *name,void *data,void *(* f)(t_brick *brick))
@@ -970,6 +971,7 @@ t_node *add_switch_custom(t_context *C,const char *name,void *data,void *(* f)(t
 
 	return node_block;
 }
+*/
 
 // MULTIPLIER 
 
