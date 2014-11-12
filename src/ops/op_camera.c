@@ -22,6 +22,26 @@
 #define OP_CAM_ORTHO_ZOOM_FAC 100
 #define OP_CAM_ORTHO_PAN_FAC 30 
 
+t_camera *op_camera_get_current( struct Context *C)
+{
+	t_camera *camera = NULL;
+
+	if(C->scene->has_generic_viewport)
+	{
+		// Get default Viewport
+		t_node *node_viewport = scene_node_get( C->scene, dt_viewport, "viewport");
+		t_viewport *viewport = NULL;
+
+		if(node_viewport)
+		{
+			viewport = node_viewport->data;
+			camera = viewport->camera;
+		}
+	}
+
+	return camera;
+}
+
 void op_3d_orientation(void)
 {
 	glRotatef(-90,1,0,0);
