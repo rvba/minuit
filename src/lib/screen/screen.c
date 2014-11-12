@@ -147,7 +147,7 @@ t_screen *screen_add_3d(const char *name, void (* draw)(t_screen *s))
 	screen->viewports = lst;
 
 	// Viewport
-	t_node *node_viewport = scene_add( C->scene, dt_viewport, name);
+	t_node *node_viewport = scene_add( C->scene, dt_viewport, "viewport");
 	t_viewport *viewport = node_viewport->data;
 
 	// Camera

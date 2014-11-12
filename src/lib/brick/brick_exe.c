@@ -457,42 +457,25 @@ void *op_window(t_brick *brick)
 void *op_camera_rotate_xy(t_brick *brick)
 {
 	t_context *C=ctx_get();
-
 	float *data=brick->plug_intern.data;
-
-	// Get default Viewport
-	t_node *node_viewport = scene_node_get( C->scene, dt_viewport, "viewport");
-	t_viewport *viewport;
-	t_camera *camera;
-
-	if(node_viewport)
+	t_camera *camera = op_camera_get_current( C);
+	if( camera)
 	{
-		viewport = node_viewport->data;
-		camera = viewport->camera;
 		op_camera_rotate(C,camera,*data,0);	
 	}
 
 	return NULL;
 }
 
-// CAMERA ROTATE Z
+// CAMERA ROTATE XY
 
 void *op_camera_rotate_z(t_brick *brick)
 {
 	t_context *C=ctx_get();
-
-	// Get default Viewport
-	t_node *node_viewport = scene_node_get( C->scene, dt_viewport, "viewport");
-	t_viewport *viewport;
-	t_camera *camera;
-
-	if(node_viewport)
+	float *data=brick->plug_intern.data;
+	t_camera *camera = op_camera_get_current( C);
+	if( camera)
 	{
-		viewport = node_viewport->data;
-		camera = viewport->camera;
-
-		op_slider(brick);
-		float *data=brick->plug_intern.data;
 		op_camera_rotate(C,camera,0,*data);	
 	}
 

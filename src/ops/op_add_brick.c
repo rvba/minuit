@@ -1262,18 +1262,7 @@ t_node *add_brick_mesh( t_context *C, const char *name)
 
 t_node *add_slider_camera(t_context *C,const char *name)
 {
-	printf("add camera\n");
-	// Get default Viewport
-	t_node *node_viewport = scene_node_get( C->scene, dt_viewport, "viewport");
-	t_viewport *viewport = NULL;
-	t_camera *camera = NULL;
-
-	if(node_viewport)
-	{
-		viewport = ( t_viewport *) node_viewport->data;
-		camera = viewport->camera;
-	}
-
+	t_camera *camera = op_camera_get_current( C);
 	t_node *node = NULL;
 
 	if(camera)

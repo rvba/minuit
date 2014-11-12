@@ -164,6 +164,7 @@ void *op_add_screen( t_brick *brick)
 	scene_store(C->scene,1);
 	C->scene->has_generic_viewport = 1;
 
+	//t_screen *screen = screen_add_3d( "screen_view3d", screen_view3d);
 	t_screen *screen = screen_add_3d( "screen_view3d", screen_view3d);
 	screen->draw = screen_view3d;
 
