@@ -23,6 +23,8 @@
 #include "op.h"
 #include "rhizome.h"
 
+t_context *C = NULL;
+
 // [block] brick->menu 		=> pointing to another block-menu 
 // [brick] block->submenu 	=> submenu selection
 // [brick] block->selected	=> brick selection
@@ -56,6 +58,7 @@ t_brick *block_brick_hover( t_context *C)
 
 void state_block_brick_trigger( t_block *block, t_event *e)
 {
+	/*
 	ctx_ui_log( "block_brick_trigger");
 	t_brick *brick = block->selected;
 	if( e->type == UI_BRICK_RELEASED)
@@ -75,6 +78,30 @@ void state_block_brick_trigger( t_block *block, t_event *e)
 	else
 	{
 		brick_dispatch( brick);
+	}
+	*/
+
+	ctx_ui_log( "block_brick_trigger");
+	t_brick *brick = block->selected;
+
+	// update brick
+	brick_dispatch( brick);
+
+	// update rhizome 
+	if( block->rhizome)
+	{
+		if( C->ui->realtime || e->type == UI_BRICK_RELEASED)
+			rhizome_setup( block->rhizome);
+	}
+	else
+	{
+		block_set_setup( block);
+	}
+
+	if( e->type == UI_BRICK_RELEASED)
+	{
+		ctx_event_add( UI_BLOCK_RELEASED);
+		BLOCK_SWAP( block, state_block_default);
 	}
 }
 
@@ -420,7 +447,7 @@ void state_block_default( t_block *block, t_event *e)
 
 void cls_block_dispatch( t_block *block)
 {
-	t_context *C = ctx_get();
+	if (!C) C = ctx_get();
 	t_link *l;
 	t_event *e;
 

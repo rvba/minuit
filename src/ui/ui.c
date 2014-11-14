@@ -242,6 +242,7 @@ t_ui *ui_new(void)
 	ui->show_plug_state = 1;
 
 	ui->draw_link = 0;
+	ui->realtime = 1;
 
 	ui->show_intro=UI_SHOW_INTRO;
 	ui->show_intro_always=0;

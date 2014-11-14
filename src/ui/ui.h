@@ -81,6 +81,7 @@ typedef struct Ui
 	int step;
 	int step_reset;
 	int fixed_menu;
+	int realtime; // rhizome: if 1 update each frame when brick pressed, else update when brick released
 
 	// MOUSE
 	int mouse_state;
