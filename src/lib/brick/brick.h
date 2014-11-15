@@ -24,8 +24,6 @@ struct Block;
 struct Brick;
 struct Dict;
 
-enum Data_Type;
-
 struct Brick_State;
 struct Brick_Geometry;
 struct Brick_Var;
@@ -183,19 +181,19 @@ void 		brick_remove(struct Action *action);
 
 int 		brick_equal(struct Brick *dst, struct Brick *src);
 void 		brick_copy_data(struct Brick *dst, struct Brick *src);
-void 		brick_binding_add(struct Brick *brick, enum Data_Type type, void *data);
+void 		brick_binding_add(struct Brick *brick, t_data_type type, void *data);
 struct Brick *	brick_copy(struct Block *block,struct Brick *brick);
 struct Brick *	brick_dupli(struct Block *block,struct Brick *brick);
 void 		plug_color_init(struct Plug *plug);
 
-void 		plug_init( struct Plug *plug, enum Data_Type type, struct Brick *brick, void *data_target, int duplicate);
+void 		plug_init( struct Plug *plug, t_data_type type, struct Brick *brick, void *data_target, int duplicate);
 
 void 		brick_release(struct Brick *brick);
 void 		brick_free(struct Brick *brick);
 int 		brick_delete(struct Brick *brick,int remove_connected);
 void 		brick_type_change(struct Brick *brick,struct Plug *plug);
 void 		brick_type_reset(struct Brick *brick);
-void 		brick_change_type_by_name(struct Brick *brick,enum Data_Type type);
+void 		brick_change_type_by_name(struct Brick *brick,t_data_type type);
 
 void 		brick_init(struct Scene *sc,struct Brick *brick);
 void 		_brick_init(struct Brick *brick);
@@ -204,7 +202,7 @@ t_brick *	brick_clone(t_brick *brick);
 void*		brick_new(const char *name);
 void *		brick_get_ref(struct Brick *brick, const char *ref);
 void 		brick_rebind(struct Scene *sc,void *ptr);
-struct Node 	*brick_make(struct Block *block,const char *name,t_brick_type brick_type,enum Data_Type data_type,void *data_target);
+struct Node 	*brick_make(struct Block *block,const char *name,t_brick_type brick_type,t_data_type data_type,void *data_target);
 
 // BRICK_CLS
 

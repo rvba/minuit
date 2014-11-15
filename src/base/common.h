@@ -76,61 +76,59 @@ typedef struct ID
 	struct Node *node;
 }t_id;
 
-typedef enum Data_Type
-{
-	dt_null,
-	dt_void,
-	dt_undefined,
-	dt_bool,
-	dt_int,
-	dt_uint,
-	dt_float,
-	dt_char,
-	dt_uchar,
-	dt_dict,
-	dt_string,
-	dt_pointer,
-	dt_vertex,
-	dt_edge,
-	dt_face,
-	dt_mesh,
-	dt_lst,
-	dt_vlst,
-	dt_camera,
-	dt_object,
-	dt_point,
-	dt_selector,
-	dt_trigger,
-	dt_operator,
-	dt_vector,
-	dt_viewport,
-	dt_binding,
-	dt_brick,
-	dt_block,
-	dt_rhizome,
-	dt_graph,
-	dt_set,
-	dt_geo,
-	dt_geo_point,
-	dt_geo_edge,
-	dt_geo_face,
-	dt_geo_array,
-	dt_light,
-	dt_screen,
-	dt_file,
-	dt_image,
-	dt_material,
-	dt_list,
-	dt_link,
-	dt_data,
-	dt_texture,
-	dt_option,
-	dt_symbol,
-	dt_var,
-	dt_datum,
-	dt_module,
+typedef int t_data_type;
 
-}t_data_type;
+#define dt_null 1
+#define dt_void 2
+#define dt_undefined 3
+#define dt_bool 4
+#define dt_int 5
+#define dt_uint 6
+#define dt_float 7
+#define dt_char 8
+#define dt_uchar 9
+#define dt_dict 10
+#define dt_string 11
+#define dt_pointer 12
+#define dt_vertex 13
+#define dt_edge 14
+#define dt_face 15
+#define dt_mesh 16
+#define dt_lst 17
+#define dt_vlst 18
+#define dt_camera 19
+#define dt_object 20
+#define dt_point 21
+#define dt_selector 22
+#define dt_trigger 23
+#define dt_operator 24
+#define dt_vector 25
+#define dt_viewport 26
+#define dt_binding 27
+#define dt_brick 28
+#define dt_block 29
+#define dt_rhizome 30
+#define dt_graph 31
+#define dt_set 32
+#define dt_geo 33
+#define dt_geo_point  34
+#define dt_geo_edge 35
+#define dt_geo_face 36
+#define dt_geo_array 37
+#define dt_light 38
+#define dt_screen 39
+#define dt_file 40
+#define dt_image 41
+#define dt_material 42
+#define dt_list 43
+#define dt_link 44
+#define dt_data 45
+#define dt_texture 46
+#define dt_option 47
+#define dt_symbol 48
+#define dt_var 49
+#define dt_datum 50
+#define dt_module 51
 
 #ifdef __cplusplus
 }

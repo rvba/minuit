@@ -29,7 +29,7 @@ typedef struct Symbol
 	short users;
 	char name[_NAME_];
 
-	enum Data_Type data_type;
+	t_data_type data_type;
 	void *data;
 
 }t_symbol;

@@ -21,7 +21,7 @@ struct Scene;
 typedef struct Binding
 {
 	t_id id;
-	enum Data_Type type;
+	t_data_type type;
 	void *data;
 
 }t_binding;
