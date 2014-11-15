@@ -15,7 +15,7 @@
 #include "base.h"
 #include "memory.h"
 
-#define CLASS_MAX 128
+#define CLASS_MAX 256
 
 // STATIC
 t_scene *SCENE=NULL;
@@ -38,38 +38,10 @@ void scene_class_init( t_scene *scene, t_data_type type, t_node_class *cls)
 	classes[ type] = cls;
 }
 
-// Add Extra (external) Class (sc->classes)
-void scene_class_add( struct Scene *scene, int type, void *cls)
-{
-	t_node *node = node_new( dt_undefined);
-	node->extra_type = type;
-	node->data = cls;
-	lst_add( scene->classes, node, "node");
-}
-
 // Get a Pointer to a Class
 t_node_class *scene_class_get( t_scene *scene, t_data_type type)
 {
 	return classes[ type];
-}
-
-// Get a Pointer to an Externa Class (sc->classes)
-void *scene_class_extra_get( struct Scene *scene, int type)
-{
-	t_link *l;
-	t_node *node;
-	for( l = scene->classes->first; l; l = l->next)
-	{
-		node = l->data;
-		if( node->extra_type == type)
-		{
-			return node->data;
-		}
-	}
-
-	printf("[SCENE] Warning can't find class %d\n", type);
-
-	return NULL;
 }
 
 /*
@@ -597,6 +569,8 @@ t_scene *scene_new(void)
 	// load file
 	sc->tmp_node=NULL;
 	sc->tmp_data=NULL;
+
+	sc->data_name = NULL;
 	
 	return sc;
 }
@@ -605,6 +579,8 @@ void scene_init(t_scene *scene)
 {
 	// Store Localy
 	SCENE = scene;
+
+	memset( classes, -1, CLASS_MAX);
 
 	// Fill Classes Pointers
 	node_classes_init( scene);

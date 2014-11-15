@@ -47,7 +47,6 @@ typedef struct Node
 	int users;
 	int store;
 	int size;
-	int extra_type;
 
 	t_data_type type;
 	struct NodeClass *cls;

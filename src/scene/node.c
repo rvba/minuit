@@ -883,7 +883,7 @@ void node_init(t_node *node,t_data_type type)
 
 	if( node->type == dt_undefined)
 	{
-		node->cls = scene_class_extra_get( scene, node->extra_type);
+		printf("[NODE_INIT] Error!\n");
 	}
 	else
 	{
@@ -944,7 +944,6 @@ t_node *node_new(t_data_type type)
 
 	node->data=NULL;
 	node->type=type;
-	node->extra_type = 0;
 	node->store = 0;
 	node->size = 0;
 

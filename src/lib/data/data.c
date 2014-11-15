@@ -32,6 +32,7 @@ t_data_cls cls_data=
 
 const char *data_name_get(t_data_type type)
 {
+	t_context *C = ctx_get();
 	switch(type)
 	{
 		case dt_null: return "null"; break;
@@ -80,7 +81,18 @@ const char *data_name_get(t_data_type type)
 		case dt_image: return "image"; break;
 		case dt_module: return "module"; break;
 		case dt_point: return "point"; break;
-		default: printf("data_name_get type not implemented %d\n", type);return "-"; break;
+		default: 
+			if( C->scene->data_name)
+			{
+				const char *name  = C->scene->data_name( type);
+				return name;
+			}
+			else
+			{
+				printf("data_name_get type not implemented %d\n", type);
+				return "-";
+			}
+			break;
 	}
 }
 

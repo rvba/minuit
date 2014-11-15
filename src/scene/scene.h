@@ -13,6 +13,7 @@
 #include "common.h"
 
 struct Node;
+struct NodeClass;
 struct Lst;
 
 typedef struct Scene 
@@ -50,9 +51,11 @@ typedef struct Scene
 	struct Lst *tmp_colors;
 	struct Lst *tmp_node;
 	struct Lst *tmp_data;
+
+	// Data
+	const char *(* data_name)(int type);
+
 }t_scene;
-
-
 
 
 struct Node *	scene_get_data(t_scene *sc,void *ptr);
@@ -124,11 +127,8 @@ void scene_store(t_scene *scene, int val);
 
 void scene_delete( t_scene *sc, void *data);
 
-void scene_class_add( struct Scene *scene, int type, void *cls);
 struct NodeClass *scene_class_get( t_scene *scene, t_data_type type);
-void *scene_class_extra_get( struct Scene *scene, int type);
 
-struct NodeClass;
 void scene_class_init( t_scene *scene, t_data_type type, struct NodeClass *cls);
 
 struct Lst *scene_lst_get( t_scene *sc, t_data_type type);
