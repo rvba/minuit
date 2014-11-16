@@ -50,8 +50,6 @@ extern "C" {
 
 #define PROCESS_LIMIT 0.01
 
-#define N_w 99
-
 #define NORTH 1
 #define NORTHEAST 2
 #define EAST 3
@@ -59,7 +57,8 @@ extern "C" {
 #define SOUTH 5
 #define SOUTHWEST 6
 #define WEST 7
-#define CENTER 8
+#define NORTHWEST 8
+#define CENTER 9
 
 #define UP 1
 #define DOWN 2
