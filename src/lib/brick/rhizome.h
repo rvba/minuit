@@ -16,7 +16,6 @@
 extern "C" {
 #endif
 
-struct Scene;
 struct Block;
 struct Set;
 struct Lst;
@@ -56,11 +55,9 @@ void 		rhizome_block_add(t_rhizome *rhizome, struct Block *block);
 void 		rhizome_block_reset(struct Block *block);
 void 		rhizome_block_remove(t_rhizome *rhizome, struct Block *block);
 t_rhizome *	rhizome_add(const char *name);
-
-void rhizome_graph_build(t_rhizome *rhizome);
+void 		rhizome_graph_build(t_rhizome *rhizome);
 void 		rhizome_init(t_rhizome *rhizome);
 void		rhizome_rebind(struct Scene *sc,void *ptr);
-
 t_rhizome *	rhizome_clone(t_rhizome *rhizome);
 void 		_rhizome_free(t_rhizome *rhizome);
 void 		rhizome_free(t_rhizome *rhizome);
