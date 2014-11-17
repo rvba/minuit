@@ -1,5 +1,7 @@
 set(
 	SRC
+	array.c
+	array.h
 	dict.c  
 	dict.h  
 	graph.c  

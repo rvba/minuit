@@ -43,6 +43,7 @@
 #include "memory.h"
 #include "node.h"
 #include "mode.h"
+#include "array.h"
 
 void var_rebind( struct Scene *scene, void *ptr)
 {
@@ -877,6 +878,19 @@ t_node_class module = {
 	.rebind = module_rebind,
 };
 
+t_node_class array = {
+	.type = dt_array,
+	.size = sizeof( t_array),
+	.lst = NULL,
+	.build = array_new,
+	.link = NULL,
+	.del = NULL,
+	.init = array_init,
+	.free = NULL,
+	.get_ref = array_get_ref,
+	.rebind = array_rebind
+};
+
 void node_init(t_node *node,t_data_type type)
 {
 	t_scene *scene = scene_get();
@@ -928,6 +942,7 @@ void node_classes_init( t_scene *scene)
 	scene_class_init( scene, dt_geo_array, &geo_array);
 	scene_class_init( scene, dt_datum, &datum);
 	scene_class_init( scene, dt_module, &module);
+	scene_class_init( scene, dt_array, &array);
 }
 
 // NEW

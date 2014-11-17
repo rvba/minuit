@@ -128,6 +128,7 @@ typedef int t_data_type;
 #define dt_var 49
 #define dt_datum 50
 #define dt_module 51
+#define dt_array 52
 
 #ifdef __cplusplus
 }
