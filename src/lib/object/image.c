@@ -16,6 +16,8 @@
 #include "file.h"
 #include "scene.h"
 #include "file.h"
+#include "ctx.h"
+
 
 GLenum image_gl_color_type( t_image *image)
 {
@@ -93,8 +95,10 @@ void image_show( t_image *image)
 	printf("bpp: %d\n", image->bpp);
 }
 
-void image_rebind( struct Scene *sc, void *ptr)
+void image_rebind( struct Scene *scene, void *ptr)
 {
+	t_image *image = ( t_image *) ptr;
+	rebind( scene, "image", "vlst", (void **) &image->vlst);
 }
 
 void image_data_convert( t_image *image, t_data_type type)
