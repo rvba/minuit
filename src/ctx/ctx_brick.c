@@ -141,8 +141,9 @@ void state_brick_slider_drag( t_brick *brick, t_event *e)
 	{
 		if( C->ui->mouse_delta_x >= 0) brick->state_pressed = BRICK_RIGHT;
 		else brick->state_pressed = BRICK_LEFT;
-		brick->act( brick);
 	}
+
+	brick->act( brick);
 }
 
 void state_brick_slider_trigger( t_brick *brick, t_event *e)
@@ -249,6 +250,28 @@ void state_brick_default( t_brick *brick, t_event *e)
 	DISPATCH
 	**********************************	*/
 
+void brick_event_set_state( t_brick_event *be, int pressed)
+{
+	if( pressed == 0) be->released = 1;
+	else if( pressed == 1) be->pressed = 1;
+}
+
+void brick_event_set( t_brick *brick, t_event *e)
+{
+	switch( e->type)
+	{
+		case MOUSE_LEFT_PRESSED: brick_event_set_state( &brick->left, 1); break;
+		case MOUSE_MIDDLE_PRESSED: brick_event_set_state( &brick->middle, 1); break;
+		case MOUSE_RIGHT_PRESSED: brick_event_set_state( &brick->right, 1); break;
+
+		case MOUSE_LEFT_RELEASED: brick_event_set_state( &brick->left, 0); break;
+		case MOUSE_MIDDLE_RELEASED: brick_event_set_state( &brick->middle, 0); break;
+		case MOUSE_RIGHT_RELEASED: brick_event_set_state( &brick->right, 0); break;
+
+		default: break;
+	}
+}
+
 void brick_dispatch( t_brick *brick)
 {
 	t_context *C = ctx_get();
@@ -263,6 +286,9 @@ void brick_dispatch( t_brick *brick)
 			else if( brick->type == bt_switch) brick->state = state_brick_switch_default;
 			else brick->state = state_brick_default;
 		}
+
+		brick_event_set( brick, e);
+
 		brick->state( brick, e);
 	}
 }

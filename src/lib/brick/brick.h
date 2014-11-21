@@ -30,6 +30,13 @@ struct Brick_Var;
 struct Action;
 struct Event;
 
+typedef struct Brick_Event
+{
+	short pressed;
+	short released;
+
+}t_brick_event;
+
 // BRICK TYPE
 
 typedef enum Brick_Type
@@ -135,6 +142,10 @@ typedef struct Brick
 	enum Brick_Type type;
 	t_data_type context;			// contextual menus
 	int state_pressed;
+
+	t_brick_event left;
+	t_brick_event middle;
+	t_brick_event right;
 
 	int typing;
 

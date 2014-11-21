@@ -493,6 +493,12 @@ void brick_rebind(t_scene *sc,void *ptr)
 
 // INIT
 
+void brick_init_event( t_brick_event *be)
+{
+	be->pressed = 0;
+	be->released = 0;
+}
+
 void brick_init(t_scene *sc,t_brick *brick)
 {
 	int col[3];
@@ -528,8 +534,11 @@ void brick_init(t_scene *sc,t_brick *brick)
 	plug_out->src = plug_intern;
 
 	// State
-	//brick->state = state_brick_default;
 	brick->state = NULL;
+
+	brick_init_event( &brick->left);
+	brick_init_event( &brick->middle);
+	brick_init_event( &brick->right);
 }
 
 

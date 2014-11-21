@@ -58,29 +58,6 @@ t_brick *block_brick_hover( t_context *C)
 
 void state_block_brick_trigger( t_block *block, t_event *e)
 {
-	/*
-	ctx_ui_log( "block_brick_trigger");
-	t_brick *brick = block->selected;
-	if( e->type == UI_BRICK_RELEASED)
-	{
-		ctx_event_add( UI_BLOCK_RELEASED);
-		// Send to be Computed
-		if( block->rhizome)
-		{
-			rhizome_setup( block->rhizome);
-		}
-		else
-		{
-			block_set_setup( block);
-		}
-		BLOCK_SWAP( block, state_block_default);
-	}
-	else
-	{
-		brick_dispatch( brick);
-	}
-	*/
-
 	ctx_ui_log( "block_brick_trigger");
 	t_brick *brick = block->selected;
 
@@ -136,14 +113,11 @@ void block_linking_swap( t_context *C, t_block *block, t_block *block_target)
 
 	block->block_state.connecting = 0;
 
-//	C->ui->draw_link = 0;
-
 	BLOCK_SWAP( block, state_block_default);
 	t_brick *brick = block->selected;
 	if( brick) brick->brick_state.connecting = 0;
 	block->selected = NULL;
 	ctx_event_add( UI_BLOCK_SWAP);
-
 }
 
 void block_connect( t_context *C, t_block *block, t_brick *brick)
