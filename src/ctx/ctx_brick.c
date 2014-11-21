@@ -254,6 +254,11 @@ void brick_event_set_state( t_brick_event *be, int pressed)
 {
 	if( pressed == 0) be->released = 1;
 	else if( pressed == 1) be->pressed = 1;
+	else 
+	{
+		be->pressed = 0;
+		be->released = 0;
+	}
 }
 
 void brick_event_set( t_brick *brick, t_event *e)
@@ -272,6 +277,13 @@ void brick_event_set( t_brick *brick, t_event *e)
 	}
 }
 
+void brick_event_clear( t_brick *brick, t_event *e)
+{
+	if( brick->left.released) brick_event_set_state( &brick->left, 2);
+	if( brick->middle.released) brick_event_set_state( &brick->middle, 2);
+	if( brick->right.released) brick_event_set_state( &brick->right, 2);
+}
+
 void brick_dispatch( t_brick *brick)
 {
 	t_context *C = ctx_get();
@@ -280,6 +292,10 @@ void brick_dispatch( t_brick *brick)
 	for(l=C->event->events_swap->first;l;l=l->next)
 	{
 		e = l->data;
+
+		// Mark Mouse State
+		brick_event_set( brick, e);
+
 		if( !brick->state)
 		{
 			if( brick->type == bt_slider) brick->state = state_brick_slider_default;
@@ -287,8 +303,10 @@ void brick_dispatch( t_brick *brick)
 			else brick->state = state_brick_default;
 		}
 
-		brick_event_set( brick, e);
-
+		// Update State
 		brick->state( brick, e);
+
+		// Reset Released state (use by last state call)
+		brick_event_clear( brick, e);
 	}
 }
