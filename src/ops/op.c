@@ -61,10 +61,10 @@ t_block *make_menu_skt( t_context *C)
 {
 	t_block *block = add_menu_block( C, "menu_sketch");
 
-	add_brick_slider_int(C,block,"line width",&C->skt->line_width);
+	add_brick_slider_int(C,block,"line width",&C->skt->line_width,NULL);
 	add_brick_slider_float(C,block,"point size",&C->skt->point_size);
 	add_brick_slider_float(C,block,"intensity",&C->skt->intensity);
-	add_brick_slider_int(C,block,"point resolution",&C->skt->point_resolution);
+	add_brick_slider_int(C,block,"point resolution",&C->skt->point_resolution,NULL);
 	add_brick_switch(C,block,"point smooth",&C->skt->point_smooth, NULL);
 
 	return block;
@@ -380,9 +380,9 @@ void make_bar( t_context *C)
 void make_screen_selector( t_context *C)
 {
 	t_block *block = add_bar_block( C, "menu_screen");
-	add_brick_slider_int(C,block,"", &C->event->color[0]);
-	add_brick_slider_int(C,block,"", &C->event->color[1]);
-	add_brick_slider_int(C,block,"", &C->event->color[2]);
+	add_brick_slider_int(C,block,"", &C->event->color[0],NULL);
+	add_brick_slider_int(C,block,"", &C->event->color[1],NULL);
+	add_brick_slider_int(C,block,"", &C->event->color[2],NULL);
 }
 
 // MAKE

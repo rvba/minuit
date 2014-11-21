@@ -20,6 +20,7 @@ extern "C" {
 
 #define BRICK_SWAP( brick, st) ((brick->state) = &(st)) 
 
+
 struct Block;
 struct Brick;
 struct Dict;

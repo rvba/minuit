@@ -152,7 +152,7 @@ t_node *add_block(t_context *C,const char *name)
 
 // BRICK SLIDER INT
 
-t_node *add_brick_slider_int(t_context *C,t_block *block,const char *name,void *data_target)
+t_node *add_brick_slider_int( t_context *C, t_block *block, const char *name, void *data_target, void *(* f)( t_brick *brick))
 {
 	void *ptr=add_brick_data(dt_int,data_target);
 
@@ -161,7 +161,10 @@ t_node *add_brick_slider_int(t_context *C,t_block *block,const char *name,void *
 	t_brick *brick =  ( t_brick *) node_brick->data;
 	
 	// ACTION
-	brick->act=op_slider;
+	if( f)
+		brick->act = f;
+	else
+		brick->act = op_slider;
 
 	// PLUG
 	set_plug_option(brick);
@@ -171,7 +174,7 @@ t_node *add_brick_slider_int(t_context *C,t_block *block,const char *name,void *
 
 t_node *add_brick_slider_int_even( t_context *C, t_block *block, const char *name, void *data_target)
 {
-	t_node *node = add_brick_slider_int( C, block, name, data_target);
+	t_node *node = add_brick_slider_int( C, block, name, data_target,NULL);
 	t_brick *brick = node->data;
 	brick->act = op_slider_even;
 	return node;
@@ -179,7 +182,7 @@ t_node *add_brick_slider_int_even( t_context *C, t_block *block, const char *nam
 
 t_node *add_brick_slider_int_even_positive_strict( t_context *C, t_block *block, const char *name, void *data_target)
 {
-	t_node *node = add_brick_slider_int( C, block, name, data_target);
+	t_node *node = add_brick_slider_int( C, block, name, data_target,NULL);
 	t_brick *brick = node->data;
 	brick->act = op_slider_even_positive_strict;
 	return node;
@@ -187,7 +190,7 @@ t_node *add_brick_slider_int_even_positive_strict( t_context *C, t_block *block,
 
 t_node *add_brick_slider_add_bricks(t_context *C,t_block *block,const char *name,int offset,void *data_target)
 {
-	t_node *node = add_brick_slider_int( C, block, name, data_target);
+	t_node *node = add_brick_slider_int( C, block, name, data_target,NULL);
 	t_brick *brick = ( t_brick *) node->data;
 	brick->act = _op_brick_add;
 	brick->var.offset = offset;
@@ -273,6 +276,7 @@ t_node *add_brick_slider_float_custom(t_context *C,t_block *block,const char *na
 
 // BRICK SLIDER INT CUSTOM
 
+/*
 t_node *add_brick_slider_int_custom(t_context *C,t_block *block,const char *name,void *data_target,void *f(t_brick *b))
 {
 	void *ptr=add_brick_data(dt_int,data_target);
@@ -289,6 +293,7 @@ t_node *add_brick_slider_int_custom(t_context *C,t_block *block,const char *name
 
 	return node_brick;
 }
+*/
 
 // BRICK INT
 
@@ -297,7 +302,7 @@ t_node *add_brick_int(t_context *C,t_block *block,const char *name,void *data_ta
 	void *ptr=add_brick_data(dt_int,data_target);
 
 	// NEW BRICK
-	t_node *node_brick=add_brick_slider_int(C,block,name,ptr);
+	t_node *node_brick=add_brick_slider_int(C,block,name,ptr,NULL);
 	t_brick *brick = ( t_brick *) node_brick->data;
 	
 	// ACTION
@@ -467,7 +472,7 @@ t_node *add_brick_operand(t_context *C,t_block *block,const char *name)
 
 t_node *add_brick_operator(t_context *C,t_block *block,const char *name)
 {
-	t_node *node_brick=add_brick_slider_int(C,block,name,NULL);
+	t_node *node_brick=add_brick_slider_int(C,block,name,NULL,NULL);
 	t_brick *brick = ( t_brick *) node_brick->data;
 
 	brick->brick_state.draw_name=1;
@@ -762,7 +767,7 @@ t_node *add_part_float(t_context *C,t_block *block,const char *name,void *data_t
 
 t_node *add_part_slider_int(t_context *C,t_block *block,const char *name,void *data_target)
 {
-	t_node *node=add_brick_slider_int(C,block,name,data_target);
+	t_node *node=add_brick_slider_int(C,block,name,data_target,NULL);
 	t_brick *brick = ( t_brick *) node->data;
 	brick->brick_state.draw_outline=0;
 	return node;
@@ -780,7 +785,7 @@ t_node *add_part_slider_add_bricks(t_context *C,t_block *block,const char *name,
 
 t_node *add_part_slider_add( t_context *C, t_block *block, const char *name, void *data_target)
 {
-	t_node *node = add_brick_slider_int( C, block, name, data_target);
+	t_node *node = add_brick_slider_int( C, block, name, data_target,NULL);
 	t_brick *brick = ( t_brick *) node->data;
 	brick->brick_state.draw_outline = 0;
 	brick->plug_out.state.flow_out = 0;
@@ -802,7 +807,7 @@ t_node *add_part_int(t_context *C,t_block *block,const char *name,void *data_tar
 
 t_node *add_part_slider_int_positive(t_context *C,t_block *block,const char *name,void *data_target)
 {
-	t_node *node=add_brick_slider_int_custom(C,block,name,data_target,op_slider_positive);
+	t_node *node=add_brick_slider_int(C,block,name,data_target,op_slider_positive);
 	t_brick *brick = ( t_brick *) node->data;
 	brick->brick_state.draw_outline=0;
 	return node;
@@ -1055,7 +1060,7 @@ t_node *add_slider_int_custom(t_context *C,const char *name,void *target_data,vo
 	t_block *block = ( t_block *) node_block->data;
 
 	// NEW BRICK
-	t_node *node_brick=add_brick_slider_int(C,block,name,target_data);
+	t_node *node_brick=add_brick_slider_int(C,block,name,target_data,NULL);
 	t_brick *brick = ( t_brick *) node_brick->data;
  
 	// SET ACTION

@@ -58,7 +58,7 @@ struct Node *	add_brick_submenu_contextual( struct Context *C, struct Block *men
 struct Node *	add_brick_submenu_poll( struct Context *C, struct Block *menu, struct Block *submenu, const char *name, int (* f)( struct Brick *brick));
 struct Node *	add_brick_selector(struct Context *C,struct Block *block,const char *name,void *data_target,int length);
 struct Node *	add_brick(struct Context *C,struct Block *block,const char *name,const char *type,const char *data_type,void *data_target);
-struct Node *	add_brick_slider_int(struct Context *C,struct Block *block,const char *name,void *data_target);
+struct Node *	add_brick_slider_int(struct Context *C,struct Block *block,const char *name,void *data_target, void *(* f)( struct Brick *brick));
 struct Node *	add_brick_slider_int_even(struct Context *C,struct Block *block,const char *name,void *data_target);
 struct Node *	add_brick_slider_int_even_positive_strict(struct Context *C,struct Block *block,const char *name,void *data_target);
 struct Node *	add_brick_slider_float(struct Context *C,struct Block *block,const char *name,void *data_target);

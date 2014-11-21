@@ -371,10 +371,10 @@ void viewport_add_controls( t_viewport *viewport)
 
 	block->pos[0] = 0;
 	block->pos[1] = 1;
-	add_brick_slider_int( C, block, "width", &viewport->width);
-	add_brick_slider_int( C, block, "height", &viewport->height);
-	add_brick_slider_int( C, block, "x", &viewport->x);
-	add_brick_slider_int( C, block, "y", &viewport->y);
+	add_brick_slider_int( C, block, "width", &viewport->width,NULL);
+	add_brick_slider_int( C, block, "height", &viewport->height,NULL);
+	add_brick_slider_int( C, block, "x", &viewport->x,NULL);
+	add_brick_slider_int( C, block, "y", &viewport->y,NULL);
 	add_brick_switch( C, block, "fullscreen", &viewport->fullscreen, NULL);
 	add_brick_switch( C, block, "outline", &viewport->show_outline, NULL);
 
