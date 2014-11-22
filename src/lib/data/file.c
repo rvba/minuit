@@ -80,18 +80,7 @@ void file_show(t_file *file)
 	else printf("ext:NULL\n");
 }
 
-void file_data_add(t_file *file,char *data)
-{
-	if(file->data)
-	{
-		free(file->data);
-	}
-
-	file->data=(char *)malloc(sizeof(char)*(strlen(data)+1));
-	strcpy(file->data,data);
-}
-
-int file_open( t_file *file)
+int file_open( t_file *file, const char *mode)
 {
 	if( file->file)
 	{
@@ -102,7 +91,7 @@ int file_open( t_file *file)
 	{
 		if( sys_file_exists( file->path))
 		{
-			file->file = fopen( file->path, "w");
+			file->file = fopen( file->path, mode);
 			return 1;
 		}
 		else
@@ -118,6 +107,7 @@ void file_close(t_file *file)
 	if(file->file)
 	{
 		fclose(file->file);
+		file->file = NULL;
 	}
 	else
 	{
@@ -149,7 +139,7 @@ int file_read( t_file *file)
 
 int file_write( t_file *file, const char *data, int size)
 {
-	if( file_open( file))
+	if( file_open( file, "w"))
 	{
 		fwrite( data, sizeof(char) * size, 1, file->file);
 		file_close( file);
@@ -159,6 +149,11 @@ int file_write( t_file *file, const char *data, int size)
 	{
 		return 0;
 	}
+}
+
+int file_put( t_file *file, const char *data)
+{
+	return file_write( file, data, strlen( data));
 }
 
 // SPLIT

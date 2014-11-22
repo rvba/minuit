@@ -69,7 +69,6 @@ t_context *ctx_init(int argc,char **argv)
 
 	scene_init( C->scene);
 	app_init( C->app, "minuit");
-	log_init();
 	term_init();
 	mem_init();
 	op_init( C); 
@@ -82,7 +81,6 @@ t_context *ctx_init(int argc,char **argv)
 	C->app->main_func = ctx_handler;
 
 	ctx_init_file( C);
-
 
 	return C;
 }

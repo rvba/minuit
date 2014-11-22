@@ -150,8 +150,8 @@ void mem_read( t_scene *sc, const char *path)
 	// NEW CHUNK
 	c=chunk_new(ct_node,dt_null,0,0,NULL);
 
-	ulog((LOG_READ,"File size:%d\n",file_size));
-	ulog((LOG_READ,"[0]\n",file_size));
+	ulog((LOG_DO_READ,LOG_READ,"File size:%d\n",file_size));
+	ulog((LOG_DO_READ,LOG_READ,"[0]\n",file_size));
 
 	size_t rsize;
 
@@ -169,17 +169,15 @@ void mem_read( t_scene *sc, const char *path)
 		rsize = fread(&magic,sizeof(char),1,file);
 		if(rsize != 1) printf("read error 1\n");
 
-		ulog((LOG_READ,"[%d][%d]\t(+%d)\tmagic {%c}\n",limit,(int)ftell(file),(int)sizeof(char),magic));
+		ulog((LOG_DO_READ,LOG_READ,"[%d][%d]\t(+%d)\tmagic {%c}\n",limit,(int)ftell(file),(int)sizeof(char),magic));
 
 		// BREAK EOF
 		if(magic=='&') break;
 
 		// READ CHUNK
-		rsize = fread(c,sizeof(t_chunk),1,file);
-		(void) rsize;
-		//if( rsize != (sizeof(t_chunk) * 1)) printf("read error 3\n");
-		ulog((LOG_READ,"[%d]\t(+%d)\tchunk",(int)ftell(file),(int)sizeof(t_chunk)));
-		ulog((LOG_READ," %s:%s:%d:%d\n",chunk_type_get(c->chunk_type),data_name_get(c->type),c->size,c->tot));
+		fread(c,sizeof(t_chunk),1,file);
+		ulog((LOG_DO_READ,LOG_READ,"[%d]\t(+%d)\tchunk",(int)ftell(file),(int)sizeof(t_chunk)));
+		ulog((LOG_DO_READ,LOG_READ," %s:%s:%d:%d\n",chunk_type_get(c->chunk_type),data_name_get(c->type),c->size,c->tot));
 
 		// READ DATA
 
@@ -187,11 +185,8 @@ void mem_read( t_scene *sc, const char *path)
 		data=mem_malloc(c->size*c->tot);
 
 		// READ
-		rsize = fread(data,c->size,c->tot,file);
-		(void) rsize;
-		//if(rsize != c->size * c->tot) printf("read error 4\n");
-
-		ulog((LOG_READ,"[%d]\t(+%d)\tstruct %s:%s\n",(int)ftell(file),c->size,chunk_type_get(c->chunk_type),c->type));
+		fread(data,c->size,c->tot,file);
+		ulog((LOG_DO_READ,LOG_READ,"[%d]\t(+%d)\tstruct %s:%s\n",(int)ftell(file),c->size,chunk_type_get(c->chunk_type),data_name_get(c->type)));
 
 		// STORE  Nodes + Structs
 		id_store(sc,c,data);
@@ -222,7 +217,7 @@ void mem_write( const char *path)
 
 	int check_size=0;
 
-	ulog((LOG_SAVE,"[0]\n"));
+	ulog((LOG_DO_SAVE,LOG_SAVE,"[0]\n"));
 
 	for(l=MEMORY->first;l;l=l->next)
 	{
@@ -231,14 +226,14 @@ void mem_write( const char *path)
 		fwrite("-",sizeof(char),1,file);
 
 		check_size+=1;
-		ulog((LOG_SAVE,"[%d]\t(+%d)\tmagic\n",(int)ftell(file),(int)sizeof(char)));
+		ulog((LOG_DO_SAVE,LOG_SAVE,"[%d]\t(+%d)\tmagic\n",(int)ftell(file),(int)sizeof(char)));
 
 		// write chunk
 		fwrite(c,sizeof(t_chunk),1,file);
 		check_size+=(int)sizeof(t_chunk);
 
-		ulog((LOG_SAVE,"[%d]\t(+%d)\tchunk\t",(int)ftell(file),(int)sizeof(t_chunk)));
-		ulog((LOG_SAVE,"%s:%s:%d:%d:%p \n",chunk_type_get(c->chunk_type),data_name_get(c->type),c->size,c->tot,c->pointer));
+		ulog((LOG_DO_SAVE,LOG_SAVE,"[%d]\t(+%d)\tchunk\t",(int)ftell(file),(int)sizeof(t_chunk)));
+		ulog((LOG_DO_SAVE,LOG_SAVE,"%s:%s:%d:%d:%p \n",chunk_type_get(c->chunk_type),data_name_get(c->type),c->size,c->tot,c->pointer));
 
 		if(DEBUG)
 		{
@@ -281,7 +276,7 @@ void mem_write( const char *path)
 		fwrite(c->pointer,c->size,c->tot,file);
 		check_size+=c->size*c->tot;
 
-		ulog((LOG_SAVE,"[%d]\t(+%d)\t%s\n",(int)ftell(file),c->size,data_name_get(c->type)));
+		ulog((LOG_DO_SAVE,LOG_SAVE,"[%d]\t(+%d)\t%s\n",(int)ftell(file),c->size,data_name_get(c->type)));
 
 		// check for memory offset
 		if(check_size!=ftell(file)) printf("[ERROR mem_write] Memory offset\n");
@@ -290,7 +285,7 @@ void mem_write( const char *path)
 	// write last character
 	fwrite("&",sizeof(char),1,file);
 
-	ulog((LOG_SAVE,"[%d]\t(+%d)\tmagic &\n",(int)ftell(file),(int)sizeof(char)));
+	ulog((LOG_DO_SAVE,LOG_SAVE,"[%d]\t(+%d)\tmagic &\n",(int)ftell(file),(int)sizeof(char)));
 
 	// close file
 	fclose(file);
@@ -310,7 +305,7 @@ int mem_add( t_chunk_type chunk_type, t_data_type type, size_t size, int tot, vo
 	t_chunk *chunk = chunk_new( chunk_type, type, size, tot, pointer);
 	lst_add( MEMORY, chunk, "chunk");
 
-	ulog((LOG_MEMORY,"mem_store %d %s %s\n",chunk->id,chunk_type_get(chunk_type),data_name_get(type)));
+	ulog((LOG_DO_MEMORY,LOG_MEMORY,"mem_store %d %s %s\n",chunk->id,chunk_type_get(chunk_type),data_name_get(type)));
 
 	return chunk->id;
 }
