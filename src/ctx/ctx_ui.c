@@ -239,7 +239,7 @@ void ctx_ui_exe(t_context *C)
 
 void exe_init( void)
 {
-	EXE=lst_new("exe");
+	if(!EXE) EXE=lst_new("exe");
 }
 
 void exe_add_action(t_action *action)
@@ -911,6 +911,10 @@ void state_ui_intro( t_context *C, t_event *e)
 			ctx_ui_intro_stop( C);
 			ctx_ui_menu_show( C);
 			UI_SWAP( C, state_ui_block_trigger); 
+			break;
+		case F1KEY:
+			ctx_ui_intro_stop( C);
+			UI_SWAP( C, state_ui_default); 
 			break;
 	}
 }
