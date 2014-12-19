@@ -7,11 +7,8 @@
  *
  */
 
-
 #ifndef __PLUG_H
 #define __PLUG_H
-
-#include "data.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -41,7 +38,6 @@ typedef enum Plug_Mode
 	mode_out
 
 }t_plug_mode;
-
 
 struct Plug_Class
 {
@@ -108,15 +104,11 @@ struct Plug
 };
 
 void 		plug_get_data(t_plug *plug);
-
 void 		plug_data_reset(t_plug *plug);
 void 		plug_data_negate(t_plug *plug);
 void 		plug_data_abs(t_plug *plug);
 void 		plug_data_set(t_plug *plug,t_data_type type,void *data);
-
 void 		plug_debug(t_plug *plug);
-
-
 t_plug *	plug_get_dst(t_plug *plug);
 t_plug *	plug_get_src(t_plug *plug);
 

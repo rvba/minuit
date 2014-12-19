@@ -25,6 +25,7 @@
 #include "block.h"
 #include "object.h"
 #include "vlst.h"
+#include "data.h"
 
 
 void brick_info( t_term *term, t_brick *brick)
