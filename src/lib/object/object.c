@@ -224,12 +224,12 @@ void object_data_add(t_node *node,void *ptr)
 	object->data=ptr;
 }
 
-void object_block_add( t_object *object, t_block *block)
+t_block *object_block_add( t_object *object, const char *name)
 {
-	if( block)
-	{
-		list_add_data( object->blocks, block);
-	}
+	t_context *C = ctx_get();
+	t_block *block = add_block_block( C, name);
+	list_add_data( object->blocks, block);
+	return block;
 }
 
 t_block *object_block_get( t_object *object, const char *name)
@@ -255,6 +255,38 @@ void *object_member_add( t_object *object, t_data_type type, const char *name, v
 	
 	list_add_data( object->members, datum);
 	return datum->data;
+}
+
+void *object_member_int_add( t_context *C, t_object *object, t_block *block, const char *name, int default_val)
+{
+	int *data = (int *) object_member_add( object, dt_int, name, NULL);
+	add_brick_slider_int( C, block, name,  data, NULL);
+	*data = default_val;
+	return data;
+}
+
+void *object_member_float_add( t_context *C, t_object *object, t_block *block, const char *name, float default_val)
+{
+	float *data = (float *) object_member_add( object, dt_float, name, NULL);
+	add_brick_slider_float( C, block, name,  data, NULL);
+	*data = default_val;
+	return data;
+}
+
+void *object_member_scalar_add( t_object *object, const char *group, const char *name, t_data_type type, float default_val)
+{
+	t_context *C = ctx_get();
+
+	t_block *block = object_block_get( object, group);
+	if( !block) block = object_block_add( object, group);
+
+	if( type == dt_int) return object_member_int_add( C, object, block, name, (int) default_val);
+	else if( type == dt_float) return object_member_float_add( C, object, block, name, default_val);
+	else 
+	{
+		printf("[ERROR] objetc member scalar add: no proper type\n");
+		return NULL;
+	}
 }
 
 t_datum *object_member_get( t_object *object, const char *name)

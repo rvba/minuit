@@ -219,7 +219,7 @@ t_node *add_brick_slider_char(t_context *C,t_block *block,const char *name,void 
 
 // NEW BRICK SLIDER FLOAT
 
-t_node *add_brick_slider_float(t_context *C,t_block *block,const char *name,void *data_target)
+t_node *add_brick_slider_float( t_context *C, t_block *block, const char *name, void *data_target, void *(* f)( t_brick *brick))
 {
 	void *ptr=add_brick_data(dt_float,data_target);
 
@@ -254,46 +254,6 @@ t_node *add_brick_float(t_context *C,t_block *block,const char *name,void *data_
 
 	return node_brick;
 }
-
-// BRICK SLIDER FLOAT CUSTOM
-
-t_node *add_brick_slider_float_custom(t_context *C,t_block *block,const char *name,void *data_target,void *f(t_brick *b))
-{
-	void *ptr=add_brick_data(dt_float,data_target);
-
-	// NEW BRICK
-	t_node *node_brick=add_brick_slider_float(C,block,name,ptr);
-	t_brick *brick = ( t_brick *) node_brick->data;
-	
-	// ACTION
-	brick->act=f;
-
-	// PLUG
-	set_plug_option(brick);
-
-	return node_brick;
-}
-
-// BRICK SLIDER INT CUSTOM
-
-/*
-t_node *add_brick_slider_int_custom(t_context *C,t_block *block,const char *name,void *data_target,void *f(t_brick *b))
-{
-	void *ptr=add_brick_data(dt_int,data_target);
-
-	// NEW BRICK
-	t_node *node_brick=add_brick_slider_int(C,block,name,ptr);
-	t_brick *brick = ( t_brick *) node_brick->data;
-	
-	// ACTION
-	brick->act=f;
-
-	// PLUG
-	set_plug_option(brick);
-
-	return node_brick;
-}
-*/
 
 // BRICK INT
 
@@ -453,9 +413,9 @@ t_node *add_brick_trigger_type(t_context *C,t_block *block,const char *name,void
 
 //  BRICK OPERAND
 
-t_node *add_brick_operand(t_context *C,t_block *block,const char *name)
+t_node *add_brick_operand( t_context *C, t_block *block, const char *name)
 {
-	t_node *node_brick=add_brick_slider_float(C,block,name,NULL);
+	t_node *node_brick = add_brick_slider_float( C, block, name, NULL, NULL);
 	t_brick *brick = ( t_brick *) node_brick->data;
 	brick->brick_state.draw_plugs=1;
 	brick->brick_state.draw_outline=0;
@@ -749,7 +709,7 @@ t_node *add_part_mesh(t_context *C,t_block *block,const char *name,void *data,t_
 
 t_node *add_part_slider_float(t_context *C,t_block *block,const char *name,void *data_target)
 {
-	t_node *node=add_brick_slider_float(C,block,name,data_target);
+	t_node *node = add_brick_slider_float( C, block, name, data_target, NULL);
 	t_brick *brick = ( t_brick *) node->data;
 	brick->brick_state.draw_outline=0;
 	return node;
@@ -957,7 +917,7 @@ t_node *add_multiplier( t_context *C, const char *type)
 	t_node *node_block = add_block(C, type);
 	t_block *block = ( t_block *) node_block->data;
 
-	t_node *node_brick = add_brick_slider_float( C, block, type, NULL);
+	t_node *node_brick = add_brick_slider_float( C, block, type, NULL, NULL);
 	t_brick *brick = ( t_brick *) node_brick->data;
 
 	if(is(type,"10"))  brick->var.increment=10; 

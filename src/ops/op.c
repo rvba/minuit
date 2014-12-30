@@ -62,8 +62,8 @@ t_block *make_menu_skt( t_context *C)
 	t_block *block = add_menu_block( C, "menu_sketch");
 
 	add_brick_slider_int(C,block,"line width",&C->skt->line_width,NULL);
-	add_brick_slider_float(C,block,"point size",&C->skt->point_size);
-	add_brick_slider_float(C,block,"intensity",&C->skt->intensity);
+	add_brick_slider_float(C,block,"point size",&C->skt->point_size, NULL);
+	add_brick_slider_float(C,block,"intensity",&C->skt->intensity, NULL);
 	add_brick_slider_int(C,block,"point resolution",&C->skt->point_resolution,NULL);
 	add_brick_switch(C,block,"point smooth",&C->skt->point_smooth, NULL);
 

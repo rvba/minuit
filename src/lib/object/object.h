@@ -85,8 +85,9 @@ void 		object_mesh_add(struct Node *node,struct Node *mesh);
 void 		object_draw_add(struct Node *node,void (* func)(struct Node *node));
 void 		object_method_add(struct Node *node,const char method[],void (*func)(struct Node *n));
 void 		object_data_add(struct Node *node,void *ptr);
-void 		object_block_add( struct Object *object, struct Block *block);
+struct Block * 	object_block_add( struct Object *object, const char *name);
 void *		object_member_add( t_object *object, t_data_type type, const char *name, void *data);
+void *		object_member_scalar_add( t_object *object, const char *group, const char *name, t_data_type type, float default_val);
 struct Datum *	object_member_get( t_object *object, const char *name);
 
 

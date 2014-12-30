@@ -50,7 +50,7 @@ void camera_add_controls( t_camera *camera)
 
 	block->pos[0] = 0;
 	block->pos[1] = 1;
-	add_brick_slider_float( C, block, "ortho_zoom", &camera->ortho_zoom);
+	add_brick_slider_float( C, block, "ortho_zoom", &camera->ortho_zoom, NULL);
 
 	set_draw_plug = 1;
 }

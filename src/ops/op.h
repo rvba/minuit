@@ -61,9 +61,7 @@ struct Node *	add_brick(struct Context *C,struct Block *block,const char *name,c
 struct Node *	add_brick_slider_int(struct Context *C,struct Block *block,const char *name,void *data_target, void *(* f)( struct Brick *brick));
 struct Node *	add_brick_slider_int_even(struct Context *C,struct Block *block,const char *name,void *data_target);
 struct Node *	add_brick_slider_int_even_positive_strict(struct Context *C,struct Block *block,const char *name,void *data_target);
-struct Node *	add_brick_slider_float(struct Context *C,struct Block *block,const char *name,void *data_target);
-struct Node *	add_brick_slider_float_custom(struct Context *C,struct Block *block,const char *name,void *data_target,void *(*f)(struct Brick *b));
-struct Node *	add_brick_slider_int_custom(struct Context *C,struct Block *block,const char *name,void *data_target,void *(*f)(struct Brick *b));
+struct Node *	add_brick_slider_float(struct Context *C,struct Block *block,const char *name,void *data_target, void *(*f)(struct Brick *b));
 struct Node *	add_brick_label(struct Context *C,struct Block *block,const char *name);
 struct Node *	add_brick_switch( struct Context *C, struct Block *block, const char *name, void *data_target, void *(* f)( struct Brick *brick));
 struct Node *	add_brick_multiswitch( struct Context *C, struct Block *block, const char *name, void *data_target, void *(* f)( struct Brick *brick));
