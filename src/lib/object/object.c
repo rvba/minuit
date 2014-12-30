@@ -257,31 +257,46 @@ void *object_member_add( t_object *object, t_data_type type, const char *name, v
 	return datum->data;
 }
 
-void *object_member_int_add( t_context *C, t_object *object, t_block *block, const char *name, int default_val)
+void *object_member_int_add( t_context *C, t_object *object, t_block *block, const char *name, int default_val, void *(* f)(t_brick *b))
 {
 	int *data = (int *) object_member_add( object, dt_int, name, NULL);
-	add_brick_slider_int( C, block, name,  data, NULL);
+	t_node *node = add_brick_slider_int( C, block, name,  data, f);
+	t_brick *brick = ( t_brick *) node->data;
+	brick->data = object;
 	*data = default_val;
 	return data;
 }
 
-void *object_member_float_add( t_context *C, t_object *object, t_block *block, const char *name, float default_val)
+void *object_member_float_add( t_context *C, t_object *object, t_block *block, const char *name, float default_val, void *(* f)(t_brick *b))
 {
 	float *data = (float *) object_member_add( object, dt_float, name, NULL);
-	add_brick_slider_float( C, block, name,  data, NULL);
+	t_node *node = add_brick_slider_float( C, block, name,  data, f);
+	t_brick *brick = ( t_brick *) node->data;
+	brick->data = object;
 	*data = default_val;
 	return data;
 }
 
-void *object_member_scalar_add( t_object *object, const char *group, const char *name, t_data_type type, float default_val)
+void *object_member_bool_add( t_context *C, t_object *object, t_block *block, const char *name, int default_val, void *(* f)(t_brick *b))
+{
+	float *data = (float *) object_member_add( object, dt_float, name, NULL);
+	t_node *node = add_brick_switch( C, block, name,  data, f);
+	t_brick *brick = ( t_brick *) node->data;
+	brick->data = object;
+	*data = default_val;
+	return data;
+}
+
+void *object_member_scalar_add( t_object *object, const char *group, const char *name, t_data_type type, float default_val, void *(* f)(t_brick *b))
 {
 	t_context *C = ctx_get();
 
 	t_block *block = object_block_get( object, group);
 	if( !block) block = object_block_add( object, group);
 
-	if( type == dt_int) return object_member_int_add( C, object, block, name, (int) default_val);
-	else if( type == dt_float) return object_member_float_add( C, object, block, name, default_val);
+	if( type == dt_int) return object_member_int_add( C, object, block, name, (int) default_val, f);
+	else if( type == dt_float) return object_member_float_add( C, object, block, name, default_val, f);
+	else if( type == dt_bool) return object_member_bool_add( C, object, block, name, (int) default_val, f);
 	else 
 	{
 		printf("[ERROR] objetc member scalar add: no proper type\n");

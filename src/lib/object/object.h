@@ -22,6 +22,7 @@ extern "C" {
 struct Node;
 struct Mesh;
 struct Block;
+struct Brick;
 struct Object;
 struct Lst;
 struct Scene;
@@ -87,7 +88,7 @@ void 		object_method_add(struct Node *node,const char method[],void (*func)(stru
 void 		object_data_add(struct Node *node,void *ptr);
 struct Block * 	object_block_add( struct Object *object, const char *name);
 void *		object_member_add( t_object *object, t_data_type type, const char *name, void *data);
-void *		object_member_scalar_add( t_object *object, const char *group, const char *name, t_data_type type, float default_val);
+void *		object_member_scalar_add( t_object *object, const char *group, const char *name, t_data_type type, float default_val, void *(* f)( struct Brick *b));
 struct Datum *	object_member_get( t_object *object, const char *name);
 
 
