@@ -24,7 +24,7 @@ extern "C" {
 
 #define MILLION 1000000
 
-#define APP_VERSION "0.6.4"
+#define APP_VERSION "0.6.5"
 
 #define _NAME_ 64
 #define _NAME_LONG_ 128
