@@ -56,6 +56,7 @@ void ctx_check_dir(t_context *C)
 
 void ctx_render_build_frames(t_context *C, t_lst *lst)
 {
+	#ifdef HAVE_JPG
 	t_link *link;
 	unsigned char *frame;
 
@@ -72,6 +73,9 @@ void ctx_render_build_frames(t_context *C, t_lst *lst)
 		img_save_video(width,height,filename,frame);
 		C->event->video_frame_number++;
 	}
+	#else
+	printf("JPG not enabled\n");
+	#endif
 }
 
 void ctx_render_free_frames(t_context *C, t_lst *lst)

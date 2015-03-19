@@ -11,10 +11,12 @@ project(Minuit)
 
 ###############		 OPTIONS #############################
 
-option(OPT_OSC "osc" ON)
+option(OPT_OSC "osc" OFF)
 option(OPT_OBJ "obj" OFF)
-option(OPT_GLEW "glew" ON)
+option(OPT_GLEW "glew" OFF)
 option(OPT_SDL "sdl" OFF)
+option(OPT_PNG "png" OFF)
+option(OPT_JPG "jpg" OFF)
 
 ###############		 LIBS	#############################
 
@@ -50,12 +52,22 @@ message("OSC " ${OPT_OSC})
 message("OBJ " ${OPT_OBJ})
 message("GLEW ${OPT_GLEW}")
 message("SDL ${OPT_SDL}")
+message("PNG ${OPT_PNG}")
+message("JPG ${OPT_JPG}")
 
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
-find_package(PNG REQUIRED)
-#find_package(JPEG REQUIRED)
 find_package(Threads)
+
+if(OPT_PNG)
+       	find_package(PNG REQUIRED)
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_PNG")
+endif()
+
+if(OPT_JPG)
+	find_library(JPG jpeg PATHS)
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_JPG")
+endif()
 
 set(GNU_LIB /usr/lib/x86_64-linux-gnu)
 
@@ -76,7 +88,6 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/src
 	)
 
-find_library(JPG jpeg PATHS)
 
 set(GPLUSPLUS FALSE)
 if(GPLUSPLUS)

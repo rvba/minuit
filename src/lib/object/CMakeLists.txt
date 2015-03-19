@@ -3,7 +3,6 @@ set(
 	camera.c  
 	geometry.c  
 	image.c  
-	image_jpg.c  
 	light.c  
 	material.c  
 	mesh_buffer.c  
@@ -13,7 +12,6 @@ set(
 	camera.h  
 	geometry.h  
 	image.h  
-	image_png.c  
 	light.h  
 	material.h  
 	mesh.c         
@@ -27,6 +25,20 @@ set( 	SRC
 	${SRC}
 	obj.c
 	obj.h
+	)
+endif()
+
+if(OPT_JPG)
+set(	SRC
+	${SRC}
+	image_jpg.c  
+	)
+endif()
+
+if(OPT_PNG)
+set(	SRC
+	${SRC}
+	image_png.c  
 	)
 endif()
 

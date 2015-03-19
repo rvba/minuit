@@ -136,8 +136,22 @@ t_image *image_open( const char *path)
 	t_file *file = file_new( path);
 	file_init( file);
 
-	if( is( file->ext, "jpg")) image = img_read_jpg( path);
-	else if( is( file->ext, "png")) image = img_read_png( path);
+	if( is( file->ext, "jpg"))
+	{
+		#ifdef HAVE_JPG
+	     	image = img_read_jpg( path);
+		#else
+		printf("[WARNING] image_open: JPG not enabled\n");
+		#endif
+	}
+	else if( is( file->ext, "png"))
+	{
+		#ifdef HAVE_PNG
+	       	image = img_read_png( path);
+		#else
+		printf("[WARNING] image_open: PNG not enabled\n");
+		#endif
+	}
 	else printf("[WARNING] image_open, unknown image type:%s\n", file->ext);
 
 	file_free( file);
