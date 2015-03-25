@@ -103,7 +103,9 @@ void app_redisplay(t_app *app)
 	}
 	else
 	{
+		#ifdef HAVE_GLUT
 		glutPostRedisplay();
+		#endif
 	}
 }
 
@@ -144,9 +146,12 @@ void app_gl_idle(void)
 	app->mouse->dy=0;
 
 	// loop
-	if(app->loop) glutPostRedisplay();
+	#ifdef HAVE_GLUT
+	if(app->loop)
+		glutPostRedisplay();
 	// or sleep
 	else app_sleep(app);
+	#endif
 }
 
 void app_default_func(void)

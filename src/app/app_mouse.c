@@ -15,6 +15,7 @@
 
 void app_gl_mouse( int button, int state, int x, int y)
 {
+	#ifdef HAVE_GLUT
 	t_app *app = app_get();
 
 	app_gl_keyboard_special(app); 
@@ -61,10 +62,12 @@ void app_gl_mouse( int button, int state, int x, int y)
 	app->mouse->y = app->window->height - y;
 
 	glutPostRedisplay();
+	#endif
 }
 
 void app_gl_passive_motion(int x,int y)
 {
+	#ifdef HAVE_GLUT
 	t_app *app = app_get();
 	
 	app->mouse->event = 1;
@@ -76,10 +79,12 @@ void app_gl_passive_motion(int x,int y)
 	app_gl_keyboard_special(app);
 
 	glutPostRedisplay();
+	#endif
 }
 
 void app_gl_motion(int x,int y)
 {
+	#ifdef HAVE_GLUT
 	t_app *app = app_get();
 
 	app->mouse->event = 1;
@@ -105,6 +110,7 @@ void app_gl_motion(int x,int y)
 	app_gl_keyboard_special(app);
 
 	glutPostRedisplay();
+	#endif
 }
 
 t_mouse *mouse_new(void)

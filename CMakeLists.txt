@@ -11,6 +11,7 @@ project(Minuit)
 
 ###############		 OPTIONS #############################
 
+option(OPT_OPENGL "opengl" ON)
 option(OPT_OSC "osc" OFF)
 option(OPT_OBJ "obj" OFF)
 option(OPT_GLEW "glew" OFF)
@@ -49,7 +50,8 @@ if(OPT_SDL)
 	include_directories("/usr/local/include/SDL2")
 endif()
 
-
+message("OPENGL ${OPT_OPENGL}")
+message("GLUT ${OPT_GLUT}")
 message("OSC " ${OPT_OSC})
 message("OBJ " ${OPT_OBJ})
 message("GLEW ${OPT_GLEW}")
@@ -60,6 +62,10 @@ message("JPG ${OPT_JPG}")
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
 find_package(Threads)
+
+if(OPT_GLUT)
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_GLUT")
+endif()
 
 if(OPT_PNG)
        	find_package(PNG REQUIRED)

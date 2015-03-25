@@ -695,17 +695,18 @@ void txt_draw(t_txt *txt)
 	t_skt *skt = C->skt;
 	float i = skt->intensity;
 
-	int font_type;
-	void * font;
+	int font_type = 0;
 	float zoom = C->ui->zoom;
 	int line_width = 1;
-	font = GLUT_BITMAP_HELVETICA_10;
 
 	#ifdef HAVE_SDL
 
 	font_type = 2;
 
 	#else
+	#ifdef HAVE_GLUT
+	void * font;
+	font = GLUT_BITMAP_HELVETICA_10;
 	if(C->ui->use_bitmap_font && txt->use_bitmap_font)
 	{
 		font_type = 1;
@@ -742,6 +743,7 @@ void txt_draw(t_txt *txt)
 	
 	}
 	#endif
+	#endif
 
 
 	if(font_type == 1)
@@ -753,7 +755,9 @@ void txt_draw(t_txt *txt)
 
 		while(*letter)
 		{
+			#ifdef HAVE_GLUT
 			glutBitmapCharacter(font,*letter);
+			#endif
 			letter++;
 		}
 	}

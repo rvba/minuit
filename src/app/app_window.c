@@ -39,6 +39,7 @@ void app_gl_reshape(int width,int height)
 
 void app_screen_set_fullscreen(t_app *app,int state)
 {
+	#ifdef HAVE_GLUT
 	if(app->with_glut)
 	{
 		app->window->fullscreen = state;
@@ -60,6 +61,7 @@ void app_screen_set_fullscreen(t_app *app,int state)
 			glViewport(0,0,app->window->width,app->window->height);
 		}
 	}
+	#endif
 }
 
 void app_screen_switch_fullscreen(t_app *app)

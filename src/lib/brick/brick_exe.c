@@ -448,7 +448,9 @@ void *op_window(t_brick *brick)
 	t_app *app = app_get();
 	app->window->viewport_width=app->window->width;
 	app->window->viewport_height=app->window->height;
+	#ifdef HAVE_GLUT
 	glutReshapeWindow(app->window->width,app->window->height);
+	#endif
 	return NULL;
 }
 

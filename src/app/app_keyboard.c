@@ -54,6 +54,7 @@ void app_gl_special(int key,int x,int y)
 
 void app_gl_keyboard_special(t_app *app)
 {
+	#ifdef HAVE_GLUT
 	int modifier = glutGetModifiers();
 
 	app->keyboard->shift = 0;
@@ -76,6 +77,7 @@ void app_gl_keyboard_special(t_app *app)
 		app->keyboard->alt=1;
 		app->keyboard->modifier = 1;
 	}
+	#endif
 }
 
 void app_gl_keyboard(unsigned char key,int x,int y)
