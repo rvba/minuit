@@ -215,7 +215,20 @@ void app_launch(t_app *app)
 		#ifdef HAVE_SDL
 		sdl_mainloop( app);
 		#else
+		#if HAVE_GLUT
 		glutMainLoop();
+		#else
+		if( app->x_func)
+		{
+			app->x_func( app->argc, app->argv, app->name);
+		}
+		else
+		{
+			printf("No X\n");
+		}
+
+		#endif
+		
 		#endif
 	}
 }
@@ -425,7 +438,9 @@ void app_init(t_app *app, const char *name)
 		sdl_init(app->argc, app->argv);
 		app->with_glut = 0;
 
-		#else
+		#else 
+
+		#ifdef HAVE_GLUT
 
 		if(app->with_glut)
 		{
@@ -445,6 +460,10 @@ void app_init(t_app *app, const char *name)
 			glutPassiveMotionFunc(app_gl_passive_motion);
 			glutIdleFunc(app_gl_idle);
 		}
+		#else
+		app->with_glut = 0;
+		#endif
+
 
 		// GLEW
 		#ifdef HAVE_GLEW
@@ -475,6 +494,7 @@ t_app *app_new(int argc,char **argv)
 	app->argv=argv;
 	set_name(app->name,"minuit");
 	app->main_func = app_default_func;
+	app->x_func = NULL;
 	app->off_screen=0;
 	app->frame=0;
 	app->timer=0;

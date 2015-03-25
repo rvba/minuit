@@ -18,6 +18,7 @@ option(OPT_SDL "sdl" OFF)
 option(OPT_PNG "png" OFF)
 option(OPT_JPG "jpg" OFF)
 option(OPT_GLEXT "glext" ON)
+option(OPT_GLUT "glut" ON)
 
 ###############		 LIBS	#############################
 
@@ -109,6 +110,10 @@ endif()
 
 if(OPT_OSC) 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_OSC")
+endif()
+
+if(OPT_GLUT)
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_GLUT")
 endif()
 
 add_subdirectory(src)

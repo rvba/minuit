@@ -136,6 +136,7 @@ typedef struct App
 	char filename[_NAME_LONG_];
 	
 	void (*main_func)(void);
+	void (*x_func)(int argc, char **argv, const char *name);
 
 	int off_screen; //off screen rendering
 	int with_glut; // use GLUT
