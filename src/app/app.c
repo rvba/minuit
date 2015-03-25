@@ -168,7 +168,9 @@ void app_swap(t_app *app)
 		#ifdef HAVE_SDL
 		sdl_swap( app);
 		#else
+		#ifdef HAVE_GLUT
 		glutSwapBuffers();
+		#endif
 		#endif
 	}
 	// single buffer
@@ -462,6 +464,7 @@ void app_init(t_app *app, const char *name)
 		}
 		#else
 		app->with_glut = 0;
+		if( app->x_init) app->x_init( app->argc, app->argv, app->name);
 		#endif
 
 
