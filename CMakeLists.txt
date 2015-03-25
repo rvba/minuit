@@ -17,6 +17,7 @@ option(OPT_GLEW "glew" OFF)
 option(OPT_SDL "sdl" OFF)
 option(OPT_PNG "png" OFF)
 option(OPT_JPG "jpg" OFF)
+option(OPT_GLEXT "glext" ON)
 
 ###############		 LIBS	#############################
 
@@ -97,6 +98,10 @@ endif()
 
 set(CMAKE_BUILD_TYPE debug)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DWITH_DEBUG -Wall ")
+
+if(OPT_GLEXT)
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_GLEXT")
+endif()
 
 if(OPT_OBJ) 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_OBJ")

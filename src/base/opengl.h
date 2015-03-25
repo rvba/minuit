@@ -19,6 +19,9 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
+
+#ifdef HAVE_GLEXT
 #include <GL/glext.h>
+#endif
 
 #endif
