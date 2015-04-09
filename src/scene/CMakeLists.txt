@@ -6,4 +6,4 @@ set(SRC
 	node.h
 )
 
-add_library(minuit-scene STATIC ${SRC})
+add_library(minuit-scene ${LIB_TYPE} ${SRC})

@@ -17,6 +17,6 @@ set(SRC
 
 endif()
 
-add_library(minuit-app STATIC ${SRC})
+add_library(minuit-app ${LIB_TYPE} ${SRC})
 
 

@@ -42,4 +42,4 @@ if(OPT_OSC)
 set(SRC ${SRC} osc.c osc.h)
 endif()
 
-add_library(minuit-base STATIC ${SRC})
+add_library(minuit-base ${LIB_TYPE} ${SRC})

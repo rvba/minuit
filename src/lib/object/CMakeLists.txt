@@ -42,5 +42,5 @@ set(	SRC
 	)
 endif()
 
-add_library( minuit-lib_object STATIC ${SRC})
+add_library( minuit-lib_object ${LIB_TYPE} ${SRC})
 

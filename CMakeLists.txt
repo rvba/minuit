@@ -20,6 +20,16 @@ option(OPT_PNG "png" OFF)
 option(OPT_JPG "jpg" OFF)
 option(OPT_GLEXT "glext" ON)
 option(OPT_GLUT "glut" ON)
+option(OPT_SHARED "shared" OFF)
+
+
+message("SHARED: ${OPT_SHARED}")
+if(OPT_SHARED)
+	set(LIB_TYPE "SHARED")
+
+else()
+	set(LIB_TYPE "STATIC")
+endif()
 
 ###############		 LIBS	#############################
 

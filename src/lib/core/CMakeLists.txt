@@ -14,5 +14,5 @@ set(
 	vlst.h
 	)
 
-add_library( minuit-lib_core STATIC ${SRC})
+add_library( minuit-lib_core ${LIB_TYPE} ${SRC})
 

@@ -20,5 +20,5 @@ set(
 	option.h
 	)
 
-add_library( minuit-lib_data STATIC ${SRC})
+add_library( minuit-lib_data ${LIB_TYPE} ${SRC})
 

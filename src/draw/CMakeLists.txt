@@ -14,4 +14,4 @@ set(SRC
 	sketch.h
 )
 
-add_library(minuit-draw STATIC ${SRC})
+add_library(minuit-draw ${LIB_TYPE} ${SRC})

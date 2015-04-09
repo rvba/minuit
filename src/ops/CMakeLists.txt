@@ -12,5 +12,5 @@ set(SRC
 	op_ui.c
 )
 
-add_library(minuit-ops STATIC ${SRC})
+add_library(minuit-ops ${LIB_TYPE} ${SRC})
 

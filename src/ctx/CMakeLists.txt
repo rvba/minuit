@@ -21,4 +21,4 @@ set(SRC
 	ctx_video.c
 )
 
-add_library(minuit-ctx STATIC ${SRC})
+add_library(minuit-ctx ${LIB_TYPE} ${SRC})

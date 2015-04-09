@@ -15,4 +15,4 @@ set(SRC
 	screen_object.c
 )
 
-add_library(minuit-ui STATIC ${SRC})
+add_library(minuit-ui ${LIB_TYPE} ${SRC})

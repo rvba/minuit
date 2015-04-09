@@ -15,4 +15,4 @@ set(
 	set.h
 	)
 
-add_library(minuit-lib_brick STATIC ${SRC})
+add_library(minuit-lib_brick ${LIB_TYPE} ${SRC})

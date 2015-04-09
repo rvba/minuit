@@ -12,5 +12,5 @@ set(
 	viewport.h
 	)
 
-add_library( minuit-lib_screen STATIC ${SRC})
+add_library( minuit-lib_screen ${LIB_TYPE} ${SRC})
 
