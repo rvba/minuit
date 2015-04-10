@@ -28,6 +28,8 @@ int op_texture_store(t_texture *texture)
 	return 1;
 }
 
+#ifdef HAVE_JPG
+
 t_node *op_texture_jpg_add(t_file *file)
 {
 	t_context *C = ctx_get();
@@ -47,6 +49,9 @@ t_node *op_texture_jpg_add(t_file *file)
 	return node;
 }
 
+#endif
+
+#ifdef HAVE_PNG
 t_node *op_texture_png_add(t_file *file)
 {
 	t_context *C = ctx_get();
@@ -66,6 +71,8 @@ t_node *op_texture_png_add(t_file *file)
 	return node;
 }
 
+#endif
+
 t_node *op_texture_add(const char *path)
 {
 	t_context *C = ctx_get();
@@ -78,11 +85,15 @@ t_node *op_texture_add(const char *path)
 	{
 		if(is(ext,"jpg"))
 		{
+			#ifdef HAVE_JPG
 			op_texture_jpg_add(file);
+			#endif
 		}
 		else if(is(ext,"png"))
 		{
+			#ifdef HAVE_PNG
 			op_texture_png_add(file);
+			#endif
 		}
 		else
 		{
