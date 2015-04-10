@@ -44,7 +44,9 @@ extern "C" {
 #define DEBUG_ALL 0
 #define DEBUG_TO_FILE 0
 
+#ifndef PI
 #define PI 3.14159655f
+#endif
 
 #define BIN_MAX 10000
 
