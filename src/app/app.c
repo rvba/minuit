@@ -47,6 +47,20 @@ const char *app_get_arg( t_app *app, int pos)
 	else return NULL;
 }
 
+int app_check_arg( t_app *app, const char *arg)
+{
+	int i;
+	for( i = 0; i < app->argc; i++)
+	{
+		if( is(app->argv[i], arg))
+		{
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
 char *app_get_file_path( t_app *app, int type)
 {
 	switch ( type)

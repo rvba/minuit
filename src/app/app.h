@@ -215,6 +215,7 @@ void glx_main_loop(void);
 
 void app_print_args( t_app *app);
 const char *app_get_arg( t_app *app, int pos);
+int app_check_arg( t_app *app, const char *arg);
 char *app_get_file_path( t_app *app, int type);
 
 void app_gl_display(void);
