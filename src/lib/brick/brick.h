@@ -30,6 +30,7 @@ struct Brick_Geometry;
 struct Brick_Var;
 struct Action;
 struct Event;
+struct Scene;
 
 typedef struct Brick_Event
 {
