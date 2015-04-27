@@ -46,6 +46,8 @@ void 		op_export(struct Node *node);
 void 		op_add_global(struct Context *C,struct Block *block);
 void 		op_init(struct Context *C);
 
+
+struct Node *op_new_mesh( const char *name, int tot_vertex, int tot_quad, int tot_tri, float *verts, int *quads, int *tris);
 struct Node *op_add_mesh_raw( const char *name, int size);
 
 // OP_ADD_BRICK
@@ -164,6 +166,7 @@ void *		op_add_empty_object(struct Brick*brick);
 void *		op_add_empty_mesh(struct Brick *brick);
 void *		op_add_object_void( const char *name);
 void *		op_add_mesh(const char *name);
+void *          op_add_mesh_data(const char *name, int tot_vertex, int tot_quad, int tot_tri, float *verts, int *quads, int *tris);
 void *		op_add_empty_vlst(struct Brick *brick);
 void *		op_add_empty_float_vlst(struct Brick *brick);
 void *		op_add_empty_int_vlst(struct Brick *brick);

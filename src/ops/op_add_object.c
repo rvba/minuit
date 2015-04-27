@@ -88,6 +88,14 @@ t_node *op_new_cube(const char *name)
 	return cube;
 }
 
+t_node *op_new_mesh( const char *name, int tot_vertex, int tot_quad, int tot_tri, float *verts, int *quads, int *tris)
+{
+        int tot_face = tot_quad + tot_tri;
+	t_node *cube = mesh_make(name,tot_vertex,tot_face,tot_quad,tot_tri,verts,quads,tris);
+
+	return cube;
+}
+
 t_node *op_new_mesh_raw( const char *name, int size)
 {
 	int tot_vertex=size;
@@ -224,6 +232,23 @@ void *op_add_mesh(const char *name)
 
 
 		t_node *node_mesh=mesh_make_empty("mesh");
+		t_node *node_object = object_make( dt_mesh, "cube");
+
+		t_object *object = ( t_object *) node_object->data;
+		object->cls->link(object,node_mesh);
+
+	scene_store(C->scene,0);
+
+	return object;
+}
+
+void *op_add_mesh_data(const char *name, int tot_vertex, int tot_quad, int tot_tri, float *verts, int *quads, int *tris)
+{
+	t_context *C = ctx_get();
+	scene_store(C->scene,1);
+
+
+		t_node *node_mesh = op_new_mesh("mesh", tot_vertex, tot_quad, tot_tri, verts, quads, tris);
 		t_node *node_object = object_make( dt_mesh, "cube");
 
 		t_object *object = ( t_object *) node_object->data;
