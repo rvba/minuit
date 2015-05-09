@@ -29,6 +29,13 @@
 #include "app.h"
 #include "ui.h"
 
+void op_add_data( t_context *C, const char *name, int size, void *data)
+{
+	scene_store( C->scene, 1);
+	scene_add_data_var( C->scene, name, "data", size, data);
+	scene_store( C->scene, 0);
+}
+
 // GEO
 
 t_geo *op_new_geo( t_context *C, const char *name)

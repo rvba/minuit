@@ -47,6 +47,7 @@ void 		op_add_global(struct Context *C,struct Block *block);
 void 		op_init(struct Context *C);
 
 
+void op_add_data( struct Context *C, const char *name, int size, void *data);
 struct Node *op_new_mesh( const char *name, int tot_vertex, int tot_quad, int tot_tri, float *verts, int *quads, int *tris);
 struct Node *op_add_mesh_raw( const char *name, int size);
 
