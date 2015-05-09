@@ -28,12 +28,21 @@
 #include "geometry.h"
 #include "app.h"
 #include "ui.h"
+#include "vlst.h"
 
 void op_add_data( t_context *C, const char *name, int size, void *data)
 {
 	scene_store( C->scene, 1);
 	scene_add_data_var( C->scene, name, "data", size, data);
 	scene_store( C->scene, 0);
+}
+
+t_vlst *op_add_vlst( t_context *C, const char *name, t_data_type type, int length, int count, void *data)
+{
+	scene_store( C->scene, 1);
+	t_vlst *vlst = vlst_make( name, type, length, count, data);
+	scene_store( C->scene, 0);
+	return vlst;
 }
 
 // GEO
