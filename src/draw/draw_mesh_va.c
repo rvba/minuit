@@ -139,8 +139,8 @@ void draw_mesh(t_draw *draw, t_scene *scene, t_mesh *mesh)
 		}
 	}
 
-	// lines
-	//if(mesh->state.with_line) draw_mesh_line(draw,mesh);
+	// edges
+	if(mesh->state.with_line) draw_mesh_edge( draw, mesh);
 
 	// outline
 	if(

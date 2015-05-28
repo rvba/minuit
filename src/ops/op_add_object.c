@@ -100,6 +100,11 @@ t_node *op_new_cube(const char *name)
 	int *tris = NULL;
 		
 	t_node *cube = mesh_make(name,tot_vertex,tot_face,tot_quad,tot_tri,verts,quads,tris);
+	t_mesh *mesh = cube->data;
+
+	// Edges
+	mesh->edges = vlst_make( "edges", dt_uint, 2, 12, cube_edges);
+	mesh->state.with_line =1;
 
 	return cube;
 }

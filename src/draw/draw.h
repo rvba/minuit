@@ -124,6 +124,7 @@ void draw_switch_axis_world(t_draw *draw);
 void draw_mesh_points(t_draw *draw, struct Mesh *mesh);
 void draw_mesh_direct(t_draw *draw,struct Scene *scene,struct Mesh *mesh);
 void draw_mesh(t_draw *draw, struct Scene *scene, struct Mesh *mesh);
+void draw_mesh_edge( t_draw *draw, struct Mesh *mesh);
 
 // POINT
 

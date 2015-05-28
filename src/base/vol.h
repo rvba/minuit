@@ -18,6 +18,7 @@ extern int mesh_cube_lines[24];
 extern int mesh_cube_tot_lines;
 extern float cube_verts[8*3];
 extern int cube_quads[6*4];
+extern unsigned int cube_edges[2*12];
 extern float plane_verts[4*3];
 extern int plane_quads[4];
 extern float vertices[72]; 
