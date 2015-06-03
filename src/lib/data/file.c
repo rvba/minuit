@@ -61,7 +61,6 @@ void file_show(t_file *file)
 	if(file->data)
 	{
 		int i;
-		for(i=0;i<file->data_size;i++)
 		{
 			printf("%c",file->data[i]);
 		}

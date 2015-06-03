@@ -20,6 +20,7 @@
 
 struct Lst;
 struct Link;
+struct Context;
 
 typedef struct Term
 {
@@ -49,6 +50,7 @@ typedef struct Term
 
 }t_term;
 
+t_term *term_make( struct Context *C, const char *name, int type);
 void 		term_reset_all( void);
 void 		term_reset (t_term *term);
 void 		term_free( t_term *term);
