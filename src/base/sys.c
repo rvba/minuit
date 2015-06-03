@@ -25,12 +25,10 @@ void sys_get_cd(const char *cmd)
 
 	if(fp)
 	{
-		printf("BROWSER\n");
 		while (fgets(input, sizeof(input)-1, fp) != NULL)
 		{
-			printf(">%s",input);
+			printf("%s",input);
 		}
-		printf("DONE\n");
 	}
 }
 
