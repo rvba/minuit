@@ -212,9 +212,12 @@ void keymap_command( int key)
 
 
 		case TABKEY:
-			switch_sets(C);
-			// reset key
-			C->app->keyboard->key_pressed=0;
+			if( !C->app->keyboard->ctrl)
+			{
+				switch_sets(C);
+				// reset key
+				C->app->keyboard->key_pressed=0;
+			}
 			break;
 
 		case F1KEY: load_last(C);break; 
