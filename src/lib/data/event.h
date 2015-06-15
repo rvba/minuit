@@ -122,7 +122,12 @@ struct MINscreen;
 #define ALTKEY		201
 #define CTRLKEY		202
 
-#define KEYBOARD_STOP	203
+#define UP_KEY 203
+#define DOWN_KEY 204
+#define LEFT_KEY 205
+#define RIGHT_KEY 206
+
+#define KEYBOARD_STOP	300
 
 #define MOUSE_START 700
 
@@ -140,6 +145,7 @@ struct MINscreen;
 #define MOUSE_WHEEL_UP		846
 #define MOUSE_WHEEL_DOWN	847
 #define MOUSE_END 850
+
 
 #define EVENT_KEYBOARD( event) ( event >= 0 && event <= KEYBOARD_STOP)
 #define EVENT_MOUSE( event) ( event >= MOUSE_START && event <= MOUSE_END)

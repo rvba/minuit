@@ -250,6 +250,18 @@ void ctx_ui_keyboard_set( t_context *C, t_event *event)
 	}
 }
 
+int ctx_keyboard_special( int key)
+{
+	switch(key)
+	{
+		case 100: return LEFT_KEY; break;
+		case 101: return UP_KEY; break;
+		case 102: return RIGHT_KEY; break;
+		case 103: return DOWN_KEY; break;
+		default: return 0; break;
+	}
+}
+
 void ctx_keyboard(t_context *C)
 {
 	t_screen *s = C->ui->screen_active;
@@ -266,7 +278,7 @@ void ctx_keyboard(t_context *C)
 
 	if( C->app->keyboard->special)
 	{
-		 event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, C->app->keyboard->special);
+		 event_add( C->event, s, C->app->mouse->x, C->app->mouse->y, ctx_keyboard_special(C->app->keyboard->special));
 		C->app->keyboard->special=0;
 	}
 

@@ -22,6 +22,7 @@ void app_gl_special(int key,int x,int y)
 
 	if(key)
 	{
+		/*
 		// transalte
 		if(app->keyboard->shift)
 		{
@@ -46,6 +47,7 @@ void app_gl_special(int key,int x,int y)
 			else if(key==103) //down
 				app_gl_keyboard(')',x,y);
 		}
+		*/
 	}
 
 	if(app->debug_keyboard)

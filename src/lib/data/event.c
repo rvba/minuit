@@ -228,6 +228,11 @@ char *event_name( int type)
 
 		case UI_EVENT_BROWSER_SHOW: return("UI_EVENT_BROWSER_SHOW"); break;
 
+		case UP_KEY: return("UP_KEY"); break;
+		case DOWN_KEY: return("DOWN_KEY"); break;
+		case LEFT_KEY: return("LEFT_KEY"); break;
+		case RIGHT_KEY: return("RIGHT_KEY"); break;
+
 		default: return("?");
 	}
 }
