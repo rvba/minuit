@@ -682,7 +682,7 @@ void load_last( t_context *C)
 
 	if( file)
 	{
-		filename = file_line_get( file, 0);
+		filename = file_line_data_get( file, 0);
 		if( filename)
 		{
 			if( is( filename, "void")) filename = NULL;

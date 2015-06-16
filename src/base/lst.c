@@ -565,6 +565,14 @@ t_link *lst_add(t_lst *lst,void *data,const char *name)
 	return link;
 }
 
+t_link *lst_insert( t_lst *lst, t_link *l, void *data, const char *name)
+{
+	t_link *link=link_new(name);
+	link->data=data;
+	lst_link_insert( lst, l, link);
+	return link;
+}
+
 // SHOW
 
 void link_show(const char *name,t_link *link)

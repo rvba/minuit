@@ -111,6 +111,67 @@ void line_remove_data( t_line *line, int pos, int size)
 	line->data = _new_data;
 }
 
+void line_cut( t_line *line, int pos)
+{
+	char c = '\0';
+	int size = line->size;
+	int new_size = size - pos;
+	line_remove_data( line, pos, new_size);
+	line_add_data( line, pos, new_size, &c);
+}
+
+t_line *line_insert_after( t_file *file, int pos, const char *data)
+{
+	t_line *line = line_new();
+	int size = strlen( data);
+	char d[] = "";
+	if( size == 0)
+	{
+		size = 1;
+		data = d;
+	}
+
+	
+	printf("size %d\n", size);
+	char *new_data = ( char *) malloc( sizeof(char) * size);
+	memcpy( new_data, data, size);
+	line->data = new_data;
+	line->size = size;
+	file->tot_line++;
+
+	t_link *l = lst_link_get( file->lines, pos);
+	lst_insert( file->lines, l, line, "line");
+
+	return line;
+}
+
+char *line_extract( t_line *line, int pos)
+{
+	return line->data + pos;
+}
+
+t_line *line_split( t_file *file, int line_pos, int pos)
+{
+	t_line *line = file_line_get( file, line_pos);
+
+	char *data;
+	char d[] = "\0";
+	if( line->size == 0)
+	{
+		data = d;
+	}
+	else
+	{
+		data = line_extract( line, pos);
+	}
+
+
+	t_line *l = line_insert_after( file, line_pos, data);
+
+	if( line->size != 0) line_cut( line, pos);
+	return l;
+}
+
 void line_read_words(t_line *line)
 {
 	int tot_word=0;
@@ -337,7 +398,7 @@ int file_read_lines(t_file *file)
 	}
 }
 
-char *file_line_get( t_file *file, int p)
+t_line *file_line_get( t_file *file, int p)
 {
 	if( file->data)
 	{
@@ -346,7 +407,7 @@ char *file_line_get( t_file *file, int p)
 			t_line *line = ( t_line *) lst_get_by_range( file->lines, p);
 			if( line) 
 			{
-				return line->data;
+				return line;
 			}
 			else
 			{
@@ -377,4 +438,11 @@ char *file_line_get( t_file *file, int p)
 			return NULL;
 		}
 	}
+}
+
+
+char *file_line_data_get( t_file *file, int p)
+{
+	t_line *line = file_line_get( file, p);
+	return line->data;
 }

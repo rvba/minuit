@@ -60,6 +60,7 @@ void 		lst_link_delete_by_ptr( t_lst *lst, void *ptr);
 void 		lst_link_delete_by_id( t_lst *lst, int id);
 
 void *		lst_get_by_range( t_lst *lst, int i);
+t_link *	lst_link_get(t_lst *lst, int pos);
 
 void 		lst_show(t_lst *lst);
 t_link *	lst_add(t_lst *lst,void *data,const char *name);
@@ -75,6 +76,7 @@ void 		link_free(t_link *link);
 int 		lst_sort_bubble(struct Lst *lst);
 int 		lst_sort_quick(struct Lst *lst);
 void 		lst_link_insert(struct Lst *lst, struct Link *link, struct Link *prev);
+t_link *	lst_insert( t_lst *lst, t_link *l, void *data, const char *name);
 
 #ifdef __cplusplus
 }
