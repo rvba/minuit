@@ -145,6 +145,47 @@ void *line_new(void)
 }
 
 // FILE
+int file_lines_size( t_file *file)
+{
+	int size = 0;
+	t_link *l;
+	t_line *line;
+	for( l = file->lines->first; l; l = l->next)
+	{
+		line = ( t_line *) l->data;
+		size += line->size;  // add newline space
+	}
+
+	return size;
+}
+
+int file_write_lines( t_file *file)
+{
+	int size = file_lines_size( file);
+	t_link *l;
+	t_line *line;
+
+	free( file->data);
+	//file->data = ( char *) calloc( 1,sizeof(char) * size);
+	file->data = ( char *) malloc( sizeof(char) * size);
+	char *ptr = file->data;
+
+	for( l = file->lines->first; l; l = l->next)
+	{
+		line = ( t_line *) l->data;
+		if( line)
+		{
+			int s = line->size;
+			memcpy( ptr, line->data, s);
+			ptr += s-1;
+			*ptr = (int)'\n';
+			ptr++;
+		}
+	}
+
+	file_write( file, file->data, size);
+	return 1;
+}
 
 /** store lines without \n **/
 int file_read_lines(t_file *file)
