@@ -14,6 +14,8 @@
 #include "list.h"
 #include "memory.h"
 
+void line_free( t_line *line);
+
 // WORD
 
 int word_equal(t_word *word,const char *string)
@@ -109,6 +111,15 @@ void line_remove_data( t_line *line, int pos, int size)
 	line->size = new_size;
 	free( line->data);
 	line->data = _new_data;
+}
+
+void line_remove( t_file *file, int pos)
+{
+	t_line *line = file_line_get( file, pos);
+	t_link *link = lst_link_get( file->lines, pos);
+	lst_link_remove( file->lines, link);
+	file->tot_line--;
+	line_free( line);
 }
 
 void line_cut( t_line *line, int pos)
@@ -266,6 +277,30 @@ void *line_new(void)
 	line->words=lst_new("lst");
 
 	return line;
+}
+
+void word_free( t_word *word)
+{
+	if( word->data) free( word->data);
+}
+
+void line_free( t_line *line)
+{
+	if( line->words)
+	{
+		t_link *l;
+		for( l = line->words->first; l; l = l->next)
+		{
+			t_word *word = ( t_word *) l->data; 
+			word_free( word);
+		}
+
+		lst_cleanup( line->words);
+	}
+
+	if (line->data) free( line->data);
+
+	free( line);
 }
 
 // FILE
