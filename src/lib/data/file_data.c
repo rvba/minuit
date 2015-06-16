@@ -46,6 +46,39 @@ t_word *word_new(void)
 
 // LINE
 
+void line_add_data( t_line *line, int pos, int size, char *data)
+{
+	int new_size = line->size + size;
+	char *_new_data = ( char *) malloc( sizeof(char) * new_size);
+	char *new_data = _new_data;
+	char *old_data = line->data;
+	int i;
+	int length = 0;
+	int add = 0;
+	for( i = 0; i < new_size; i++)
+	{
+		if( i == pos) add = 1;
+		if( add)
+		{
+			*new_data = *data;
+			new_data++;
+			data++;
+			length++;
+			if( length == size) add = 0;
+		}
+		else
+		{
+			*new_data = *old_data;
+			new_data++;
+			old_data++;
+		}
+	}
+
+	line->size = new_size;
+	free( line->data);
+	line->data = _new_data;
+}
+
 void line_read_words(t_line *line)
 {
 	int tot_word=0;
