@@ -131,8 +131,6 @@ t_line *line_insert_after( t_file *file, int pos, const char *data)
 		data = d;
 	}
 
-	
-	printf("size %d\n", size);
 	char *new_data = ( char *) malloc( sizeof(char) * size);
 	memcpy( new_data, data, size);
 	line->data = new_data;
