@@ -94,6 +94,8 @@ void app_gl_keyboard(unsigned char key,int x,int y)
 	else app->keyboard->key_pressed = 0;
 
 	if(app->debug_keyboard) printf("key:%c(%d)\n",key,(int)key);
+
+	app_gl_keyboard_special(app);
 }
 
 t_keyboard *keyboard_new(void)
