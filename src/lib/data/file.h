@@ -94,6 +94,7 @@ void		file_rebind( struct Scene *scene, void *ptr);
 void 		file_show( t_file *file);
 char *		file_line_get( t_file *file, int p);
 void		line_add_data( t_line *line, int pos, int size, char *data);
+void		line_remove_data( t_line *line, int pos, int size);
 int 		file_read( t_file *file);
 int 		file_read_lines( t_file *file);
 int 		file_write( t_file *file, const char *data, int size);
