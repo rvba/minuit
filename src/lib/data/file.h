@@ -101,6 +101,7 @@ int 		file_read( t_file *file);
 int 		file_read_lines( t_file *file);
 int 		file_write( t_file *file, const char *data, int size);
 int		file_write_lines( t_file *file);
+int		file_write_data( t_file *file);
 int 		file_put( t_file *file, const char *data);
 int 		file_open( t_file *file, const char *mode);
 void 		file_close( t_file *file);

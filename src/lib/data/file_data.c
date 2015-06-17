@@ -318,7 +318,7 @@ int file_lines_size( t_file *file)
 	return size;
 }
 
-int file_write_lines( t_file *file)
+int file_write_data( t_file *file)
 {
 	int size = file_lines_size( file);
 	t_link *l;
@@ -342,6 +342,13 @@ int file_write_lines( t_file *file)
 		}
 	}
 
+	return 1;
+}
+
+int file_write_lines( t_file *file)
+{
+	int size = file_lines_size( file);
+	file_write_data( file);
 	file_write( file, file->data, size);
 	return 1;
 }
