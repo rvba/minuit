@@ -176,6 +176,18 @@ t_line *line_split( t_file *file, int line_pos, int char_pos)
 
 	return l;
 }
+t_line *file_line_join( t_file *file, int before, int after)
+{
+	t_line *line_before = file_line_get( file, before);
+	t_line *line_after = file_line_get( file, after);
+	int pos = line_before->size-1; //starts at /0
+	int size = line_after->size;
+	char *data = line_after->data;
+	line_add_data( line_before, pos, size, data);
+	line_remove( file, after);
+	line_before->size--;
+	return line_before;
+}
 
 void line_read_words(t_line *line)
 {
