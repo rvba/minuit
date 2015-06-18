@@ -81,38 +81,6 @@ void line_add_data( t_line *line, int pos, int size, char *data)
 	line->data = _new_data;
 }
 
-void line_remove_data( t_line *line, int pos, int size)
-{
-	int old_size = line->size;
-	int new_size = line->size - size;
-	char *_new_data = ( char *) malloc( sizeof(char) * new_size);
-	char *new_data = _new_data;
-	char *old_data = line->data;
-	int i;
-	int length = 0;
-	int remove = 0;
-	for( i = 0; i < old_size; i++)
-	{
-		if( i == pos) remove = 1;
-		if( remove)
-		{
-			old_data++;
-			length++;
-			if( length == size) remove = 0;
-		}
-		else
-		{
-			*new_data = *old_data;
-			new_data++;
-			old_data++;
-		}
-	}
-
-	line->size = new_size;
-	free( line->data);
-	line->data = _new_data;
-}
-
 void line_remove( t_file *file, int pos)
 {
 	t_line *line = file_line_get( file, pos);
@@ -122,62 +90,60 @@ void line_remove( t_file *file, int pos)
 	line_free( line);
 }
 
-void line_cut( t_line *line, int pos)
+// cut line after char_pos
+void line_cut( t_line *line, int char_pos)
 {
-	char c = '\0';
-	int size = line->size;
-	int new_size = size - pos;
-	line_remove_data( line, pos, new_size);
-	line_add_data( line, pos, new_size, &c);
+	int new_size = char_pos + 1; // \0
+	char *old_data = line->data;
+	char *new_data = ( char *) realloc( old_data, new_size);
+	new_data[new_size] = '\0';
+	line->size = new_size;
+	line->data = new_data;
 }
 
-t_line *line_insert_after( t_file *file, int pos, const char *data)
+// make new line with (split) data after line_pos
+t_line *line_split_make( t_file *file, int line_pos,  const char *data)
 {
+	// new line
 	t_line *line = line_new();
-	int size = strlen( data);
-	char d[] = "";
-	if( size == 0)
-	{
-		size = 1;
-		data = d;
-	}
 
+	// new data
+	int size = strlen( data) + 1;
 	char *new_data = ( char *) malloc( sizeof(char) * size);
+
+	// copy data
 	memcpy( new_data, data, size);
+
+	// set line param
 	line->data = new_data;
 	line->size = size;
-	file->tot_line++;
 
-	t_link *l = lst_link_get( file->lines, pos);
+	// insert in file
+	file->tot_line++;
+	t_link *l = lst_link_get( file->lines, line_pos);
 	lst_insert( file->lines, l, line, "line");
 
 	return line;
 }
 
-char *line_extract( t_line *line, int pos)
+// split line at char_pos
+t_line *line_split( t_file *file, int line_pos, int char_pos)
 {
-	return line->data + pos;
-}
-
-t_line *line_split( t_file *file, int line_pos, int pos)
-{
+	// get current line
 	t_line *line = file_line_get( file, line_pos);
 
-	char *data;
-	char d[] = "\0";
-	if( line->size == 0)
-	{
-		data = d;
-	}
-	else
-	{
-		data = line_extract( line, pos);
-	}
+	// get pointer to split point
+	char *data = line->data + char_pos;
 
+	// create split line
+	t_line *l = line_split_make( file, line_pos, data);
 
-	t_line *l = line_insert_after( file, line_pos, data);
+	// cut current line
+	line_cut(line, char_pos);
 
-	if( line->size != 0) line_cut( line, pos);
+	line_show(l);
+	line_show(line);
+
 	return l;
 }
 
