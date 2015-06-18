@@ -156,6 +156,17 @@ t_node *scene_node_exists( t_scene *sc, t_data_type type, const char *name)
 	}
 }
 
+t_node *scene_get_node_by_id( t_scene *scene, int id)
+{
+	t_link *l;
+	for( l = scene->nodes->first; l; l = l->next)
+	{
+		t_node *node = ( t_node *) l->data;
+		if ( node->id == id) return node;
+	}
+	return NULL;
+}
+
 /*
 	****************************
 	COLORS ID

@@ -270,7 +270,7 @@ void *op_add_mesh_data(const char *name, int tot_vertex, int tot_quad, int tot_t
 
 
 		t_node *node_mesh = op_new_mesh("mesh", tot_vertex, tot_quad, tot_tri, verts, quads, tris);
-		t_node *node_object = object_make( dt_mesh, "cube");
+		t_node *node_object = object_make( dt_mesh, name);
 
 		t_object *object = ( t_object *) node_object->data;
 		object->cls->link(object,node_mesh);
