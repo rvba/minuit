@@ -119,6 +119,17 @@ void ctx_scene_set_selected(t_context *C, t_node *node)
 	C->ui->show_nodes=0;
 }
 
+void ctx_scene_set_deselected(t_context *C, t_node *node)
+{
+	ctx_scene_selection(C, node, 0);
+	C->scene->selected = NULL;
+}
+
+t_node *ctx_scene_get_selected( t_context *C)
+{
+	return C->scene->selected;
+}
+
 void ctx_scene_clear_selections(t_context *C)
 {
 	t_link *link;

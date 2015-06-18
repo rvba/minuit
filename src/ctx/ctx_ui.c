@@ -948,6 +948,18 @@ void ctx_ui_delete( t_context *C, t_event *e)
 		ctx_ui_selection_release( C);
 		UI_SWAP( C, state_ui_default);
 	}
+	else 
+	{
+		t_node *node = ctx_scene_get_selected( C);
+		if( node)
+		{
+			if( node->type == dt_object)
+			{
+				ctx_scene_set_deselected( C, node);
+				scene_node_delete( C->scene, node);
+			}
+		}
+	}
 }
 
 /*	**********************************
