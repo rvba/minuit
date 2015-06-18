@@ -365,30 +365,34 @@ t_file *file_access( const char *path)
 
 // CREATE
 
-int file_create( const char *path)
+int file_make( t_file *file)
 {
-	t_file *file = file_new( path);
 	if ( file_init( file))
 	{
 		file->file = fopen( file->path, "w");
 		if( file->file)
 		{
 			file_close( file);
-			file_free( file);
 			return 1;
 		}
 		else
 		{
-			printf("[FILE] Error can't create %s\n,", path);
-			file_free( file);
+			printf("[FILE] Error can't create %s\n,", file->path);
 			return 0;
 		}
 	}
 	else
 	{
-		file_free( file);
 		return 0;
 	}
+}
+
+int file_create( const char *path)
+{
+	t_file *file = file_new( path);
+	int ret = file_make( file);
+	file_free( file);
+	return ret;
 }
 
 // NEW

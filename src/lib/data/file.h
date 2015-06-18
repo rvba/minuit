@@ -109,6 +109,7 @@ void 		file_close( t_file *file);
 int 		file_init( t_file *file);
 void 		file_free( t_file *file);
 t_file *	file_access( const char *path);
+int		file_make( t_file *file);
 int 		file_create( const char *path);
 void *		file_new( const char *path);
 
