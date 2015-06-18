@@ -48,6 +48,39 @@ t_word *word_new(void)
 
 // LINE
 
+t_line *file_line_add( t_file *file, int line_pos, const char *data)
+{
+	// new line
+	t_line *line = line_new();
+
+	// new data
+	int size = strlen( data) + 1;
+	char *new_data = ( char *) malloc( sizeof(char) * size);
+
+	// copy data
+	memcpy( new_data, data, size);
+
+	// set line param
+	line->data = new_data;
+	line->size = size;
+
+	// insert in file
+	if( file->tot_line == 0)
+	{
+		file->lines = lst_new( "lines");
+		lst_add( file->lines, line, "line");
+		file->tot_line++;
+	}
+	else
+	{
+		t_link *l = lst_link_get( file->lines, line_pos);
+		lst_insert( file->lines, l, line, "line");
+		file->tot_line++;
+	}
+
+	return line;
+}
+
 void line_add_data( t_line *line, int pos, int size, char *data)
 {
 	int new_size = line->size + size;
@@ -141,26 +174,7 @@ void line_cut( t_line *line, int char_pos)
 // make new line with (split) data after line_pos
 t_line *line_split_make( t_file *file, int line_pos,  const char *data)
 {
-	// new line
-	t_line *line = line_new();
-
-	// new data
-	int size = strlen( data) + 1;
-	char *new_data = ( char *) malloc( sizeof(char) * size);
-
-	// copy data
-	memcpy( new_data, data, size);
-
-	// set line param
-	line->data = new_data;
-	line->size = size;
-
-	// insert in file
-	file->tot_line++;
-	t_link *l = lst_link_get( file->lines, line_pos);
-	lst_insert( file->lines, l, line, "line");
-
-	return line;
+	return file_line_add( file, line_pos, data);
 }
 
 // split line at char_pos
@@ -337,7 +351,6 @@ int file_write_data( t_file *file)
 	t_line *line;
 
 	free( file->data);
-	//file->data = ( char *) calloc( 1,sizeof(char) * size);
 	file->data = ( char *) malloc( sizeof(char) * size);
 	char *ptr = file->data;
 
@@ -353,6 +366,8 @@ int file_write_data( t_file *file)
 			ptr++;
 		}
 	}
+
+	file->data_size = size;
 
 	return 1;
 }
@@ -452,46 +467,16 @@ int file_read_lines(t_file *file)
 
 t_line *file_line_get( t_file *file, int p)
 {
-	if( file->data)
+	if( file->lines)
 	{
-		if( file->lines)
-		{
-			t_line *line = ( t_line *) lst_get_by_range( file->lines, p);
-			if( line) 
-			{
-				return line;
-			}
-			else
-			{
-				printf("[FILE] Error, Can't get %d line\n", p);
-				return NULL;
-			}
-		}
-		else
-		{
-			if( file_read_lines( file))
-			{
-				return file_line_get( file, p);
-			}
-			else
-			{
-				return NULL;
-			}
-		}
+		t_line *line = ( t_line *) lst_get_by_range( file->lines, p);
+		return line;
 	}
 	else
 	{
-		if( file_read( file))
-		{
-			return file_line_get( file, p);
-		}
-		else
-		{
-			return NULL;
-		}
+		return NULL;
 	}
 }
-
 
 char *file_line_data_get( t_file *file, int p)
 {

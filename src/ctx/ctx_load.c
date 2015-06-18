@@ -682,6 +682,7 @@ void load_last( t_context *C)
 
 	if( file)
 	{
+		file_read_lines( file);
 		filename = file_line_data_get( file, 0);
 		if( filename)
 		{
