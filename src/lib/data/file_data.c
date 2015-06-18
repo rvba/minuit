@@ -127,9 +127,10 @@ void line_remove_data( t_line *line, int pos, int size)
 void line_cut( t_line *line, int char_pos)
 {
 	int new_size = char_pos + 1; // \0
+	size_t new_data_size = sizeof(char) * new_size;
 	char *old_data = line->data;
-	char *new_data = ( char *) realloc( old_data, new_size);
-	new_data[new_size] = '\0';
+	char *new_data = ( char *) realloc( old_data, new_data_size);
+	new_data[char_pos] = '\0';
 	line->size = new_size;
 	line->data = new_data;
 }
