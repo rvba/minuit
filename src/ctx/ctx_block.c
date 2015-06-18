@@ -361,11 +361,6 @@ void state_block_default( t_block *block, t_event *e)
 		t_brick *brick = ctx_ui_hover_get( C, dt_brick);
 		if( brick)
 		{
-			if( e->type == DKEY)
-			{
-				//block_brick_delete( block, brick);
-			}
-
 			if( e->type == MOUSE_RIGHT_PRESSED)
 			{
 				BLOCK_SWAP( block, state_block_move);

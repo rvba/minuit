@@ -194,9 +194,6 @@ void state_brick_slider_default( t_brick *brick, t_event *e)
 			brick_hover_set( brick);
 			BRICK_SWAP( brick, state_brick_slider_trigger);
 			break;
-		case DKEY:
-			brick_do_delete( brick);
-			break;
 	}
 }
 
