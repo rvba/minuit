@@ -193,8 +193,7 @@ void browser_build(void)
 						s_convert_newline_endline(ff,f_type);
 						s_truncate_after(':',fff,ff);
 
-
-						if(is(fff," directory"))
+						if(is(fff," directory "))
 						{
 							add_brick_trigger(C,block,file_name,browser_go_directory);
 						}
