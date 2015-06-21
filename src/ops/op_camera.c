@@ -29,7 +29,7 @@ t_camera *op_camera_get_current( struct Context *C)
 	if(C->scene->has_generic_viewport)
 	{
 		// Get default Viewport
-		t_node *node_viewport = scene_node_get( C->scene, dt_viewport, "viewport");
+		t_node *node_viewport = scene_get_node_by_type_name( C->scene, dt_viewport, "viewport");
 		t_viewport *viewport = NULL;
 
 		if(node_viewport)

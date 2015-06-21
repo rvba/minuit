@@ -199,6 +199,8 @@ void ctx_thread_init( struct Context *C);
 
 // CTX_BROWSER
 
+
+void browser_enter( struct Context *C, void (*callback)( void));
 void ctx_ui_browser( struct Context *C);
 int ctx_ui_selection_set( struct Context *C, struct Node *node);
 

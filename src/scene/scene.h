@@ -60,8 +60,10 @@ typedef struct Scene
 
 struct Node *	scene_get_data(t_scene *sc,void *ptr);
 struct Node *	scene_get_var(t_scene *sc,void *ptr);
-t_scene*	scene_get(void);
 struct Node *	scene_get_node_by_id( t_scene *scene, int id);
+struct Node*	scene_get_node_by_type_name(t_scene *sc, t_data_type type,const char *name);
+t_scene*	scene_get(void);
+
 void 		scene_color_tmp_reset(t_scene *scene);
 void 		scene_color_get(t_scene *scene,int *color);
 void		scene_color_set(t_scene *sc,struct Node *node);
@@ -73,9 +75,6 @@ void 		scene_node_load(t_scene *sc,struct Node *node);
 void 		scene_data_node_load(t_scene *sc,struct Node *node);
 void 		scene_node_free(t_scene *sc,struct Node *node);
 int		scene_node_delete(t_scene *sc,struct Node *node);
-//struct Node *	scene_node_get_by_id_global(t_scene *sc,int id);
-struct Node*	scene_node_get(t_scene *sc, t_data_type type,const char *name);
-//struct Node*	scene_node_exists(t_scene *sc,const char *type,const char *name);
 struct Node*	scene_node_exists(t_scene *sc, t_data_type type,const char *name);
 void		scene_cleanup(t_scene *sc);
 

@@ -47,7 +47,7 @@ void skt_cp( t_skt *dst, t_skt *src)
 
 void skt_load( t_context *C)
 {
-	t_node *node = scene_node_get( C->scene, dt_dict, "dict_skt");
+	t_node *node = scene_get_node_by_type_name( C->scene, dt_dict, "dict_skt");
 	t_dict *dict = node->data;
 	t_symbol *symbol = dict_pop( dict, "symbol_skt");
 	t_skt *skt = (t_skt *) symbol->data;

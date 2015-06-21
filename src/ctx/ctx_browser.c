@@ -16,12 +16,29 @@
 #include "ui.h"
 
 int BROWSER_EXIT = 0;
+static t_screen *SCREEN = NULL;
+
+void browser_enter( t_context *C, void (* f)( void))
+{
+	C->event->callback = f;
+	SCREEN = C->ui->screen_active;
+	ctx_ui_event_add( UI_EVENT_BROWSER_SHOW);
+}
 
 void browser_exit( t_context *C)
 {
 	ctx_ui_log( "browser_exit");
 	BROWSER_EXIT = 0;
-	screen_switch_by_name( "screen_main");
+	if( SCREEN)
+	{
+		printf("switching to %s\n", SCREEN->id.name);
+		screen_switch_by_name( SCREEN->id.name);
+	}
+	else
+	{
+		screen_switch_by_name( "screen_main");
+	}
+
 	ctx_show_browser = 0;
 	UI_EVENT = UI_EVENT_NULL;
 	UI_STATE = state_ui_default;
@@ -38,7 +55,7 @@ void state_browser( t_context *C, t_event *e)
 	}
 	else
 	{
-		t_node *node = scene_node_get( C->scene, dt_block, "block_browser");
+		t_node *node = scene_get_node_by_type_name( C->scene, dt_block, "block_browser");
 
 		switch( e->type)
 		{
@@ -59,7 +76,7 @@ void state_browser( t_context *C, t_event *e)
 void ctx_ui_browser( t_context *C)
 {
 	ctx_ui_log( "ui_browser");
-	t_node *node = scene_node_get( C->scene, dt_block, "block_browser");
+	t_node *node = scene_get_node_by_type_name( C->scene, dt_block, "block_browser");
 	if( node)
 	{
 		screen_switch_by_name( "screen_browser");

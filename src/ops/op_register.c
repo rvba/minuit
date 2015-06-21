@@ -42,7 +42,7 @@ void *find_register(const char *target,const char *name)
 {
 	t_context *C=ctx_get();
 
-	t_node *node_dict=scene_node_get( C->scene, dt_dict, target);
+	t_node *node_dict=scene_get_node_by_type_name( C->scene, dt_dict, target);
 
 	if(node_dict)
 	{

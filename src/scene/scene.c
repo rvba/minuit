@@ -126,7 +126,7 @@ t_node *scene_get_var(t_scene *sc,void *ptr)
 }
 
 // Get A Node by Name (With Warning Message) 
-t_node *scene_node_get( t_scene *sc, t_data_type type, const char *name)
+t_node *scene_get_node_by_type_name( t_scene *sc, t_data_type type, const char *name)
 {
 	t_lst *lst=scene_lst_get(sc,type);
 

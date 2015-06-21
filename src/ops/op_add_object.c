@@ -418,9 +418,12 @@ void *op_add_default(t_brick *brick)
 
 void *op_add_mn(t_brick *brick)
 {
-	t_context *C=ctx_get();
+	t_context *C = ctx_get();
+	browser_enter( C, add_mn);
+	/*
 	C->event->callback=add_mn;
 	ctx_ui_event_add( UI_EVENT_BROWSER_SHOW);
+	*/
 
 	return NULL;
 }

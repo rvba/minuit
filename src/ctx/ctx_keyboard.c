@@ -57,7 +57,7 @@ void switch_txt(t_context *C)
 
 void switch_sets(t_context *C)
 {
-	t_node *node_screen_sets = scene_node_get( C->scene, dt_screen, "screen_sets");
+	t_node *node_screen_sets = scene_get_node_by_type_name( C->scene, dt_screen, "screen_sets");
 	t_screen *screen_set = ( t_screen *) node_screen_sets->data;
 
 	if(C->ui->show_sets)
@@ -74,7 +74,7 @@ void switch_sets(t_context *C)
 
 void show_sets(t_context *C)
 {
-	t_node *node_screen_sets = scene_node_get( C->scene, dt_screen , "screen_sets");
+	t_node *node_screen_sets = scene_get_node_by_type_name( C->scene, dt_screen , "screen_sets");
 	t_screen *screen_set = ( t_screen *) node_screen_sets->data;
 
 	screen_set->is_active = 1;
@@ -83,7 +83,7 @@ void show_sets(t_context *C)
 
 void switch_bricks(t_context *C)
 {
-	t_node *node = scene_node_get( C->scene, dt_screen , "screen_bricks");
+	t_node *node = scene_get_node_by_type_name( C->scene, dt_screen , "screen_bricks");
 	t_screen *screen = ( t_screen *) node->data;
 
 	if(C->ui->show_bricks)
@@ -133,7 +133,7 @@ void op_reset( t_context *C)
 void switch_info( t_context *C)
 {
 	t_term *term = term_get("term_info");
-	t_node *node = scene_node_get( C->scene, dt_screen , "screen_info");
+	t_node *node = scene_get_node_by_type_name( C->scene, dt_screen , "screen_info");
 	t_screen *screen = node->data;
 
 	int visible = term->visible;

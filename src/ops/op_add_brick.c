@@ -448,7 +448,7 @@ t_node *add_brick_operator(t_context *C,t_block *block,const char *name)
 
 t_block *add_default_menu(t_context *C, const char *name)
 {
-	t_node *menu_root = scene_node_get( C->scene, dt_block, "menu_mouse");
+	t_node *menu_root = scene_get_node_by_type_name( C->scene, dt_block, "menu_mouse");
 	t_block *block_root = ( t_block *) menu_root->data;
 
 	t_node *menu = block_make(name,"menu");
