@@ -118,6 +118,8 @@ struct MINscreen;
 #define PADEIGHT	56
 #define PADNINE		57
 
+#define DELKEY		127
+
 #define SHIFTKEY	200
 #define ALTKEY		201
 #define CTRLKEY		202
