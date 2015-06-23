@@ -335,16 +335,6 @@ void *object_get_ref(t_object *object, const char *ref)
 	return p;
 }
 
-// REMOVE
-
-void _object_free(t_object *object)
-{
-	if(object->mesh) _mesh_free(object->mesh);
-	// object->data is NULL 
-	// object->ref is NULL
-	// object->blocks is NULL
-}
-
 // FREE
 
 void object_free(t_object *object)
@@ -355,26 +345,10 @@ void object_free(t_object *object)
 	// free data
 	scene_remove_data_node( sc, object->id.node);
 
-	// free ref block 
-	if(object->ref)
-	{
-		// remove from global list
-		//t_lst *lst = get_target_list(C);
-		t_set *set = object->ref->set;
-		t_lst *lst = set->blocks;
-
-		list_remove_by_ptr(lst,object->ref);
-		// free block
-		scene_delete(sc,object->ref);
-	}
-
+	if(object->ref) scene_delete(sc,object->ref);
 	if(object->mesh) scene_delete(sc,object->mesh);
 	if(object->data) scene_delete(sc,object->data);
-	if(object->blocks)
-	{
-		list_cleanup(object->blocks);
-		scene_delete(sc,object->blocks);
-	}
+	if(object->blocks) scene_delete(sc,object->blocks);
 
 	mem_free( object, sizeof( t_object));
 }

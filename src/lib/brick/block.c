@@ -1068,6 +1068,7 @@ void block_bricks_free(t_block *block)
 	for(l=block->bricks->first;l;l=l->next)
 	{
 		b=l->data;
+		b->cls->disconnect( b);
 		scene_delete(sc,b);
 	}
 }
@@ -1078,8 +1079,21 @@ void block_free( t_block *block)
 {
 	t_scene *sc = scene_get();
 
+	if( block->set)
+	{
+		if( block->clone)
+		{
+			t_block *block_parent = block->clone;
+			block_parent->clones -= 1;
+		}
+
+		list_remove_by_ptr(block->set->blocks,block);
+	}
+
 	// free bricks
 	block_bricks_free( block);
+
+	if( block->rhizome) rhizome_block_remove( block->rhizome, block);
 
 	// free lst
 	scene_delete( sc, block->bricks);

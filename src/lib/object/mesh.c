@@ -215,29 +215,6 @@ void mesh_add_default_color(t_mesh *mesh)
 	mesh_add_brick_color(mesh);
 }
 
-// ADD BRICK VERTEX
-
-void mesh_add_brick_vertex(t_context *C,t_mesh *mesh)
-{
-	// New Block
-	t_node *_node_block=add_block(C,"vertex");
-	t_block *_block=_node_block->data;
-
-	// add vertex
-	scene_add_ref(C->scene,"struct_ref","mesh","vertex",&mesh->vertex,mesh);
-	add_part_vlst(C,_block,dt_vlst,"vertex",mesh->vertex);
-	t_brick *brick_count = block_brick_get(_block,"count:");
-
-	// Bind
-	brick_binding_add(brick_count, dt_int, &mesh->var.tot_vertex);
-
-	// Ref
-	scene_add_ref(C->scene,"struct_ref","mesh","tot vertex",&mesh->var.tot_vertex,mesh);
-
-	// Add Global offset
-	add_block_offset(C,_block);
-}
-
 void mesh_add_brick_mesh(t_context *C, t_node *node_mesh)
 {
 	// New Block
@@ -299,9 +276,6 @@ t_node *mesh_make(
 			mesh->vertex=vlst_make("vertex", dt_float, 3, totvert, NULL);
 			vlst_init( mesh->vertex);
 		}
-
-		// add brick vertex
-		if(C->ui->add_bricks) mesh_add_brick_vertex(C,mesh);
 	}
 
 	// add quad list
@@ -466,34 +440,6 @@ void *mesh_new(const char *name)
 }
 
 // FREE
-
-void _mesh_free(t_mesh *mesh)
-{
-	if (mesh->vertex) vlst_free(mesh->vertex); 
-	if (mesh->quads) vlst_free(mesh->quads);
-	if (mesh->tris) vlst_free(mesh->tris);
-	if (mesh->uvs) vlst_free(mesh->uvs);
-	if (mesh->edges) vlst_free(mesh->edges);
-	if (mesh->edges_color) vlst_free(mesh->edges_color);
-
-	if (mesh->quad_vertex) vlst_free(mesh->quad_vertex);
-	if (mesh->quad_face) vlst_free(mesh->quad_face);
-	if (mesh->quad_normal) vlst_free(mesh->quad_normal);
-	if (mesh->quad_color) vlst_free(mesh->quad_color); 
-	if (mesh->quad_uv) vlst_free(mesh->quad_uv);
-
-	if (mesh->tri_vertex) vlst_free(mesh->tri_vertex);
-	if (mesh->tri_face) vlst_free(mesh->tri_face);
-	if (mesh->tri_normal) vlst_free(mesh->tri_normal);
-	if (mesh->tri_color) vlst_free(mesh->tri_color);
-	if (mesh->tri_uv) vlst_free(mesh->tri_uv);
-
-	if(mesh->material) _material_free(mesh->material);
-	if(mesh->texture) _texture_free(mesh->texture);
-
-	mem_free( mesh, sizeof( t_mesh));
-}
-
 void mesh_free(t_mesh *mesh)
 {
 	t_context *C=ctx_get();
@@ -516,11 +462,10 @@ void mesh_free(t_mesh *mesh)
 	if (mesh->tri_color) scene_delete(sc,mesh->tri_color);
 	if (mesh->tri_uv) scene_delete(sc,mesh->tri_uv);
 
-
-	//XXX
+	if( mesh->ref) scene_delete(sc, mesh->ref);
+	if( mesh->edges) scene_delete(sc, mesh->edges);
+	if( mesh->edges_color) scene_delete(sc, mesh->edges_color);
 	// material
-	// texture
-	// edges
 }
 
 

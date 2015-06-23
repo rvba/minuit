@@ -929,8 +929,10 @@ void *vlst_new(const char *name)
 
 void vlst_free(t_vlst *vlst)
 {
+	t_context *C = ctx_get();
 	int l = vlst->count * vlst->length * vlst->size;
 	if(vlst->data) mem_free(vlst->data, l);
+	if(vlst->ref) scene_delete( C->scene, vlst->ref);
 	mem_free( vlst, sizeof( t_vlst));
 }
 

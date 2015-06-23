@@ -103,8 +103,12 @@ t_node *op_new_cube(const char *name)
 	t_mesh *mesh = cube->data;
 
 	// Edges
-	mesh->edges = vlst_make( "edges", dt_uint, 2, 12, cube_edges);
+	//mesh->edges = vlst_make( "edges", dt_uint, 2, 12, cube_edges);
+	/*
+	mesh->edges = vlst_make( "edges", dt_uint, 2, 12, NULL);
+	_loop_unsigned_int(mesh->edges->data, cube_edges, mesh->edges->count, mesh->edges->size);
 	mesh->state.with_line =1;
+	*/
 
 	return cube;
 }
