@@ -20,7 +20,7 @@
 #define TYPE_FILE 1
 #define TYPE_DIRECTORY 2
 
-#define FILE_MAX_DIR 10
+#define FILE_MAX_DIR 150
 
 #ifdef __cplusplus
 extern "C" {
