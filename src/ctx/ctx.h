@@ -75,6 +75,7 @@ void show_sets(struct Context *C);
 void switch_sets(struct Context *C);
 void keymap_main( int key);
 void keymap_generic( int key);
+void keymap_command( int key);
 void ctx_keyboard(struct Context *C);
 
 // CTX_MOUSE
