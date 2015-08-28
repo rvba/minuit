@@ -7,7 +7,7 @@
 
 void draw_mesh_edge( t_draw *draw, struct Mesh *mesh)
 {
-	if( draw->with_edge)
+	if( draw->with_edge && mesh->edges)
 	{
 		float *c = draw->front_color;
 		glColor3f(c[0],c[1],c[2]);
