@@ -155,7 +155,6 @@ void cls_object_draw_mesh(t_object *object)
 
 				if(mesh)
 				{
-					mesh_update( mesh);
 					// selected
 					if(object->is_selected)
 					{
