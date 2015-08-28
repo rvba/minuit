@@ -24,8 +24,6 @@
 #include "texture.h"
 
 
-void mesh_add_brick_vertex(t_context *C,t_mesh *mesh);
-
 void mesh_show(t_mesh *mesh)
 {
 	printf("MESH\n");
@@ -40,13 +38,6 @@ void mesh_show(t_mesh *mesh)
 	if(mesh->quads) vlst_show( mesh->quads);
 	printf("TRIS\n");
 	if(mesh->tris) vlst_show( mesh->tris);
-}
-
-void mesh_init(t_scene *sc,t_mesh *mesh)
-{
-	int col[3];
-	scene_color_get(sc,col);
-	vcp3i(mesh->idcol,col);
 }
 
 void cls_mesh_init(t_mesh *mesh)
@@ -79,15 +70,12 @@ void *mesh_get_ref(t_mesh *mesh, const char *ref)
 	return p;
 }
 
-
 // REBIND
 
 void mesh_rebind(t_scene *sc,void *ptr)
 {
 	t_mesh *mesh=(t_mesh *)ptr;
 	
-	// REBIND
-
 	rebind(sc,"mesh","texture",(void **)&mesh->texture);
 	rebind(sc,"mesh","material",(void **)&mesh->material);
 	rebind(sc,"mesh","edges",(void **)&mesh->edges);
@@ -118,6 +106,11 @@ void mesh_rebind(t_scene *sc,void *ptr)
 	mesh->state.buffer_type=buffer_empty;
 	mesh->state.is_buffer_built=0;
 }
+
+/*
+	********************************************
+	BRICKS
+	*******************************************	*/
 
 // FACES
 
@@ -174,7 +167,6 @@ void mesh_add_brick_color(t_mesh *mesh)
 	add_block_offset(C,_block);
 }
 
-
 void mesh_add_default_color(t_mesh *mesh)
 {
 	int tot_vertex=mesh->var.tot_vertex;
@@ -195,6 +187,8 @@ void mesh_add_default_color(t_mesh *mesh)
 	mesh_add_brick_color(mesh);
 }
 
+// MESH
+
 void mesh_add_brick_mesh(t_context *C, t_node *node_mesh)
 {
 	// New Block
@@ -206,8 +200,21 @@ void mesh_add_brick_mesh(t_context *C, t_node *node_mesh)
 
 }
 
-// MAKE
+/*
+	********************************************
+	MAKE
+	*******************************************	*/
 
+// INIT
+
+void mesh_init(t_scene *sc,t_mesh *mesh)
+{
+	int col[3];
+	scene_color_get(sc,col);
+	vcp3i(mesh->idcol,col);
+}
+
+// MAKE
 
 t_node *mesh_make(
 			const char name[],
