@@ -342,7 +342,22 @@ void vlst_show(t_vlst *vlst)
 
 			else if(vlst->type == dt_uint)
 			{
-				if(vlst->length == 3)
+				if(vlst->length == 2)
+				{
+					unsigned int *d=(unsigned int *)dat;
+					for(i=0;i<count;i++)
+					{
+						if(C->event->debug_terminal)
+							printf("[%d] %u %u \n",i,d[0],d[1]);
+						if(C->event->debug_console)
+							term_log("[%d] %u %u",i,d[0],d[1]);
+						if( term)
+							term_l( term, "[%d] %u %u",i,d[0],d[1]);
+
+						d+=length;
+					}
+				}
+				else if(vlst->length == 3)
 				{
 					unsigned int *d=(unsigned int *)dat;
 					for(i=0;i<count;i++)
