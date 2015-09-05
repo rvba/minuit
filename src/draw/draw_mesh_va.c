@@ -26,8 +26,6 @@ void draw_mesh(t_draw *draw, t_scene *scene, t_mesh *mesh)
 
 	float *color=draw->front_color;
 
-	if(draw->mode==mode_selection) glEnableClientState(GL_COLOR_ARRAY);
-	if(draw->with_normal) glEnableClientState(GL_NORMAL_ARRAY);
 
 	// TEXTURE
 	if(draw->with_texture && mesh->state.with_texture)
@@ -104,8 +102,7 @@ void draw_mesh(t_draw *draw, t_scene *scene, t_mesh *mesh)
 		}
 	}
 	// DRAW MODE draw faces
-	//else if(draw->with_face && mesh->state.has_face)
-	else if(draw->with_face)
+	else if(draw->with_face && mesh->state.has_face)
 	{
 		if (draw->with_light)
 		{
@@ -113,6 +110,9 @@ void draw_mesh(t_draw *draw, t_scene *scene, t_mesh *mesh)
 			GLfloat model_ambient[] = {1,1,1,1};
 			glLightModelfv(GL_LIGHT_MODEL_AMBIENT,model_ambient);
 		}
+		
+		if(draw->mode==mode_selection) glEnableClientState(GL_COLOR_ARRAY);
+		if(draw->with_normal) glEnableClientState(GL_NORMAL_ARRAY);
 
 		// quads 
 
