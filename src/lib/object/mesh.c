@@ -23,7 +23,6 @@
 #include "material.h"
 #include "texture.h"
 
-
 void mesh_show(t_mesh *mesh)
 {
 	printf("MESH\n");
