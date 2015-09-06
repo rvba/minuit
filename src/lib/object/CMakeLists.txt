@@ -5,8 +5,9 @@ set(
 	image.c  
 	light.c  
 	material.c  
-	mesh_buffer.c  
 	mesh.h            
+	mesh.c         
+	mesh_buffer.c  
 	object.h  
 	texture.c
 	camera.h  
@@ -14,8 +15,6 @@ set(
 	image.h  
 	light.h  
 	material.h  
-	mesh.c         
-	mesh_transform.c  
 	object.c  
 	texture.h
 	)

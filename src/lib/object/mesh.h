@@ -49,7 +49,6 @@ struct Mesh_Var
 
 struct Mesh_State
 {
-	// OFF
 	int has_face:1;
 	int has_tri:1;
 	int has_quad:1;
@@ -127,7 +126,6 @@ void 		mesh_vertex_add(t_mesh *mesh, float *v);
 void		mesh_uv_add(t_mesh *mesh,int *uvs,int totuv);
 void * 		mesh_new(const char *name);
 
-void		 _mesh_free(t_mesh *mesh);
 void 		mesh_free(t_mesh *mesh);
 void 		mesh_update(t_mesh *mesh);
 
@@ -149,6 +147,7 @@ void		mesh_rebind(struct Scene *sc,void *ptr);
 void 		mesh_init(struct Scene *sc,t_mesh *mesh);
 
 t_mesh *	mesh_clone(t_mesh *mesh);
+void		mesh_show(t_mesh *mesh);
 
 
 // MESH_BUFFER
@@ -158,20 +157,6 @@ void mesh_init_buffers(t_mesh *mesh,t_mesh_buffer_type type);
 void mesh_add_brick_color(t_mesh *mesh);
 void mesh_add_default_color(t_mesh *mesh);
 void mesh_add_brick_faces(t_mesh *mesh);
-
-// OP_MESH
-
-void 		mesh_object_add(struct Node *node,struct Node *object);
-void 		mesh_line_add(t_mesh *mesh,int *lines,int totline);
-void 		mesh_line_cube_add(t_mesh *mesh);
-void 		mesh_calc_vertex_array(t_mesh *mesh);
-void 		mesh_build_vertex_array(t_mesh *mesh);
-void 		mesh_do_quad_colors(t_mesh *mesh,int *col);
-void 		mesh_do_tri_colors(t_mesh *mesh,int *col);
-void 		mesh_do_quad_normals(t_mesh *mesh);
-void 		mesh_do_tri_normals(t_mesh *mesh);
-void 		mesh_recalc_normals(t_mesh *mesh);
-void 		mesh_show(t_mesh *mesh);
 
 #ifdef __cplusplus
 }
