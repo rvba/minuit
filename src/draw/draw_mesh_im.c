@@ -77,7 +77,7 @@ void draw_mesh_edges(t_draw *draw, t_mesh *mesh)
 	}
 }
 
-void draw_mesh_direct_faces(t_draw *draw, t_mesh *mesh)
+void draw_mesh_direct_quads(t_draw *draw, t_mesh *mesh)
 {
 	t_vlst *vertex=mesh->vertex;
 	t_vlst *quads=mesh->quads;
@@ -90,8 +90,6 @@ void draw_mesh_direct_faces(t_draw *draw, t_mesh *mesh)
 		if(quads)
 		{
 			int *q = ( int *) quads->data;		// quad indices
-			t_vlst *vlst_quad = mesh->quad_normal;
-			float *normals = ( float *) vlst_quad->data;
 
 			float outline[4*3];
 
@@ -103,7 +101,14 @@ void draw_mesh_direct_faces(t_draw *draw, t_mesh *mesh)
 				{
 					// normal
 					if(draw->with_normal)
-						glNormal3f(normals[(i*3)+0],normals[(i*3)+1],normals[(i*3)+2]);
+					{
+						t_vlst *vlst = mesh->quad_normal;
+						if(vlst)
+						{
+							float *normals = ( float *) vlst->data;
+							glNormal3f(normals[(i*3)+0],normals[(i*3)+1],normals[(i*3)+2]);
+						}
+					}
 
 					// selection
 					if(draw->mode == mode_selection)
@@ -142,6 +147,82 @@ void draw_mesh_direct_faces(t_draw *draw, t_mesh *mesh)
 	}
 }
 
+void draw_mesh_direct_tris(t_draw *draw, t_mesh *mesh)
+{
+	t_vlst *vertex=mesh->vertex;
+	t_vlst *tris=mesh->tris;
+
+	if(vertex)
+	{
+		GLfloat *v = ( GLfloat *) vertex->data;	// vertices 
+		int i,j,n;
+		// quads
+		if(tris)
+		{
+			int *q = ( int *) tris->data;		// quad indices
+
+			float outline[4*3];
+
+			j=0;
+			for(i=0;i<tris->count;i++)
+			{
+				glBegin(GL_TRIANGLES);
+				for(n=0;n<3;n++)
+				{
+					// normal
+					if(draw->with_normal)
+					{
+						t_vlst *vlst = mesh->tri_normal;
+						if( vlst)
+						{
+							float *normals = ( float *) vlst->data;
+							glNormal3f(normals[(i*3)+0],normals[(i*3)+1],normals[(i*3)+2]);
+						}
+					}
+
+					// selection
+					if(draw->mode == mode_selection)
+					{
+						float c[3];
+						c[0] = (float)mesh->idcol[0]/255;
+						c[1] = (float)mesh->idcol[1]/255;
+						c[2] = (float)mesh->idcol[2]/255;
+						glColor3f(c[0],c[1],c[2]);
+					}
+
+					// vertex
+					if(draw->with_face)
+						glVertex3f(v[(q[j]*3)],v[(q[j]*3)+1],v[(q[j]*3)+2]);
+
+					outline[(n*3)+0] = v[(q[j]*3)+0]; 
+					outline[(n*3)+1] = v[(q[j]*3)+1]; 
+					outline[(n*3)+2] = v[(q[j]*3)+2]; 
+
+					j++;
+				}
+				glEnd();
+
+				if(draw->with_face_outline)
+				{
+					glDisable(GL_LIGHTING);
+					if(draw->with_face)
+						skt_closedline(outline,3,draw->back_color,1);
+					else
+						skt_closedline(outline,3,draw->front_color,1);
+					glEnable(GL_LIGHTING);
+				}
+			}
+		}
+
+	}
+}
+
+void draw_mesh_direct_faces(t_draw *draw, t_mesh *mesh)
+{
+	draw_mesh_direct_quads( draw, mesh);
+	draw_mesh_direct_tris( draw, mesh);
+}
+
 void draw_mesh_direct_selection(t_draw *draw, t_mesh *mesh)
 {
 	float *color=draw->front_color;
@@ -156,11 +237,13 @@ void draw_mesh_direct_selection(t_draw *draw, t_mesh *mesh)
 		glColor3f(color[0],color[1],color[2]);
 
 		if(mesh->state.has_quad) draw_mesh_direct_faces(draw, mesh); 
+		if(mesh->state.has_tri) draw_mesh_direct_tris(draw, mesh); 
 
 		glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 		glColor3f( 0.0f, 0.0f, 0.0f );
 
 		if(mesh->state.has_quad) draw_mesh_direct_faces(draw, mesh); 
+		if(mesh->state.has_tri) draw_mesh_direct_tris(draw, mesh); 
 
 		glDisable( GL_POLYGON_OFFSET_FILL );
 		glEnable( GL_LIGHTING );
@@ -188,6 +271,7 @@ void draw_mesh_direct_selection_stencil(t_draw *draw, t_mesh *mesh)
 		glColor3f(0,0,0);
 
 		if(mesh->state.has_quad) draw_mesh_direct_faces(draw, mesh); 
+		if(mesh->state.has_tri) draw_mesh_direct_tris(draw, mesh); 
 
 		glDisable( GL_LIGHTING);
 
@@ -263,7 +347,6 @@ void draw_mesh_direct(t_draw *draw,t_scene *scene,t_mesh *mesh)
 		draw_mesh_direct_selection_stencil(draw, mesh);
 
 	}
-
 
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_LIGHTING);
