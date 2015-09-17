@@ -103,6 +103,7 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/src/lib/data
 	${CMAKE_SOURCE_DIR}/src/lib/object
 	${CMAKE_SOURCE_DIR}/src/lib/screen
+	${CMAKE_SOURCE_DIR}/src/umber
 	${CMAKE_SOURCE_DIR}/src
 	)
 
@@ -152,7 +153,9 @@ target_link_libraries(
 		minuit-lib_brick
 		minuit-draw 
 		minuit-app 
-		minuit-base)
+		minuit-base
+		umber
+		)
 
 if(OPT_SDL)
 	target_link_libraries(minuit ${SDL_LIBRARY})
