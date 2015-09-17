@@ -16,7 +16,7 @@
 #include <string.h>
 #include <math.h>
 #include <ctype.h>
-
+#include "umber.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -26,7 +26,6 @@ extern "C" {
 
 #define APP_VERSION "0.6.6"
 
-#define _NAME_ 64
 #define _NAME_LONG_ 128
 #define _PATH_ 150
 #define _EXT_ 10
@@ -65,15 +64,6 @@ extern "C" {
 #define RIGHT 3
 #define LEFT 4
 
-typedef struct ID
-{
-	int id;
-	int id_chunk;
-	short users;
-	char name[_NAME_];
-	int store;
-	struct Node *node;
-}t_id;
 
 typedef int t_data_type;
 
