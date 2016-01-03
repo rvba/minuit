@@ -19,6 +19,15 @@ libpng12-dev
 libxmu-dev
 libxi-dev
 
++ Build +
+
+git clone https://github.com/rvba/minuit.git
+cd minuit
+git submodule update --init --recursive
+mkdir build
+cd build
+cmake ../minuit
+
 + Licence +
 
 GPL v2
