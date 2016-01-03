@@ -24,6 +24,7 @@ libxi-dev
 git clone https://github.com/rvba/minuit.git
 cd minuit
 git submodule update --init --recursive
+cd ..
 mkdir build
 cd build
 cmake ../minuit
