@@ -28,6 +28,7 @@ cd ..
 mkdir build
 cd build
 cmake ../minuit
+make
 
 + Licence +
 
