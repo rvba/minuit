@@ -7,10 +7,12 @@ set(
 	term.c  
 	term.h  
 	txt.c  
+	txt_ttf.c
 	txt.h  
 	viewport.c  
 	viewport.h
 	)
+
 
 add_library( minuit-lib_screen ${LIB_TYPE} ${SRC})
 

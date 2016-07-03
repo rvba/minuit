@@ -63,4 +63,8 @@ void txt_free(t_txt *txt);
 void txt_init(t_txt *txt,const char *name);
 void * txt_new(const char *data);
 
+#ifdef HAVE_FREETYPE
+void txt_ttf_draw( char *str);
+#endif
+
 #endif

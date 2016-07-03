@@ -21,6 +21,7 @@ option(OPT_JPG "jpg" OFF)
 option(OPT_GLEXT "glext" ON)
 option(OPT_GLUT "glut" ON)
 option(OPT_SHARED "shared" OFF)
+option(OPT_FREETYPE "freetype" ON)
 
 
 message("SHARED: ${OPT_SHARED}")
@@ -133,6 +134,14 @@ if(OPT_GLUT)
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_GLUT")
 endif()
 
+if(OPT_FREETYPE)
+	find_package(Freetype REQUIRED)
+	include_directories(${FREETYPE_INCLUDE_DIRS})
+	include_directories(${FREETYPE_INCLUDE_DIR_ft2build})
+	include_directories(${FREETYPE_INCLUDE_DIR_freetype2})
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_FREETYPE")
+endif()
+
 add_subdirectory(src)
 
 add_executable(
@@ -169,6 +178,10 @@ endif()
 
 if(OPT_GLEW)
 	target_link_libraries(minuit ${GLEW_LIBRARY})
+endif()
+
+if(OPT_FREETYPE)
+	target_link_libraries(minuit ${FREETYPE_LIBRARIES})
 endif()
 
 
