@@ -64,7 +64,10 @@ void txt_init(t_txt *txt,const char *name);
 void * txt_new(const char *data);
 
 #ifdef HAVE_FREETYPE
+int txt_ttf_init( void);
 void txt_ttf_draw( char *str);
+void txt_ttf_draw_char( char l);
+void txt_ttf_vertical_offset( float factor);
 #endif
 
 #endif

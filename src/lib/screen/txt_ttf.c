@@ -279,6 +279,10 @@ t_glyph *txt_ttf_build_glyph( const char l)
 }
 
 /* DRAW */
+void txt_ttf_vertical_offset( float factor)
+{
+	glTranslatef(0, TTF_slot->metrics.vertAdvance * factor,0);
+}
 
 void txt_ttf_draw_char( char l)
 {
@@ -290,6 +294,9 @@ void txt_ttf_draw_char( char l)
 
 	/* Render */
 	glCallList(g->list);
+
+	/* Transalte */
+	glTranslatef(TTF_slot->metrics.horiAdvance,0,0);
 }
 
 void txt_ttf_load(char *ttffilename)
@@ -309,7 +316,7 @@ void txt_ttf_load(char *ttffilename)
 	TTF_slot = TTF_face->glyph;
 }
 
-void txt_ttf_init( void)
+int txt_ttf_init( void)
 {
 	if(!TTF_INIT)
 	{
@@ -320,6 +327,8 @@ void txt_ttf_init( void)
 			TTF_READY = 1;
 		}
 	}
+
+	return TTF_READY;
 }
 
 void txt_ttf_draw( char *str)
@@ -334,7 +343,6 @@ void txt_ttf_draw( char *str)
 		for( l = str; *l; l++)
 		{
 			txt_ttf_draw_char(*l);
-			glTranslatef(TTF_slot->metrics.horiAdvance,0,0);
 		}
 	}
 }
