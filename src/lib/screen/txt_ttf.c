@@ -284,13 +284,20 @@ void txt_ttf_vertical_offset( float factor)
 	glTranslatef(0, TTF_slot->metrics.vertAdvance * factor,0);
 }
 
-void txt_ttf_draw_char( char l)
+t_glyph *txt_ttf_glyph_get( char c)
 {
 	/* Find char*/
-	t_glyph *g = GLYPH[(unsigned int)l];
+	t_glyph *g = GLYPH[(unsigned int) c];
 
 	/* Build char */
-	if(!g) g = txt_ttf_build_glyph( l);
+	if(!g) g = txt_ttf_build_glyph( c);
+
+	return g;
+}
+
+void txt_ttf_draw_char( char l)
+{
+	t_glyph *g = txt_ttf_glyph_get( l);
 
 	/* Render */
 	glCallList(g->list);
