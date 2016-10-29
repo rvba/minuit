@@ -7,11 +7,14 @@ set(
 	term.c  
 	term.h  
 	txt.c  
-	txt_ttf.c
 	txt.h  
 	viewport.c  
 	viewport.h
 	)
+
+if(HAVE_TTF)
+	set( SRC ${SRC} txt_ttf.c)
+endif()
 
 
 add_library( minuit-lib_screen ${LIB_TYPE} ${SRC})
