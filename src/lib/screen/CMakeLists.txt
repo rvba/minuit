@@ -12,7 +12,7 @@ set(
 	viewport.h
 	)
 
-if(HAVE_TTF)
+if(HAVE_FREETYPE)
 	set( SRC ${SRC} txt_ttf.c)
 endif()
 
