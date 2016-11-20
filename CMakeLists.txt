@@ -139,7 +139,7 @@ if(OPT_FREETYPE)
 	include_directories(${FREETYPE_INCLUDE_DIRS})
 	include_directories(${FREETYPE_INCLUDE_DIR_ft2build})
 	include_directories(${FREETYPE_INCLUDE_DIR_freetype2})
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_FREETYPE")
+	add_definitions(-DHAVE_FREETYPE)
 endif()
 
 add_subdirectory(src)
