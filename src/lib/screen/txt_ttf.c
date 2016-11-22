@@ -249,7 +249,7 @@ t_glyph *txt_ttf_build_glyph( const char l)
 	error = FT_Load_Char(TTF_face, l, FT_LOAD_DEFAULT);
 	if(error)
 	{
-		printf("err % d\n", error);
+		printf("[FreeType Error] Could not load char (error=%d)\n", error);
 		return NULL;
 	}
 
@@ -300,7 +300,7 @@ void txt_ttf_draw_char( char l)
 	t_glyph *g = txt_ttf_glyph_get( l);
 
 	/* Render */
-	glCallList(g->list);
+	if(g) glCallList(g->list);
 
 	/* Transalte */
 	glTranslatef(TTF_slot->metrics.horiAdvance,0,0);
@@ -314,7 +314,7 @@ void txt_ttf_load(char *ttffilename)
 
 	if (error)
 	{
-  	        printf("could not load font");
+  	        printf("[FreeType] Could not load face\n");
 		TTF_READY = 0;
 		return;
 	}
@@ -332,6 +332,11 @@ int txt_ttf_init( void)
 		{
 			txt_ttf_load( "font.ttf");
 			TTF_READY = 1;
+		}
+		else
+		{
+			printf("[FreeType] Couldn't find ttf file %s\n","font.ttf");
+
 		}
 	}
 

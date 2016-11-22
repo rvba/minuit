@@ -21,7 +21,7 @@ option(OPT_JPG "jpg" OFF)
 option(OPT_GLEXT "glext" ON)
 option(OPT_GLUT "glut" ON)
 option(OPT_SHARED "shared" OFF)
-option(OPT_FREETYPE "freetype" OFF)
+option(OPT_FREETYPE "freetype" ON)
 
 
 message("SHARED: ${OPT_SHARED}")
