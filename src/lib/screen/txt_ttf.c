@@ -30,12 +30,15 @@ typedef struct MGlyph
 	double **verts;
 	unsigned int vert_count;
 	unsigned int list;
+	float width;
+	float height;
 
 }t_glyph;
 
 /* GLYPHS */
 
 t_glyph *GLYPH[512] = {NULL};
+
 
 /* NEW */
 
@@ -56,6 +59,8 @@ t_glyph *glyph_new( void)
 	glyph->mesh_count = 0;
 	glyph->verts = NULL;
 	glyph->vert_count = 0;
+	glyph->width = 0;
+	glyph->height = 0;
 
 	return glyph;
 }
@@ -255,6 +260,12 @@ t_glyph *txt_ttf_build_glyph( const char l)
 
 	/* Build geometry */
 	t_glyph *glyph = txt_ttf_build_geometry(TTF_slot);
+
+	/* width, height */
+	glyph->width = TTF_slot->metrics.horiAdvance;
+	glyph->height = TTF_slot->metrics.vertAdvance;
+
+	/* Store it */
 	GLYPH[(unsigned int) l] = glyph;
 
 	/* Build lists */
@@ -278,11 +289,7 @@ t_glyph *txt_ttf_build_glyph( const char l)
 	return glyph;
 }
 
-/* DRAW */
-void txt_ttf_vertical_offset( float factor)
-{
-	glTranslatef(0, TTF_slot->metrics.vertAdvance * factor,0);
-}
+/* GET */
 
 t_glyph *txt_ttf_glyph_get( char c)
 {
@@ -295,15 +302,33 @@ t_glyph *txt_ttf_glyph_get( char c)
 	return g;
 }
 
+float txt_ttf_glyph_get_width( char letter)
+{
+	t_glyph *g = txt_ttf_glyph_get( letter);
+	return g->width;
+}
+
+float txt_ttf_glyph_get_height( char letter)
+{
+	t_glyph *g = txt_ttf_glyph_get( letter);
+	return g->height;
+}
+
+/* DRAW */
+void txt_ttf_vertical_offset( float factor)
+{
+	glTranslatef(0, TTF_slot->metrics.vertAdvance * factor,0);
+}
+
 void txt_ttf_draw_char( char l)
 {
 	t_glyph *g = txt_ttf_glyph_get( l);
 
-	/* Render */
-	if(g) glCallList(g->list);
-
-	/* Transalte */
-	glTranslatef(TTF_slot->metrics.horiAdvance,0,0);
+	if(g)
+	{
+		glCallList(g->list);
+		glTranslatef(g->width,0,0);
+	}	
 }
 
 void txt_ttf_load(char *ttffilename)
