@@ -7,6 +7,8 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+#define LIBERATION "/usr/share/fonts/truetype/liberation/LiberationMono-Regular.ttf" 
+
 static int TTF_INIT = 0;
 static int TTF_READY = 0;
 
@@ -347,6 +349,7 @@ void txt_ttf_load(char *ttffilename)
 	error = FT_Set_Char_Size(TTF_face, 100 * 64, 0, 10, 0);
 	TTF_slot = TTF_face->glyph;
 }
+	
 
 int txt_ttf_init( void)
 {
@@ -356,6 +359,11 @@ int txt_ttf_init( void)
 		if(file_exists(file_new("font.ttf")))
 		{
 			txt_ttf_load( "font.ttf");
+			TTF_READY = 1;
+		}
+		else if( file_exists( file_new( LIBERATION))) 
+	       	{
+			txt_ttf_load( LIBERATION);
 			TTF_READY = 1;
 		}
 		else
