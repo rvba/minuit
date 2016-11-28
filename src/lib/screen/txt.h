@@ -65,7 +65,7 @@ void * txt_new(const char *data);
 
 #ifdef HAVE_FREETYPE
 float txt_ttf_glyph_get_width( char c);
-float txt_ttf_glyph_get_hegiht( char c);
+float txt_ttf_glyph_get_height( char c);
 int txt_ttf_init( void);
 void txt_ttf_draw( char *str);
 void txt_ttf_draw_char( char l);
