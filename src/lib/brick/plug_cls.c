@@ -1364,9 +1364,9 @@ void __cls_plug_flow_vlst(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 	if(src_plug)
 	{
 		t_data_type src_type=src_plug->data_type;
-		t_vlst *vlst = plug->data;
+		//t_vlst *vlst = plug->data;
 		t_lst *lst = NULL;
-		t_data_type lst_type = dt_null;
+		//t_data_type lst_type = dt_null;
 
 		switch(src_type)
 		{
@@ -1382,6 +1382,9 @@ void __cls_plug_flow_vlst(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 				lst = src_plug->data;
 				if(lst)
 				{
+					/*
+					 * broke since lst->type removal 21-12-16
+					 *
 				lst_type = lst->type;
 				switch(lst_type)
 				{
@@ -1395,6 +1398,7 @@ void __cls_plug_flow_vlst(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 						printf("?? %s\n", data_name_get( lst_type));
 						break;
 				}
+					*/
 				}
 				break;
 				

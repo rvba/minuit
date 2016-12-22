@@ -10,6 +10,8 @@
 #ifndef __BASE_H__
 #define __BASE_H__
 
+#include "umber.h"
+
 #include "mem.h"
 #include "vec.h"
 #include "rnd.h"
@@ -18,7 +20,6 @@
 #include "net.h"
 #include "cpt.h"
 #include "sys.h"
-#include "lst.h"
 #include "ptr.h"
 #include "sock.h"
 #include "eng.h"
@@ -36,7 +37,6 @@ extern "C" {
 #endif
 
 #define SQ(x) ((x) *(x))
-#define is( a, b) ( !( strcmp( (a), (b))))  
 
 void color_id(int *color);
 void id_show( t_id *id);

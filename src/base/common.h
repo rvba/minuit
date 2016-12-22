@@ -18,19 +18,34 @@
 #include <ctype.h>
 #include "umber.h"
 
+#include "mem.h"
+#include "vec.h"
+#include "rnd.h"
+#include "vol.h"
+#include "str.h"
+#include "net.h"
+#include "cpt.h"
+#include "sys.h"
+//#include "lst.h"
+#include "ptr.h"
+#include "sock.h"
+#include "eng.h"
+#include "srv.h"
+#include "proc.h"
+#include "clock.h"
+#include "shm.h"
+
+#ifdef HAVE_OSC
+#include "osc.h"
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#define MILLION 1000000
 
 #define APP_VERSION "0.6.6"
 
-#define _NAME_LONG_ 128
-#define _PATH_ 150
-#define _EXT_ 10
-#define _STATE_ 20
-#define _LIST_ 10
 
 #define DEBUG_PROCESS 0
 #define DEBUG_CONSOLE 0
