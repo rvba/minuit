@@ -23,6 +23,7 @@
 #include "memory.h"
 
 #include "dict.h"
+#include "vec.h"
 
 // LOCAL
 t_skt *SKT=NULL;

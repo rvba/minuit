@@ -10,7 +10,7 @@
 #ifndef __PROC_H_
 #define __PROC_H_
 
-#include "common.h"
+#include "base.h"
 #include <pthread.h>
 
 #ifdef __cplusplus

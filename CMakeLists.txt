@@ -32,6 +32,8 @@ else()
 	set(LIB_TYPE "STATIC")
 endif()
 
+add_definitions(-std=gnu89)
+
 ###############		 LIBS	#############################
 
 SET(CMAKE_FIND_LIBRARY_PREFIXES "lib")

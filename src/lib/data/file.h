@@ -10,7 +10,7 @@
 #ifndef __FILE_H
 #define __FILE_H
 
-#include "common.h"
+#include "base.h"
 
 #define PATH_RELATIVE 1
 #define PATH_ABSOLUTE 2

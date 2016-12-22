@@ -10,7 +10,7 @@
 #ifndef __CLOCK_H
 #define __CLOCK_H
 
-#include "common.h"
+#include "base.h"
 
 #include <ctype.h>
 #include <time.h>

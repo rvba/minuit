@@ -10,7 +10,7 @@
 #ifndef __OPTION_H
 #define __OPTION_H
 
-#include "common.h"
+#include "base.h"
 
 #ifdef __cplusplus
 extern "C" {

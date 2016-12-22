@@ -10,7 +10,7 @@
 #ifndef __RHIZOME_H
 #define __RHIZOME_H
 
-#include "common.h"
+#include "base.h"
 
 #ifdef __cplusplus
 extern "C" {

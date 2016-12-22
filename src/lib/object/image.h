@@ -11,7 +11,7 @@
 #define __IMAGE_H
 
 #include <GL/gl.h>
-#include "common.h"
+#include "base.h"
 
 #ifdef __cplusplus
 extern "C" {

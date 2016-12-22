@@ -10,7 +10,7 @@
 #ifndef __MESH_H_
 #define __MESH_H_
 
-#include "common.h"
+#include "base.h"
 
 #ifdef __cplusplus
 extern "C" {

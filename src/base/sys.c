@@ -7,18 +7,7 @@
  *
  */
 
-#include "common.h"
 #include "base.h"
-
-
-/*
-size_t get_memory_peak(void)
-{
-    struct rusage rusage;
-    getrusage( RUSAGE_SELF, &rusage );
-    return (size_t)(rusage.ru_maxrss * 1024L);
-}
-*/
 
 void rest( float sec)
 {

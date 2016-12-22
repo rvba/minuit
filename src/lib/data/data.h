@@ -10,7 +10,7 @@
 #ifndef __DATA_H
 #define __DATA_H
 
-#include "common.h"
+#include "base.h"
 
 #ifdef __cplusplus
 extern "C" {

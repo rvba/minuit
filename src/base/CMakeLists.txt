@@ -1,7 +1,6 @@
 # BASE
 set(SRC
 	opengl.h
-	common.h
 	cpt.h
 	cpt.c
 	clock.h

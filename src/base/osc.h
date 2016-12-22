@@ -10,7 +10,7 @@
 #ifndef __OSC_H__
 #define __OSC_H__
 
-#include "common.h"
+#include "base.h"
 #include "lo.h"
 
 #ifdef __cplusplus

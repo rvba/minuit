@@ -10,7 +10,7 @@
 #ifndef __LIGHT_H_
 #define __LIGHT_H_
 
-#include "common.h"
+#include "base.h"
 
 #ifdef __cplusplus
 extern "C" {
