@@ -10,7 +10,7 @@
 #ifndef __DATUM_H
 #define __DATUM_H
 
-#include "common.h"
+#include "base.h"
 
 #ifdef __cplusplus
 extern "C" {

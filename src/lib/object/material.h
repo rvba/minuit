@@ -11,7 +11,7 @@
 #ifndef __MATERIAL_H
 #define __MATERIAL_H
 
-#include "common.h"
+#include "base.h"
 
 #ifdef __cplusplus
 extern "C" {

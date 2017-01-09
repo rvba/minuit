@@ -10,7 +10,7 @@
 #ifndef __OBJECT_H
 #define __OBJECT_H
 
-#include "common.h"
+#include "base.h"
 
 #define OBJECT_SHADER_ON 1
 #define OBJECT_SHADER_OFF 2

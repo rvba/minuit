@@ -10,7 +10,7 @@
 #ifndef __SCENE_H
 #define __SCENE_H
 
-#include "common.h"
+#include "base.h"
 
 struct Node;
 struct NodeClass;

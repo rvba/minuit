@@ -290,6 +290,9 @@ void geo_array_delete( t_geo_array *array)
 
 void geo_lst_delete( t_lst *lst)
 {
+	/*
+	 * broke since lst->type removal 21-12-16
+	 *
 	t_link *l;
 	t_data_type type = lst->type;
 	t_geo_point *point;
@@ -312,6 +315,7 @@ void geo_lst_delete( t_lst *lst)
 
 	t_scene *sc = scene_get();
 	scene_delete( sc,  lst);
+	*/
 }
 
 void geo_free( t_geo *geo)
@@ -342,11 +346,11 @@ t_geo *geo_make( t_context *C, const char *name)
 	geo = node_geo->data;
 
 	t_lst *points = lst_new( "points");
-	points->type = dt_geo_point;
+	//points->type = dt_geo_point;
 	geo->points = points;
 
 	t_lst *edges = lst_new( "edges");
-	edges->type = dt_geo_edge;
+	//edges->type = dt_geo_edge;
 	geo->edges = edges;
 
 	if(C->ui->add_bricks)
@@ -393,7 +397,7 @@ t_geo_array *geo_array_make( t_context *C, const char *name)
 	t_geo_array *geo_array = node_geo_array->data;
 
 	t_lst *elements = lst_new(" elements");
-	elements->type = dt_geo_array;
+	//elements->type = dt_geo_array;
 	geo_array->elements = elements;
 
 	if(C->ui->add_bricks)
@@ -414,11 +418,11 @@ void geo_array_init( t_geo_array *array)
 void geo_init( t_geo *geo)
 {
 	t_lst *points = lst_new( "points");
-	points->type = dt_geo_point;
+	//points->type = dt_geo_point;
 	geo->points = points;
 
 	t_lst *edges = lst_new( "edges");
-	edges->type = dt_geo_edge;
+	//edges->type = dt_geo_edge;
 	geo->edges = edges;
 
 	t_block *block = geo->block;

@@ -11,7 +11,7 @@
 #ifndef __ENG_H
 #define __ENG_H
 
-#include "common.h"
+#include "base.h"
 
 #ifdef __cplusplus
 extern "C" {

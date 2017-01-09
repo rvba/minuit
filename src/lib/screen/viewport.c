@@ -185,6 +185,13 @@ void viewport_switch_2d( t_viewport *viewport)
 		far
 		);
 
+	viewport->left = left;
+	viewport->right = right;
+	viewport->bottom = bottom;
+	viewport->top = top;
+	viewport->near = near;
+	viewport->far = far;
+
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
@@ -411,6 +418,12 @@ void *viewport_new(const char *name)
 	viewport->height = 0;
 	viewport->x = 0;
 	viewport->y = 0;
+	viewport->left = 0;
+	viewport->right = 0;
+	viewport->bottom = 0;
+	viewport->top = 0;
+	viewport->near = 0;
+	viewport->far = 0;
 	viewport->camera = NULL;
 	viewport->draw = NULL;
 	viewport->show_controls = 0;

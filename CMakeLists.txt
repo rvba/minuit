@@ -1,5 +1,5 @@
 # MINUIT
-cmake_minimum_required(VERSION 2.6) 
+cmake_minimum_required(VERSION 2.8) 
 
 if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
 		message(FATAL_ERROR "Don't build in SOURCE directory !")
@@ -21,6 +21,7 @@ option(OPT_JPG "jpg" OFF)
 option(OPT_GLEXT "glext" ON)
 option(OPT_GLUT "glut" ON)
 option(OPT_SHARED "shared" OFF)
+option(OPT_FREETYPE "freetype" OFF)
 
 
 message("SHARED: ${OPT_SHARED}")
@@ -30,6 +31,8 @@ if(OPT_SHARED)
 else()
 	set(LIB_TYPE "STATIC")
 endif()
+
+add_definitions(-std=gnu89)
 
 ###############		 LIBS	#############################
 
@@ -133,6 +136,14 @@ if(OPT_GLUT)
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_GLUT")
 endif()
 
+if(OPT_FREETYPE)
+	find_package(Freetype REQUIRED)
+	include_directories(${FREETYPE_INCLUDE_DIRS})
+	include_directories(${FREETYPE_INCLUDE_DIR_ft2build})
+	include_directories(${FREETYPE_INCLUDE_DIR_freetype2})
+	add_definitions(-DHAVE_FREETYPE)
+endif()
+
 add_subdirectory(src)
 
 add_executable(
@@ -169,6 +180,10 @@ endif()
 
 if(OPT_GLEW)
 	target_link_libraries(minuit ${GLEW_LIBRARY})
+endif()
+
+if(OPT_FREETYPE)
+	target_link_libraries(minuit ${FREETYPE_LIBRARIES})
 endif()
 
 

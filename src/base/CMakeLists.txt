@@ -1,15 +1,10 @@
 # BASE
 set(SRC
 	opengl.h
-	common.h
 	cpt.h
 	cpt.c
 	clock.h
 	clock.c
-	lst.h
-	lst.c
-	mem.h
-	mem.c
 	eng.h
 	eng.c
 	proc.h
@@ -34,8 +29,6 @@ set(SRC
 	vec.c
 	vol.c
 	vol.h
-	base.c
-	base.h
 	)
 
 if(OPT_OSC)

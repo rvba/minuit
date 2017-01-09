@@ -12,5 +12,9 @@ set(
 	viewport.h
 	)
 
+if(OPT_FREETYPE)
+	set( SRC ${SRC} txt_ttf.c)
+endif()
+
 add_library( minuit-lib_screen ${LIB_TYPE} ${SRC})
 

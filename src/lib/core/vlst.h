@@ -14,7 +14,7 @@
 extern "C" {
 #endif
 
-#include "common.h"
+#include "base.h"
 
 struct Brick;
 struct Term;

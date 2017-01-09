@@ -10,7 +10,7 @@
 #ifndef _GRAPH_H_
 #define _GRAPH_H_
 
-#include "common.h"
+#include "base.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -10,7 +10,7 @@
 #ifndef __SCREEN_H_
 #define __SCREEN_H_
 
-#include "common.h"
+#include "base.h"
 
 #ifdef __cplusplus
 extern "C" {

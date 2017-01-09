@@ -369,7 +369,6 @@ t_lst *list_make( t_data_type type, const char *name)
 	t_node *node = scene_add( sc, dt_list, name);
 	lst = node->data;
 
-	lst->type = type;
 	return lst;
 }
 

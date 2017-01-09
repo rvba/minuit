@@ -7,7 +7,7 @@
  *
  */
 
-#include "common.h"
+#include "base.h"
 
 #ifndef __TXT_H
 #define __TXT_H
@@ -62,5 +62,14 @@ void txt_free(t_txt *txt);
 
 void txt_init(t_txt *txt,const char *name);
 void * txt_new(const char *data);
+
+#ifdef HAVE_FREETYPE
+float txt_ttf_glyph_get_width( char c);
+float txt_ttf_glyph_get_height( char c);
+int txt_ttf_init( void);
+void txt_ttf_draw( char *str);
+void txt_ttf_draw_char( char l);
+void txt_ttf_vertical_offset( float factor);
+#endif
 
 #endif

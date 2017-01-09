@@ -7,8 +7,27 @@
  *
  */
 
-#include "common.h"
 #include "base.h"
+
+void rest( float sec)
+{
+	usleep( (int)( sec * MILLION));
+}
+
+size_t get_memory_usage(void)
+{
+    long rss = 0L;
+    FILE* fp = NULL;
+    if ( (fp = fopen( "/proc/self/statm", "r" )) == NULL )
+        return (size_t)0L;     	// open error 
+    if ( fscanf( fp, "%*s%ld", &rss ) != 1 )
+    {
+        fclose( fp );
+        return (size_t)0L;     // read error
+    }
+    fclose( fp );
+    return (size_t)rss * (size_t)sysconf( _SC_PAGESIZE);
+}
 
 int sys_file_exists( const char *path)
 {

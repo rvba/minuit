@@ -10,7 +10,7 @@
 #ifndef __MODE_H_
 #define __MODE_H_
 
-#include "common.h"
+#include "base.h"
 
 struct Scene;
 struct Context;

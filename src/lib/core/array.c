@@ -146,7 +146,7 @@ inline void *array_elem_get( t_array *array, int x, int y)
 	return ( ptr + (( array->width * array->elem_size * y) + ( array->elem_size * x)));
 }
 
-inline void *array_elem_get_by_indice( t_array *array, int i)
+void *array_elem_get_by_indice( t_array *array, int i)
 {
 	unsigned char *ptr = ( unsigned char *) array->data;
 	return ( ptr +  ( array->elem_size * i));

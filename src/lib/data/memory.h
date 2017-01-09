@@ -10,7 +10,7 @@
 #ifndef __MEMORY_H_
 #define __MEMORY_H_
 
-#include "common.h"
+#include "base.h"
 
 #ifdef __cplusplus
 extern "C" {

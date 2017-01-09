@@ -1,7 +1,7 @@
 #ifndef __ARRAY_H__
 #define __ARRAY_H__
 
-#include "common.h"
+#include "base.h"
 
 struct Scene;
 
@@ -30,7 +30,7 @@ void array_get_region( t_array *array, int sx, int sy, int ex, int ey, void *_co
 
 void array_outline_get( t_array *array, int x, int y, void *( * outline)[8]);
 int array_elem_count( t_array *array);
-inline void *array_elem_get_by_indice( t_array *array, int i);
+void *array_elem_get_by_indice( t_array *array, int i);
 void *array_elem_get_near( t_array *array, int x, int y, int dir);
 void *array_elem_loop( t_array *array, int i);
 void *array_elem_get( t_array *array, int x, int y);

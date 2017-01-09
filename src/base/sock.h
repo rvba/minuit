@@ -10,7 +10,7 @@
 #ifndef __SOCK_H
 #define __SOCK_H
 
-#include "common.h"
+#include "base.h"
 
 #include <fcntl.h>
 #include <sys/types.h>

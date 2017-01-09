@@ -34,6 +34,8 @@ struct Viewport
 	int x;
 	int y;
 
+	double left,right,top,bottom,near,far;
+
 	int show_controls;
 	int show_outline;
 	int fullscreen;
