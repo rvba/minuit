@@ -331,7 +331,7 @@ void txt_ttf_draw_char( char l)
 	if(g)
 	{
 		glCallList(g->list);
-		glTranslatef(g->width,0,0);
+		//glTranslatef(g->width,0,0);
 	}	
 }
 
