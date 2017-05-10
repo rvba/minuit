@@ -264,10 +264,10 @@ t_glyph *txt_ttf_build_glyph( const char l)
 	t_glyph *glyph = txt_ttf_build_geometry(TTF_slot);
 
 	/* width, height */
-	//glyph->width = TTF_slot->metrics.horiAdvance;
-	glyph->width = TTF_slot->metrics.width;
-	//glyph->height = TTF_slot->metrics.vertAdvance;
-	glyph->height = TTF_slot->metrics.height;
+	glyph->width = TTF_slot->metrics.horiAdvance;
+	//glyph->width = TTF_slot->metrics.width;
+	glyph->height = TTF_slot->metrics.vertAdvance;
+	//glyph->height = TTF_slot->metrics.height;
 
 	/* Store it */
 	GLYPH[(unsigned int) l] = glyph;
