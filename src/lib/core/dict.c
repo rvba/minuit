@@ -27,7 +27,7 @@ void symbol_show(t_symbol *symbol)
 		case dt_string:printf("(string\t)%s:(%s)\n",name,drf_string(symbol->data));break;
 		case dt_pointer:printf("(pointer\t)%s:(%p)\n",name,symbol->data);break;
 		case dt_lst:printf("(lst\t)%s\n",name);lst_show(symbol->data);break;
-		default: printf("[WARNING symbol_show] Unknown type\n");
+		default: printf("(unkwnon type\t)%s\n",name);
 	}
 }
 			

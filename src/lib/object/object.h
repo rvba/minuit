@@ -59,6 +59,7 @@ typedef struct Object
 
 	int is_selected;
 	int is_edit_mode;
+	int is_visible;
 	int hover;
 
 	void *data; 		// struct (data)

@@ -135,7 +135,7 @@ void cls_object_draw_mesh(t_object *object)
 	t_draw *draw=C->draw;
 	t_scene *scene=C->scene;
 
-	if(object->mesh)
+	if(object->mesh && object->is_visible)
 	{
 		if( draw->mode == mode_draw || (draw->mode == mode_selection && draw->with_object_selection))
 		{

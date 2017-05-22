@@ -465,6 +465,7 @@ void *object_new(const char *name)
 	object->is_selected = 0;
 	object->hover = 0;
 	object->is_edit_mode = 0;
+	object->is_visible = 1;
 
 	object->update=object_default;
 	object->action=NULL;
