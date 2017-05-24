@@ -27,6 +27,7 @@ void 	s_remove_newline( char *target, char *src, int size);
 void 	s_write_time( char *string);
 int 	s_append( char *dest, char *src, int pos);
 void 	s_store( char *target, char source, int pos);
+void	s_increment( char *str, int max_length);
 
 #ifdef __cplusplus
 }
