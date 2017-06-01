@@ -32,6 +32,8 @@ extern "C" {
 #define UI_SHOW_STATUS 0
 #define UI_SHOW_BAR 1
 #define UI_ADD_BRICKS 1
+#define UI_ADD_BRICKS_MESH 0
+#define UI_ADD_BRICKS_DATA 0
 
 #define UI_MOUSE_IDLE		 0
 
@@ -78,6 +80,8 @@ typedef struct Ui
 	int do_connect;
 	int do_disconnect;
 	int add_bricks;
+	int add_bricks_mesh;
+	int add_bricks_data;
 	int step;
 	int step_reset;
 	int fixed_menu;

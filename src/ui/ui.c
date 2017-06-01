@@ -288,6 +288,8 @@ t_ui *ui_new(void)
 	ui->step = 0;
 	ui->step_reset = 0;
 	ui->add_bricks = UI_ADD_BRICKS;
+	ui->add_bricks_mesh = UI_ADD_BRICKS_MESH;
+	ui->add_bricks_data = UI_ADD_BRICKS_DATA;
 
 	ui->update_links = 1;
 

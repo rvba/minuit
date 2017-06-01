@@ -242,7 +242,8 @@ t_node *mesh_make(
 	mesh->var.tot_quad_face=totquad;
 	mesh->var.tot_tri_face=tottri;
 
-	if(C->ui->add_bricks) mesh_add_brick_mesh(C,node_mesh);
+	if(C->ui->add_bricks && C->ui->add_bricks_mesh) 
+		mesh_add_brick_mesh(C,node_mesh);
 
 	// add data node
 	scene_add_data_node( C->scene, "app_node", "mesh", name, node_mesh);
