@@ -18,6 +18,8 @@
 #include "file.h"
 #include "base.h"
 
+static void (* QUIT_OP)(void) = NULL;
+
 void op_set_color(t_context *C,int color)
 {
 	if(C->event->color_transition)
@@ -190,10 +192,18 @@ int op_post_quit(t_node *node)
 		}
 	}
 
+	/* Quit Operator */
+	if( QUIT_OP) QUIT_OP();
+
 	// exit badly
 	op_exit();
 
 	return 1;
+}
+
+void op_quit_operator_set( void (* ptr)( void))
+{
+	QUIT_OP = *ptr;
 }
 
 

@@ -40,6 +40,7 @@ void 		op_switch_color(struct Context *C);
 void		op_set_color(struct Context *C,int color);
 int 		op_exit(void);
 int 		op_quit(struct Node *node);
+void		op_quit_operator_set( void (* ptr)( void));
 void 		op_export(struct Node *node);
 
 // OP_C
