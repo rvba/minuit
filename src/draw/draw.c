@@ -39,7 +39,6 @@ void draw_clear(float r,float g,float b,float a)
 	glClear(GL_COLOR_BUFFER_BIT);
 	glClearColor(0,0,0,0);
 	glClear(GL_DEPTH_BUFFER_BIT);
-	
 }
 
 void draw_lights(t_draw *draw, t_scene *scene)

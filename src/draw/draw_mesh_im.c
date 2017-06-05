@@ -331,7 +331,8 @@ void draw_mesh_direct(t_draw *draw,t_scene *scene,t_mesh *mesh)
 	if (draw->with_light && draw->mode != mode_selection)
 	{
 		glEnable(GL_LIGHTING);
-		GLfloat model_ambient[] = {1,1,1,1};
+		float f = 1.5;
+		GLfloat model_ambient[] = {f,f,f,1};
 		glLightModelfv(GL_LIGHT_MODEL_AMBIENT,model_ambient);
 	}
 
