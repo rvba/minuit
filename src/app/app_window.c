@@ -35,6 +35,11 @@ void app_gl_reshape(int width,int height)
 	glViewport(0,0,width,height);
 }
 
+void app_gl_move( int x, int y)
+{
+	glutPositionWindow( x, y);
+}
+
 // FULLSCREEN -- glViewport
 
 void app_screen_set_fullscreen(t_app *app,int state)

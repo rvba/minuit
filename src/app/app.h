@@ -204,6 +204,7 @@ void app_gl_idle(void);
 
 t_window *window_new(int with_glut);
 void app_gl_reshape(int width,int height);
+void app_gl_move( int x, int y);
 void app_screen_switch_fullscreen(t_app *app);
 void app_screen_set_fullscreen(t_app *app,int state);
 
