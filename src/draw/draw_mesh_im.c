@@ -64,8 +64,10 @@ void draw_mesh_edges(t_draw *draw, t_mesh *mesh)
 					else
 					{
 						t_context *C = ctx_get();
-						color = C->draw->front_color;
+						color = C->draw->back_color;
 					}
+
+					//float color[] = {1,0,0,0,};
 
 					skt_line(x,y,width,color);
 				}
