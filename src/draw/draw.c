@@ -212,6 +212,7 @@ t_draw *draw_new(void)
 
 	draw->draw_lights = 1;
 	draw->edit_mode = 0;
+	draw->edge_use_front_color = 0;
 
 	return draw;
 }

@@ -64,7 +64,8 @@ void draw_mesh_edges(t_draw *draw, t_mesh *mesh)
 					else
 					{
 						t_context *C = ctx_get();
-						color = C->draw->back_color;
+						if( !C->draw->edge_use_front_color) color = C->draw->back_color;
+						else color = C->draw->front_color;
 					}
 
 					//float color[] = {1,0,0,0,};

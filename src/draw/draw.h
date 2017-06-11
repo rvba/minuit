@@ -107,6 +107,7 @@ typedef struct Draw
 	int draw_lights;
 
 	int edit_mode;
+	int edge_use_front_color;
 
 }t_draw;
 
