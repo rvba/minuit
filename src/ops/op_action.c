@@ -78,8 +78,16 @@ void op_set_color(t_context *C,int color)
 			{
 				vset4i(C->ui->background_color,255,255,255,0);
 				vset4f(C->ui->front_color,0,0,0,0);
+
+				/*
 				vset4f(C->draw->front_color,0,0,0,0);
 				vset4f(C->draw->back_color,1,1,1,0);
+				*/
+
+				/* remain black */
+				vset4f(C->draw->front_color,1,1,1,0);
+				vset4f(C->draw->back_color,0,0,0,0);
+
 				vset4f(C->ui->back_color,1,1,1,0);
 
 				C->event->color_transition = 0;
