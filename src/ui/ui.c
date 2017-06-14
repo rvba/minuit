@@ -175,6 +175,7 @@ void ui_draw_term(void)
 
 void ui_draw_screens(t_context *C)
 {
+	/*
 	t_lst *lst = scene_lst_get( C->scene, dt_screen);
 	t_link *l = lst->first;
 	t_node *n;
@@ -192,6 +193,26 @@ void ui_draw_screens(t_context *C)
 			}
 		}
 	}
+	*/
+
+	t_lst *lst = scene_lst_get( C->scene, dt_screen);
+	t_link *l = lst->last;
+	t_node *n;
+	t_screen *s;
+
+	if(l)
+	{
+		for(;l;l=l->prev)
+		{
+			n = ( t_node *) l->data;
+			s = ( t_screen *) n->data;
+			if(s->is_visible)
+			{
+				s->draw(s);
+			}
+		}
+	}
+
 }
 
 // DRAW
