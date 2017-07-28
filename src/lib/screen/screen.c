@@ -229,7 +229,7 @@ void screen_switch_by_name( const char *name)
 			t_screen *this_screen=this_node->data;
 
 			// enable screen
-			if(is(this_screen->id.name, name))
+			if(iseq(this_screen->id.name, name))
 			{
 				this_screen->is_visible=1;
 				this_screen->is_active=1;
@@ -307,7 +307,7 @@ void screen_rebind(t_scene *scene, void *ptr)
 	rebind(scene,"screen","blocks",(void **)&screen->blocks);
 	rebind(scene,"screen","viewports",(void **)&screen->viewports);
 
-	if( is( screen->id.name, "screen_view3d"))
+	if( iseq( screen->id.name, "screen_view3d"))
 	{
 		t_context *C = ctx_get();
 		C->scene->has_generic_viewport = 1;

@@ -42,7 +42,7 @@ t_module *mode_module_add(t_mode *mode, const char *name, void *data)
 		for(link=mode->modules->first;link;link=link->next)
 		{
 			t_module *module=link->data;
-			if( is( module->id.name,"name"))
+			if( iseq( module->id.name,"name"))
 			{
 				printf("module %s exists\n",name);
 				is_free=0;
@@ -68,7 +68,7 @@ t_module *mode_module_get( t_mode *mode, const char *name)
 	for(link=mode->modules->first;link;link=link->next)
 	{
 		t_module *module=link->data;
-		if( is( module->id.name, name)) return module;
+		if( iseq( module->id.name, name)) return module;
 	}
 	return NULL;
 }

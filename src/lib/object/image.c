@@ -136,7 +136,7 @@ t_image *image_open( const char *path)
 	t_file *file = file_new( path);
 	file_init( file);
 
-	if( is( file->ext, "jpg"))
+	if( iseq( file->ext, "jpg"))
 	{
 		#ifdef HAVE_JPG
 	     	image = img_read_jpg( path);
@@ -144,7 +144,7 @@ t_image *image_open( const char *path)
 		printf("[WARNING] image_open: JPG not enabled\n");
 		#endif
 	}
-	else if( is( file->ext, "png"))
+	else if( iseq( file->ext, "png"))
 	{
 		#ifdef HAVE_PNG
 	       	image = img_read_png( path);

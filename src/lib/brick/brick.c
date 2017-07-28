@@ -435,9 +435,9 @@ void *brick_get_ref(t_brick *brick, const char *ref)
 {
 	void *p;
 
-	if(is(ref,"in"))  p=&brick->plug_in; 
-	else if(is(ref,"intern"))  p=&brick->plug_intern; 
-	else if(is(ref,"out"))  p=&brick->plug_out; 
+	if(iseq(ref,"in"))  p=&brick->plug_in; 
+	else if(iseq(ref,"intern"))  p=&brick->plug_intern; 
+	else if(iseq(ref,"out"))  p=&brick->plug_out; 
 	else
 	{
 		printf("[ERROR berick_get_ref] Unknown ref %s \n",ref);
@@ -584,11 +584,11 @@ t_node *brick_make(t_block *block,const char *name,t_brick_type brick_type,t_dat
 	brick->cls->init( brick);
 
 	// Frame Based
-	if(is(name,"frame"))
+	if(iseq(name,"frame"))
 	{
 		block->block_state.frame_based  =1;
 	}
-	else if(is(name,"rnd"))
+	else if(iseq(name,"rnd"))
 	{
 		block->block_state.frame_based  =1;
 	}

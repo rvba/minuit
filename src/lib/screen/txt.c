@@ -613,7 +613,7 @@ char special_key[8];
 
 int get_special_key()
 {
-	if(is(special_key,"eacute")) return 233;
+	if(iseq(special_key,"eacute")) return 233;
 	else return 0;
 }
 

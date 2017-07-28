@@ -92,9 +92,9 @@ void skt_color(float r,float g,float b,float a)
 
 void skt_tint(const char tint[])
 {
-	if     (is(tint,"white")) skt_color(1,1,1,0);
-	else if(is(tint,"black")) skt_color(0,0,0,0);
-	else if(is(tint,"red")) skt_color(1,0,0,1);
+	if     (iseq(tint,"white")) skt_color(1,1,1,0);
+	else if(iseq(tint,"black")) skt_color(0,0,0,0);
+	else if(iseq(tint,"red")) skt_color(1,0,0,1);
 }
 
 // LINE

@@ -577,7 +577,7 @@ void *geo_array_get_ref(t_geo_array *array, const char *ref)
 {
 	void *p;
 
-	if(is(ref,"count"))  			p=&array->count; 
+	if(iseq(ref,"count"))  			p=&array->count; 
 	else
 	{
 		printf("[ERROR geo_array_get_ref] Unknown ref [%s] \n",ref);

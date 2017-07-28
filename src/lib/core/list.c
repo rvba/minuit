@@ -105,7 +105,7 @@ t_node *list_find_node_by_name(t_lst *lst,const char *name)
 			node=link->data;
 			id = (t_id *) node->data;
 
-			if(is(id->name,name))
+			if(iseq(id->name,name))
 			{
 				return node;
 			}
@@ -163,7 +163,7 @@ void list_remove_by_name(t_lst *lst, const char *name)
 	for(link = lst->first; link; link = link->next)
 	{
 		id = (t_id *) link->data;
-		if(is (id->name, name))
+		if(iseq(id->name, name))
 		{
 			list_link_remove(lst,link);
 		}

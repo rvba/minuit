@@ -52,7 +52,7 @@ int app_check_arg( t_app *app, const char *arg)
 	int i;
 	for( i = 0; i < app->argc; i++)
 	{
-		if( is(app->argv[i], arg))
+		if( iseq(app->argv[i], arg))
 		{
 			return 1;
 		}
@@ -272,29 +272,29 @@ void app_args_scan(t_app *app)
 			scan_port = 0;
 		}
 
-		if(is(app->argv[i],"off"))
+		if(iseq(app->argv[i],"off"))
 		{
 			app->off_screen=1;
 		}
 		
-		if(is(app->argv[i],"x"))
+		if(iseq(app->argv[i],"x"))
 		{
 			app->with_glut=0;
 		}
 
-		if(is(app->argv[i],"client"))
+		if(iseq(app->argv[i],"client"))
 		{
 			app->off_screen=1;
 			app->client=1;
 		}
 
-		if(is(app->argv[i],"slave"))
+		if(iseq(app->argv[i],"slave"))
 		{
 			app->off_screen=1;
 			app->slave=1;
 		}
 
-		if(is(app->argv[i],"load"))
+		if(iseq(app->argv[i],"load"))
 		{
 			char *path = app->argv[2];
 			printf("load %s\n",path);
@@ -302,19 +302,19 @@ void app_args_scan(t_app *app)
 			set_path( app->path_file, path);
 		}
 
-		if(is(app->argv[i],"osc_server"))
+		if(iseq(app->argv[i],"osc_server"))
 		{
 			app->off_screen = 1;
 			app->osc_server = 1;
 		}
 
-		if(is(app->argv[i],"osc_client"))
+		if(iseq(app->argv[i],"osc_client"))
 		{
 			app->off_screen = 1;
 			app->osc_client = 1;
 		}
 
-		if(is(app->argv[i],"-port"))
+		if(iseq(app->argv[i],"-port"))
 		{
 			scan_port = 1;
 		}

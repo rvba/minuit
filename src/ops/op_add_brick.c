@@ -920,11 +920,11 @@ t_node *add_multiplier( t_context *C, const char *type)
 	t_node *node_brick = add_brick_slider_float( C, block, type, NULL, NULL);
 	t_brick *brick = ( t_brick *) node_brick->data;
 
-	if(is(type,"10"))  brick->var.increment=10; 
-	else if(is(type,"100"))  brick->var.increment=100; 
-	else if(is(type,".1"))  brick->var.increment=.1; 
-	else if(is(type,".01"))  brick->var.increment=.01; 
-	else if(is(type,".001"))  brick->var.increment=.001; 
+	if(iseq(type,"10"))  brick->var.increment=10; 
+	else if(iseq(type,"100"))  brick->var.increment=100; 
+	else if(iseq(type,".1"))  brick->var.increment=.1; 
+	else if(iseq(type,".01"))  brick->var.increment=.01; 
+	else if(iseq(type,".001"))  brick->var.increment=.001; 
 
 	return node_block;
 }
@@ -951,10 +951,10 @@ t_node *add_operator_double(t_context *C,const char *type)
 	t_brick *result = ( t_brick *) brick_result->data;
 	
 	// ACTIONS
-	if(is(type,">"))  			result->exe=op_superior;
-	else if(is(type,"<"))  			result->exe=op_inferior;
-	else if(is(type,"="))  			result->exe=op_equal;
-	else if(is(type,"mod"))  		result->exe=op_mod;
+	if(iseq(type,">"))  			result->exe=op_superior;
+	else if(iseq(type,"<"))  			result->exe=op_inferior;
+	else if(iseq(type,"="))  			result->exe=op_equal;
+	else if(iseq(type,"mod"))  		result->exe=op_mod;
 
 	return node_block;
 }
@@ -1118,21 +1118,21 @@ void add_slider_ref(t_context *C,t_object *object,const char *name)
 		 if(mesh->material) mat=mesh->material;
 	}
 
-	if(is(name,"pos x")) 		scene_add_ref(C->scene,"struct_ref","object","loc_x",&object->loc[0],object);
-	else if(is(name,"pos y"))	scene_add_ref(C->scene,"struct_ref","object","loc_y",&object->loc[1],object);
-	else if(is(name,"pos z"))	scene_add_ref(C->scene,"struct_ref","object","loc_z",&object->loc[2],object);
-	else if(is(name,"rot x"))	scene_add_ref(C->scene,"struct_ref","object","rot_x",&object->rot[0],object);
-	else if(is(name,"rot y"))	scene_add_ref(C->scene,"struct_ref","object","rot_y",&object->rot[1],object);
-	else if(is(name,"rot z"))	scene_add_ref(C->scene,"struct_ref","object","rot_z",&object->rot[2],object);
-	else if(is(name,"scl x"))	scene_add_ref(C->scene,"struct_ref","object","scl_x",&object->size[0],object);
-	else if(is(name,"scl y"))	scene_add_ref(C->scene,"struct_ref","object","scl_y",&object->size[1],object);
-	else if(is(name,"scl z"))	scene_add_ref(C->scene,"struct_ref","object","scl_z",&object->size[2],object);
-	else if(is(name,"red") && mat)	scene_add_ref(C->scene,"struct_ref","material","red",&mat->color[0],mat);
-	else if(is(name,"green") && mat)	scene_add_ref(C->scene,"struct_ref","material","green",&mat->color[1],mat);
-	else if(is(name,"blue") && mat)		scene_add_ref(C->scene,"struct_ref","material","blue",&mat->color[2],mat);
-	else if(is(name,"alpha") && mat)	scene_add_ref(C->scene,"struct_ref","material","alpha",&mat->color[3],mat);
-	else if(is(name,"quad face") && mesh)	scene_add_ref(C->scene,"struct_ref","mesh","quad_face",&mesh->quad_face,mesh);
-	else if(is(name,"mesh") && mesh)	scene_add_ref(C->scene,"struct_ref","mesh","mesh",mesh,mesh);
+	if(iseq(name,"pos x")) 		scene_add_ref(C->scene,"struct_ref","object","loc_x",&object->loc[0],object);
+	else if(iseq(name,"pos y"))	scene_add_ref(C->scene,"struct_ref","object","loc_y",&object->loc[1],object);
+	else if(iseq(name,"pos z"))	scene_add_ref(C->scene,"struct_ref","object","loc_z",&object->loc[2],object);
+	else if(iseq(name,"rot x"))	scene_add_ref(C->scene,"struct_ref","object","rot_x",&object->rot[0],object);
+	else if(iseq(name,"rot y"))	scene_add_ref(C->scene,"struct_ref","object","rot_y",&object->rot[1],object);
+	else if(iseq(name,"rot z"))	scene_add_ref(C->scene,"struct_ref","object","rot_z",&object->rot[2],object);
+	else if(iseq(name,"scl x"))	scene_add_ref(C->scene,"struct_ref","object","scl_x",&object->size[0],object);
+	else if(iseq(name,"scl y"))	scene_add_ref(C->scene,"struct_ref","object","scl_y",&object->size[1],object);
+	else if(iseq(name,"scl z"))	scene_add_ref(C->scene,"struct_ref","object","scl_z",&object->size[2],object);
+	else if(iseq(name,"red") && mat)	scene_add_ref(C->scene,"struct_ref","material","red",&mat->color[0],mat);
+	else if(iseq(name,"green") && mat)	scene_add_ref(C->scene,"struct_ref","material","green",&mat->color[1],mat);
+	else if(iseq(name,"blue") && mat)		scene_add_ref(C->scene,"struct_ref","material","blue",&mat->color[2],mat);
+	else if(iseq(name,"alpha") && mat)	scene_add_ref(C->scene,"struct_ref","material","alpha",&mat->color[3],mat);
+	else if(iseq(name,"quad face") && mesh)	scene_add_ref(C->scene,"struct_ref","mesh","quad_face",&mesh->quad_face,mesh);
+	else if(iseq(name,"mesh") && mesh)	scene_add_ref(C->scene,"struct_ref","mesh","mesh",mesh,mesh);
 
 }
 
@@ -1150,22 +1150,22 @@ void add_slider_target(t_context *C,t_object *object,const char *name)
 		 if(mesh->material) material=mesh->material;
 	}
 
-	if(is(name,"pos x")) 		add_part_slider_float(C,block,"pos x",&object->loc[0]);
-	else if(is(name,"pos y")) 	add_part_slider_float(C,block,"pos y",&object->loc[1]);
-	else if(is(name,"pos z")) 	add_part_slider_float(C,block,"pos z",&object->loc[2]);
-	else if(is(name,"rot x")) 	add_part_slider_float(C,block,"rot x",&object->rot[0]);
-	else if(is(name,"rot y")) 	add_part_slider_float(C,block,"rot y",&object->rot[1]);
-	else if(is(name,"rot z")) 	add_part_slider_float(C,block,"rot z",&object->rot[2]);
-	else if(is(name,"scl x")) 	add_part_slider_float(C,block,"scl x",&object->size[0]);
-	else if(is(name,"scl y")) 	add_part_slider_float(C,block,"scl y",&object->size[1]);
-	else if(is(name,"scl z")) 	add_part_slider_float(C,block,"scl z",&object->size[2]);
-	else if(is(name,"red") && material) 	add_part_slider_float(C,block,"red",&material->color[0]);
-	else if(is(name,"green") && material) 	add_part_slider_float(C,block,"green",&material->color[1]);
-	else if(is(name,"blue") && material) 	add_part_slider_float(C,block,"blue",&material->color[2]);
-	else if(is(name,"alpha") && material) 	add_part_slider_float(C,block,"alpha",&material->color[3]);
-	else if(is(name,"color") && mesh) 	mesh_add_default_color(mesh); 
-	else if(is(name,"faces") && mesh) 	mesh_add_brick_faces(mesh); 
-	else if(is(name,"mesh")) 		add_part_object(C,block,"mesh",object,dt_object); 
+	if(iseq(name,"pos x")) 		add_part_slider_float(C,block,"pos x",&object->loc[0]);
+	else if(iseq(name,"pos y")) 	add_part_slider_float(C,block,"pos y",&object->loc[1]);
+	else if(iseq(name,"pos z")) 	add_part_slider_float(C,block,"pos z",&object->loc[2]);
+	else if(iseq(name,"rot x")) 	add_part_slider_float(C,block,"rot x",&object->rot[0]);
+	else if(iseq(name,"rot y")) 	add_part_slider_float(C,block,"rot y",&object->rot[1]);
+	else if(iseq(name,"rot z")) 	add_part_slider_float(C,block,"rot z",&object->rot[2]);
+	else if(iseq(name,"scl x")) 	add_part_slider_float(C,block,"scl x",&object->size[0]);
+	else if(iseq(name,"scl y")) 	add_part_slider_float(C,block,"scl y",&object->size[1]);
+	else if(iseq(name,"scl z")) 	add_part_slider_float(C,block,"scl z",&object->size[2]);
+	else if(iseq(name,"red") && material) 	add_part_slider_float(C,block,"red",&material->color[0]);
+	else if(iseq(name,"green") && material) 	add_part_slider_float(C,block,"green",&material->color[1]);
+	else if(iseq(name,"blue") && material) 	add_part_slider_float(C,block,"blue",&material->color[2]);
+	else if(iseq(name,"alpha") && material) 	add_part_slider_float(C,block,"alpha",&material->color[3]);
+	else if(iseq(name,"color") && mesh) 	mesh_add_default_color(mesh); 
+	else if(iseq(name,"faces") && mesh) 	mesh_add_brick_faces(mesh); 
+	else if(iseq(name,"mesh")) 		add_part_object(C,block,"mesh",object,dt_object); 
 
 	block->block_state.update_geometry = 1;
 
@@ -1198,8 +1198,8 @@ void add_target_mesh( t_context *C, t_mesh *mesh, const char *name)
 	{
 		t_mesh *mesh =  ( t_mesh *) selected->data;
 		t_block *block = mesh->ref;
-		if( is( name, "vertex")) 	add_part_mesh( C, block, "vertex", mesh, dt_mesh);
-		else if( is( name, "edges")) 	add_part_mesh( C, block, "edges", mesh, dt_mesh);
+		if( iseq( name, "vertex")) 	add_part_mesh( C, block, "vertex", mesh, dt_mesh);
+		else if( iseq( name, "edges")) 	add_part_mesh( C, block, "edges", mesh, dt_mesh);
 		block->block_state.update_geometry = 1;
 	}
 }
@@ -1232,32 +1232,32 @@ t_node *add_slider_camera(t_context *C,const char *name)
 
 	if(camera)
 	{
-		if(is(name,"pos x"))
+		if(iseq(name,"pos x"))
 		{
 			scene_add_ref(C->scene,"struct_ref","camera","pos_x",&camera->pos[0],camera);
 			node = add_slider_float(C,"cam pos x",&camera->pos[0]);
 		}
-		else if(is(name,"pos y"))
+		else if(iseq(name,"pos y"))
 		{
 			scene_add_ref(C->scene,"struct_ref","camera","pos_y",&camera->pos[1],camera);
 			node = add_slider_float(C,"cam pos y",&camera->pos[1]);
 		}
-		else if(is(name,"pos z"))
+		else if(iseq(name,"pos z"))
 		{
 			scene_add_ref(C->scene,"struct_ref","camera","pos_z",&camera->pos[2],camera);
 			node = add_slider_float(C,"cam pos z",&camera->pos[2]);
 		}
-		else if(is(name,"eye x"))
+		else if(iseq(name,"eye x"))
 		{
 			scene_add_ref(C->scene,"struct_ref","camera","eye_x",&camera->eye[1],camera);
 			node = add_slider_float(C,"cam eye x",&camera->eye[1]);
 		}
-		else if(is(name,"eye y"))
+		else if(iseq(name,"eye y"))
 		{
 			scene_add_ref(C->scene,"struct_ref","camera","eye_y",&camera->eye[2],camera);
 			node = add_slider_float(C,"cam eye y",&camera->eye[2]);
 		}
-		else if(is(name,"eye z"))
+		else if(iseq(name,"eye z"))
 		{
 			scene_add_ref(C->scene,"struct_ref","camera","eye_z",&camera->eye[3],camera);
 			node = add_slider_float(C,"cam eye z",&camera->eye[3]);
@@ -1357,9 +1357,9 @@ t_node *add_maths(t_context *C,const char *name)
 	t_node *node_brick_clone = add_part_slider_add_bricks( C, block, name, 2, NULL);
 	t_brick *brick_clone = ( t_brick *) node_brick_clone->data;
 
-	if(is(name,"+")) 	brick_clone->exe = op_add;
-	else if(is(name,"x")) 	brick_clone->exe = op_mult;
-	else if(is(name,"and")) brick_clone->exe = op_and;
+	if(iseq(name,"+")) 	brick_clone->exe = op_add;
+	else if(iseq(name,"x")) 	brick_clone->exe = op_mult;
+	else if(iseq(name,"and")) brick_clone->exe = op_and;
 	else printf("[WARNING add_maths] Unknown type %s\n",name);
 
 	return node_block;

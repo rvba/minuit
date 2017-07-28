@@ -665,7 +665,7 @@ int block_is_connected(const char *gate, t_block *block)
 	int plug_in;
 	int follow;
 
-	if(is(gate,"in")) plug_in = 1;
+	if(iseq(gate,"in")) plug_in = 1;
 	else plug_in = 0;
 
 	if(block->bricks->first)
@@ -860,7 +860,7 @@ void block_cls_init(t_block *block)
 	int found=0;
 	for(i=0;i<n;i++)
 	{
-		if(is(block->type,blocks[i]->type))
+		if(iseq(block->type,blocks[i]->type))
 		{
 			blocks[i]->make(block);
 			found=1;
@@ -868,7 +868,7 @@ void block_cls_init(t_block *block)
 		}
 	}
 
-	if( is(block->cls->type, "menu"))
+	if( iseq(block->cls->type, "menu"))
 	{
 		block->state = state_block_menu_default;
 	}
@@ -907,7 +907,7 @@ t_brick *block_brick_get(t_block *block,const char *name)
 	for(l=block->bricks->first;l;l=l->next)
 	{
 		brick=l->data;
-		if(is(brick->id.name,name))
+		if(iseq(brick->id.name,name))
 		{
 			return brick;
 		}

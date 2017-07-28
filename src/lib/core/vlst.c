@@ -897,7 +897,7 @@ void *vlst_get_ref(t_vlst *vlst, const char *ref)
 {
 	void *p;
 
-	if(is(ref,"count"))  			p=&vlst->count_new; 
+	if(iseq(ref,"count"))  			p=&vlst->count_new; 
 	else
 	{
 		printf("[ERROR vlst_get_ref] Unknown ref [%s] \n",ref);

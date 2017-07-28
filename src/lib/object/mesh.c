@@ -55,11 +55,11 @@ void *mesh_get_ref(t_mesh *mesh, const char *ref)
 {
 	void *p;
 
-	if(is(ref,"vertex"))  				p=&mesh->vertex; 
-	else if(is(ref,"colors"))  			p=&mesh->colors; 
-	else if(is(ref,"faces"))  			p=&mesh->quads; 
-	else if(is(ref,"tot vertex"))  			p=&mesh->var.tot_vertex; 
-	else if(is(ref,"tot quad face"))  		p=&mesh->var.tot_quad_face; 
+	if(iseq(ref,"vertex"))  				p=&mesh->vertex; 
+	else if(iseq(ref,"colors"))  			p=&mesh->colors; 
+	else if(iseq(ref,"faces"))  			p=&mesh->quads; 
+	else if(iseq(ref,"tot vertex"))  			p=&mesh->var.tot_vertex; 
+	else if(iseq(ref,"tot quad face"))  		p=&mesh->var.tot_quad_face; 
 	else
 	{
 		printf("[ERROR mesh_get_ref] Unknown ref [%s] \n",ref);

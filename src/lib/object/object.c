@@ -208,11 +208,11 @@ void cls_object_link(t_object *self,t_node *target)
 void object_method_add(t_node *node,const char method[],void (*func)(t_node *n))
 {
 	t_object *object = node->data;
-	if(is(method,"action"))
+	if(iseq(method,"action"))
 	{
 		object->action=func;
 	}
-	if(is(method,"update"))
+	if(iseq(method,"update"))
 	{
 		object->update=func;
 	}
@@ -242,7 +242,7 @@ t_block *object_block_get( t_object *object, const char *name)
 		for( l = lst->first; l; l = l->next)
 		{
 			block = l->data;
-			if( is( block->id.name, name)) return block;
+			if( iseq( block->id.name, name)) return block;
 		}
 	}
 
@@ -317,15 +317,15 @@ void *object_get_ref(t_object *object, const char *ref)
 {
 	void *p;
 
-	if(is(ref,"loc_x"))  p=&object->loc[0]; 
-	else if(is(ref,"loc_y"))  	p=&object->loc[1]; 
-	else if(is(ref,"loc_z"))  	p=&object->loc[2]; 
-	else if(is(ref,"rot_x"))  	p=&object->rot[0]; 
-	else if(is(ref,"rot_y"))  	p=&object->rot[1]; 
-	else if(is(ref,"rot_z"))  	p=&object->rot[2]; 
-	else if(is(ref,"scl_x"))  	p=&object->size[0]; 
-	else if(is(ref,"scl_y"))  	p=&object->size[1]; 
-	else if(is(ref,"scl_z"))  	p=&object->size[2]; 
+	if(iseq(ref,"loc_x"))  p=&object->loc[0]; 
+	else if(iseq(ref,"loc_y"))  	p=&object->loc[1]; 
+	else if(iseq(ref,"loc_z"))  	p=&object->loc[2]; 
+	else if(iseq(ref,"rot_x"))  	p=&object->rot[0]; 
+	else if(iseq(ref,"rot_y"))  	p=&object->rot[1]; 
+	else if(iseq(ref,"rot_z"))  	p=&object->rot[2]; 
+	else if(iseq(ref,"scl_x"))  	p=&object->size[0]; 
+	else if(iseq(ref,"scl_y"))  	p=&object->size[1]; 
+	else if(iseq(ref,"scl_z"))  	p=&object->size[2]; 
 	else
 	{
 		printf("[ERROR object_get_ref] Unknown ref %s \n",ref);

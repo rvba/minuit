@@ -144,9 +144,9 @@ t_node *find_by_ptr(t_scene *sc,void *ptr)
 			t_data *data = ( t_data *) n->data;
 
 			if(
-				is(data->type,"app_data") 	||
-				is(data->type,"struct_ref") 	||
-				is(data->type,"app_node") 
+				iseq(data->type,"app_data") 	||
+				iseq(data->type,"struct_ref") 	||
+				iseq(data->type,"app_node") 
 			)
 			{
 				if(data->pointer == ptr)
@@ -287,7 +287,7 @@ void load_store(t_scene *sc)
 		{
 			d = ( t_data *) n->data;
 
-			if(is(d->type,"dynamic"))
+			if(iseq(d->type,"dynamic"))
 			{
 				// find var
 				t_node *var=find_new(sc,d->pointer);
@@ -306,7 +306,7 @@ void load_store(t_scene *sc)
 					load_error = 1;
 				}
 			}
-			else if(is(d->type,"app_node"))
+			else if(iseq(d->type,"app_node"))
 			{
 				// get internal node by id
 				t_node *node=find_by_id(sc,d->id_node);
@@ -316,7 +316,7 @@ void load_store(t_scene *sc)
 
 				id->id_chunk = n->id_chunk;
 			}
-			else if(is(d->type,"struct_ref"))
+			else if(iseq(d->type,"struct_ref"))
 			{
 				// get new object reference
 				void *p = find_ref(sc,d);
@@ -333,7 +333,7 @@ void load_store(t_scene *sc)
 
 				id->id_chunk = n->id_chunk;
 			}
-			else if(is(d->type,"app_data"))
+			else if(iseq(d->type,"app_data"))
 			{
 			}
 			else
@@ -386,22 +386,22 @@ void rebind(t_scene *sc,const char *type,const char *name,void **ptr)
 			{
 				t_data *data = ( t_data *) node->data;
 
-				if(is(data->type,"dynamic"))
+				if(iseq(data->type,"dynamic"))
 				{
 					// get ptr to memory
 					*ptr=data->pointer;
 				}
-				else if(is(data->type,"app_data"))
+				else if(iseq(data->type,"app_data"))
 				{
 					// get register
 					*ptr=find_register(data->target, data->id.name);
 				}
-				else if(is(data->type,"struct_ref"))
+				else if(iseq(data->type,"struct_ref"))
 				{
 					// get ref
 					*ptr=find_ref(sc,data);
 				}
-				else if(is(data->type,"app_node"))
+				else if(iseq(data->type,"app_node"))
 				{
 					// get internal node by id
 					t_node *n=find_by_id(sc,data->id_node);
@@ -469,7 +469,7 @@ void load_var(t_scene *sc)
 			d = ( t_data *) n->data;
 
 			// dynamic
-			if(is(d->type,"dynamic"))
+			if(iseq(d->type,"dynamic"))
 			{
 				// find new node 
 				t_node *var=find_by_ptr(sc,d->pointer);
@@ -686,7 +686,7 @@ void load_last( t_context *C)
 		filename = file_line_data_get( file, 0);
 		if( filename)
 		{
-			if( is( filename, "void")) filename = NULL;
+			if( iseq( filename, "void")) filename = NULL;
 		}
 		else
 		{
@@ -724,7 +724,7 @@ void add_mn(void)
 	t_file *file = file_new( C->app->path_file);
 	file_init(file);
 
-	if(is(file->ext,"mn"))
+	if(iseq(file->ext,"mn"))
 	{
 		/*
 		load_file( C, file->path);

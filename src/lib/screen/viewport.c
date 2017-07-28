@@ -35,12 +35,12 @@ void *viewport_get_ref(t_viewport *viewport, const char *ref)
 {
 	void *p;
 
-	if(is(ref,"width"))  				p=&viewport->width; 
-	else if(is(ref,"height"))  			p=&viewport->height; 
-	else if(is(ref,"x"))  				p=&viewport->x; 
-	else if(is(ref,"y"))  				p=&viewport->y; 
-	else if(is(ref,"fullscreen"))  			p=&viewport->fullscreen; 
-	else if(is(ref,"show_outline"))  		p=&viewport->show_outline; 
+	if(iseq(ref,"width"))  				p=&viewport->width; 
+	else if(iseq(ref,"height"))  			p=&viewport->height; 
+	else if(iseq(ref,"x"))  				p=&viewport->x; 
+	else if(iseq(ref,"y"))  				p=&viewport->y; 
+	else if(iseq(ref,"fullscreen"))  			p=&viewport->fullscreen; 
+	else if(iseq(ref,"show_outline"))  		p=&viewport->show_outline; 
 	else
 	{
 		printf("[ERROR mesh_get_ref] Unknown ref [%s] \n",ref);
@@ -284,7 +284,7 @@ t_viewport *viewport_clone(t_viewport *viewport)
 void viewport_set_format( t_viewport *viewport, const char *format)
 {
 	int width, height;
-	if( is( format, "A4"))
+	if( iseq( format, "A4"))
 	{
 		width = 210;
 		height = 297;

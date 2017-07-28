@@ -1332,7 +1332,7 @@ void __cls_plug_flow_lst(t_plug_mode mode,t_plug *plug,t_plug *src_plug)
 			// +INT (REWIND)
 			case dt_int:
 
-				if(is(src_brick->id.name,"rewind"))
+				if(iseq(src_brick->id.name,"rewind"))
 				{
 					int *state = src_plug->data;
 

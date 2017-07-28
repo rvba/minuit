@@ -87,7 +87,7 @@ t_symbol *dict_pop(t_dict *dict,const char *name)
 	for(l=lst->first;l;l=l->next)
 	{
 		symbol=l->data;
-		if(is(symbol->name,name))
+		if(iseq(symbol->name,name))
 		{
 			return symbol;
 		}

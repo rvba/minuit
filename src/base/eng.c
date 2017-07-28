@@ -36,7 +36,7 @@ t_process *engine_process_get(t_engine *engine,const char *name)
 	for(link = engine->processes->first; link; link = link->next)
 	{
 		process = (t_process * ) link->data;
-		if( is(process->id.name, name))
+		if( iseq(process->id.name, name))
 		{
 			return process;
 		}
