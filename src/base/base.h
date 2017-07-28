@@ -53,7 +53,7 @@ extern "C" {
 #define DEBUG_LOOP 0
 #define DEBUG_KEY 0
 #define DEBUG_PLUG 1 
-#define DEBUG_ALL 0
+#define DEBUG_ALL_EVENTS 0
 #define DEBUG_TO_FILE 0
 
 #ifndef PI
