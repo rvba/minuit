@@ -83,13 +83,13 @@ t_node *op_texture_add(const char *path)
 
 	if(*ext)
 	{
-		if(is(ext,"jpg"))
+		if(iseq(ext,"jpg"))
 		{
 			#ifdef HAVE_JPG
 			op_texture_jpg_add(file);
 			#endif
 		}
-		else if(is(ext,"png"))
+		else if(iseq(ext,"png"))
 		{
 			#ifdef HAVE_PNG
 			op_texture_png_add(file);
