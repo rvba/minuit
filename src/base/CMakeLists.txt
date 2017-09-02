@@ -23,8 +23,6 @@ set(SRC
 	sock.c
 	sys.h
 	sys.c
-	str.h
-	str.c
 	vec.h
 	vec.c
 	vol.c
