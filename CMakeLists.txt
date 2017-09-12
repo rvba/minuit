@@ -5,6 +5,17 @@ if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
 		message(FATAL_ERROR "Don't build in SOURCE directory !")
 endif()
 
+GET_PROPERTY(_MINUIT_LIB GLOBAL PROPERTY MINUIT_LIB)
+
+if( NOT DEFINED _MINUIT_LIB)
+	SET_PROPERTY(GLOBAL PROPERTY MINUIT_LIB "not set")
+	set(_MINUIT_LIB "not set")
+endif() 
+
+
+if( NOT ${_MINUIT_LIB} STREQUAL "set")
+	SET_PROPERTY(GLOBAL PROPERTY MINUIT_LIB "set")
+
 ###############		 PROJECT #############################
 
 project(Minuit)
@@ -184,6 +195,8 @@ endif()
 
 if(OPT_FREETYPE)
 	target_link_libraries(minuit ${FREETYPE_LIBRARIES})
+endif()
+
 endif()
 
 
